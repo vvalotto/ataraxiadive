@@ -1,0 +1,29 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 24.3.0
+    hooks:
+      - id: black
+        language_version: python3.11
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.1
+    hooks:
+      - id: ruff
+        args: [--fix]
+
+  # CodeGuard (Software Limpio) — advierte pero no bloquea
+  - repo: local
+    hooks:
+      - id: codeguard
+        name: CodeGuard quality check
+        entry: codeguard
+        args: ["src/"]
+        language: system
+        pass_filenames: false
+        always_run: false
+        stages: [commit]
