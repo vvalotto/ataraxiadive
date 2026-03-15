@@ -5,7 +5,9 @@
       "Bash(git push:*)",
       "Bash(chmod +x /Users/victor/PycharmProjects/ataraxiadive/.claude/hooks/save-session.sh /Users/victor/PycharmProjects/ataraxiadive/.claude/hooks/check-session-start.sh)",
       "Bash(git -C /Users/victor/PycharmProjects/ataraxiadive status --short)",
-      "Bash(git -C /Users/victor/PycharmProjects/ataraxiadive add CLAUDE.md .claude/)"
+      "Bash(git -C /Users/victor/PycharmProjects/ataraxiadive add CLAUDE.md .claude/)",
+      "Bash(git -C /Users/victor/PycharmProjects/ataraxiadive rm --cached .claude/worktrees/fervent-feistel)",
+      "Bash(git -C /Users/victor/PycharmProjects/ataraxiadive add .gitignore)"
     ]
   }
 }

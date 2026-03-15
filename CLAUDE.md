@@ -323,9 +323,20 @@ isort src/ tests/
 | Architecture doc | ⏳ pendiente | `docs/design/architecture.md` |
 | Código SP1 | ⏳ pendiente | `src/` — empieza luego de Semana 0 |
 
+**Herramientas (prerequisito para SP1):**
+
+| Herramienta | Estado |
+|-------------|--------|
+| Claude Dev Kit (`/implement-us`) | ❌ No instalado — `skills/` vacío |
+| software_limpio / quality-agents | ❌ No instalado — paquete ausente en dependencias |
+| CodeGuard pre-commit hook | ⚠️ Configurado en `.pre-commit-config.yaml`, no funcional |
+| DesignReviewer | ⚠️ Configurado en `pyproject.toml`, no funcional |
+| ArchitectAnalyst | ⚠️ Configurado en `pyproject.toml`, carpeta `quality/` inexistente |
+
 **Próximo paso:** completar los documentos de diseño estratégico (Capas 1-4 de IEDD)
-antes de iniciar SP1. Secuencia: vision.md → context-map.md → domain-model.md →
-architecture.md → BL-000 actualizada → arrancar SP1.
+antes de iniciar SP1. Ver plan completo en `docs/plans/FASE-0-PLAN.md`.
+Secuencia: vision.md → context-map.md → domain-model.md → architecture.md →
+instalar herramientas → BL-000 actualizada → arrancar SP1.
 
 ---
 
