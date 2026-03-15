@@ -339,5 +339,44 @@ architecture.md → BL-000 actualizada → arrancar SP1.
 
 ---
 
+## 16. Gestión de Sesión (OBLIGATORIO)
+
+Este proyecto usa un sistema de memoria de sesión. **Seguir estas reglas sin excepción.**
+
+### Al iniciar una sesión
+- Si el hook SessionStart muestra una alerta de flag pendiente → ejecutar `/resume` **antes** de cualquier otra acción.
+- Si no hay alerta, igualmente verificar si hay trabajo en curso leyendo `session-current.md`.
+
+### Durante la sesión — uso proactivo de `/checkpoint`
+**Ejecutar `/checkpoint` automáticamente** (sin esperar que el usuario lo pida) en estos momentos:
+- Al completar una tarea o subtarea significativa
+- Después de tomar una decisión de diseño o arquitectura
+- Antes de una operación riesgosa (refactor grande, cambio de enfoque)
+- Al terminar cualquier fase de una US-IEDD
+- Cuando el usuario da señales de cierre ("listo", "ok seguimos", "después continuamos")
+- Cada ~30 minutos de trabajo continuo
+
+El checkpoint escribe en `session-current.md` el estado exacto: qué se completó, decisiones tomadas, y cuál es el próximo paso concreto.
+
+### Al cerrar la sesión
+El hook SessionEnd captura automáticamente los commits y crea el flag. No requiere acción manual.
+
+### Archivos de sesión
+```
+~/.claude/projects/-Users-victor-PycharmProjects-ataraxiadive/memory/
+├── session-metadata.json      ← timestamp, branch, razón de salida
+├── session-current.md         ← estado de la sesión en curso (checkpoints)
+├── session-history.md         ← historial de sesiones anteriores
+└── session-needs-summary.flag ← indica que /resume debe ejecutarse
+```
+
+### Comandos disponibles
+```
+/resume      → restaurar contexto completo de sesión anterior
+/checkpoint  → guardar estado actual (usar proactivamente durante la sesión)
+```
+
+---
+
 *Última actualización: 2026-03-15 — Semana 0, incorporación de contexto experimental completo*
 *Mantenido por: Claude Cowork (decisiones estratégicas) + Claude Code (implementación)*
