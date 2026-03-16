@@ -37,8 +37,18 @@ Todo el trabajo sigue la cadena de 5 capas de IEDD. El orden no es opcional.
 Capa 1 — DOMINIO         → docs/dominio/01-dominio_torneos_apnea.md     ✅
                             docs/requirements/vision.md                  ⏳ pendiente
          ↓
+    [ Event Storming Nivel 1 — Big Picture ]
+      docs/design/event-storming-big-picture.md              ⏳ pendiente
+      (Dominio completo — descubre candidatos a BC)
+      Produce: domain events del dominio completo, hot spots globales, fronteras de BC
+         ↓
 Capa 2 — MODELO (DDD)    → docs/design/context-map.md                   ⏳ pendiente
                             docs/design/domain-model.md                  ⏳ pendiente
+         ↑
+    [ Event Storming Nivel 2 — Process Modeling ]
+      docs/design/event-storming-competencia.md              ⏳ pendiente
+      (BC Competencia — profundiza el Core Domain)
+      Produce: comandos, políticas, invariantes, candidatos a US-IEDD
          ↓
 Capa 3 — ESPECIFICACIÓN  → docs/iedd/US-IEDD-template.md                ✅
                             Una US-IEDD por cada historia (pre/post/invariantes)
@@ -50,6 +60,14 @@ Capa 4 — ARQUITECTURA    → docs/design/architecture.md                  ⏳ 
          ↓
 Capa 5 — IMPLEMENTACIÓN  → src/  (empieza en SP1, luego de completar Semana 0)
 ```
+
+> **Event Storming en este proyecto:** opera en dos niveles entre Capa 1 y Capa 2.
+> No es una capa nueva de IEDD — es el método concreto para producir el modelo DDD
+> a partir del dominio ya explorado. El Nivel 1 (Big Picture) descubre los BCs desde
+> el comportamiento del dominio. El Nivel 2 (Process Modeling) profundiza el Core Domain
+> ya formalizado. La hipótesis experimental es que esta secuencia produce invariantes más
+> completos y BCs más coherentes que el análisis directo de los RFs.
+> Ver: `docs/contexto/DECISION-EVENT-STORMING.md`
 
 **Documentos de referencia:** `docs/iedd/` (3 archivos del marco conceptual)
 **Análisis completo de IEDD:** `docs/contexto/ANALISIS-IEDD.md`
@@ -317,10 +335,17 @@ isort src/ tests/
 | Contexto del experimento | ✅ | `docs/contexto/` (5 archivos) |
 | Documentos del dominio | ✅ | `docs/dominio/` (5 archivos) |
 | Marco metodológico IEDD | ✅ | `docs/iedd/` (4 archivos) |
+| FASE-0-PLAN.md | ✅ | `docs/plans/FASE-0-PLAN.md` |
+| DECISION-EVENT-STORMING.md | ✅ | `docs/contexto/DECISION-EVENT-STORMING.md` |
 | vision.md | ⏳ pendiente | `docs/requirements/vision.md` |
+| Event Storming Big Picture | ⏳ pendiente | `docs/design/event-storming-big-picture.md` |
 | Context Map | ⏳ pendiente | `docs/design/context-map.md` |
+| Event Storming Competencia | ⏳ pendiente | `docs/design/event-storming-competencia.md` |
 | Domain Model | ⏳ pendiente | `docs/design/domain-model.md` |
 | Architecture doc | ⏳ pendiente | `docs/design/architecture.md` |
+| ADR-005 BCs estratégico | ⏳ pendiente | `docs/adr/ADR-005-bounded-contexts-ddd-estrategico.md` |
+| Estrategia desarrollo → BCs | ⏳ pendiente | `docs/design/estrategia-desarrollo-bc.md` |
+| Traceability matrix | ⏳ pendiente | `docs/traceability/matrix.md` |
 | Código SP1 | ⏳ pendiente | `src/` — empieza luego de Semana 0 |
 
 **Herramientas (prerequisito para SP1):**
@@ -335,7 +360,8 @@ isort src/ tests/
 
 **Próximo paso:** completar los documentos de diseño estratégico (Capas 1-4 de IEDD)
 antes de iniciar SP1. Ver plan completo en `docs/plans/FASE-0-PLAN.md`.
-Secuencia: vision.md → context-map.md → domain-model.md → architecture.md →
+Secuencia: vision.md → **event-storming-big-picture.md** → context-map.md →
+**event-storming-competencia.md** → domain-model.md → architecture.md →
 instalar herramientas → BL-000 actualizada → arrancar SP1.
 
 ---
@@ -389,5 +415,5 @@ El hook SessionEnd captura automáticamente los commits y crea el flag. No requi
 
 ---
 
-*Última actualización: 2026-03-15 — Semana 0, incorporación de contexto experimental completo*
+*Última actualización: 2026-03-16 — Semana 0, incorporación de Event Storming como técnica entre Capa 1 y Capa 2 de IEDD*
 *Mantenido por: Claude Cowork (decisiones estratégicas) + Claude Code (implementación)*
