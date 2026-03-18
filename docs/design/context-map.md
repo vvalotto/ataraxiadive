@@ -285,7 +285,69 @@ aplicar ES a un BC Generic?
 
 ---
 
-## 8. Próximo Paso
+## 8. Notas del Experimento
+
+El Context Map no es solo un artefacto de organización — es una sesión de análisis
+con decisiones reales. Estos aprendizajes alimentan directamente el paper IEDD y la
+retrospectiva BL-000.
+
+### Aprendizajes — sesión 2026-03-18
+
+**1. El Context Map descubre lo que el ES Big Picture no captura**
+
+`EntidadOrganizadora` y `Sede` no generan eventos de dominio propios, por eso no
+aparecieron en el ES Big Picture. El Context Map los hizo emerger al preguntarse
+"¿qué necesita cada BC para funcionar?". Las entidades sin comportamiento de dominio
+propio son invisibles para el ES pero visibles para el Context Map.
+
+Esto confirma que ES Big Picture y Context Map son técnicas **complementarias**, no
+redundantes. El ES captura el comportamiento; el Context Map captura las dependencias
+y los contratos. Ninguno reemplaza al otro.
+
+**2. La tensión BC vs. infraestructura es real y no trivial**
+
+`Notificaciones` tenía argumentos válidos en ambas direcciones. No es un caso obvio.
+La resolución requirió evaluar criterios DDD concretos: ¿tiene lenguaje ubicuo propio?
+¿tiene aggregate con ciclo de vida real? ¿tiene invariantes de negocio propios?
+
+El proceso de evaluación en sí tiene valor metodológico: los criterios DDD de BC
+(lenguaje ubicuo, aggregate, invariantes) son más discriminantes que la pregunta
+intuitiva "¿es esto infraestructura?".
+
+**3. El criterio para ES en un BC Generic no es el tipo de BC, es el requerimiento de integridad**
+
+La decisión de ES en `Notificaciones` no surgió de que sea Generic — surgió de un
+requerimiento operativo específico: garantizar exactly-once delivery sin lógica ad-hoc.
+
+**Principio emergente:**
+> Event Sourcing se justifica cuando existe un requerimiento de integridad que CRUD
+> no puede satisfacer estructuralmente — solo con lógica ad-hoc propensa a errores.
+
+Este principio aplica independientemente del tipo de BC (Core, Supporting o Generic).
+En este proyecto, Competencia y Notificaciones lo cumplen por razones distintas:
+Competencia por auditoría regulatoria; Notificaciones por idempotencia operativa.
+
+**4. La diferencia semántica justifica el ACL por sí sola**
+
+La decisión de ACL en Registro→Competencia no fue una decisión técnica de conveniencia
+— fue la consecuencia directa de reconocer que `Atleta` y `Participante` son conceptos
+distintos del dominio:
+
+- `Atleta` (Registro): persona con datos personales, brevet, membresía en FAAS
+- `Participante` (Competencia): competidor activo en una disciplina específica, con AP registrado
+
+El ACL no traduce datos — traduce semántica. Esto es coherente con el principio de
+que el Core Domain define sus propios conceptos, incluso para entidades que existen
+en otros BCs.
+
+**Hipótesis a evaluar en retrospectiva BL-000:**
+> La secuencia ES Big Picture → Context Map produce contratos de integración más
+> fundamentados que derivar el Context Map directamente de los RFs, porque el ES
+> hace explícitas las fronteras de consistencia antes de que el Context Map las formalice.
+
+---
+
+## 9. Próximo Paso
 
 Este Context Map es insumo directo para:
 
