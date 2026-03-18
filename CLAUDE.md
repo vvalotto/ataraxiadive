@@ -352,8 +352,8 @@ isort src/ tests/
 | Event Storming Big Picture | ✅ | `docs/design/event-storming-big-picture.md` |
 | Context Map | ✅ | `docs/design/context-map.md` |
 | ADR-005 BCs estratégico | ✅ | `docs/adr/ADR-005-bounded-contexts-ddd-estrategico.md` |
-| Event Storming Competencia | ⏳ pendiente | `docs/design/event-storming-competencia.md` |
-| Domain Model | ⏳ pendiente | `docs/design/domain-model.md` |
+| Event Storming Competencia | ✅ | `docs/design/event-storming-competencia.md` |
+| Domain Model | ✅ | `docs/design/domain-model.md` |
 | Architecture doc | ⏳ pendiente | `docs/design/architecture.md` |
 | Estrategia desarrollo → BCs | ⏳ pendiente | `docs/design/estrategia-desarrollo-bc.md` |
 | Traceability matrix | ⏳ pendiente | `docs/traceability/matrix.md` |
@@ -369,10 +369,10 @@ isort src/ tests/
 | DesignReviewer | ⚠️ Configurado en `pyproject.toml`, no funcional |
 | ArchitectAnalyst | ⚠️ Configurado en `pyproject.toml`, carpeta `quality/` inexistente |
 
-**Próximo paso:** completar los documentos de diseño estratégico restantes antes de iniciar SP1.
+**Próximo paso:** completar los 5 artefactos restantes de Fase 0 antes de iniciar SP1.
 Ver plan completo en `docs/plans/FASE-0-PLAN.md`.
-Secuencia: **event-storming-competencia.md** → domain-model.md → architecture.md →
-estrategia-desarrollo-bc.md → matrix.md → instalar herramientas → BL-000 actualizada → arrancar SP1.
+Secuencia: **architecture.md** → estrategia-desarrollo-bc.md → matrix.md →
+instalar herramientas → BL-000 actualizada → CLAUDE.md final → tag v0.1.0 → arrancar SP1.
 
 ---
 
@@ -425,5 +425,5 @@ El hook SessionEnd captura automáticamente los commits y crea el flag. No requi
 
 ---
 
-*Última actualización: 2026-03-18 — Semana 0, Context Map v1.1 y ADR-005: 6 BCs definitivos, ES en Notificaciones*
+*Última actualización: 2026-03-18 — Semana 0, 6/11 artefactos completados (ES Competencia + Domain Model)*
 *Mantenido por: Claude Cowork (decisiones estratégicas) + Claude Code (implementación)*

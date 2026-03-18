@@ -7,7 +7,7 @@
 | **Responsable** | Claude Cowork (documentación) + Claude Code (commits) |
 | **DoD de Fase** | Todos los artefactos creados, BL-000 actualizada, CLAUDE.md vigente |
 | **Fecha inicio** | 2026-03-15 |
-| **Fecha cierre** | Pendiente |
+| **Fecha cierre** | Pendiente — 6/11 artefactos completados al 2026-03-18 |
 
 ---
 
@@ -346,13 +346,13 @@ Sesión 7 → Cowork entrega a Code
 
 Esta fase está terminada cuando:
 
-- [ ] `docs/requirements/vision.md` creado y aprobado por Victor
-- [ ] `docs/design/event-storming-big-picture.md` con línea de eventos del dominio completo, candidatos a BCs y hot spots globales
-- [ ] `docs/design/context-map.md` con BCs formalizados a partir del Big Picture ES
-- [ ] `docs/design/event-storming-competencia.md` con Process Modeling de Competencia, políticas, invariantes y candidatos a US-IEDD
-- [ ] `docs/design/domain-model.md` con aggregates e invariantes de SP1 y SP2 al menos
+- [x] `docs/requirements/vision.md` creado y aprobado por Victor
+- [x] `docs/design/event-storming-big-picture.md` con línea de eventos del dominio completo, candidatos a BCs y hot spots globales
+- [x] `docs/design/context-map.md` con BCs formalizados a partir del Big Picture ES
+- [x] `docs/design/event-storming-competencia.md` con Process Modeling de Competencia, políticas, invariantes y candidatos a US-IEDD
+- [x] `docs/design/domain-model.md` con aggregates e invariantes de SP1 y SP2 al menos
+- [x] `docs/adr/ADR-005-bounded-contexts-ddd-estrategico.md` aceptado
 - [ ] `docs/design/architecture.md` con estructura de módulos y reglas de dependencia
-- [ ] `docs/adr/ADR-005-bounded-contexts-ddd-estrategico.md` aceptado
 - [ ] `docs/design/estrategia-desarrollo-bc.md` con mapeo SP → BC
 - [ ] `docs/traceability/matrix.md` inicializada con CIs de Fase 0
 - [ ] `BL-000` actualizada con inventario completo de CIs
