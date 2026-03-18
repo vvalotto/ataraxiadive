@@ -35,14 +35,15 @@ Todo el trabajo sigue la cadena de 5 capas de IEDD. El orden no es opcional.
 
 ```
 Capa 1 — DOMINIO         → docs/dominio/01-dominio_torneos_apnea.md     ✅
-                            docs/requirements/vision.md                  ⏳ pendiente
+                            docs/requirements/vision.md                  ✅
          ↓
     [ Event Storming Nivel 1 — Big Picture ]
-      docs/design/event-storming-big-picture.md              ⏳ pendiente
+      docs/design/event-storming-big-picture.md              ✅
       (Dominio completo — descubre candidatos a BC)
       Produce: domain events del dominio completo, hot spots globales, fronteras de BC
          ↓
-Capa 2 — MODELO (DDD)    → docs/design/context-map.md                   ⏳ pendiente
+Capa 2 — MODELO (DDD)    → docs/design/context-map.md                   ✅
+                            docs/adr/ADR-005-bounded-contexts-ddd-estrategico.md ✅
                             docs/design/domain-model.md                  ⏳ pendiente
          ↑
     [ Event Storming Nivel 2 — Process Modeling ]
@@ -56,7 +57,7 @@ Capa 3 — ESPECIFICACIÓN  → docs/iedd/US-IEDD-template.md                ✅
     [ IA como traductor conceptual — Claude Dev Kit /implement-us ]
          ↓
 Capa 4 — ARQUITECTURA    → docs/design/architecture.md                  ⏳ pendiente
-                            docs/adr/ADR-001 a ADR-004                   ✅
+                            docs/adr/ADR-001 a ADR-005                   ✅
          ↓
 Capa 5 — IMPLEMENTACIÓN  → src/  (empieza en SP1, luego de completar Semana 0)
 ```
@@ -105,7 +106,7 @@ IEDD (metodología)
 **AtaraxiaDive** es una plataforma web para gestión de torneos de apnea (freediving).
 
 - **Stack:** FastAPI (backend Python) + React PWA (frontend) + PostgreSQL
-- **Arquitectura:** Hexagonal + Event Sourcing (contexto Competencia)
+- **Arquitectura:** Hexagonal + Event Sourcing (BCs Competencia y Notificaciones)
 - **Desarrollador:** Victor Valotto
 - **Horizonte:** 2026, sin fecha fija — avance por incrementos con DoD binaria
 
@@ -135,14 +136,14 @@ tests/
 └── features/        ← .feature files BDD (Gherkin)
 
 docs/
-├── adr/             ← Architecture Decision Records (ADR-001 a ADR-004 ✅)
+├── adr/             ← Architecture Decision Records (ADR-001 a ADR-005 ✅)
 ├── contexto/        ← Documentos fundacionales del experimento (5 archivos ✅)
-├── design/          ← Context Map, Domain Model, Architecture (⏳ pendientes)
+├── design/          ← Context Map ✅ · Event Storming Big Picture ✅ · Domain Model, Architecture (⏳ pendientes)
 ├── dominio/         ← Descripción del dominio y RFs (5 archivos ✅)
 ├── iedd/            ← Marco metodológico IEDD (4 archivos ✅)
 ├── plans/           ← US-IEDD por incremento (genera el Dev Kit)
 ├── reports/         ← Reportes /implement-us (genera el Dev Kit)
-├── requirements/    ← vision.md (⏳ pendiente)
+├── requirements/    ← vision.md ✅
 └── traceability/    ← matrix.md
 
 .cm/
@@ -171,23 +172,33 @@ DesignReviewer detecta automáticamente las violaciones en cada merge.
 
 ---
 
-## 7. Bounded Contexts (diseño estratégico — pendiente de formalizar)
+## 7. Bounded Contexts (diseño estratégico — formalizado en ADR-005)
 
-El Context Map completo está pendiente (`docs/design/context-map.md`).
-Mapa orientativo basado en el análisis previo:
+Context Map completo: `docs/design/context-map.md` ✅
+Decisión formal: `docs/adr/ADR-005-bounded-contexts-ddd-estrategico.md` ✅
 
-| Bounded Context | Tipo | Contenido principal |
-|----------------|------|---------------------|
-| **Competencia** | Core Domain | Performance, ejecución, Event Sourcing |
-| **Gestión de Torneo** | Supporting | Torneo, ciclo de vida, estados |
-| **Registro** | Supporting | Atleta, inscripción, anuncios, FAZ |
-| **Resultados** | Supporting | Rankings, podios, certificados |
-| **Configuración** | Generic | Disciplinas, categorías, reglas |
-| **Identidad** | Generic | Usuarios, roles, permisos |
-| **Notificaciones** | Generic | Email, push |
+**6 Bounded Contexts definitivos** — emergieron del Event Storming Big Picture:
+
+| Bounded Context | Tipo | Impl. | Contenido principal |
+|----------------|------|:-----:|---------------------|
+| **Competencia** | Core Domain | ES | AP, grilla, ejecución, tarjetas — lógica no trivial del deporte |
+| **Torneo** | Supporting | CRUD | Ciclo de vida del torneo, disciplinas, `EntidadOrganizadora`, `Sede` |
+| **Registro** | Supporting | CRUD | Atleta como persona, inscripción, anuncios, cancelaciones |
+| **Resultados** | Supporting | CRUD | Rankings por disciplina/género, Overall, publicación incremental |
+| **Identidad** | Generic | CRUD | Usuarios, roles (organizador/juez/atleta), autenticación JWT |
+| **Notificaciones** | Generic | ES | Ciclo de vida de notificación, idempotencia exactly-once, Email/Push |
+
+> **ES** = Event Sourcing · **CRUD** = persistencia relacional estándar
+
+**`Configuración` fue eliminado:** sus conceptos (disciplinas → Torneo; reglas de tarjetas → Competencia)
+son atributos de los BCs que los usan. No emergió como frontera natural en el ES Big Picture.
+
+**`Notificaciones` usa Event Sourcing** para garantizar idempotencia estructural:
+antes de enviar, verifica si `NotificacionEnviada` ya existe en el store para ese evento fuente.
+Ver ADR-005 para justificación y trade-offs.
 
 **Competencia es el Core Domain.** Es donde vive la lógica no trivial, los invariantes
-duros y el Event Sourcing. Todo lo demás sirve a Competencia.
+duros y el Event Sourcing principal. Todo lo demás sirve a Competencia.
 
 ---
 
@@ -331,19 +342,19 @@ isort src/ tests/
 |-----------|--------|-----------|
 | Repositorio inicializado | ✅ | — |
 | BL-000 baseline pre-código | ✅ | `.cm/baselines/BL-000-pre-codigo.md` |
-| ADR-001 a ADR-004 | ✅ | `docs/adr/` |
+| ADR-001 a ADR-005 | ✅ | `docs/adr/` |
 | Contexto del experimento | ✅ | `docs/contexto/` (5 archivos) |
 | Documentos del dominio | ✅ | `docs/dominio/` (5 archivos) |
 | Marco metodológico IEDD | ✅ | `docs/iedd/` (4 archivos) |
 | FASE-0-PLAN.md | ✅ | `docs/plans/FASE-0-PLAN.md` |
 | DECISION-EVENT-STORMING.md | ✅ | `docs/contexto/DECISION-EVENT-STORMING.md` |
-| vision.md | ⏳ pendiente | `docs/requirements/vision.md` |
-| Event Storming Big Picture | ⏳ pendiente | `docs/design/event-storming-big-picture.md` |
-| Context Map | ⏳ pendiente | `docs/design/context-map.md` |
+| vision.md | ✅ | `docs/requirements/vision.md` |
+| Event Storming Big Picture | ✅ | `docs/design/event-storming-big-picture.md` |
+| Context Map | ✅ | `docs/design/context-map.md` |
+| ADR-005 BCs estratégico | ✅ | `docs/adr/ADR-005-bounded-contexts-ddd-estrategico.md` |
 | Event Storming Competencia | ⏳ pendiente | `docs/design/event-storming-competencia.md` |
 | Domain Model | ⏳ pendiente | `docs/design/domain-model.md` |
 | Architecture doc | ⏳ pendiente | `docs/design/architecture.md` |
-| ADR-005 BCs estratégico | ⏳ pendiente | `docs/adr/ADR-005-bounded-contexts-ddd-estrategico.md` |
 | Estrategia desarrollo → BCs | ⏳ pendiente | `docs/design/estrategia-desarrollo-bc.md` |
 | Traceability matrix | ⏳ pendiente | `docs/traceability/matrix.md` |
 | Código SP1 | ⏳ pendiente | `src/` — empieza luego de Semana 0 |
@@ -358,11 +369,10 @@ isort src/ tests/
 | DesignReviewer | ⚠️ Configurado en `pyproject.toml`, no funcional |
 | ArchitectAnalyst | ⚠️ Configurado en `pyproject.toml`, carpeta `quality/` inexistente |
 
-**Próximo paso:** completar los documentos de diseño estratégico (Capas 1-4 de IEDD)
-antes de iniciar SP1. Ver plan completo en `docs/plans/FASE-0-PLAN.md`.
-Secuencia: vision.md → **event-storming-big-picture.md** → context-map.md →
-**event-storming-competencia.md** → domain-model.md → architecture.md →
-instalar herramientas → BL-000 actualizada → arrancar SP1.
+**Próximo paso:** completar los documentos de diseño estratégico restantes antes de iniciar SP1.
+Ver plan completo en `docs/plans/FASE-0-PLAN.md`.
+Secuencia: **event-storming-competencia.md** → domain-model.md → architecture.md →
+estrategia-desarrollo-bc.md → matrix.md → instalar herramientas → BL-000 actualizada → arrancar SP1.
 
 ---
 
@@ -415,5 +425,5 @@ El hook SessionEnd captura automáticamente los commits y crea el flag. No requi
 
 ---
 
-*Última actualización: 2026-03-16 — Semana 0, incorporación de Event Storming como técnica entre Capa 1 y Capa 2 de IEDD*
+*Última actualización: 2026-03-18 — Semana 0, Context Map v1.1 y ADR-005: 6 BCs definitivos, ES en Notificaciones*
 *Mantenido por: Claude Cowork (decisiones estratégicas) + Claude Code (implementación)*
