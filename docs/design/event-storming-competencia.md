@@ -46,25 +46,45 @@ Registro AP → Configuración Grilla → Confirmación → Ejecución → Final
 
 El BC Competencia tiene **dos aggregates** con Event Sourcing:
 
-```
-┌─────────────────────────────────────────────────────┐
-│  Competencia (aggregate root, por disciplina)        │
-│  stream: competencia-{id}                           │
-│                                                      │
-│  Estado: Preparacion → Confirmada → EnEjecucion     │
-│           → Finalizada                              │
-│                                                      │
-│  Gestiona: intervalo OT, grilla, N Performances     │
-└─────────────────────────────────────────────────────┘
+```mermaid
+classDiagram
+    class Competencia {
+        +String competenciaId
+        +String disciplina
+        +String torneoId
+        +Int intervaloDisciplina
+        +EstadoCompetencia estado
+        +ConfigurarIntervaloOT()
+        +GenerarGrilla()
+        +AjustarGrilla()
+        +ConfirmarGrilla()
+        +IniciarCompetencia()
+        +FinalizarCompetencia()
+    }
+    note for Competencia "stream: competencia-id
+    Preparacion → Confirmada → EnEjecucion → Finalizada"
 
-┌─────────────────────────────────────────────────────┐
-│  Performance (aggregate, por atleta por disciplina)  │
-│  stream: performance-{id}                           │
-│                                                      │
-│  Estado: AnunciadaAP → Llamada → Ejecutada / DNS    │
-│                                                      │
-│  Gestiona: AP, resultado, tarjeta, correcciones     │
-└─────────────────────────────────────────────────────┘
+    class Performance {
+        +String performanceId
+        +String atletaId
+        +String competenciaId
+        +String disciplina
+        +Decimal valorAP
+        +Int posicionGrilla
+        +Int andarivel
+        +DateTime OTProgramado
+        +EstadoPerformance estado
+        +RegistrarAP()
+        +LlamarAtleta()
+        +RegistrarResultado()
+        +AsignarTarjeta()
+        +RegistrarDNS()
+        +CorregirResultado()
+    }
+    note for Performance "stream: performance-id
+    AnunciadaAP → Llamada → Ejecutada | DNS"
+
+    Competencia "1" --> "N" Performance : gestiona
 ```
 
 ---
@@ -353,40 +373,34 @@ INV-P-14: CorregirResultado solo sobre el resultado más reciente (no se puede c
 
 ### Competencia
 
-```
-          ConfigurarIntervaloOT
-          GenerarGrilla
-          AjustarGrilla
-               ↓
-[Preparacion] ──── ConfirmarGrilla ────► [Confirmada]
-                                               │
-                                         IniciarCompetencia
-                                               │
-                                               ▼
-                                        [EnEjecucion]
-                                               │
-                                   todas Performances completas
-                                               │
-                                               ▼
-                                         [Finalizada]
+```mermaid
+stateDiagram-v2
+    [*] --> Preparacion
+
+    Preparacion --> Preparacion : ConfigurarIntervaloOT\nGenerarGrilla / RegenerarGrilla\nAjustarGrilla
+    Preparacion --> Confirmada : ConfirmarGrilla
+    Confirmada --> EnEjecucion : IniciarCompetencia
+    EnEjecucion --> Finalizada : todas las Performances\nEjecutada o DNS
+    Finalizada --> [*]
 ```
 
 ### Performance
 
-```
-[AnunciadaAP] ──── AtletaLlamado ────► [Llamada]
-                                           │
-                        ┌──────────────────┤
-                        │                  │
-                  RegistrarDNS      RegistrarResultado
-                        │                  │
-                        ▼                  ▼
-                      [DNS]         [ResultadoRegistrado]
-                                           │
-                                     AsignarTarjeta
-                                           │
-                                           ▼
-                                      [Ejecutada] ◄── CorregirResultado (bucle)
+```mermaid
+stateDiagram-v2
+    [*] --> AnunciadaAP : APRegistrado
+
+    AnunciadaAP --> Llamada : AtletaLlamado
+
+    Llamada --> DNS : DNSRegistrado
+    Llamada --> ResultadoRegistrado : RegistrarResultado
+
+    ResultadoRegistrado --> Ejecutada : AsignarTarjeta
+
+    Ejecutada --> Ejecutada : CorregirResultado
+
+    DNS --> [*]
+    Ejecutada --> [*]
 ```
 
 ---
