@@ -336,7 +336,7 @@ isort src/ tests/
 
 ## 14. Estado Actual del Proyecto
 
-**Semana 0 — Inicialización**
+**Fase 0 — ✅ COMPLETA (2026-03-19) — tag `v0.1.0`**
 
 | Artefacto | Estado | Ubicación |
 |-----------|--------|-----------|
@@ -354,10 +354,10 @@ isort src/ tests/
 | ADR-005 BCs estratégico | ✅ | `docs/adr/ADR-005-bounded-contexts-ddd-estrategico.md` |
 | Event Storming Competencia | ✅ | `docs/design/event-storming-competencia.md` |
 | Domain Model | ✅ | `docs/design/domain-model.md` |
-| Architecture doc | ⏳ pendiente | `docs/design/architecture.md` |
-| Estrategia desarrollo → BCs | ⏳ pendiente | `docs/design/estrategia-desarrollo-bc.md` |
-| Traceability matrix | ⏳ pendiente | `docs/traceability/matrix.md` |
-| Código SP1 | ⏳ pendiente | `src/` — empieza luego de Semana 0 |
+| Architecture doc | ✅ | `docs/design/architecture.md` |
+| Estrategia desarrollo → BCs | ✅ | `docs/design/estrategia-desarrollo-bc.md` |
+| Traceability matrix | ✅ | `docs/traceability/matrix.md` |
+| BL-000 actualizada | ✅ | `.cm/baselines/BL-000-pre-codigo.md` |
 
 **Herramientas (prerequisito para SP1):**
 
@@ -369,10 +369,8 @@ isort src/ tests/
 | DesignReviewer | ⚠️ Configurado en `pyproject.toml`, no funcional |
 | ArchitectAnalyst | ⚠️ Configurado en `pyproject.toml`, carpeta `quality/` inexistente |
 
-**Próximo paso:** completar los 5 artefactos restantes de Fase 0 antes de iniciar SP1.
-Ver plan completo en `docs/plans/FASE-0-PLAN.md`.
-Secuencia: **architecture.md** → estrategia-desarrollo-bc.md → matrix.md →
-instalar herramientas → BL-000 actualizada → CLAUDE.md final → tag v0.1.0 → arrancar SP1.
+**Próximo paso:** instalar herramientas (Claude Dev Kit + software_limpio) y arrancar SP1.
+Primera acción: redactar `docs/plans/US-1.1.1.md` y ejecutar `/implement-us US-1.1.1`.
 
 ---
 
@@ -425,5 +423,5 @@ El hook SessionEnd captura automáticamente los commits y crea el flag. No requi
 
 ---
 
-*Última actualización: 2026-03-18 — Semana 0, 6/11 artefactos completados (ES Competencia + Domain Model)*
+*Última actualización: 2026-03-19 — Fase 0 completa, 11/11 artefactos — tag v0.1.0*
 *Mantenido por: Claude Cowork (decisiones estratégicas) + Claude Code (implementación)*
