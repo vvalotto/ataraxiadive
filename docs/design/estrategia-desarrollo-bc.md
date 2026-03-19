@@ -236,7 +236,96 @@ Implementarlo antes sería construir el consumidor sin productores estables.
 
 ---
 
-## 11. Próximo Paso
+## 11. Notas del Experimento
+
+### Aprendizajes — sesión 2026-03-19
+
+**1. El principio "Core Domain primero" tiene consecuencias concretas en el plan**
+
+La decisión de empezar SP1 con BC Competencia no es solo una preferencia técnica —
+es la consecuencia directa del diseño estratégico DDD. Si la arquitectura hexagonal
+y el Event Sourcing funcionan para el caso más complejo (14 invariantes, 2 aggregates,
+stream propio por Performance), funcionan para todo lo demás.
+
+Esto produce un efecto experimental interesante: el riesgo arquitectónico se valida
+en el primer subproyecto, no en el último. Si algo falla en SP1, el costo de corregirlo
+es mínimo — no hay código de producción que migrar. Esta inversión de riesgo (atacar
+lo difícil primero) es una consecuencia directa de IEDD que vale documentar.
+
+**2. Las reglas de negocio pertenecen al BC que las configura, no al que las usa**
+
+`FormulaPuntos` y `VentanaImpugnacion` resuelven dos hot spots distintos pero con
+el mismo patrón: son reglas configuradas en BC Torneo y consumidas en BCs downstream
+(Resultados y Competencia respectivamente).
+
+La primera intuición podría ser ubicarlas en el BC que las aplica:
+- la fórmula de puntos "parece" ser lógica de Resultados
+- la ventana de corrección "parece" ser lógica de Competencia
+
+Pero el análisis de dominio revela que **ambas son decisiones del organizador del torneo**,
+no invariantes del modelo deportivo. Un torneo puede usar AIDA; el siguiente, CMAS.
+Un organizador puede dar 30 minutos de impugnación; otro, 10.
+
+Esto confirma el principio DDD: la regla vive en el aggregate que tiene autoridad
+para cambiarla, no en el que la ejecuta. BC Torneo configura; BC Competencia y
+BC Resultados aplican lo configurado.
+
+**3. Resolver hot spots en diseño cuesta minutos; en implementación, horas**
+
+Los 4 hot spots (HS-19, HS-22, HS-25, HS-P2) se resolvieron en una sola sesión de
+conversación antes de escribir una línea de código. El impacto de no haberlos resuelto:
+
+- HS-P2 sin resolver → `CorregirResultado` implementado sin INV-P-15 → refactoring
+  de aggregate Performance durante SP1 o SP4
+- HS-19 sin resolver → BC Resultados implementado con lógica de puntos hardcodeada →
+  migración costosa cuando aparezca el segundo torneo con distinta fórmula
+- HS-25 sin resolver → BC Notificaciones implementado sin el payload de resumen
+  individual → cambio de contrato en SP4 con impacto en BC Torneo
+
+El costo de resolverlos ahora es una conversación. El costo de resolverlos tarde
+es proporcional a cuánto código dependiente ya existe. Esto es evidencia concreta
+de que la Capa 3 de IEDD (Especificación) produce mejores resultados cuando los
+hot spots de Capa 2 están cerrados.
+
+**4. La distinción entre eventos administrativos y eventos con efectos**
+
+`PremiosEntregados` y `TorneoCerrado` son ambos eventos de dominio, pero con
+"peso" radicalmente distinto:
+
+- `PremiosEntregados`: registra un hecho. El estado del sistema no cambia para
+  ningún otro BC. Es un punto final administrativo, no un disparador.
+- `TorneoCerrado`: registra un hecho **y** dispara un proceso: N notificaciones
+  personalizadas a todos los participantes.
+
+La distinción no es técnica — es semántica. `TorneoCerrado` tiene consecuencias
+para los atletas (quieren saber cómo les fue); `PremiosEntregados` no (ya lo saben).
+
+Hacer esta distinción explícita en diseño evita dos errores opuestos:
+- Over-engineering: construir infraestructura de notificación para eventos sin efectos
+- Under-engineering: olvidar que un evento dispara comportamiento en otro BC
+
+**5. El mapeo BC×SP hace visibles dependencias de implementación no obvias**
+
+Construir la matriz BC×SP forzó a pensar en qué debe existir antes de qué.
+La dependencia más interesante que emergió: BC Notificaciones no puede implementarse
+correctamente hasta que los BCs upstream (Torneo, Registro, Resultados, Competencia)
+tengan sus eventos estabilizados. Cualquier cambio de contrato en un evento fuente
+después de SP4 tiene impacto en Notificaciones.
+
+Esto sugiere que la secuencia SP1→SP4 no es solo una conveniencia de desarrollo —
+es una garantía de que cuando Notificaciones se implemente, los contratos que consume
+ya son estables. Es una propiedad emergente de ordenar por dependencias DDD, no
+una decisión arbitraria de planning.
+
+**Hipótesis a evaluar en retrospectiva BL-000:**
+> Resolver hot spots en la Capa 2 de IEDD (antes de Capa 3 — Especificación)
+> reduce la cantidad de invariantes descubiertos durante la implementación que
+> no estaban en las US-IEDD. La métrica: edge cases aparecidos en SP1 que no
+> fueron anticipados en las US-IEDD de ese SP.
+
+---
+
+## 12. Próximo Paso
 
 Este documento es insumo directo para:
 
@@ -246,6 +335,6 @@ Este documento es insumo directo para:
 ---
 
 *Documento creado: 2026-03-19 — Semana 0, Fase 0*
-*v1.0: mapeo BC × SP, secuencia justificada, dependencias, hot spots con impacto*
+*v1.1: mapeo BC × SP, secuencia justificada, dependencias, hot spots resueltos, notas del experimento*
 *Fuentes: estrategia_desarrollo.md · Context Map v1.1 · Domain Model v1.0*
 *Mantenido por: Claude Cowork + Victor Valotto*
