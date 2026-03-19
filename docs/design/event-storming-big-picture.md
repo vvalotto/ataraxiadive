@@ -255,10 +255,10 @@ Cierre:
 
 | ID | Descripción | Estado |
 |----|-------------|--------|
-| 🔴 HS-19 | RF-PM-01: cálculo por puntos o por marca absoluta — pendiente de definir. ¿El evento `ResultadosCalculados` es suficiente sin resolver el algoritmo ahora? | ⏳ Pendiente |
+| 🔴 HS-19 | RF-PM-01: cálculo por puntos o por marca absoluta | ✅ Fórmula deportiva configurable por torneo (AIDA/CMAS/genérica). Overall por categoría sumando puntos. `FormulaPuntos` VO en BC Torneo. |
 | 🔴 HS-20 | RF-PM-02: Overall (ranking general multi-disciplina). ¿Es evento separado `OverallCalculado` o incluido en `ResultadosCalculados`? | ✅ Evento separado `OverallCalculado` — se dispara después de calcular todas las disciplinas |
 | 🔴 HS-21 | ¿`PublicarResultados` es por disciplina (publicación incremental) o una sola publicación al cierre del torneo? | ✅ Por disciplina — publicación incremental a medida que cada competencia finaliza |
-| 🔴 HS-22 | `PremiosEntregados`: ¿genera efectos en el sistema (certificado, notificación) o solo registro del hecho? | ⏳ Pendiente |
+| 🔴 HS-22 | `PremiosEntregados`: ¿genera efectos en el sistema (certificado, notificación) o solo registro del hecho? | ✅ Solo registro administrativo — sin efectos secundarios ni notificaciones. |
 
 ---
 
@@ -302,7 +302,7 @@ Variante cancelación (puede ocurrir en cualquier fase anterior):
 |----|-------------|--------|
 | 🔴 HS-23 | `CancelarTorneo` puede ocurrir en cualquier fase. ¿Hay restricciones? ¿Se puede cancelar con competencias ya ejecutadas? | ✅ Sí, se puede cancelar en cualquier fase incluso con competencias ejecutadas — datos siempre preservados |
 | 🔴 HS-24 | RF-GT-05: vuelta de Ejecución a Preparación. ¿Se modela como evento `TorneoRevertidoAPreparacion` o es implícito en el estado? | ✅ No aplica v1 — consecuencia de HS-17: transición unidireccional |
-| 🔴 HS-25 | ¿`TorneoCerrado` dispara notificaciones a atletas y jueces (RF-NT-04)? | ⏳ Pendiente |
+| 🔴 HS-25 | ¿`TorneoCerrado` dispara notificaciones a atletas y jueces (RF-NT-04)? | ✅ Sí — email/push a todos los participantes con resumen individual de participación. |
 
 ---
 
@@ -311,7 +311,7 @@ Variante cancelación (puede ocurrir en cualquier fase anterior):
 | ID | Fase | Descripción | Estado |
 |----|------|-------------|--------|
 | HS-01 | Apertura | ¿`CrearTorneo` y `SeleccionarDisciplinas` son un solo comando o dos? | ✅ Dos comandos separados |
-| HS-02 | Apertura | ¿La entidad organizadora se registra al crear el torneo o es config previa? | ⏳ Pendiente |
+| HS-02 | Apertura | ¿La entidad organizadora se registra al crear el torneo o es config previa? | ✅ Catálogo CRUD propio en BC Torneo |
 | HS-03 | Apertura | ¿Cuántos torneos activos puede tener un organizador? | ✅ Solo uno |
 | HS-04 | Inscripción | Atleta nuevo vs. existente en BD FAAS — ¿dos comandos? | ✅ MVP: un solo `RegistrarAtleta` |
 | HS-05 | Inscripción | ¿Qué pasa si datos difieren de BD FAAS? | ✅ No aplica v1 |
@@ -328,13 +328,13 @@ Variante cancelación (puede ocurrir en cualquier fase anterior):
 | HS-16 | Ejecución | ¿El sistema registra qué juez asignó cada tarjeta? | ✅ Sí |
 | HS-17 | Ejecución | ¿Se puede volver de Ejecución a Preparación? | ✅ No — transición unidireccional v1 |
 | HS-18 | Ejecución | Zona v2+: eventos intermedios entre `AtletaLlamado` y `ResultadoRegistrado` | ✅ Documentado — fuera de alcance v1 |
-| HS-19 | Premiación | Cálculo por puntos o por marca absoluta | ⏳ Pendiente |
+| HS-19 | Premiación | Cálculo por puntos o por marca absoluta | ✅ Fórmula configurable por torneo — `FormulaPuntos` VO en BC Torneo |
 | HS-20 | Premiación | ¿Overall es evento separado o incluido en `ResultadosCalculados`? | ✅ Evento separado `OverallCalculado` |
 | HS-21 | Premiación | ¿`PublicarResultados` por disciplina o al cierre del torneo? | ✅ Por disciplina — publicación incremental |
-| HS-22 | Premiación | `PremiosEntregados`: ¿genera certificado/notificación o solo registro? | ⏳ Pendiente |
+| HS-22 | Premiación | `PremiosEntregados`: ¿genera certificado/notificación o solo registro? | ✅ Solo registro administrativo — sin efectos secundarios |
 | HS-23 | Cierre | ¿Se puede cancelar con competencias ya ejecutadas? | ✅ Sí — datos siempre preservados |
 | HS-24 | Cierre | Vuelta de Ejecución a Preparación: ¿evento explícito? | ✅ No aplica v1 — consecuencia de HS-17 |
-| HS-25 | Cierre | ¿`TorneoCerrado` dispara notificaciones? | ⏳ Pendiente |
+| HS-25 | Cierre | ¿`TorneoCerrado` dispara notificaciones? | ✅ Sí — email/push a todos los participantes con resumen individual |
 
 ---
 

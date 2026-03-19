@@ -236,15 +236,24 @@ classDiagram
 | `EntidadOrganizadora` | Aggregate root | Catálogo de federaciones/clubs organizadores (CRUD) |
 | `Sede` | Aggregate root | Catálogo de sedes físicas con datos de pileta (CRUD) |
 
+### Value Objects de configuración del Torneo
+
+| Value Object | Descripción |
+|-------------|-------------|
+| `FormulaPuntos` | Fórmula deportiva para calcular puntos por disciplina. Configurable por torneo (AIDA / CMAS / genérica). Consumida por BC Resultados para calcular el Overall. |
+| `VentanaImpugnacion` | Lapso en minutos desde `CompetenciaFinalizada` durante el cual se permite `CorregirResultado`. Configurable por torneo. Consumida por BC Competencia como INV-P-15. |
+
 ### Eventos principales
 
 | Evento | Descripción |
 |--------|-------------|
 | `TorneoCreado` | Torneo inicializado con EntidadOrganizadora y Sede seleccionadas |
 | `DisciplinasSeleccionadas` | Lista de disciplinas del torneo definida |
+| `FormulaPuntosConfigurada` | Fórmula de cálculo de Overall seleccionada para el torneo |
+| `VentanaImpugnacionConfigurada` | Lapso de corrección de resultados establecido |
 | `InscripcionHabilitada` | Publicado al bus → BC Registro puede aceptar inscripciones |
 | `InscripcionCerrada` | Automática (fecha) o manual (organizador) |
-| `TorneoCerrado` | Torneo finalizado — resultados disponibles para descarga |
+| `TorneoCerrado` | Torneo finalizado — dispara notificaciones con resumen individual a todos los participantes |
 | `TorneoCancelado` | Cancelación en cualquier fase — datos preservados |
 
 ---
@@ -289,7 +298,7 @@ classDiagram
 | `ResultadosCalculados` | Ranking por disciplina calculado |
 | `OverallCalculado` | Ranking general calculado (después de todas las disciplinas) |
 | `ResultadosPublicados` | Publicación incremental por disciplina |
-| `PremiosEntregados` | Registro del hecho de entrega (HS-22: efectos pendientes de definir) |
+| `PremiosEntregados` | Registro administrativo del hecho de entrega — sin efectos secundarios ni notificaciones (HS-22: ✅) |
 
 ---
 

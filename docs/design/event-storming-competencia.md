@@ -300,8 +300,10 @@ INV-P-11: motivo es obligatorio si tarjeta = amarilla o roja
 
 > Actor: Juez
 > Aggregate: Performance
-> Restricción: solo mientras Competencia en estado EnEjecucion o hasta N minutos después
-> de CompetenciaFinalizada (a definir — HS-P2)
+> Restricción: dentro de la **ventana de impugnación** configurada en el torneo.
+> La ventana se define como un lapso en minutos desde `CompetenciaFinalizada`.
+> Vencida la ventana, `CorregirResultado` queda bloqueado — el resultado es inmutable.
+> (HS-P2 ✅ resuelto — 2026-03-19)
 
 ### Línea de Eventos
 
@@ -327,13 +329,15 @@ INV-P-12: motivo es obligatorio en ResultadoCorregido — sin excepción
 INV-P-13: CorregirResultado no permitido si Performance en estado DNS
 INV-P-14: CorregirResultado solo sobre el resultado más reciente (no se puede corregir
           una corrección anterior — siempre se corrige sobre el estado actual proyectado)
+INV-P-15: CorregirResultado solo permitido dentro de la ventanaImpugnacion del torneo
+          medida desde CompetenciaFinalizada. Vencida la ventana → excepción de dominio.
 ```
 
 ### Hot Spots
 
 | ID | Descripción | Estado |
 |----|-------------|--------|
-| 🔴 HS-P2 | ¿Hasta cuándo se puede corregir un resultado? ¿Solo mientras la Competencia está EnEjecucion, o también después de CompetenciaFinalizada? | ⏳ Pendiente — impacta las US-IEDD de corrección |
+| ✅ HS-P2 | ¿Hasta cuándo se puede corregir un resultado? | Resuelto: ventana de tiempo configurable por torneo (minutos desde `CompetenciaFinalizada`). Ver INV-P-15. |
 
 ---
 
@@ -366,6 +370,7 @@ INV-P-14: CorregirResultado solo sobre el resultado más reciente (no se puede c
 | INV-P-12 | `motivo` obligatorio en `ResultadoCorregido` — sin excepción |
 | INV-P-13 | `CorregirResultado` no permitido si Performance = DNS |
 | INV-P-14 | Se corrige sobre el estado actual proyectado — no sobre eventos anteriores |
+| INV-P-15 | `CorregirResultado` solo dentro de la ventana de impugnación del torneo desde `CompetenciaFinalizada` |
 
 ---
 
@@ -426,11 +431,11 @@ Derivados directamente de los comandos y sus invariantes:
 
 ---
 
-## Hot Spot Pendiente
+## Hot Spots — Estado Final
 
-| ID | Descripción | Impacto |
-|----|-------------|---------|
-| 🔴 HS-P2 | ¿Hasta cuándo se puede corregir un resultado? | Determina la precondición de US-P-06 — a resolver antes de especificar esa US |
+| ID | Descripción | Estado | Resolución |
+|----|-------------|--------|-----------|
+| ✅ HS-P2 | ¿Hasta cuándo se puede corregir un resultado? | Resuelto — 2026-03-19 | Ventana de impugnación configurable por torneo (minutos desde `CompetenciaFinalizada`). Se almacena en BC Torneo y se aplica como INV-P-15 en `CorregirResultado`. |
 
 ---
 

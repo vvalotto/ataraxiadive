@@ -170,8 +170,8 @@ Es downstream de todos — ningún BC depende de Notificaciones en runtime.
 | `InscripcionConfirmada` | Registro | Atleta | Email |
 | `TorneoCancelado` | Torneo | Todos los inscriptos | Email |
 | `ResultadosPublicados` | Resultados | Atletas de esa disciplina | Email/Push |
-| `TorneoCerrado` | Torneo | Atletas y jueces | Email/Push (HS-25: ⏳) |
-| `PremiosEntregados` | Resultados | — | ⏳ (HS-22 pendiente) |
+| `TorneoCerrado` | Torneo | Todos los participantes | Email/Push — resumen individual de participación (HS-25: ✅) |
+| `PremiosEntregados` | Resultados | — | Solo registro administrativo — sin efectos secundarios (HS-22: ✅) |
 
 ---
 
@@ -232,14 +232,14 @@ El lugar físico donde se realiza el torneo (club, pileta, institución).
 
 ---
 
-## 6. Hot Spots Pendientes con Impacto en el Context Map
+## 6. Hot Spots con Impacto en el Context Map
 
-| HS | Descripción | Impacto |
-|----|-------------|---------|
-| HS-02 | Entidad organizadora: ¿catálogo preconfigurado o libre? | ✅ Resuelto: catálogo persistido con CRUD propio en BC Torneo |
-| HS-25 | ¿`TorneoCerrado` dispara notificaciones? | Afecta tabla de eventos de Notificaciones — a resolver antes de implementar ese flujo |
-| HS-22 | `PremiosEntregados`: ¿genera certificado/notificación? | Idem |
-| HS-19 | Cálculo por puntos o por marca absoluta | Afecta internamente a BC Resultados — no al mapa |
+| HS | Descripción | Estado | Resolución |
+|----|-------------|--------|-----------|
+| HS-02 | Entidad organizadora: ¿catálogo preconfigurado o libre? | ✅ | Catálogo persistido con CRUD propio en BC Torneo |
+| HS-25 | ¿`TorneoCerrado` dispara notificaciones? | ✅ | Sí — email/push a todos los participantes con resumen individual de participación |
+| HS-22 | `PremiosEntregados`: ¿genera certificado/notificación? | ✅ | Solo registro administrativo — sin efectos secundarios ni notificaciones |
+| HS-19 | Cálculo por puntos o por marca absoluta | ✅ | Fórmula deportiva configurable por torneo (AIDA/CMAS/otra). Overall por categoría sumando puntos. `FormulaPuntos` en BC Torneo. |
 
 ---
 
