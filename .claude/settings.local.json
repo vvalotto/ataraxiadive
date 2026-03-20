@@ -7,7 +7,31 @@
       "Bash(git -C /Users/victor/PycharmProjects/ataraxiadive status --short)",
       "Bash(git -C /Users/victor/PycharmProjects/ataraxiadive add CLAUDE.md .claude/)",
       "Bash(git -C /Users/victor/PycharmProjects/ataraxiadive rm --cached .claude/worktrees/fervent-feistel)",
-      "Bash(git -C /Users/victor/PycharmProjects/ataraxiadive add .gitignore)"
+      "Bash(git -C /Users/victor/PycharmProjects/ataraxiadive add .gitignore)",
+      "Bash(git tag:*)",
+      "Bash(gh repo:*)",
+      "Bash(gh api:*)",
+      "Bash(python:*)",
+      "Bash(pip install:*)",
+      "Bash(python3 -c \"import yaml; print\\(''ok''\\)\")",
+      "Bash(pip list:*)",
+      "Bash(pip show:*)",
+      "Bash(/Users/victor/PycharmProjects/ataraxiadive/.venv/bin/pip install:*)",
+      "Bash(/Users/victor/PycharmProjects/ataraxiadive/.venv/bin/python -m pip install pyyaml --quiet)",
+      "Bash(/Users/victor/PycharmProjects/ataraxiadive/.venv/bin/python -c \"import yaml; print\\(''yaml ok''\\)\")",
+      "Bash(/Users/victor/PycharmProjects/ataraxiadive/.venv/bin/python3.14 --version)",
+      "Bash(/Users/victor/PycharmProjects/ataraxiadive/.venv/bin/python3.14 -c \"import yaml\")",
+      "Bash(uv --version)",
+      "Bash(uv add:*)",
+      "Bash(uv run:*)",
+      "Bash(/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 ~/.claude-dev-kit/install/installer.py --profile fastapi-rest --yes 2>&1)",
+      "Bash(/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 ~/.claude-dev-kit/install/installer.py --profile fastapi-rest --yes --force 2>&1)",
+      "Bash(python3 -m json.tool)",
+      "Bash(codeguard --version)",
+      "Bash(designreviewer --version)",
+      "Bash(architectanalyst --version)",
+      "Bash(codeguard --help)",
+      "Bash(codeguard src/)"
     ]
   }
 }
