@@ -363,14 +363,13 @@ isort src/ tests/
 
 | Herramienta | Estado |
 |-------------|--------|
-| Claude Dev Kit (`/implement-us`) | ❌ No instalado — `skills/` vacío |
-| software_limpio / quality-agents | ❌ No instalado — paquete ausente en dependencias |
-| CodeGuard pre-commit hook | ⚠️ Configurado en `.pre-commit-config.yaml`, no funcional |
-| DesignReviewer | ⚠️ Configurado en `pyproject.toml`, no funcional |
-| ArchitectAnalyst | ⚠️ Configurado en `pyproject.toml`, carpeta `quality/` inexistente |
+| Claude Dev Kit (`/implement-us`) | ✅ Instalado — `.claude/skills/implement-us/`, perfil `fastapi-rest` |
+| software_limpio / quality-agents | ✅ Instalado — `quality-agents v0.3.1` vía `uv pip install` desde git |
+| CodeGuard pre-commit hook | ✅ Operativo — `codeguard src/` |
+| DesignReviewer | ✅ Operativo — `designreviewer src/` |
+| ArchitectAnalyst | ✅ Operativo — `architectanalyst src/ --sprint-id BL-NNN` |
 
-**Próximo paso:** instalar herramientas (Claude Dev Kit + software_limpio) y arrancar SP1.
-Primera acción: redactar `docs/plans/US-1.1.1.md` y ejecutar `/implement-us US-1.1.1`.
+**Próximo paso:** redactar `docs/plans/US-1.1.1.md` y ejecutar `/implement-us US-1.1.1`.
 
 ---
 
