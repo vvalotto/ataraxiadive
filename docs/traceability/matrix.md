@@ -140,7 +140,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-IG-01 | Integración con BD FAZ (protocolo/formato) | Registro | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
+| RF-IG-01 | Integración con BD FAAS (protocolo/formato) | Registro | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
 | RF-IG-02 | Consulta a BD externa: solo lectura o lectura/escritura | Registro | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
 | RF-IG-03 | BD externa no disponible al inscribir atleta | Registro | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
 | RF-IG-04 | Exportación a sistemas de rankings (AIDA, CMAS) | Resultados | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
@@ -167,7 +167,7 @@ en `docs/plans/` antes de ejecutar `/implement-us`.
 
 | US candidata | Inc. | RFs cubiertos | Comando principal | Invariantes clave |
 |-------------|------|---------------|------------------|------------------|
-| US-1.1.1 | 1.1 | — | Setup: capas hexagonales + `domain_events` + health-check | — |
+| US-1.1.1 | 1.1 | — | Setup: esqueleto BC Competencia (BC-first) + `domain_events` + health-check | — |
 | US-1.2.1 | 1.2 | RF-PR-01/02/03, RF-EJ-08 | `RegistrarAP` | INV-P-01, INV-P-02, INV-P-03 |
 | US-1.2.2 | 1.2 | RF-EJ-05/08 | `RegistrarResultado` | INV-P-06 |
 | US-1.2.3 | 1.2 | RF-EJ-10 | `AsignarTarjeta` (blanca/roja) | INV-P-07, INV-P-11 |
@@ -209,11 +209,12 @@ en `docs/plans/` antes de ejecutar `/implement-us`.
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
 | US-1.1.1 | ADR-001..004 | Stack tecnológico y arquitectura hexagonal |
+| US-1.1.1 | ADR-006 | Estructura BC-first — esqueleto de `src/competencia/` |
 | US-1.2.x | ADR-005 | Event Sourcing en BC Competencia |
 
 ---
 
 *Documento creado: 2026-03-19 — Semana 0, Fase 0*
-*v1.0: trazabilidad completa RF → BC → incremento → US-IEDD candidata*
+*v1.1 — 2026-03-20: US-1.1.1 actualizada a BC-first · ADR-006 agregado · FAZ → FAAS*
 *Fuentes: 05-requerimientos_funcionales.md · Context Map v1.1 · estrategia-desarrollo-bc.md · ES Competencia*
 *Mantenido por: Claude Cowork + Victor Valotto*
