@@ -1,46 +1,55 @@
 {
-  "_comment_profile": "Perfil de customización para APIs REST con FastAPI y arquitectura en capas",
+  "_comment_profile": "Perfil de customización para AtaraxiaDive — FastAPI + Hexagonal DDD BC-first",
+  "_comment_override": "Este perfil SOBREESCRIBE el fastapi-rest genérico con las convenciones reales de AtaraxiaDive",
+  "_comment_context_doc": "Documento de contexto obligatorio: docs/plans/ATARAXIADIVE-CONTEXT.md",
 
   "profile_metadata": {
     "name": "fastapi-rest",
-    "display_name": "FastAPI REST API + Layered Architecture",
-    "description": "Configuración para APIs REST con FastAPI, arquitectura en capas (router-service-repository) y async/await",
+    "display_name": "AtaraxiaDive — FastAPI + Hexagonal DDD BC-First",
+    "description": "Arquitectura hexagonal con DDD organizada por Bounded Context. No es layered architecture.",
     "extends": "config.json",
-    "version": "1.0.0",
-    "author": "Claude Dev Kit",
-    "created": "2026-02-13",
-    "target_stack": "FastAPI + Python 3.10+ + async/await",
-    "architecture": "Layered Architecture (Presentation → Business → Data)"
+    "version": "2.0.0",
+    "author": "Victor Valotto",
+    "created": "2026-03-20",
+    "target_stack": "FastAPI + Python 3.14 + uv + async/await",
+    "architecture": "Hexagonal DDD BC-First (domain → application → infrastructure → api)",
+    "context_document": "docs/plans/ATARAXIADIVE-CONTEXT.md"
   },
 
-  "_comment_variables": "Override de variables para FastAPI - Arquitectura en capas REST",
+  "_comment_variables": "Override de variables para AtaraxiaDive — BC-first hexagonal DDD",
 
   "variables": {
     "architecture_pattern": {
-      "default": "layered",
-      "description": "Arquitectura en capas: Router (presentación) → Service (lógica) → Repository (datos)",
-      "available": ["layered", "clean-architecture"],
+      "default": "hexagonal",
+      "description": "Hexagonal DDD BC-first: domain → application → infrastructure → api",
+      "available": ["hexagonal"],
       "layers": {
-        "presentation": "Routers (FastAPI endpoints)",
-        "business": "Services (lógica de negocio)",
-        "data": "Repositories (acceso a datos)",
-        "models": "Models (Pydantic schemas + SQLAlchemy models)"
-      }
+        "domain": "Aggregates, ValueObjects, DomainEvents, Ports (interfaces)",
+        "application": "CommandHandlers, QueryHandlers",
+        "infrastructure": "Repository implementations, EventStore, ACLs",
+        "api": "FastAPI routers del BC"
+      },
+      "golden_rule": "<bc>/domain/ no importa nada fuera de su domain/. Solo shared/domain/ es excepción."
     },
     "component_type": {
-      "default": "Endpoint",
-      "description": "Tipo de componente a implementar en la API",
-      "available": ["Endpoint", "Service", "Repository", "Model", "Schema"],
-      "examples": "UserEndpoint, AuthService, ProductRepository, UserSchema"
+      "default": "AggregateRoot",
+      "description": "Tipo de componente DDD a implementar",
+      "available": ["AggregateRoot", "ValueObject", "DomainEvent", "Port", "CommandHandler", "QueryHandler", "Repository", "ApiRouter"],
+      "examples": "Performance, AnnouncedPerformance, PerformanceRegistrada, PerformanceRepository, RegistrarAPHandler"
     },
     "component_path": {
-      "default": "app/api/{name}/",
-      "description": "Ruta base para módulos de API - agrupa todos los layers de un feature",
-      "structure": {
-        "feature_based": "app/api/{name}/",
-        "layer_based": "app/{layer}/{name}/"
-      },
-      "recommended": "feature_based (mejor cohesión)"
+      "default": "src/{bc}/domain/aggregates/",
+      "description": "Ruta base según tipo de componente y BC",
+      "by_component": {
+        "AggregateRoot": "src/{bc}/domain/aggregates/",
+        "ValueObject": "src/{bc}/domain/value_objects/",
+        "DomainEvent": "src/{bc}/domain/events/",
+        "Port": "src/{bc}/domain/ports/",
+        "CommandHandler": "src/{bc}/application/commands/",
+        "QueryHandler": "src/{bc}/application/queries/",
+        "Repository": "src/{bc}/infrastructure/repositories/",
+        "ApiRouter": "src/{bc}/api/"
+      }
     },
     "test_framework": {
       "default": "pytest + httpx",
@@ -72,87 +81,105 @@
       "current_layer": "api"
     },
     "project_root": {
-      "default": "app/",
-      "description": "Raíz del proyecto FastAPI (directorio app/)",
+      "default": "src/",
+      "description": "Raíz del código fuente — organizado por BC",
       "structure": {
-        "api": "app/api/",
-        "core": "app/core/",
-        "models": "app/models/",
-        "db": "app/db/"
+        "competencia": "src/competencia/",
+        "torneo": "src/torneo/",
+        "registro": "src/registro/",
+        "resultados": "src/resultados/",
+        "identidad": "src/identidad/",
+        "notificaciones": "src/notificaciones/",
+        "shared": "src/shared/domain/",
+        "app_entry": "src/app.py"
       }
     }
   },
 
-  "_comment_component_structure": "Estructura en capas para features de FastAPI",
+  "_comment_component_structure": "Estructura hexagonal DDD BC-first para AtaraxiaDive",
 
   "component_structure": {
-    "api_feature": {
-      "description": "Feature completo con arquitectura en capas (router-service-repository-models)",
-      "base_path": "app/api/{feature_name}/",
+    "bc_feature": {
+      "description": "BC completo con arquitectura hexagonal DDD",
+      "base_path": "src/{bc}/",
       "files": {
-        "router": {
-          "filename": "router.py",
-          "class_name": "{FeatureName}Router",
-          "decorator": "@router (APIRouter)",
+        "aggregate": {
+          "path": "src/{bc}/domain/aggregates/{nombre}.py",
+          "base_class": "AggregateRoot (de shared/domain/base/)",
           "responsibilities": [
-            "Definir endpoints HTTP (GET, POST, PUT, DELETE)",
-            "Validación de request/response con Pydantic",
-            "Dependency injection (get_db, get_current_user)",
-            "Delegación a services"
+            "Encapsula invariantes del BC",
+            "Emite DomainEvents ante cambios de estado",
+            "Métodos de negocio que validan las reglas",
+            "Sin dependencias de infraestructura"
           ]
         },
-        "service": {
-          "filename": "service.py",
-          "class_name": "{FeatureName}Service",
-          "base_class": "BaseService",
+        "value_object": {
+          "path": "src/{bc}/domain/value_objects/{nombre}.py",
+          "base_class": "ValueObject inmutable",
           "responsibilities": [
-            "Lógica de negocio del feature",
-            "Orquestación de múltiples repositories",
-            "Transacciones y validaciones complejas",
-            "Transformación de datos (entity → DTO)"
+            "Inmutable — frozen dataclass o __setattr__ bloqueado",
+            "Validación propia en __init__",
+            "Igualdad por valor, no por identidad"
           ]
         },
-        "repository": {
-          "filename": "repository.py",
-          "class_name": "{FeatureName}Repository",
-          "base_class": "BaseRepository",
+        "domain_event": {
+          "path": "src/{bc}/domain/events/{nombre}.py",
+          "base_class": "DomainEvent (de shared/domain/base/)",
           "responsibilities": [
-            "Acceso a base de datos (CRUD)",
-            "Queries específicas del feature",
-            "Gestión de sesiones SQLAlchemy",
+            "Describe algo que ocurrió en el dominio",
+            "Inmutable — todos los campos readonly",
+            "Nombrado en pasado: PerformanceRegistrada, TarjetaAsignada"
+          ]
+        },
+        "port": {
+          "path": "src/{bc}/domain/ports/{nombre}.py",
+          "base_class": "ABC",
+          "responsibilities": [
+            "Define el contrato de repositorio o servicio externo",
+            "Solo métodos abstractos — sin implementación",
+            "Implementado en infrastructure/"
+          ]
+        },
+        "command_handler": {
+          "path": "src/{bc}/application/commands/{nombre}_handler.py",
+          "responsibilities": [
+            "Carga aggregate desde repositorio",
+            "Llama método del aggregate",
+            "Persiste aggregate",
+            "Sin lógica de negocio — delega al aggregate"
+          ]
+        },
+        "query_handler": {
+          "path": "src/{bc}/application/queries/{nombre}_handler.py",
+          "responsibilities": [
+            "Lee datos del repositorio o read model",
+            "Retorna DTOs o view models",
+            "Sin side effects"
+          ]
+        },
+        "repository_impl": {
+          "path": "src/{bc}/infrastructure/repositories/{nombre}_repository.py",
+          "responsibilities": [
+            "Implementa el puerto definido en domain/ports/",
+            "Traduce entre domain objects y SQLAlchemy/EventStore",
             "Sin lógica de negocio"
           ]
         },
-        "schemas": {
-          "filename": "schemas.py",
-          "description": "Pydantic models para request/response",
-          "classes": [
-            "{Feature}Create (request body)",
-            "{Feature}Update (request body)",
-            "{Feature}Response (response model)",
-            "{Feature}InDB (incluye campos DB)"
-          ]
-        },
-        "models": {
-          "filename": "models.py",
-          "description": "SQLAlchemy ORM models",
-          "base_class": "Base (DeclarativeBase)",
+        "api_router": {
+          "path": "src/{bc}/api/router.py",
+          "base_class": "fastapi.APIRouter",
           "responsibilities": [
-            "Definir schema de base de datos",
-            "Relaciones entre tablas",
-            "Constraints y validaciones DB"
+            "Solo importa application/ — nunca domain/ directamente",
+            "Traduce HTTP request → Command/Query",
+            "Traduce resultado → HTTP response con Pydantic schema"
           ]
-        },
-        "init": {
-          "filename": "__init__.py",
-          "exports": ["router", "service", "repository", "schemas", "models"]
         }
       },
       "test_files": {
-        "test_router": "tests/api/test_{feature_name}_router.py",
-        "test_service": "tests/services/test_{feature_name}_service.py",
-        "test_repository": "tests/repositories/test_{feature_name}_repository.py",
-        "test_integration": "tests/integration/test_{feature_name}_e2e.py"
+        "test_aggregate": "tests/unit/{bc}/test_{nombre}.py",
+        "test_value_object": "tests/unit/{bc}/test_{nombre}.py",
+        "test_command_handler": "tests/unit/{bc}/test_{nombre}_handler.py",
+        "test_integration": "tests/integration/{bc}/test_{nombre}.py"
       },
       "dependency_injection": {
         "enabled": true,
@@ -202,12 +229,12 @@
       "db": "Tests que requieren base de datos"
     },
     "coverage_config": {
-      "source": ["app/api", "app/services", "app/repositories"],
+      "source": ["src/{bc}/domain", "src/{bc}/application"],
       "omit": [
         "tests/*",
-        "app/api/*/__init__.py",
-        "app/core/config.py",
-        "app/db/base.py"
+        "src/*/__init__.py",
+        "src/*/infrastructure/*",
+        "src/*/api/*"
       ],
       "exclude_lines": [
         "pragma: no cover",
@@ -222,54 +249,42 @@
       "--tb=short",
       "--strict-markers",
       "--asyncio-mode=auto",
-      "--cov=app",
+      "--cov=src/{bc}/domain",
+      "--cov=src/{bc}/application",
       "--cov-report=term-missing",
       "--cov-report=html"
     ]
   },
 
-  "_comment_quality_gates": "Quality gates para APIs REST (async code, dependency injection)",
+  "_comment_quality_gates": "Quality gates — se usan mediante CodeGuard (orquesta pylint + radon). NUNCA usar radon directamente.",
 
   "quality_gates": {
+    "codeguard": {
+      "enabled": true,
+      "tool": "codeguard",
+      "command": "codeguard src/{bc}/ --format json > quality/reports/codeguard/{US_ID}-codeguard.json",
+      "notes": "CodeGuard orquesta pylint + radon. Ver pyproject.toml [tool.codeguard]"
+    },
     "pylint": {
       "enabled": true,
-      "min_score": 8.5,
-      "config_file": ".pylintrc",
-      "exclude_patterns": [
-        "tests/*",
-        "app/db/migrations/*",
-        "*/__init__.py"
-      ],
-      "disable_checks": [
-        "too-few-public-methods",
-        "too-many-arguments",
-        "redefined-outer-name"
-      ],
-      "notes": "APIs tienen muchos parámetros (query params, path params, body)"
+      "min_score": 8.0,
+      "config_source": "pyproject.toml [tool.pylint]",
+      "scope": "src/{bc}/domain/ + src/{bc}/application/",
+      "notes": "Invocado por CodeGuard, no directamente"
     },
     "cyclomatic_complexity": {
       "enabled": true,
       "max_per_function": 10,
-      "tool": "radon",
-      "exclude_patterns": ["tests/*", "app/db/migrations/*"]
-    },
-    "maintainability_index": {
-      "enabled": true,
-      "min_score": 25,
-      "tool": "radon",
-      "exclude_patterns": ["tests/*"],
-      "notes": "APIs bien diseñadas tienen MI alto (servicios pequeños y cohesivos)"
+      "tool": "radon (vía CodeGuard)",
+      "notes": "Nunca usar radon directamente — CodeGuard lo orquesta"
     },
     "coverage": {
       "enabled": true,
-      "min_percent": 95.0,
+      "min_percent": 90.0,
       "tool": "pytest-cov",
-      "exclude_patterns": [
-        "tests/*",
-        "app/db/migrations/*",
-        "*/__init__.py"
-      ],
-      "notes": "APIs son fáciles de testear (mockeables, inyección de dependencias)"
+      "scope": "src/{bc}/domain/ + src/{bc}/application/",
+      "command": "pytest tests/unit/{bc}/ --cov=src/{bc}/domain --cov=src/{bc}/application --cov-report=term-missing",
+      "notes": "Infrastructure y api no cuentan para el umbral mínimo del 90%"
     }
   },
 
@@ -328,13 +343,15 @@
   "_comment_patterns": "Patrones específicos de FastAPI/REST",
 
   "design_patterns": {
-    "layered_architecture": {
-      "description": "Separación en capas: Router → Service → Repository → DB",
+    "hexagonal_architecture": {
+      "description": "Hexagonal DDD BC-First — domain → application → infrastructure → api",
       "rules": [
-        "Router: solo endpoints HTTP, validación con Pydantic",
-        "Service: lógica de negocio, orquestación de repositories",
-        "Repository: CRUD y queries específicas, sin lógica de negocio"
-      ]
+        "domain/: aggregates, value objects, eventos, puertos (interfaces ABC) — sin dependencias externas",
+        "application/: command/query handlers — delegan al aggregate, sin lógica de negocio",
+        "infrastructure/: implementa puertos de domain/ — SQLAlchemy, EventStore, ACLs",
+        "api/: FastAPI router — traduce HTTP → Command/Query, solo importa application/"
+      ],
+      "golden_rule": "<bc>/domain/ NO importa nada fuera de su domain/. Solo shared/domain/ es excepción válida."
     },
     "dependency_injection": {
       "description": "Inyección de dependencias con FastAPI Depends()",
@@ -429,7 +446,7 @@
   "documentation_config": {
     "plan_path": "docs/plans/",
     "report_path": "docs/reports/",
-    "adr_path": "docs/architecture/decisions/",
+    "adr_path": "docs/adr/",
     "api_docs_path": "docs/api/",
     "format": "markdown",
     "include_diagrams": true,

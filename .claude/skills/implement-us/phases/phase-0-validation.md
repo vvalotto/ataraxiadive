@@ -6,6 +6,21 @@
 
 ---
 
+## 0. Leer contexto del proyecto (OBLIGATORIO — hacer antes de cualquier otra cosa)
+
+**Leer el documento `docs/plans/ATARAXIADIVE-CONTEXT.md` antes de continuar.**
+
+Este documento define:
+- La arquitectura real del proyecto (hexagonal DDD BC-first, no layered)
+- Los paths canónicos de todos los artefactos
+- Los tipos de componente DDD a generar por capa
+- Los BCs y sus características (Event Sourcing vs CRUD)
+- Las convenciones de código y quality gates
+
+> **Sin leer este documento, las rutas, patrones y convenciones de las fases siguientes serán incorrectas.**
+
+---
+
 ## Tracking
 
 **Al inicio de la fase:**
@@ -22,13 +37,10 @@ tracker.start_phase(0, "Validación de Contexto")
 
 ## 1. Verificar que existe la historia de usuario
 
-**Buscar en estructura de documentación del proyecto:**
+**Buscar en la ubicación canónica de AtaraxiaDive:**
 
-> **Rutas comunes según stack:**
-> - **PyQt/MVC:** `{PRODUCT}/docs/HISTORIAS-USUARIO-*.md`
-> - **FastAPI:** `docs/user-stories/US-*.md` o `{PRODUCT}/docs/US-*.md`
-> - **Django:** `docs/requirements/US-*.md` o `{app}/docs/US-*.md`
-> - **Generic:** `docs/US-*.md` o `requirements/US-*.md`
+> **Ruta canónica:** `docs/plans/US-X.Y.Z.md`
+> (donde X.Y.Z = identificador de la US, ej: `docs/plans/US-1.1.1.md`)
 
 **Extraer de la US:**
 - Título de la historia
@@ -44,31 +56,21 @@ tracker.start_phase(0, "Validación de Contexto")
 
 ## 2. Validar arquitectura de referencia
 
-**Buscar documentación arquitectónica:**
+**Verificar documentación arquitectónica de AtaraxiaDive:**
 
-Verificar que existe documentación de la arquitectura del proyecto en uno de estos formatos:
-- `docs/architecture/ADR-*.md` (Architecture Decision Records)
-- `docs/architecture.md`
-- `ARCHITECTURE.md`
-- `README.md` (sección de arquitectura)
+Los siguientes artefactos deben existir (ya fueron creados en Fase 0 del proyecto):
+- `docs/adr/ADR-005-bounded-contexts-ddd-estrategico.md` — decisión de BCs
+- `docs/adr/ADR-006-estructura-bc-first.md` — decisión de estructura BC-first
+- `docs/design/architecture.md` — arquitectura C4
+- `docs/design/domain-model.md` — modelo de dominio
 
-**Verificar patrones arquitectónicos configurados:**
+**Verificar que el BC de la US existe en `src/`:**
 
-Leer del archivo de configuración `.claude/skills/implement-us/config.json` los patrones a validar:
-
-```json
-{
-  "architecture_pattern": "{ARCHITECTURE_PATTERN}",
-  "required_patterns": ["{PATTERNS}"],
-  "architecture_doc": "{ARCHITECTURE_DOC}"
-}
-```
-
-> **Patrones según perfil:**
-> - **PyQt/MVC:** Validar MVC, Factory, Coordinator
-> - **FastAPI:** Validar Layered Architecture, Dependency Injection, Repository
-> - **Django:** Validar MVT, Class-Based Views, Managers
-> - **Generic:** Validar patrones definidos en config o saltar validación
+Identificar el BC al que pertenece la US (de `docs/plans/ATARAXIADIVE-CONTEXT.md` §5) y confirmar que su estructura existe:
+- `src/{bc}/domain/`
+- `src/{bc}/application/`
+- `src/{bc}/infrastructure/`
+- `src/{bc}/api/`
 
 **Checkpoint:**
 - ✅ Arquitectura documentada encontrada
@@ -91,10 +93,10 @@ Leer del archivo de configuración `.claude/skills/implement-us/config.json` los
    - `conftest.py` configurado (si usa pytest)
    - Framework de testing instalado (verificar según `{TEST_FRAMEWORK}`)
 
-3. **Herramientas de calidad configuradas:**
-   - `.pylintrc` o configuración de pylint
-   - `pytest.ini` o `pyproject.toml` (si usa pytest)
-   - `.coveragerc` o configuración de coverage
+3. **Herramientas de calidad configuradas** (ver `pyproject.toml`):**
+   - `[tool.codeguard]` — CodeGuard configurado con paths de BCs
+   - `[tool.designreviewer]` — check_hexagonal = true
+   - `[tool.coverage.run]` — fuentes apuntando a `src/`
 
 **Si faltan herramientas:**
 - Advertir al usuario
