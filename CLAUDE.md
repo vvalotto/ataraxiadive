@@ -147,7 +147,7 @@ src/
 │   └── domain/{value_objects, base}   ← tipos cross-BC
 └── app.py               ← ensamble central de routers FastAPI
 
-frontend/            ← React PWA (package.json propio)
+frontend/            ← React PWA (se crea en SP4 con Vite)
 
 tests/
 ├── unit/
