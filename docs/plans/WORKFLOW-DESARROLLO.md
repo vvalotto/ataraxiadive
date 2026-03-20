@@ -1,24 +1,79 @@
 # Workflow de Desarrollo — AtaraxiaDive
 
-**Versión:** 1.0
+**Versión:** 1.1
 **Fecha:** 2026-03-20
-**Alcance:** Convenciones de branching, PRs y quality gates para SP1 en adelante
+**Alcance:** Convenciones de branching, PRs, quality gates y gestión administrativa para SP1 en adelante
 
 ---
 
 ## 1. Jerarquía de Trabajo
 
 ```
-SP (Subproyecto)          → Baseline (BL-NNN) + tag git (v0.N.0)
+SP (Subproyecto)          → Baseline (BL-NNN) + tag git (v0.N.0) + Milestone GitHub
   └── Incremento (X.Y)    → PR a develop + DoD de integración verificable
-        └── US-IEDD (X.Y.Z) → branch feature/ + commit atómico
+        └── US-IEDD (X.Y.Z) → GitHub Issue + docs/plans/US-X.Y.Z.md + branch feature/
 ```
 
 No existe un nivel "iteración" — el Incremento cubre esa función.
 
 ---
 
-## 2. Branching
+## 2. Gestión Administrativa (GitHub)
+
+### División de responsabilidades
+
+| Artefacto | Dónde vive | Propósito |
+|-----------|-----------|-----------|
+| **GitHub Issue** | GitHub Issues | Fuente de verdad del estado — qué hay que hacer, criterios de aceptación, seguimiento |
+| **`docs/plans/US-X.Y.Z.md`** | Repositorio | Artefacto técnico de implementación — precondición, postcondición, invariantes IEDD, input de `/implement-us` |
+
+### Estructura en GitHub
+
+- **Milestones** = uno por Subproyecto (`SP1 — La Performance`, `SP2 — La Competencia`, etc.)
+- **Labels** = `us-iedd`, `incremento-1.1`, `incremento-1.2`, `blocked`, `in-progress`, `done`
+- **Sin Project board** — los Milestones + Labels proveen seguimiento suficiente para desarrollo en solitario
+
+### Template de Issue (US-IEDD)
+
+```markdown
+## Descripción
+Como <rol>, quiero <acción> para <valor>.
+
+## Criterios de Aceptación
+- [ ] ...
+
+## Precondición
+...
+
+## Postcondición
+...
+
+## Invariantes
+- INV-1: ...
+
+## Referencias
+- Incremento: X.Y
+- Bounded Context: ...
+- docs/plans/US-X.Y.Z.md
+```
+
+---
+
+## 3. Ciclo de Elaboración de US por SP
+
+```
+1. Claude elabora el archivo de US candidatas: docs/plans/SP-N-candidatas.md
+   → Lista todas las US del SP con descripción, criterios y estimación
+2. Victor revisa y aprueba (con ajustes si corresponde)
+3. Por cada US aprobada:
+   a. Crear GitHub Issue con template US-IEDD → asignar Milestone + Labels
+   b. Crear docs/plans/US-X.Y.Z.md con el detalle técnico completo
+4. Las US quedan en estado "backlog" hasta iniciar su Incremento
+```
+
+---
+
+## 4. Branching
 
 ```
 main          ← baselines etiquetadas (v0.1.0, v0.2.0...)
@@ -33,31 +88,32 @@ main          ← baselines etiquetadas (v0.1.0, v0.2.0...)
 
 ---
 
-## 3. Ciclo por US-IEDD
+## 5. Ciclo por US-IEDD
 
 ```
-1. Crear branch feature/US-X.Y.Z
-2. Ejecutar /implement-us US-X.Y.Z  (10 fases)
-3. CodeGuard corre automático en cada commit (pre-commit, no bloquea)
-4. Commit atómico con referencia: feat(domain): ... [US-X.Y.Z]
-5. Branch queda lista; se acumula hasta cerrar el Incremento
+1. Crear branch feature/US-X.Y.Z desde develop
+2. Cambiar label del Issue: backlog → in-progress
+3. Ejecutar /implement-us US-X.Y.Z  (10 fases, input: docs/plans/US-X.Y.Z.md)
+4. CodeGuard corre automático en cada commit (pre-commit, no bloquea)
+5. Commit atómico con referencia: feat(domain): ... [US-X.Y.Z]
+6. Branch queda lista; label → done (branch pendiente de merge al cerrar Incremento)
 ```
 
 ---
 
-## 4. Ciclo por Incremento
+## 6. Ciclo por Incremento
 
 Un Incremento agrupa una o más US-IEDD relacionadas que juntas producen
 una funcionalidad cohesiva y verificable de punta a punta.
 
 ```
-1. Todas las US del Incremento están implementadas en sus branches
-2. Merge de todas las branches feature/ a develop (squash opcional)
-3. Abrir PR: feature/US-X.Y.* → develop
+1. Todas las US del Incremento en estado done en sus branches
+2. Merge de todas las branches feature/ a develop
+3. Abrir PR: Incremento X.Y → develop  (referencia los Issues de las US)
 4. Correr DesignReviewer: designreviewer src/
    → Bloquea el merge si hay violaciones CRITICAL
 5. Verificar DoD de integración (test end-to-end observable)
-6. Merge a develop
+6. Merge a develop — Issues de las US se cierran automáticamente
 7. Mini-retrospectiva: ¿qué funcionó? ¿qué ajustar en el próximo?
 ```
 
@@ -67,21 +123,21 @@ punta a punta antes del análisis de diseño.
 
 ---
 
-## 5. Ciclo por Subproyecto (Baseline)
+## 7. Ciclo por Subproyecto (Baseline)
 
 ```
-1. Todos los Incrementos del SP están cerrados en develop
+1. Todos los Incrementos del SP cerrados en develop — Milestone al 100%
 2. Correr ArchitectAnalyst: architectanalyst src/ --sprint-id BL-NNN --format json
    → Guardar output en .cm/baselines/BL-NNN-arquitectura.json
 3. Registrar métricas en .cm/baselines/BL-NNN.md
 4. Merge develop → main
-5. Tag: git tag vN.0.0
+5. Tag: git tag vN.0.0  — cerrar Milestone en GitHub
 6. Retrospectiva documentada en BL-NNN.md (alimenta el libro y el paper)
 ```
 
 ---
 
-## 6. Quality Gates por Nivel
+## 8. Quality Gates por Nivel
 
 | Nivel | Herramienta | Momento | Acción |
 |-------|-------------|---------|--------|
@@ -91,18 +147,19 @@ punta a punta antes del análisis de diseño.
 
 ---
 
-## 7. Relación con /implement-us
+## 9. Relación con /implement-us
 
-El skill `/implement-us US-X.Y.Z` ejecuta las 10 fases dentro de la branch
-`feature/US-X.Y.Z`. Al terminar, la branch está lista pero **no se mergea**
-hasta que el Incremento completo esté listo para el PR.
+El skill `/implement-us US-X.Y.Z` lee `docs/plans/US-X.Y.Z.md` como input y
+ejecuta las 10 fases dentro de la branch `feature/US-X.Y.Z`. Al terminar,
+la branch está lista pero **no se mergea** hasta que el Incremento completo
+esté listo para el PR.
 
 ```
-/implement-us US-1.1.1  → branch feature/US-1.1.1 lista
-/implement-us US-1.1.2  → branch feature/US-1.1.2 lista
-→ PR Incremento 1.1: merge ambas branches + DesignReviewer + DoD
+/implement-us US-1.1.1  → branch feature/US-1.1.1 lista, Issue → done
+/implement-us US-1.1.2  → branch feature/US-1.1.2 lista, Issue → done
+→ PR Incremento 1.1: merge ambas branches + DesignReviewer + DoD → Issues cerrados
 ```
 
 ---
 
-*Documento generado en sesión 2026-03-20. Complementa `docs/dominio/04-estrategia_desarrollo.md`.*
+*v1.1 — 2026-03-20. Complementa `docs/dominio/04-estrategia_desarrollo.md`.*
