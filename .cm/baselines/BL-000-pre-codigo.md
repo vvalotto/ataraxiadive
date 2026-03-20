@@ -129,3 +129,30 @@ el entorno completo CM Framework + Claude Dev Kit + Software Limpio + IEDD.
 > no anticipados durante la implementación de SP1.
 
 Ver `docs/design/estrategia-desarrollo-bc.md` §11 para detalle completo.
+
+---
+
+### Retrospectiva Pre-SP1 — configuración del entorno de desarrollo (2026-03-20)
+
+#### Lecciones operacionales
+
+1. **El instalador del Dev Kit no tolera entornos sin TTY ni directorios preexistentes.** Requiere `--force` y Python con `pyyaml` disponible. Workaround: usar Python del sistema, no el venv gestionado por uv. Issues documentados en `vvalotto/claude-dev-kit` (#38, #39, #40).
+
+2. **`uv pip install` falla si el proyecto tiene problemas de build en `pyproject.toml`.** La solución es instalar directamente desde git (`uv pip install git+https://...`) para evitar que uv intente reconstruir el proyecto.
+
+3. **La estructura BC-first requiere configuración explícita en todas las herramientas.** `pyproject.toml` necesita secciones `[tool.codeguard]`, `[tool.designreviewer]`, `[tool.architectanalyst]` y `[tool.coverage.run]` apuntando a `src/{bc}/`, no a rutas genéricas.
+
+4. **El hook `.githooks/pre-push` debe activarse manualmente** con `git config core.hooksPath .githooks` en cada clon. No es automático. Documentado en `CLAUDE.md` §13.
+
+#### Lecciones experimentales (RQ1: fricción de integración del ecosistema)
+
+5. **El Dev Kit asume arquitectura layered; el proyecto usa hexagonal DDD BC-first.** La fricción fue real y abarcó todas las fases del skill: paths, tipos de componente, paths de tests, quality gates. Requirió tres artefactos de adaptación: `ATARAXIADIVE-CONTEXT.md`, `customizations/fastapi-rest.json` v2.0.0, y patch de `phase-0-validation.md`.
+
+6. **La fricción de integración es solucionable pero no es cero.** El ecosistema funciona integrado, pero exige un trabajo de calibración inicial proporcional a cuánto se aleja el proyecto del perfil genérico. En AtaraxiaDive, ~3 horas de configuración para un proyecto con arquitectura no-trivial.
+
+7. **La adaptación del Dev Kit produce artefactos reutilizables.** El documento `ATARAXIADIVE-CONTEXT.md` y el `fastapi-rest.json` v2.0.0 eliminan la fricción en todas las US futuras. El costo es una inversión puntual, no recurrente.
+
+8. **El mecanismo de adaptación debería ser un skill propio.** El proceso manual de calibración es candidato a automatización: issue #41 en `vvalotto/claude-dev-kit` propone `/adapt-project` como skill de configuración inicial.
+
+**Observación experimental:**
+> La fricción detectada en RQ1 es de tipo *incompatibilidad de supuestos arquitectónicos*, no de *incompatibilidad técnica*. Las herramientas coexisten sin conflicto; el problema es que el perfil genérico no conoce la arquitectura del proyecto. Esto sugiere que el Dev Kit necesita un mecanismo de onboarding por proyecto, no solo perfiles por stack tecnológico.
