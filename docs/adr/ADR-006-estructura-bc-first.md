@@ -5,7 +5,7 @@
 | **Estado** | Aceptada |
 | **Fecha** | 2026-03-20 |
 | **Autores** | Victor Valotto |
-| **Relacionado** | ADR-005 (Bounded Contexts DDD), ADR-001 (Arquitectura Hexagonal) |
+| **Relacionado** | ADR-005 (Bounded Contexts DDD), ADR-001 (Event Sourcing — BCs con ES) |
 
 ---
 

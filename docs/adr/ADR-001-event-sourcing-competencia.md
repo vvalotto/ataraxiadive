@@ -12,7 +12,7 @@
 ## Contexto
 
 La fase de ejecución de una competencia de apnea tiene requisitos de integridad muy altos:
-los resultados de un torneo oficial son disputables ante la federación (FAZ), y cualquier
+los resultados de un torneo oficial son disputables ante la federación (FAAS), y cualquier
 modificación de una performance cerrada podría considerarse manipulación de resultados.
 
 Adicionalmente, un juez puede cometer errores durante el registro (marca incorrecta, tarjeta
@@ -38,9 +38,9 @@ registro, la anterior queda marcada como obsoleta.
 Se adopta **Event Sourcing (Opción B)** para los aggregates de la fase de competencia:
 `Performance` y `Competencia`.
 
-Los aggregates de gestión (`Torneo`, `Inscripción`, `Configuración`) usan CRUD estándar
-porque su historial no tiene valor regulatorio y la complejidad de Event Sourcing no
-está justificada para ellos.
+Los aggregates de los BCs de soporte (`Torneo`, `Registro`, `Resultados`, `Identidad`)
+usan CRUD estándar porque su historial no tiene valor regulatorio y la complejidad de
+Event Sourcing no está justificada para ellos (ver ADR-005).
 
 ## Consecuencias
 

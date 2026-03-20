@@ -6,6 +6,7 @@
 | **Fecha** | 2026-03-14 |
 | **Autores** | Victor Valotto |
 | **Reemplaza** | — |
+| **Relacionado** | ADR-005 (Bounded Contexts — propietario de cada tabla), ADR-007 (SQLite por BC) |
 
 ---
 
@@ -30,8 +31,8 @@ reglas están en constantes o enums en `domain/`. Cambiar una regla requiere mod
 **Opción B — Configuración en archivos (YAML/JSON):** Las reglas viven en archivos de
 configuración versionados. Cambiar una regla requiere editar un archivo y hacer deploy.
 
-**Opción C — Configuración como datos en base de datos:** Las reglas se almacenan como JSONB
-en PostgreSQL. El administrador las modifica desde un panel sin intervención técnica.
+**Opción C — Configuración como datos en base de datos:** Las reglas se almacenan en la
+base de datos. El administrador las modifica desde un panel sin intervención técnica.
 El sistema las lee en runtime.
 
 ## Decisión
@@ -44,43 +45,60 @@ modificarse") siguen en el código — son parte del modelo, no configuración.
 
 ## Consecuencias
 
+### Propietario de cada tabla (per ADR-005)
+
+El BC `Configuración` fue eliminado (ADR-005). Las tablas de configuración pertenecen
+a los BCs que las consumen:
+
+| Tabla | BC propietario | Archivo SQLite |
+|-------|---------------|----------------|
+| `discipline_config` | **Torneo** | `torneo.db` |
+| `category_config` | **Torneo** | `torneo.db` |
+| `card_rule_config` | **Competencia** | `competencia.db` |
+
+### Esquema de tablas (SQLite)
+
 ```mermaid
 erDiagram
     DISCIPLINE_CONFIG {
-        uuid id
-        string code
-        string name
-        string measurement_type
-        string unit
-        string ranking_order
-        jsonb rules
-        bool active
+        text id PK
+        text code
+        text name
+        text measurement_type
+        text unit
+        text ranking_order
+        text rules
+        integer active
     }
 
     CARD_RULE_CONFIG {
-        uuid id
-        string code
-        string description
-        float penalty_seconds
-        float penalty_meters
-        bool disqualifying
+        text id PK
+        text code
+        text description
+        real penalty_seconds
+        real penalty_meters
+        integer disqualifying
     }
 
     CATEGORY_CONFIG {
-        uuid id
-        string name
-        int min_age
-        int max_age
-        string gender
+        text id PK
+        text name
+        integer min_age
+        integer max_age
+        text gender
     }
 ```
+
+> **Nota:** Los tipos son SQLite (`text`, `real`, `integer`). El campo `rules` almacena
+> JSON serializado como `text` — SQLite no tiene tipo JSONB nativo.
 
 **Positivas:**
 - El administrador puede agregar una disciplina nueva o modificar una penalización
   desde el panel sin tocar código ni hacer deploy (AC-CF-01, AC-CF-02)
 - Los torneos futuros usan la configuración vigente; los torneos pasados conservan
   la configuración con la que se ejecutaron (snapshot al crear el torneo)
-- JSONB en PostgreSQL permite esquemas flexibles para reglas que varían por disciplina
+- JSON como `text` en SQLite es suficiente para este volumen; la validación
+  de estructura es responsabilidad de la capa de aplicación
 
 **Negativas:**
 - La validación de las reglas configuradas es responsabilidad de la aplicación,

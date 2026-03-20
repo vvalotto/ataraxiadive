@@ -365,7 +365,7 @@ La implementación vive en `infrastructure/`.
 | Notificaciones | `Notificacion` | `NotificacionRepository` |
 
 > **Regla de Oro (§6 CLAUDE.md):** Los repositorios son interfaces definidas en
-> `domain/`. Las implementaciones concretas (PostgreSQL, event store) viven en
+> `domain/`. Las implementaciones concretas (SQLite, event store) viven en
 > `infrastructure/`. El dominio no conoce la implementación.
 
 ---

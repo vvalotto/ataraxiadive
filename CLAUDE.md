@@ -44,10 +44,10 @@ Capa 1 — DOMINIO         → docs/dominio/01-dominio_torneos_apnea.md     ✅
          ↓
 Capa 2 — MODELO (DDD)    → docs/design/context-map.md                   ✅
                             docs/adr/ADR-005-bounded-contexts-ddd-estrategico.md ✅
-                            docs/design/domain-model.md                  ⏳ pendiente
+                            docs/design/domain-model.md                  ✅
          ↑
     [ Event Storming Nivel 2 — Process Modeling ]
-      docs/design/event-storming-competencia.md              ⏳ pendiente
+      docs/design/event-storming-competencia.md              ✅
       (BC Competencia — profundiza el Core Domain)
       Produce: comandos, políticas, invariantes, candidatos a US-IEDD
          ↓
@@ -56,8 +56,8 @@ Capa 3 — ESPECIFICACIÓN  → docs/iedd/US-IEDD-template.md                ✅
          ↓
     [ IA como traductor conceptual — Claude Dev Kit /implement-us ]
          ↓
-Capa 4 — ARQUITECTURA    → docs/design/architecture.md                  ⏳ pendiente
-                            docs/adr/ADR-001 a ADR-005                   ✅
+Capa 4 — ARQUITECTURA    → docs/design/architecture.md                  ✅
+                            docs/adr/ADR-001 a ADR-012                   ✅
          ↓
 Capa 5 — IMPLEMENTACIÓN  → src/  (empieza en SP1, luego de completar Semana 0)
 ```
@@ -105,7 +105,7 @@ IEDD (metodología)
 
 **AtaraxiaDive** es una plataforma web para gestión de torneos de apnea (freediving).
 
-- **Stack:** FastAPI (backend Python) + React PWA (frontend) + PostgreSQL
+- **Stack:** FastAPI (backend Python) + React PWA (frontend) + SQLite (un archivo por BC — ADR-007)
 - **Arquitectura:** Hexagonal + Event Sourcing (BCs Competencia y Notificaciones)
 - **Desarrollador:** Victor Valotto
 - **Horizonte:** 2026, sin fecha fija — avance por incrementos con DoD binaria
@@ -159,7 +159,7 @@ tests/
     └── US-X.Y.Z.feature  ← organizados por US-IEDD
 
 docs/
-├── adr/             ← ADR-001 a ADR-006 ✅
+├── adr/             ← ADR-001 a ADR-012 ✅
 ├── contexto/        ← Documentos fundacionales del experimento ✅
 ├── design/          ← Context Map ✅ · ES Big Picture ✅ · Domain Model ✅ · Architecture ✅
 ├── dominio/         ← Descripción del dominio y RFs ✅
@@ -347,8 +347,8 @@ Umbrales mínimos para SP1:
 # Setup inicial del repositorio (una vez al clonar)
 git config core.hooksPath .githooks   # activa el pre-push hook de DesignReviewer
 
-# Entorno
-docker-compose up
+# Entorno de desarrollo (sin Docker — ADR-010)
+uv run fastapi dev src/app.py
 
 # Tests
 pytest tests/unit/
@@ -375,7 +375,7 @@ isort src/ tests/
 |-----------|--------|-----------|
 | Repositorio inicializado | ✅ | — |
 | BL-000 baseline pre-código | ✅ | `.cm/baselines/BL-000-pre-codigo.md` |
-| ADR-001 a ADR-005 | ✅ | `docs/adr/` |
+| ADR-001 a ADR-012 | ✅ | `docs/adr/` |
 | Contexto del experimento | ✅ | `docs/contexto/` (5 archivos) |
 | Documentos del dominio | ✅ | `docs/dominio/` (5 archivos) |
 | Marco metodológico IEDD | ✅ | `docs/iedd/` (4 archivos) |
@@ -402,7 +402,7 @@ isort src/ tests/
 | DesignReviewer | ✅ Operativo — `designreviewer src/` |
 | ArchitectAnalyst | ✅ Operativo — `architectanalyst src/ --sprint-id BL-NNN` |
 
-**Próximo paso:** redactar `docs/plans/US-1.1.1.md` y ejecutar `/implement-us US-1.1.1`.
+**Próximo paso:** crear branch `feature/US-1.1` desde develop → implementar Inc 1.1 (fundación técnica) o redactar `docs/plans/US-1.2.1.md` y ejecutar `/implement-us US-1.2.1`.
 
 ---
 
@@ -455,5 +455,5 @@ El hook SessionEnd captura automáticamente los commits y crea el flag. No requi
 
 ---
 
-*Última actualización: 2026-03-19 — Fase 0 completa, 11/11 artefactos — tag v0.1.0*
+*Última actualización: 2026-03-20 — ADR-007 a ADR-012 · consistencia con SQLite/aiosqlite*
 *Mantenido por: Claude Cowork (decisiones estratégicas) + Claude Code (implementación)*

@@ -13,7 +13,7 @@
 
 AtaraxiaDive necesita un backend que exponga una API JSON consumida por el frontend React PWA.
 El backend aloja la lógica de dominio (aggregates, invariantes, Event Sourcing) y persiste en
-PostgreSQL.
+SQLite (un archivo por Bounded Context — ver ADR-007).
 
 El desarrollador trabaja solo, con experiencia en Python. Las herramientas del entorno de
 desarrollo (Software Limpio, Claude Dev Kit) están calibradas para Python.
@@ -47,8 +47,9 @@ graph LR
 **Positivas:**
 - Pydantic v2 permite expresar invariantes de dominio directamente en los modelos:
   validadores, constraints, tipos estrictos — sin capas adicionales
-- Async nativo es coherente con PostgreSQL async (asyncpg) y el modelo de concurrencia
-  de la interfaz del juez (hasta 50 usuarios concurrentes, AC-DS-02)
+- Async nativo es coherente con el modelo de concurrencia de la interfaz del juez
+  (hasta 50 usuarios concurrentes, AC-DS-02); con SQLite se usa `aiosqlite` como
+  adaptador async (ver ADR-007)
 - OpenAPI generado automáticamente sirve como documentación viva del contrato de API
 - El ecosistema completo es Python: Software Limpio cubre backend y dominio con un
   solo conjunto de herramientas
