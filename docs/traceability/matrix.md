@@ -156,7 +156,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 | RF-IN-07 | ¿Qué pasa si los datos del atleta difieren de la BD FAAS? | SP5 inc. 5.1 | SP5 |
 | RF-EJ-04 | Códigos de penalización (AIDA/CMAS u otra federación) | SP4 inc. 4.4 | SP4 |
 | RF-NT-03 | ¿Juez u organizador reciben notificaciones durante ejecución? | SP4 inc. 4.2 | SP4 |
-| RF-IG-01..04 | Integración completa con BD FAZ / exportación a rankings | SP5 inc. 5.1 | SP5 |
+| RF-IG-01..04 | Integración completa con BD FAAS / exportación a rankings | SP5 inc. 5.1 | SP5 |
 
 ---
 
@@ -167,7 +167,7 @@ en `docs/plans/` antes de ejecutar `/implement-us`.
 
 | US candidata | Inc. | RFs cubiertos | Comando principal | Invariantes clave |
 |-------------|------|---------------|------------------|------------------|
-| US-1.1.1 | 1.1 | — | Setup: esqueleto BC Competencia (BC-first) + `domain_events` + health-check | — |
+| US-1.1.1 | 1.1 | — | Setup: esqueleto BC Competencia (BC-first) + tabla `events` + health-check | — |
 | US-1.2.1 | 1.2 | RF-PR-01/02/03, RF-EJ-08 | `RegistrarAP` | INV-P-01, INV-P-02, INV-P-03 |
 | US-1.2.2 | 1.2 | RF-EJ-05/08 | `RegistrarResultado` | INV-P-06 |
 | US-1.2.3 | 1.2 | RF-EJ-10 | `AsignarTarjeta` (blanca/roja) | INV-P-07, INV-P-11 |
@@ -210,6 +210,9 @@ en `docs/plans/` antes de ejecutar `/implement-us`.
 |---------|----------------|---------|
 | US-1.1.1 | ADR-001..004 | Stack tecnológico y arquitectura hexagonal |
 | US-1.1.1 | ADR-006 | Estructura BC-first — esqueleto de `src/competencia/` |
+| US-1.1.1 | ADR-007 | SQLite como motor de persistencia — `data/competencia.db` |
+| US-1.1.1 | ADR-008 | Event Store como tabla `events` append-only en SQLite |
+| US-1.1.1 | ADR-009 | Migraciones Alembic en `competencia/infrastructure/migrations/` |
 | US-1.2.x | ADR-005 | Event Sourcing en BC Competencia |
 
 ---
