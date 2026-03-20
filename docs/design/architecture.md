@@ -5,9 +5,9 @@
 | **Documento** | architecture.md |
 | **Modelo** | C4 (Simon Brown) — L1 Context · L2 Container · L3 Component |
 | **Capa IEDD** | Capa 4 — Arquitectura |
-| **Fecha** | 2026-03-19 |
-| **Fuentes** | Context Map v1.1 · Domain Model v1.0 · ADR-001 a ADR-005 |
-| **Estado** | ✅ v1.0 — Fase 0 |
+| **Fecha** | 2026-03-20 |
+| **Fuentes** | Context Map v1.1 · Domain Model v1.0 · ADR-001 a ADR-012 |
+| **Estado** | ✅ v1.1 — SQLite por BC (ADR-007/008), proyección síncrona |
 
 ---
 
@@ -23,7 +23,7 @@ C4Context
     Person(juez, "Juez", "Registra resultados\ny asigna tarjetas en tiempo real")
     Person(atleta, "Atleta", "Se inscribe, declara AP\ny consulta resultados")
 
-    System(ataraxia, "AtaraxiaDive", "Plataforma web para gestión\nde torneos de apnea.\nFastAPI + React PWA + PostgreSQL")
+    System(ataraxia, "AtaraxiaDive", "Plataforma web para gestión\nde torneos de apnea.\nFastAPI + React PWA + SQLite")
 
     System_Ext(email, "Servicio Email", "SMTP externo\n(ej: SendGrid)")
     System_Ext(push, "Servicio Push", "FCM — notificaciones\nmóviles y web")
@@ -75,9 +75,9 @@ C4Container
 
         Container(api, "Backend API", "Python · FastAPI", "Expone la API REST.\nOrquesta los 6 Bounded Contexts.\nArquitectura Hexagonal.")
 
-        ContainerDb(pg_crud, "PostgreSQL — CRUD", "PostgreSQL 16", "Persistencia relacional para\nlos 4 BCs CRUD:\nTorneo · Registro · Resultados · Identidad")
+        ContainerDb(sqlite_crud, "SQLite — CRUD BCs", "SQLite · 4 archivos\nuno por Bounded Context", "Persistencia relacional para\nlos 4 BCs CRUD:\nTorneo · Registro · Resultados · Identidad")
 
-        ContainerDb(pg_es, "Event Store", "PostgreSQL 16\n(tabla domain_events)", "Streams de eventos para\nlos 2 BCs con Event Sourcing:\nCompetencia · Notificaciones")
+        ContainerDb(sqlite_es, "SQLite — ES BCs", "SQLite · 2 archivos\nuno por Bounded Context", "Event store + read model para\nlos 2 BCs con Event Sourcing:\nCompetencia · Notificaciones")
     }
 
     System_Ext(email, "Servicio Email", "SMTP externo")
@@ -85,18 +85,18 @@ C4Container
 
     Rel(usuario, spa, "Usa", "HTTPS / Browser")
     Rel(spa, api, "API calls", "REST / HTTPS / JSON")
-    Rel(api, pg_crud, "Lee y escribe", "SQL / asyncpg")
-    Rel(api, pg_es, "Append y lee streams", "SQL / asyncpg")
+    Rel(api, sqlite_crud, "Lee y escribe", "SQL / aiosqlite")
+    Rel(api, sqlite_es, "Append / lee streams\ny actualiza read model", "SQL / aiosqlite")
     Rel(api, email, "Envía", "SMTP/TLS")
     Rel(api, push, "Envía", "HTTPS")
 
     UpdateLayoutConfig($c4ShapeInRow="2", $c4BoundaryInRow="1")
 ```
 
-> **Event Store sobre PostgreSQL:** la tabla `domain_events` actúa como append-only log.
-> Cada fila es un evento inmutable con `stream_id`, `stream_version`, `event_type` y `payload` JSON.
+> **Event Store sobre SQLite:** la tabla `events` actúa como append-only log (ADR-008).
+> Cada fila es un evento inmutable con `stream_id`, `stream_pos`, `event_type` y `payload` JSON.
 > Los aggregates con ES (Competencia, Notificaciones) reconstruyen su estado reproduciendo su stream.
-> No se usa un motor de Event Sourcing externo — PostgreSQL es suficiente para el horizonte del proyecto.
+> El event store convive en el mismo archivo SQLite del BC — sin motor de Event Sourcing externo (ADR-007).
 
 ### Elementos
 
@@ -104,8 +104,8 @@ C4Container
 |-----------------------|--------------------------|
 | React PWA | Interfaz de usuario instalable. Renderiza las vistas de gestión de torneos, competencias y resultados. |
 | Backend API | Núcleo del sistema. Expone la API REST y orquesta los 6 Bounded Contexts con arquitectura hexagonal. |
-| PostgreSQL — CRUD | Almacena el estado de los 4 BCs con persistencia relacional estándar: Torneo, Registro, Resultados, Identidad. |
-| Event Store | Almacena los streams de eventos de los 2 BCs con Event Sourcing: Competencia y Notificaciones. Tabla append-only `domain_events` en PostgreSQL. |
+| SQLite — CRUD BCs | 4 archivos SQLite independientes (uno por BC). Almacena el estado de los BCs CRUD: Torneo, Registro, Resultados, Identidad. |
+| SQLite — ES BCs | 2 archivos SQLite independientes (uno por BC). Almacena el event store y el read model de los BCs con Event Sourcing: Competencia y Notificaciones. |
 | Servicio Email | Sistema externo para envío de emails. |
 | Servicio Push | Sistema externo para notificaciones push (FCM). |
 
@@ -115,8 +115,8 @@ C4Container
 |-----------------|--------|-------------|
 | Uso | Usuario → React PWA | El usuario interactúa con la interfaz web/PWA desde el navegador. |
 | Llamada API | React PWA → Backend API | El frontend realiza llamadas REST/JSON sobre HTTPS para todas las operaciones. |
-| Persistencia | Backend API → PostgreSQL CRUD | El backend lee y escribe el estado de los BCs CRUD mediante SQL/asyncpg. |
-| Event Sourcing | Backend API → Event Store | El backend hace append de eventos y lee streams para reconstruir aggregates con ES. |
+| Persistencia | Backend API → SQLite CRUD BCs | El backend lee y escribe el estado de los BCs CRUD mediante SQL/aiosqlite. |
+| Event Sourcing | Backend API → SQLite ES BCs | El backend hace append de eventos, lee streams para reconstruir aggregates con ES, y actualiza el read model síncronamente en el mismo comando. |
 | Notificación | Backend API → Servicio Email | El backend delega el envío de emails al servicio externo mediante SMTP/TLS. |
 | Notificación | Backend API → Servicio Push | El backend delega el envío de push notifications a FCM mediante HTTPS. |
 
@@ -139,15 +139,15 @@ C4Component
 
         Component(domain, "Domain Layer", "Python — Aggregates · VOs · Ports", "Aggregates con invariantes.\nValue Objects inmutables.\nInterfaces de repositorios (puertos).\nEventos de dominio.\nNo importa nada externo al dominio.")
 
-        Component(infra, "Infrastructure Layer", "Python · asyncpg", "Implementa los puertos del dominio.\nRepositorios concretos (PostgreSQL / Event Store).\nAdaptadores para servicios externos.")
+        Component(infra, "Infrastructure Layer", "Python · aiosqlite", "Implementa los puertos del dominio.\nRepositorios concretos (SQLite / event store).\nAdaptadores para servicios externos.")
     }
 
-    ContainerDb(db, "Base de Datos", "PostgreSQL 16", "CRUD relacional\no Event Store\nsegún el BC")
+    ContainerDb(db, "Base de Datos", "SQLite", "CRUD relacional\no Event Store\nsegún el BC")
 
     Rel(routes, usecases, "Invoca comandos / queries")
     Rel(usecases, domain, "Usa aggregates y puertos")
     Rel(infra, domain, "Implementa puertos (inversión de dependencia)")
-    Rel(infra, db, "Lee y escribe", "SQL / asyncpg")
+    Rel(infra, db, "Lee y escribe", "SQL / aiosqlite")
 
     UpdateLayoutConfig($c4ShapeInRow="2", $c4BoundaryInRow="1")
 ```
@@ -159,7 +159,7 @@ C4Component
 | API Layer | Adaptador de entrada. Expone rutas HTTP, valida entrada/salida con Pydantic y verifica el token JWT. Traduce requests HTTP en comandos/queries para la capa de aplicación. |
 | Application Layer | Orquestador del flujo de negocio. Recibe comandos, carga aggregates via puertos, ejecuta la operación de dominio, persiste cambios y publica eventos. No contiene lógica de negocio. |
 | Domain Layer | Núcleo del sistema. Contiene aggregates con invariantes, value objects inmutables, interfaces de repositorios (puertos) y definición de eventos de dominio. No depende de nada externo. |
-| Infrastructure Layer | Adaptador de salida. Implementa los puertos definidos en el dominio: repositorios concretos para PostgreSQL / Event Store y adaptadores para servicios externos. |
+| Infrastructure Layer | Adaptador de salida. Implementa los puertos definidos en el dominio: repositorios concretos para SQLite / event store y adaptadores para servicios externos. |
 | Base de Datos | Almacenamiento persistente. CRUD relacional o Event Store según el BC que corresponda. |
 
 ### Relaciones
@@ -169,7 +169,7 @@ C4Component
 | Invocación | API Layer → Application Layer | La capa API deserializa el request y delega la ejecución al caso de uso correspondiente. |
 | Uso de puertos | Application Layer → Domain Layer | La capa de aplicación usa los aggregates del dominio e invoca los puertos para cargar y persistir el estado. |
 | Implementación de puerto | Infrastructure Layer → Domain Layer | La capa de infraestructura implementa las interfaces (puertos) definidas en el dominio (inversión de dependencia). El dominio no depende de la infraestructura. |
-| Persistencia | Infrastructure Layer → Base de Datos | La capa de infraestructura lee y escribe en la base de datos mediante SQL/asyncpg. |
+| Persistencia | Infrastructure Layer → Base de Datos | La capa de infraestructura lee y escribe en la base de datos mediante SQL/aiosqlite. |
 
 ### Regla de dependencias (Regla de Oro — §6 CLAUDE.md)
 
@@ -182,7 +182,7 @@ api/  →  application/  →  domain/
 |------|---------------|-------------------|
 | `domain/` | Solo stdlib Python y tipos propios del dominio | Nada externo |
 | `application/` | `domain/` | `infrastructure/`, `api/` |
-| `infrastructure/` | `domain/`, libs externas (asyncpg, etc.) | `application/`, `api/` |
+| `infrastructure/` | `domain/`, libs externas (aiosqlite, etc.) | `application/`, `api/` |
 | `api/` | `application/`, Pydantic | `domain/` directamente, `infrastructure/` |
 
 > DesignReviewer detecta automáticamente las violaciones de estas reglas en cada merge.
@@ -193,6 +193,7 @@ api/  →  application/  →  domain/
 
 Instancia el patrón hexagonal con los componentes reales del Core Domain.
 BC Competencia usa Event Sourcing — los aggregates reconstruyen su estado reproduciendo el stream.
+Las proyecciones se actualizan síncronamente en el mismo comando (ADR-008 — sin subscriptions reactivas).
 
 ```mermaid
 C4Component
@@ -218,14 +219,13 @@ C4Component
         }
 
         Container_Boundary(infra_layer, "Infrastructure Layer") {
-            Component(repo_comp, "CompetenciaEventStore", "asyncpg · domain_events", "Implementa CompetenciaRepository.\nAppend de eventos al stream.\nReconstrucción de estado desde stream_id.")
-            Component(repo_perf, "PerformanceEventStore", "asyncpg · domain_events", "Implementa PerformanceRepository.\nStream propio por instancia de Performance.")
-            Component(proj, "CompetenciaReadProjection", "asyncpg · PostgreSQL", "Proyecta eventos a tablas\ndenormalizadas para consultas GET.\nActualización por polling o NOTIFY.")
+            Component(repo_comp, "CompetenciaEventStore", "aiosqlite · events", "Implementa CompetenciaRepository.\nAppend de eventos al stream.\nReconstrucción de estado desde stream_id.")
+            Component(repo_perf, "PerformanceEventStore", "aiosqlite · events", "Implementa PerformanceRepository.\nStream propio por instancia de Performance.")
+            Component(proj, "CompetenciaReadProjection", "aiosqlite · SQLite", "Proyecta eventos a tablas\ndenormalizadas para consultas GET.\nActualización síncrona en el mismo comando.")
         }
     }
 
-    ContainerDb(event_store, "Event Store", "PostgreSQL 16\ndomain_events", "Streams de eventos de\nCompetencia y Performance")
-    ContainerDb(read_db, "Read Model DB", "PostgreSQL 16", "Tablas proyectadas para\nconsultas rápidas de grilla\ny estado de competencia")
+    ContainerDb(sqlite_comp, "competencia.db", "SQLite", "Tabla events (event store)\n+ tablas proyectadas (read model)")
 
     Rel(routes_comp, cmd_comp, "Invoca")
     Rel(routes_perf, cmd_perf, "Invoca")
@@ -234,11 +234,12 @@ C4Component
     Rel(acl, ent_part, "Crea / actualiza")
     Rel(repo_comp, agg_comp, "Implementa puerto")
     Rel(repo_perf, agg_perf, "Implementa puerto")
-    Rel(repo_comp, event_store, "Append / read stream", "SQL")
-    Rel(repo_perf, event_store, "Append / read stream", "SQL")
-    Rel(proj, event_store, "Suscribe a eventos", "polling / NOTIFY")
-    Rel(proj, read_db, "Escribe proyecciones", "SQL")
-    Rel(routes_comp, read_db, "Consultas GET", "SQL via handler")
+    Rel(repo_comp, sqlite_comp, "Append / read stream", "SQL / aiosqlite")
+    Rel(repo_perf, sqlite_comp, "Append / read stream", "SQL / aiosqlite")
+    Rel(cmd_comp, proj, "Actualiza read model\ntras append de eventos")
+    Rel(cmd_perf, proj, "Actualiza read model\ntras append de eventos")
+    Rel(proj, sqlite_comp, "Escribe proyecciones", "SQL / aiosqlite")
+    Rel(routes_comp, sqlite_comp, "Consultas GET", "SQL via handler")
 
     UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")
 ```
@@ -249,17 +250,16 @@ C4Component
 |-----------------------|--------------------------|
 | CompetenciaRoutes | Expone los endpoints REST para operaciones sobre el aggregate Competencia: gestión de grilla, inicio y finalización. |
 | PerformanceRoutes | Expone los endpoints REST para operaciones sobre el aggregate Performance: registro de AP, resultado, tarjeta y DNS. |
-| CompetenciaHandlers | Maneja los comandos del ciclo de vida de Competencia: GenerarGrilla, AjustarGrilla, ConfirmarGrilla, IniciarCompetencia, FinalizarCompetencia. |
-| PerformanceHandlers | Maneja los comandos del ciclo de vida de Performance: RegistrarAP, LlamarAtleta, RegistrarResultado, AsignarTarjeta, RegistrarDNS, CorregirResultado. |
+| CompetenciaHandlers | Maneja los comandos del ciclo de vida de Competencia: GenerarGrilla, AjustarGrilla, ConfirmarGrilla, IniciarCompetencia, FinalizarCompetencia. Actualiza el read model tras cada append. |
+| PerformanceHandlers | Maneja los comandos del ciclo de vida de Performance: RegistrarAP, LlamarAtleta, RegistrarResultado, AsignarTarjeta, RegistrarDNS, CorregirResultado. Actualiza el read model tras cada append. |
 | ParticipanteACL | Anti-Corruption Layer. Suscribe al evento AtletaInscripto de BC Registro y traduce el modelo de Atleta al modelo local de Participante. Aísla el Core Domain de cambios en BC Registro. |
 | Competencia | Aggregate Root del ciclo de vida de la competencia. Contiene GrillaDeSalida e IntervaloDisciplina. Custodia los invariantes INV-C-01 a INV-C-04. |
 | Performance | Aggregate Root del ciclo de vida de una performance individual. Contiene AP, RP y Tarjeta. Custodia los invariantes INV-P-01 a INV-P-14. |
 | Participante | Entidad local sin aggregate propio. Representa al atleta dentro del contexto de Competencia. Creada y mantenida por el ParticipanteACL a partir de eventos de BC Registro. |
-| CompetenciaEventStore | Implementa CompetenciaRepository. Persiste eventos de Competencia en el stream y reconstruye el aggregate desde el stream_id. |
-| PerformanceEventStore | Implementa PerformanceRepository. Cada instancia de Performance tiene su propio stream en la tabla domain_events. |
-| CompetenciaReadProjection | Proyecta los eventos de dominio a tablas desnormalizadas en PostgreSQL para servir consultas GET eficientes sin reproducir el stream. |
-| Event Store | Tabla append-only `domain_events`. Almacena todos los eventos de Competencia y Performance. Fuente de verdad del estado de ambos aggregates. |
-| Read Model DB | Tablas proyectadas para consultas rápidas de grilla y estado de competencia. No es fuente de verdad — se puede reconstruir desde el Event Store. |
+| CompetenciaEventStore | Implementa CompetenciaRepository. Persiste eventos de Competencia en la tabla `events` y reconstruye el aggregate desde el stream_id. |
+| PerformanceEventStore | Implementa PerformanceRepository. Cada instancia de Performance tiene su propio stream en la tabla `events`. |
+| CompetenciaReadProjection | Proyecta los eventos de dominio a tablas desnormalizadas en SQLite para servir consultas GET eficientes. La actualización es síncrona: el handler llama a la proyección tras cada append al event store. |
+| competencia.db | Archivo SQLite del BC Competencia. Contiene la tabla `events` (event store) y las tablas proyectadas (read model). Es la única fuente de persistencia del BC. |
 
 ### Relaciones
 
@@ -272,11 +272,12 @@ C4Component
 | Traducción ACL | ParticipanteACL → Participante | El ACL crea o actualiza la entidad Participante a partir del evento AtletaInscripto recibido desde BC Registro. |
 | Implementación de puerto | CompetenciaEventStore → Competencia | Implementa CompetenciaRepository: append al stream y reconstrucción del aggregate desde la secuencia de eventos. |
 | Implementación de puerto | PerformanceEventStore → Performance | Implementa PerformanceRepository con stream propio por instancia de Performance. |
-| Event Sourcing | CompetenciaEventStore → Event Store | Escribe eventos de Competencia en `domain_events` y los lee para reconstruir el aggregate. |
-| Event Sourcing | PerformanceEventStore → Event Store | Escribe y lee el stream propio de cada Performance en `domain_events`. |
-| Proyección | CompetenciaReadProjection → Event Store | Lee los eventos de dominio (por polling o NOTIFY de PostgreSQL) para mantener el read model actualizado. |
-| Proyección | CompetenciaReadProjection → Read Model DB | Escribe las proyecciones desnormalizadas para consultas rápidas. |
-| Consulta | CompetenciaRoutes → Read Model DB | Las consultas GET de grilla y estado de competencia se resuelven contra el read model, no contra el event store. |
+| Event Sourcing | CompetenciaEventStore → competencia.db | Escribe eventos de Competencia en la tabla `events` y los lee para reconstruir el aggregate. |
+| Event Sourcing | PerformanceEventStore → competencia.db | Escribe y lee el stream propio de cada Performance en la tabla `events`. |
+| Proyección síncrona | CompetenciaHandlers → CompetenciaReadProjection | El handler invoca la proyección síncronamente tras cada append al event store. No hay subscripción reactiva ni polling. |
+| Proyección síncrona | PerformanceHandlers → CompetenciaReadProjection | Ídem para eventos de Performance que afecten el read model de grilla/estado. |
+| Persistencia | CompetenciaReadProjection → competencia.db | Escribe las proyecciones desnormalizadas en las tablas del read model. |
+| Consulta | CompetenciaRoutes → competencia.db | Las consultas GET de grilla y estado de competencia se resuelven contra el read model, no contra el event store. |
 
 ### Notas de diseño — BC Competencia
 
@@ -285,10 +286,10 @@ C4Component
 Esto permite auditar el ciclo de vida de cada performance de forma independiente,
 y reconstruir el estado de una performance sin cargar toda la competencia.
 
-**Read Model separado del Event Store**
-Las consultas GET (ej: obtener la grilla actual) no reproducen el stream.
-El `CompetenciaReadProjection` mantiene una proyección en tablas PostgreSQL
-actualizadas cada vez que se produce un evento relevante.
+**Read Model y Event Store en el mismo archivo SQLite**
+`competencia.db` contiene tanto la tabla `events` (append-only) como las tablas proyectadas.
+No hay base de datos separada para el read model — es el mismo archivo SQLite del BC (ADR-007).
+Las proyecciones se actualizan síncronamente en el mismo comando que produce los eventos (ADR-008).
 
 **ACL en Application Layer**
 El Anti-Corruption Layer vive en `application/` — no en `domain/`.
@@ -299,16 +300,16 @@ El dominio no sabe que existe Registro; solo conoce `Participante`.
 ## 5. BCs CRUD — Referencia de estructura
 
 Los BCs Torneo, Registro, Resultados e Identidad siguen el patrón hexagonal canónico (§3)
-con persistencia relacional estándar. No requieren L3 detallado en Fase 0
+con persistencia relacional estándar en SQLite. No requieren L3 detallado en Fase 0
 — se elabora al diseñar cada BC en su SP correspondiente.
 
 | BC | Tipo | SP | Persistencia | Notas |
 |----|------|:--:|-------------|-------|
-| Torneo | Supporting | SP3 | PostgreSQL CRUD | Incluye catálogos EntidadOrganizadora y Sede |
-| Registro | Supporting | SP2 | PostgreSQL CRUD | ACL de salida hacia Competencia |
-| Resultados | Supporting | SP2 | PostgreSQL CRUD | Alimentado por CompetenciaFinalizada |
-| Identidad | Generic | SP4 | PostgreSQL CRUD | JWT cross-cutting; candidato a solución externa en H2-H3 |
-| Notificaciones | Generic | SP4 | Event Store (ES) | Idempotencia exactly-once; suscribe a todos los BCs |
+| Torneo | Supporting | SP3 | SQLite CRUD | Incluye catálogos EntidadOrganizadora y Sede |
+| Registro | Supporting | SP3 | SQLite CRUD | ACL de salida hacia Competencia |
+| Resultados | Supporting | SP2 | SQLite CRUD | Alimentado por CompetenciaFinalizada |
+| Identidad | Generic | SP3 | SQLite CRUD | JWT cross-cutting; candidato a solución externa en H2-H3 |
+| Notificaciones | Generic | SP4 | SQLite + ES | Idempotencia exactly-once; suscribe a todos los BCs |
 
 ---
 
@@ -316,8 +317,18 @@ con persistencia relacional estándar. No requieren L3 detallado en Fase 0
 
 | ADR | Decisión |
 |-----|----------|
-| ADR-001 a ADR-004 | Stack tecnológico: FastAPI · PostgreSQL · React PWA · Arquitectura Hexagonal |
+| ADR-001 | Event Sourcing para BC Competencia (aggregates Performance y Competencia) |
+| ADR-002 | FastAPI como framework backend |
+| ADR-003 | PWA offline-first con Service Worker + IndexedDB para el juez |
+| ADR-004 | Reglas de competencia (disciplinas, categorías, tarjetas) como datos configurables en SQLite |
 | ADR-005 | 6 Bounded Contexts definitivos + Event Sourcing en Competencia y Notificaciones |
+| ADR-006 | Estructura de código BC-first — cada BC como paquete Python independiente |
+| ADR-007 | SQLite como motor de persistencia — un archivo `.db` por Bounded Context |
+| ADR-008 | Event Store como tabla `events` append-only en el SQLite del BC |
+| ADR-009 | Migraciones Alembic independientes por BC |
+| ADR-010 | Docker solo para producción — Cloud Run (GCP) + Litestream para backup de SQLite |
+| ADR-011 | structlog para logging estructurado (JSON en prod, texto en dev) |
+| ADR-012 | RFC 7807 (Problem Details) como convención de errores HTTP |
 
 Ver `docs/adr/` para justificación completa de cada decisión.
 
@@ -334,7 +345,7 @@ Este documento es insumo directo para:
 ---
 
 *Documento creado: 2026-03-19 — Semana 0, Fase 0*
-*v1.0: L1 System Context + L2 Container + L3a Hexagonal canónico + L3b BC Competencia*
+*v1.1 (2026-03-20): SQLite por BC (ADR-007/008), proyección síncrona sin NOTIFY, ADR-001..ADR-012*
 *Modelo: C4 (Simon Brown) — diagramas Mermaid*
-*Fuentes: Context Map v1.1 · Domain Model v1.0 · ADR-001 a ADR-005*
+*Fuentes: Context Map v1.1 · Domain Model v1.0 · ADR-001 a ADR-012*
 *Mantenido por: Claude Cowork + Victor Valotto*
