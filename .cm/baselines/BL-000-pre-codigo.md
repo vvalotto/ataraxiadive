@@ -48,7 +48,22 @@ de la documentación fundacional sobre la cual arranca el desarrollo de Ataraxia
 | CI-D17 | `docs/design/estrategia-desarrollo-bc.md` | Plan | Mapeo BC×SP — secuencia, dependencias, hot spots resueltos |
 | CI-D18 | `docs/traceability/matrix.md` | Trazabilidad | Matriz RF→BC→incremento→US-IEDD — 53 RFs, 85% definidos |
 
-### CIs agregados en sesión pre-SP1 (2026-03-20)
+### CIs agregados en sesión pre-SP1 — stack técnico (2026-03-20)
+
+| CI | Artefacto | Tipo | Descripción |
+|----|-----------|------|-------------|
+| CI-D19 | `docs/adr/ADR-006-estructura-bc-first.md` | Decisión | Estructura src/ BC-first — 6 paquetes Python + shared/ + app.py |
+| CI-D20 | `docs/plans/WORKFLOW-DESARROLLO.md` | Proceso | Workflow completo: branching, PRs, quality gates, gestión con GitHub Issues+Milestones |
+| CI-D21 | `docs/adr/ADR-007-sqlite-persistencia-bc.md` | Decisión | SQLite — un archivo `.db` por Bounded Context |
+| CI-D22 | `docs/adr/ADR-008-event-store-sqlite.md` | Decisión | Event Store como tabla `events` append-only en SQLite |
+| CI-D23 | `docs/adr/ADR-009-migraciones-por-bc.md` | Decisión | Migraciones Alembic independientes por BC |
+| CI-D24 | `docs/adr/ADR-010-docker-produccion-cloud-run.md` | Decisión | Docker solo en prod — Cloud Run + Litestream |
+| CI-D25 | `docs/adr/ADR-011-structlog-logging.md` | Decisión | structlog para logging estructurado (JSON prod / texto dev) |
+| CI-D26 | `docs/adr/ADR-012-rfc7807-errores-http.md` | Decisión | RFC 7807 (Problem Details) para errores HTTP |
+| CI-D27 | `docs/plans/SP1-candidatas.md` | Plan | SP1 — 4 incrementos, 7 US candidatas con pre/post/invariantes |
+| CI-D28 | `docs/design/architecture.md` (v1.1) | Arquitectura | L4 Deployment candidato + SQLite/aiosqlite en todos los niveles C4 |
+
+### CIs agregados en sesión pre-SP1 — herramientas (2026-03-20)
 
 | CI | Artefacto | Tipo | Descripción |
 |----|-----------|------|-------------|
@@ -156,3 +171,64 @@ Ver `docs/design/estrategia-desarrollo-bc.md` §11 para detalle completo.
 
 **Observación experimental:**
 > La fricción detectada en RQ1 es de tipo *incompatibilidad de supuestos arquitectónicos*, no de *incompatibilidad técnica*. Las herramientas coexisten sin conflicto; el problema es que el perfil genérico no conoce la arquitectura del proyecto. Esto sugiere que el Dev Kit necesita un mecanismo de onboarding por proyecto, no solo perfiles por stack tecnológico.
+
+---
+
+### Retrospectiva Pre-SP1 — stack técnico ADR-007..012 (2026-03-20)
+
+#### Lección 9 — El stack técnico es una cascada de decisiones, no decisiones independientes
+
+ADR-007 a ADR-012 forman una cadena: SQLite → Event Store en SQLite → Alembic por BC
+→ sin Docker en dev → Cloud Run → structlog JSON. Cada decisión habilita o condiciona
+a la siguiente. IEDD no tiene mecanismo explícito para capturar estas dependencias entre
+decisiones técnicas — los ADRs las documentan, pero la relación entre ellos no es
+visible en la metodología. Candidato a formalización.
+
+#### Lección 10 — SQLite es una decisión de escala, no de conveniencia
+
+La elección de SQLite en lugar de PostgreSQL no fue por facilidad sino por escala real
+(500 performances/torneo, 4 torneos/año, 50 usuarios concurrentes). El puerto hexagonal
+hace que la migración futura sea un cambio de adaptador — no de dominio. Esto convierte
+la decisión en un caso de prueba empírico de la arquitectura hexagonal: si en SP3/SP4
+se migra a PostgreSQL, la retrospectiva medirá cuánto cambió fuera de `infrastructure/`.
+
+#### Lección 11 — Las restricciones del desarrollador son datos de contexto de Capa 1
+
+La ausencia de Docker Desktop en el entorno de desarrollo condicionó ADR-010 y simplificó
+el ciclo de trabajo (git clone + uv sync + uv run). Las restricciones del desarrollador
+deberían ser explícitas en Capa 1 de IEDD — no supuestos implícitos que emergen al
+tomar decisiones técnicas.
+
+---
+
+### Retrospectiva Pre-SP1 — consistencia documental post-ADR (2026-03-20)
+
+#### Lección 12 — Una decisión tardía que contradice supuestos previos genera fricción de consistencia proporcional a su "distancia"
+
+ADR-007 (PostgreSQL → SQLite) impactó 9 archivos en 4 carpetas. ADR-012 (RFC 7807),
+en cambio, no impactó ningún documento previo. La diferencia: ADR-007 contradecía
+supuestos de documentos tempranos; ADR-012 formalizaba algo no definido. El costo de
+consistencia de un ADR es proporcional a cuántos supuestos previos contradice, no a la
+magnitud del cambio técnico.
+
+#### Lección 13 — La distinción documentos-de-entrada / documentos-derivados es necesaria y no estaba formalizada
+
+Durante la revisión emergió una distinción operativa crítica: `docs/contexto/`,
+`docs/dominio/` y `docs/requirements/vision.md` son documentos de entrada — capturan
+el conocimiento previo al análisis técnico y no se modifican retroactivamente.
+`docs/design/`, `docs/adr/`, `CLAUDE.md` y `docs/traceability/` son documentos
+derivados — se actualizan cuando cambia un ADR. Esta distinción debería ser explícita
+en el WORKFLOW-DESARROLLO.md.
+
+#### Lección 14 — La revisión de consistencia es fricción inherente, no falla del método
+
+Una sesión completa dedicada a consistencia documental no es ineficiencia — es el precio
+de tener documentación rigurosa en un proceso iterativo. El valor diferencial: la
+inconsistencia es detectable y corregible. Sin documentación, el supuesto incorrecto
+simplemente se implementa y el costo aparece mucho más tarde.
+
+**Hipótesis a evaluar en BL-001:**
+> Si la revisión de consistencia se hace inmediatamente al aprobar el ADR (no en sesión
+> posterior), el costo se reduce significativamente. Próximo bloque de ADRs: medir.
+
+Ver `docs/contexto/HITO-2-STACK-TECNICO-CONSISTENCIA.md` para análisis completo.
