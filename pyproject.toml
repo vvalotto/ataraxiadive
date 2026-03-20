@@ -28,7 +28,11 @@ dev = [
     "mypy>=1.9.0",
     "pylint>=3.1.0",
     "pre-commit>=3.7.0",
+    "quality-agents",
 ]
+
+[tool.uv.sources]
+quality-agents = { git = "https://github.com/vvalotto/software_limpio" }
 
 # ── Black ──────────────────────────────────────────────────────────────────
 [tool.black]
