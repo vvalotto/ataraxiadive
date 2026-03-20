@@ -344,6 +344,9 @@ Umbrales mínimos para SP1:
 ## 13. Comandos Útiles
 
 ```bash
+# Setup inicial del repositorio (una vez al clonar)
+git config core.hooksPath .githooks   # activa el pre-push hook de DesignReviewer
+
 # Entorno
 docker-compose up
 
@@ -353,9 +356,9 @@ pytest tests/integration/
 pytest tests/features/
 
 # Calidad
-codeguard src/
-designreviewer src/
-architectanalyst src/ --sprint-id BL-NNN
+codeguard src/                                           # análisis estático (Fase 7 /implement-us)
+designreviewer src/                                      # diseño — bloquea si CRITICAL (pre-push a develop)
+architectanalyst src/ --sprint-id BL-NNN --format json  # arquitectura — manual al cerrar SP
 
 # Formato
 black src/ tests/
