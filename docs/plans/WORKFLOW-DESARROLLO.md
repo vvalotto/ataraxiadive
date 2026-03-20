@@ -108,12 +108,13 @@ una funcionalidad cohesiva y verificable de punta a punta.
 
 ```
 1. Todas las US del Incremento en estado done en sus branches
-2. Merge de todas las branches feature/ a develop
+2. Merge de todas las branches feature/ a develop (local)
 3. Abrir PR: Incremento X.Y → develop  (referencia los Issues de las US)
-4. Correr DesignReviewer: designreviewer src/
-   → Bloquea el merge si hay violaciones CRITICAL
+4. Push a develop → pre-push hook ejecuta DesignReviewer automáticamente
+   → Bloquea el push si hay violaciones CRITICAL
+   → Corregir y re-pushear si es necesario
 5. Verificar DoD de integración (test end-to-end observable)
-6. Merge a develop — Issues de las US se cierran automáticamente
+6. Merge del PR en GitHub — Issues de las US se cierran automáticamente
 7. Mini-retrospectiva: ¿qué funcionó? ¿qué ajustar en el próximo?
 ```
 
@@ -121,19 +122,31 @@ una funcionalidad cohesiva y verificable de punta a punta.
 coherencia arquitectónica al review: la funcionalidad es verificable de
 punta a punta antes del análisis de diseño.
 
+**DesignReviewer manual (opcional):**
+```bash
+# Correr manualmente en cualquier momento antes del push
+designreviewer src/
+```
+
 ---
 
 ## 7. Ciclo por Subproyecto (Baseline)
 
 ```
 1. Todos los Incrementos del SP cerrados en develop — Milestone al 100%
-2. Correr ArchitectAnalyst: architectanalyst src/ --sprint-id BL-NNN --format json
-   → Guardar output en .cm/baselines/BL-NNN-arquitectura.json
+2. Correr ArchitectAnalyst manualmente:
+   architectanalyst src/ --sprint-id BL-NNN --format json \
+     > quality/reports/architectanalyst/BL-NNN-arquitectura.json
+   → Leer y analizar el reporte antes de continuar
+   → Copiar también a .cm/baselines/BL-NNN-arquitectura.json
 3. Registrar métricas en .cm/baselines/BL-NNN.md
 4. Merge develop → main
 5. Tag: git tag vN.0.0  — cerrar Milestone en GitHub
 6. Retrospectiva documentada en BL-NNN.md (alimenta el libro y el paper)
 ```
+
+**ArchitectAnalyst es siempre manual** — su valor está en la lectura consciente
+del reporte antes de cerrar el Baseline, no en la automatización.
 
 ---
 
