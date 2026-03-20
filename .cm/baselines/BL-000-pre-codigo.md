@@ -48,6 +48,19 @@ de la documentación fundacional sobre la cual arranca el desarrollo de Ataraxia
 | CI-D17 | `docs/design/estrategia-desarrollo-bc.md` | Plan | Mapeo BC×SP — secuencia, dependencias, hot spots resueltos |
 | CI-D18 | `docs/traceability/matrix.md` | Trazabilidad | Matriz RF→BC→incremento→US-IEDD — 53 RFs, 85% definidos |
 
+### CIs agregados en sesión pre-SP1 (2026-03-20)
+
+| CI | Artefacto | Tipo | Descripción |
+|----|-----------|------|-------------|
+| CI-T01 | `.claude/skills/implement-us/` | Herramienta | Claude Dev Kit v1.3 — skill /implement-us (10 fases), perfil fastapi-rest |
+| CI-T02 | `quality-agents v0.3.1` | Herramienta | software_limpio — codeguard, designreviewer, architectanalyst operativos |
+| CI-T03 | `.githooks/pre-push` | Automatización | Pre-push hook: DesignReviewer bloquea push a develop si hay violaciones CRITICAL |
+| CI-D19 | `docs/adr/ADR-006-estructura-bc-first.md` | Decisión | Estructura src/ BC-first — 6 paquetes Python + shared/ + app.py |
+| CI-D20 | `docs/plans/WORKFLOW-DESARROLLO.md` | Proceso | Workflow completo: branching, PRs, quality gates, gestión con GitHub Issues+Milestones |
+| CI-C01 | `src/` | Código | Esqueleto BC-first: 6 BCs × {domain,application,infrastructure,api} + shared/ |
+| CI-C02 | `tests/` | Tests | Estructura unit/<bc>/, integration/<bc>/, features/steps/ |
+| CI-C03 | `quality/reports/` | Calidad | Carpetas por agente: codeguard/, designreviewer/, architectanalyst/ |
+
 ---
 
 ## Estado del Código
@@ -92,10 +105,9 @@ Ninguna. El proyecto no tiene código todavía.
 
 ## Próximos Pasos
 
-- **SP1 — La Performance:** arrancar con US-1.1.1 en `docs/plans/`
-- Instalar Claude Dev Kit (`/implement-us`) antes de SP1
-- Instalar `software_limpio` (codeguard, designreviewer, architectanalyst) antes de SP1
-- Primera US-IEDD: `US-1.1.1` — Fundación técnica
+- **SP1 — La Performance:** elaborar US candidatas en `docs/plans/SP1-candidatas.md` y arrancar con `/implement-us`
+- Crear Milestone SP1 en GitHub Issues
+- Primera US-IEDD: `US-1.1.1`
 
 ---
 
