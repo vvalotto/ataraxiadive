@@ -334,7 +334,98 @@ Ver `docs/adr/` para justificación completa de cada decisión.
 
 ---
 
-## 7. Próximo Paso
+## 7. L4 — Deployment (candidato)
+
+> **Candidato:** la configuración definitiva de producción (región, memoria, concurrencia de Cloud Run,
+> bucket GCS, pipeline CI/CD) se completa en SP5. Este diagrama refleja las decisiones de ADR-010.
+
+Dos entornos con estrategias distintas. El desarrollo es directo (`uv run`), sin Docker.
+La producción es un contenedor stateless en Cloud Run cuya persistencia SQLite
+se replica en tiempo real a GCS mediante Litestream.
+
+```mermaid
+graph TB
+    subgraph DEV["💻 Desarrollo Local"]
+        direction TB
+        DEV_CMD["uv run fastapi dev src/app.py"]
+        DEV_DB[("data/\ncompetencia.db · torneo.db\nregistro.db · resultados.db\nidentidad.db · notificaciones.db")]
+        DEV_CMD --> DEV_DB
+    end
+
+    subgraph GH["GitHub"]
+        direction LR
+        REPO["Repositorio\nAtaraxiaDive"]
+        GHA["GitHub Actions\nCI/CD Pipeline\n(SP5)"]
+        REPO -->|"push a main"| GHA
+    end
+
+    subgraph GAR["Google Artifact Registry"]
+        IMG["imagen Docker\nataraxiadive:latest"]
+    end
+
+    subgraph GCP["☁️ Google Cloud Platform"]
+        direction TB
+        subgraph CR["Cloud Run — instancia stateless"]
+            direction LR
+            APP["FastAPI\n(Dockerfile)"]
+            LS["Litestream\n(proceso paralelo)"]
+            APP -.- LS
+        end
+        subgraph GCS["Cloud Storage"]
+            BUCKET[("Bucket GCS\nreplicas de data/*.db")]
+        end
+        LS -->|"replica en tiempo real"| BUCKET
+        BUCKET -->|"restaura al arrancar\nnueva instancia"| LS
+    end
+
+    subgraph EXT["Servicios Externos"]
+        SMTP["SMTP\n(ej: SendGrid)"]
+        FCM["FCM\nPush Notifications"]
+    end
+
+    GHA -->|"build + push imagen"| GAR
+    GAR -->|"deploy"| CR
+    APP -->|"SMTP/TLS"| SMTP
+    APP -->|"HTTPS"| FCM
+```
+
+### Flujo de despliegue (producción)
+
+```
+1. git push → main (baseline tag)
+2. GitHub Actions: pytest + designreviewer + build Dockerfile
+3. push imagen → Google Artifact Registry
+4. Cloud Run: despliega nueva revisión
+5. Al arrancar: Litestream restaura data/*.db desde GCS
+6. Instancia sirve tráfico
+7. Durante operación: Litestream replica cada write a GCS en tiempo real
+```
+
+### Flujo de backup / recuperación (Litestream)
+
+```
+Escritura SQLite → WAL → Litestream detecta → replica a GCS (< 1s)
+                                                      ↓
+Nueva instancia Cloud Run ← restaura desde GCS ← punto de recuperación
+```
+
+### Elementos
+
+| Elemento | Rol | Notas |
+|----------|-----|-------|
+| `uv run fastapi dev` | Servidor de desarrollo | Sin Docker — ADR-010 |
+| `data/<bc>.db` (local) | Persistencia en dev | 6 archivos SQLite, excluidos de git |
+| GitHub Actions | CI/CD | Pipeline completo en SP5; en SP1-SP4 se ejecuta manualmente |
+| Google Artifact Registry | Registro de imágenes | Imagen de producción optimizada |
+| Cloud Run | Runtime de producción | Stateless — escala a cero entre torneos |
+| Litestream | Replicación SQLite | Proceso paralelo al servidor; replica WAL a GCS |
+| Cloud Storage (GCS) | Backup continuo de SQLite | Punto de restauración al arrancar nueva instancia |
+| SMTP externo | Envío de emails | Delegado — SendGrid u otro proveedor |
+| FCM | Push notifications | Delegado — Firebase Cloud Messaging |
+
+---
+
+## 8. Próximo Paso
 
 Este documento es insumo directo para:
 
