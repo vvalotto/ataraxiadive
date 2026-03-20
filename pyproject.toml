@@ -65,7 +65,10 @@ addopts = "--cov=src --cov-report=term-missing --cov-fail-under=90"
 # ── Coverage ───────────────────────────────────────────────────────────────
 [tool.coverage.run]
 source = ["src"]
-omit = ["src/api/*"]  # API layer cubierta por tests de integración
+omit = [
+    "src/*/api/*",    # API layer de cada BC — cubierta por tests de integración
+    "src/app.py",
+]
 
 [tool.coverage.report]
 exclude_lines = [
@@ -78,22 +81,26 @@ exclude_lines = [
 [tool.codeguard]
 min_pylint_score = 8.0
 max_complexity = 10
-paths = ["src/domain", "src/application", "src/infrastructure", "src/api"]
+paths = [
+    "src/competencia", "src/torneo", "src/registro",
+    "src/resultados", "src/identidad", "src/notificaciones",
+    "src/shared",
+]
 
 # ── DesignReviewer (Software Limpio) ──────────────────────────────────────
 [tool.designreviewer]
 paths = ["src"]
 check_hexagonal = true
-domain_path = "src/domain"
-forbidden_imports_in_domain = ["src.infrastructure", "src.api", "fastapi", "sqlalchemy"]
+# Patrón BC-first: domain/ dentro de cada BC no puede importar infrastructure/ ni api/
+forbidden_imports_in_domain = ["infrastructure", "api", "fastapi", "sqlalchemy"]
 
 # ── ArchitectAnalyst (Software Limpio) ────────────────────────────────────
 [tool.architectanalyst]
 paths = ["src"]
-history_db = ".quality_control/architecture.db"
+history_db = "quality/reports/architectanalyst/architecture.db"
 
 [tool.architectanalyst.layers]
-domain = "src/domain"
-application = "src/application"
-infrastructure = "src/infrastructure"
-api = "src/api"
+domain = ["*/domain"]
+application = ["*/application"]
+infrastructure = ["*/infrastructure"]
+api = ["*/api"]

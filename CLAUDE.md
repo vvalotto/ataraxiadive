@@ -121,52 +121,82 @@ IEDD (metodología)
 
 ## 5. Estructura del Repositorio
 
+Estructura **BC-first** (ADR-006). Cada Bounded Context es un paquete Python independiente.
+
 ```
 src/
-├── domain/          ← aggregates, value objects, domain events, invariantes
-├── application/     ← use cases, command/query handlers
-├── infrastructure/  ← event store, read model, PostgreSQL, repos
-└── api/             ← FastAPI routes, schemas Pydantic, dependencias
+├── competencia/         ← Core Domain (Event Sourcing)
+│   ├── domain/{aggregates, value_objects, events, ports}
+│   ├── application/{commands, queries}
+│   ├── infrastructure/{event_store, repositories}
+│   └── api/             ← router FastAPI del BC
+├── torneo/              ← Supporting (CRUD)
+│   ├── domain/{aggregates, value_objects, events, ports}
+│   ├── application/{commands, queries}
+│   ├── infrastructure/repositories
+│   └── api/
+├── registro/            (igual que torneo)
+├── resultados/          (igual que torneo)
+├── identidad/           (igual que torneo)
+├── notificaciones/      ← Generic (Event Sourcing)
+│   ├── domain/{aggregates, value_objects, events, ports}
+│   ├── application/{commands, queries}
+│   ├── infrastructure/{event_store, repositories}
+│   └── api/
+├── shared/
+│   └── domain/{value_objects, base}   ← tipos cross-BC
+└── app.py               ← ensamble central de routers FastAPI
 
 frontend/            ← React PWA (package.json propio)
 
 tests/
-├── unit/            ← tests de aggregates y value objects
-├── integration/     ← tests de use cases + infraestructura
-└── features/        ← .feature files BDD (Gherkin)
+├── unit/
+│   └── <bc>/        ← árbol espejo de src/<bc>/
+├── integration/
+│   └── <bc>/        ← stack completo por BC
+└── features/
+    ├── steps/
+    └── US-X.Y.Z.feature  ← organizados por US-IEDD
 
 docs/
-├── adr/             ← Architecture Decision Records (ADR-001 a ADR-005 ✅)
-├── contexto/        ← Documentos fundacionales del experimento (5 archivos ✅)
-├── design/          ← Context Map ✅ · Event Storming Big Picture ✅ · Domain Model, Architecture (⏳ pendientes)
-├── dominio/         ← Descripción del dominio y RFs (5 archivos ✅)
-├── iedd/            ← Marco metodológico IEDD (4 archivos ✅)
-├── plans/           ← US-IEDD por incremento (genera el Dev Kit)
+├── adr/             ← ADR-001 a ADR-006 ✅
+├── contexto/        ← Documentos fundacionales del experimento ✅
+├── design/          ← Context Map ✅ · ES Big Picture ✅ · Domain Model ✅ · Architecture ✅
+├── dominio/         ← Descripción del dominio y RFs ✅
+├── iedd/            ← Marco metodológico IEDD ✅
+├── plans/           ← US-IEDD + WORKFLOW-DESARROLLO.md + candidatas por SP
 ├── reports/         ← Reportes /implement-us (genera el Dev Kit)
 ├── requirements/    ← vision.md ✅
-└── traceability/    ← matrix.md
+└── traceability/    ← matrix.md ✅
 
 .cm/
 ├── baselines/       ← BL-000 ✅ · BL-NNN...
 └── changes/         ← RFC-NNN.md
 
-skills/              ← claude-dev-kit
 quality/
-└── reports/         ← quality gates por US (genera el Dev Kit)
+└── reports/
+    ├── codeguard/        ← por US (genera /implement-us)
+    ├── designreviewer/   ← por Incremento (genera PR)
+    └── architectanalyst/ ← por Baseline (genera cierre SP)
 ```
 
 ---
 
-## 6. Regla de Oro: Arquitectura Hexagonal
+## 6. Regla de Oro: Arquitectura Hexagonal (por BC)
 
-**El dominio no importa nada de infraestructura.** Esta regla es absoluta.
+**El dominio no importa nada de infraestructura.** Esta regla es absoluta dentro de cada BC.
 
 ```
-domain/         → no importa nada externo al propio dominio
-application/    → importa domain/, nunca infrastructure/ directamente
-infrastructure/ → implementa interfaces definidas en domain/
-api/            → importa application/, nunca domain/ directamente
+<bc>/domain/         → no importa nada fuera de su propio domain/
+<bc>/application/    → importa <bc>/domain/, nunca infrastructure/
+<bc>/infrastructure/ → implementa puertos definidos en <bc>/domain/ports/
+<bc>/api/            → importa <bc>/application/, nunca domain/ directamente
 ```
+
+**Única excepción permitida:** cualquier capa puede importar desde `shared/domain/`.
+
+**Comunicación entre BCs:** exclusivamente a través de puertos (`domain/ports/`).
+Nunca imports directos entre BCs. Los ACLs viven en `infrastructure/` del BC consumidor.
 
 DesignReviewer detecta automáticamente las violaciones en cada merge.
 
