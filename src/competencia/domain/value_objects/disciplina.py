@@ -1,10 +1,10 @@
 """Value Object Disciplina — modalidades de apnea competitiva."""
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 
-class Disciplina(str, Enum):
+class Disciplina(StrEnum):
     """Disciplinas de apnea reconocidas por AIDA/CMAS.
 
     Valores de tiempo (segundos): STA

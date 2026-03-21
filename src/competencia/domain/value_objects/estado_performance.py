@@ -1,10 +1,10 @@
 """Value Object EstadoPerformance — máquina de estados del ciclo de vida."""
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 
-class EstadoPerformance(str, Enum):
+class EstadoPerformance(StrEnum):
     """Estados del ciclo de vida de una Performance.
 
     Transiciones válidas:

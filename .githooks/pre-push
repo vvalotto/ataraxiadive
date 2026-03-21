@@ -20,7 +20,7 @@ fi
 echo "🔍 DesignReviewer — analizando src/ antes del merge a develop..."
 echo ""
 
-designreviewer src/
+designreviewer src/ --config pyproject.toml
 EXIT_CODE=$?
 
 if [[ $EXIT_CODE -ne 0 ]]; then
