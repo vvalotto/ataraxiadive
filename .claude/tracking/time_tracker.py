@@ -329,6 +329,107 @@ class TimeTracker:
         self._save()
         # Los reportes se generarán en una fase posterior
 
+    @classmethod
+    def load(cls, us_id: str) -> "TimeTracker":
+        """Reconstruye un TimeTracker completo desde el JSON persistido.
+
+        Permite usar el tracker en procesos Python separados (ej: llamadas Bash
+        individuales durante /implement-us). Cada llamada carga estado, opera y
+        persiste — sin necesidad de mantener el objeto en memoria entre fases.
+
+        Args:
+            us_id: ID de la Historia de Usuario (ej: "US-1.2.1")
+
+        Returns:
+            TimeTracker con estado completo restaurado
+
+        Raises:
+            FileNotFoundError: Si no existe tracking para el us_id dado
+        """
+        storage_path = Path(f".claude/tracking/{us_id}-tracking.json")
+        if not storage_path.exists():
+            raise FileNotFoundError(
+                f"No existe tracking para {us_id}. "
+                f"Inicializar primero con start_tracking()."
+            )
+
+        with open(storage_path, encoding="utf-8") as f:
+            data = json.load(f)
+
+        def parse_dt(value: Optional[str]) -> Optional[datetime]:
+            if not value:
+                return None
+            return datetime.fromisoformat(value)
+
+        metadata = data["metadata"]
+        tracker = cls(
+            us_id=metadata["us_id"],
+            us_title=metadata["us_title"],
+            us_points=metadata["us_points"],
+            producto=metadata["producto"],
+        )
+
+        timeline = data["timeline"]
+        tracker.started_at = parse_dt(timeline.get("started_at"))
+        tracker.completed_at = parse_dt(timeline.get("completed_at"))
+
+        for phase_data in data.get("phases", []):
+            phase = Phase(
+                phase_number=phase_data["phase_number"],
+                phase_name=phase_data["phase_name"],
+                started_at=parse_dt(phase_data.get("started_at")),
+                completed_at=parse_dt(phase_data.get("completed_at")),
+                elapsed_seconds=phase_data.get("elapsed_seconds", 0),
+                status=phase_data.get("status", "pending"),
+                auto_approved=phase_data.get("auto_approved", True),
+                user_approval_time_seconds=phase_data.get(
+                    "user_approval_time_seconds", 0
+                ),
+            )
+            for i, task_data in enumerate(phase_data.get("tasks", [])):
+                # Acepta tanto dicts completos (format normal) como strings
+                # (format simplificado generado post-facto)
+                if isinstance(task_data, str):
+                    task = Task(
+                        task_id=f"task_{i:03d}",
+                        task_name=task_data,
+                        task_type="generic",
+                        estimated_minutes=0,
+                        status="completed",
+                    )
+                else:
+                    task = Task(
+                        task_id=task_data["task_id"],
+                        task_name=task_data["task_name"],
+                        task_type=task_data["task_type"],
+                        estimated_minutes=task_data["estimated_minutes"],
+                        started_at=parse_dt(task_data.get("started_at")),
+                        completed_at=parse_dt(task_data.get("completed_at")),
+                        elapsed_seconds=task_data.get("elapsed_seconds", 0),
+                        file_created=task_data.get("file_created"),
+                        status=task_data.get("status", "pending"),
+                    )
+                phase.tasks.append(task)
+                if task.status == "in_progress":
+                    tracker.current_task = task
+            tracker.phases.append(phase)
+            if phase.status == "in_progress":
+                tracker.current_phase = phase
+
+        for pause_data in data.get("pauses", []):
+            pause = Pause(
+                pause_id=pause_data["pause_id"],
+                started_at=parse_dt(pause_data["started_at"]),
+                resumed_at=parse_dt(pause_data.get("resumed_at")),
+                duration_seconds=pause_data.get("duration_seconds", 0),
+                reason=pause_data.get("reason", ""),
+            )
+            tracker.pauses.append(pause)
+            if pause.is_active:
+                tracker.current_pause = pause
+
+        return tracker
+
     def get_status(self) -> Dict[str, Any]:
         """Retorna estado actual para /track-status.
 

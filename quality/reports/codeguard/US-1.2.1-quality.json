@@ -1,0 +1,29 @@
+{
+  "us_id": "US-1.2.1",
+  "titulo": "Registrar AP",
+  "fecha": "2026-03-21",
+  "tool": "codeguard v0.2.0",
+  "scope": [
+    "src/"
+  ],
+  "resultados": {
+    "errores": 0,
+    "advertencias": 0,
+    "informativos": 279,
+    "archivos_analizados": 93,
+    "checks_ejecutados": 6
+  },
+  "cobertura": {
+    "total": 97.71,
+    "umbral": 90,
+    "pasa": true
+  },
+  "tests": {
+    "unitarios": 17,
+    "integracion": 4,
+    "bdd": 6,
+    "total": 27,
+    "pasan": 27
+  },
+  "quality_gate": "PASS"
+}

@@ -168,7 +168,7 @@ en `docs/plans/` antes de ejecutar `/implement-us`.
 | US candidata | Inc. | RFs cubiertos | Comando principal | Invariantes clave |
 |-------------|------|---------------|------------------|------------------|
 | US-1.1.1 | 1.1 | — | Setup: esqueleto BC Competencia (BC-first) + tabla `events` + health-check | — |
-| US-1.2.1 | 1.2 | RF-PR-01/02/03, RF-EJ-08 | `RegistrarAP` | INV-P-01, INV-P-02, INV-P-03 |
+| US-1.2.1 | 1.2 | RF-PR-01/02/03, RF-EJ-08 | `RegistrarAP` | INV-P-01, INV-P-02, INV-P-03, INV-P-04 | ✅ Implementada 2026-03-21 |
 | US-1.2.2 | 1.2 | RF-EJ-05/08 | `RegistrarResultado` | INV-P-06 |
 | US-1.2.3 | 1.2 | RF-EJ-10 | `AsignarTarjeta` (blanca/roja) | INV-P-07, INV-P-11 |
 | US-1.3.1 | 1.3 | RF-EJ-05 | Interfaz juez mobile-first — 6 botones del flujo | — |
