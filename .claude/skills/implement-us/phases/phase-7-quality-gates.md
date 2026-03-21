@@ -49,12 +49,16 @@ US-6.x.x → src/notificaciones/
 
 ## Paso 2: Ejecutar CodeGuard sobre el BC
 
+Dos comandos obligatorios — el primero guarda la evidencia cruda, el segundo muestra
+el output en consola para revisión inmediata:
+
 ```bash
-codeguard src/{BC}/ --format json > quality/reports/codeguard/{US_ID}-codeguard.json
+codeguard src/{BC}/ --format json > quality/reports/codeguard/{US_ID}-codeguard-raw.json
 codeguard src/{BC}/
 ```
 
-El primer comando guarda el reporte JSON. El segundo muestra el resultado en consola.
+**El archivo `{US_ID}-codeguard-raw.json` es la evidencia auténtica del quality gate.**
+No sustituir por un JSON escrito manualmente.
 
 **CodeGuard nunca bloquea** — advierte y reporta. El criterio de aprobación
 se evalúa manualmente revisando el output.
@@ -92,7 +96,8 @@ pytest tests/unit/{BC}/ \
 
 ## Paso 4: Generar reporte consolidado
 
-Crear `quality/reports/codeguard/{US_ID}-quality.json` con el estado final:
+Crear `quality/reports/codeguard/{US_ID}-quality.json` como **resumen** que referencia
+los artefactos de evidencia reales:
 
 ```json
 {
@@ -103,12 +108,12 @@ Crear `quality/reports/codeguard/{US_ID}-quality.json` con el estado final:
     "estado": "APROBADO | CON_WARNINGS | RECHAZADO",
     "pylint": "<score>",
     "issues_criticos": 0,
-    "reporte": "quality/reports/codeguard/{US_ID}-codeguard.json"
+    "evidencia_raw": "quality/reports/codeguard/{US_ID}-codeguard-raw.json"
   },
   "coverage": {
     "estado": "APROBADO | RECHAZADO",
     "porcentaje": "<valor>",
-    "reporte": "quality/reports/codeguard/{US_ID}-coverage.json"
+    "evidencia_raw": "quality/reports/codeguard/{US_ID}-coverage.json"
   },
   "estado_final": "APROBADO | RECHAZADO",
   "observaciones": []
@@ -124,9 +129,14 @@ Crear `quality/reports/codeguard/{US_ID}-quality.json` con el estado final:
 
 ## Nota sobre DesignReviewer
 
-**DesignReviewer NO se ejecuta en esta fase.** Corre en el PR del Incremento
-(cuando todas las US del Incremento están implementadas), no por US individual.
-Ver `docs/plans/WORKFLOW-DESARROLLO.md` → Ciclo por Incremento.
+**DesignReviewer NO se ejecuta manualmente en esta fase.**
+Corre automáticamente como hook pre-push cuando se hace push de la branch
+`feature/US-X.Y.Z-*` para abrir el PR a develop. Si hay violations CRITICAL, bloquea el push.
+
+Adicionalmente, al cerrar el Incremento (todas las US mergeadas), se corre una vez más
+en forma manual sobre `develop` para confirmar el estado consolidado.
+
+Ver `docs/plans/WORKFLOW-DESARROLLO.md` → §5 Ciclo por US-IEDD y §8 Quality Gates.
 
 ---
 
@@ -143,9 +153,10 @@ tracker.end_phase(7, auto_approved=True)
 Al finalizar:
 
 ✅ CodeGuard ejecutado sobre `src/{BC}/`
-✅ Reporte JSON guardado en `quality/reports/codeguard/{US_ID}-codeguard.json`
+✅ Evidencia cruda guardada en `quality/reports/codeguard/{US_ID}-codeguard-raw.json`
 ✅ Cobertura ≥ 90% en `domain/` + `application/`
-✅ Reporte consolidado en `quality/reports/codeguard/{US_ID}-quality.json`
+✅ Reporte consolidado en `quality/reports/codeguard/{US_ID}-quality.json` (referencia los raw)
 ✅ Estado final documentado (APROBADO / CON_WARNINGS / RECHAZADO)
+⏭️  DesignReviewer corre automáticamente al hacer push (pre-push hook) — no requiere acción manual aquí
 
 **Próxima fase:** Fase 8 — Documentación

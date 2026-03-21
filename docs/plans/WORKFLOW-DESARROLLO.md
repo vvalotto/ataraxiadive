@@ -121,8 +121,10 @@ y el DoD de integración es verificable de punta a punta.
 ```
 1. Todas las US del Incremento mergeadas a develop (PR individual por US)
 2. Verificar DoD de integración (test end-to-end observable)
-3. [MANUAL] Correr DesignReviewer sobre el estado completo del incremento:
+3. [MANUAL] Correr DesignReviewer sobre el estado consolidado del incremento:
    designreviewer src/
+   → Complementa el DesignReviewer automático (pre-push por US) — aquí se verifica
+     que la interacción entre todas las US del incremento no introdujo violations.
    → Si hay CRITICAL: abrir fix/ branch, corregir, PR a develop
 4. Registrar en BL-00N activa:
    → Agregar CIs nuevos a la tabla de inventario
