@@ -124,8 +124,13 @@ y el DoD de integración es verificable de punta a punta.
 3. [MANUAL] Correr DesignReviewer sobre el estado completo del incremento:
    designreviewer src/
    → Si hay CRITICAL: abrir fix/ branch, corregir, PR a develop
-4. Mini-retrospectiva: ¿qué funcionó? ¿qué ajustar en el próximo?
-5. Cerrar Milestone parcial en GitHub si corresponde
+4. Registrar en BL-00N activa:
+   → Agregar CIs nuevos a la tabla de inventario
+   → Actualizar métricas del incremento
+   → Registrar decisiones técnicas relevantes
+5. Documentar aprendizajes experimentales en HITO-N si hay observaciones relevantes
+6. Mini-retrospectiva: ¿qué funcionó? ¿qué ajustar en el próximo?
+7. Cerrar Issue del incremento en GitHub con comentario de DoD verificado
 ```
 
 **Para incrementos técnicos sin US (ej: Inc 1.1):**
@@ -135,6 +140,7 @@ y el DoD de integración es verificable de punta a punta.
 3. [AUTO] CodeGuard en cada commit
 4. Abrir PR con /pr → DesignReviewer pre-push
 5. Merge → verificar DoD
+6. Registrar en BL-00N + HITO-N si hay aprendizajes
 ```
 
 **DesignReviewer manual (en cualquier momento):**
@@ -205,5 +211,5 @@ feature/US-1.2.3-registrar-resultado → /implement-us → /pr → merge develop
 
 ---
 
-*v1.2 — 2026-03-21. Estrategia liviana: PR individual por US + nomenclatura de branches + quality gates por nivel.*
+*v1.3 — 2026-03-21. Ciclo por incremento: agregar registro en BL activa + HITO experimental.*
 *Complementa `docs/dominio/04-estrategia_desarrollo.md`.*
