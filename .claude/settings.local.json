@@ -31,7 +31,13 @@
       "Bash(designreviewer --version)",
       "Bash(architectanalyst --version)",
       "Bash(codeguard --help)",
-      "Bash(codeguard src/)"
+      "Bash(codeguard src/)",
+      "Bash(git checkout:*)",
+      "Bash(gh milestone:*)",
+      "Bash(git pull:*)",
+      "Bash(gh pr:*)",
+      "Bash(mkdir -p ~/.claude/commands)",
+      "Bash(cp /Users/victor/PycharmProjects/app_termostato/.claude/commands/pr.md ~/.claude/commands/pr.md)"
     ]
   }
 }
