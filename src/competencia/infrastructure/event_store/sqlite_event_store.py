@@ -44,10 +44,13 @@ class SQLiteEventStore(EventStorePort):
                     )
             await db.execute(
                 """
-                INSERT INTO events (stream_id, event_type, payload)
-                VALUES (?, ?, ?)
+                INSERT INTO events (stream_id, event_type, payload, version)
+                VALUES (
+                    ?, ?, ?,
+                    (SELECT COALESCE(MAX(version), 0) + 1 FROM events WHERE stream_id = ?)
+                )
                 """,
-                (stream_id, event_type, json.dumps(payload)),
+                (stream_id, event_type, json.dumps(payload), stream_id),
             )
             await db.commit()
 
