@@ -52,6 +52,8 @@
 | Cobertura total | 97.71% | ≥ 90% | ✅ |
 | CodeGuard errores | 0 | 0 | ✅ |
 | CodeGuard advertencias | 0 | 0 | ✅ |
+| CodeGuard informativos | 279 | — | ℹ️ |
+| CodeGuard archivos analizados | 93 (`src/`) | — | ✅ |
 | Violaciones hexagonales | 0 | 0 | ✅ |
 
 ---
