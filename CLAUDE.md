@@ -292,31 +292,31 @@ chore(cm): registrar BL-001 cierre SP1
 ### Branching
 ```
 main          ← baselines etiquetadas (v0.1.0, v0.2.0...)
-  └── develop ← integración continua
-        ├── feature/US-X.Y.Z-descripcion
+  └── develop ← integración continua — recibe PRs individuales por US
+        ├── feature/US-X.Y.Z-descripcion-corta   ← una branch por US-IEDD
+        ├── feature/inc-X.Y-descripcion-corta    ← incrementos técnicos sin US
         └── fix/descripcion-corta
 ```
+
+**Detalle completo:** `docs/plans/WORKFLOW-DESARROLLO.md`
 
 ---
 
 ## 11. Quality Gates (software_limpio)
 
-```bash
-# Pre-commit (automático, ~5s, nunca bloquea)
-codeguard src/
-
-# Antes de merge a develop (obligatorio, bloquea si CRITICAL)
-designreviewer src/
-
-# Al cerrar un Subproyecto / Baseline
-architectanalyst src/ --sprint-id BL-NNN --format json
-# Guardar output en .cm/baselines/BL-NNN-arquitectura.json
-```
+| Momento | Herramienta | Modo |
+|---------|-------------|------|
+| Cada commit | CodeGuard | Automático — advierte, no bloquea |
+| Cada push (PR) | DesignReviewer | Automático — bloquea si CRITICAL |
+| Cierre de Incremento | DesignReviewer | Manual — confirmar cero CRITICAL |
+| Cierre de Subproyecto | ArchitectAnalyst | Manual — informa tendencias |
 
 Umbrales mínimos para SP1:
 - Pylint ≥ 8.0 en `domain/`
 - Cobertura ≥ 85% en `domain/` + `application/`
 - Cero imports de infraestructura en `domain/`
+
+**Detalle completo (comandos, flujo de bloqueo):** `docs/plans/WORKFLOW-DESARROLLO.md §8`
 
 ---
 

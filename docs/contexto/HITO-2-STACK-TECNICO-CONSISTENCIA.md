@@ -219,6 +219,7 @@ Esta sesión aporta evidencia parcial:
 | H-2.2 | El costo de consistencia se reduce si la revisión es inmediata al aprobar el ADR | Comparar tiempo de revisión en este caso vs. próximo bloque de ADRs |
 | H-2.3 | Los ADRs que contradicen supuestos previos generan más inconsistencias que los que formalizan decisiones nuevas | Clasificar ADRs futuros y medir archivos impactados por tipo |
 | H-2.4 | La distinción documentos-de-entrada / documentos-derivados reduce el scope de revisión y elimina trabajo innecesario | Validar en próximos bloques de ADRs |
+| H-2.5 | IEDD subestima la dependencia temporal entre decisiones de stack (Capa 4) y el arranque del proyecto — la tendencia recurrente de completar Capa 4 antes de Capa 3 es un patrón inherente al desarrollo con IA, donde el contexto técnico debe estar claro antes de que la IA pueda especificar con precisión | Si el patrón se repite en SP1 (más decisiones de stack antes de escribir US individuales), la hipótesis se confirma y IEDD necesita un mecanismo explícito para decisiones transversales de Capa 4 antes de Capa 3 |
 
 ---
 
