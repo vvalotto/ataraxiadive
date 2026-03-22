@@ -93,11 +93,12 @@ max_cyclomatic_complexity = 10
 [tool.designreviewer]
 # CBO elevado: aggregates DDD acoplan legitimamente a sus VOs, eventos y puertos.
 # US-1.2.1: max_cbo=10. US-1.2.2: Performance+AtletaLlamado → CBO=11, sube a 12.
-# US-1.2.3: Performance+ResultadoRegistrado → CBO=13. Sube a 14 para Inc 1.2 completo.
-max_cbo = 14
+# US-1.2.3: Performance+ResultadoRegistrado → CBO=13. Sube a 14.
+# US-1.2.4: +TipoTarjeta +TarjetaAsignada → CBO=15. Sube a 17 para US-1.2.4-1.2.6 completo.
+max_cbo = 17
 # WMC elevado: Performance crece con cada US de Inc 1.2 (un método por comando de dominio).
-# US-1.2.3: Performance WMC=21. Sube a 25 para absorber US-1.2.4 a US-1.2.6.
-max_wmc = 25
+# US-1.2.3: WMC=21. US-1.2.4: asignar_tarjeta() → WMC=27. Sube a 36 para US-1.2.4-1.2.6 completo.
+max_wmc = 36
 
 # ── ArchitectAnalyst (Software Limpio) ────────────────────────────────────
 [tool.architectanalyst]

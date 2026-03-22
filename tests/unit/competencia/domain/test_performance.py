@@ -1,4 +1,4 @@
-"""Tests unitarios del aggregate Performance — US-1.2.1 + US-1.2.2 + US-1.2.3."""
+"""Tests unitarios del aggregate Performance — US-1.2.1 + US-1.2.2 + US-1.2.3 + US-1.2.4."""
 from __future__ import annotations
 
 from datetime import datetime
@@ -8,13 +8,16 @@ from uuid import uuid4
 import pytest
 
 from competencia.domain.aggregates.performance import (
+    EstadoInvalidoParaAsignarTarjeta,
     EstadoInvalidoParaLlamar,
     EstadoInvalidoParaRegistrarResultado,
+    MotivoObligatorio,
     Performance,
 )
 from competencia.domain.value_objects.ap import ValorAPInvalido
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
+from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
 OT = datetime(2026, 3, 22, 10, 30, 0)
@@ -386,3 +389,207 @@ def test_reconstitute_con_resultado_registrado_restaura_estado() -> None:
 
     assert restored.estado == EstadoPerformance.ResultadoRegistrado
     assert restored.rp == Decimal("50.5")
+
+
+# ── asignar_tarjeta() — fixtures ──────────────────────────────────────────────
+
+
+@pytest.fixture
+def performance_con_resultado() -> Performance:
+    """Performance en estado ResultadoRegistrado, lista para asignar tarjeta."""
+    p = Performance(
+        performance_id=uuid4(),
+        competencia_id=uuid4(),
+        participante_id=uuid4(),
+        disciplina=Disciplina.DNF,
+    )
+    p.registrarAP(Decimal("50"), UnidadMedida.Metros)
+    p.pull_events()
+    p.llamar(OT, posicion_grilla=1)
+    p.pull_events()
+    p.registrar_resultado(Decimal("50.5"), UnidadMedida.Metros, "juez-001")
+    p.pull_events()
+    return p
+
+
+# ── asignar_tarjeta() — camino feliz ──────────────────────────────────────────
+
+
+def test_asignar_tarjeta_blanca_emite_evento(performance_con_resultado: Performance) -> None:
+    """asignar_tarjeta(Blanca) emite exactamente un evento TarjetaAsignada."""
+    performance_con_resultado.asignar_tarjeta(TipoTarjeta.Blanca, "juez-001")
+
+    events = performance_con_resultado.pull_events()
+    assert len(events) == 1
+    assert events[0].event_type == "TarjetaAsignada"
+
+
+def test_asignar_tarjeta_blanca_transiciona_a_ejecutada(
+    performance_con_resultado: Performance,
+) -> None:
+    """asignar_tarjeta(Blanca) transiciona al estado Ejecutada."""
+    performance_con_resultado.asignar_tarjeta(TipoTarjeta.Blanca, "juez-001")
+
+    assert performance_con_resultado.estado == EstadoPerformance.Ejecutada
+
+
+def test_asignar_tarjeta_blanca_payload_correcto(performance_con_resultado: Performance) -> None:
+    """TarjetaAsignada (Blanca) contiene tipo, motivo=null y asignadaPor correctos."""
+    performance_con_resultado.asignar_tarjeta(TipoTarjeta.Blanca, "juez-007")
+
+    events = performance_con_resultado.pull_events()
+    payload = events[0].to_payload()
+    assert payload["tipo"] == "Blanca"
+    assert payload["motivo"] is None
+    assert payload["asignada_por"] == "juez-007"
+
+
+def test_asignar_tarjeta_amarilla_con_motivo(performance_con_resultado: Performance) -> None:
+    """asignar_tarjeta(Amarilla, motivo) emite TarjetaAsignada con motivo correcto."""
+    performance_con_resultado.asignar_tarjeta(
+        TipoTarjeta.Amarilla, "juez-001", motivo="superficie sin protocolo"
+    )
+
+    events = performance_con_resultado.pull_events()
+    payload = events[0].to_payload()
+    assert payload["tipo"] == "Amarilla"
+    assert payload["motivo"] == "superficie sin protocolo"
+    assert performance_con_resultado.estado == EstadoPerformance.Ejecutada
+
+
+def test_asignar_tarjeta_roja_con_motivo(performance_con_resultado: Performance) -> None:
+    """asignar_tarjeta(Roja, motivo) emite TarjetaAsignada con motivo correcto."""
+    performance_con_resultado.asignar_tarjeta(
+        TipoTarjeta.Roja, "juez-001", motivo="black-out"
+    )
+
+    events = performance_con_resultado.pull_events()
+    payload = events[0].to_payload()
+    assert payload["tipo"] == "Roja"
+    assert payload["motivo"] == "black-out"
+    assert performance_con_resultado.estado == EstadoPerformance.Ejecutada
+
+
+def test_asignar_tarjeta_persiste_tarjeta_en_aggregate(
+    performance_con_resultado: Performance,
+) -> None:
+    """asignar_tarjeta() actualiza la propiedad tarjeta del aggregate."""
+    performance_con_resultado.asignar_tarjeta(TipoTarjeta.Blanca, "juez-001")
+
+    assert performance_con_resultado.tarjeta == TipoTarjeta.Blanca
+
+
+def test_asignar_tarjeta_pull_events_vacia_lista(performance_con_resultado: Performance) -> None:
+    """pull_events() limpia la lista tras asignar tarjeta."""
+    performance_con_resultado.asignar_tarjeta(TipoTarjeta.Blanca, "juez-001")
+
+    performance_con_resultado.pull_events()
+    assert performance_con_resultado.pull_events() == []
+
+
+# ── asignar_tarjeta() — INV-P-11: motivo obligatorio ─────────────────────────
+
+
+def test_asignar_tarjeta_amarilla_sin_motivo_lanza_excepcion(
+    performance_con_resultado: Performance,
+) -> None:
+    """INV-P-11: tarjeta Amarilla sin motivo lanza MotivoObligatorio."""
+    with pytest.raises(MotivoObligatorio):
+        performance_con_resultado.asignar_tarjeta(TipoTarjeta.Amarilla, "juez-001")
+
+
+def test_asignar_tarjeta_roja_sin_motivo_lanza_excepcion(
+    performance_con_resultado: Performance,
+) -> None:
+    """INV-P-11: tarjeta Roja sin motivo lanza MotivoObligatorio."""
+    with pytest.raises(MotivoObligatorio):
+        performance_con_resultado.asignar_tarjeta(TipoTarjeta.Roja, "juez-001")
+
+
+def test_asignar_tarjeta_motivo_obligatorio_no_emite_eventos(
+    performance_con_resultado: Performance,
+) -> None:
+    """Si INV-P-11 falla, no quedan eventos pendientes."""
+    with pytest.raises(MotivoObligatorio):
+        performance_con_resultado.asignar_tarjeta(TipoTarjeta.Amarilla, "juez-001")
+
+    assert performance_con_resultado.pull_events() == []
+
+
+# ── asignar_tarjeta() — INV-P-07: estado incorrecto ──────────────────────────
+
+
+def test_asignar_tarjeta_desde_llamada_lanza_excepcion(performance_llamada: Performance) -> None:
+    """INV-P-07: asignar tarjeta desde Llamada lanza EstadoInvalidoParaAsignarTarjeta."""
+    with pytest.raises(EstadoInvalidoParaAsignarTarjeta):
+        performance_llamada.asignar_tarjeta(TipoTarjeta.Blanca, "juez-001")
+
+
+def test_asignar_tarjeta_estado_invalido_no_emite_eventos(
+    performance_llamada: Performance,
+) -> None:
+    """Si el estado es inválido, no quedan eventos pendientes."""
+    with pytest.raises(EstadoInvalidoParaAsignarTarjeta):
+        performance_llamada.asignar_tarjeta(TipoTarjeta.Blanca, "juez-001")
+
+    assert performance_llamada.pull_events() == []
+
+
+# ── reconstitute con TarjetaAsignada ─────────────────────────────────────────
+
+
+def test_reconstitute_con_tarjeta_asignada_restaura_estado() -> None:
+    """reconstitute con stream completo restaura estado Ejecutada y tarjeta."""
+    p = Performance(
+        performance_id=uuid4(),
+        competencia_id=uuid4(),
+        participante_id=uuid4(),
+        disciplina=Disciplina.DNF,
+    )
+    p.registrarAP(Decimal("50"), UnidadMedida.Metros)
+    ap_evs = p.pull_events()
+
+    p.llamar(OT, posicion_grilla=1)
+    llamar_evs = p.pull_events()
+
+    p.registrar_resultado(Decimal("50.5"), UnidadMedida.Metros, "juez-001")
+    res_evs = p.pull_events()
+
+    p.asignar_tarjeta(TipoTarjeta.Blanca, "juez-001")
+    tarjeta_evs = p.pull_events()
+
+    raw = [
+        {"event_type": e.event_type, "payload": e.to_payload()}
+        for e in ap_evs + llamar_evs + res_evs + tarjeta_evs
+    ]
+    restored = Performance.reconstitute(raw)
+
+    assert restored.estado == EstadoPerformance.Ejecutada
+    assert restored.tarjeta == TipoTarjeta.Blanca
+
+
+def test_reconstitute_tarjeta_roja_restaura_tipo() -> None:
+    """reconstitute con TarjetaAsignada=Roja restaura el tipo de tarjeta correcto."""
+    p = Performance(
+        performance_id=uuid4(),
+        competencia_id=uuid4(),
+        participante_id=uuid4(),
+        disciplina=Disciplina.DNF,
+    )
+    p.registrarAP(Decimal("50"), UnidadMedida.Metros)
+    ap_evs = p.pull_events()
+    p.llamar(OT, posicion_grilla=1)
+    llamar_evs = p.pull_events()
+    p.registrar_resultado(Decimal("30"), UnidadMedida.Metros, "juez-001")
+    res_evs = p.pull_events()
+    p.asignar_tarjeta(TipoTarjeta.Roja, "juez-001", motivo="black-out")
+    tarjeta_evs = p.pull_events()
+
+    raw = [
+        {"event_type": e.event_type, "payload": e.to_payload()}
+        for e in ap_evs + llamar_evs + res_evs + tarjeta_evs
+    ]
+    restored = Performance.reconstitute(raw)
+
+    assert restored.tarjeta == TipoTarjeta.Roja
+    assert restored.estado == EstadoPerformance.Ejecutada
