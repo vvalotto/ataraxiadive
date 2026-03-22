@@ -1,6 +1,6 @@
 # Workflow de Desarrollo — AtaraxiaDive
 
-**Versión:** 1.2
+**Versión:** 1.4
 **Fecha:** 2026-03-21
 **Alcance:** Convenciones de branching, PRs, quality gates y gestión administrativa para SP1 en adelante
 
@@ -11,7 +11,7 @@
 ```
 SP (Subproyecto)          → Baseline (BL-NNN) + tag git (v0.N.0) + Milestone GitHub
   └── Incremento (X.Y)    → PR a develop + DoD de integración verificable
-        └── US-IEDD (X.Y.Z) → GitHub Issue + docs/plans/US-X.Y.Z.md + branch feature/
+        └── US-IEDD (X.Y.Z) → GitHub Issue + docs/specs/spX/US-X.Y.Z.md + branch feature/
 ```
 
 No existe un nivel "iteración" — el Incremento cubre esa función.
@@ -25,7 +25,7 @@ No existe un nivel "iteración" — el Incremento cubre esa función.
 | Artefacto | Dónde vive | Propósito |
 |-----------|-----------|-----------|
 | **GitHub Issue** | GitHub Issues | Fuente de verdad del estado — qué hay que hacer, criterios de aceptación, seguimiento |
-| **`docs/plans/US-X.Y.Z.md`** | Repositorio | Artefacto técnico de implementación — precondición, postcondición, invariantes IEDD, input de `/implement-us` |
+| **`docs/specs/spX/US-X.Y.Z.md`** | Repositorio | Especificación US-IEDD — precondición, postcondición, invariantes, input de `/implement-us` |
 
 ### Estructura en GitHub
 
@@ -54,7 +54,7 @@ Como <rol>, quiero <acción> para <valor>.
 ## Referencias
 - Incremento: X.Y
 - Bounded Context: ...
-- docs/plans/US-X.Y.Z.md
+- docs/specs/spX/US-X.Y.Z.md
 ```
 
 ---
@@ -62,12 +62,12 @@ Como <rol>, quiero <acción> para <valor>.
 ## 3. Ciclo de Elaboración de US por SP
 
 ```
-1. Claude elabora el archivo de US candidatas: docs/plans/SP-N-candidatas.md
+1. Claude elabora el archivo de US candidatas: docs/plans/spN/SP-N-candidatas.md
    → Lista todas las US del SP con descripción, criterios y estimación
 2. Victor revisa y aprueba (con ajustes si corresponde)
 3. Por cada US aprobada:
    a. Crear GitHub Issue con template US-IEDD → asignar Milestone + Labels
-   b. Crear docs/plans/US-X.Y.Z.md con el detalle técnico completo
+   b. Crear docs/specs/spN/US-X.Y.Z.md con la especificación US-IEDD completa
 4. Las US quedan en estado "backlog" hasta iniciar su Incremento
 ```
 
@@ -104,7 +104,7 @@ main          ← baselines etiquetadas (v0.1.0, v0.2.0...)
 ```
 1. Crear branch feature/US-X.Y.Z-descripcion desde develop
 2. Cambiar label del Issue: backlog → in-progress
-3. Ejecutar /implement-us US-X.Y.Z  (10 fases, input: docs/plans/US-X.Y.Z.md)
+3. Ejecutar /implement-us US-X.Y.Z  (10 fases, input: docs/specs/spX/US-X.Y.Z.md)
 4. [AUTO] CodeGuard corre en cada commit (pre-commit hook, ~5s, solo advierte)
 5. Commits atómicos con referencia: feat(domain): ... [US-X.Y.Z]
 6. Abrir PR hacia develop con /pr  → DesignReviewer corre en pre-push (bloquea si CRITICAL)
@@ -197,7 +197,7 @@ push → pre-push hook → designreviewer src/
 
 ## 9. Relación con /implement-us
 
-El skill `/implement-us US-X.Y.Z` lee `docs/plans/US-X.Y.Z.md` como input y
+El skill `/implement-us US-X.Y.Z` lee `docs/specs/spX/US-X.Y.Z.md` como input y
 ejecuta las 10 fases dentro de la branch `feature/US-X.Y.Z-descripcion`.
 Al terminar, se abre PR con `/pr` y se mergea directo a `develop`.
 
@@ -213,5 +213,6 @@ feature/US-1.2.3-registrar-resultado → /implement-us → /pr → merge develop
 
 ---
 
+*v1.4 — 2026-03-22. Reestructuración docs/: specs/ para US-IEDD (Capa 3 IEDD), plans/ con subdirs por SP.*
 *v1.3 — 2026-03-21. Ciclo por incremento: agregar registro en BL activa + HITO experimental.*
 *Complementa `docs/dominio/04-estrategia_desarrollo.md`.*

@@ -8,7 +8,7 @@
 
 ## 0. Leer contexto del proyecto (OBLIGATORIO — hacer antes de cualquier otra cosa)
 
-**Leer el documento `docs/plans/ATARAXIADIVE-CONTEXT.md` antes de continuar.**
+**Leer el documento `docs/contexto/ATARAXIADIVE-CONTEXT.md` antes de continuar.**
 
 Este documento define:
 - La arquitectura real del proyecto (hexagonal DDD BC-first, no layered)
@@ -39,8 +39,8 @@ uv run python .claude/tracking/tracker_cli.py start-phase 0 "Validación de Cont
 
 **Buscar en la ubicación canónica de AtaraxiaDive:**
 
-> **Ruta canónica:** `docs/plans/US-X.Y.Z.md`
-> (donde X.Y.Z = identificador de la US, ej: `docs/plans/US-1.1.1.md`)
+> **Ruta canónica:** `docs/specs/spX/US-X.Y.Z.md`
+> (donde X = número de SP, ej: `docs/specs/sp1/US-1.2.1.md`)
 
 **Extraer de la US:**
 - Título de la historia
@@ -66,7 +66,7 @@ Los siguientes artefactos deben existir (ya fueron creados en Fase 0 del proyect
 
 **Verificar que el BC de la US existe en `src/`:**
 
-Identificar el BC al que pertenece la US (de `docs/plans/ATARAXIADIVE-CONTEXT.md` §5) y confirmar que su estructura existe:
+Identificar el BC al que pertenece la US (de `docs/contexto/ATARAXIADIVE-CONTEXT.md` §5) y confirmar que su estructura existe:
 - `src/{bc}/domain/`
 - `src/{bc}/application/`
 - `src/{bc}/infrastructure/`

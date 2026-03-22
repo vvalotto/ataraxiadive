@@ -276,7 +276,8 @@
   "_comment_documentation": "Configuración de documentación generada",
 
   "documentation_config": {
-    "plan_path": "docs/plans/",
+    "spec_path": "docs/specs/sp{SP}/",
+    "plan_path": "docs/plans/sp{SP}/",
     "report_path": "docs/reports/",
     "adr_path": "docs/architecture/decisions/",
     "format": "markdown",

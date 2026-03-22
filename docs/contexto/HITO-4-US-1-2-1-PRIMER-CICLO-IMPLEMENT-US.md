@@ -247,7 +247,41 @@ formalizado: el lugar natural para validarlo es el tipo, no el orquestador.
 | L-4.5 | Herramienta | DesignReviewer ignora pyproject.toml silenciosamente | `--config` explícito + issue en software_limpio |
 | L-4.6 | Herramienta | CBO default incompatible con DDD | `max_cbo = 10` + issue en software_limpio |
 | L-4.7 | Código | `(str, Enum)` → `StrEnum` en Python ≥ 3.11 | Enums corregidos; skill debe generarlos con StrEnum |
+| L-4.8 | Organización | `docs/plans/` mezclaba specs (qué) y planes (cómo) | Separados en `docs/specs/` (US-IEDD) y `docs/plans/` (planes técnicos) |
+
+---
+
+## 8. Aprendizaje adicional — Organización documental (2026-03-22)
+
+### O-4.1 — docs/plans/ mezclaba dos tipos de artefactos distintos
+
+**Qué pasó:** El directorio `docs/plans/` acumuló tres tipos de artefactos con
+roles distintos: especificaciones US-IEDD (`US-X.Y.Z.md`), planes técnicos de
+implementación (`US-X.Y.Z-plan.md`) y documentos de proceso/contexto
+(`ATARAXIADIVE-CONTEXT.md`, `IMPLEMENT-US-DISCREPANCIAS.md`).
+
+**Problema:** La mezcla oscurece la cadena IEDD. Las especificaciones son
+artefactos de Capa 3 — definen *qué* hace el sistema. Los planes son artefactos
+del proceso de implementación — definen *cómo* y *cuándo*. Poner ambos en el mismo
+directorio borra esa distinción.
+
+**Acción tomada (2026-03-22):** Reestructuración a tres directorios:
+- `docs/specs/spN/` — US-IEDD (Capa 3 IEDD, artefacto de requerimientos)
+- `docs/plans/spN/` — planes técnicos y candidatas (artefacto de implementación)
+- `docs/contexto/` — documentos de proceso/herramienta (ya existía)
+
+La cadena IEDD ahora es legible en el árbol de directorios:
+```
+dominio/ → design/ → specs/ → plans/ → src/
+```
+
+**Aprendizaje L-4.8:**
+> La estructura de directorios debe reflejar la cadena conceptual del marco
+> metodológico. Cuando una carpeta acumula artefactos de distintas capas, la
+> distinción entre "qué especifica el sistema" y "cómo se implementa" se pierde
+> gradualmente. Mejor separar desde el inicio.
 
 ---
 
 *2026-03-21 — US-1.2.1 cerrada. Próximo: HITO-5 al cerrar Inc 1.2 (todas las US de la competencia).*
+*2026-03-22 — L-4.8 agregado: reestructuración documental docs/specs/ + docs/plans/spN/.*

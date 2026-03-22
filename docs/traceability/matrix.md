@@ -163,7 +163,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 ## 5. US-IEDD Candidatas para SP1
 
 SP1 es el próximo SP a implementar. Estas US-IEDD se especifican formalmente
-en `docs/plans/` antes de ejecutar `/implement-us`.
+en `docs/specs/spN/` antes de ejecutar `/implement-us`.
 
 | US candidata | Inc. | RFs cubiertos | Comando principal | Invariantes clave |
 |-------------|------|---------------|------------------|------------------|

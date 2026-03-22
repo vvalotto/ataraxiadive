@@ -403,8 +403,8 @@ El plan generado debe seguir esta estructura:
 ## Ubicación del Archivo Generado
 
 > **Según stack:**
-> - **PyQt/MVC:** `{PRODUCT}/docs/plans/US-XXX-plan.md`
-> - **FastAPI:** `docs/plans/US-XXX-plan.md`
+> - **PyQt/MVC:** `{PRODUCT}/docs/plans/spN/US-XXX-plan.md`
+> - **FastAPI:** `docs/plans/spN/US-XXX-plan.md`
 > - **Django:** `docs/requirements/US-XXX-plan.md`
 > - **Generic:** `docs/plans/US-XXX-plan.md`
 

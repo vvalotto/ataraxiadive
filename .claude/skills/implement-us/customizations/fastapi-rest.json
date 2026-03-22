@@ -1,7 +1,7 @@
 {
   "_comment_profile": "Perfil de customización para AtaraxiaDive — FastAPI + Hexagonal DDD BC-first",
   "_comment_override": "Este perfil SOBREESCRIBE el fastapi-rest genérico con las convenciones reales de AtaraxiaDive",
-  "_comment_context_doc": "Documento de contexto obligatorio: docs/plans/ATARAXIADIVE-CONTEXT.md",
+  "_comment_context_doc": "Documento de contexto obligatorio: docs/contexto/ATARAXIADIVE-CONTEXT.md",
 
   "profile_metadata": {
     "name": "fastapi-rest",
@@ -13,7 +13,7 @@
     "created": "2026-03-20",
     "target_stack": "FastAPI + Python 3.14 + uv + async/await",
     "architecture": "Hexagonal DDD BC-First (domain → application → infrastructure → api)",
-    "context_document": "docs/plans/ATARAXIADIVE-CONTEXT.md"
+    "context_document": "docs/contexto/ATARAXIADIVE-CONTEXT.md"
   },
 
   "_comment_variables": "Override de variables para AtaraxiaDive — BC-first hexagonal DDD",
@@ -444,7 +444,8 @@
   "_comment_documentation": "Configuración de documentación para APIs",
 
   "documentation_config": {
-    "plan_path": "docs/plans/",
+    "spec_path": "docs/specs/sp{SP}/",
+    "plan_path": "docs/plans/sp{SP}/",
     "report_path": "docs/reports/",
     "adr_path": "docs/adr/",
     "api_docs_path": "docs/api/",

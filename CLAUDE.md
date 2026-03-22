@@ -164,9 +164,10 @@ docs/
 ├── design/          ← Context Map ✅ · ES Big Picture ✅ · Domain Model ✅ · Architecture ✅
 ├── dominio/         ← Descripción del dominio y RFs ✅
 ├── iedd/            ← Marco metodológico IEDD ✅
-├── plans/           ← US-IEDD + WORKFLOW-DESARROLLO.md + candidatas por SP
+├── plans/           ← planes técnicos de implementación + candidatas por SP (dividido en sp1/, sp2/, …)
 ├── reports/         ← Reportes /implement-us (genera el Dev Kit)
 ├── requirements/    ← vision.md ✅
+├── specs/           ← US-IEDD por SP — Capa 3 IEDD (dividido en sp1/, sp2/, …)
 └── traceability/    ← matrix.md ✅
 
 .cm/
@@ -323,7 +324,7 @@ Umbrales mínimos para SP1:
 ## 12. Gestión de la Configuración (CM)
 
 ### Al implementar una US
-1. La US-IEDD debe estar en `docs/plans/US-X.Y.Z.md` antes de empezar
+1. La US-IEDD debe estar en `docs/specs/spX/US-X.Y.Z.md` antes de empezar (donde X = número de SP)
 2. Usar `/implement-us US-X.Y.Z` con las 10 fases
 3. Commit con referencia a la US: `feat(domain): ... [US-1.2.1]`
 4. Actualizar `docs/traceability/matrix.md` al cerrar
@@ -402,7 +403,7 @@ isort src/ tests/
 | DesignReviewer | ✅ Operativo — `designreviewer src/` |
 | ArchitectAnalyst | ✅ Operativo — `architectanalyst src/ --sprint-id BL-NNN` |
 
-**Próximo paso:** crear branch `feature/US-1.1` desde develop → implementar Inc 1.1 (fundación técnica) o redactar `docs/plans/US-1.2.1.md` y ejecutar `/implement-us US-1.2.1`.
+**Próximo paso:** crear branch `feature/US-1.1` desde develop → implementar Inc 1.1 (fundación técnica) o redactar `docs/specs/sp1/US-1.2.1.md` y ejecutar `/implement-us US-1.2.1`.
 
 ---
 

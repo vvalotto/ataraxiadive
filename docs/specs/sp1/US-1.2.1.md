@@ -146,7 +146,7 @@ de Competencia.
 - ADR-005: BCs estratégico (Competencia como Core Domain)
 - ADR-008: Event Store append-only
 - US mapeada desde: US-P-01 (ES Competencia)
-- Incremento: Inc 1.2 en `docs/plans/SP1-candidatas.md`
+- Incremento: Inc 1.2 en `docs/plans/sp1/SP1-candidatas.md`
 
 ---
 

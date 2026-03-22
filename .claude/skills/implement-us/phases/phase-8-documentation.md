@@ -25,7 +25,7 @@ Actualizar documentos relevantes del proyecto para mantener la documentación si
 
 ### 1. Actualizar Plan de Implementación
 
-**Archivo:** `{PROJECT_PATH}/docs/plans/{US_ID}-plan.md` (o ubicación configurada)
+**Archivo:** `{PROJECT_PATH}/docs/plans/sp{SP}/{US_ID}-plan.md` (donde SP = primer dígito del US_ID)
 
 **Cambios a realizar:**
 

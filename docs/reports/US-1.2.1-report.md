@@ -35,8 +35,8 @@
 | BDD | `tests/features/US-1.2.1-registrar-ap.feature` | 6 escenarios Gherkin |
 | BDD | `tests/features/steps/registrar_ap_steps.py` | Step definitions completas |
 | conftest | `tests/conftest.py` | Fixture `event_store_inmemory` compartida |
-| plans | `docs/plans/US-1.2.1.md` | Especificación IEDD completa |
-| plans | `docs/plans/US-1.2.1-plan.md` | Plan de implementación con checkboxes |
+| specs | `docs/specs/sp1/US-1.2.1.md` | Especificación IEDD completa |
+| plans | `docs/plans/sp1/US-1.2.1-plan.md` | Plan de implementación con checkboxes |
 | quality | `quality/reports/codeguard/US-1.2.1-quality.json` | Reporte quality gates |
 
 ---

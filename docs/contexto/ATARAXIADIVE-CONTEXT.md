@@ -77,12 +77,12 @@ tests/
 
 | Artefacto | Path |
 |-----------|------|
-| US-IEDD (input del skill) | `docs/plans/US-X.Y.Z.md` |
+| US-IEDD (input del skill) | `docs/specs/spX/US-X.Y.Z.md` (donde X = número de SP) |
 | ADRs | `docs/adr/ADR-NNN-*.md` |
 | Documento de arquitectura | `docs/design/architecture.md` |
 | Domain model | `docs/design/domain-model.md` |
 | Traceability matrix | `docs/traceability/matrix.md` |
-| Plan de implementación (Fase 2) | `docs/plans/US-X.Y.Z-plan.md` |
+| Plan de implementación (Fase 2) | `docs/plans/spX/US-X.Y.Z-plan.md` |
 | Reporte final (Fase 9) | `docs/reports/US-X.Y.Z-report.md` |
 | Reporte CodeGuard (Fase 7) | `quality/reports/codeguard/US-X.Y.Z-quality.json` |
 | Feature BDD (Fase 1) | `tests/features/US-X.Y.Z-{nombre}.feature` |

@@ -250,5 +250,5 @@ vendrían de esos BCs se hardcodean:
 
 1. Crear Milestone SP1 en GitHub
 2. Crear Issues en GitHub por cada US (1.1 como issue técnico, 1.2.1 a 1.4.1 como US-IEDD)
-3. Redactar `docs/plans/US-1.1.md` (tarea técnica) y `docs/plans/US-1.2.1.md` (primera US-IEDD)
+3. Redactar `docs/specs/sp1/US-1.2.1.md` (primera US-IEDD) — ✅ completado
 4. Ejecutar `/implement-us US-1.2.1` como primer uso real del Dev Kit

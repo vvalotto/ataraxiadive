@@ -160,10 +160,11 @@ Nuestro framework tiene `docs/requirements/`, `docs/design/`, `docs/adr/`.
 ```
 docs/
 ├── adr/              ← Cowork (decisiones)
-├── requirements/     ← Cowork (requisitos)
+├── requirements/     ← Cowork (visión del producto)
 ├── design/           ← Cowork (diseño)
+├── specs/            ← Cowork (US-IEDD, Capa 3 IEDD — dividido en sp1/, sp2/, …)
 ├── traceability/     ← Cowork (matriz)
-├── plans/            ← Kit (plan por US, fase 2)
+├── plans/            ← Kit (plan técnico por US, fase 2 — dividido en sp1/, sp2/, …)
 └── reports/          ← Kit (reporte final por US, fase 9)
 quality/
 └── reports/          ← Kit (quality gates, fase 7)
@@ -243,7 +244,7 @@ Para implementar una US:
   /implement-us US-NNN
 
 Artefactos generados por el kit (no editar manualmente):
-  docs/plans/        — planes de implementación (Fase 2)
+  docs/plans/spN/    — planes de implementación (Fase 2)
   docs/reports/      — reportes finales (Fase 9)
   quality/reports/   — quality gates (Fase 7)
   .claude/tracking/  — datos de tiempo (no commitear)
@@ -255,7 +256,7 @@ Agregar los artefactos del kit como CIs:
 
 | ID       | Descripción              | Ubicación                        | Propietario |
 |----------|--------------------------|----------------------------------|-------------|
-| `PLAN-`  | Planes de implementación | `docs/plans/US-NNN-plan.md`      | Code/Kit    |
+| `PLAN-`  | Planes de implementación | `docs/plans/spN/US-NNN-plan.md`  | Code/Kit    |
 | `REP-`   | Reportes finales de US   | `docs/reports/US-NNN-report.md`  | Code/Kit    |
 | `QG-`    | Quality gate reports     | `quality/reports/US-NNN-*.json`  | Code/Kit    |
 
