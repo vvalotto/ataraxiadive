@@ -108,6 +108,7 @@ main          ← baselines etiquetadas (v0.1.0, v0.2.0...)
 4. [AUTO] CodeGuard corre en cada commit (pre-commit hook, ~5s, solo advierte)
 5. Commits atómicos con referencia: feat(domain): ... [US-X.Y.Z]
 6. Abrir PR hacia develop con /pr  → DesignReviewer corre en pre-push (bloquea si CRITICAL)
+   → Usar siempre `gh pr create --base develop` (default de gh es main)
 7. Merge del PR — Issue se cierra automáticamente
 ```
 
