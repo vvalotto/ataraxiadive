@@ -454,7 +454,22 @@ El hook SessionEnd captura automáticamente los commits y crea el flag. No requi
 /checkpoint  → guardar estado actual (usar proactivamente durante la sesión)
 ```
 
+### Dónde guardar cada tipo de conocimiento
+
+Esta distinción es importante y aplica a cualquier proyecto IEDD:
+
+| Artefacto | Alcance | Cuándo usarlo |
+|-----------|---------|---------------|
+| **HITO / BL** | Aprendizajes del experimento — valen para el paper, el libro, futuros proyectos con IEDD | Cuando el aprendizaje ilumina una hipótesis experimental, un patrón metodológico o una decisión de diseño que otros proyectos deberían conocer |
+| **memory/** | Conocimiento operativo para futuras sesiones **en este proyecto** | Políticas, convenciones, datos de trabajo que Claude necesita recordar para operar bien — no tienen valor académico externo |
+
+**Regla práctica:**
+- *¿Querés capitalizar este aprendizaje en el paper o en un futuro proyecto?* → HITO o BL
+- *¿Es una convención o dato que Claude necesita recordar para trabajar bien la próxima sesión?* → `memory/`
+
+Los dos no son excluyentes: un aprendizaje puede vivir en ambos si tiene valor académico Y operativo.
+
 ---
 
-*Última actualización: 2026-03-20 — ADR-007 a ADR-012 · consistencia con SQLite/aiosqlite*
+*Última actualización: 2026-03-22 — distinción HITO/BL vs memory/ formalizada*
 *Mantenido por: Claude Cowork (decisiones estratégicas) + Claude Code (implementación)*
