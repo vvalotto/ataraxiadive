@@ -1,4 +1,8 @@
 """Commands del BC Competencia."""
+from competencia.application.commands.asignar_tarjeta import (
+    AsignarTarjetaCommand,
+    AsignarTarjetaHandler,
+)
 from competencia.application.commands.registrar_ap import (
     APYaRegistrado,
     GrillaYaConfirmadaError,
@@ -13,6 +17,8 @@ from competencia.application.commands.registrar_resultado import (
 )
 
 __all__ = [
+    "AsignarTarjetaCommand",
+    "AsignarTarjetaHandler",
     "APYaRegistrado",
     "GrillaYaConfirmadaError",
     "PlazoAPVencidoError",

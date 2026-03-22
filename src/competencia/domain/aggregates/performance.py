@@ -11,9 +11,11 @@ from shared.domain.base.aggregate_root import AggregateRoot
 from competencia.domain.events.ap_registrado import APRegistrado
 from competencia.domain.events.atleta_llamado import AtletaLlamado
 from competencia.domain.events.resultado_registrado import ResultadoRegistrado
+from competencia.domain.events.tarjeta_asignada import TarjetaAsignada
 from competencia.domain.value_objects.ap import AP
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
+from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
 
@@ -23,6 +25,14 @@ class EstadoInvalidoParaLlamar(Exception):
 
 class EstadoInvalidoParaRegistrarResultado(Exception):
     """Performance no está en estado Llamada — no se puede registrar el resultado."""
+
+
+class EstadoInvalidoParaAsignarTarjeta(Exception):
+    """Performance no está en estado ResultadoRegistrado — no se puede asignar tarjeta."""
+
+
+class MotivoObligatorio(Exception):
+    """Tarjeta amarilla o roja requieren motivo obligatorio (INV-P-11)."""
 
 
 class Performance(AggregateRoot):
@@ -53,6 +63,7 @@ class Performance(AggregateRoot):
         self._disciplina = disciplina
         self._ap: AP | None = None
         self._rp: Decimal | None = None
+        self._tarjeta: TipoTarjeta | None = None
         self._estado: EstadoPerformance | None = None
 
     # ── Propiedades ───────────────────────────────────────────────────────────
@@ -76,6 +87,11 @@ class Performance(AggregateRoot):
     def rp(self) -> Decimal | None:
         """RP registrado, o None si aún no fue registrado."""
         return self._rp
+
+    @property
+    def tarjeta(self) -> TipoTarjeta | None:
+        """Tarjeta asignada, o None si aún no fue asignada."""
+        return self._tarjeta
 
     # ── Comandos de dominio ───────────────────────────────────────────────────
 
@@ -182,6 +198,50 @@ class Performance(AggregateRoot):
         self._estado = EstadoPerformance.ResultadoRegistrado
         self._record(event)
 
+    def asignar_tarjeta(
+        self, tipo: TipoTarjeta, asignada_por: str, motivo: str | None = None
+    ) -> None:
+        """Asigna la tarjeta al atleta tras registrar el resultado.
+
+        Verifica que la Performance esté en estado ResultadoRegistrado (INV-P-07).
+        Exige motivo si la tarjeta es Amarilla o Roja (INV-P-11).
+
+        Args:
+            tipo: Tipo de tarjeta — Blanca, Amarilla o Roja.
+            asignada_por: Identificador del juez que asigna la tarjeta.
+            motivo: Motivo obligatorio para Amarilla y Roja (INV-P-11).
+
+        Raises:
+            EstadoInvalidoParaAsignarTarjeta: Performance no en ResultadoRegistrado (INV-P-07).
+            MotivoObligatorio: tarjeta Amarilla o Roja sin motivo (INV-P-11).
+        """
+        if self._estado != EstadoPerformance.ResultadoRegistrado:
+            raise EstadoInvalidoParaAsignarTarjeta(
+                f"Performance {self._performance_id} en estado {self._estado} "
+                "— solo se puede asignar tarjeta desde ResultadoRegistrado"
+            )
+        if tipo in (TipoTarjeta.Amarilla, TipoTarjeta.Roja) and not motivo:
+            raise MotivoObligatorio(
+                f"Tarjeta {tipo} requiere motivo obligatorio (INV-P-11)"
+            )
+
+        now = TarjetaAsignada.now()
+        event = TarjetaAsignada(
+            event_type="TarjetaAsignada",
+            aggregate_id=str(self._performance_id),
+            occurred_at=now,
+            performance_id=str(self._performance_id),
+            participante_id=str(self._participante_id),
+            disciplina=self._disciplina.value,
+            tipo=tipo.value,
+            motivo=motivo,
+            asignada_por=asignada_por,
+            asignada_en=now.isoformat(),
+        )
+        self._tarjeta = tipo
+        self._estado = EstadoPerformance.Ejecutada
+        self._record(event)
+
     # ── Reconstitución desde eventos ──────────────────────────────────────────
 
     @classmethod
@@ -238,6 +298,9 @@ class Performance(AggregateRoot):
             self._estado = EstadoPerformance.ResultadoRegistrado
         elif event_type == "DNSRegistrado":
             self._estado = EstadoPerformance.DNS
+        elif event_type == "TarjetaAsignada":
+            self._tarjeta = TipoTarjeta(payload["tipo"])
+            self._estado = EstadoPerformance.Ejecutada
 
     @staticmethod
     def _parse_payload(payload: Any) -> dict[str, Any]:
