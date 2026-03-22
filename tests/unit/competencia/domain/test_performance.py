@@ -1,4 +1,4 @@
-"""Tests unitarios del aggregate Performance — US-1.2.1 + US-1.2.2."""
+"""Tests unitarios del aggregate Performance — US-1.2.1 + US-1.2.2 + US-1.2.3."""
 from __future__ import annotations
 
 from datetime import datetime
@@ -7,7 +7,11 @@ from uuid import uuid4
 
 import pytest
 
-from competencia.domain.aggregates.performance import EstadoInvalidoParaLlamar, Performance
+from competencia.domain.aggregates.performance import (
+    EstadoInvalidoParaLlamar,
+    EstadoInvalidoParaRegistrarResultado,
+    Performance,
+)
 from competencia.domain.value_objects.ap import ValorAPInvalido
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
@@ -260,3 +264,125 @@ def test_reconstitute_con_atleta_llamado_restaura_estado_llamada() -> None:
     restored = Performance.reconstitute(raw)
 
     assert restored.estado == EstadoPerformance.Llamada
+
+
+# ── registrar_resultado() — camino feliz ──────────────────────────────────────
+
+
+@pytest.fixture
+def performance_llamada() -> Performance:
+    """Performance en estado Llamada, lista para registrar resultado."""
+    p = Performance(
+        performance_id=uuid4(),
+        competencia_id=uuid4(),
+        participante_id=uuid4(),
+        disciplina=Disciplina.DNF,
+    )
+    p.registrarAP(Decimal("50"), UnidadMedida.Metros)
+    p.pull_events()
+    p.llamar(OT, posicion_grilla=1)
+    p.pull_events()
+    return p
+
+
+def test_registrar_resultado_emite_evento(performance_llamada: Performance) -> None:
+    """registrar_resultado() emite exactamente un evento ResultadoRegistrado."""
+    performance_llamada.registrar_resultado(Decimal("50.5"), UnidadMedida.Metros, "juez-001")
+
+    events = performance_llamada.pull_events()
+    assert len(events) == 1
+    assert events[0].event_type == "ResultadoRegistrado"
+
+
+def test_registrar_resultado_transiciona_a_resultado_registrado(
+    performance_llamada: Performance,
+) -> None:
+    """registrar_resultado() transiciona al estado ResultadoRegistrado."""
+    performance_llamada.registrar_resultado(Decimal("50.5"), UnidadMedida.Metros, "juez-001")
+
+    assert performance_llamada.estado == EstadoPerformance.ResultadoRegistrado
+
+
+def test_registrar_resultado_payload_correcto(performance_llamada: Performance) -> None:
+    """El evento ResultadoRegistrado contiene valorRP, unidad y registradoPor correctos."""
+    valor = Decimal("48.3")
+    performance_llamada.registrar_resultado(valor, UnidadMedida.Metros, "juez-007")
+
+    events = performance_llamada.pull_events()
+    payload = events[0].to_payload()
+    assert payload["valor_rp"] == str(valor)
+    assert payload["unidad"] == UnidadMedida.Metros.value
+    assert payload["registrado_por"] == "juez-007"
+
+
+def test_registrar_resultado_persiste_rp_en_aggregate(performance_llamada: Performance) -> None:
+    """registrar_resultado() actualiza la propiedad rp del aggregate."""
+    valor = Decimal("50.5")
+    performance_llamada.registrar_resultado(valor, UnidadMedida.Metros, "juez-001")
+
+    assert performance_llamada.rp == valor
+
+
+def test_registrar_resultado_pull_events_vacia_lista(performance_llamada: Performance) -> None:
+    """pull_events() limpia la lista de eventos pendientes."""
+    performance_llamada.registrar_resultado(Decimal("50.5"), UnidadMedida.Metros, "juez-001")
+
+    performance_llamada.pull_events()
+    assert performance_llamada.pull_events() == []
+
+
+# ── registrar_resultado() — INV-P-06 ─────────────────────────────────────────
+
+
+def test_registrar_resultado_desde_anunciada_lanza_excepcion(
+    performance: Performance,
+) -> None:
+    """INV-P-06: registrar_resultado() desde AnunciadaAP lanza EstadoInvalidoParaRegistrarResultado."""
+    performance.registrarAP(Decimal("50"), UnidadMedida.Metros)
+    performance.pull_events()
+
+    with pytest.raises(EstadoInvalidoParaRegistrarResultado):
+        performance.registrar_resultado(Decimal("50"), UnidadMedida.Metros, "juez-001")
+
+
+def test_registrar_resultado_desde_estado_invalido_no_emite_eventos(
+    performance: Performance,
+) -> None:
+    """Si el estado es inválido, no quedan eventos pendientes."""
+    performance.registrarAP(Decimal("50"), UnidadMedida.Metros)
+    performance.pull_events()
+
+    with pytest.raises(EstadoInvalidoParaRegistrarResultado):
+        performance.registrar_resultado(Decimal("50"), UnidadMedida.Metros, "juez-001")
+
+    assert performance.pull_events() == []
+
+
+# ── reconstitute con ResultadoRegistrado ──────────────────────────────────────
+
+
+def test_reconstitute_con_resultado_registrado_restaura_estado() -> None:
+    """reconstitute con AP + Llamado + ResultadoRegistrado restaura estado correcto."""
+    p = Performance(
+        performance_id=uuid4(),
+        competencia_id=uuid4(),
+        participante_id=uuid4(),
+        disciplina=Disciplina.DNF,
+    )
+    p.registrarAP(Decimal("50"), UnidadMedida.Metros)
+    ap_events = p.pull_events()
+
+    p.llamar(OT, posicion_grilla=1)
+    llamar_events = p.pull_events()
+
+    p.registrar_resultado(Decimal("50.5"), UnidadMedida.Metros, "juez-001")
+    resultado_events = p.pull_events()
+
+    raw = [
+        {"event_type": e.event_type, "payload": e.to_payload()}
+        for e in ap_events + llamar_events + resultado_events
+    ]
+    restored = Performance.reconstitute(raw)
+
+    assert restored.estado == EstadoPerformance.ResultadoRegistrado
+    assert restored.rp == Decimal("50.5")

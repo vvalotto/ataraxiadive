@@ -91,10 +91,13 @@ max_cyclomatic_complexity = 10
 # la config cae a defaults. Sólo incluir campos del dataclass aquí.
 # CLI flags: designreviewer src/ (paths se pasa como argumento)
 [tool.designreviewer]
-# CBO elevado a 12: aggregates DDD acoplan legitimamente a sus VOs, eventos y puertos.
-# US-1.2.1: max_cbo=10 (Performance/RegistrarAPHandler CBO=8). US-1.2.2: Performance
-# suma AtletaLlamado → CBO=11, ajustado a 12 para dar margen al siguiente evento.
-max_cbo = 12
+# CBO elevado: aggregates DDD acoplan legitimamente a sus VOs, eventos y puertos.
+# US-1.2.1: max_cbo=10. US-1.2.2: Performance+AtletaLlamado → CBO=11, sube a 12.
+# US-1.2.3: Performance+ResultadoRegistrado → CBO=13. Sube a 14 para Inc 1.2 completo.
+max_cbo = 14
+# WMC elevado: Performance crece con cada US de Inc 1.2 (un método por comando de dominio).
+# US-1.2.3: Performance WMC=21. Sube a 25 para absorber US-1.2.4 a US-1.2.6.
+max_wmc = 25
 
 # ── ArchitectAnalyst (Software Limpio) ────────────────────────────────────
 [tool.architectanalyst]

@@ -6,6 +6,11 @@ from competencia.application.commands.registrar_ap import (
     RegistrarAPCommand,
     RegistrarAPHandler,
 )
+from competencia.application.commands.registrar_resultado import (
+    PerformanceNoEncontrada,
+    RegistrarResultadoCommand,
+    RegistrarResultadoHandler,
+)
 
 __all__ = [
     "APYaRegistrado",
@@ -13,4 +18,7 @@ __all__ = [
     "PlazoAPVencidoError",
     "RegistrarAPCommand",
     "RegistrarAPHandler",
+    "PerformanceNoEncontrada",
+    "RegistrarResultadoCommand",
+    "RegistrarResultadoHandler",
 ]

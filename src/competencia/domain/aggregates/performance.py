@@ -10,6 +10,7 @@ from uuid import UUID
 from shared.domain.base.aggregate_root import AggregateRoot
 from competencia.domain.events.ap_registrado import APRegistrado
 from competencia.domain.events.atleta_llamado import AtletaLlamado
+from competencia.domain.events.resultado_registrado import ResultadoRegistrado
 from competencia.domain.value_objects.ap import AP
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
@@ -20,14 +21,18 @@ class EstadoInvalidoParaLlamar(Exception):
     """Performance no está en estado AnunciadaAP — no se puede llamar al atleta."""
 
 
+class EstadoInvalidoParaRegistrarResultado(Exception):
+    """Performance no está en estado Llamada — no se puede registrar el resultado."""
+
+
 class Performance(AggregateRoot):
     """Aggregate raíz que modela el ciclo de vida de la actuación de un atleta.
 
     Stream ID: "performance-{competencia_id}-{participante_id}-{disciplina}"
 
     Estados:
-        AnunciadaAP → Llamada → Ejecutada  (camino nominal)
-        AnunciadaAP → Llamada → DNS        (atleta no se presentó)
+        AnunciadaAP → Llamada → ResultadoRegistrado → Ejecutada  (camino nominal)
+        AnunciadaAP → Llamada → DNS                              (atleta no se presentó)
 
     Invariantes (ver event-storming-competencia.md):
         INV-P-01: valorAP > 0  (validado por AP value object)
@@ -47,6 +52,7 @@ class Performance(AggregateRoot):
         self._participante_id = participante_id
         self._disciplina = disciplina
         self._ap: AP | None = None
+        self._rp: Decimal | None = None
         self._estado: EstadoPerformance | None = None
 
     # ── Propiedades ───────────────────────────────────────────────────────────
@@ -65,6 +71,11 @@ class Performance(AggregateRoot):
     def ap(self) -> AP | None:
         """AP registrado, o None si aún no fue declarado."""
         return self._ap
+
+    @property
+    def rp(self) -> Decimal | None:
+        """RP registrado, o None si aún no fue registrado."""
+        return self._rp
 
     # ── Comandos de dominio ───────────────────────────────────────────────────
 
@@ -133,6 +144,44 @@ class Performance(AggregateRoot):
         self._estado = EstadoPerformance.Llamada
         self._record(event)
 
+    def registrar_resultado(
+        self, valor_rp: Decimal, unidad: UnidadMedida, registrado_por: str
+    ) -> None:
+        """Registra el resultado efectivo (RP) del atleta.
+
+        Verifica que la Performance esté en estado Llamada (INV-P-06).
+
+        Args:
+            valor_rp: Realized Performance — marca efectivamente lograda.
+            unidad: Unidad de medida del RP (Metros | Segundos).
+            registrado_por: Identificador del juez que registra el resultado.
+
+        Raises:
+            EstadoInvalidoParaRegistrarResultado: Si la Performance no está en Llamada (INV-P-06).
+        """
+        if self._estado != EstadoPerformance.Llamada:
+            raise EstadoInvalidoParaRegistrarResultado(
+                f"Performance {self._performance_id} en estado {self._estado} "
+                "— solo se puede registrar resultado desde Llamada"
+            )
+
+        now = ResultadoRegistrado.now()
+        event = ResultadoRegistrado(
+            event_type="ResultadoRegistrado",
+            aggregate_id=str(self._performance_id),
+            occurred_at=now,
+            performance_id=str(self._performance_id),
+            participante_id=str(self._participante_id),
+            disciplina=self._disciplina.value,
+            valor_rp=str(valor_rp),
+            unidad=unidad.value,
+            registrado_por=registrado_por,
+            registrado_en=now.isoformat(),
+        )
+        self._rp = valor_rp
+        self._estado = EstadoPerformance.ResultadoRegistrado
+        self._record(event)
+
     # ── Reconstitución desde eventos ──────────────────────────────────────────
 
     @classmethod
@@ -184,6 +233,11 @@ class Performance(AggregateRoot):
             self._estado = EstadoPerformance.AnunciadaAP
         elif event_type == "AtletaLlamado":
             self._estado = EstadoPerformance.Llamada
+        elif event_type == "ResultadoRegistrado":
+            self._rp = Decimal(payload["valor_rp"])
+            self._estado = EstadoPerformance.ResultadoRegistrado
+        elif event_type == "DNSRegistrado":
+            self._estado = EstadoPerformance.DNS
 
     @staticmethod
     def _parse_payload(payload: Any) -> dict[str, Any]:
