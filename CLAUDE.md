@@ -44,10 +44,10 @@ Capa 1 — DOMINIO         → docs/dominio/01-dominio_torneos_apnea.md     ✅
          ↓
 Capa 2 — MODELO (DDD)    → docs/design/context-map.md                   ✅
                             docs/adr/ADR-005-bounded-contexts-ddd-estrategico.md ✅
-                            docs/design/domain-model.md                  ⏳ pendiente
+                            docs/design/domain-model.md                  ✅
          ↑
     [ Event Storming Nivel 2 — Process Modeling ]
-      docs/design/event-storming-competencia.md              ⏳ pendiente
+      docs/design/event-storming-competencia.md              ✅
       (BC Competencia — profundiza el Core Domain)
       Produce: comandos, políticas, invariantes, candidatos a US-IEDD
          ↓
@@ -56,8 +56,8 @@ Capa 3 — ESPECIFICACIÓN  → docs/iedd/US-IEDD-template.md                ✅
          ↓
     [ IA como traductor conceptual — Claude Dev Kit /implement-us ]
          ↓
-Capa 4 — ARQUITECTURA    → docs/design/architecture.md                  ⏳ pendiente
-                            docs/adr/ADR-001 a ADR-005                   ✅
+Capa 4 — ARQUITECTURA    → docs/design/architecture.md                  ✅
+                            docs/adr/ADR-001 a ADR-012                   ✅
          ↓
 Capa 5 — IMPLEMENTACIÓN  → src/  (empieza en SP1, luego de completar Semana 0)
 ```
@@ -105,7 +105,7 @@ IEDD (metodología)
 
 **AtaraxiaDive** es una plataforma web para gestión de torneos de apnea (freediving).
 
-- **Stack:** FastAPI (backend Python) + React PWA (frontend) + PostgreSQL
+- **Stack:** FastAPI (backend Python) + React PWA (frontend) + SQLite (un archivo por BC — ADR-007)
 - **Arquitectura:** Hexagonal + Event Sourcing (BCs Competencia y Notificaciones)
 - **Desarrollador:** Victor Valotto
 - **Horizonte:** 2026, sin fecha fija — avance por incrementos con DoD binaria
@@ -159,14 +159,15 @@ tests/
     └── US-X.Y.Z.feature  ← organizados por US-IEDD
 
 docs/
-├── adr/             ← ADR-001 a ADR-006 ✅
+├── adr/             ← ADR-001 a ADR-012 ✅
 ├── contexto/        ← Documentos fundacionales del experimento ✅
 ├── design/          ← Context Map ✅ · ES Big Picture ✅ · Domain Model ✅ · Architecture ✅
 ├── dominio/         ← Descripción del dominio y RFs ✅
 ├── iedd/            ← Marco metodológico IEDD ✅
-├── plans/           ← US-IEDD + WORKFLOW-DESARROLLO.md + candidatas por SP
+├── plans/           ← planes técnicos de implementación + candidatas por SP (dividido en sp1/, sp2/, …)
 ├── reports/         ← Reportes /implement-us (genera el Dev Kit)
 ├── requirements/    ← vision.md ✅
+├── specs/           ← US-IEDD por SP — Capa 3 IEDD (dividido en sp1/, sp2/, …)
 └── traceability/    ← matrix.md ✅
 
 .cm/
@@ -292,38 +293,38 @@ chore(cm): registrar BL-001 cierre SP1
 ### Branching
 ```
 main          ← baselines etiquetadas (v0.1.0, v0.2.0...)
-  └── develop ← integración continua
-        ├── feature/US-X.Y.Z-descripcion
+  └── develop ← integración continua — recibe PRs individuales por US
+        ├── feature/US-X.Y.Z-descripcion-corta   ← una branch por US-IEDD
+        ├── feature/inc-X.Y-descripcion-corta    ← incrementos técnicos sin US
         └── fix/descripcion-corta
 ```
+
+**Detalle completo:** `docs/plans/WORKFLOW-DESARROLLO.md`
 
 ---
 
 ## 11. Quality Gates (software_limpio)
 
-```bash
-# Pre-commit (automático, ~5s, nunca bloquea)
-codeguard src/
-
-# Antes de merge a develop (obligatorio, bloquea si CRITICAL)
-designreviewer src/
-
-# Al cerrar un Subproyecto / Baseline
-architectanalyst src/ --sprint-id BL-NNN --format json
-# Guardar output en .cm/baselines/BL-NNN-arquitectura.json
-```
+| Momento | Herramienta | Modo |
+|---------|-------------|------|
+| Cada commit | CodeGuard | Automático — advierte, no bloquea |
+| Cada push (PR) | DesignReviewer | Automático — bloquea si CRITICAL |
+| Cierre de Incremento | DesignReviewer | Manual — confirmar cero CRITICAL |
+| Cierre de Subproyecto | ArchitectAnalyst | Manual — informa tendencias |
 
 Umbrales mínimos para SP1:
 - Pylint ≥ 8.0 en `domain/`
 - Cobertura ≥ 85% en `domain/` + `application/`
 - Cero imports de infraestructura en `domain/`
 
+**Detalle completo (comandos, flujo de bloqueo):** `docs/plans/WORKFLOW-DESARROLLO.md §8`
+
 ---
 
 ## 12. Gestión de la Configuración (CM)
 
 ### Al implementar una US
-1. La US-IEDD debe estar en `docs/plans/US-X.Y.Z.md` antes de empezar
+1. La US-IEDD debe estar en `docs/specs/spX/US-X.Y.Z.md` antes de empezar (donde X = número de SP)
 2. Usar `/implement-us US-X.Y.Z` con las 10 fases
 3. Commit con referencia a la US: `feat(domain): ... [US-1.2.1]`
 4. Actualizar `docs/traceability/matrix.md` al cerrar
@@ -347,8 +348,8 @@ Umbrales mínimos para SP1:
 # Setup inicial del repositorio (una vez al clonar)
 git config core.hooksPath .githooks   # activa el pre-push hook de DesignReviewer
 
-# Entorno
-docker-compose up
+# Entorno de desarrollo (sin Docker — ADR-010)
+uv run fastapi dev src/app.py
 
 # Tests
 pytest tests/unit/
@@ -375,7 +376,7 @@ isort src/ tests/
 |-----------|--------|-----------|
 | Repositorio inicializado | ✅ | — |
 | BL-000 baseline pre-código | ✅ | `.cm/baselines/BL-000-pre-codigo.md` |
-| ADR-001 a ADR-005 | ✅ | `docs/adr/` |
+| ADR-001 a ADR-012 | ✅ | `docs/adr/` |
 | Contexto del experimento | ✅ | `docs/contexto/` (5 archivos) |
 | Documentos del dominio | ✅ | `docs/dominio/` (5 archivos) |
 | Marco metodológico IEDD | ✅ | `docs/iedd/` (4 archivos) |
@@ -402,7 +403,7 @@ isort src/ tests/
 | DesignReviewer | ✅ Operativo — `designreviewer src/` |
 | ArchitectAnalyst | ✅ Operativo — `architectanalyst src/ --sprint-id BL-NNN` |
 
-**Próximo paso:** redactar `docs/plans/US-1.1.1.md` y ejecutar `/implement-us US-1.1.1`.
+**Próximo paso:** crear branch `feature/US-1.1` desde develop → implementar Inc 1.1 (fundación técnica) o redactar `docs/specs/sp1/US-1.2.1.md` y ejecutar `/implement-us US-1.2.1`.
 
 ---
 
@@ -453,7 +454,22 @@ El hook SessionEnd captura automáticamente los commits y crea el flag. No requi
 /checkpoint  → guardar estado actual (usar proactivamente durante la sesión)
 ```
 
+### Dónde guardar cada tipo de conocimiento
+
+Esta distinción es importante y aplica a cualquier proyecto IEDD:
+
+| Artefacto | Alcance | Cuándo usarlo |
+|-----------|---------|---------------|
+| **HITO / BL** | Aprendizajes del experimento — valen para el paper, el libro, futuros proyectos con IEDD | Cuando el aprendizaje ilumina una hipótesis experimental, un patrón metodológico o una decisión de diseño que otros proyectos deberían conocer |
+| **memory/** | Conocimiento operativo para futuras sesiones **en este proyecto** | Políticas, convenciones, datos de trabajo que Claude necesita recordar para operar bien — no tienen valor académico externo |
+
+**Regla práctica:**
+- *¿Querés capitalizar este aprendizaje en el paper o en un futuro proyecto?* → HITO o BL
+- *¿Es una convención o dato que Claude necesita recordar para trabajar bien la próxima sesión?* → `memory/`
+
+Los dos no son excluyentes: un aprendizaje puede vivir en ambos si tiene valor académico Y operativo.
+
 ---
 
-*Última actualización: 2026-03-19 — Fase 0 completa, 11/11 artefactos — tag v0.1.0*
+*Última actualización: 2026-03-22 — distinción HITO/BL vs memory/ formalizada*
 *Mantenido por: Claude Cowork (decisiones estratégicas) + Claude Code (implementación)*

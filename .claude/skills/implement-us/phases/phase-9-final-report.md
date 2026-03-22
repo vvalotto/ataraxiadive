@@ -172,7 +172,7 @@ Generar un reporte estructurado que documente todo el proceso de implementación
 - `tests/step_defs/test_{feature}_steps.py` ({STEPS_LOC} líneas)
 
 ### Documentación
-- `docs/plans/{US_ID}-plan.md`
+- `docs/plans/sp{SP}/{US_ID}-plan.md` (donde SP = primer dígito del US_ID)
 - `docs/reports/{US_ID}-report.md` (este archivo)
 - `quality/reports/{US_ID}-quality.json`
 

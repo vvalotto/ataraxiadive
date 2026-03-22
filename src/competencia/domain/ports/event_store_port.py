@@ -1,0 +1,56 @@
+"""Puerto EventStore — contrato de persistencia del Event Store para BC Competencia."""
+from __future__ import annotations
+
+from abc import ABC, abstractmethod
+from typing import Any
+
+
+class EventStorePort(ABC):
+    """Puerto de persistencia de eventos del BC Competencia.
+
+    Contrato que define las operaciones de lectura y escritura del Event Store.
+    La infraestructura provee la implementación concreta (SQLiteEventStore).
+    """
+
+    @abstractmethod
+    async def append(
+        self,
+        stream_id: str,
+        event_type: str,
+        payload: dict[str, Any],
+        expected_version: int | None = None,
+    ) -> None:
+        """Agrega un evento al stream indicado.
+
+        Args:
+            stream_id: Identificador del stream (ej: "performance-<uuid>").
+            event_type: Nombre del tipo de evento (ej: "APRegistrado").
+            payload: Datos del evento serializables a JSON.
+            expected_version: Versión esperada para control de concurrencia optimista.
+                Si se provee y no coincide con la versión actual, lanza ConcurrencyError.
+        """
+
+    @abstractmethod
+    async def load(self, stream_id: str) -> list[dict[str, Any]]:
+        """Carga todos los eventos de un stream en orden cronológico.
+
+        Args:
+            stream_id: Identificador del stream.
+
+        Returns:
+            Lista de eventos con claves: event_type, payload, version, occurred_at.
+        """
+
+    @abstractmethod
+    async def load_from(
+        self, stream_id: str, from_version: int
+    ) -> list[dict[str, Any]]:
+        """Carga eventos de un stream a partir de una versión dada.
+
+        Args:
+            stream_id: Identificador del stream.
+            from_version: Versión a partir de la cual cargar (inclusive).
+
+        Returns:
+            Lista de eventos desde from_version en adelante.
+        """

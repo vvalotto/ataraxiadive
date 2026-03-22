@@ -145,7 +145,7 @@ cruzan la frontera de BC con traducción real. Primer test de la integración as
 |------|--------|-------------------|
 | 4.1 | El juez se desconecta | **Competencia:** offline-first · IndexedDB · sincronización |
 | 4.2 | El sistema habla | **Notificaciones:** BC completo — aggregate `Notificacion` + ES + Email/Push · resuelve HS-25 y HS-22 |
-| 4.3 | Configuración sin código | **Torneo:** panel admin · JSONB para disciplinas, categorías, reglas |
+| 4.3 | Configuración sin código | **Torneo:** panel admin · JSON (texto) para disciplinas, categorías, reglas |
 | 4.4 | Tarjetas y penalizaciones | **Competencia:** tarjeta amarilla configurable · `CorregirResultado` · rankings por categoría/género |
 | 4.5 | Confianza y auditoría | Cross-cutting: log de auditoría · hash SHA-256 · inmutabilidad post-cierre · exportación CSV/JSON |
 

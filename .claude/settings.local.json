@@ -31,7 +31,22 @@
       "Bash(designreviewer --version)",
       "Bash(architectanalyst --version)",
       "Bash(codeguard --help)",
-      "Bash(codeguard src/)"
+      "Bash(codeguard src/)",
+      "Bash(git checkout:*)",
+      "Bash(gh milestone:*)",
+      "Bash(git pull:*)",
+      "Bash(gh pr:*)",
+      "Bash(mkdir -p ~/.claude/commands)",
+      "Bash(cp /Users/victor/PycharmProjects/app_termostato/.claude/commands/pr.md ~/.claude/commands/pr.md)",
+      "Bash(uv sync:*)",
+      "Bash(uv pip:*)",
+      "Bash(alembic init:*)",
+      "Bash(PYTHONPATH=src python -m pytest tests/integration/competencia/test_sqlite_event_store.py -v --no-cov 2>&1)",
+      "Bash(gh issue:*)",
+      "Bash(ls /Users/victor/PycharmProjects/ataraxiadive/docs/contexto/HITO*)",
+      "Bash(python3:*)",
+      "Bash(codeguard src/ --format json)",
+      "Bash(designreviewer:*)"
     ]
   }
 }

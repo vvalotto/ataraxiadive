@@ -1,0 +1,4 @@
+US-1.2.3 — Registrar Resultado
+CodeGuard: 0 errores, 0 advertencias — 2026-03-22
+DesignReviewer: 0 CRITICAL, 14 WARNING (LongMethod/FeatureEnvy en handlers — estructural DDD)
+Coverage: 98.01% (65 tests)
