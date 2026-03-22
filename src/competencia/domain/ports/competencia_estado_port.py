@@ -10,12 +10,12 @@ from competencia.domain.value_objects.disciplina import Disciplina
 class CompetenciaEstadoPort(ABC):
     """Puerto para consultar el estado del aggregate Competencia.
 
-    En SP1 se implementa con un stub que retorna siempre False.
+    En SP1 se implementa con un stub que retorna valores fijos.
     En SP2 la implementación real lee el stream del aggregate Competencia.
 
-    Requerido por RegistrarAPHandler para verificar:
-        INV-P-03: PlazoAPVencido no emitido
-        INV-P-04: GrillaConfirmada no emitido
+    Requerido por:
+        RegistrarAPHandler: INV-P-03 (plazo) e INV-P-04 (grilla)
+        LlamarAtletaHandler: INV-P-05 (en ejecución)
     """
 
     @abstractmethod
@@ -44,4 +44,15 @@ class CompetenciaEstadoPort(ABC):
 
         Returns:
             True si GrillaConfirmada fue emitido para esta competencia.
+        """
+
+    @abstractmethod
+    async def is_en_ejecucion(self, competencia_id: UUID) -> bool:
+        """Verifica si la Competencia está en estado EnEjecucion (INV-P-05).
+
+        Args:
+            competencia_id: Identificador de la competencia.
+
+        Returns:
+            True si CompetenciaIniciada fue emitida y CompetenciaFinalizada no.
         """

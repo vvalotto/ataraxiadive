@@ -1,0 +1,56 @@
+╭──────────────────────────────────────────────────────────────────────────────╮
+│  🔍  DesignReviewer - Análisis de Calidad de Diseño                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Archivos analizados:   95   
+Analyzers ejecutados:  12   
+Tiempo de ejecución:   3.64s
+Resultados totales:    11   
+
+────────────────────────── 📦  aggregates  (4 issues) ──────────────────────────
+
+                           Advertencias de Diseño (4)                           
+┏━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Analyzer           ┃ Clase / Módulo ┃ Problema       ┃ Val/Umbral ┃ Esfuerzo ┃
+┡━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━┩
+│ FanOutAnalyzer     │ performance.py │ 'performance.… │    8/7     │     0.2h │
+│ LongMethodAnalyzer │ Performance    │ Método 'Perfo… │   29/20    │     0.5h │
+│ LongMethodAnalyzer │ Performance    │ Método 'Perfo… │   34/20    │     0.7h │
+│ LongMethodAnalyzer │ Performance    │ Método 'Perfo… │   34/20    │     0.7h │
+└────────────────────┴────────────────┴────────────────┴────────────┴──────────┘
+
+─────────────────────────── 📦  commands  (4 issues) ───────────────────────────
+
+                           Advertencias de Diseño (4)                           
+┏━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Analyzer            ┃ Clase / Módulo      ┃ Problema ┃ Val/Umbral ┃ Esfuerzo ┃
+┡━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━┩
+│ FeatureEnvyAnalyzer │ RegistrarAPHandler  │ Método … │    18/4    │     1.5h │
+│ LongMethodAnalyzer  │ RegistrarAPHandler  │ Método … │   63/20    │     2.1h │
+│ FeatureEnvyAnalyzer │ LlamarAtletaHandler │ Método … │    10/3    │     1.5h │
+│ LongMethodAnalyzer  │ LlamarAtletaHandler │ Método … │   41/20    │     1.1h │
+└─────────────────────┴─────────────────────┴──────────┴────────────┴──────────┘
+
+───────────────────────── 📦  event_store  (3 issues) ──────────────────────────
+
+                           Advertencias de Diseño (3)                           
+┏━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Analyzer           ┃ Clase / Módulo   ┃ Problema     ┃ Val/Umbral ┃ Esfuerzo ┃
+┡━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━┩
+│ LongMethodAnalyzer │ SQLiteEventStore │ Método 'SQL… │   30/20    │     0.5h │
+│ LongMethodAnalyzer │ SQLiteEventStore │ Método 'SQL… │   22/20    │     0.1h │
+│ LongMethodAnalyzer │ SQLiteEventStore │ Método 'SQL… │   24/20    │     0.2h │
+└────────────────────┴──────────────────┴──────────────┴────────────┴──────────┘
+
+╭─────────────────────────────── Resumen Final ────────────────────────────────╮
+│  Resumen:                                                                    │
+│            0 blocking issues (CRITICAL)                                      │
+│            11 advertencias (WARNING)                                         │
+│            0 informativos (INFO)                                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+╭────────────────────────────── ⏱  Deuda Técnica ──────────────────────────────╮
+│  Esfuerzo estimado de refactoring:                                           │
+│    Blocking issues: 0.0h                                                     │
+│    Total del changeset: 9.1h                                                 │
+╰──────────────────────────────────────────────────────────────────────────────╯

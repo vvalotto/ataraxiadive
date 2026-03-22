@@ -1,16 +1,19 @@
-"""Tests unitarios del aggregate Performance — US-1.2.1."""
+"""Tests unitarios del aggregate Performance — US-1.2.1 + US-1.2.2."""
 from __future__ import annotations
 
+from datetime import datetime
 from decimal import Decimal
 from uuid import uuid4
 
 import pytest
 
-from competencia.domain.aggregates.performance import Performance
+from competencia.domain.aggregates.performance import EstadoInvalidoParaLlamar, Performance
 from competencia.domain.value_objects.ap import ValorAPInvalido
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
+
+OT = datetime(2026, 3, 22, 10, 30, 0)
 
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
@@ -133,3 +136,127 @@ def test_reconstitute_primer_evento_incorrecto_lanza_error() -> None:
     """reconstitute con evento incorrecto lanza ValueError."""
     with pytest.raises(ValueError, match="APRegistrado"):
         Performance.reconstitute([{"event_type": "OtroEvento", "payload": {}}])
+
+
+# ── llamar() — camino feliz ───────────────────────────────────────────────────
+
+
+@pytest.fixture
+def performance_anunciada() -> Performance:
+    """Performance con AP registrado, lista para ser llamada."""
+    p = Performance(
+        performance_id=uuid4(),
+        competencia_id=uuid4(),
+        participante_id=uuid4(),
+        disciplina=Disciplina.STA,
+    )
+    p.registrarAP(Decimal("330"), UnidadMedida.Segundos)
+    p.pull_events()  # limpiar eventos pendientes de registrarAP
+    return p
+
+
+def test_llamar_emite_evento_atleta_llamado(performance_anunciada: Performance) -> None:
+    """llamar() emite exactamente un evento AtletaLlamado."""
+    performance_anunciada.llamar(OT, posicion_grilla=3)
+
+    events = performance_anunciada.pull_events()
+    assert len(events) == 1
+    assert events[0].event_type == "AtletaLlamado"
+
+
+def test_llamar_transiciona_a_estado_llamada(performance_anunciada: Performance) -> None:
+    """llamar() transiciona al estado Llamada."""
+    performance_anunciada.llamar(OT, posicion_grilla=1)
+
+    assert performance_anunciada.estado == EstadoPerformance.Llamada
+
+
+def test_llamar_payload_contiene_datos_correctos(performance_anunciada: Performance) -> None:
+    """El evento AtletaLlamado contiene posicion_grilla y ot_programado correctos."""
+    performance_anunciada.llamar(OT, posicion_grilla=5)
+
+    events = performance_anunciada.pull_events()
+    payload = events[0].to_payload()
+    assert payload["posicion_grilla"] == 5
+    assert payload["ot_programado"] == OT.isoformat()
+
+
+# ── llamar() — invariantes ────────────────────────────────────────────────────
+
+
+def test_llamar_en_estado_no_anunciada_lanza_excepcion(performance_anunciada: Performance) -> None:
+    """INV: llamar() sobre Performance ya en Llamada lanza EstadoInvalidoParaLlamar."""
+    performance_anunciada.llamar(OT, posicion_grilla=1)
+    performance_anunciada.pull_events()
+
+    with pytest.raises(EstadoInvalidoParaLlamar):
+        performance_anunciada.llamar(OT, posicion_grilla=2)
+
+
+def test_llamar_estado_invalido_no_emite_eventos(performance_anunciada: Performance) -> None:
+    """Si el estado es inválido no quedan eventos pendientes."""
+    performance_anunciada.llamar(OT, posicion_grilla=1)
+    performance_anunciada.pull_events()
+
+    with pytest.raises(EstadoInvalidoParaLlamar):
+        performance_anunciada.llamar(OT, posicion_grilla=2)
+
+    assert performance_anunciada.pull_events() == []
+
+
+# ── reconstitute con AtletaLlamado ───────────────────────────────────────────
+
+
+def test_performance_id_propiedad(performance: Performance) -> None:
+    """performance_id retorna el UUID asignado en construcción."""
+    pid = uuid4()
+    p = Performance(
+        performance_id=pid,
+        competencia_id=uuid4(),
+        participante_id=uuid4(),
+        disciplina=Disciplina.STA,
+    )
+    assert p.performance_id == pid
+
+
+def test_reconstitute_payload_como_string_json() -> None:
+    """_parse_payload maneja payload serializado como string JSON."""
+    import json as _json
+
+    pid = uuid4()
+    cid = uuid4()
+    part_id = uuid4()
+    p = Performance(
+        performance_id=pid, competencia_id=cid, participante_id=part_id, disciplina=Disciplina.STA
+    )
+    p.registrarAP(Decimal("330"), UnidadMedida.Segundos)
+    events = p.pull_events()
+
+    # Simular payload guardado como string (como lo hace SQLite)
+    raw = [{"event_type": e.event_type, "payload": _json.dumps(e.to_payload())} for e in events]
+    restored = Performance.reconstitute(raw)
+
+    assert restored.estado == EstadoPerformance.AnunciadaAP
+
+
+def test_reconstitute_con_atleta_llamado_restaura_estado_llamada() -> None:
+    """reconstitute con APRegistrado + AtletaLlamado restaura estado Llamada."""
+    p = Performance(
+        performance_id=uuid4(),
+        competencia_id=uuid4(),
+        participante_id=uuid4(),
+        disciplina=Disciplina.STA,
+    )
+    p.registrarAP(Decimal("330"), UnidadMedida.Segundos)
+    ap_events = p.pull_events()
+
+    p.llamar(OT, posicion_grilla=2)
+    llamar_events = p.pull_events()
+
+    raw = [
+        {"event_type": e.event_type, "payload": e.to_payload()}
+        for e in ap_events + llamar_events
+    ]
+    restored = Performance.reconstitute(raw)
+
+    assert restored.estado == EstadoPerformance.Llamada
