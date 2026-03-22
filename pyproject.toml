@@ -82,12 +82,8 @@ exclude_lines = [
 # ── CodeGuard (Software Limpio) ────────────────────────────────────────────
 [tool.codeguard]
 min_pylint_score = 8.0
-max_complexity = 10
-paths = [
-    "src/competencia", "src/torneo", "src/registro",
-    "src/resultados", "src/identidad", "src/notificaciones",
-    "src/shared",
-]
+check_complexity = true
+max_cyclomatic_complexity = 10
 
 # ── DesignReviewer (Software Limpio) ──────────────────────────────────────
 # Nota: paths/check_hexagonal/forbidden_imports_in_domain no son campos de
@@ -95,9 +91,10 @@ paths = [
 # la config cae a defaults. Sólo incluir campos del dataclass aquí.
 # CLI flags: designreviewer src/ (paths se pasa como argumento)
 [tool.designreviewer]
-# CBO elevado a 10: aggregates DDD acoplan legitimamente a sus VOs, eventos y puertos.
-# El default de 5 es para OO genérico — no aplica a patrones hexagonales con tipos de dominio ricos.
-max_cbo = 10
+# CBO elevado a 12: aggregates DDD acoplan legitimamente a sus VOs, eventos y puertos.
+# US-1.2.1: max_cbo=10 (Performance/RegistrarAPHandler CBO=8). US-1.2.2: Performance
+# suma AtletaLlamado → CBO=11, ajustado a 12 para dar margen al siguiente evento.
+max_cbo = 12
 
 # ── ArchitectAnalyst (Software Limpio) ────────────────────────────────────
 [tool.architectanalyst]

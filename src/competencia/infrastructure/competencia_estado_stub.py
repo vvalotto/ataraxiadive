@@ -16,8 +16,12 @@ from competencia.domain.value_objects.disciplina import Disciplina
 class StubCompetenciaEstadoAdapter(CompetenciaEstadoPort):
     """Implementación stub del puerto CompetenciaEstadoPort para SP1.
 
-    Retorna siempre False: plazo activo y grilla no confirmada.
-    Permite implementar y probar INV-P-03 e INV-P-04 sin el aggregate Competencia.
+    Retorna valores fijos para operar sin el aggregate Competencia:
+        - is_plazo_vencido → False (plazo siempre activo)
+        - is_grilla_confirmada → False (grilla nunca confirmada)
+        - is_en_ejecucion → True (competencia siempre en ejecución)
+
+    Se reemplaza en SP2 con la implementación real.
     """
 
     async def is_plazo_vencido(
@@ -31,3 +35,7 @@ class StubCompetenciaEstadoAdapter(CompetenciaEstadoPort):
     ) -> bool:
         """SP1 stub: grilla nunca confirmada."""
         return False
+
+    async def is_en_ejecucion(self, competencia_id: UUID) -> bool:
+        """SP1 stub: competencia siempre en ejecución."""
+        return True

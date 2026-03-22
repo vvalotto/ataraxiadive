@@ -169,7 +169,7 @@ en `docs/specs/spN/` antes de ejecutar `/implement-us`.
 |-------------|------|---------------|------------------|------------------|
 | US-1.1.1 | 1.1 | — | Setup: esqueleto BC Competencia (BC-first) + tabla `events` + health-check | — |
 | US-1.2.1 | 1.2 | RF-PR-01/02/03, RF-EJ-08 | `RegistrarAP` | INV-P-01, INV-P-02, INV-P-03, INV-P-04 | ✅ Implementada 2026-03-21 |
-| US-1.2.2 | 1.2 | RF-EJ-05/08 | `RegistrarResultado` | INV-P-06 |
+| US-1.2.2 | 1.2 | RF-EJ-02 | `LlamarAtleta` | INV-P-05 | ✅ Implementada 2026-03-22 |
 | US-1.2.3 | 1.2 | RF-EJ-10 | `AsignarTarjeta` (blanca/roja) | INV-P-07, INV-P-11 |
 | US-1.3.1 | 1.3 | RF-EJ-05 | Interfaz juez mobile-first — 6 botones del flujo | — |
 | US-1.4.1 | 1.4 | RF-EJ-02 | `RegistrarDNS` | INV-P-08, INV-P-09 |
@@ -200,7 +200,8 @@ en `docs/specs/spN/` antes de ejecutar `/implement-us`.
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
-| — | — | Se completa a partir de SP1 inc. 1.2 |
+| US-1.2.1 | unit/competencia/domain + unit/competencia/application + unit/competencia/infrastructure + integration/competencia + features/US-1.2.1 | ✅ 34 tests (92%) |
+| US-1.2.2 | unit/competencia/domain + unit/competencia/application + unit/competencia/infrastructure + integration/competencia + features/US-1.2.2 | ✅ 41 tests (92%) |
 
 ---
 

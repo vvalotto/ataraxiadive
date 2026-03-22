@@ -2,16 +2,22 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from decimal import Decimal
 from typing import Any
 from uuid import UUID
 
 from shared.domain.base.aggregate_root import AggregateRoot
 from competencia.domain.events.ap_registrado import APRegistrado
+from competencia.domain.events.atleta_llamado import AtletaLlamado
 from competencia.domain.value_objects.ap import AP
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
+
+
+class EstadoInvalidoParaLlamar(Exception):
+    """Performance no está en estado AnunciadaAP — no se puede llamar al atleta."""
 
 
 class Performance(AggregateRoot):
@@ -25,6 +31,7 @@ class Performance(AggregateRoot):
 
     Invariantes (ver event-storming-competencia.md):
         INV-P-01: valorAP > 0  (validado por AP value object)
+        INV-P-05: llamar() solo si Competencia en EnEjecucion (verificado por handler)
     """
 
     def __init__(
@@ -91,6 +98,41 @@ class Performance(AggregateRoot):
         self._estado = EstadoPerformance.AnunciadaAP
         self._record(event)
 
+    def llamar(self, ot_programado: datetime, posicion_grilla: int) -> None:
+        """Llama al atleta para que inicie su performance (OT programado).
+
+        Verifica que la Performance esté en estado AnunciadaAP.
+        La verificación de INV-P-05 (Competencia en EnEjecucion) es
+        responsabilidad del handler, que consulta CompetenciaEstadoPort.
+
+        Args:
+            ot_programado: Momento programado para el Official Top.
+            posicion_grilla: Número de orden en la grilla de salida.
+
+        Raises:
+            EstadoInvalidoParaLlamar: Si la Performance no está en AnunciadaAP.
+        """
+        if self._estado != EstadoPerformance.AnunciadaAP:
+            raise EstadoInvalidoParaLlamar(
+                f"Performance {self._performance_id} en estado {self._estado} "
+                "— solo se puede llamar desde AnunciadaAP"
+            )
+
+        now = AtletaLlamado.now()
+        event = AtletaLlamado(
+            event_type="AtletaLlamado",
+            aggregate_id=str(self._performance_id),
+            occurred_at=now,
+            performance_id=str(self._performance_id),
+            participante_id=str(self._participante_id),
+            disciplina=self._disciplina.value,
+            posicion_grilla=posicion_grilla,
+            ot_programado=ot_programado.isoformat(),
+            llamado_en=now.isoformat(),
+        )
+        self._estado = EstadoPerformance.Llamada
+        self._record(event)
+
     # ── Reconstitución desde eventos ──────────────────────────────────────────
 
     @classmethod
@@ -140,6 +182,8 @@ class Performance(AggregateRoot):
                 unidad=UnidadMedida(payload["unidad"]),
             )
             self._estado = EstadoPerformance.AnunciadaAP
+        elif event_type == "AtletaLlamado":
+            self._estado = EstadoPerformance.Llamada
 
     @staticmethod
     def _parse_payload(payload: Any) -> dict[str, Any]:
