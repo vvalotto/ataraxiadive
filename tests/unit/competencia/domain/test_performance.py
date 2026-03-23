@@ -1,4 +1,4 @@
-"""Tests unitarios del aggregate Performance — US-1.2.1 a US-1.2.6."""
+"""Tests unitarios del aggregate Performance — US-1.2.1 a US-1.4.1."""
 from __future__ import annotations
 
 from datetime import datetime
@@ -8,6 +8,7 @@ from uuid import uuid4
 import pytest
 
 from competencia.domain.aggregates.performance import (
+    DistanciaBlackoutObligatoria,
     EstadoInvalidoParaAsignarTarjeta,
     EstadoInvalidoParaCorregirResultado,
     EstadoInvalidoParaLlamar,
@@ -462,13 +463,13 @@ def test_asignar_tarjeta_amarilla_con_motivo(performance_con_resultado: Performa
 def test_asignar_tarjeta_roja_con_motivo(performance_con_resultado: Performance) -> None:
     """asignar_tarjeta(Roja, motivo) emite TarjetaAsignada con motivo correcto."""
     performance_con_resultado.asignar_tarjeta(
-        TipoTarjeta.Roja, "juez-001", motivo="black-out"
+        TipoTarjeta.Roja, "juez-001", motivo="tiempo excedido"
     )
 
     events = performance_con_resultado.pull_events()
     payload = events[0].to_payload()
     assert payload["tipo"] == "Roja"
-    assert payload["motivo"] == "black-out"
+    assert payload["motivo"] == "tiempo excedido"
     assert performance_con_resultado.estado == EstadoPerformance.Ejecutada
 
 
@@ -584,7 +585,7 @@ def test_reconstitute_tarjeta_roja_restaura_tipo() -> None:
     llamar_evs = p.pull_events()
     p.registrar_resultado(Decimal("30"), UnidadMedida.Metros, "juez-001")
     res_evs = p.pull_events()
-    p.asignar_tarjeta(TipoTarjeta.Roja, "juez-001", motivo="black-out")
+    p.asignar_tarjeta(TipoTarjeta.Roja, "juez-001", motivo="tiempo excedido")
     tarjeta_evs = p.pull_events()
 
     raw = [
@@ -870,3 +871,113 @@ def test_reconstitute_con_resultado_corregido_restaura_rp() -> None:
 
     assert restored.estado == EstadoPerformance.Ejecutada
     assert restored.rp == Decimal("90.0")
+
+
+# ── US-1.4.1: asignar_tarjeta() — black-out con distancia ────────────────────
+
+
+def test_blackout_con_distancia_valida_emite_evento(
+    performance_con_resultado: Performance,
+) -> None:
+    """Black-out con distancia válida emite TarjetaAsignada con distancia_blackout."""
+    performance_con_resultado.asignar_tarjeta(
+        TipoTarjeta.Roja, "juez-001", motivo="black-out", distancia_blackout=Decimal("45.5")
+    )
+    events = performance_con_resultado.pull_events()
+    assert len(events) == 1
+    payload = events[0].to_payload()
+    assert payload["distancia_blackout"] == "45.5"
+    assert payload["motivo"] == "black-out"
+    assert payload["tipo"] == TipoTarjeta.Roja.value
+
+
+def test_blackout_con_distancia_valida_estado_ejecutada(
+    performance_con_resultado: Performance,
+) -> None:
+    """Black-out con distancia válida transiciona a Ejecutada."""
+    performance_con_resultado.asignar_tarjeta(
+        TipoTarjeta.Roja, "juez-001", motivo="black-out", distancia_blackout=Decimal("45.5")
+    )
+    assert performance_con_resultado.estado == EstadoPerformance.Ejecutada
+    assert performance_con_resultado.distancia_blackout == Decimal("45.5")
+
+
+def test_blackout_sin_distancia_lanza_excepcion(
+    performance_con_resultado: Performance,
+) -> None:
+    """Black-out sin distancia_blackout lanza DistanciaBlackoutObligatoria (RF-EJ-07)."""
+    with pytest.raises(DistanciaBlackoutObligatoria):
+        performance_con_resultado.asignar_tarjeta(
+            TipoTarjeta.Roja, "juez-001", motivo="black-out"
+        )
+
+
+def test_blackout_con_distancia_cero_lanza_excepcion(
+    performance_con_resultado: Performance,
+) -> None:
+    """Black-out con distancia_blackout=0 lanza DistanciaBlackoutObligatoria (RF-EJ-07)."""
+    with pytest.raises(DistanciaBlackoutObligatoria):
+        performance_con_resultado.asignar_tarjeta(
+            TipoTarjeta.Roja, "juez-001", motivo="black-out", distancia_blackout=Decimal("0")
+        )
+
+
+def test_blackout_no_emite_eventos_si_falla(
+    performance_con_resultado: Performance,
+) -> None:
+    """Black-out inválido no emite eventos."""
+    with pytest.raises(DistanciaBlackoutObligatoria):
+        performance_con_resultado.asignar_tarjeta(
+            TipoTarjeta.Roja, "juez-001", motivo="black-out"
+        )
+    assert performance_con_resultado.pull_events() == []
+
+
+def test_tarjeta_roja_sin_blackout_sigue_funcionando(
+    performance_con_resultado: Performance,
+) -> None:
+    """Tarjeta roja con motivo distinto a black-out funciona sin distancia (regresión)."""
+    performance_con_resultado.asignar_tarjeta(
+        TipoTarjeta.Roja, "juez-001", motivo="tiempo excedido"
+    )
+    events = performance_con_resultado.pull_events()
+    assert len(events) == 1
+    payload = events[0].to_payload()
+    assert payload["distancia_blackout"] is None
+
+
+def test_reconstitute_con_blackout_restaura_distancia(
+    performance_con_resultado: Performance,
+) -> None:
+    """reconstitute restaura distancia_blackout desde el payload del evento."""
+    performance_con_resultado.asignar_tarjeta(
+        TipoTarjeta.Roja, "juez-001", motivo="black-out", distancia_blackout=Decimal("38.2")
+    )
+    ap_evs = performance_con_resultado._events[:-1] if hasattr(performance_con_resultado, '_events') else []
+    tarjeta_evs = performance_con_resultado.pull_events()
+
+    # Reconstituir desde cero usando reconstitute
+    p2 = Performance(
+        performance_id=performance_con_resultado.performance_id,
+        competencia_id=uuid4(),
+        participante_id=performance_con_resultado.participante_id,
+        disciplina=Disciplina.STA,
+    )
+    p2.registrarAP(Decimal("90"), UnidadMedida.Metros)
+    ap = p2.pull_events()
+    p2.llamar(OT, posicion_grilla=1)
+    llamar = p2.pull_events()
+    p2.registrar_resultado(Decimal("38.2"), UnidadMedida.Metros, "juez-001")
+    resultado = p2.pull_events()
+    p2.asignar_tarjeta(
+        TipoTarjeta.Roja, "juez-001", motivo="black-out", distancia_blackout=Decimal("38.2")
+    )
+    tarjeta = p2.pull_events()
+
+    raw = [
+        {"event_type": e.event_type, "payload": e.to_payload()}
+        for e in ap + llamar + resultado + tarjeta
+    ]
+    restored = Performance.reconstitute(raw)
+    assert restored.distancia_blackout == Decimal("38.2")
+    assert restored.estado == EstadoPerformance.Ejecutada

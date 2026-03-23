@@ -23,10 +23,10 @@ Feature: Asignar Tarjeta
     And el evento contiene tipo="Amarilla", motivo="superficie sin protocolo" y asignadaPor="juez-001"
 
   Scenario: Juez asigna tarjeta roja con motivo obligatorio
-    When el juez asigna tarjeta roja con motivo="black-out" asignada_por="juez-001"
+    When el juez asigna tarjeta roja con motivo="tiempo excedido" asignada_por="juez-001"
     Then la performance pasa al estado "Ejecutada"
     And el evento TarjetaAsignada persiste en el event stream
-    And el evento contiene tipo="Roja", motivo="black-out" y asignadaPor="juez-001"
+    And el evento contiene tipo="Roja", motivo="tiempo excedido" y asignadaPor="juez-001"
 
   Scenario: Rechazo — tarjeta amarilla sin motivo (INV-P-11)
     When el juez intenta asignar tarjeta amarilla sin motivo asignada_por="juez-001"

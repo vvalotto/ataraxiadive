@@ -183,7 +183,7 @@ async def test_tarjeta_asignada_payload_correcto(
             disciplina=Disciplina.DNF,
             tipo=TipoTarjeta.Roja,
             asignada_por="juez-007",
-            motivo="black-out",
+            motivo="tiempo excedido",
         )
     )
 
@@ -191,7 +191,7 @@ async def test_tarjeta_asignada_payload_correcto(
     events = await event_store.load(stream_id)
     payload = events[3]["payload"]
     assert payload["tipo"] == "Roja"
-    assert payload["motivo"] == "black-out"
+    assert payload["motivo"] == "tiempo excedido"
     assert payload["asignada_por"] == "juez-007"
 
 
@@ -251,5 +251,70 @@ async def test_tarjeta_amarilla_sin_motivo_lanza_error(
             AsignarTarjetaCommand(
                 competencia_id=cid, participante_id=pid,
                 disciplina=Disciplina.DNF, tipo=TipoTarjeta.Amarilla, asignada_por="juez-001",
+            )
+        )
+
+
+# ── US-1.4.1: black-out con distancia ────────────────────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_blackout_persiste_y_reconstitye_distancia(
+    registrar_ap_handler: RegistrarAPHandler,
+    llamar_handler: LlamarAtletaHandler,
+    resultado_handler: RegistrarResultadoHandler,
+    tarjeta_handler: AsignarTarjetaHandler,
+    event_store: SQLiteEventStore,
+) -> None:
+    """Black-out con distancia se persiste en SQLite y se reconstituye correctamente."""
+    from competencia.domain.aggregates.performance import DistanciaBlackoutObligatoria
+
+    cid = uuid4()
+    pid = uuid4()
+
+    await _setup_performance_con_resultado(
+        registrar_ap_handler, llamar_handler, resultado_handler, cid, pid
+    )
+    await tarjeta_handler.handle(
+        AsignarTarjetaCommand(
+            competencia_id=cid, participante_id=pid,
+            disciplina=Disciplina.DNF, tipo=TipoTarjeta.Roja,
+            asignada_por="juez-001", motivo="black-out",
+            distancia_blackout=Decimal("45.5"),
+        )
+    )
+
+    stream_id = f"performance-{cid}-{pid}-{Disciplina.DNF.value}"
+    events = await event_store.load(stream_id)
+    performance = Performance.reconstitute(events)
+
+    assert performance.estado == EstadoPerformance.Ejecutada
+    assert performance.distancia_blackout == Decimal("45.5")
+    assert performance.tarjeta == TipoTarjeta.Roja
+
+
+@pytest.mark.asyncio
+async def test_blackout_sin_distancia_rechazado_en_integracion(
+    registrar_ap_handler: RegistrarAPHandler,
+    llamar_handler: LlamarAtletaHandler,
+    resultado_handler: RegistrarResultadoHandler,
+    tarjeta_handler: AsignarTarjetaHandler,
+) -> None:
+    """Black-out sin distancia es rechazado — no persiste ningún evento extra."""
+    from competencia.domain.aggregates.performance import DistanciaBlackoutObligatoria
+
+    cid = uuid4()
+    pid = uuid4()
+
+    await _setup_performance_con_resultado(
+        registrar_ap_handler, llamar_handler, resultado_handler, cid, pid
+    )
+
+    with pytest.raises(DistanciaBlackoutObligatoria):
+        await tarjeta_handler.handle(
+            AsignarTarjetaCommand(
+                competencia_id=cid, participante_id=pid,
+                disciplina=Disciplina.DNF, tipo=TipoTarjeta.Roja,
+                asignada_por="juez-001", motivo="black-out",
             )
         )

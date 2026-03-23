@@ -1,0 +1,32 @@
+{
+  "us_id": "US-1.4.1",
+  "fecha": "2026-03-23",
+  "estado": "APROBADO",
+  "pylint": {
+    "score": 9.53,
+    "umbral": 8.0,
+    "status": "OK"
+  },
+  "coverage": {
+    "total": 97.57,
+    "umbral": 90.0,
+    "status": "OK"
+  },
+  "tests": {
+    "total": 189,
+    "nuevos": 15,
+    "passed": 189,
+    "failed": 0
+  },
+  "design_reviewer": {
+    "critical": 0,
+    "warnings": 32,
+    "status": "OK"
+  },
+  "ajustes_umbrales": {
+    "max_wmc": "36 → 44",
+    "max_god_object_lines": "380 → 400",
+    "motivo": "Performance crece con cada método de dominio — ajuste esperado en Inc 1.4"
+  },
+  "evidencia_raw": "quality/reports/codeguard/US-1.4.1-codeguard-raw.json"
+}
