@@ -95,8 +95,9 @@ max_cyclomatic_complexity = 10
 # El CBO del analyzer incluye clases definidas en el mismo módulo (exceptions), no solo imports.
 # US-1.2.1: max_cbo=10. US-1.2.2: CBO=11→12. US-1.2.3: CBO=13→14.
 # US-1.2.4: +TipoTarjeta +TarjetaAsignada → CBO=17. Sube a 17.
-# US-1.2.5: +DNSRegistrado +EstadoInvalidoParaRegistrarDNS → CBO=19. Sube a 20 para US-1.2.5-1.2.6.
-max_cbo = 20
+# US-1.2.5: +DNSRegistrado +EstadoInvalidoParaRegistrarDNS → CBO=19. Sube a 20 para US-1.2.5.
+# US-1.2.6: +ResultadoCorregido +EstadoInvalidoParaCorregirResultado → CBO=21. Sube a 22.
+max_cbo = 22
 # WMC elevado: Performance crece con cada US de Inc 1.2 (un método por comando de dominio).
 # US-1.2.3: WMC=21. US-1.2.4: asignar_tarjeta() → WMC=27. Sube a 36 para US-1.2.4-1.2.6 completo.
 max_wmc = 36

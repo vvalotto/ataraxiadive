@@ -1,4 +1,4 @@
-"""Tests unitarios del aggregate Performance — US-1.2.1 + US-1.2.2 + US-1.2.3 + US-1.2.4 + US-1.2.5."""
+"""Tests unitarios del aggregate Performance — US-1.2.1 a US-1.2.6."""
 from __future__ import annotations
 
 from datetime import datetime
@@ -9,6 +9,7 @@ import pytest
 
 from competencia.domain.aggregates.performance import (
     EstadoInvalidoParaAsignarTarjeta,
+    EstadoInvalidoParaCorregirResultado,
     EstadoInvalidoParaLlamar,
     EstadoInvalidoParaRegistrarDNS,
     EstadoInvalidoParaRegistrarResultado,
@@ -692,3 +693,180 @@ def test_reconstitute_con_dns_registrado_restaura_estado() -> None:
     restored = Performance.reconstitute(raw)
 
     assert restored.estado == EstadoPerformance.DNS
+
+
+# ── Fixtures para corregir_resultado ─────────────────────────────────────────
+
+
+@pytest.fixture
+def performance_ejecutada() -> Performance:
+    """Performance en estado Ejecutada (AP + Llamada + Resultado + Tarjeta Blanca)."""
+    p = Performance(
+        performance_id=uuid4(),
+        competencia_id=uuid4(),
+        participante_id=uuid4(),
+        disciplina=Disciplina.STA,
+    )
+    p.registrarAP(Decimal("90"), UnidadMedida.Metros)
+    p.pull_events()
+    p.llamar(OT, posicion_grilla=1)
+    p.pull_events()
+    p.registrar_resultado(Decimal("89.5"), UnidadMedida.Metros, "juez-001")
+    p.pull_events()
+    p.asignar_tarjeta(TipoTarjeta.Blanca, "juez-001")
+    p.pull_events()
+    return p
+
+
+# ── corregir_resultado — camino feliz ─────────────────────────────────────────
+
+
+def test_corregir_resultado_emite_evento(performance_ejecutada: Performance) -> None:
+    """corregir_resultado() emite exactamente un evento ResultadoCorregido."""
+    performance_ejecutada.corregir_resultado(
+        Decimal("90.0"), UnidadMedida.Metros, "juez-001", "Error de lectura"
+    )
+
+    events = performance_ejecutada.pull_events()
+    assert len(events) == 1
+    assert events[0].event_type == "ResultadoCorregido"
+
+
+def test_corregir_resultado_actualiza_rp(performance_ejecutada: Performance) -> None:
+    """corregir_resultado() actualiza self._rp al nuevo valor."""
+    performance_ejecutada.corregir_resultado(
+        Decimal("90.0"), UnidadMedida.Metros, "juez-001", "Error de lectura"
+    )
+
+    assert performance_ejecutada.rp == Decimal("90.0")
+
+
+def test_corregir_resultado_estado_permanece_ejecutada(
+    performance_ejecutada: Performance,
+) -> None:
+    """corregir_resultado() no cambia el estado — permanece Ejecutada."""
+    performance_ejecutada.corregir_resultado(
+        Decimal("90.0"), UnidadMedida.Metros, "juez-001", "Error de lectura"
+    )
+    performance_ejecutada.pull_events()
+
+    assert performance_ejecutada.estado == EstadoPerformance.Ejecutada
+
+
+def test_corregir_resultado_payload_correcto(performance_ejecutada: Performance) -> None:
+    """El payload de ResultadoCorregido contiene valor anterior, nuevo, motivo y juez."""
+    performance_ejecutada.corregir_resultado(
+        Decimal("90.0"), UnidadMedida.Metros, "juez-007", "Corrección de planilla"
+    )
+
+    event = performance_ejecutada.pull_events()[0]
+    payload = event.to_payload()
+    assert payload["valor_rp_anterior"] == "89.5"
+    assert payload["valor_rp_nuevo"] == "90.0"
+    assert payload["motivo"] == "Corrección de planilla"
+    assert payload["registrado_por"] == "juez-007"
+
+
+# ── corregir_resultado — INV-P-12/13 ─────────────────────────────────────────
+
+
+def test_corregir_resultado_desde_anunciada_lanza_excepcion(
+    performance: Performance,
+) -> None:
+    """INV-P-12: corregir_resultado() desde estado inicial lanza EstadoInvalidoParaCorregirResultado."""
+    performance.registrarAP(Decimal("90"), UnidadMedida.Metros)
+    performance.pull_events()
+
+    with pytest.raises(EstadoInvalidoParaCorregirResultado):
+        performance.corregir_resultado(
+            Decimal("90.0"), UnidadMedida.Metros, "juez-001", "motivo"
+        )
+
+
+def test_corregir_resultado_desde_llamada_lanza_excepcion(
+    performance: Performance,
+) -> None:
+    """INV-P-12: corregir_resultado() desde Llamada lanza EstadoInvalidoParaCorregirResultado."""
+    performance.registrarAP(Decimal("90"), UnidadMedida.Metros)
+    performance.pull_events()
+    performance.llamar(OT, posicion_grilla=1)
+    performance.pull_events()
+
+    with pytest.raises(EstadoInvalidoParaCorregirResultado):
+        performance.corregir_resultado(
+            Decimal("90.0"), UnidadMedida.Metros, "juez-001", "motivo"
+        )
+
+
+def test_corregir_resultado_desde_dns_lanza_excepcion(
+    performance: Performance,
+) -> None:
+    """INV-P-13: corregir_resultado() desde DNS lanza EstadoInvalidoParaCorregirResultado."""
+    performance.registrarAP(Decimal("90"), UnidadMedida.Metros)
+    performance.pull_events()
+    performance.llamar(OT, posicion_grilla=1)
+    performance.pull_events()
+    performance.registrar_dns("juez-001")
+    performance.pull_events()
+
+    with pytest.raises(EstadoInvalidoParaCorregirResultado):
+        performance.corregir_resultado(
+            Decimal("90.0"), UnidadMedida.Metros, "juez-001", "motivo"
+        )
+
+
+def test_corregir_resultado_sin_motivo_lanza_excepcion(
+    performance_ejecutada: Performance,
+) -> None:
+    """INV-P-12: motivo ausente lanza MotivoObligatorio."""
+    with pytest.raises(MotivoObligatorio):
+        performance_ejecutada.corregir_resultado(
+            Decimal("90.0"), UnidadMedida.Metros, "juez-001", ""
+        )
+
+
+def test_corregir_resultado_estado_invalido_no_emite_eventos(
+    performance: Performance,
+) -> None:
+    """Si el estado es inválido, no quedan eventos pendientes."""
+    performance.registrarAP(Decimal("90"), UnidadMedida.Metros)
+    performance.pull_events()
+
+    with pytest.raises(EstadoInvalidoParaCorregirResultado):
+        performance.corregir_resultado(
+            Decimal("90.0"), UnidadMedida.Metros, "juez-001", "motivo"
+        )
+
+    assert performance.pull_events() == []
+
+
+# ── reconstitute con ResultadoCorregido ──────────────────────────────────────
+
+
+def test_reconstitute_con_resultado_corregido_restaura_rp() -> None:
+    """reconstitute con AP + Llamada + Resultado + Tarjeta + Corrección restaura RP corregido."""
+    p = Performance(
+        performance_id=uuid4(),
+        competencia_id=uuid4(),
+        participante_id=uuid4(),
+        disciplina=Disciplina.STA,
+    )
+    p.registrarAP(Decimal("90"), UnidadMedida.Metros)
+    ap_evs = p.pull_events()
+    p.llamar(OT, posicion_grilla=1)
+    llamar_evs = p.pull_events()
+    p.registrar_resultado(Decimal("89.5"), UnidadMedida.Metros, "juez-001")
+    resultado_evs = p.pull_events()
+    p.asignar_tarjeta(TipoTarjeta.Blanca, "juez-001")
+    tarjeta_evs = p.pull_events()
+    p.corregir_resultado(Decimal("90.0"), UnidadMedida.Metros, "juez-001", "Error de planilla")
+    correccion_evs = p.pull_events()
+
+    raw = [
+        {"event_type": e.event_type, "payload": e.to_payload()}
+        for e in ap_evs + llamar_evs + resultado_evs + tarjeta_evs + correccion_evs
+    ]
+    restored = Performance.reconstitute(raw)
+
+    assert restored.estado == EstadoPerformance.Ejecutada
+    assert restored.rp == Decimal("90.0")
