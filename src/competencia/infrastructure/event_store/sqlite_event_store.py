@@ -77,6 +77,37 @@ class SQLiteEventStore(EventStorePort):
             for row in rows
         ]
 
+    async def load_all_streams_with_prefix(
+        self, prefix: str
+    ) -> list[list[dict[str, Any]]]:
+        async with aiosqlite.connect(self._db_path) as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute(
+                """
+                SELECT stream_id, event_type, payload, version, occurred_at
+                FROM events
+                WHERE stream_id LIKE ?
+                ORDER BY stream_id, version ASC
+                """,
+                (prefix + "%",),
+            )
+            rows = await cursor.fetchall()
+
+        streams: dict[str, list[dict[str, Any]]] = {}
+        for row in rows:
+            sid = row["stream_id"]
+            if sid not in streams:
+                streams[sid] = []
+            streams[sid].append(
+                {
+                    "event_type": row["event_type"],
+                    "payload": json.loads(row["payload"]),
+                    "version": row["version"],
+                    "occurred_at": row["occurred_at"],
+                }
+            )
+        return list(streams.values())
+
     async def load_from(
         self, stream_id: str, from_version: int
     ) -> list[dict[str, Any]]:
