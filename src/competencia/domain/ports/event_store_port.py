@@ -71,3 +71,22 @@ class EventStorePort(ABC):
             Lista de streams; cada stream es una lista de eventos ordenados
             por version ASC. Streams vacíos no se incluyen.
         """
+
+    @abstractmethod
+    async def load_all_events_ordered(self, prefix: str) -> list[dict[str, Any]]:
+        """Carga todos los eventos de streams con el prefijo dado, en orden de inserción global.
+
+        A diferencia de load_all_streams_with_prefix, retorna una lista plana
+        ordenada por el id autoincrement de la tabla (orden real de inserción),
+        incluyendo el stream_id de cada evento para identificar la performance.
+
+        Usado por el endpoint GET /competencia/{id}/events para exponer la
+        traza completa del Event Store como audit log.
+
+        Args:
+            prefix: Prefijo del stream_id (ej: "performance-{competencia_id}-").
+
+        Returns:
+            Lista plana de eventos con claves: sequence, stream_id, event_type,
+            payload, occurred_at. Ordenados por sequence (id) ASC.
+        """

@@ -23,6 +23,10 @@ from competencia.application.queries.obtener_progreso import (
     ObtenerProgresoQuery,
     ProgresoCompetenciaDTO,
 )
+from competencia.application.queries.obtener_eventos import (
+    ObtenerEventosHandler,
+    ObtenerEventosQuery,
+)
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 
 router = APIRouter(prefix="/competencia", tags=["competencia"])
@@ -35,6 +39,41 @@ def get_event_store() -> SQLiteEventStore:
 
 
 EventStoreDep = Annotated[SQLiteEventStore, Depends(get_event_store)]
+
+
+@router.get("/{competencia_id}/events", response_class=JSONResponse)
+async def get_eventos(
+    competencia_id: UUID,
+    event_store: EventStoreDep,
+) -> JSONResponse:
+    """Retorna todos los eventos del Event Store para una competencia en orden de inserción.
+
+    Expone el Event Store como audit log de solo lectura. Útil para verificar
+    la traza completa de eventos y la consistencia del sistema (US-1.4.2).
+
+    Returns:
+        JSON con competencia_id, total_events y lista de eventos con
+        sequence, event_type, performance_id, occurred_at y data.
+    """
+    handler = ObtenerEventosHandler(event_store)
+    eventos = await handler.handle(ObtenerEventosQuery(competencia_id=competencia_id))
+    return JSONResponse(
+        content={
+            "competencia_id": str(competencia_id),
+            "total_events": len(eventos),
+            "events": [
+                {
+                    "sequence": dto.sequence,
+                    "event_type": dto.event_type,
+                    "performance_id": dto.performance_id,
+                    "occurred_at": dto.occurred_at,
+                    "data": dto.data,
+                }
+                for dto in eventos
+            ],
+        },
+        status_code=200,
+    )
 
 
 @router.get("/{competencia_id}/performance/actual", response_class=JSONResponse)
