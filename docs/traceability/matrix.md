@@ -167,7 +167,7 @@ en `docs/specs/spN/` antes de ejecutar `/implement-us`.
 
 | US candidata | Inc. | RFs cubiertos | Comando principal | Invariantes clave |
 |-------------|------|---------------|------------------|------------------|
-| US-1.1.1 | 1.1 | — | Setup: esqueleto BC Competencia (BC-first) + tabla `events` + health-check | — |
+| US-1.1.1 | 1.1 | — | Setup: esqueleto BC Competencia (BC-first) + tabla `events` + health-check | — | ✅ Implementada 2026-03-21 |
 | US-1.2.1 | 1.2 | RF-PR-01/02/03, RF-EJ-08 | `RegistrarAP` | INV-P-01, INV-P-02, INV-P-03, INV-P-04 | ✅ Implementada 2026-03-21 |
 | US-1.2.2 | 1.2 | RF-EJ-02 | `LlamarAtleta` | INV-P-05 | ✅ Implementada 2026-03-22 |
 | US-1.2.3 | 1.2 | RF-EJ-05 | `RegistrarResultado` | INV-P-06, INV-P-09 | ✅ Implementada 2026-03-22 |
@@ -208,6 +208,8 @@ en `docs/specs/spN/` antes de ejecutar `/implement-us`.
 | US-1.2.4 | unit/competencia/domain + unit/competencia/application + integration/competencia + features/US-1.2.4 | ✅ 92 tests (98%) |
 | US-1.2.5 | unit/competencia/domain + unit/competencia/application + integration/competencia + features/US-1.2.5 | ✅ 108 tests (98.51%) |
 | US-1.2.6 | unit/competencia/domain + unit/competencia/application + integration/competencia + features/US-1.2.6 | ✅ 128 tests (98.51%) |
+| US-1.3.1 | unit/competencia/application + integration/competencia + features/US-1.3.1 | ✅ 174 tests (97.53%) |
+| US-1.4.1 | unit/competencia/domain + unit/competencia/application + integration/competencia + features/US-1.4.1 | ✅ 189 tests (97.57%) |
 
 ---
 
