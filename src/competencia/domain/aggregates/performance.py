@@ -11,6 +11,7 @@ from shared.domain.base.aggregate_root import AggregateRoot
 from competencia.domain.events.ap_registrado import APRegistrado
 from competencia.domain.events.atleta_llamado import AtletaLlamado
 from competencia.domain.events.dns_registrado import DNSRegistrado
+from competencia.domain.events.resultado_corregido import ResultadoCorregido
 from competencia.domain.events.resultado_registrado import ResultadoRegistrado
 from competencia.domain.events.tarjeta_asignada import TarjetaAsignada
 from competencia.domain.value_objects.ap import AP
@@ -37,7 +38,12 @@ class EstadoInvalidoParaAsignarTarjeta(Exception):
 
 
 class MotivoObligatorio(Exception):
-    """Tarjeta amarilla o roja requieren motivo obligatorio (INV-P-11)."""
+    """Tarjeta amarilla o roja requieren motivo obligatorio (INV-P-11).
+    También aplica a la corrección de resultado (INV-P-12)."""
+
+
+class EstadoInvalidoParaCorregirResultado(Exception):
+    """Performance no está en estado Ejecutada — no se puede corregir el resultado (INV-P-12/13)."""
 
 
 class Performance(AggregateRoot):
@@ -239,6 +245,55 @@ class Performance(AggregateRoot):
         self._estado = EstadoPerformance.DNS
         self._record(event)
 
+    def corregir_resultado(
+        self, valor_rp: Decimal, unidad: UnidadMedida, registrado_por: str, motivo: str
+    ) -> None:
+        """Corrige el resultado efectivo (RP) de un atleta ya ejecutado.
+
+        Solo permitido si la Performance está en estado Ejecutada (INV-P-12).
+        No permitido si la Performance está en DNS (INV-P-13) — garantizado
+        estructuralmente por la verificación de Ejecutada.
+        Motivo obligatorio sin excepción (INV-P-12).
+        INV-P-15 (ventana de impugnación) diferido a SP3.
+
+        Args:
+            valor_rp: Nuevo valor del Realized Performance corregido.
+            unidad: Unidad de medida del RP corregido.
+            registrado_por: Identificador del juez que realiza la corrección.
+            motivo: Razón de la corrección — obligatorio (INV-P-12).
+
+        Raises:
+            EstadoInvalidoParaCorregirResultado: Performance no en Ejecutada (INV-P-12/13).
+            MotivoObligatorio: motivo ausente o vacío (INV-P-12).
+        """
+        if self._estado != EstadoPerformance.Ejecutada:
+            raise EstadoInvalidoParaCorregirResultado(
+                f"Performance {self._performance_id} en estado {self._estado} "
+                "— solo se puede corregir el resultado desde Ejecutada"
+            )
+        if not motivo:
+            raise MotivoObligatorio(
+                "La corrección de resultado requiere motivo obligatorio (INV-P-12)"
+            )
+
+        now = ResultadoCorregido.now()
+        event = ResultadoCorregido(
+            event_type="ResultadoCorregido",
+            aggregate_id=str(self._performance_id),
+            occurred_at=now,
+            performance_id=str(self._performance_id),
+            participante_id=str(self._participante_id),
+            disciplina=self._disciplina.value,
+            valor_rp_anterior=str(self._rp) if self._rp is not None else "",
+            valor_rp_nuevo=str(valor_rp),
+            unidad=unidad.value,
+            motivo=motivo,
+            registrado_por=registrado_por,
+            corregido_en=now.isoformat(),
+        )
+        self._rp = valor_rp
+        self._record(event)
+
     def asignar_tarjeta(
         self, tipo: TipoTarjeta, asignada_por: str, motivo: str | None = None
     ) -> None:
@@ -343,6 +398,8 @@ class Performance(AggregateRoot):
         elif event_type == "TarjetaAsignada":
             self._tarjeta = TipoTarjeta(payload["tipo"])
             self._estado = EstadoPerformance.Ejecutada
+        elif event_type == "ResultadoCorregido":
+            self._rp = Decimal(payload["valor_rp_nuevo"])
 
     @staticmethod
     def _parse_payload(payload: Any) -> dict[str, Any]:
