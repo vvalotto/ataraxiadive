@@ -1,4 +1,4 @@
-"""Tests unitarios del aggregate Performance — US-1.2.1 + US-1.2.2 + US-1.2.3 + US-1.2.4."""
+"""Tests unitarios del aggregate Performance — US-1.2.1 + US-1.2.2 + US-1.2.3 + US-1.2.4 + US-1.2.5."""
 from __future__ import annotations
 
 from datetime import datetime
@@ -10,6 +10,7 @@ import pytest
 from competencia.domain.aggregates.performance import (
     EstadoInvalidoParaAsignarTarjeta,
     EstadoInvalidoParaLlamar,
+    EstadoInvalidoParaRegistrarDNS,
     EstadoInvalidoParaRegistrarResultado,
     MotivoObligatorio,
     Performance,
@@ -593,3 +594,101 @@ def test_reconstitute_tarjeta_roja_restaura_tipo() -> None:
 
     assert restored.tarjeta == TipoTarjeta.Roja
     assert restored.estado == EstadoPerformance.Ejecutada
+
+
+# ── registrar_dns() — camino feliz ────────────────────────────────────────────
+
+
+def test_registrar_dns_emite_evento(performance_llamada: Performance) -> None:
+    """registrar_dns() emite exactamente un evento DNSRegistrado."""
+    performance_llamada.registrar_dns("juez-001")
+
+    events = performance_llamada.pull_events()
+    assert len(events) == 1
+    assert events[0].event_type == "DNSRegistrado"
+
+
+def test_registrar_dns_transiciona_a_dns(performance_llamada: Performance) -> None:
+    """registrar_dns() transiciona al estado DNS."""
+    performance_llamada.registrar_dns("juez-001")
+
+    assert performance_llamada.estado == EstadoPerformance.DNS
+
+
+def test_registrar_dns_payload_contiene_datos_correctos(
+    performance_llamada: Performance,
+) -> None:
+    """El evento DNSRegistrado contiene registradoPor y ot_programado correctos."""
+    performance_llamada.registrar_dns("juez-007")
+
+    events = performance_llamada.pull_events()
+    payload = events[0].to_payload()
+    assert payload["registrado_por"] == "juez-007"
+    assert payload["ot_programado"] == OT.isoformat()
+
+
+def test_registrar_dns_pull_events_vacia_lista(performance_llamada: Performance) -> None:
+    """pull_events() limpia la lista tras registrar DNS."""
+    performance_llamada.registrar_dns("juez-001")
+
+    performance_llamada.pull_events()
+    assert performance_llamada.pull_events() == []
+
+
+# ── registrar_dns() — INV-P-08 ────────────────────────────────────────────────
+
+
+def test_registrar_dns_desde_anunciada_lanza_excepcion(
+    performance_anunciada: Performance,
+) -> None:
+    """INV-P-08: registrar_dns() desde AnunciadaAP lanza EstadoInvalidoParaRegistrarDNS."""
+    with pytest.raises(EstadoInvalidoParaRegistrarDNS):
+        performance_anunciada.registrar_dns("juez-001")
+
+
+def test_registrar_dns_desde_resultado_registrado_lanza_excepcion(
+    performance_llamada: Performance,
+) -> None:
+    """INV-P-09: registrar_dns() desde ResultadoRegistrado lanza EstadoInvalidoParaRegistrarDNS."""
+    performance_llamada.registrar_resultado(Decimal("50.5"), UnidadMedida.Metros, "juez-001")
+    performance_llamada.pull_events()
+
+    with pytest.raises(EstadoInvalidoParaRegistrarDNS):
+        performance_llamada.registrar_dns("juez-001")
+
+
+def test_registrar_dns_estado_invalido_no_emite_eventos(
+    performance_anunciada: Performance,
+) -> None:
+    """Si el estado es inválido, no quedan eventos pendientes."""
+    with pytest.raises(EstadoInvalidoParaRegistrarDNS):
+        performance_anunciada.registrar_dns("juez-001")
+
+    assert performance_anunciada.pull_events() == []
+
+
+# ── reconstitute con DNSRegistrado ───────────────────────────────────────────
+
+
+def test_reconstitute_con_dns_registrado_restaura_estado() -> None:
+    """reconstitute con AP + Llamado + DNS restaura estado DNS."""
+    p = Performance(
+        performance_id=uuid4(),
+        competencia_id=uuid4(),
+        participante_id=uuid4(),
+        disciplina=Disciplina.DNF,
+    )
+    p.registrarAP(Decimal("50"), UnidadMedida.Metros)
+    ap_evs = p.pull_events()
+    p.llamar(OT, posicion_grilla=1)
+    llamar_evs = p.pull_events()
+    p.registrar_dns("juez-001")
+    dns_evs = p.pull_events()
+
+    raw = [
+        {"event_type": e.event_type, "payload": e.to_payload()}
+        for e in ap_evs + llamar_evs + dns_evs
+    ]
+    restored = Performance.reconstitute(raw)
+
+    assert restored.estado == EstadoPerformance.DNS
