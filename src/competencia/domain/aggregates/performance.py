@@ -10,6 +10,7 @@ from uuid import UUID
 from shared.domain.base.aggregate_root import AggregateRoot
 from competencia.domain.events.ap_registrado import APRegistrado
 from competencia.domain.events.atleta_llamado import AtletaLlamado
+from competencia.domain.events.dns_registrado import DNSRegistrado
 from competencia.domain.events.resultado_registrado import ResultadoRegistrado
 from competencia.domain.events.tarjeta_asignada import TarjetaAsignada
 from competencia.domain.value_objects.ap import AP
@@ -25,6 +26,10 @@ class EstadoInvalidoParaLlamar(Exception):
 
 class EstadoInvalidoParaRegistrarResultado(Exception):
     """Performance no está en estado Llamada — no se puede registrar el resultado."""
+
+
+class EstadoInvalidoParaRegistrarDNS(Exception):
+    """Performance no está en estado Llamada — no se puede registrar DNS (INV-P-08)."""
 
 
 class EstadoInvalidoParaAsignarTarjeta(Exception):
@@ -65,6 +70,7 @@ class Performance(AggregateRoot):
         self._rp: Decimal | None = None
         self._tarjeta: TipoTarjeta | None = None
         self._estado: EstadoPerformance | None = None
+        self._ot_programado: datetime | None = None
 
     # ── Propiedades ───────────────────────────────────────────────────────────
 
@@ -158,6 +164,7 @@ class Performance(AggregateRoot):
             llamado_en=now.isoformat(),
         )
         self._estado = EstadoPerformance.Llamada
+        self._ot_programado = ot_programado
         self._record(event)
 
     def registrar_resultado(
@@ -196,6 +203,40 @@ class Performance(AggregateRoot):
         )
         self._rp = valor_rp
         self._estado = EstadoPerformance.ResultadoRegistrado
+        self._record(event)
+
+    def registrar_dns(self, registrado_por: str) -> None:
+        """Registra que el atleta no se presentó al Official Top (DNS).
+
+        Verifica que la Performance esté en estado Llamada (INV-P-08).
+        La exclusión mutua con ResultadoRegistrado (INV-P-09) se garantiza
+        estructuralmente: desde Llamada no es posible que ya exista un RP.
+
+        Args:
+            registrado_por: Identificador del juez que registra el DNS.
+
+        Raises:
+            EstadoInvalidoParaRegistrarDNS: Si la Performance no está en Llamada (INV-P-08).
+        """
+        if self._estado != EstadoPerformance.Llamada:
+            raise EstadoInvalidoParaRegistrarDNS(
+                f"Performance {self._performance_id} en estado {self._estado} "
+                "— solo se puede registrar DNS desde Llamada"
+            )
+
+        now = DNSRegistrado.now()
+        event = DNSRegistrado(
+            event_type="DNSRegistrado",
+            aggregate_id=str(self._performance_id),
+            occurred_at=now,
+            performance_id=str(self._performance_id),
+            participante_id=str(self._participante_id),
+            disciplina=self._disciplina.value,
+            ot_programado=self._ot_programado.isoformat() if self._ot_programado else "",
+            registrado_por=registrado_por,
+            registrado_en=now.isoformat(),
+        )
+        self._estado = EstadoPerformance.DNS
         self._record(event)
 
     def asignar_tarjeta(
@@ -293,6 +334,7 @@ class Performance(AggregateRoot):
             self._estado = EstadoPerformance.AnunciadaAP
         elif event_type == "AtletaLlamado":
             self._estado = EstadoPerformance.Llamada
+            self._ot_programado = datetime.fromisoformat(payload["ot_programado"])
         elif event_type == "ResultadoRegistrado":
             self._rp = Decimal(payload["valor_rp"])
             self._estado = EstadoPerformance.ResultadoRegistrado
