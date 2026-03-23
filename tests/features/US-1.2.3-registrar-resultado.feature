@@ -1,4 +1,3 @@
-# language: es
 @US-1.2.3
 Feature: Registrar Resultado
   Como juez,

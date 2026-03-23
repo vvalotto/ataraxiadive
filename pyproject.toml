@@ -62,6 +62,7 @@ disallow_untyped_defs = true
 testpaths = ["tests"]
 asyncio_mode = "auto"
 pythonpath = ["src"]
+python_files = ["test_*.py", "*_steps.py"]
 addopts = "--cov=src --cov-report=term-missing --cov-fail-under=90"
 
 # ── Coverage ───────────────────────────────────────────────────────────────

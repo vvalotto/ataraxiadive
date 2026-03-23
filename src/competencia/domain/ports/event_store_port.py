@@ -54,3 +54,20 @@ class EventStorePort(ABC):
         Returns:
             Lista de eventos desde from_version en adelante.
         """
+
+    @abstractmethod
+    async def load_all_streams_with_prefix(
+        self, prefix: str
+    ) -> list[list[dict[str, Any]]]:
+        """Carga todos los streams cuyo stream_id comienza con prefix.
+
+        Usado por los query handlers para proyectar read models de una
+        competencia completa sin conocer los stream_ids individuales.
+
+        Args:
+            prefix: Prefijo del stream_id (ej: "performance-{competencia_id}-").
+
+        Returns:
+            Lista de streams; cada stream es una lista de eventos ordenados
+            por version ASC. Streams vacíos no se incluyen.
+        """

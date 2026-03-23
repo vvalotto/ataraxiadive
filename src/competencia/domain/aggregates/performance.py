@@ -86,6 +86,11 @@ class Performance(AggregateRoot):
         return self._performance_id
 
     @property
+    def participante_id(self) -> UUID:
+        """Identificador del participante asociado a esta Performance."""
+        return self._participante_id
+
+    @property
     def estado(self) -> EstadoPerformance | None:
         """Estado actual de la Performance."""
         return self._estado
