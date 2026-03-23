@@ -1,0 +1,57 @@
+{
+  "us_id": "US-1.4.2",
+  "us_title": "Flujo Completo E2E: AP → Tarjeta",
+  "fecha": "2026-03-23",
+  "branch": "feature/US-1.4.2-flujo-e2e",
+
+  "pylint": {
+    "score": 9.55,
+    "umbral_minimo": 8.0,
+    "estado": "OK",
+    "nota": "+0.02 vs US-1.4.1 (9.53)"
+  },
+
+  "coverage": {
+    "total_percent": 98.0,
+    "umbral_minimo": 90.0,
+    "estado": "OK",
+    "tests_pasando": 207,
+    "tests_fallando": 0
+  },
+
+  "codeguard": {
+    "errores": 0,
+    "advertencias": 3,
+    "informativos": 118,
+    "estado": "OK",
+    "nota": "Advertencias PEP8 en performance.py (preexistentes) — no en archivos US-1.4.2"
+  },
+
+  "complejidad_ciclomatica": {
+    "max_por_funcion": 10,
+    "estado": "OK",
+    "nota": "Todos los métodos nuevos CC ≤ 3"
+  },
+
+  "resumen": {
+    "nuevos_archivos": [
+      "src/competencia/application/queries/obtener_eventos.py",
+      "tests/unit/competencia/test_obtener_eventos.py",
+      "tests/integration/competencia/test_flujo_e2e.py",
+      "tests/features/steps/flujo_e2e_steps.py",
+      "tests/features/US-1.4.2-flujo-e2e.feature"
+    ],
+    "archivos_modificados": [
+      "src/competencia/domain/ports/event_store_port.py",
+      "src/competencia/infrastructure/event_store/sqlite_event_store.py",
+      "src/competencia/api/router.py"
+    ],
+    "tests_nuevos": {
+      "unit": 5,
+      "integration": 7,
+      "bdd": 6,
+      "total": 18
+    },
+    "gate_ok": true
+  }
+}

@@ -51,7 +51,9 @@ class ObtenerEventosHandler:  # pylint: disable=too-few-public-methods
         stream_id: str = event["stream_id"]
         # stream_id tiene forma "performance-{competencia_id}-{performance_id}"
         # Se stripea el prefijo para obtener solo el performance_id
-        performance_id = stream_id.removeprefix(prefix) if stream_id.startswith(prefix) else stream_id
+        performance_id = (
+            stream_id.removeprefix(prefix) if stream_id.startswith(prefix) else stream_id
+        )
         return EventoDTO(
             sequence=event["sequence"],
             event_type=event["event_type"],
