@@ -42,6 +42,10 @@ class MotivoObligatorio(Exception):
     También aplica a la corrección de resultado (INV-P-12)."""
 
 
+class DistanciaBlackoutObligatoria(Exception):
+    """Tarjeta roja con motivo black-out requiere distancia_blackout > 0 (RF-EJ-07)."""
+
+
 class EstadoInvalidoParaCorregirResultado(Exception):
     """Performance no está en estado Ejecutada — no se puede corregir el resultado (INV-P-12/13)."""
 
@@ -77,6 +81,7 @@ class Performance(AggregateRoot):
         self._tarjeta: TipoTarjeta | None = None
         self._estado: EstadoPerformance | None = None
         self._ot_programado: datetime | None = None
+        self._distancia_blackout: Decimal | None = None
 
     # ── Propiedades ───────────────────────────────────────────────────────────
 
@@ -109,6 +114,11 @@ class Performance(AggregateRoot):
     def tarjeta(self) -> TipoTarjeta | None:
         """Tarjeta asignada, o None si aún no fue asignada."""
         return self._tarjeta
+
+    @property
+    def distancia_blackout(self) -> Decimal | None:
+        """Distancia alcanzada en black-out, o None si no aplica."""
+        return self._distancia_blackout
 
     # ── Comandos de dominio ───────────────────────────────────────────────────
 
@@ -300,21 +310,28 @@ class Performance(AggregateRoot):
         self._record(event)
 
     def asignar_tarjeta(
-        self, tipo: TipoTarjeta, asignada_por: str, motivo: str | None = None
+        self,
+        tipo: TipoTarjeta,
+        asignada_por: str,
+        motivo: str | None = None,
+        distancia_blackout: Decimal | None = None,
     ) -> None:
         """Asigna la tarjeta al atleta tras registrar el resultado.
 
         Verifica que la Performance esté en estado ResultadoRegistrado (INV-P-07).
         Exige motivo si la tarjeta es Amarilla o Roja (INV-P-11).
+        Exige distancia_blackout > 0 si motivo == "black-out" (RF-EJ-07).
 
         Args:
             tipo: Tipo de tarjeta — Blanca, Amarilla o Roja.
             asignada_por: Identificador del juez que asigna la tarjeta.
             motivo: Motivo obligatorio para Amarilla y Roja (INV-P-11).
+            distancia_blackout: Distancia alcanzada — obligatoria si motivo == "black-out" (RF-EJ-07).
 
         Raises:
             EstadoInvalidoParaAsignarTarjeta: Performance no en ResultadoRegistrado (INV-P-07).
             MotivoObligatorio: tarjeta Amarilla o Roja sin motivo (INV-P-11).
+            DistanciaBlackoutObligatoria: motivo "black-out" sin distancia o distancia <= 0 (RF-EJ-07).
         """
         if self._estado != EstadoPerformance.ResultadoRegistrado:
             raise EstadoInvalidoParaAsignarTarjeta(
@@ -324,6 +341,10 @@ class Performance(AggregateRoot):
         if tipo in (TipoTarjeta.Amarilla, TipoTarjeta.Roja) and not motivo:
             raise MotivoObligatorio(
                 f"Tarjeta {tipo} requiere motivo obligatorio (INV-P-11)"
+            )
+        if motivo == "black-out" and (distancia_blackout is None or distancia_blackout <= 0):
+            raise DistanciaBlackoutObligatoria(
+                "Tarjeta roja por black-out requiere distancia_blackout > 0 (RF-EJ-07)"
             )
 
         now = TarjetaAsignada.now()
@@ -338,8 +359,10 @@ class Performance(AggregateRoot):
             motivo=motivo,
             asignada_por=asignada_por,
             asignada_en=now.isoformat(),
+            distancia_blackout=str(distancia_blackout) if distancia_blackout else None,
         )
         self._tarjeta = tipo
+        self._distancia_blackout = distancia_blackout
         self._estado = EstadoPerformance.Ejecutada
         self._record(event)
 
@@ -403,6 +426,8 @@ class Performance(AggregateRoot):
         elif event_type == "TarjetaAsignada":
             self._tarjeta = TipoTarjeta(payload["tipo"])
             self._estado = EstadoPerformance.Ejecutada
+            if payload.get("distancia_blackout"):
+                self._distancia_blackout = Decimal(payload["distancia_blackout"])
         elif event_type == "ResultadoCorregido":
             self._rp = Decimal(payload["valor_rp_nuevo"])
 

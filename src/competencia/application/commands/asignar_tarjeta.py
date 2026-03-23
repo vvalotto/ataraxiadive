@@ -1,7 +1,8 @@
-"""Command y Handler para AsignarTarjeta — US-1.2.4."""
+"""Command y Handler para AsignarTarjeta — US-1.2.4 / US-1.4.1."""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from decimal import Decimal
 from uuid import UUID
 
 from competencia.domain.aggregates.performance import Performance
@@ -39,6 +40,7 @@ class AsignarTarjetaCommand:
     tipo: TipoTarjeta
     asignada_por: str
     motivo: str | None = field(default=None)
+    distancia_blackout: Decimal | None = field(default=None)
 
 
 # ── Handler ───────────────────────────────────────────────────────────────────
@@ -82,7 +84,9 @@ class AsignarTarjetaHandler:
         performance = Performance.reconstitute(events)
 
         # Ejecuta (lanza EstadoInvalidoParaAsignarTarjeta o MotivoObligatorio si aplica)
-        performance.asignar_tarjeta(command.tipo, command.asignada_por, command.motivo)
+        performance.asignar_tarjeta(
+            command.tipo, command.asignada_por, command.motivo, command.distancia_blackout
+        )
 
         # Persistir eventos pendientes
         for event in performance.pull_events():

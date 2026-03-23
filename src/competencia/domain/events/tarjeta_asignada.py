@@ -31,6 +31,7 @@ class TarjetaAsignada(DomainEvent):
     motivo: str | None
     asignada_por: str
     asignada_en: str
+    distancia_blackout: str | None = None
 
     def to_payload(self) -> dict[str, Any]:
         """Serializa el evento a payload JSON-serializable para el Event Store."""
@@ -42,6 +43,7 @@ class TarjetaAsignada(DomainEvent):
             "motivo": self.motivo,
             "asignada_por": self.asignada_por,
             "asignada_en": self.asignada_en,
+            "distancia_blackout": self.distancia_blackout,
             "occurred_at": self.occurred_at.isoformat(),
         }
 
@@ -59,4 +61,5 @@ class TarjetaAsignada(DomainEvent):
             motivo=payload.get("motivo"),
             asignada_por=payload["asignada_por"],
             asignada_en=payload["asignada_en"],
+            distancia_blackout=payload.get("distancia_blackout"),
         )
