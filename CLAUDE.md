@@ -358,7 +358,7 @@ pytest tests/features/
 
 # Calidad
 codeguard src/                                           # análisis estático (Fase 7 /implement-us)
-designreviewer src/                                      # diseño — bloquea si CRITICAL (pre-push a develop)
+designreviewer src/ --config pyproject.toml              # diseño — bloquea si CRITICAL (pre-push a develop)
 architectanalyst src/ --sprint-id BL-NNN --format json  # arquitectura — manual al cerrar SP
 
 # Formato
