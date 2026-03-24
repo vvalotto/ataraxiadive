@@ -161,6 +161,7 @@ _(se completa al cerrar SP1)_
 - El StubCompetenciaEstadoAdapter permitió avanzar en el dominio sin bloquear en infraestructura externa.
 - El DoD SP1 (5 performances, Event Store con traza completa, Read Models consistentes) se verificó completamente con el test E2E de la US-1.4.2.
 - Los artefactos físicos por fase (HITO-8) eliminaron el problema de fases "fantasmas" sin evidencia en disco.
+- El UAT híbrido en dos capas (pytest + HTTP) permitió generar evidencia formal del cierre de SP1 aunque los comandos no estén expuestos via HTTP (HITO-9). El seed script como especificación ejecutable del escenario DoD resultó más preciso que una colección Postman.
 
 ### ¿Qué fue más difícil de lo esperado?
 
@@ -173,6 +174,7 @@ _(se completa al cerrar SP1)_
 - Documentar `--config pyproject.toml` como obligatorio en todos los contextos donde se invoque DesignReviewer.
 - En BDD: verificar el tipo de paso antes de implementar step definitions para evitar errores de contexto pytest-bdd.
 - Evaluar si el StubCompetenciaEstadoAdapter debe migrar a un puerto formal antes de SP2.
+- En SP2 los comandos estarán expuestos via HTTP: el UAT de SP2 puede ser un flujo HTTP completo (Capa 2 con POST reales), eliminando la necesidad del seed script como intermediario.
 
 ### Métricas finales SP1
 
