@@ -17,7 +17,7 @@
 | **1.1** | Fundación técnica | Setup | — (tarea técnica) | `GET /health` → 200 · `competencia.db` con tabla `events` · todas las capas scaffold |
 | **1.2** | El dominio habla | Domain | US-1.2.1 a US-1.2.6 | Tests unitarios del aggregate Performance pasan · EventStore persiste y recarga eventos |
 | **1.3** | El juez ve y toca | API + Read Models | US-1.3.1 | Endpoints del flujo del juez responden · Read Models retornan datos correctos |
-| **1.4** | Todo conectado | E2E | US-1.4.1 | Flujo AP → llamar → resultado → tarjeta ejecutable desde el celular |
+| **1.4** | Todo conectado | E2E | US-1.4.1, US-1.4.2 | Black-out con distancia · Flujo AP → llamar → resultado → tarjeta ejecutable desde el celular |
 
 ---
 
@@ -197,9 +197,35 @@ todo lo demás crezca encima.
 
 ## Incremento 1.4 — Todo Conectado
 
-**Objetivo:** flujo end-to-end verificable desde el celular.
+**Objetivo:** black-out con distancia + flujo end-to-end verificable desde el celular.
 
-### US-1.4.1 — Flujo Completo AP → Tarjeta
+### US-1.4.1 — Black-out con Distancia
+
+| Campo | Valor |
+|-------|-------|
+| **Comando** | `AsignarTarjeta` (variante black-out) |
+| **Evento** | `TarjetaAsignada` (roja, con `distancia_blackout`) |
+| **Actor** | Juez |
+| **RFs** | RF-EJ-07 |
+| **Invariantes** | INV-P-07, INV-P-11 |
+
+**Precondición:** Performance en estado `ResultadoRegistrado`.
+
+**Postcondición:** `TarjetaAsignada` persiste con `tipo = roja`, `motivo = "black-out"` y `distancia_blackout` obligatoria.
+
+**Invariantes:**
+- `distancia_blackout` es obligatoria cuando `motivo = "black-out"`
+- `distancia_blackout > 0`
+
+---
+
+### US-1.4.2 — Flujo Completo E2E: AP → Tarjeta
+
+| Campo | Valor |
+|-------|-------|
+| **Actor** | Juez (desde el celular) |
+| **RFs** | RF-EJ-05, RF-EJ-10 |
+| **Invariantes** | INV-P-05..10 |
 
 **Escenario de DoD:**
 1. 5 atletas con AP registrado (datos hardcodeados)
@@ -210,9 +236,6 @@ todo lo demás crezca encima.
 
 **Verificación:** `GET /competencia/{id}/events` retorna la secuencia de eventos en orden.
 Los Read Models son consistentes con el Event Store.
-
-> **Black-out:** se registra como tarjeta roja con `motivo = "black-out"`.
-> No requiere comando separado en v1 — es una convención de uso de `AsignarTarjeta`.
 
 ---
 

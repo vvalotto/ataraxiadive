@@ -159,4 +159,16 @@ Al finalizar:
 ✅ Estado final documentado (APROBADO / CON_WARNINGS / RECHAZADO)
 ⏭️  DesignReviewer corre automáticamente al hacer push (pre-push hook) — no requiere acción manual aquí
 
+---
+
+## 🔒 Gate de cierre — OBLIGATORIO antes de continuar
+
+**Mostrar en el chat ≠ persistir en disco. Verificar con la herramienta Read o Glob:**
+
+- [ ] `quality/reports/codeguard/{US_ID}-quality.json` existe en disco
+- [ ] `quality/reports/codeguard/{US_ID}-codeguard-raw.json` existe en disco
+
+Si alguno falta → crearlo ahora con Write antes de avanzar a Fase 8.
+**No declarar esta fase completada si los archivos no están en disco.**
+
 **Próxima fase:** Fase 8 — Documentación

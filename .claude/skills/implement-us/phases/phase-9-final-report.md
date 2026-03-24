@@ -509,6 +509,17 @@ Al finalizar esta fase:
 ✅ Próximos pasos identificados
 ✅ Tracking finalizado y datos guardados
 
+---
+
+## 🔒 Gate de cierre — OBLIGATORIO antes de declarar el skill completo
+
+**Mostrar en el chat ≠ persistir en disco. Verificar con la herramienta Read o Glob:**
+
+- [ ] `docs/reports/{US_ID}-report.md` existe en disco
+
+Si falta → crearlo ahora con Write antes de continuar.
+**El skill implement-us NO está completo hasta que este archivo exista en disco.**
+
 **El skill implement-us ha completado todas sus fases.** ✅
 
 ---

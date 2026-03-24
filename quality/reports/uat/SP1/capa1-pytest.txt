@@ -1,0 +1,18 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0 -- /Users/victor/PycharmProjects/ataraxiadive/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /Users/victor/PycharmProjects/ataraxiadive
+configfile: pyproject.toml
+plugins: anyio-4.12.1, asyncio-1.3.0, bdd-8.1.0, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 7 items
+
+tests/integration/competencia/test_flujo_e2e.py::test_get_events_retorna_traza_completa PASSED [ 14%]
+tests/integration/competencia/test_flujo_e2e.py::test_get_events_orden_de_secuencia PASSED [ 28%]
+tests/integration/competencia/test_flujo_e2e.py::test_get_events_campos_obligatorios PASSED [ 42%]
+tests/integration/competencia/test_flujo_e2e.py::test_get_events_incluye_tipos_esperados PASSED [ 57%]
+tests/integration/competencia/test_flujo_e2e.py::test_progreso_consistente_con_event_store PASSED [ 71%]
+tests/integration/competencia/test_flujo_e2e.py::test_blackout_con_distancia_en_event_store PASSED [ 85%]
+tests/integration/competencia/test_flujo_e2e.py::test_get_events_sin_eventos_retorna_lista_vacia PASSED [100%]
+
+============================== 7 passed in 2.30s ===============================

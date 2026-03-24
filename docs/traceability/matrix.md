@@ -167,16 +167,16 @@ en `docs/specs/spN/` antes de ejecutar `/implement-us`.
 
 | US candidata | Inc. | RFs cubiertos | Comando principal | Invariantes clave |
 |-------------|------|---------------|------------------|------------------|
-| US-1.1.1 | 1.1 | — | Setup: esqueleto BC Competencia (BC-first) + tabla `events` + health-check | — |
+| US-1.1.1 | 1.1 | — | Setup: esqueleto BC Competencia (BC-first) + tabla `events` + health-check | — | ✅ Implementada 2026-03-21 |
 | US-1.2.1 | 1.2 | RF-PR-01/02/03, RF-EJ-08 | `RegistrarAP` | INV-P-01, INV-P-02, INV-P-03, INV-P-04 | ✅ Implementada 2026-03-21 |
 | US-1.2.2 | 1.2 | RF-EJ-02 | `LlamarAtleta` | INV-P-05 | ✅ Implementada 2026-03-22 |
 | US-1.2.3 | 1.2 | RF-EJ-05 | `RegistrarResultado` | INV-P-06, INV-P-09 | ✅ Implementada 2026-03-22 |
-| US-1.2.4 | 1.2 | RF-EJ-10 | `AsignarTarjeta` (blanca/roja) | INV-P-07, INV-P-11 |
-| US-1.2.5 | 1.2 | RF-EJ-02 | `RegistrarDNS` | INV-P-08, INV-P-09 |
-| US-1.2.6 | 1.2 | RF-EJ-09 | `CorregirResultado` | INV-P-12, INV-P-13, INV-P-14 |
-| US-1.3.1 | 1.3 | RF-EJ-05 | Interfaz juez mobile-first — 6 botones del flujo | — |
-| US-1.4.1 | 1.4 | RF-EJ-07 | `AsignarTarjeta` roja + black-out con distancia | INV-P-07, INV-P-11 |
-| US-1.4.2 | 1.4 | RF-EJ-05/10 | Flujo end-to-end: AP → llamar → resultado → tarjeta | INV-P-05..10 |
+| US-1.2.4 | 1.2 | RF-EJ-10 | `AsignarTarjeta` (blanca/roja) | INV-P-07, INV-P-10, INV-P-11 | ✅ Implementada 2026-03-22 |
+| US-1.2.5 | 1.2 | RF-EJ-02 | `RegistrarDNS` | INV-P-08, INV-P-09 | ✅ Implementada 2026-03-23 |
+| US-1.2.6 | 1.2 | RF-EJ-06 | `CorregirResultado` | INV-P-12, INV-P-13 (INV-P-15 → SP3) | ✅ Implementada 2026-03-23 |
+| US-1.3.1 | 1.3 | RF-EJ-05 | Read Models: `PerformanceActual`, `ProximosAtletas`, `ProgresoCompetencia` — 3 GET endpoints | — | ✅ Implementada 2026-03-23 |
+| US-1.4.1 | 1.4 | RF-EJ-07 | `AsignarTarjeta` roja + black-out con distancia | INV-P-07, INV-P-11 | ✅ Implementada 2026-03-23 |
+| US-1.4.2 | 1.4 | RF-EJ-05/10 | Flujo end-to-end: AP → llamar → resultado → tarjeta + `GET /events` audit log | INV-P-05..10 | ✅ Implementada 2026-03-23 |
 
 ---
 
@@ -205,6 +205,12 @@ en `docs/specs/spN/` antes de ejecutar `/implement-us`.
 | US-1.2.1 | unit/competencia/domain + unit/competencia/application + unit/competencia/infrastructure + integration/competencia + features/US-1.2.1 | ✅ 34 tests (92%) |
 | US-1.2.2 | unit/competencia/domain + unit/competencia/application + unit/competencia/infrastructure + integration/competencia + features/US-1.2.2 | ✅ 41 tests (92%) |
 | US-1.2.3 | unit/competencia/domain + unit/competencia/application + integration/competencia + features/US-1.2.3 | ✅ 65 tests (98%) |
+| US-1.2.4 | unit/competencia/domain + unit/competencia/application + integration/competencia + features/US-1.2.4 | ✅ 92 tests (98%) |
+| US-1.2.5 | unit/competencia/domain + unit/competencia/application + integration/competencia + features/US-1.2.5 | ✅ 108 tests (98.51%) |
+| US-1.2.6 | unit/competencia/domain + unit/competencia/application + integration/competencia + features/US-1.2.6 | ✅ 128 tests (98.51%) |
+| US-1.3.1 | unit/competencia/application + integration/competencia + features/US-1.3.1 | ✅ 174 tests (97.53%) |
+| US-1.4.1 | unit/competencia/domain + unit/competencia/application + integration/competencia + features/US-1.4.1 | ✅ 189 tests (97.57%) |
+| US-1.4.2 | unit/competencia/application + integration/competencia + features/US-1.4.2 | ✅ 207 tests (98%) |
 
 ---
 

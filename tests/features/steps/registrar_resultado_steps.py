@@ -117,7 +117,26 @@ def step_performance_llamada(ctx: dict) -> None:  # type: ignore[type-arg]
 
 @given('la performance del atleta está en estado "AnunciadaAP"')
 def step_performance_anunciada_ap_resultado(ctx: dict) -> None:  # type: ignore[type-arg]
-    pass  # Background ya registró el AP → estado AnunciadaAP (sin llamar)
+    """Resetea con store fresco y lleva la performance solo hasta AnunciadaAP."""
+    import tempfile
+    fresh_store = _make_event_store(tempfile.mkdtemp())
+    cid = uuid4()
+    pid = uuid4()
+    ctx["event_store"] = fresh_store
+    ctx["competencia_id"] = cid
+    ctx["participante_id"] = pid
+    sp = ctx["estado_port"]
+    asyncio.run(
+        RegistrarAPHandler(fresh_store, sp).handle(
+            RegistrarAPCommand(
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=ctx["disciplina"],
+                valor_ap=Decimal("50"),
+                unidad=UnidadMedida.Metros,
+            )
+        )
+    )
 
 
 @given('la performance del atleta está en estado "DNS"')
