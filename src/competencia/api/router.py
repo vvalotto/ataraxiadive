@@ -8,6 +8,13 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
+from competencia.application.commands.configurar_intervalo_ot import (
+    ConfigurarIntervaloOTHandler,
+)
+from competencia.application.queries.obtener_eventos import (
+    ObtenerEventosHandler,
+    ObtenerEventosQuery,
+)
 from competencia.application.queries.obtener_performance_actual import (
     ObtenerPerformanceActualHandler,
     ObtenerPerformanceActualQuery,
@@ -23,13 +30,12 @@ from competencia.application.queries.obtener_progreso import (
     ObtenerProgresoQuery,
     ProgresoCompetenciaDTO,
 )
-from competencia.application.queries.obtener_eventos import (
-    ObtenerEventosHandler,
-    ObtenerEventosQuery,
-)
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 
 router = APIRouter(prefix="/competencia", tags=["competencia"])
+
+
+# ── Dependency providers ──────────────────────────────────────────────────────
 
 
 def get_event_store() -> SQLiteEventStore:
@@ -41,10 +47,65 @@ def get_event_store() -> SQLiteEventStore:
 EventStoreDep = Annotated[SQLiteEventStore, Depends(get_event_store)]
 
 
+def get_obtener_eventos_handler(
+    event_store: EventStoreDep,
+) -> ObtenerEventosHandler:
+    """Dependency: handler de consulta de eventos."""
+    return ObtenerEventosHandler(event_store)
+
+
+def get_obtener_performance_actual_handler(
+    event_store: EventStoreDep,
+) -> ObtenerPerformanceActualHandler:
+    """Dependency: handler de performance actual."""
+    return ObtenerPerformanceActualHandler(event_store)
+
+
+def get_obtener_proximas_performances_handler(
+    event_store: EventStoreDep,
+) -> ObtenerProximasPerformancesHandler:
+    """Dependency: handler de próximas performances."""
+    return ObtenerProximasPerformancesHandler(event_store)
+
+
+def get_obtener_progreso_handler(
+    event_store: EventStoreDep,
+) -> ObtenerProgresoHandler:
+    """Dependency: handler de progreso de competencia."""
+    return ObtenerProgresoHandler(event_store)
+
+
+def get_configurar_intervalo_ot_handler(
+    event_store: EventStoreDep,
+) -> ConfigurarIntervaloOTHandler:
+    """Dependency: handler para configurar intervalo OT."""
+    return ConfigurarIntervaloOTHandler(event_store)
+
+
+ObtenerEventosHandlerDep = Annotated[
+    ObtenerEventosHandler, Depends(get_obtener_eventos_handler)
+]
+ObtenerPerformanceActualHandlerDep = Annotated[
+    ObtenerPerformanceActualHandler, Depends(get_obtener_performance_actual_handler)
+]
+ObtenerProximasPerformancesHandlerDep = Annotated[
+    ObtenerProximasPerformancesHandler, Depends(get_obtener_proximas_performances_handler)
+]
+ObtenerProgresoHandlerDep = Annotated[
+    ObtenerProgresoHandler, Depends(get_obtener_progreso_handler)
+]
+ConfigurarIntervaloOTHandlerDep = Annotated[
+    ConfigurarIntervaloOTHandler, Depends(get_configurar_intervalo_ot_handler)
+]
+
+
+# ── Endpoints ─────────────────────────────────────────────────────────────────
+
+
 @router.get("/{competencia_id}/events", response_class=JSONResponse)
 async def get_eventos(
     competencia_id: UUID,
-    event_store: EventStoreDep,
+    handler: ObtenerEventosHandlerDep,
 ) -> JSONResponse:
     """Retorna todos los eventos del Event Store para una competencia en orden de inserción.
 
@@ -55,7 +116,6 @@ async def get_eventos(
         JSON con competencia_id, total_events y lista de eventos con
         sequence, event_type, performance_id, occurred_at y data.
     """
-    handler = ObtenerEventosHandler(event_store)
     eventos = await handler.handle(ObtenerEventosQuery(competencia_id=competencia_id))
     return JSONResponse(
         content={
@@ -79,7 +139,7 @@ async def get_eventos(
 @router.get("/{competencia_id}/performance/actual", response_class=JSONResponse)
 async def get_performance_actual(
     competencia_id: UUID,
-    event_store: EventStoreDep,
+    handler: ObtenerPerformanceActualHandlerDep,
 ) -> PerformanceActualDTO | None:
     """Retorna la performance que el juez está evaluando en este momento.
 
@@ -87,8 +147,9 @@ async def get_performance_actual(
         PerformanceActualDTO si hay una performance en estado Llamada o
         ResultadoRegistrado, null si no hay ninguna activa.
     """
-    handler = ObtenerPerformanceActualHandler(event_store)
-    result = await handler.handle(ObtenerPerformanceActualQuery(competencia_id=competencia_id))
+    result = await handler.handle(
+        ObtenerPerformanceActualQuery(competencia_id=competencia_id)
+    )
     if result is None:
         return JSONResponse(content=None, status_code=200)
     return JSONResponse(
@@ -107,14 +168,13 @@ async def get_performance_actual(
 @router.get("/{competencia_id}/performance/proximas", response_class=JSONResponse)
 async def get_proximas_performances(
     competencia_id: UUID,
-    event_store: EventStoreDep,
+    handler: ObtenerProximasPerformancesHandlerDep,
 ) -> list[ProximoAtletaDTO]:
     """Retorna los próximos 3 atletas a competir (en estado AnunciadaAP).
 
     Returns:
         Lista de hasta 3 ProximoAtletaDTO ordenados por momento de registro (SP1).
     """
-    handler = ObtenerProximasPerformancesHandler(event_store)
     result = await handler.handle(
         ObtenerProximasPerformancesQuery(competencia_id=competencia_id)
     )
@@ -135,14 +195,13 @@ async def get_proximas_performances(
 @router.get("/{competencia_id}/progreso", response_class=JSONResponse)
 async def get_progreso(
     competencia_id: UUID,
-    event_store: EventStoreDep,
+    handler: ObtenerProgresoHandlerDep,
 ) -> ProgresoCompetenciaDTO:
     """Retorna el progreso de ejecución de la competencia.
 
     Returns:
         ProgresoCompetenciaDTO con total, ejecutadas, dns_count y completadas.
     """
-    handler = ObtenerProgresoHandler(event_store)
     result = await handler.handle(ObtenerProgresoQuery(competencia_id=competencia_id))
     return JSONResponse(
         content={
