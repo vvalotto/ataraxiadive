@@ -1,6 +1,6 @@
 # INC-2.0: Exception Management — domain/exceptions.py + exception_handlers.py
 
-**Estado**: `Backlog`
+**Estado**: `Done`
 **Tipo**: Incremento técnico (refactor + arquitectura)
 **Incremento**: INC-2.0 — previo a Inc 2.1
 **Subproyecto**: SP2 — La Competencia

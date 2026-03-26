@@ -11,7 +11,8 @@ from competencia.application.commands.configurar_intervalo_ot import (
     ConfigurarIntervaloOTHandler,
     _build_stream_id,
 )
-from competencia.domain.aggregates.competencia import Competencia, GrillaYaConfirmada
+from competencia.domain.aggregates.competencia import Competencia
+from competencia.domain.exceptions import GrillaYaConfirmada
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_competencia import EstadoCompetencia
 from competencia.domain.value_objects.intervalo_disciplina import IntervaloInvalido

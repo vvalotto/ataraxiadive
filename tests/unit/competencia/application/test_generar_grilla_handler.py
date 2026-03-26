@@ -13,7 +13,7 @@ from competencia.application.commands.generar_grilla import (
     GenerarGrillaHandler,
     _build_stream_id,
 )
-from competencia.domain.aggregates.competencia import (
+from competencia.domain.exceptions import (
     IntervaloNoConfigurado,
     SinPerformancesParaGrilla,
 )

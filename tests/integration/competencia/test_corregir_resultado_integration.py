@@ -13,7 +13,8 @@ from competencia.application.commands.corregir_resultado import CorregirResultad
 from competencia.application.commands.llamar_atleta import LlamarAtletaCommand, LlamarAtletaHandler
 from competencia.application.commands.registrar_ap import RegistrarAPCommand, RegistrarAPHandler
 from competencia.application.commands.registrar_resultado import RegistrarResultadoCommand, RegistrarResultadoHandler
-from competencia.domain.aggregates.performance import EstadoInvalidoParaCorregirResultado, MotivoObligatorio, Performance
+from competencia.domain.aggregates.performance import Performance
+from competencia.domain.exceptions import EstadoInvalidoParaCorregirResultado, MotivoObligatorio
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta

@@ -9,23 +9,16 @@ from uuid import UUID
 from shared.domain.base.aggregate_root import AggregateRoot
 from competencia.domain.events.grilla_de_salida_generada import GrillaDeSalidaGenerada
 from competencia.domain.events.intervalo_ot_configurado import IntervaloOTConfigurado
+from competencia.domain.exceptions import (
+    GrillaYaConfirmada,
+    IntervaloNoConfigurado,
+    SinPerformancesParaGrilla,
+)
 from competencia.domain.ports.performances_ap_port import PerformancesAPData
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.entrada_grilla import EntradaGrilla
 from competencia.domain.value_objects.estado_competencia import EstadoCompetencia
 from competencia.domain.value_objects.intervalo_disciplina import IntervaloDisciplina
-
-
-class GrillaYaConfirmada(Exception):
-    """La grilla fue confirmada — no se puede reconfigurar ni regenerar."""
-
-
-class IntervaloNoConfigurado(Exception):
-    """INV-C-01: intervaloDisciplina no configurado — no se puede generar la grilla."""
-
-
-class SinPerformancesParaGrilla(Exception):
-    """No hay performances con AP registrado para generar la grilla."""
 
 
 class Competencia(AggregateRoot):

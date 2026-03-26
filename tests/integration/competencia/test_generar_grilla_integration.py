@@ -22,8 +22,8 @@ from competencia.application.commands.registrar_ap import (
     RegistrarAPCommand,
     RegistrarAPHandler,
 )
-from competencia.domain.aggregates.competencia import (
-    Competencia,
+from competencia.domain.aggregates.competencia import Competencia
+from competencia.domain.exceptions import (
     IntervaloNoConfigurado,
     SinPerformancesParaGrilla,
 )

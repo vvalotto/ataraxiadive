@@ -7,8 +7,8 @@ from uuid import UUID, uuid4
 
 import pytest
 
-from competencia.domain.aggregates.competencia import (
-    Competencia,
+from competencia.domain.aggregates.competencia import Competencia
+from competencia.domain.exceptions import (
     GrillaYaConfirmada,
     IntervaloNoConfigurado,
     SinPerformancesParaGrilla,
