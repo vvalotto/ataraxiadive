@@ -16,10 +16,14 @@ from competencia.domain.exceptions import (
 from competencia.domain.events.grilla_de_salida_generada import GrillaDeSalidaGenerada
 from competencia.domain.ports.performances_ap_port import PerformancesAPData
 from competencia.domain.value_objects.disciplina import Disciplina
+from competencia.domain.value_objects.disciplina_descriptor import DisciplinaDescriptor
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
 COMPETENCIA_ID = UUID("00000000-0000-0000-0000-000000000001")
 OT_INICIO = datetime(2026, 1, 1, 10, 0, 0, tzinfo=timezone.utc)
+
+_DESC_STA = DisciplinaDescriptor.para(Disciplina.STA)
+_DESC_DNF = DisciplinaDescriptor.para(Disciplina.DNF)
 
 
 def _make_competencia(disciplina: Disciplina = Disciplina.STA) -> Competencia:
@@ -58,12 +62,12 @@ class TestInvariantes:
     def test_sin_intervalo_lanza_intervalo_no_configurado(self) -> None:
         c = Competencia(competencia_id=COMPETENCIA_ID, disciplina=Disciplina.STA)
         with pytest.raises(IntervaloNoConfigurado):
-            c.generar_grilla(OT_INICIO, [_sta(A001, "330")])
+            c.generar_grilla(OT_INICIO, [_sta(A001, "330")], _DESC_STA)
 
     def test_sin_performances_lanza_sin_performances(self) -> None:
         c = _make_competencia()
         with pytest.raises(SinPerformancesParaGrilla):
-            c.generar_grilla(OT_INICIO, [])
+            c.generar_grilla(OT_INICIO, [], _DESC_STA)
 
     def test_grilla_confirmada_lanza_excepcion(self) -> None:
         c = Competencia.reconstitute(
@@ -87,7 +91,7 @@ class TestInvariantes:
             ],
         )
         with pytest.raises(GrillaYaConfirmada):
-            c.generar_grilla(OT_INICIO, [_sta(A001, "330")])
+            c.generar_grilla(OT_INICIO, [_sta(A001, "330")], _DESC_STA)
 
 
 # ── Ordenamiento STA (tiempo, mayor→menor) ────────────────────────────────────
@@ -101,32 +105,32 @@ class TestOrdenamientoSTA:
             _sta(A002, "360"),  # 6:00 — mayor, debe ir primero
             _sta(A003, "285"),  # 4:45 — menor, debe ir último
         ]
-        c.generar_grilla(OT_INICIO, performances)
+        c.generar_grilla(OT_INICIO, performances, _DESC_STA)
         grilla = c.grilla
         atletas_orden = [str(e.atleta_id) for e in grilla]
         assert atletas_orden == [A002, A001, A003]
 
     def test_posiciones_1_based(self) -> None:
         c = _make_competencia(Disciplina.STA)
-        c.generar_grilla(OT_INICIO, [_sta(A001, "330"), _sta(A002, "360")])
+        c.generar_grilla(OT_INICIO, [_sta(A001, "330"), _sta(A002, "360")], _DESC_STA)
         posiciones = [e.posicion for e in c.grilla]
         assert posiciones == [1, 2]
 
     def test_ot_primera_posicion_es_ot_inicio(self) -> None:
         c = _make_competencia(Disciplina.STA)
-        c.generar_grilla(OT_INICIO, [_sta(A001, "330")])
+        c.generar_grilla(OT_INICIO, [_sta(A001, "330")], _DESC_STA)
         assert c.grilla[0].ot_programado == OT_INICIO
 
     def test_ot_segunda_posicion_suma_intervalo(self) -> None:
         c = _make_competencia(Disciplina.STA)
-        c.generar_grilla(OT_INICIO, [_sta(A002, "360"), _sta(A001, "330")])
+        c.generar_grilla(OT_INICIO, [_sta(A002, "360"), _sta(A001, "330")], _DESC_STA)
         expected = OT_INICIO + timedelta(minutes=9)
         assert c.grilla[1].ot_programado == expected
 
     def test_ot_tercera_posicion_suma_dos_intervalos(self) -> None:
         c = _make_competencia(Disciplina.STA)
         perfs = [_sta(A001, "330"), _sta(A002, "360"), _sta(A003, "285")]
-        c.generar_grilla(OT_INICIO, perfs)
+        c.generar_grilla(OT_INICIO, perfs, _DESC_STA)
         expected = OT_INICIO + timedelta(minutes=18)
         assert c.grilla[2].ot_programado == expected
 
@@ -142,7 +146,7 @@ class TestOrdenamientoDNF:
             _dnf(A002, "60"),   # menor — debe ir primero
             _dnf(A003, "100"),  # mayor — debe ir último
         ]
-        c.generar_grilla(OT_INICIO, performances)
+        c.generar_grilla(OT_INICIO, performances, _DESC_DNF)
         atletas_orden = [str(e.atleta_id) for e in c.grilla]
         assert atletas_orden == [A002, A001, A003]
 
@@ -153,14 +157,14 @@ class TestOrdenamientoDNF:
 class TestEventoGenerado:
     def test_emite_un_evento(self) -> None:
         c = _make_competencia()
-        c.generar_grilla(OT_INICIO, [_sta(A001, "330")])
+        c.generar_grilla(OT_INICIO, [_sta(A001, "330")], _DESC_STA)
         events = c.pull_events()
         assert len(events) == 1
         assert isinstance(events[0], GrillaDeSalidaGenerada)
 
     def test_evento_contiene_datos_correctos(self) -> None:
         c = _make_competencia()
-        c.generar_grilla(OT_INICIO, [_sta(A001, "330")])
+        c.generar_grilla(OT_INICIO, [_sta(A001, "330")], _DESC_STA)
         event = c.pull_events()[0]
         assert isinstance(event, GrillaDeSalidaGenerada)
         assert event.competencia_id == str(COMPETENCIA_ID)
@@ -170,9 +174,9 @@ class TestEventoGenerado:
 
     def test_regeneracion_emite_nuevo_evento(self) -> None:
         c = _make_competencia()
-        c.generar_grilla(OT_INICIO, [_sta(A001, "330")])
+        c.generar_grilla(OT_INICIO, [_sta(A001, "330")], _DESC_STA)
         c.pull_events()
-        c.generar_grilla(OT_INICIO, [_sta(A001, "330"), _sta(A002, "360")])
+        c.generar_grilla(OT_INICIO, [_sta(A001, "330"), _sta(A002, "360")], _DESC_STA)
         events = c.pull_events()
         assert len(events) == 1
         assert isinstance(events[0], GrillaDeSalidaGenerada)
@@ -186,7 +190,7 @@ class TestAndarivel:
     def test_un_andarivel_todos_en_andarivel_1(self) -> None:
         c = _make_competencia()
         perfs = [_sta(A001, "330"), _sta(A002, "360"), _sta(A003, "285")]
-        c.generar_grilla(OT_INICIO, perfs, andariveles=1)
+        c.generar_grilla(OT_INICIO, perfs, _DESC_STA, andariveles=1)
         assert all(e.andarivel == 1 for e in c.grilla)
 
 
@@ -197,7 +201,7 @@ class TestReconstitucion:
     def test_reconstituye_grilla_desde_evento(self) -> None:
         c = _make_competencia()
         perfs = [_sta(A001, "330"), _sta(A002, "360")]
-        c.generar_grilla(OT_INICIO, perfs)
+        c.generar_grilla(OT_INICIO, perfs, _DESC_STA)
         event = c.pull_events()[0]
         assert isinstance(event, GrillaDeSalidaGenerada)
 

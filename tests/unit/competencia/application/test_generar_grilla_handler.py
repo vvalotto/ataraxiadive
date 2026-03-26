@@ -20,6 +20,7 @@ from competencia.domain.exceptions import (
 from competencia.domain.ports.performances_ap_port import PerformancesAPData
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 
 COMPETENCIA_ID = UUID("00000000-0000-0000-0000-000000000001")
 OT_INICIO = datetime(2026, 1, 1, 10, 0, 0, tzinfo=timezone.utc)
@@ -59,6 +60,9 @@ def mock_performances_ap() -> AsyncMock:
     return port
 
 
+_DESCRIPTOR_ADAPTER = DisciplinaDescriptorAdapter()
+
+
 def _command() -> GenerarGrillaCommand:
     return GenerarGrillaCommand(
         competencia_id=COMPETENCIA_ID,
@@ -72,7 +76,7 @@ class TestGenerarGrillaHandlerExitoso:
     async def test_append_llamado_una_vez(
         self, mock_event_store: AsyncMock, mock_performances_ap: AsyncMock
     ) -> None:
-        handler = GenerarGrillaHandler(mock_event_store, mock_performances_ap)
+        handler = GenerarGrillaHandler(mock_event_store, mock_performances_ap, _DESCRIPTOR_ADAPTER)
         await handler.handle(_command())
         assert mock_event_store.append.call_count == 1
 
@@ -80,7 +84,7 @@ class TestGenerarGrillaHandlerExitoso:
     async def test_event_type_correcto(
         self, mock_event_store: AsyncMock, mock_performances_ap: AsyncMock
     ) -> None:
-        handler = GenerarGrillaHandler(mock_event_store, mock_performances_ap)
+        handler = GenerarGrillaHandler(mock_event_store, mock_performances_ap, _DESCRIPTOR_ADAPTER)
         await handler.handle(_command())
         assert mock_event_store.append.call_args[1]["event_type"] == "GrillaDeSalidaGenerada"
 
@@ -88,7 +92,7 @@ class TestGenerarGrillaHandlerExitoso:
     async def test_performances_ap_consultado_con_competencia_id(
         self, mock_event_store: AsyncMock, mock_performances_ap: AsyncMock
     ) -> None:
-        handler = GenerarGrillaHandler(mock_event_store, mock_performances_ap)
+        handler = GenerarGrillaHandler(mock_event_store, mock_performances_ap, _DESCRIPTOR_ADAPTER)
         await handler.handle(_command())
         mock_performances_ap.get_performances_con_ap.assert_called_once_with(COMPETENCIA_ID)
 
@@ -96,7 +100,7 @@ class TestGenerarGrillaHandlerExitoso:
     async def test_load_con_stream_id_correcto(
         self, mock_event_store: AsyncMock, mock_performances_ap: AsyncMock
     ) -> None:
-        handler = GenerarGrillaHandler(mock_event_store, mock_performances_ap)
+        handler = GenerarGrillaHandler(mock_event_store, mock_performances_ap, _DESCRIPTOR_ADAPTER)
         await handler.handle(_command())
         mock_event_store.load.assert_called_once_with(_build_stream_id(COMPETENCIA_ID))
 
@@ -108,7 +112,7 @@ class TestGenerarGrillaHandlerErrores:
     ) -> None:
         store = AsyncMock()
         store.load.return_value = []  # sin IntervaloOTConfigurado
-        handler = GenerarGrillaHandler(store, mock_performances_ap)
+        handler = GenerarGrillaHandler(store, mock_performances_ap, _DESCRIPTOR_ADAPTER)
         with pytest.raises(IntervaloNoConfigurado):
             await handler.handle(_command())
 
@@ -118,7 +122,7 @@ class TestGenerarGrillaHandlerErrores:
     ) -> None:
         port = AsyncMock()
         port.get_performances_con_ap.return_value = []
-        handler = GenerarGrillaHandler(mock_event_store, port)
+        handler = GenerarGrillaHandler(mock_event_store, port, _DESCRIPTOR_ADAPTER)
         with pytest.raises(SinPerformancesParaGrilla):
             await handler.handle(_command())
 
@@ -128,7 +132,7 @@ class TestGenerarGrillaHandlerErrores:
     ) -> None:
         port = AsyncMock()
         port.get_performances_con_ap.return_value = []
-        handler = GenerarGrillaHandler(mock_event_store, port)
+        handler = GenerarGrillaHandler(mock_event_store, port, _DESCRIPTOR_ADAPTER)
         with pytest.raises(SinPerformancesParaGrilla):
             await handler.handle(_command())
         mock_event_store.append.assert_not_called()

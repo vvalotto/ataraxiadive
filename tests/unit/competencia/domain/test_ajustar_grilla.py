@@ -17,6 +17,7 @@ from competencia.domain.events.grilla_de_salida_ajustada import GrillaDeSalidaAj
 from competencia.domain.ports.performances_ap_port import PerformancesAPData
 from competencia.domain.value_objects.cambio_grilla import CambioGrilla
 from competencia.domain.value_objects.disciplina import Disciplina
+from competencia.domain.value_objects.disciplina_descriptor import DisciplinaDescriptor
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
 COMPETENCIA_ID = UUID("00000000-0000-0000-0000-000000000001")
@@ -40,7 +41,7 @@ def _make_competencia_con_grilla() -> Competencia:
         PerformancesAPData(performance_id=P_A002, atleta_id=A002, valor_ap=Decimal("360"), unidad=UnidadMedida.Segundos),
         PerformancesAPData(performance_id=P_A003, atleta_id=A003, valor_ap=Decimal("285"), unidad=UnidadMedida.Segundos),
     ]
-    c.generar_grilla(OT_INICIO, performances)
+    c.generar_grilla(OT_INICIO, performances, DisciplinaDescriptor.para(Disciplina.STA))
     c.pull_events()  # limpiar eventos previos
     return c
 

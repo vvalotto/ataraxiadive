@@ -17,6 +17,7 @@ from competencia.domain.exceptions import (
 )
 from competencia.domain.ports.performances_ap_port import PerformancesAPData
 from competencia.domain.value_objects.disciplina import Disciplina
+from competencia.domain.value_objects.disciplina_descriptor import DisciplinaDescriptor
 from competencia.domain.value_objects.estado_competencia import EstadoCompetencia
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
@@ -44,7 +45,7 @@ def _make_competencia_con_grilla() -> Competencia:
             unidad=UnidadMedida.Segundos,
         ),
     ]
-    c.generar_grilla(OT_INICIO, performances)
+    c.generar_grilla(OT_INICIO, performances, DisciplinaDescriptor.para(Disciplina.STA))
     c.pull_events()  # limpiar eventos anteriores
     return c
 

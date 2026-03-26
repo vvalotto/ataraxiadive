@@ -55,6 +55,7 @@ from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEven
 from competencia.infrastructure.repositories.competencia_estado_adapter import (
     CompetenciaEstadoAdapter,
 )
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
 
 CREATE_EVENTS_TABLE = """
@@ -114,7 +115,7 @@ async def _setup_grilla_generada(
             )
         )
     adapter = PerformancesAPAdapter(store)
-    await GenerarGrillaHandler(store, adapter).handle(
+    await GenerarGrillaHandler(store, adapter, DisciplinaDescriptorAdapter()).handle(
         GenerarGrillaCommand(
             competencia_id=competencia_id,
             disciplina=_DISCIPLINA,
