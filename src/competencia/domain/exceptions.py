@@ -15,6 +15,7 @@ Jerarquía (ADR-013):
         ├── GrillaYaConfirmada
         ├── GrillaNoGenerada
         ├── PerformanceNoEncontrada
+        ├── CompetenciaNoConfirmada
         └── EstadoInvalidoParaGenerarGrilla
 """
 from __future__ import annotations
@@ -78,6 +79,10 @@ class GrillaNoGenerada(DomainError):
 
 class PerformanceNoEncontrada(DomainError):
     """Performance no encontrada en la grilla — el performanceId no corresponde a ninguna entrada."""
+
+
+class CompetenciaNoConfirmada(DomainError):
+    """Competencia no está en estado Confirmada — no se puede iniciar (INV-C-03)."""
 
 
 class EstadoInvalidoParaGenerarGrilla(DomainError):

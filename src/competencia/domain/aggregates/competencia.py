@@ -7,10 +7,13 @@ from typing import Any
 from uuid import UUID
 
 from shared.domain.base.aggregate_root import AggregateRoot
+from competencia.domain.events.competencia_iniciada import CompetenciaIniciada
+from competencia.domain.events.grilla_confirmada import GrillaConfirmada
 from competencia.domain.events.grilla_de_salida_ajustada import GrillaDeSalidaAjustada
 from competencia.domain.events.grilla_de_salida_generada import GrillaDeSalidaGenerada
 from competencia.domain.events.intervalo_ot_configurado import IntervaloOTConfigurado
 from competencia.domain.exceptions import (
+    CompetenciaNoConfirmada,
     GrillaNoGenerada,
     GrillaYaConfirmada,
     IntervaloNoConfigurado,
@@ -76,6 +79,11 @@ class Competencia(AggregateRoot):
     def grilla(self) -> list[EntradaGrilla]:
         """Grilla de salida actual (última generada), o lista vacía si no fue generada."""
         return list(self._grilla)
+
+    @property
+    def grilla_confirmada(self) -> bool:
+        """True si la grilla fue confirmada de forma irreversible."""
+        return self._grilla_confirmada
 
     # ── Comandos de dominio ───────────────────────────────────────────────────
 
@@ -333,6 +341,71 @@ class Competencia(AggregateRoot):
         self._grilla = nueva_grilla
         self._record(event)
 
+    def confirmar_grilla(self) -> None:
+        """Confirma la Grilla de Salida, congelándola de forma irreversible (INV-C-02).
+
+        Después de este evento, GenerarGrilla, AjustarGrilla y ConfigurarIntervaloOT
+        quedan bloqueados. Transiciona el estado a Confirmada.
+
+        Raises:
+            GrillaNoGenerada: Si la grilla no fue generada aún.
+            GrillaYaConfirmada: Si la grilla ya fue confirmada previamente.
+        """
+        if not self._grilla:
+            raise GrillaNoGenerada(
+                f"Competencia {self._competencia_id}: grilla no generada — "
+                "confirmar_grilla requiere GrillaDeSalidaGenerada previo"
+            )
+        if self._grilla_confirmada:
+            raise GrillaYaConfirmada(
+                f"Competencia {self._competencia_id}: INV-C-02 — "
+                "grilla ya confirmada, operación irreversible"
+            )
+
+        now = GrillaConfirmada.now()
+        event = GrillaConfirmada(
+            event_type="GrillaConfirmada",
+            aggregate_id=str(self._competencia_id),
+            occurred_at=now,
+            competencia_id=str(self._competencia_id),
+            disciplina=self._disciplina.value,
+            confirmada_en=now.isoformat(),
+        )
+        self._grilla_confirmada = True
+        self._estado = EstadoCompetencia.Confirmada
+        self._record(event)
+
+    def iniciar_competencia(self, juez_id: str) -> None:
+        """Inicia la Competencia, habilitando el registro de performances (INV-C-03).
+
+        Precondición: la grilla debe estar confirmada (estado Confirmada).
+        Transiciona el estado a EnEjecucion.
+
+        Args:
+            juez_id: Identificador del juez que inicia la competencia.
+
+        Raises:
+            CompetenciaNoConfirmada: INV-C-03 — competencia no está en estado Confirmada.
+        """
+        if self._estado != EstadoCompetencia.Confirmada:
+            raise CompetenciaNoConfirmada(
+                f"Competencia {self._competencia_id}: INV-C-03 — "
+                f"estado actual '{self._estado}', se requiere 'Confirmada'"
+            )
+
+        now = CompetenciaIniciada.now()
+        event = CompetenciaIniciada(
+            event_type="CompetenciaIniciada",
+            aggregate_id=str(self._competencia_id),
+            occurred_at=now,
+            competencia_id=str(self._competencia_id),
+            disciplina=self._disciplina.value,
+            juez_id=juez_id,
+            iniciada_en=now.isoformat(),
+        )
+        self._estado = EstadoCompetencia.EnEjecucion
+        self._record(event)
+
     # ── Reconstitución desde eventos ──────────────────────────────────────────
 
     @classmethod
@@ -364,6 +437,7 @@ class Competencia(AggregateRoot):
             "GrillaDeSalidaGenerada": self._apply_grilla_de_salida_generada,
             "GrillaDeSalidaAjustada": self._apply_grilla_de_salida_ajustada,
             "GrillaConfirmada": self._apply_grilla_confirmada,
+            "CompetenciaIniciada": self._apply_competencia_iniciada,
         }
 
         handler = _handlers.get(event_type)
@@ -426,6 +500,10 @@ class Competencia(AggregateRoot):
 
     def _apply_grilla_confirmada(self, payload: dict[str, Any]) -> None:  # noqa: ARG002
         self._grilla_confirmada = True
+        self._estado = EstadoCompetencia.Confirmada
+
+    def _apply_competencia_iniciada(self, payload: dict[str, Any]) -> None:  # noqa: ARG002
+        self._estado = EstadoCompetencia.EnEjecucion
 
     @staticmethod
     def _parse_payload(payload: Any) -> dict[str, Any]:

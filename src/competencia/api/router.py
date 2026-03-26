@@ -7,13 +7,34 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 
+from competencia.application.commands.ajustar_grilla import (
+    AjustarGrillaCommand,
+    AjustarGrillaHandler,
+)
+from competencia.application.commands.confirmar_grilla import (
+    ConfirmarGrillaCommand,
+    ConfirmarGrillaHandler,
+)
 from competencia.application.commands.configurar_intervalo_ot import (
     ConfigurarIntervaloOTHandler,
+)
+from competencia.application.commands.iniciar_competencia import (
+    IniciarCompetenciaCommand,
+    IniciarCompetenciaHandler,
+)
+from competencia.application.queries.obtener_estado_competencia import (
+    ObtenerEstadoCompetenciaHandler,
+    ObtenerEstadoCompetenciaQuery,
 )
 from competencia.application.queries.obtener_eventos import (
     ObtenerEventosHandler,
     ObtenerEventosQuery,
+)
+from competencia.application.queries.obtener_grilla import (
+    ObtenerGrillaHandler,
+    ObtenerGrillaQuery,
 )
 from competencia.application.queries.obtener_performance_actual import (
     ObtenerPerformanceActualHandler,
@@ -30,9 +51,42 @@ from competencia.application.queries.obtener_progreso import (
     ObtenerProgresoQuery,
     ProgresoCompetenciaDTO,
 )
+from competencia.domain.value_objects.cambio_grilla import CambioGrilla
+from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 
 router = APIRouter(prefix="/competencia", tags=["competencia"])
+
+
+# ── Request body schemas ───────────────────────────────────────────────────────
+
+
+class CambioGrillaSchema(BaseModel):
+    """Schema de un cambio individual sobre la Grilla de Salida."""
+
+    performance_id: UUID
+    campo: str
+    valor_nuevo: int
+
+
+class AjustarGrillaBody(BaseModel):
+    """Body del endpoint POST /ajustar-grilla."""
+
+    disciplina: Disciplina
+    cambios: list[CambioGrillaSchema]
+
+
+class ConfirmarGrillaBody(BaseModel):
+    """Body del endpoint POST /confirmar-grilla."""
+
+    disciplina: Disciplina
+
+
+class IniciarCompetenciaBody(BaseModel):
+    """Body del endpoint POST /iniciar."""
+
+    disciplina: Disciplina
+    juez_id: str
 
 
 # ── Dependency providers ──────────────────────────────────────────────────────
@@ -96,6 +150,50 @@ ObtenerProgresoHandlerDep = Annotated[
 ]
 ConfigurarIntervaloOTHandlerDep = Annotated[
     ConfigurarIntervaloOTHandler, Depends(get_configurar_intervalo_ot_handler)
+]
+
+
+def get_ajustar_grilla_handler(event_store: EventStoreDep) -> AjustarGrillaHandler:
+    """Dependency: handler para ajustar la grilla."""
+    return AjustarGrillaHandler(event_store)
+
+
+def get_confirmar_grilla_handler(event_store: EventStoreDep) -> ConfirmarGrillaHandler:
+    """Dependency: handler para confirmar la grilla."""
+    return ConfirmarGrillaHandler(event_store)
+
+
+def get_iniciar_competencia_handler(event_store: EventStoreDep) -> IniciarCompetenciaHandler:
+    """Dependency: handler para iniciar la competencia."""
+    return IniciarCompetenciaHandler(event_store)
+
+
+def get_obtener_grilla_handler(event_store: EventStoreDep) -> ObtenerGrillaHandler:
+    """Dependency: handler de consulta de la grilla."""
+    return ObtenerGrillaHandler(event_store)
+
+
+def get_obtener_estado_competencia_handler(
+    event_store: EventStoreDep,
+) -> ObtenerEstadoCompetenciaHandler:
+    """Dependency: handler de consulta de estado de competencia."""
+    return ObtenerEstadoCompetenciaHandler(event_store)
+
+
+AjustarGrillaHandlerDep = Annotated[
+    AjustarGrillaHandler, Depends(get_ajustar_grilla_handler)
+]
+ConfirmarGrillaHandlerDep = Annotated[
+    ConfirmarGrillaHandler, Depends(get_confirmar_grilla_handler)
+]
+IniciarCompetenciaHandlerDep = Annotated[
+    IniciarCompetenciaHandler, Depends(get_iniciar_competencia_handler)
+]
+ObtenerGrillaHandlerDep = Annotated[
+    ObtenerGrillaHandler, Depends(get_obtener_grilla_handler)
+]
+ObtenerEstadoCompetenciaHandlerDep = Annotated[
+    ObtenerEstadoCompetenciaHandler, Depends(get_obtener_estado_competencia_handler)
 ]
 
 
@@ -209,6 +307,130 @@ async def get_progreso(
             "ejecutadas": result.ejecutadas,
             "dns_count": result.dns_count,
             "completadas": result.completadas,
+        },
+        status_code=200,
+    )
+
+
+@router.post("/{competencia_id}/ajustar-grilla", response_class=JSONResponse)
+async def post_ajustar_grilla(
+    competencia_id: UUID,
+    body: AjustarGrillaBody,
+    handler: AjustarGrillaHandlerDep,
+) -> JSONResponse:
+    """Aplica ajustes manuales sobre la Grilla de Salida (US-2.1.3).
+
+    Returns:
+        204 No Content si el ajuste fue aplicado correctamente.
+    """
+    cambios = [
+        CambioGrilla(
+            performance_id=c.performance_id,
+            campo=c.campo,  # type: ignore[arg-type]
+            valor_nuevo=c.valor_nuevo,
+        )
+        for c in body.cambios
+    ]
+    await handler.handle(
+        AjustarGrillaCommand(
+            competencia_id=competencia_id,
+            disciplina=body.disciplina,
+            cambios=cambios,
+        )
+    )
+    return JSONResponse(content=None, status_code=204)
+
+
+@router.post("/{competencia_id}/confirmar-grilla", response_class=JSONResponse)
+async def post_confirmar_grilla(
+    competencia_id: UUID,
+    body: ConfirmarGrillaBody,
+    handler: ConfirmarGrillaHandlerDep,
+) -> JSONResponse:
+    """Confirma la Grilla de Salida de forma irreversible (INV-C-02).
+
+    Returns:
+        204 No Content si la grilla fue confirmada correctamente.
+    """
+    await handler.handle(
+        ConfirmarGrillaCommand(
+            competencia_id=competencia_id,
+            disciplina=body.disciplina,
+        )
+    )
+    return JSONResponse(content=None, status_code=204)
+
+
+@router.post("/{competencia_id}/iniciar", response_class=JSONResponse)
+async def post_iniciar_competencia(
+    competencia_id: UUID,
+    body: IniciarCompetenciaBody,
+    handler: IniciarCompetenciaHandlerDep,
+) -> JSONResponse:
+    """Inicia la Competencia, habilitando el registro de performances (INV-C-03).
+
+    Returns:
+        204 No Content si la competencia fue iniciada correctamente.
+    """
+    await handler.handle(
+        IniciarCompetenciaCommand(
+            competencia_id=competencia_id,
+            disciplina=body.disciplina,
+            juez_id=body.juez_id,
+        )
+    )
+    return JSONResponse(content=None, status_code=204)
+
+
+@router.get("/{competencia_id}/grilla", response_class=JSONResponse)
+async def get_grilla(
+    competencia_id: UUID,
+    disciplina: Disciplina,
+    handler: ObtenerGrillaHandlerDep,
+) -> JSONResponse:
+    """Retorna la Grilla de Salida ordenada por posición.
+
+    Returns:
+        Lista de entradas de grilla con performance_id, atleta_id, posicion,
+        andarivel y ot_programado.
+    """
+    entradas = await handler.handle(
+        ObtenerGrillaQuery(competencia_id=competencia_id, disciplina=disciplina)
+    )
+    return JSONResponse(
+        content=[
+            {
+                "performance_id": e.performance_id,
+                "atleta_id": e.atleta_id,
+                "posicion": e.posicion,
+                "andarivel": e.andarivel,
+                "ot_programado": e.ot_programado,
+            }
+            for e in entradas
+        ],
+        status_code=200,
+    )
+
+
+@router.get("/{competencia_id}/estado", response_class=JSONResponse)
+async def get_estado_competencia(
+    competencia_id: UUID,
+    disciplina: Disciplina,
+    handler: ObtenerEstadoCompetenciaHandlerDep,
+) -> JSONResponse:
+    """Retorna el estado actual de la competencia.
+
+    Returns:
+        JSON con estado, intervalo_minutos y grilla_confirmada.
+    """
+    dto = await handler.handle(
+        ObtenerEstadoCompetenciaQuery(competencia_id=competencia_id, disciplina=disciplina)
+    )
+    return JSONResponse(
+        content={
+            "estado": dto.estado,
+            "intervalo_minutos": dto.intervalo_minutos,
+            "grilla_confirmada": dto.grilla_confirmada,
         },
         status_code=200,
     )
