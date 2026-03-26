@@ -13,6 +13,8 @@ Jerarquía (ADR-013):
     └── Competencia
         ├── IntervaloNoConfigurado
         ├── GrillaYaConfirmada
+        ├── GrillaNoGenerada
+        ├── PerformanceNoEncontrada
         └── EstadoInvalidoParaGenerarGrilla
 """
 from __future__ import annotations
@@ -68,6 +70,14 @@ class IntervaloNoConfigurado(DomainError):
 
 class GrillaYaConfirmada(DomainError):
     """La grilla ya fue confirmada — operación no permitida sobre grilla congelada."""
+
+
+class GrillaNoGenerada(DomainError):
+    """La grilla no fue generada aún — ajuste no permitido antes de GenerarGrilla."""
+
+
+class PerformanceNoEncontrada(DomainError):
+    """Performance no encontrada en la grilla — el performanceId no corresponde a ninguna entrada."""
 
 
 class EstadoInvalidoParaGenerarGrilla(DomainError):
