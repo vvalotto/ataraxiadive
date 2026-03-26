@@ -14,7 +14,7 @@ from competencia.application.commands.corregir_resultado import (
     CorregirResultadoHandler,
     PerformanceNoEncontrada,
 )
-from competencia.domain.aggregates.performance import (
+from competencia.domain.exceptions import (
     EstadoInvalidoParaCorregirResultado,
     MotivoObligatorio,
 )

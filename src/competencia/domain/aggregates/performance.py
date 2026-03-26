@@ -14,40 +14,20 @@ from competencia.domain.events.dns_registrado import DNSRegistrado
 from competencia.domain.events.resultado_corregido import ResultadoCorregido
 from competencia.domain.events.resultado_registrado import ResultadoRegistrado
 from competencia.domain.events.tarjeta_asignada import TarjetaAsignada
+from competencia.domain.exceptions import (
+    DistanciaBlackoutObligatoria,
+    EstadoInvalidoParaAsignarTarjeta,
+    EstadoInvalidoParaCorregirResultado,
+    EstadoInvalidoParaLlamar,
+    EstadoInvalidoParaRegistrarDNS,
+    EstadoInvalidoParaRegistrarResultado,
+    MotivoObligatorio,
+)
 from competencia.domain.value_objects.ap import AP
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
-
-
-class EstadoInvalidoParaLlamar(Exception):
-    """Performance no está en estado AnunciadaAP — no se puede llamar al atleta."""
-
-
-class EstadoInvalidoParaRegistrarResultado(Exception):
-    """Performance no está en estado Llamada — no se puede registrar el resultado."""
-
-
-class EstadoInvalidoParaRegistrarDNS(Exception):
-    """Performance no está en estado Llamada — no se puede registrar DNS (INV-P-08)."""
-
-
-class EstadoInvalidoParaAsignarTarjeta(Exception):
-    """Performance no está en estado ResultadoRegistrado — no se puede asignar tarjeta."""
-
-
-class MotivoObligatorio(Exception):
-    """Tarjeta amarilla o roja requieren motivo obligatorio (INV-P-11).
-    También aplica a la corrección de resultado (INV-P-12)."""
-
-
-class DistanciaBlackoutObligatoria(Exception):
-    """Tarjeta roja con motivo black-out requiere distancia_blackout > 0 (RF-EJ-07)."""
-
-
-class EstadoInvalidoParaCorregirResultado(Exception):
-    """Performance no está en estado Ejecutada — no se puede corregir el resultado (INV-P-12/13)."""
 
 
 class Performance(AggregateRoot):

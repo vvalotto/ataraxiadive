@@ -21,10 +21,8 @@ from competencia.application.commands.registrar_resultado import (
     RegistrarResultadoCommand,
     RegistrarResultadoHandler,
 )
-from competencia.domain.aggregates.performance import (
-    DistanciaBlackoutObligatoria,
-    Performance,
-)
+from competencia.domain.aggregates.performance import Performance
+from competencia.domain.exceptions import DistanciaBlackoutObligatoria
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta

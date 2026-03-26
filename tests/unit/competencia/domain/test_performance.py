@@ -7,7 +7,8 @@ from uuid import uuid4
 
 import pytest
 
-from competencia.domain.aggregates.performance import (
+from competencia.domain.aggregates.performance import Performance
+from competencia.domain.exceptions import (
     DistanciaBlackoutObligatoria,
     EstadoInvalidoParaAsignarTarjeta,
     EstadoInvalidoParaCorregirResultado,
@@ -15,7 +16,6 @@ from competencia.domain.aggregates.performance import (
     EstadoInvalidoParaRegistrarDNS,
     EstadoInvalidoParaRegistrarResultado,
     MotivoObligatorio,
-    Performance,
 )
 from competencia.domain.value_objects.ap import ValorAPInvalido
 from competencia.domain.value_objects.disciplina import Disciplina

@@ -164,6 +164,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 | US candidata | Inc. | RFs cubiertos | Comando/Contenido principal | Invariantes clave | Estado |
 |-------------|------|---------------|-----------------------------|------------------|--------|
+| INC-2.0 | — | — | Exception management: `domain/exceptions.py` + `exception_handlers.py` (ADR-013) | — | ✅ Done |
 | US-2.1.1 | 2.1 | RF-PR-08 | `ConfigurarIntervaloOT` + scaffold aggregate Competencia + deuda SOLID SP1 | INV-C-01 | ✅ Done |
 | US-2.1.2 | 2.1 | RF-PR-04, RF-PR-05 | `GenerarGrilla` / `RegenerarGrilla` | INV-C-01, P-01, P-02 | ✅ Done |
 | US-2.1.3 | 2.1 | RF-PR-07 | `AjustarGrilla` | INV-C-02 (parcial) | ⬜ Backlog |

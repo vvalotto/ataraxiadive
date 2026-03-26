@@ -15,7 +15,7 @@ from competencia.application.commands.llamar_atleta import (
     LlamarAtletaHandler,
     PerformanceNoEncontrada,
 )
-from competencia.domain.aggregates.performance import EstadoInvalidoParaLlamar
+from competencia.domain.exceptions import EstadoInvalidoParaLlamar
 from competencia.domain.value_objects.disciplina import Disciplina
 
 OT = datetime(2026, 3, 22, 10, 30, 0)

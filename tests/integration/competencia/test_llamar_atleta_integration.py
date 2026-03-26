@@ -15,7 +15,8 @@ from competencia.application.commands.llamar_atleta import (
     PerformanceNoEncontrada,
 )
 from competencia.application.commands.registrar_ap import RegistrarAPCommand, RegistrarAPHandler
-from competencia.domain.aggregates.performance import EstadoInvalidoParaLlamar, Performance
+from competencia.domain.aggregates.performance import Performance
+from competencia.domain.exceptions import EstadoInvalidoParaLlamar
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from competencia.domain.value_objects.unidad_medida import UnidadMedida

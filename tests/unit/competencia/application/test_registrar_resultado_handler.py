@@ -14,7 +14,7 @@ from competencia.application.commands.registrar_resultado import (
     RegistrarResultadoCommand,
     RegistrarResultadoHandler,
 )
-from competencia.domain.aggregates.performance import EstadoInvalidoParaRegistrarResultado
+from competencia.domain.exceptions import EstadoInvalidoParaRegistrarResultado
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 

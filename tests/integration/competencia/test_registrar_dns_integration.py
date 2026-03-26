@@ -11,7 +11,8 @@ import pytest
 from competencia.application.commands.llamar_atleta import LlamarAtletaCommand, LlamarAtletaHandler
 from competencia.application.commands.registrar_ap import RegistrarAPCommand, RegistrarAPHandler
 from competencia.application.commands.registrar_dns import RegistrarDNSCommand, RegistrarDNSHandler
-from competencia.domain.aggregates.performance import EstadoInvalidoParaRegistrarDNS, Performance
+from competencia.domain.aggregates.performance import Performance
+from competencia.domain.exceptions import EstadoInvalidoParaRegistrarDNS
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
