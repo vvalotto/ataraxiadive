@@ -7,14 +7,18 @@ from typing import Any
 from uuid import UUID
 
 from shared.domain.base.aggregate_root import AggregateRoot
+from competencia.domain.events.grilla_de_salida_ajustada import GrillaDeSalidaAjustada
 from competencia.domain.events.grilla_de_salida_generada import GrillaDeSalidaGenerada
 from competencia.domain.events.intervalo_ot_configurado import IntervaloOTConfigurado
 from competencia.domain.exceptions import (
+    GrillaNoGenerada,
     GrillaYaConfirmada,
     IntervaloNoConfigurado,
+    PerformanceNoEncontrada,
     SinPerformancesParaGrilla,
 )
 from competencia.domain.ports.performances_ap_port import PerformancesAPData
+from competencia.domain.value_objects.cambio_grilla import CambioGrilla
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.entrada_grilla import EntradaGrilla
 from competencia.domain.value_objects.estado_competencia import EstadoCompetencia
@@ -201,6 +205,134 @@ class Competencia(AggregateRoot):
         self._grilla = entradas
         self._record(event)
 
+    def ajustar_grilla(self, cambios: list[CambioGrilla]) -> None:
+        """Aplica ajustes manuales sobre la Grilla de Salida generada.
+
+        Permite modificar la posición o el andarivel de uno o más atletas.
+        Si se cambia la posición, los OTs se recalculan para todos los atletas
+        según la política P-02.
+
+        La operación es acumulativa: puede llamarse múltiples veces antes de
+        confirmar la grilla, emitiendo un evento por cada llamada.
+
+        Args:
+            cambios: Lista de cambios a aplicar. Cada cambio especifica
+                performance_id, campo ("posicion"|"andarivel") y valor_nuevo.
+
+        Raises:
+            GrillaNoGenerada: Si la grilla no fue generada aún.
+            GrillaYaConfirmada: INV-C-02 — grilla confirmada, ajuste no permitido.
+            PerformanceNoEncontrada: Si algún performance_id no existe en la grilla.
+        """
+        if not self._grilla:
+            raise GrillaNoGenerada(
+                f"Competencia {self._competencia_id}: grilla no generada — "
+                "ejecutar generar_grilla() antes de ajustar"
+            )
+        if self._grilla_confirmada:
+            raise GrillaYaConfirmada(
+                f"Competencia {self._competencia_id}: INV-C-02 — "
+                "grilla confirmada, ajuste no permitido"
+            )
+
+        grilla_por_id = {e.performance_id: e for e in self._grilla}
+        for cambio in cambios:
+            if cambio.performance_id not in grilla_por_id:
+                raise PerformanceNoEncontrada(
+                    f"Competencia {self._competencia_id}: performance "
+                    f"{cambio.performance_id} no encontrada en la grilla"
+                )
+
+        grilla_mutable = {e.performance_id: e for e in self._grilla}
+        cambios_payload: list[dict[str, object]] = []
+        hubo_cambio_posicion = False
+
+        for cambio in cambios:
+            entrada = grilla_mutable[cambio.performance_id]
+            valor_anterior = (
+                entrada.posicion if cambio.campo == "posicion" else entrada.andarivel
+            )
+            if cambio.campo == "posicion":
+                posicion_nueva = cambio.valor_nuevo
+                posicion_vieja = entrada.posicion
+                # Si la posición destino está ocupada, desplazar al ocupante
+                ocupante_id = next(
+                    (pid for pid, e in grilla_mutable.items()
+                     if e.posicion == posicion_nueva and pid != cambio.performance_id),
+                    None,
+                )
+                if ocupante_id is not None:
+                    ocupante = grilla_mutable[ocupante_id]
+                    grilla_mutable[ocupante_id] = EntradaGrilla(
+                        performance_id=ocupante.performance_id,
+                        atleta_id=ocupante.atleta_id,
+                        posicion=posicion_vieja,
+                        andarivel=ocupante.andarivel,
+                        ot_programado=ocupante.ot_programado,
+                    )
+                    cambios_payload.append(
+                        {
+                            "performance_id": str(ocupante_id),
+                            "campo": "posicion",
+                            "valor_anterior": posicion_nueva,
+                            "valor_nuevo": posicion_vieja,
+                        }
+                    )
+                grilla_mutable[cambio.performance_id] = EntradaGrilla(
+                    performance_id=entrada.performance_id,
+                    atleta_id=entrada.atleta_id,
+                    posicion=posicion_nueva,
+                    andarivel=entrada.andarivel,
+                    ot_programado=entrada.ot_programado,
+                )
+                hubo_cambio_posicion = True
+            else:
+                grilla_mutable[cambio.performance_id] = EntradaGrilla(
+                    performance_id=entrada.performance_id,
+                    atleta_id=entrada.atleta_id,
+                    posicion=entrada.posicion,
+                    andarivel=cambio.valor_nuevo,
+                    ot_programado=entrada.ot_programado,
+                )
+            cambios_payload.append(
+                {
+                    "performance_id": str(cambio.performance_id),
+                    "campo": cambio.campo,
+                    "valor_anterior": valor_anterior,
+                    "valor_nuevo": cambio.valor_nuevo,
+                }
+            )
+
+        nueva_grilla = sorted(grilla_mutable.values(), key=lambda e: e.posicion)
+
+        if hubo_cambio_posicion and self._intervalo is not None:
+            ot_inicio = min(e.ot_programado for e in self._grilla)
+            nueva_grilla = [
+                EntradaGrilla(
+                    performance_id=e.performance_id,
+                    atleta_id=e.atleta_id,
+                    posicion=e.posicion,
+                    andarivel=e.andarivel,
+                    ot_programado=ot_inicio + timedelta(
+                        minutes=(e.posicion - 1) * self._intervalo.minutos
+                    ),
+                )
+                for e in nueva_grilla
+            ]
+
+        now = GrillaDeSalidaAjustada.now()
+        event = GrillaDeSalidaAjustada(
+            event_type="GrillaDeSalidaAjustada",
+            aggregate_id=str(self._competencia_id),
+            occurred_at=now,
+            competencia_id=str(self._competencia_id),
+            disciplina=self._disciplina.value,
+            cambios=tuple(cambios_payload),
+            ajustada_en=now.isoformat(),
+        )
+        self._grilla = nueva_grilla
+        self._record(event)
+
     # ── Reconstitución desde eventos ──────────────────────────────────────────
 
     @classmethod
@@ -230,6 +362,7 @@ class Competencia(AggregateRoot):
         _handlers: dict[str, Any] = {
             "IntervaloOTConfigurado": self._apply_intervalo_ot_configurado,
             "GrillaDeSalidaGenerada": self._apply_grilla_de_salida_generada,
+            "GrillaDeSalidaAjustada": self._apply_grilla_de_salida_ajustada,
             "GrillaConfirmada": self._apply_grilla_confirmada,
         }
 
@@ -251,6 +384,45 @@ class Competencia(AggregateRoot):
             )
             for p in payload["performances"]
         ]
+
+    def _apply_grilla_de_salida_ajustada(self, payload: dict[str, Any]) -> None:
+        grilla_por_id = {e.performance_id: e for e in self._grilla}
+        for cambio in payload["cambios"]:
+            pid = UUID(cambio["performance_id"])
+            entrada = grilla_por_id[pid]
+            if cambio["campo"] == "posicion":
+                grilla_por_id[pid] = EntradaGrilla(
+                    performance_id=entrada.performance_id,
+                    atleta_id=entrada.atleta_id,
+                    posicion=cambio["valor_nuevo"],
+                    andarivel=entrada.andarivel,
+                    ot_programado=entrada.ot_programado,
+                )
+            else:
+                grilla_por_id[pid] = EntradaGrilla(
+                    performance_id=entrada.performance_id,
+                    atleta_id=entrada.atleta_id,
+                    posicion=entrada.posicion,
+                    andarivel=cambio["valor_nuevo"],
+                    ot_programado=entrada.ot_programado,
+                )
+        nueva_grilla = sorted(grilla_por_id.values(), key=lambda e: e.posicion)
+        hubo_cambio_posicion = any(c["campo"] == "posicion" for c in payload["cambios"])
+        if hubo_cambio_posicion and self._intervalo is not None:
+            ot_inicio = min(e.ot_programado for e in self._grilla)
+            nueva_grilla = [
+                EntradaGrilla(
+                    performance_id=e.performance_id,
+                    atleta_id=e.atleta_id,
+                    posicion=e.posicion,
+                    andarivel=e.andarivel,
+                    ot_programado=ot_inicio + timedelta(
+                        minutes=(e.posicion - 1) * self._intervalo.minutos
+                    ),
+                )
+                for e in nueva_grilla
+            ]
+        self._grilla = nueva_grilla
 
     def _apply_grilla_confirmada(self, payload: dict[str, Any]) -> None:  # noqa: ARG002
         self._grilla_confirmada = True
