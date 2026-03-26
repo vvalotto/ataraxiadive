@@ -6,6 +6,7 @@ from datetime import datetime
 from uuid import UUID
 
 from competencia.domain.aggregates.competencia import Competencia
+from competencia.domain.ports.disciplina_descriptor_port import DisciplinaDescriptorPort
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.ports.performances_ap_port import PerformancesAPPort
 from competencia.domain.value_objects.disciplina import Disciplina
@@ -46,15 +47,18 @@ class GenerarGrillaHandler:
     Args:
         event_store: Puerto de persistencia de eventos.
         performances_ap: Puerto para consultar performances con AP.
+        disciplina_descriptor: Puerto para obtener el descriptor de una disciplina.
     """
 
     def __init__(
         self,
         event_store: EventStorePort,
         performances_ap: PerformancesAPPort,
+        disciplina_descriptor: DisciplinaDescriptorPort,
     ) -> None:
         self._event_store = event_store
         self._performances_ap = performances_ap
+        self._disciplina_descriptor = disciplina_descriptor
 
     async def handle(self, command: GenerarGrillaCommand) -> None:
         """Ejecuta el comando GenerarGrilla.
@@ -80,9 +84,12 @@ class GenerarGrillaHandler:
             command.competencia_id
         )
 
+        descriptor = self._disciplina_descriptor.describe(command.disciplina)
+
         competencia.generar_grilla(
             ot_inicio=command.ot_inicio,
             performances=performances,
+            descriptor=descriptor,
             andariveles=command.andariveles,
         )
 

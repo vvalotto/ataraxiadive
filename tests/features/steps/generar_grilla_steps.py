@@ -32,6 +32,7 @@ from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 from competencia.infrastructure.repositories.performances_ap_adapter import (
     PerformancesAPAdapter,
 )
@@ -148,7 +149,7 @@ def dados_aps_sta(context: dict, datatable: object) -> None:
 def dada_grilla_generada(context: dict) -> None:
     store = _get_store(context)
     adapter = PerformancesAPAdapter(store)
-    handler = GenerarGrillaHandler(store, adapter)
+    handler = GenerarGrillaHandler(store, adapter, DisciplinaDescriptorAdapter())
     asyncio.run(
         handler.handle(
             GenerarGrillaCommand(
@@ -252,7 +253,7 @@ def cuando_genera_grilla_dnf(context: dict, ot_str: str) -> None:
 def _ejecutar_generar_grilla(context: dict) -> None:
     store = _get_store(context)
     adapter = PerformancesAPAdapter(store)
-    handler = GenerarGrillaHandler(store, adapter)
+    handler = GenerarGrillaHandler(store, adapter, DisciplinaDescriptorAdapter())
     try:
         asyncio.run(
             handler.handle(

@@ -23,6 +23,7 @@ from competencia.domain.exceptions import (
 from competencia.domain.ports.performances_ap_port import PerformancesAPData
 from competencia.domain.value_objects.cambio_grilla import CambioGrilla
 from competencia.domain.value_objects.disciplina import Disciplina
+from competencia.domain.value_objects.disciplina_descriptor import DisciplinaDescriptor
 from competencia.domain.value_objects.entrada_grilla import EntradaGrilla
 from competencia.domain.value_objects.estado_competencia import EstadoCompetencia
 from competencia.domain.value_objects.intervalo_disciplina import IntervaloDisciplina
@@ -131,6 +132,7 @@ class Competencia(AggregateRoot):
         self,
         ot_inicio: datetime,
         performances: list[PerformancesAPData],
+        descriptor: DisciplinaDescriptor,
         andariveles: int = 1,
     ) -> None:
         """Genera (o regenera) la Grilla de Salida ordenando atletas por AP.
@@ -171,7 +173,7 @@ class Competencia(AggregateRoot):
                 f"Competencia {self._competencia_id}: no hay performances con AP"
             )
 
-        ordenadas = _ordenar_performances(performances, self._disciplina)
+        ordenadas = _ordenar_performances(performances, descriptor)
         now = GrillaDeSalidaGenerada.now()
 
         entradas = []
@@ -517,15 +519,14 @@ class Competencia(AggregateRoot):
 
 
 def _ordenar_performances(
-    performances: list[PerformancesAPData], disciplina: Disciplina
+    performances: list[PerformancesAPData], descriptor: DisciplinaDescriptor
 ) -> list[PerformancesAPData]:
     """Ordena las performances según la política P-01.
 
     STA (tiempo): AP mayor → menor (primero el que declara más tiempo).
     Distancia: AP menor → mayor (primero el más conservador).
     """
-    reverse = disciplina.es_tiempo()
-    return sorted(performances, key=lambda p: p.valor_ap, reverse=reverse)
+    return sorted(performances, key=lambda p: p.valor_ap, reverse=not descriptor.orden_ascendente)
 
 
 def _calcular_andarivel(posicion: int, total_andariveles: int) -> int:

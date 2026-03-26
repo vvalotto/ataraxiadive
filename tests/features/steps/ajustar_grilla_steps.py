@@ -33,6 +33,7 @@ from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
 
 scenarios("../US-2.1.3-ajustar-grilla.feature")
@@ -117,7 +118,7 @@ async def _seed_grilla_c001(store: SQLiteEventStore, ctx: dict) -> None:
         )
 
     adapter = PerformancesAPAdapter(store)
-    await GenerarGrillaHandler(store, adapter).handle(
+    await GenerarGrillaHandler(store, adapter, DisciplinaDescriptorAdapter()).handle(
         GenerarGrillaCommand(
             competencia_id=_C001,
             disciplina=Disciplina.STA,

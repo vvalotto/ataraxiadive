@@ -41,6 +41,7 @@ from competencia.domain.value_objects.estado_competencia import EstadoCompetenci
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 from competencia.infrastructure.repositories.competencia_estado_adapter import (
     CompetenciaEstadoAdapter,
 )
@@ -126,7 +127,7 @@ async def _seed_grilla(store: SQLiteEventStore, comp_id: UUID) -> None:
             )
         )
     adapter = PerformancesAPAdapter(store)
-    await GenerarGrillaHandler(store, adapter).handle(
+    await GenerarGrillaHandler(store, adapter, DisciplinaDescriptorAdapter()).handle(
         GenerarGrillaCommand(
             competencia_id=comp_id,
             disciplina=_DISCIPLINA,
