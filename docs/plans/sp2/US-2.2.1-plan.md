@@ -87,7 +87,32 @@
 
 ---
 
-**Estado:** 0/10 tareas completadas
+**Estado:** ✅ COMPLETADO
+**Fecha completado:** 2026-03-26
+
+---
+
+## Métricas de Tiempo
+
+| Tarea/Fase | Estimado | Real |
+|------------|----------|------|
+| T1 DisciplinaDescriptor VO | 10 min | ~5 min |
+| T2 Port | 5 min | ~5 min |
+| T3 Adapter | 10 min | ~5 min |
+| T4 Refactor aggregate | 15 min | ~10 min |
+| T5 Refactor handler | 10 min | ~5 min |
+| T6 Exports | 2 min | ~2 min |
+| T7-T8 Unit tests | 18 min | ~8 min |
+| T9 Integration tests | 10 min | ~7 min |
+| T10 BDD steps | 12 min | ~7 min |
+| Actualizar tests existentes (17 archivos) | — | ~15 min |
+| **Total** | **55 min** | **~69 min** |
+
+## Lecciones Aprendidas
+
+- ✅ El patrón Port+Adapter para un VO sin I/O resulta en un adapter de ~10 líneas — overhead mínimo, ganancia en desacoplamiento real
+- ⚠️ Al agregar un parámetro a `generar_grilla()`, 17 archivos de tests necesitaron actualización — el impacto horizontal fue mayor al estimado
+- 💡 `RegistrarAPCommand` usa `participante_id`, no `atleta_id` — recordar consistencia de naming al escribir tests de integración nuevos
 
 ---
 

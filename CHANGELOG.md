@@ -10,6 +10,18 @@ Versionado: [Semantic Versioning](https://semver.org/lang/es/)
 ## [Unreleased]
 
 ### Added
+- [US-2.2.1] DisciplinaDescriptor VO + Port + Adapter — encapsula reglas de disciplina (política P-01) y desacopla el ordering de grilla del enum Disciplina
+  - `DisciplinaDescriptor` frozen dataclass con `unidad_esperada` y `orden_ascendente`
+  - `DisciplinaDescriptorPort` ABC + `DisciplinaDescriptorAdapter` sin I/O
+  - `GenerarGrillaHandler` inyecta el port; 46 tests nuevos, cobertura 100%
+
+### Changed
+- [US-2.2.1] `Competencia.generar_grilla()` acepta `descriptor: DisciplinaDescriptor` — elimina dependencia directa en `disciplina.es_tiempo()`
+- [US-2.2.1] `GenerarGrillaHandler.__init__` recibe `DisciplinaDescriptorPort` como tercer parámetro
+
+---
+
+### Added (SP1 — v0.1.0)
 - Estructura inicial del repositorio
 - CLAUDE.md con convenciones del proyecto
 - ADR-001: Event Sourcing para la fase de competencia

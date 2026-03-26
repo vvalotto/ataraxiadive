@@ -8,7 +8,7 @@
   },
   "timeline": {
     "started_at": "2026-03-26T21:23:45.527800+00:00",
-    "completed_at": null,
+    "completed_at": "2026-03-26T22:12:22.543797+00:00",
     "total_elapsed_seconds": 578,
     "effective_seconds": 578,
     "paused_seconds": 0
@@ -84,6 +84,18 @@
       ],
       "auto_approved": true,
       "user_approval_time_seconds": 0
+    },
+    {
+      "id": 8,
+      "title": "Documentaci\u00f3n",
+      "started_at": "2026-03-26T22:12:22.543797+00:00",
+      "ended_at": "2026-03-26T22:12:22.543797+00:00"
+    },
+    {
+      "id": 9,
+      "title": "Reporte Final",
+      "started_at": "2026-03-26T22:12:22.543797+00:00",
+      "ended_at": "2026-03-26T22:12:22.543797+00:00"
     }
   ],
   "pauses": [],
