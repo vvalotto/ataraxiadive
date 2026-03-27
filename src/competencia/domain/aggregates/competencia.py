@@ -7,6 +7,7 @@ from typing import Any
 from uuid import UUID
 
 from shared.domain.base.aggregate_root import AggregateRoot
+from competencia.domain.events.competencia_finalizada import CompetenciaFinalizada
 from competencia.domain.events.competencia_iniciada import CompetenciaIniciada
 from competencia.domain.events.grilla_confirmada import GrillaConfirmada
 from competencia.domain.events.grilla_de_salida_ajustada import GrillaDeSalidaAjustada
@@ -14,6 +15,7 @@ from competencia.domain.events.grilla_de_salida_generada import GrillaDeSalidaGe
 from competencia.domain.events.intervalo_ot_configurado import IntervaloOTConfigurado
 from competencia.domain.exceptions import (
     CompetenciaNoConfirmada,
+    CompetenciaNoFinalizable,
     GrillaNoGenerada,
     GrillaYaConfirmada,
     IntervaloNoConfigurado,
@@ -408,6 +410,41 @@ class Competencia(AggregateRoot):
         self._estado = EstadoCompetencia.EnEjecucion
         self._record(event)
 
+    def finalizar(self, total_performances: int, ejecutadas: int, dns_count: int) -> None:
+        """Finaliza la Competencia cuando todas las performances están completas (INV-C-04).
+
+        Emite CompetenciaFinalizada y transiciona el estado a Finalizada.
+
+        Args:
+            total_performances: Total de performances de la disciplina.
+            ejecutadas: Cantidad en estado Ejecutada.
+            dns_count: Cantidad en estado DNS.
+
+        Raises:
+            CompetenciaNoFinalizable: INV-C-04 — quedan performances en AnunciadaAP o Llamada.
+        """
+        pendientes = total_performances - ejecutadas - dns_count
+        if pendientes > 0:
+            raise CompetenciaNoFinalizable(
+                f"Competencia {self._competencia_id}: INV-C-04 — "
+                f"{pendientes} performance(s) aún pendientes"
+            )
+
+        now = CompetenciaFinalizada.now()
+        event = CompetenciaFinalizada(
+            event_type="CompetenciaFinalizada",
+            aggregate_id=str(self._competencia_id),
+            occurred_at=now,
+            competencia_id=str(self._competencia_id),
+            disciplina=self._disciplina.value,
+            total_performances=total_performances,
+            ejecutadas=ejecutadas,
+            dns_count=dns_count,
+            finalizada_en=now.isoformat(),
+        )
+        self._estado = EstadoCompetencia.Finalizada
+        self._record(event)
+
     # ── Reconstitución desde eventos ──────────────────────────────────────────
 
     @classmethod
@@ -440,6 +477,7 @@ class Competencia(AggregateRoot):
             "GrillaDeSalidaAjustada": self._apply_grilla_de_salida_ajustada,
             "GrillaConfirmada": self._apply_grilla_confirmada,
             "CompetenciaIniciada": self._apply_competencia_iniciada,
+            "CompetenciaFinalizada": self._apply_competencia_finalizada,
         }
 
         handler = _handlers.get(event_type)
@@ -506,6 +544,9 @@ class Competencia(AggregateRoot):
 
     def _apply_competencia_iniciada(self, payload: dict[str, Any]) -> None:  # noqa: ARG002
         self._estado = EstadoCompetencia.EnEjecucion
+
+    def _apply_competencia_finalizada(self, payload: dict[str, Any]) -> None:  # noqa: ARG002
+        self._estado = EstadoCompetencia.Finalizada
 
     @staticmethod
     def _parse_payload(payload: Any) -> dict[str, Any]:

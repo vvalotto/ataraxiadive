@@ -1,12 +1,14 @@
-"""Command y Handler para AsignarTarjeta — US-1.2.4 / US-1.4.1."""
+"""Command y Handler para AsignarTarjeta — US-1.2.4 / US-1.4.1 / US-2.4.1."""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from decimal import Decimal
 from uuid import UUID
 
+from competencia.application._p08_finalizacion import trigger_finalizacion_si_corresponde
 from competencia.domain.aggregates.performance import Performance
 from competencia.domain.ports.event_store_port import EventStorePort
+from competencia.domain.ports.performances_estado_port import PerformancesEstadoPort
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 
@@ -50,14 +52,21 @@ class AsignarTarjetaHandler:
     """Handler del comando AsignarTarjeta.
 
     Carga la Performance desde el Event Store, ejecuta asignar_tarjeta()
-    y persiste TarjetaAsignada. Es el paso final del ciclo de vida de la Performance.
+    y persiste TarjetaAsignada. Tras persistir, verifica P-08: si todas las
+    performances finalizaron, emite CompetenciaFinalizada automáticamente.
 
     Args:
         event_store: Puerto de persistencia de eventos.
+        performances_estado: Puerto para verificar P-08. None = sin verificación.
     """
 
-    def __init__(self, event_store: EventStorePort) -> None:
+    def __init__(
+        self,
+        event_store: EventStorePort,
+        performances_estado: PerformancesEstadoPort | None = None,
+    ) -> None:
         self._event_store = event_store
+        self._performances_estado = performances_estado
 
     async def handle(self, command: AsignarTarjetaCommand) -> None:
         """Ejecuta el comando AsignarTarjeta.
@@ -96,6 +105,15 @@ class AsignarTarjetaHandler:
                 payload=event.to_payload(),
             )
 
+        # Política P-08: verificar si la competencia puede finalizar
+        if self._performances_estado is not None:
+            await trigger_finalizacion_si_corresponde(
+                self._event_store,
+                self._performances_estado,
+                command.competencia_id,
+                command.disciplina,
+            )
+
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -103,8 +121,5 @@ class AsignarTarjetaHandler:
 def _build_stream_id(
     competencia_id: UUID, participante_id: UUID, disciplina: Disciplina
 ) -> str:
-    """Construye el stream ID canónico para una Performance.
-
-    Format: "performance-{competencia_id}-{participante_id}-{disciplina}"
-    """
+    """Construye el stream ID canónico para una Performance."""
     return f"performance-{competencia_id}-{participante_id}-{disciplina.value}"

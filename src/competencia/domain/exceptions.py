@@ -91,3 +91,7 @@ class EstadoInvalidoParaGenerarGrilla(DomainError):
 
 class SinPerformancesParaGrilla(DomainError):
     """No hay performances con AP registrado para generar la grilla."""
+
+
+class CompetenciaNoFinalizable(DomainError):
+    """INV-C-04 — no se puede finalizar: quedan performances en AnunciadaAP o Llamada."""
