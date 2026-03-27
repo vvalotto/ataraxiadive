@@ -37,7 +37,7 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 scenarios("../US-1.2.4-asignar-tarjeta.feature")
 
 _CREATE_TABLE = """
@@ -117,7 +117,7 @@ def step_ap_y_resultado_registrado(ctx: dict, valor: int, rp: float) -> None:  #
     disc = ctx["disciplina"]
 
     asyncio.run(
-        RegistrarAPHandler(es, sp).handle(
+        RegistrarAPHandler(es, sp, DisciplinaDescriptorAdapter()).handle(
             RegistrarAPCommand(
                 competencia_id=cid, participante_id=pid,
                 disciplina=disc, valor_ap=Decimal(str(valor)), unidad=UnidadMedida.Metros,
@@ -133,7 +133,7 @@ def step_ap_y_resultado_registrado(ctx: dict, valor: int, rp: float) -> None:  #
         )
     )
     asyncio.run(
-        RegistrarResultadoHandler(es).handle(
+        RegistrarResultadoHandler(es, DisciplinaDescriptorAdapter()).handle(
             RegistrarResultadoCommand(
                 competencia_id=cid, participante_id=pid,
                 disciplina=disc, valor_rp=Decimal(str(rp)),
@@ -169,7 +169,7 @@ def step_performance_en_llamada(ctx: dict) -> None:  # type: ignore[type-arg]
     disc = ctx["disciplina"]
 
     asyncio.run(
-        RegistrarAPHandler(fresh_store, sp).handle(
+        RegistrarAPHandler(fresh_store, sp, DisciplinaDescriptorAdapter()).handle(
             RegistrarAPCommand(
                 competencia_id=cid, participante_id=pid,
                 disciplina=disc, valor_ap=Decimal("50"), unidad=UnidadMedida.Metros,

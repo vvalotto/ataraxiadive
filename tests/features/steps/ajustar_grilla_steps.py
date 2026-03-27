@@ -105,7 +105,7 @@ async def _seed_grilla_c001(store: SQLiteEventStore, ctx: dict) -> None:
         )
     )
     stub = StubCompetenciaEstadoAdapter()
-    handler_ap = RegistrarAPHandler(store, stub)
+    handler_ap = RegistrarAPHandler(store, stub, DisciplinaDescriptorAdapter())
     for atleta_str, valor in [("A002", "360"), ("A001", "330"), ("A003", "285")]:
         await handler_ap.handle(
             RegistrarAPCommand(

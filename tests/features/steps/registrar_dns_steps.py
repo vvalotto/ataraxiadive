@@ -29,7 +29,7 @@ from competencia.domain.value_objects.estado_performance import EstadoPerformanc
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 scenarios("../US-1.2.5-registrar-dns.feature")
 
 _CREATE_TABLE = """
@@ -103,7 +103,7 @@ def step_ap_registrado_y_llamada(ctx: dict, valor: int) -> None:  # type: ignore
     disc = ctx["disciplina"]
 
     asyncio.run(
-        RegistrarAPHandler(es, sp).handle(
+        RegistrarAPHandler(es, sp, DisciplinaDescriptorAdapter()).handle(
             RegistrarAPCommand(
                 competencia_id=cid,
                 participante_id=pid,
@@ -142,7 +142,7 @@ def step_performance_en_anunciada(ctx: dict) -> None:  # type: ignore[type-arg]
     disc = ctx["disciplina"]
 
     asyncio.run(
-        RegistrarAPHandler(fresh_store, sp).handle(
+        RegistrarAPHandler(fresh_store, sp, DisciplinaDescriptorAdapter()).handle(
             RegistrarAPCommand(
                 competencia_id=cid,
                 participante_id=pid,
@@ -165,7 +165,7 @@ def step_performance_con_resultado(ctx: dict, rp: float) -> None:  # type: ignor
     disc = ctx["disciplina"]
 
     asyncio.run(
-        RegistrarResultadoHandler(es).handle(
+        RegistrarResultadoHandler(es, DisciplinaDescriptorAdapter()).handle(
             RegistrarResultadoCommand(
                 competencia_id=cid,
                 participante_id=pid,

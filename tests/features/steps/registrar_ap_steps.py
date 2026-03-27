@@ -27,7 +27,7 @@ from competencia.domain.value_objects.estado_performance import EstadoPerformanc
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 # Enlaza todos los escenarios del feature file a este módulo
 scenarios("../US-1.2.1-registrar-ap.feature")
 
@@ -112,7 +112,7 @@ def step_grilla_no_confirmada(ctx: dict) -> None:  # type: ignore[type-arg]
 
 @given("ya existe un AP del participante para esta disciplina y competencia")
 def step_ap_existente(ctx: dict) -> None:  # type: ignore[type-arg]
-    handler = RegistrarAPHandler(ctx["event_store"], ctx["estado_port"])
+    handler = RegistrarAPHandler(ctx["event_store"], ctx["estado_port"], DisciplinaDescriptorAdapter())
     cmd = RegistrarAPCommand(
         competencia_id=ctx["competencia_id"],
         participante_id=ctx["participante_id"],
@@ -143,7 +143,7 @@ def step_grilla_confirmada(ctx: dict) -> None:  # type: ignore[type-arg]
 
 
 def _ejecutar_registrar_ap(ctx: dict, valor: str, unidad: str) -> None:  # type: ignore[type-arg]
-    handler = RegistrarAPHandler(ctx["event_store"], ctx["estado_port"])
+    handler = RegistrarAPHandler(ctx["event_store"], ctx["estado_port"], DisciplinaDescriptorAdapter())
     cmd = RegistrarAPCommand(
         competencia_id=ctx["competencia_id"],
         participante_id=ctx["participante_id"],

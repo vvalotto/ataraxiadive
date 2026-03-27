@@ -18,6 +18,9 @@ from competencia.application.commands.registrar_ap import (
 from competencia.domain.value_objects.ap import ValorAPInvalido
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
@@ -56,6 +59,7 @@ def handler(mock_event_store: AsyncMock, mock_estado_port: AsyncMock) -> Registr
     return RegistrarAPHandler(
         event_store=mock_event_store,
         competencia_estado=mock_estado_port,
+        disciplina_descriptor=DisciplinaDescriptorAdapter(),
     )
 
 
@@ -113,7 +117,7 @@ async def test_handle_stream_id_contiene_natural_key(
     participante_id: Any,
 ) -> None:
     """El stream_id incluye competencia_id, participante_id y disciplina."""
-    cmd = make_command(competencia_id, participante_id, disciplina=Disciplina.DNF)
+    cmd = make_command(competencia_id, participante_id, disciplina=Disciplina.DNF, unidad=UnidadMedida.Metros)
     await handler.handle(cmd)
 
     call_kwargs = mock_event_store.append.call_args
@@ -188,3 +192,25 @@ async def test_handle_valor_cero_lanza_valor_ap_invalido(
     cmd = make_command(competencia_id, participante_id, valor="0")
     with pytest.raises(ValorAPInvalido):
         await handler.handle(cmd)
+
+
+# ── US-2.2.2: validación de unidad ────────────────────────────────────────────
+
+
+async def test_handle_unidad_incompatible_lanza_excepcion(
+    handler: RegistrarAPHandler,
+    mock_event_store: AsyncMock,
+    competencia_id: Any,
+    participante_id: Any,
+) -> None:
+    """US-2.2.2: STA con Metros lanza UnidadIncompatible."""
+    from competencia.application.commands.registrar_resultado import UnidadIncompatible
+
+    cmd = make_command(
+        competencia_id, participante_id,
+        disciplina=Disciplina.STA, unidad=UnidadMedida.Metros,  # STA requiere Segundos
+    )
+    with pytest.raises(UnidadIncompatible):
+        await handler.handle(cmd)
+
+    mock_event_store.append.assert_not_called()

@@ -70,7 +70,7 @@ async def _seed_competencia(
         )
     )
     for atleta_id, valor, unidad in aps:
-        await RegistrarAPHandler(store, StubCompetenciaEstadoAdapter()).handle(
+        await RegistrarAPHandler(store, StubCompetenciaEstadoAdapter(), DisciplinaDescriptorAdapter()).handle(
             RegistrarAPCommand(
                 competencia_id=competencia_id,
                 participante_id=atleta_id,

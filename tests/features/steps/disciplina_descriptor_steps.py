@@ -106,7 +106,7 @@ def dada_competencia_con_aps(context: dict, disc: str, ap1: str, ap2: str, ap3: 
             )
         )
         for atleta_id, (valor, unidad) in zip(atleta_ids, aps):
-            await RegistrarAPHandler(store, StubCompetenciaEstadoAdapter()).handle(
+            await RegistrarAPHandler(store, StubCompetenciaEstadoAdapter(), DisciplinaDescriptorAdapter()).handle(
                 RegistrarAPCommand(
                     competencia_id=comp_id,
                     participante_id=atleta_id,

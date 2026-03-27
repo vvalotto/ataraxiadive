@@ -103,7 +103,7 @@ async def _setup_grilla_generada(
         )
     )
     stub = StubCompetenciaEstadoAdapter()
-    ap_handler = RegistrarAPHandler(store, stub)
+    ap_handler = RegistrarAPHandler(store, stub, DisciplinaDescriptorAdapter())
     for atleta_id, ap_segundos in [(atleta_a, "300"), (atleta_b, "180"), (atleta_c, "120")]:
         await ap_handler.handle(
             RegistrarAPCommand(

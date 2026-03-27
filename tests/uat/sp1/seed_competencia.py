@@ -50,7 +50,7 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 _DISCIPLINA = Disciplina.STA
 _JUEZ = "juez-uat-001"
 _OT = datetime.now(timezone.utc)
@@ -76,7 +76,7 @@ async def seed() -> dict[str, str]:
 
     # ── Registrar APs ──────────────────────────────────────────────────────
     for pid, valor in [(pid_a, "60"), (pid_b, "40"), (pid_c, "80"), (pid_d, "50"), (pid_e, "90")]:
-        await RegistrarAPHandler(store, stub).handle(
+        await RegistrarAPHandler(store, stub, DisciplinaDescriptorAdapter()).handle(
             RegistrarAPCommand(
                 competencia_id=cid,
                 participante_id=pid,
@@ -94,7 +94,7 @@ async def seed() -> dict[str, str]:
             ot_programado=_OT, posicion_grilla=1,
         )
     )
-    await RegistrarResultadoHandler(store).handle(
+    await RegistrarResultadoHandler(store, DisciplinaDescriptorAdapter()).handle(
         RegistrarResultadoCommand(
             competencia_id=cid, participante_id=pid_a, disciplina=_DISCIPLINA,
             valor_rp=Decimal("60"), unidad=UnidadMedida.Metros, registrado_por=_JUEZ,
@@ -130,7 +130,7 @@ async def seed() -> dict[str, str]:
             ot_programado=_OT, posicion_grilla=3,
         )
     )
-    await RegistrarResultadoHandler(store).handle(
+    await RegistrarResultadoHandler(store, DisciplinaDescriptorAdapter()).handle(
         RegistrarResultadoCommand(
             competencia_id=cid, participante_id=pid_c, disciplina=_DISCIPLINA,
             valor_rp=Decimal("72"), unidad=UnidadMedida.Metros, registrado_por=_JUEZ,
@@ -151,7 +151,7 @@ async def seed() -> dict[str, str]:
             ot_programado=_OT, posicion_grilla=4,
         )
     )
-    await RegistrarResultadoHandler(store).handle(
+    await RegistrarResultadoHandler(store, DisciplinaDescriptorAdapter()).handle(
         RegistrarResultadoCommand(
             competencia_id=cid, participante_id=pid_d, disciplina=_DISCIPLINA,
             valor_rp=Decimal("55"), unidad=UnidadMedida.Metros, registrado_por=_JUEZ,
@@ -179,7 +179,7 @@ async def seed() -> dict[str, str]:
             ot_programado=_OT, posicion_grilla=5,
         )
     )
-    await RegistrarResultadoHandler(store).handle(
+    await RegistrarResultadoHandler(store, DisciplinaDescriptorAdapter()).handle(
         RegistrarResultadoCommand(
             competencia_id=cid, participante_id=pid_e, disciplina=_DISCIPLINA,
             valor_rp=Decimal("90"), unidad=UnidadMedida.Metros, registrado_por=_JUEZ,

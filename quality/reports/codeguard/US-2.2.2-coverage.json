@@ -1,0 +1,9 @@
+{
+  "us": "US-2.2.2",
+  "date": "2026-03-27",
+  "errores": 0,
+  "advertencias": 4,
+  "coverage": "97%",
+  "tests": 409,
+  "notes": "Complejidad preexistente en ajustar_grilla, no introducida por US-2.2.2"
+}

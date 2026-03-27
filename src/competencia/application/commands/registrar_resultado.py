@@ -6,6 +6,7 @@ from decimal import Decimal
 from uuid import UUID
 
 from competencia.domain.aggregates.performance import Performance
+from competencia.domain.ports.disciplina_descriptor_port import DisciplinaDescriptorPort
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
@@ -16,6 +17,10 @@ from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
 class PerformanceNoEncontrada(Exception):
     """El stream de la Performance no existe en el Event Store."""
+
+
+class UnidadIncompatible(Exception):
+    """La unidad del comando no coincide con la unidad esperada por la disciplina."""
 
 
 # ── Command ───────────────────────────────────────────────────────────────────
@@ -55,8 +60,11 @@ class RegistrarResultadoHandler:
         event_store: Puerto de persistencia de eventos.
     """
 
-    def __init__(self, event_store: EventStorePort) -> None:
+    def __init__(
+        self, event_store: EventStorePort, disciplina_descriptor: DisciplinaDescriptorPort
+    ) -> None:
         self._event_store = event_store
+        self._disciplina_descriptor = disciplina_descriptor
 
     async def handle(self, command: RegistrarResultadoCommand) -> None:
         """Ejecuta el comando RegistrarResultado.
@@ -65,9 +73,17 @@ class RegistrarResultadoHandler:
             command: Datos del resultado a registrar.
 
         Raises:
+            UnidadIncompatible: la unidad no coincide con la disciplina.
             PerformanceNoEncontrada: no existe Performance para este atleta.
             EstadoInvalidoParaRegistrarResultado: Performance no está en Llamada (INV-P-06).
         """
+        descriptor = self._disciplina_descriptor.describe(command.disciplina)
+        if command.unidad != descriptor.unidad_esperada:
+            raise UnidadIncompatible(
+                f"{command.disciplina.value} requiere {descriptor.unidad_esperada.value}, "
+                f"recibido {command.unidad.value}"
+            )
+
         stream_id = _build_stream_id(
             command.competencia_id, command.participante_id, command.disciplina
         )

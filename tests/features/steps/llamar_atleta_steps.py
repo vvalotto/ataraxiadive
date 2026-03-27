@@ -28,7 +28,7 @@ from competencia.domain.value_objects.estado_performance import EstadoPerformanc
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 scenarios("../US-1.2.2-llamar-atleta.feature")
 
 _CREATE_TABLE = """
@@ -93,7 +93,7 @@ def step_disciplina(ctx: dict, disciplina: str) -> None:  # type: ignore[type-ar
 @given('la performance del participante está en estado "AnunciadaAP"')
 def step_performance_anunciada_ap(ctx: dict) -> None:  # type: ignore[type-arg]
     """Registra un AP para poner la performance en AnunciadaAP."""
-    handler = RegistrarAPHandler(ctx["event_store"], ctx["estado_port"])
+    handler = RegistrarAPHandler(ctx["event_store"], ctx["estado_port"], DisciplinaDescriptorAdapter())
     cmd = RegistrarAPCommand(
         competencia_id=ctx["competencia_id"],
         participante_id=ctx["participante_id"],

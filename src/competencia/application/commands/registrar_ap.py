@@ -5,11 +5,18 @@ from dataclasses import dataclass
 from decimal import Decimal
 from uuid import UUID, uuid4
 
+from competencia.application.commands.registrar_resultado import UnidadIncompatible
 from competencia.domain.aggregates.performance import Performance
 from competencia.domain.ports.competencia_estado_port import CompetenciaEstadoPort
+from competencia.domain.ports.disciplina_descriptor_port import DisciplinaDescriptorPort
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
+
+
+# ── Re-export para uso externo ─────────────────────────────────────────────────
+
+__all__ = ["UnidadIncompatible", "APYaRegistrado", "PlazoAPVencidoError", "GrillaYaConfirmadaError"]
 
 
 # ── Excepciones de aplicación ─────────────────────────────────────────────────
@@ -68,9 +75,11 @@ class RegistrarAPHandler:
         self,
         event_store: EventStorePort,
         competencia_estado: CompetenciaEstadoPort,
+        disciplina_descriptor: DisciplinaDescriptorPort,
     ) -> None:
         self._event_store = event_store
         self._competencia_estado = competencia_estado
+        self._disciplina_descriptor = disciplina_descriptor
 
     async def handle(self, command: RegistrarAPCommand) -> UUID:
         """Ejecuta el comando RegistrarAP.
@@ -82,11 +91,19 @@ class RegistrarAPHandler:
             UUID del PerformanceId recién creado.
 
         Raises:
+            UnidadIncompatible: la unidad no coincide con la disciplina.
             PlazoAPVencidoError: INV-P-03 — plazo cerrado.
             GrillaYaConfirmadaError: INV-P-04 — grilla congelada.
             APYaRegistrado: INV-P-02 — AP duplicado.
             ValorAPInvalido: INV-P-01 — valor <= 0 (lanzado por AP value object).
         """
+        descriptor = self._disciplina_descriptor.describe(command.disciplina)
+        if command.unidad != descriptor.unidad_esperada:
+            raise UnidadIncompatible(
+                f"{command.disciplina.value} requiere {descriptor.unidad_esperada.value}, "
+                f"recibido {command.unidad.value}"
+            )
+
         # INV-P-03: plazo de AP vencido?
         if await self._competencia_estado.is_plazo_vencido(
             command.competencia_id, command.disciplina

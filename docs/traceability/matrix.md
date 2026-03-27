@@ -169,8 +169,8 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 | US-2.1.2 | 2.1 | RF-PR-04, RF-PR-05 | `GenerarGrilla` / `RegenerarGrilla` | INV-C-01, P-01, P-02 | ✅ Done |
 | US-2.1.3 | 2.1 | RF-PR-07 | `AjustarGrilla` | INV-C-02 (parcial) | ✅ Done |
 | US-2.1.4 | 2.1 | — | `ConfirmarGrilla` + `IniciarCompetencia` + reemplazar stub `CompetenciaEstadoPort` | INV-C-02/03 | ✅ Done |
-| US-2.2.1 | 2.2 | RF-EJ-08 | `DisciplinaDescriptor` value object + port (STA/tiempo, DNF/distancia) | — | ⬜ Backlog |
-| US-2.2.2 | 2.2 | RF-EJ-08 | API disciplina-aware + avance automático al siguiente atleta en grilla | P-06 | ⬜ Backlog |
+| US-2.2.1 | 2.2 | RF-EJ-08 | `DisciplinaDescriptor` value object + port (STA/tiempo, DNF/distancia) | — | ✅ Done |
+| US-2.2.2 | 2.2 | RF-EJ-08 | API disciplina-aware + validación de unidades + ordenamiento por grilla | P-06 | ✅ Done |
 | US-2.3.1 | 2.3 | RF-PR-06 | Ejecución multi-andarivel — distribución en grilla + sin conflicto entre andariveles | — | ⬜ Backlog |
 | US-2.4.1 | 2.4 | — | `CompetenciaFinalizada` automático (política P-08) | INV-C-04 | ⬜ Backlog |
 | US-2.4.2 | 2.4 | RF-PM-03 | `CalcularRanking` — BC Resultados núcleo · empates · podio | RF-PM-03 | ⬜ Backlog |
