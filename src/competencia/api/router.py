@@ -46,6 +46,10 @@ from competencia.application.queries.obtener_proximas_performances import (
     ObtenerProximasPerformancesQuery,
     ProximoAtletaDTO,
 )
+from competencia.application.queries.obtener_andariveles_activos import (
+    ObtenerAndarivelesActivosHandler,
+    ObtenerAndarivelesActivosQuery,
+)
 from competencia.application.queries.obtener_progreso import (
     ObtenerProgresoHandler,
     ObtenerProgresoQuery,
@@ -54,6 +58,9 @@ from competencia.application.queries.obtener_progreso import (
 from competencia.domain.value_objects.cambio_grilla import CambioGrilla
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
+from competencia.infrastructure.repositories.andariveles_activos_adapter import (
+    AndarivelesActivosAdapter,
+)
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
@@ -106,8 +113,25 @@ def get_disciplina_descriptor() -> DisciplinaDescriptorAdapter:
     return DisciplinaDescriptorAdapter()
 
 
+def get_andariveles_activos_adapter(
+    event_store: EventStoreDep,
+) -> AndarivelesActivosAdapter:
+    """Dependency: adapter de andariveles activos."""
+    return AndarivelesActivosAdapter(event_store)
+
+
+def get_obtener_andariveles_activos_handler(
+    event_store: EventStoreDep,
+) -> ObtenerAndarivelesActivosHandler:
+    """Dependency: handler de consulta de andariveles activos."""
+    return ObtenerAndarivelesActivosHandler(AndarivelesActivosAdapter(event_store))
+
+
 EventStoreDep = Annotated[SQLiteEventStore, Depends(get_event_store)]
 DisciplinaDescriptorDep = Annotated[DisciplinaDescriptorAdapter, Depends(get_disciplina_descriptor)]
+ObtenerAndarivelesActivosHandlerDep = Annotated[
+    ObtenerAndarivelesActivosHandler, Depends(get_obtener_andariveles_activos_handler)
+]
 
 
 def get_obtener_eventos_handler(
@@ -444,5 +468,42 @@ async def get_estado_competencia(
             "intervalo_minutos": dto.intervalo_minutos,
             "grilla_confirmada": dto.grilla_confirmada,
         },
+        status_code=200,
+    )
+
+
+@router.get("/{competencia_id}/andariveles", response_class=JSONResponse)
+async def get_andariveles_activos(
+    competencia_id: UUID,
+    disciplina: Disciplina,
+    andariveles: int,
+    handler: ObtenerAndarivelesActivosHandlerDep,
+) -> JSONResponse:
+    """Retorna el estado de cada andarivel para la competencia en ejecución.
+
+    Permite al juez ver qué andariveles están ocupados (Performance en Llamada)
+    y cuáles están libres (US-2.3.1).
+
+    Returns:
+        Lista de andariveles con numero, ocupado, atleta_id, performance_id y ot_programado.
+    """
+    result = await handler.handle(
+        ObtenerAndarivelesActivosQuery(
+            competencia_id=competencia_id,
+            disciplina=disciplina,
+            andariveles=andariveles,
+        )
+    )
+    return JSONResponse(
+        content=[
+            {
+                "numero": a.numero,
+                "ocupado": a.ocupado,
+                "atleta_id": str(a.atleta_id) if a.atleta_id else None,
+                "performance_id": str(a.performance_id) if a.performance_id else None,
+                "ot_programado": a.ot_programado.isoformat() if a.ot_programado else None,
+            }
+            for a in result
+        ],
         status_code=200,
     )
