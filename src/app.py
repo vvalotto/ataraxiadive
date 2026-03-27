@@ -4,10 +4,12 @@ from fastapi.responses import JSONResponse
 
 from competencia.api.exception_handlers import register_exception_handlers
 from competencia.api.router import router as competencia_router
+from resultados.api.router import router as resultados_router
 
 app = FastAPI(title="AtaraxiaDive", version="0.1.0")
 
 app.include_router(competencia_router)
+app.include_router(resultados_router)
 register_exception_handlers(app)
 
 

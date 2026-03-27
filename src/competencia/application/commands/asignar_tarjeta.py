@@ -5,6 +5,8 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from uuid import UUID
 
+from typing import Awaitable, Callable
+
 from competencia.application._p08_finalizacion import trigger_finalizacion_si_corresponde
 from competencia.domain.aggregates.performance import Performance
 from competencia.domain.ports.event_store_port import EventStorePort
@@ -64,9 +66,11 @@ class AsignarTarjetaHandler:
         self,
         event_store: EventStorePort,
         performances_estado: PerformancesEstadoPort | None = None,
+        on_finalizada: Callable[[UUID, Disciplina], Awaitable[None]] | None = None,
     ) -> None:
         self._event_store = event_store
         self._performances_estado = performances_estado
+        self._on_finalizada = on_finalizada
 
     async def handle(self, command: AsignarTarjetaCommand) -> None:
         """Ejecuta el comando AsignarTarjeta.
@@ -112,6 +116,7 @@ class AsignarTarjetaHandler:
                 self._performances_estado,
                 command.competencia_id,
                 command.disciplina,
+                on_finalizada=self._on_finalizada,
             )
 
 

@@ -1,0 +1,256 @@
+{
+  "metadata": {
+    "us_id": "US-2.4.2",
+    "us_title": "Calcular Ranking BC Resultados nucleo",
+    "us_points": 8,
+    "producto": "resultados",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-03-27T22:04:09.494509+00:00",
+    "completed_at": null,
+    "total_elapsed_seconds": 1623,
+    "effective_seconds": 1623,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validacion de Contexto",
+      "started_at": "2026-03-27T22:04:09.578318+00:00",
+      "completed_at": "2026-03-27T22:06:48.075233+00:00",
+      "elapsed_seconds": 158,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generacion de Escenarios BDD",
+      "started_at": "2026-03-27T22:06:48.156976+00:00",
+      "completed_at": "2026-03-27T22:07:24.008382+00:00",
+      "elapsed_seconds": 35,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de Implementacion",
+      "started_at": "2026-03-27T22:07:24.177003+00:00",
+      "completed_at": "2026-03-27T22:09:47.197492+00:00",
+      "elapsed_seconds": 143,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementacion",
+      "started_at": "2026-03-27T22:09:47.303902+00:00",
+      "completed_at": "2026-03-27T22:18:32.427294+00:00",
+      "elapsed_seconds": 525,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "T1",
+          "task_name": "exceptions + EntradaRanking VO",
+          "task_type": "impl",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-03-27T22:09:51.486378+00:00",
+          "completed_at": "2026-03-27T22:10:09.500469+00:00",
+          "elapsed_seconds": 18,
+          "actual_minutes": 0.3,
+          "variance_minutes": -9.7,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T2",
+          "task_name": "ResultadoFinal DTO + ResultadosCompetenciaPort",
+          "task_type": "impl",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-03-27T22:10:21.042823+00:00",
+          "completed_at": "2026-03-27T22:10:35.660143+00:00",
+          "elapsed_seconds": 14,
+          "actual_minutes": 0.23,
+          "variance_minutes": -9.77,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T3",
+          "task_name": "evento ResultadosCalculados",
+          "task_type": "impl",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-03-27T22:10:39.008806+00:00",
+          "completed_at": "2026-03-27T22:10:56.915459+00:00",
+          "elapsed_seconds": 17,
+          "actual_minutes": 0.28,
+          "variance_minutes": -9.72,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T4",
+          "task_name": "RankingCompetencia aggregate",
+          "task_type": "impl",
+          "estimated_minutes": 20.0,
+          "started_at": "2026-03-27T22:11:00.604235+00:00",
+          "completed_at": "2026-03-27T22:11:41.730283+00:00",
+          "elapsed_seconds": 41,
+          "actual_minutes": 0.68,
+          "variance_minutes": -19.32,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T5",
+          "task_name": "ResultadosCompetenciaAdapter ACL",
+          "task_type": "impl",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-03-27T22:11:46.128097+00:00",
+          "completed_at": "2026-03-27T22:12:04.248375+00:00",
+          "elapsed_seconds": 18,
+          "actual_minutes": 0.3,
+          "variance_minutes": -14.7,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T6",
+          "task_name": "CalcularRankingHandler",
+          "task_type": "impl",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-03-27T22:12:08.351613+00:00",
+          "completed_at": "2026-03-27T22:12:28.190516+00:00",
+          "elapsed_seconds": 19,
+          "actual_minutes": 0.32,
+          "variance_minutes": -14.68,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T7",
+          "task_name": "ObtenerRankingHandler",
+          "task_type": "impl",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-03-27T22:12:34.080684+00:00",
+          "completed_at": "2026-03-27T22:12:55.327007+00:00",
+          "elapsed_seconds": 21,
+          "actual_minutes": 0.35,
+          "variance_minutes": -9.65,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T8",
+          "task_name": "API router BC Resultados + app.py",
+          "task_type": "impl",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-03-27T22:12:59.294433+00:00",
+          "completed_at": "2026-03-27T22:13:40.192651+00:00",
+          "elapsed_seconds": 40,
+          "actual_minutes": 0.67,
+          "variance_minutes": -9.33,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T9",
+          "task_name": "Wiring P-08 a CalcularRanking via callback",
+          "task_type": "impl",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-03-27T22:13:44.981098+00:00",
+          "completed_at": "2026-03-27T22:16:31.532419+00:00",
+          "elapsed_seconds": 166,
+          "actual_minutes": 2.77,
+          "variance_minutes": -12.23,
+          "file_created": null,
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-03-27T22:18:33.852008+00:00",
+      "completed_at": "2026-03-27T22:22:25.499062+00:00",
+      "elapsed_seconds": 231,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-03-27T22:22:26.036164+00:00",
+      "completed_at": "2026-03-27T22:24:37.683324+00:00",
+      "elapsed_seconds": 131,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-03-27T22:24:38.509303+00:00",
+      "completed_at": "2026-03-27T22:27:14.720921+00:00",
+      "elapsed_seconds": 156,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-03-27T22:27:14.903855+00:00",
+      "completed_at": "2026-03-27T22:29:14.845332+00:00",
+      "elapsed_seconds": 119,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-03-27T22:29:16.628592+00:00",
+      "completed_at": "2026-03-27T22:30:09.182575+00:00",
+      "elapsed_seconds": 52,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-03-27T22:30:09.991726+00:00",
+      "completed_at": "2026-03-27T22:31:13.448637+00:00",
+      "elapsed_seconds": 63,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 9,
+    "completed_tasks": 9,
+    "total_phases": 10,
+    "estimated_total_minutes": 115.0,
+    "actual_total_minutes": 5.9,
+    "variance_minutes": -109.1,
+    "variance_percent": -94.87
+  }
+}
