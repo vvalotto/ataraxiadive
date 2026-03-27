@@ -127,7 +127,7 @@ def dado_ot_inicio(context: dict, ot_str: str) -> None:
 def dados_aps_sta(context: dict, datatable: object) -> None:
     store = _get_store(context)
     stub = StubCompetenciaEstadoAdapter()
-    handler = RegistrarAPHandler(store, stub)
+    handler = RegistrarAPHandler(store, stub, DisciplinaDescriptorAdapter())
     rows = datatable[1:]  # skip header
     for row in rows:
         atleta_str, ap_str = row[0].strip(), row[1].strip()
@@ -203,7 +203,7 @@ def dada_competencia_dnf(context: dict, minutos: int) -> None:
 def dados_aps_dnf(context: dict, datatable: object) -> None:
     store = _get_store(context)
     stub = StubCompetenciaEstadoAdapter()
-    handler = RegistrarAPHandler(store, stub)
+    handler = RegistrarAPHandler(store, stub, DisciplinaDescriptorAdapter())
     rows = datatable[1:]
     for row in rows:
         atleta_str, ap_str = row[0].strip(), row[1].strip()

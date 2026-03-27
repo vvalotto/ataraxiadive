@@ -29,7 +29,7 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 OT = datetime(2026, 3, 22, 10, 30, 0)
 
 CREATE_EVENTS_TABLE = """
@@ -65,7 +65,7 @@ def stub() -> StubCompetenciaEstadoAdapter:
 def registrar_ap_handler(
     event_store: SQLiteEventStore, stub: StubCompetenciaEstadoAdapter
 ) -> RegistrarAPHandler:
-    return RegistrarAPHandler(event_store=event_store, competencia_estado=stub)
+    return RegistrarAPHandler(event_store=event_store, competencia_estado=stub, disciplina_descriptor=DisciplinaDescriptorAdapter())
 
 
 @pytest.fixture
@@ -77,7 +77,7 @@ def llamar_handler(
 
 @pytest.fixture
 def resultado_handler(event_store: SQLiteEventStore) -> RegistrarResultadoHandler:
-    return RegistrarResultadoHandler(event_store=event_store)
+    return RegistrarResultadoHandler(event_store=event_store, disciplina_descriptor=DisciplinaDescriptorAdapter())
 
 
 @pytest.fixture

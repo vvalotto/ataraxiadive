@@ -54,6 +54,9 @@ from competencia.application.queries.obtener_progreso import (
 from competencia.domain.value_objects.cambio_grilla import CambioGrilla
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 
 router = APIRouter(prefix="/competencia", tags=["competencia"])
 
@@ -98,7 +101,13 @@ def get_event_store() -> SQLiteEventStore:
     return SQLiteEventStore(db_path)
 
 
+def get_disciplina_descriptor() -> DisciplinaDescriptorAdapter:
+    """Dependency: adapter del descriptor de disciplina (sin I/O)."""
+    return DisciplinaDescriptorAdapter()
+
+
 EventStoreDep = Annotated[SQLiteEventStore, Depends(get_event_store)]
+DisciplinaDescriptorDep = Annotated[DisciplinaDescriptorAdapter, Depends(get_disciplina_descriptor)]
 
 
 def get_obtener_eventos_handler(
@@ -110,9 +119,10 @@ def get_obtener_eventos_handler(
 
 def get_obtener_performance_actual_handler(
     event_store: EventStoreDep,
+    disciplina_descriptor: DisciplinaDescriptorDep,
 ) -> ObtenerPerformanceActualHandler:
     """Dependency: handler de performance actual."""
-    return ObtenerPerformanceActualHandler(event_store)
+    return ObtenerPerformanceActualHandler(event_store, disciplina_descriptor)
 
 
 def get_obtener_proximas_performances_handler(
@@ -256,6 +266,7 @@ async def get_performance_actual(
             "nombre_atleta": result.nombre_atleta,
             "ap_declarado": result.ap_declarado,
             "unidad": result.unidad,
+            "unidad_esperada": result.unidad_esperada,
             "andarivel": result.andarivel,
             "estado": result.estado,
         },
@@ -266,15 +277,16 @@ async def get_performance_actual(
 @router.get("/{competencia_id}/performance/proximas", response_class=JSONResponse)
 async def get_proximas_performances(
     competencia_id: UUID,
+    disciplina: Disciplina,
     handler: ObtenerProximasPerformancesHandlerDep,
 ) -> list[ProximoAtletaDTO]:
     """Retorna los próximos 3 atletas a competir (en estado AnunciadaAP).
 
     Returns:
-        Lista de hasta 3 ProximoAtletaDTO ordenados por momento de registro (SP1).
+        Lista de hasta 3 ProximoAtletaDTO ordenados por posicion_grilla (SP2).
     """
     result = await handler.handle(
-        ObtenerProximasPerformancesQuery(competencia_id=competencia_id)
+        ObtenerProximasPerformancesQuery(competencia_id=competencia_id, disciplina=disciplina)
     )
     return JSONResponse(
         content=[

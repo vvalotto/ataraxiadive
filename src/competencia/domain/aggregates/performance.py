@@ -61,6 +61,7 @@ class Performance(AggregateRoot):
         self._tarjeta: TipoTarjeta | None = None
         self._estado: EstadoPerformance | None = None
         self._ot_programado: datetime | None = None
+        self._posicion_grilla: int | None = None
         self._distancia_blackout: Decimal | None = None
         self._event_handlers: dict[str, Any] = {
             "APRegistrado": self._apply_ap_registrado,
@@ -102,6 +103,16 @@ class Performance(AggregateRoot):
     def tarjeta(self) -> TipoTarjeta | None:
         """Tarjeta asignada, o None si aún no fue asignada."""
         return self._tarjeta
+
+    @property
+    def disciplina(self) -> Disciplina:
+        """Disciplina de esta Performance."""
+        return self._disciplina
+
+    @property
+    def posicion_grilla(self) -> int | None:
+        """Posición en la grilla de salida, disponible tras ser llamado. None si aún no fue llamado."""
+        return self._posicion_grilla
 
     @property
     def distancia_blackout(self) -> Decimal | None:
@@ -414,6 +425,7 @@ class Performance(AggregateRoot):
     def _apply_atleta_llamado(self, payload: dict[str, Any]) -> None:
         self._estado = EstadoPerformance.Llamada
         self._ot_programado = datetime.fromisoformat(payload["ot_programado"])
+        self._posicion_grilla = payload["posicion_grilla"]
 
     def _apply_resultado_registrado(self, payload: dict[str, Any]) -> None:
         self._rp = Decimal(payload["valor_rp"])

@@ -30,7 +30,7 @@ Feature: Registrar Announced Performance
 
   Scenario: Rechazo por valor AP negativo
     Given no existe un AP previo del atleta para esta disciplina y competencia
-    When el atleta intenta registrar un AP de valor "-1" unidad "Metros"
+    When el atleta intenta registrar un AP de valor "-1" unidad "Segundos"
     Then el sistema rechaza la operación con error "ValorAPInvalido"
 
   Scenario: Rechazo por plazo de AP vencido

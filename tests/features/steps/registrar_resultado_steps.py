@@ -26,7 +26,7 @@ from competencia.domain.value_objects.estado_performance import EstadoPerformanc
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 scenarios("../US-1.2.3-registrar-resultado.feature")
 
 _CREATE_TABLE = """
@@ -88,7 +88,7 @@ def step_atleta_dnf(ctx: dict) -> None:  # type: ignore[type-arg]
 
 @given(parsers.parse('la performance del atleta tiene AP registrado de {valor:d} metros'))
 def step_ap_registrado(ctx: dict, valor: int) -> None:  # type: ignore[type-arg]
-    handler = RegistrarAPHandler(ctx["event_store"], ctx["estado_port"])
+    handler = RegistrarAPHandler(ctx["event_store"], ctx["estado_port"], DisciplinaDescriptorAdapter())
     cmd = RegistrarAPCommand(
         competencia_id=ctx["competencia_id"],
         participante_id=ctx["participante_id"],
@@ -127,7 +127,7 @@ def step_performance_anunciada_ap_resultado(ctx: dict) -> None:  # type: ignore[
     ctx["participante_id"] = pid
     sp = ctx["estado_port"]
     asyncio.run(
-        RegistrarAPHandler(fresh_store, sp).handle(
+        RegistrarAPHandler(fresh_store, sp, DisciplinaDescriptorAdapter()).handle(
             RegistrarAPCommand(
                 competencia_id=cid,
                 participante_id=pid,
@@ -191,7 +191,7 @@ def step_performance_dns(ctx: dict) -> None:  # type: ignore[type-arg]
 
 
 def _ejecutar_registrar_resultado(ctx: dict, valor_rp: float, juez: str) -> None:  # type: ignore[type-arg]
-    handler = RegistrarResultadoHandler(ctx["event_store"])
+    handler = RegistrarResultadoHandler(ctx["event_store"], DisciplinaDescriptorAdapter())
     cmd = RegistrarResultadoCommand(
         competencia_id=ctx["competencia_id"],
         participante_id=ctx["participante_id"],

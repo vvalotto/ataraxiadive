@@ -36,7 +36,7 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 scenarios("../US-1.4.2-flujo-e2e.feature")
 
 _CREATE_TABLE = """
@@ -67,13 +67,13 @@ def _run(coro):  # type: ignore[no-untyped-def]
 
 
 async def _ap_async(store: SQLiteEventStore, cid: UUID, pid: UUID, valor: str) -> None:
-    await RegistrarAPHandler(store, StubCompetenciaEstadoAdapter()).handle(
+    await RegistrarAPHandler(store, StubCompetenciaEstadoAdapter(), DisciplinaDescriptorAdapter()).handle(
         RegistrarAPCommand(
             competencia_id=cid,
             participante_id=pid,
             disciplina=_DISCIPLINA,
             valor_ap=Decimal(valor),
-            unidad=UnidadMedida.Metros,
+            unidad=UnidadMedida.Segundos,
         )
     )
 
@@ -91,13 +91,13 @@ async def _llamar_async(store: SQLiteEventStore, cid: UUID, pid: UUID, pos: int)
 
 
 async def _resultado_async(store: SQLiteEventStore, cid: UUID, pid: UUID, valor: str) -> None:
-    await RegistrarResultadoHandler(store).handle(
+    await RegistrarResultadoHandler(store, DisciplinaDescriptorAdapter()).handle(
         RegistrarResultadoCommand(
             competencia_id=cid,
             participante_id=pid,
             disciplina=_DISCIPLINA,
             valor_rp=Decimal(valor),
-            unidad=UnidadMedida.Metros,
+            unidad=UnidadMedida.Segundos,
             registrado_por=_JUEZ,
         )
     )

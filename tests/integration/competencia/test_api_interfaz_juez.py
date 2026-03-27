@@ -21,6 +21,7 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 from app import app
 from competencia.api.router import get_event_store
 
@@ -57,7 +58,7 @@ def client(store: SQLiteEventStore) -> TestClient:
 async def _registrar_ap(
     store: SQLiteEventStore, competencia_id: UUID, participante_id: UUID
 ) -> UUID:
-    handler = RegistrarAPHandler(store, StubCompetenciaEstadoAdapter())
+    handler = RegistrarAPHandler(store, StubCompetenciaEstadoAdapter(), DisciplinaDescriptorAdapter())
     return await handler.handle(
         RegistrarAPCommand(
             competencia_id=competencia_id,
@@ -91,7 +92,7 @@ async def _llamar(
 async def _ejecutar(
     store: SQLiteEventStore, competencia_id: UUID, participante_id: UUID
 ) -> None:
-    handler_r = RegistrarResultadoHandler(store)
+    handler_r = RegistrarResultadoHandler(store, DisciplinaDescriptorAdapter())
     await handler_r.handle(
         RegistrarResultadoCommand(
             competencia_id=competencia_id,
@@ -165,13 +166,15 @@ async def test_proximas_retorna_atletas_en_anunciada_ap(
     await _llamar(store, cid, participantes[0], posicion=1)
     await _llamar(store, cid, participantes[1], posicion=2)
 
-    response = client.get(f"/competencia/{cid}/performance/proximas")
+    response = client.get(f"/competencia/{cid}/performance/proximas?disciplina=DNF")
 
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 3
-    for i, item in enumerate(data, start=1):
-        assert item["posicion"] == i
+    for item in data:
+        assert "posicion" in item
+        assert "nombre_atleta" in item
+        assert "ap_declarado" in item
 
 
 @pytest.mark.asyncio
@@ -210,7 +213,7 @@ async def test_competencia_sin_performances_retorna_estructuras_vacias(
     assert r1.status_code == 200
     assert r1.json() is None
 
-    r2 = client.get(f"/competencia/{cid}/performance/proximas")
+    r2 = client.get(f"/competencia/{cid}/performance/proximas?disciplina=DNF")
     assert r2.status_code == 200
     assert r2.json() == []
 

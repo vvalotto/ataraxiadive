@@ -22,7 +22,7 @@ from competencia.domain.value_objects.estado_performance import EstadoPerformanc
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 OT = datetime(2026, 3, 22, 10, 30, 0)
 
 CREATE_EVENTS_TABLE = """
@@ -56,7 +56,7 @@ def stub() -> StubCompetenciaEstadoAdapter:
 
 @pytest.fixture
 def registrar_handler(event_store: SQLiteEventStore, stub: StubCompetenciaEstadoAdapter) -> RegistrarAPHandler:
-    return RegistrarAPHandler(event_store=event_store, competencia_estado=stub)
+    return RegistrarAPHandler(event_store=event_store, competencia_estado=stub, disciplina_descriptor=DisciplinaDescriptorAdapter())
 
 
 @pytest.fixture

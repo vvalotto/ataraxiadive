@@ -31,7 +31,7 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 scenarios("../US-1.2.6-corregir-resultado.feature")
 
 _CREATE_TABLE = """
@@ -105,7 +105,7 @@ def step_ap_registrado_y_llamada(ctx: dict, valor: int) -> None:  # type: ignore
     disc = ctx["disciplina"]
 
     asyncio.run(
-        RegistrarAPHandler(es, sp).handle(
+        RegistrarAPHandler(es, sp, DisciplinaDescriptorAdapter()).handle(
             RegistrarAPCommand(
                 competencia_id=cid,
                 participante_id=pid,
@@ -134,7 +134,7 @@ def step_ap_registrado_y_llamada(ctx: dict, valor: int) -> None:  # type: ignore
 def step_resultado_registrado(ctx: dict, rp: float) -> None:  # type: ignore[type-arg]
     """Registra el resultado desde el estado Llamada del Background."""
     asyncio.run(
-        RegistrarResultadoHandler(ctx["event_store"]).handle(
+        RegistrarResultadoHandler(ctx["event_store"], DisciplinaDescriptorAdapter()).handle(
             RegistrarResultadoCommand(
                 competencia_id=ctx["competencia_id"],
                 participante_id=ctx["participante_id"],
@@ -181,7 +181,7 @@ def step_performance_en_dns(ctx: dict) -> None:  # type: ignore[type-arg]
     disc = ctx["disciplina"]
 
     asyncio.run(
-        RegistrarAPHandler(fresh_store, sp).handle(
+        RegistrarAPHandler(fresh_store, sp, DisciplinaDescriptorAdapter()).handle(
             RegistrarAPCommand(
                 competencia_id=cid,
                 participante_id=pid,

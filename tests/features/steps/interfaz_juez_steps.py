@@ -31,7 +31,7 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 scenarios("../US-1.3.1-interfaz-juez.feature")
 
 _CREATE_TABLE = """
@@ -104,7 +104,7 @@ def _registrar_ap(
     ctx: dict, cid: UUID, pid: UUID, valor: str = "50", unidad: UnidadMedida = UnidadMedida.Metros  # type: ignore[type-arg]
 ) -> None:
     asyncio.run(
-        RegistrarAPHandler(ctx["store"], ctx["estado_port"]).handle(
+        RegistrarAPHandler(ctx["store"], ctx["estado_port"], DisciplinaDescriptorAdapter()).handle(
             RegistrarAPCommand(
                 competencia_id=cid,
                 participante_id=pid,
@@ -132,7 +132,7 @@ def _llamar(ctx: dict, cid: UUID, pid: UUID, posicion: int) -> None:  # type: ig
 
 def _ejecutar(ctx: dict, cid: UUID, pid: UUID) -> None:  # type: ignore[type-arg]
     asyncio.run(
-        RegistrarResultadoHandler(ctx["store"]).handle(
+        RegistrarResultadoHandler(ctx["store"], DisciplinaDescriptorAdapter()).handle(
             RegistrarResultadoCommand(
                 competencia_id=cid,
                 participante_id=pid,
@@ -221,7 +221,7 @@ def step_performance_ejecutada(ctx: dict, pid: str, valor: int) -> None:  # type
     cid = _get_cid(ctx)
     p = _get_pid(ctx, pid)
     asyncio.run(
-        RegistrarAPHandler(ctx["store"], ctx["estado_port"]).handle(
+        RegistrarAPHandler(ctx["store"], ctx["estado_port"], DisciplinaDescriptorAdapter()).handle(
             RegistrarAPCommand(
                 competencia_id=cid,
                 participante_id=p,
@@ -243,7 +243,7 @@ def step_performance_ejecutada(ctx: dict, pid: str, valor: int) -> None:  # type
         )
     )
     asyncio.run(
-        RegistrarResultadoHandler(ctx["store"]).handle(
+        RegistrarResultadoHandler(ctx["store"], DisciplinaDescriptorAdapter()).handle(
             RegistrarResultadoCommand(
                 competencia_id=cid,
                 participante_id=p,
@@ -276,7 +276,7 @@ def step_performance_dns(ctx: dict, pid: str, valor: int) -> None:  # type: igno
     cid = _get_cid(ctx)
     p = _get_pid(ctx, pid)
     asyncio.run(
-        RegistrarAPHandler(ctx["store"], ctx["estado_port"]).handle(
+        RegistrarAPHandler(ctx["store"], ctx["estado_port"], DisciplinaDescriptorAdapter()).handle(
             RegistrarAPCommand(
                 competencia_id=cid,
                 participante_id=p,
@@ -318,7 +318,7 @@ def step_performance_llamada_sta(ctx: dict, pid: str, valor: int) -> None:  # ty
     cid = _get_cid(ctx)
     p = _get_pid(ctx, pid)
     asyncio.run(
-        RegistrarAPHandler(ctx["store"], ctx["estado_port"]).handle(
+        RegistrarAPHandler(ctx["store"], ctx["estado_port"], DisciplinaDescriptorAdapter()).handle(
             RegistrarAPCommand(
                 competencia_id=cid,
                 participante_id=p,
@@ -353,7 +353,10 @@ def step_get_actual(ctx: dict, cid: str) -> None:  # type: ignore[type-arg]
 @when(parsers.parse("el juez consulta GET /competencia/{cid}/performance/proximas"))
 def step_get_proximas(ctx: dict, cid: str) -> None:  # type: ignore[type-arg]
     competencia_id = ctx["competencias"].get(cid, uuid4())
-    ctx["response"] = ctx["client"].get(f"/competencia/{competencia_id}/performance/proximas")
+    disciplina = ctx.get("disciplina_proximas", "DNF")
+    ctx["response"] = ctx["client"].get(
+        f"/competencia/{competencia_id}/performance/proximas?disciplina={disciplina}"
+    )
 
 
 @when(parsers.parse("el juez consulta GET /competencia/{cid}/progreso"))

@@ -83,7 +83,7 @@ async def _seed_ap(
     store: SQLiteEventStore, atleta_id: UUID, valor: str
 ) -> None:
     stub = StubCompetenciaEstadoAdapter()
-    handler = RegistrarAPHandler(store, stub)
+    handler = RegistrarAPHandler(store, stub, DisciplinaDescriptorAdapter())
     await handler.handle(
         RegistrarAPCommand(
             competencia_id=COMPETENCIA_ID,
