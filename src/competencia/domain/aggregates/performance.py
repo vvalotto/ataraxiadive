@@ -62,6 +62,7 @@ class Performance(AggregateRoot):
         self._estado: EstadoPerformance | None = None
         self._ot_programado: datetime | None = None
         self._posicion_grilla: int | None = None
+        self._andarivel: int | None = None
         self._distancia_blackout: Decimal | None = None
         self._event_handlers: dict[str, Any] = {
             "APRegistrado": self._apply_ap_registrado,
@@ -115,6 +116,11 @@ class Performance(AggregateRoot):
         return self._posicion_grilla
 
     @property
+    def andarivel(self) -> int | None:
+        """Número de andarivel asignado, disponible tras ser llamado. None si aún no fue llamado."""
+        return self._andarivel
+
+    @property
     def distancia_blackout(self) -> Decimal | None:
         """Distancia alcanzada en black-out, o None si no aplica."""
         return self._distancia_blackout
@@ -151,16 +157,17 @@ class Performance(AggregateRoot):
         self._estado = EstadoPerformance.AnunciadaAP
         self._record(event)
 
-    def llamar(self, ot_programado: datetime, posicion_grilla: int) -> None:
+    def llamar(self, ot_programado: datetime, posicion_grilla: int, andarivel: int = 1) -> None:
         """Llama al atleta para que inicie su performance (OT programado).
 
         Verifica que la Performance esté en estado AnunciadaAP.
-        La verificación de INV-P-05 (Competencia en EnEjecucion) es
-        responsabilidad del handler, que consulta CompetenciaEstadoPort.
+        La verificación de INV-P-05 (Competencia en EnEjecucion) y
+        INV-C-05 (andarivel libre) es responsabilidad del handler.
 
         Args:
             ot_programado: Momento programado para el Official Top.
             posicion_grilla: Número de orden en la grilla de salida.
+            andarivel: Número de andarivel asignado (default 1).
 
         Raises:
             EstadoInvalidoParaLlamar: Si la Performance no está en AnunciadaAP.
@@ -182,9 +189,11 @@ class Performance(AggregateRoot):
             posicion_grilla=posicion_grilla,
             ot_programado=ot_programado.isoformat(),
             llamado_en=now.isoformat(),
+            andarivel=andarivel,
         )
         self._estado = EstadoPerformance.Llamada
         self._ot_programado = ot_programado
+        self._andarivel = andarivel
         self._record(event)
 
     def registrar_resultado(
@@ -426,6 +435,7 @@ class Performance(AggregateRoot):
         self._estado = EstadoPerformance.Llamada
         self._ot_programado = datetime.fromisoformat(payload["ot_programado"])
         self._posicion_grilla = payload["posicion_grilla"]
+        self._andarivel = payload.get("andarivel", 1)
 
     def _apply_resultado_registrado(self, payload: dict[str, Any]) -> None:
         self._rp = Decimal(payload["valor_rp"])
