@@ -106,7 +106,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 |----|-------------|----|----|------|-------------------|--------|
 | RF-PM-01 | Fórmula de puntos configurable por torneo (HS-19 ✅) | Resultados / Torneo | SP3 | 3.5 | US-3.5.x | ✅ definido |
 | RF-PM-02 | Overall = ranking general multi-disciplina por categoría | Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
-| RF-PM-03 | Empates = mismo puesto y mismos puntos | Resultados | SP2 | 2.4 | US-2.4.x | ✅ definido |
+| RF-PM-03 | Empates = mismo puesto y mismos puntos | Resultados | SP2 | 2.4 | US-2.4.2 | ✅ Implementado |
 | RF-PM-04 | Certificados/diplomas | — | — | — | — | — fuera de alcance v1 |
 | RF-PM-05 | Rankings por categoría y género | Resultados | SP4 | 4.4 | US-4.4.x | ✅ definido |
 | RF-PM-06 | Publicación en plataforma + descarga | Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
@@ -173,7 +173,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 | US-2.2.2 | 2.2 | RF-EJ-08 | API disciplina-aware + validación de unidades + ordenamiento por grilla | P-06 | ✅ Done |
 | US-2.3.1 | 2.3 | RF-PR-06 | Ejecución multi-andarivel — distribución en grilla + sin conflicto entre andariveles | INV-C-05 | ✅ Done |
 | US-2.4.1 | 2.4 | — | `CompetenciaFinalizada` automático (política P-08) | INV-C-04 | ✅ Done |
-| US-2.4.2 | 2.4 | RF-PM-03 | `CalcularRanking` — BC Resultados núcleo · empates · podio | RF-PM-03 | ⬜ Backlog |
+| US-2.4.2 | 2.4 | RF-PM-03 | `CalcularRanking` — BC Resultados núcleo · empates · podio | RF-PM-03 | ✅ Done |
 
 ---
 
