@@ -64,6 +64,9 @@ from competencia.infrastructure.repositories.andariveles_activos_adapter import 
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
+from competencia.infrastructure.repositories.performances_estado_adapter import (
+    PerformancesEstadoAdapter,
+)
 
 router = APIRouter(prefix="/competencia", tags=["competencia"])
 
@@ -120,6 +123,13 @@ def get_andariveles_activos_adapter(
     return AndarivelesActivosAdapter(event_store)
 
 
+def get_performances_estado_adapter(
+    event_store: EventStoreDep,
+) -> PerformancesEstadoAdapter:
+    """Dependency: adapter de estado de performances (P-08 — US-2.4.1)."""
+    return PerformancesEstadoAdapter(event_store)
+
+
 def get_obtener_andariveles_activos_handler(
     event_store: EventStoreDep,
 ) -> ObtenerAndarivelesActivosHandler:
@@ -131,6 +141,9 @@ EventStoreDep = Annotated[SQLiteEventStore, Depends(get_event_store)]
 DisciplinaDescriptorDep = Annotated[DisciplinaDescriptorAdapter, Depends(get_disciplina_descriptor)]
 ObtenerAndarivelesActivosHandlerDep = Annotated[
     ObtenerAndarivelesActivosHandler, Depends(get_obtener_andariveles_activos_handler)
+]
+PerformancesEstadoAdapterDep = Annotated[
+    PerformancesEstadoAdapter, Depends(get_performances_estado_adapter)
 ]
 
 
