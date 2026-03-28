@@ -14,9 +14,12 @@ from competencia.application.commands.registrar_resultado import (
     RegistrarResultadoCommand,
     RegistrarResultadoHandler,
 )
-from competencia.domain.aggregates.performance import EstadoInvalidoParaRegistrarResultado
+from competencia.domain.exceptions import EstadoInvalidoParaRegistrarResultado
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 
 OT = datetime(2026, 3, 22, 10, 30, 0)
 
@@ -111,7 +114,7 @@ async def test_registrar_resultado_persiste_evento(
     participante_id: Any,
 ) -> None:
     """RegistrarResultadoHandler persiste ResultadoRegistrado en el Event Store."""
-    handler = RegistrarResultadoHandler(mock_event_store_llamada)
+    handler = RegistrarResultadoHandler(mock_event_store_llamada, DisciplinaDescriptorAdapter())
     command = _make_command(competencia_id, participante_id)
 
     await handler.handle(command)
@@ -128,7 +131,7 @@ async def test_registrar_resultado_payload_correcto(
     participante_id: Any,
 ) -> None:
     """El payload de ResultadoRegistrado contiene valorRP, unidad y registradoPor."""
-    handler = RegistrarResultadoHandler(mock_event_store_llamada)
+    handler = RegistrarResultadoHandler(mock_event_store_llamada, DisciplinaDescriptorAdapter())
     command = _make_command(competencia_id, participante_id)
 
     await handler.handle(command)
@@ -151,7 +154,7 @@ async def test_registrar_resultado_stream_vacio_lanza_excepcion(
     store = AsyncMock()
     store.load.return_value = []
 
-    handler = RegistrarResultadoHandler(store)
+    handler = RegistrarResultadoHandler(store, DisciplinaDescriptorAdapter())
     command = _make_command(competencia_id, participante_id)
 
     with pytest.raises(PerformanceNoEncontrada):
@@ -173,7 +176,7 @@ async def test_registrar_resultado_desde_anunciada_lanza_excepcion(
         _ap_registrado_payload(performance_id, competencia_id, participante_id)
     ]
 
-    handler = RegistrarResultadoHandler(store)
+    handler = RegistrarResultadoHandler(store, DisciplinaDescriptorAdapter())
     command = _make_command(competencia_id, participante_id)
 
     with pytest.raises(EstadoInvalidoParaRegistrarResultado):
@@ -192,10 +195,61 @@ async def test_registrar_resultado_estado_invalido_no_persiste(
         _ap_registrado_payload(performance_id, competencia_id, participante_id)
     ]
 
-    handler = RegistrarResultadoHandler(store)
+    handler = RegistrarResultadoHandler(store, DisciplinaDescriptorAdapter())
     command = _make_command(competencia_id, participante_id)
 
     with pytest.raises(EstadoInvalidoParaRegistrarResultado):
         await handler.handle(command)
 
     store.append.assert_not_called()
+
+
+# ── US-2.2.2: validación de unidad ────────────────────────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_registrar_resultado_unidad_incompatible_lanza_excepcion(
+    mock_event_store_llamada: AsyncMock,
+    competencia_id: Any,
+    participante_id: Any,
+) -> None:
+    """US-2.2.2: DNF con Segundos lanza UnidadIncompatible."""
+    from competencia.application.commands.registrar_resultado import UnidadIncompatible
+
+    handler = RegistrarResultadoHandler(mock_event_store_llamada, DisciplinaDescriptorAdapter())
+    command = RegistrarResultadoCommand(
+        competencia_id=competencia_id,
+        participante_id=participante_id,
+        disciplina=Disciplina.DNF,
+        valor_rp=Decimal("50"),
+        unidad=UnidadMedida.Segundos,  # DNF requiere Metros
+        registrado_por="juez-001",
+    )
+
+    with pytest.raises(UnidadIncompatible):
+        await handler.handle(command)
+
+
+@pytest.mark.asyncio
+async def test_registrar_resultado_unidad_incompatible_no_persiste(
+    mock_event_store_llamada: AsyncMock,
+    competencia_id: Any,
+    participante_id: Any,
+) -> None:
+    """US-2.2.2: unidad incorrecta no persiste ningún evento."""
+    from competencia.application.commands.registrar_resultado import UnidadIncompatible
+
+    handler = RegistrarResultadoHandler(mock_event_store_llamada, DisciplinaDescriptorAdapter())
+    command = RegistrarResultadoCommand(
+        competencia_id=competencia_id,
+        participante_id=participante_id,
+        disciplina=Disciplina.DNF,
+        valor_rp=Decimal("50"),
+        unidad=UnidadMedida.Segundos,
+        registrado_por="juez-001",
+    )
+
+    with pytest.raises(UnidadIncompatible):
+        await handler.handle(command)
+
+    mock_event_store_llamada.append.assert_not_called()

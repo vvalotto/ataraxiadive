@@ -106,7 +106,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 |----|-------------|----|----|------|-------------------|--------|
 | RF-PM-01 | Fórmula de puntos configurable por torneo (HS-19 ✅) | Resultados / Torneo | SP3 | 3.5 | US-3.5.x | ✅ definido |
 | RF-PM-02 | Overall = ranking general multi-disciplina por categoría | Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
-| RF-PM-03 | Empates = mismo puesto y mismos puntos | Resultados | SP2 | 2.4 | US-2.4.x | ✅ definido |
+| RF-PM-03 | Empates = mismo puesto y mismos puntos | Resultados | SP2 | 2.4 | US-2.4.2 | ✅ Implementado |
 | RF-PM-04 | Certificados/diplomas | — | — | — | — | — fuera de alcance v1 |
 | RF-PM-05 | Rankings por categoría y género | Resultados | SP4 | 4.4 | US-4.4.x | ✅ definido |
 | RF-PM-06 | Publicación en plataforma + descarga | Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
@@ -160,7 +160,36 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
-## 5. US-IEDD Candidatas para SP1
+## 5. US-IEDD Candidatas para SP2
+
+| US candidata | Inc. | RFs cubiertos | Comando/Contenido principal | Invariantes clave | Estado |
+|-------------|------|---------------|-----------------------------|------------------|--------|
+| INC-2.0 | — | — | Exception management: `domain/exceptions.py` + `exception_handlers.py` (ADR-013) | — | ✅ Done |
+| US-2.1.1 | 2.1 | RF-PR-08 | `ConfigurarIntervaloOT` + scaffold aggregate Competencia + deuda SOLID SP1 | INV-C-01 | ✅ Done |
+| US-2.1.2 | 2.1 | RF-PR-04, RF-PR-05 | `GenerarGrilla` / `RegenerarGrilla` | INV-C-01, P-01, P-02 | ✅ Done |
+| US-2.1.3 | 2.1 | RF-PR-07 | `AjustarGrilla` | INV-C-02 (parcial) | ✅ Done |
+| US-2.1.4 | 2.1 | — | `ConfirmarGrilla` + `IniciarCompetencia` + reemplazar stub `CompetenciaEstadoPort` | INV-C-02/03 | ✅ Done |
+| US-2.2.1 | 2.2 | RF-EJ-08 | `DisciplinaDescriptor` value object + port (STA/tiempo, DNF/distancia) | — | ✅ Done |
+| US-2.2.2 | 2.2 | RF-EJ-08 | API disciplina-aware + validación de unidades + ordenamiento por grilla | P-06 | ✅ Done |
+| US-2.3.1 | 2.3 | RF-PR-06 | Ejecución multi-andarivel — distribución en grilla + sin conflicto entre andariveles | INV-C-05 | ✅ Done |
+| US-2.4.1 | 2.4 | — | `CompetenciaFinalizada` automático (política P-08) | INV-C-04 | ✅ Done |
+| US-2.4.2 | 2.4 | RF-PM-03 | `CalcularRanking` — BC Resultados núcleo · empates · podio | RF-PM-03 | ✅ Done |
+
+---
+
+## 5b. US-IEDD SP-ADJ-01 (Ajuste Técnico Post-SP2)
+
+| US candidata | Issues | Capas afectadas | Contenido principal | Estado |
+|-------------|--------|-----------------|---------------------|--------|
+| US-ADJ-1.1 | ADJ-03, ADJ-06, ADJ-08 | `domain/aggregates/`, `infrastructure/` | `@property ot_programado` · `_event_handlers` en `__init__` Competencia · `registrar_ap` snake_case | ✅ Done |
+| US-ADJ-1.2 | ADJ-01 | `domain/aggregates/` | Extraer `_recalcular_ots` + `_aplicar_swap_posicion` — eliminar triplicación de OT en `ajustar_grilla` | ✅ Done |
+| US-ADJ-1.3 | ADJ-02 | `application/commands/` | `_stream_ids.py` — 11 copias de `_build_stream_id` → 2 funciones canónicas | ✅ Done |
+| US-ADJ-1.4 | ADJ-04, ADJ-05 | `api/router.py`, `src/app.py` | DIP: `EventStoreDep` → `EventStorePort`; cableado P-08 movido a composition root `app.py` | ✅ Done |
+| US-ADJ-1.5 | ADJ-07 | `competencia/api/` | SRP — router.py → schemas.py + dependencies.py + router.py | ✅ Done |
+
+---
+
+## 6. US-IEDD Candidatas para SP1
 
 SP1 es el próximo SP a implementar. Estas US-IEDD se especifican formalmente
 en `docs/specs/spN/` antes de ejecutar `/implement-us`.

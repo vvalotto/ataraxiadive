@@ -1,0 +1,100 @@
+"""Query y Handler para ObtenerRanking — US-2.4.2."""
+from __future__ import annotations
+
+from dataclasses import dataclass
+from uuid import UUID
+
+from competencia.domain.ports.event_store_port import EventStorePort
+from competencia.domain.value_objects.disciplina import Disciplina
+from resultados.domain.aggregates.ranking_competencia import RankingCompetencia
+
+
+# ── Query ─────────────────────────────────────────────────────────────────────
+
+
+@dataclass(frozen=True)
+class ObtenerRankingQuery:
+    """Query para obtener el ranking calculado de una disciplina.
+
+    Attributes:
+        competencia_id: Identificador de la competencia.
+        disciplina: Disciplina del ranking.
+    """
+
+    competencia_id: UUID
+    disciplina: Disciplina
+
+
+# ── DTO ───────────────────────────────────────────────────────────────────────
+
+
+@dataclass(frozen=True)
+class RankingEntradaDTO:
+    """DTO de respuesta para una entrada del ranking.
+
+    Attributes:
+        posicion: Posición en el ranking.
+        atleta_id: Identificador del participante (str UUID).
+        rp: Marca efectiva como string, o None.
+        unidad: Unidad de medida, o None.
+        tarjeta: Tipo de tarjeta, o None.
+        es_dns: True si el atleta no se presentó.
+        en_podio: True si está en el podio (posición 1, 2 o 3).
+    """
+
+    posicion: int
+    atleta_id: str
+    rp: str | None
+    unidad: str | None
+    tarjeta: str | None
+    es_dns: bool
+    en_podio: bool
+
+
+# ── Handler ───────────────────────────────────────────────────────────────────
+
+
+class ObtenerRankingHandler:
+    """Handler de la query ObtenerRanking.
+
+    Lee el stream `ranking-{competencia_id}-{disciplina}` del Event Store de
+    BC Resultados y devuelve las entradas del último ranking calculado.
+
+    Args:
+        ranking_store: Event Store del BC Resultados.
+    """
+
+    def __init__(self, ranking_store: EventStorePort) -> None:
+        self._ranking_store = ranking_store
+
+    async def handle(self, query: ObtenerRankingQuery) -> list[RankingEntradaDTO]:
+        """Retorna las entradas del ranking calculado.
+
+        Args:
+            query: Datos de la consulta.
+
+        Returns:
+            Lista de RankingEntradaDTO ordenada por posición.
+            Lista vacía si el ranking aún no fue calculado.
+        """
+        stream_id = f"ranking-{query.competencia_id}-{query.disciplina.value}"
+        events = await self._ranking_store.load(stream_id)
+
+        ranking = RankingCompetencia.reconstitute(
+            competencia_id=query.competencia_id,
+            disciplina=query.disciplina,
+            events=events,
+        )
+
+        return [
+            RankingEntradaDTO(
+                posicion=e.posicion,
+                atleta_id=str(e.atleta_id),
+                rp=str(e.rp) if e.rp is not None else None,
+                unidad=e.unidad,
+                tarjeta=e.tarjeta,
+                es_dns=e.es_dns,
+                en_podio=e.en_podio,
+            )
+            for e in ranking.entries
+        ]

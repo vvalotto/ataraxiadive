@@ -13,14 +13,15 @@ from competencia.application.commands.corregir_resultado import CorregirResultad
 from competencia.application.commands.llamar_atleta import LlamarAtletaCommand, LlamarAtletaHandler
 from competencia.application.commands.registrar_ap import RegistrarAPCommand, RegistrarAPHandler
 from competencia.application.commands.registrar_resultado import RegistrarResultadoCommand, RegistrarResultadoHandler
-from competencia.domain.aggregates.performance import EstadoInvalidoParaCorregirResultado, MotivoObligatorio, Performance
+from competencia.domain.aggregates.performance import Performance
+from competencia.domain.exceptions import EstadoInvalidoParaCorregirResultado, MotivoObligatorio
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 OT = datetime(2026, 3, 23, 10, 30, 0)
 
 CREATE_EVENTS_TABLE = """
@@ -56,7 +57,7 @@ def stub() -> StubCompetenciaEstadoAdapter:
 def registrar_ap_handler(
     event_store: SQLiteEventStore, stub: StubCompetenciaEstadoAdapter
 ) -> RegistrarAPHandler:
-    return RegistrarAPHandler(event_store=event_store, competencia_estado=stub)
+    return RegistrarAPHandler(event_store=event_store, competencia_estado=stub, disciplina_descriptor=DisciplinaDescriptorAdapter())
 
 
 @pytest.fixture
@@ -68,7 +69,7 @@ def llamar_handler(
 
 @pytest.fixture
 def registrar_resultado_handler(event_store: SQLiteEventStore) -> RegistrarResultadoHandler:
-    return RegistrarResultadoHandler(event_store=event_store)
+    return RegistrarResultadoHandler(event_store=event_store, disciplina_descriptor=DisciplinaDescriptorAdapter())
 
 
 @pytest.fixture
@@ -96,7 +97,7 @@ async def _setup_performance_en_ejecutada(
             participante_id=pid,  # type: ignore[arg-type]
             disciplina=Disciplina.STA,
             valor_ap=Decimal("90"),
-            unidad=UnidadMedida.Metros,
+            unidad=UnidadMedida.Segundos,
         )
     )
     await llamar_handler.handle(
@@ -114,7 +115,7 @@ async def _setup_performance_en_ejecutada(
             participante_id=pid,  # type: ignore[arg-type]
             disciplina=Disciplina.STA,
             valor_rp=Decimal("89.5"),
-            unidad=UnidadMedida.Metros,
+            unidad=UnidadMedida.Segundos,
             registrado_por="juez-001",
         )
     )
@@ -155,7 +156,7 @@ async def test_flujo_completo_hasta_correccion(
             participante_id=pid,
             disciplina=Disciplina.STA,
             valor_rp=Decimal("90.0"),
-            unidad=UnidadMedida.Metros,
+            unidad=UnidadMedida.Segundos,
             registrado_por="juez-001",
             motivo="Error de lectura en planilla",
         )
@@ -194,7 +195,7 @@ async def test_correccion_payload_correcto(
             participante_id=pid,
             disciplina=Disciplina.STA,
             valor_rp=Decimal("90.0"),
-            unidad=UnidadMedida.Metros,
+            unidad=UnidadMedida.Segundos,
             registrado_por="juez-007",
             motivo="Corrección confirmada por árbitro",
         )
@@ -226,7 +227,7 @@ async def test_correccion_desde_anunciada_lanza_error(
             participante_id=pid,
             disciplina=Disciplina.STA,
             valor_ap=Decimal("90"),
-            unidad=UnidadMedida.Metros,
+            unidad=UnidadMedida.Segundos,
         )
     )
 
@@ -237,7 +238,7 @@ async def test_correccion_desde_anunciada_lanza_error(
                 participante_id=pid,
                 disciplina=Disciplina.STA,
                 valor_rp=Decimal("90.0"),
-                unidad=UnidadMedida.Metros,
+                unidad=UnidadMedida.Segundos,
                 registrado_por="juez-001",
                 motivo="motivo",
             )
@@ -267,7 +268,7 @@ async def test_correccion_sin_motivo_lanza_error(
                 participante_id=pid,
                 disciplina=Disciplina.STA,
                 valor_rp=Decimal("90.0"),
-                unidad=UnidadMedida.Metros,
+                unidad=UnidadMedida.Segundos,
                 registrado_por="juez-001",
                 motivo="",
             )

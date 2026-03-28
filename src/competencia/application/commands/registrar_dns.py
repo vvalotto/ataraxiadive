@@ -1,13 +1,17 @@
-"""Command y Handler para RegistrarDNS — US-1.2.5."""
+"""Command y Handler para RegistrarDNS — US-1.2.5 / US-2.4.1."""
 from __future__ import annotations
 
 from dataclasses import dataclass
 from uuid import UUID
 
+from typing import Awaitable, Callable
+
+from competencia.application._p08_finalizacion import trigger_finalizacion_si_corresponde
 from competencia.domain.aggregates.performance import Performance
 from competencia.domain.ports.event_store_port import EventStorePort
+from competencia.domain.ports.performances_estado_port import PerformancesEstadoPort
 from competencia.domain.value_objects.disciplina import Disciplina
-
+from competencia.application.commands._stream_ids import performance_stream_id
 
 # ── Excepciones de aplicación ─────────────────────────────────────────────────
 
@@ -43,14 +47,23 @@ class RegistrarDNSHandler:
     """Handler del comando RegistrarDNS.
 
     Carga la Performance desde el Event Store, ejecuta registrar_dns()
-    y persiste DNSRegistrado.
+    y persiste DNSRegistrado. Tras persistir, verifica P-08: si todas las
+    performances finalizaron, emite CompetenciaFinalizada automáticamente.
 
     Args:
         event_store: Puerto de persistencia de eventos.
+        performances_estado: Puerto para verificar P-08. None = sin verificación.
     """
 
-    def __init__(self, event_store: EventStorePort) -> None:
+    def __init__(
+        self,
+        event_store: EventStorePort,
+        performances_estado: PerformancesEstadoPort | None = None,
+        on_finalizada: Callable[[UUID, Disciplina], Awaitable[None]] | None = None,
+    ) -> None:
         self._event_store = event_store
+        self._performances_estado = performances_estado
+        self._on_finalizada = on_finalizada
 
     async def handle(self, command: RegistrarDNSCommand) -> None:
         """Ejecuta el comando RegistrarDNS.
@@ -62,7 +75,7 @@ class RegistrarDNSHandler:
             PerformanceNoEncontrada: no existe Performance para este atleta.
             EstadoInvalidoParaRegistrarDNS: Performance no está en Llamada (INV-P-08).
         """
-        stream_id = _build_stream_id(
+        stream_id = performance_stream_id(
             command.competencia_id, command.participante_id, command.disciplina
         )
         events = await self._event_store.load(stream_id)
@@ -86,15 +99,17 @@ class RegistrarDNSHandler:
                 payload=event.to_payload(),
             )
 
+        # Política P-08: verificar si la competencia puede finalizar
+        if self._performances_estado is not None:
+            await trigger_finalizacion_si_corresponde(
+                self._event_store,
+                self._performances_estado,
+                command.competencia_id,
+                command.disciplina,
+                on_finalizada=self._on_finalizada,
+            )
+
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 
-def _build_stream_id(
-    competencia_id: UUID, participante_id: UUID, disciplina: Disciplina
-) -> str:
-    """Construye el stream ID canónico para una Performance.
-
-    Format: "performance-{competencia_id}-{participante_id}-{disciplina}"
-    """
-    return f"performance-{competencia_id}-{participante_id}-{disciplina.value}"

@@ -14,13 +14,14 @@ from competencia.application.commands.registrar_resultado import (
     RegistrarResultadoCommand,
     RegistrarResultadoHandler,
 )
-from competencia.domain.aggregates.performance import EstadoInvalidoParaRegistrarResultado, Performance
+from competencia.domain.aggregates.performance import Performance
+from competencia.domain.exceptions import EstadoInvalidoParaRegistrarResultado
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 OT = datetime(2026, 3, 22, 10, 30, 0)
 
 CREATE_EVENTS_TABLE = """
@@ -56,7 +57,7 @@ def stub() -> StubCompetenciaEstadoAdapter:
 def registrar_ap_handler(
     event_store: SQLiteEventStore, stub: StubCompetenciaEstadoAdapter
 ) -> RegistrarAPHandler:
-    return RegistrarAPHandler(event_store=event_store, competencia_estado=stub)
+    return RegistrarAPHandler(event_store=event_store, competencia_estado=stub, disciplina_descriptor=DisciplinaDescriptorAdapter())
 
 
 @pytest.fixture
@@ -68,7 +69,7 @@ def llamar_handler(
 
 @pytest.fixture
 def resultado_handler(event_store: SQLiteEventStore) -> RegistrarResultadoHandler:
-    return RegistrarResultadoHandler(event_store=event_store)
+    return RegistrarResultadoHandler(event_store=event_store, disciplina_descriptor=DisciplinaDescriptorAdapter())
 
 
 # ── Flujo completo ────────────────────────────────────────────────────────────
@@ -191,3 +192,47 @@ async def test_resultado_desde_anunciada_lanza_error(
                 unidad=UnidadMedida.Metros, registrado_por="juez-001",
             )
         )
+
+
+# ── US-2.2.2: validación de unidad ────────────────────────────────────────────
+
+
+async def test_resultado_unidad_incompatible_lanza_error(
+    registrar_ap_handler: RegistrarAPHandler,
+    llamar_handler: LlamarAtletaHandler,
+    resultado_handler: RegistrarResultadoHandler,
+    event_store: SQLiteEventStore,
+) -> None:
+    """US-2.2.2: DNF con Segundos lanza UnidadIncompatible y no persiste evento."""
+    from competencia.application.commands.registrar_resultado import UnidadIncompatible
+
+    cid = uuid4()
+    pid = uuid4()
+
+    await registrar_ap_handler.handle(
+        RegistrarAPCommand(
+            competencia_id=cid, participante_id=pid,
+            disciplina=Disciplina.DNF, valor_ap=Decimal("50"), unidad=UnidadMedida.Metros,
+        )
+    )
+    await llamar_handler.handle(
+        LlamarAtletaCommand(
+            competencia_id=cid, participante_id=pid,
+            disciplina=Disciplina.DNF, ot_programado=OT, posicion_grilla=1,
+        )
+    )
+
+    with pytest.raises(UnidadIncompatible):
+        await resultado_handler.handle(
+            RegistrarResultadoCommand(
+                competencia_id=cid, participante_id=pid,
+                disciplina=Disciplina.DNF, valor_rp=Decimal("50"),
+                unidad=UnidadMedida.Segundos,  # incorrecto para DNF
+                registrado_por="juez-001",
+            )
+        )
+
+    # El stream sigue con 2 eventos (AP + Llamada), no se persiste ResultadoRegistrado
+    stream_id = f"performance-{cid}-{pid}-DNF"
+    events = await event_store.load(stream_id)
+    assert len(events) == 2

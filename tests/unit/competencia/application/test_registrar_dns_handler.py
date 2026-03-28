@@ -13,7 +13,7 @@ from competencia.application.commands.registrar_dns import (
     RegistrarDNSHandler,
     PerformanceNoEncontrada,
 )
-from competencia.domain.aggregates.performance import EstadoInvalidoParaRegistrarDNS
+from competencia.domain.exceptions import EstadoInvalidoParaRegistrarDNS
 from competencia.domain.value_objects.disciplina import Disciplina
 
 OT = datetime(2026, 3, 23, 10, 30, 0)

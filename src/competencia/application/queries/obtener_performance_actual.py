@@ -1,4 +1,4 @@
-"""Query y Handler para ObtenerPerformanceActual — US-1.3.1."""
+"""Query y Handler para ObtenerPerformanceActual — US-1.3.1 / US-2.2.2."""
 from __future__ import annotations
 
 import json
@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from competencia.domain.aggregates.performance import Performance
+from competencia.domain.ports.disciplina_descriptor_port import DisciplinaDescriptorPort
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 
@@ -18,6 +19,7 @@ class PerformanceActualDTO:
     nombre_atleta: str
     ap_declarado: str
     unidad: str
+    unidad_esperada: str
     andarivel: int
     estado: str
 
@@ -42,8 +44,11 @@ class ObtenerPerformanceActualHandler:  # pylint: disable=too-few-public-methods
 
     _ESTADOS_ACTIVOS = {EstadoPerformance.Llamada, EstadoPerformance.ResultadoRegistrado}
 
-    def __init__(self, event_store: EventStorePort) -> None:
+    def __init__(
+        self, event_store: EventStorePort, disciplina_descriptor: DisciplinaDescriptorPort
+    ) -> None:
         self._event_store = event_store
+        self._disciplina_descriptor = disciplina_descriptor
 
     async def handle(self, query: ObtenerPerformanceActualQuery) -> PerformanceActualDTO | None:
         """Ejecuta la query y retorna la performance activa, o None."""
@@ -63,6 +68,7 @@ class ObtenerPerformanceActualHandler:  # pylint: disable=too-few-public-methods
         ap_valor = str(ap.valor) if ap else ""
         ap_unidad = ap.unidad.value if ap else ""
 
+        descriptor = self._disciplina_descriptor.describe(performance.disciplina)
         andarivel = self._extract_andarivel(stream)
         participante_id = str(performance.participante_id)
 
@@ -71,6 +77,7 @@ class ObtenerPerformanceActualHandler:  # pylint: disable=too-few-public-methods
             nombre_atleta=f"Atleta-{participante_id[:8]}",
             ap_declarado=ap_valor,
             unidad=ap_unidad,
+            unidad_esperada=descriptor.unidad_esperada.value,
             andarivel=andarivel,
             estado=performance.estado.value if performance.estado else "",
         )

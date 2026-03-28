@@ -1,4 +1,4 @@
-"""Command y Handler para LlamarAtleta — US-1.2.2."""
+"""Command y Handler para LlamarAtleta — US-1.2.2, US-2.3.1."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -6,10 +6,11 @@ from datetime import datetime
 from uuid import UUID
 
 from competencia.domain.aggregates.performance import Performance
+from competencia.domain.ports.andariveles_activos_port import AndarivelesActivosPort
 from competencia.domain.ports.competencia_estado_port import CompetenciaEstadoPort
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.disciplina import Disciplina
-
+from competencia.application.commands._stream_ids import performance_stream_id
 
 # ── Excepciones de aplicación ─────────────────────────────────────────────────
 
@@ -20,6 +21,10 @@ class CompetenciaNoEnEjecucion(Exception):
 
 class PerformanceNoEncontrada(Exception):
     """El stream de la Performance no existe en el Event Store."""
+
+
+class AndarivelesConflicto(Exception):
+    """INV-C-05: el andarivel ya tiene una Performance en estado Llamada."""
 
 
 # ── Command ───────────────────────────────────────────────────────────────────
@@ -35,6 +40,7 @@ class LlamarAtletaCommand:
         disciplina: Disciplina en la que compite.
         ot_programado: Official Top programado para este atleta.
         posicion_grilla: Número de orden en la grilla de salida.
+        andarivel: Número de andarivel asignado al atleta.
     """
 
     competencia_id: UUID
@@ -42,6 +48,7 @@ class LlamarAtletaCommand:
     disciplina: Disciplina
     ot_programado: datetime
     posicion_grilla: int
+    andarivel: int = 1
 
 
 # ── Handler ───────────────────────────────────────────────────────────────────
@@ -50,21 +57,25 @@ class LlamarAtletaCommand:
 class LlamarAtletaHandler:
     """Handler del comando LlamarAtleta.
 
-    Verifica INV-P-05 (Competencia en EnEjecucion), carga la Performance
-    desde el Event Store, ejecuta llamar() y persiste AtletaLlamado.
+    Verifica INV-P-05 (Competencia en EnEjecucion), INV-C-05 (andarivel libre),
+    carga la Performance desde el Event Store, ejecuta llamar() y persiste
+    AtletaLlamado.
 
     Args:
         event_store: Puerto de persistencia de eventos.
         competencia_estado: Puerto para verificar estado de Competencia.
+        andariveles_activos: Puerto para verificar conflictos de andarivel.
     """
 
     def __init__(
         self,
         event_store: EventStorePort,
         competencia_estado: CompetenciaEstadoPort,
+        andariveles_activos: AndarivelesActivosPort | None = None,
     ) -> None:
         self._event_store = event_store
         self._competencia_estado = competencia_estado
+        self._andariveles_activos = andariveles_activos
 
     async def handle(self, command: LlamarAtletaCommand) -> None:
         """Ejecuta el comando LlamarAtleta.
@@ -74,6 +85,7 @@ class LlamarAtletaHandler:
 
         Raises:
             CompetenciaNoEnEjecucion: INV-P-05 — competencia no iniciada.
+            AndarivelesConflicto: INV-C-05 — andarivel ya ocupado.
             PerformanceNoEncontrada: no existe AP registrado para este atleta.
             EstadoInvalidoParaLlamar: Performance no está en AnunciadaAP.
         """
@@ -83,8 +95,20 @@ class LlamarAtletaHandler:
                 f"INV-P-05: competencia={command.competencia_id} no está en EnEjecucion"
             )
 
+        # INV-C-05: andarivel libre? (solo si el port está inyectado)
+        andarivel_activo = (
+            self._andariveles_activos is not None
+            and await self._andariveles_activos.is_andarivel_activo(
+                command.competencia_id, command.disciplina, command.andarivel
+            )
+        )
+        if andarivel_activo:
+            raise AndarivelesConflicto(
+                f"INV-C-05: andarivel={command.andarivel} ya tiene una Performance en Llamada"
+            )
+
         # Cargar Performance desde Event Store
-        stream_id = _build_stream_id(
+        stream_id = performance_stream_id(
             command.competencia_id, command.participante_id, command.disciplina
         )
         events = await self._event_store.load(stream_id)
@@ -98,7 +122,7 @@ class LlamarAtletaHandler:
         performance = Performance.reconstitute(events)
 
         # Ejecutar (lanza EstadoInvalidoParaLlamar si no está en AnunciadaAP)
-        performance.llamar(command.ot_programado, command.posicion_grilla)
+        performance.llamar(command.ot_programado, command.posicion_grilla, command.andarivel)
 
         # Persistir eventos pendientes
         for event in performance.pull_events():
@@ -112,11 +136,3 @@ class LlamarAtletaHandler:
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 
-def _build_stream_id(
-    competencia_id: UUID, participante_id: UUID, disciplina: Disciplina
-) -> str:
-    """Construye el stream ID canónico para una Performance.
-
-    Format: "performance-{competencia_id}-{participante_id}-{disciplina}"
-    """
-    return f"performance-{competencia_id}-{participante_id}-{disciplina.value}"

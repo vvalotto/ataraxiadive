@@ -29,6 +29,7 @@ class AtletaLlamado(DomainEvent):
     posicion_grilla: int
     ot_programado: str
     llamado_en: str
+    andarivel: int = 1
 
     def to_payload(self) -> dict[str, Any]:
         """Serializa el evento a payload JSON-serializable para el Event Store."""
@@ -39,6 +40,7 @@ class AtletaLlamado(DomainEvent):
             "posicion_grilla": self.posicion_grilla,
             "ot_programado": self.ot_programado,
             "llamado_en": self.llamado_en,
+            "andarivel": self.andarivel,
             "occurred_at": self.occurred_at.isoformat(),
         }
 
@@ -55,4 +57,5 @@ class AtletaLlamado(DomainEvent):
             posicion_grilla=payload["posicion_grilla"],
             ot_programado=payload["ot_programado"],
             llamado_en=payload["llamado_en"],
+            andarivel=payload.get("andarivel", 1),
         )

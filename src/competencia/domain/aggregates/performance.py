@@ -14,40 +14,20 @@ from competencia.domain.events.dns_registrado import DNSRegistrado
 from competencia.domain.events.resultado_corregido import ResultadoCorregido
 from competencia.domain.events.resultado_registrado import ResultadoRegistrado
 from competencia.domain.events.tarjeta_asignada import TarjetaAsignada
+from competencia.domain.exceptions import (
+    DistanciaBlackoutObligatoria,
+    EstadoInvalidoParaAsignarTarjeta,
+    EstadoInvalidoParaCorregirResultado,
+    EstadoInvalidoParaLlamar,
+    EstadoInvalidoParaRegistrarDNS,
+    EstadoInvalidoParaRegistrarResultado,
+    MotivoObligatorio,
+)
 from competencia.domain.value_objects.ap import AP
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
-
-
-class EstadoInvalidoParaLlamar(Exception):
-    """Performance no está en estado AnunciadaAP — no se puede llamar al atleta."""
-
-
-class EstadoInvalidoParaRegistrarResultado(Exception):
-    """Performance no está en estado Llamada — no se puede registrar el resultado."""
-
-
-class EstadoInvalidoParaRegistrarDNS(Exception):
-    """Performance no está en estado Llamada — no se puede registrar DNS (INV-P-08)."""
-
-
-class EstadoInvalidoParaAsignarTarjeta(Exception):
-    """Performance no está en estado ResultadoRegistrado — no se puede asignar tarjeta."""
-
-
-class MotivoObligatorio(Exception):
-    """Tarjeta amarilla o roja requieren motivo obligatorio (INV-P-11).
-    También aplica a la corrección de resultado (INV-P-12)."""
-
-
-class DistanciaBlackoutObligatoria(Exception):
-    """Tarjeta roja con motivo black-out requiere distancia_blackout > 0 (RF-EJ-07)."""
-
-
-class EstadoInvalidoParaCorregirResultado(Exception):
-    """Performance no está en estado Ejecutada — no se puede corregir el resultado (INV-P-12/13)."""
 
 
 class Performance(AggregateRoot):
@@ -81,7 +61,17 @@ class Performance(AggregateRoot):
         self._tarjeta: TipoTarjeta | None = None
         self._estado: EstadoPerformance | None = None
         self._ot_programado: datetime | None = None
+        self._posicion_grilla: int | None = None
+        self._andarivel: int | None = None
         self._distancia_blackout: Decimal | None = None
+        self._event_handlers: dict[str, Any] = {
+            "APRegistrado": self._apply_ap_registrado,
+            "AtletaLlamado": self._apply_atleta_llamado,
+            "ResultadoRegistrado": self._apply_resultado_registrado,
+            "DNSRegistrado": self._apply_dns_registrado,
+            "TarjetaAsignada": self._apply_tarjeta_asignada,
+            "ResultadoCorregido": self._apply_resultado_corregido,
+        }
 
     # ── Propiedades ───────────────────────────────────────────────────────────
 
@@ -116,13 +106,33 @@ class Performance(AggregateRoot):
         return self._tarjeta
 
     @property
+    def disciplina(self) -> Disciplina:
+        """Disciplina de esta Performance."""
+        return self._disciplina
+
+    @property
+    def posicion_grilla(self) -> int | None:
+        """Posición en la grilla de salida, disponible tras ser llamado. None si aún no fue llamado."""
+        return self._posicion_grilla
+
+    @property
+    def andarivel(self) -> int | None:
+        """Número de andarivel asignado, disponible tras ser llamado. None si aún no fue llamado."""
+        return self._andarivel
+
+    @property
     def distancia_blackout(self) -> Decimal | None:
         """Distancia alcanzada en black-out, o None si no aplica."""
         return self._distancia_blackout
 
+    @property
+    def ot_programado(self) -> datetime | None:
+        """OT programado, disponible tras ser llamado. None si aún no fue llamado."""
+        return self._ot_programado
+
     # ── Comandos de dominio ───────────────────────────────────────────────────
 
-    def registrarAP(self, valor: Decimal, unidad: UnidadMedida) -> None:
+    def registrar_ap(self, valor: Decimal, unidad: UnidadMedida) -> None:
         """Registra el Announced Performance del atleta.
 
         Valida INV-P-01 a través del value object AP.
@@ -152,16 +162,17 @@ class Performance(AggregateRoot):
         self._estado = EstadoPerformance.AnunciadaAP
         self._record(event)
 
-    def llamar(self, ot_programado: datetime, posicion_grilla: int) -> None:
+    def llamar(self, ot_programado: datetime, posicion_grilla: int, andarivel: int = 1) -> None:
         """Llama al atleta para que inicie su performance (OT programado).
 
         Verifica que la Performance esté en estado AnunciadaAP.
-        La verificación de INV-P-05 (Competencia en EnEjecucion) es
-        responsabilidad del handler, que consulta CompetenciaEstadoPort.
+        La verificación de INV-P-05 (Competencia en EnEjecucion) y
+        INV-C-05 (andarivel libre) es responsabilidad del handler.
 
         Args:
             ot_programado: Momento programado para el Official Top.
             posicion_grilla: Número de orden en la grilla de salida.
+            andarivel: Número de andarivel asignado (default 1).
 
         Raises:
             EstadoInvalidoParaLlamar: Si la Performance no está en AnunciadaAP.
@@ -183,9 +194,11 @@ class Performance(AggregateRoot):
             posicion_grilla=posicion_grilla,
             ot_programado=ot_programado.isoformat(),
             llamado_en=now.isoformat(),
+            andarivel=andarivel,
         )
         self._estado = EstadoPerformance.Llamada
         self._ot_programado = ot_programado
+        self._andarivel = andarivel
         self._record(event)
 
     def registrar_resultado(
@@ -326,12 +339,12 @@ class Performance(AggregateRoot):
             tipo: Tipo de tarjeta — Blanca, Amarilla o Roja.
             asignada_por: Identificador del juez que asigna la tarjeta.
             motivo: Motivo obligatorio para Amarilla y Roja (INV-P-11).
-            distancia_blackout: Distancia alcanzada — obligatoria si motivo == "black-out" (RF-EJ-07).
+            distancia_blackout: Distancia alcanzada — obligatoria si motivo == "black-out".
 
         Raises:
             EstadoInvalidoParaAsignarTarjeta: Performance no en ResultadoRegistrado (INV-P-07).
             MotivoObligatorio: tarjeta Amarilla o Roja sin motivo (INV-P-11).
-            DistanciaBlackoutObligatoria: motivo "black-out" sin distancia o distancia <= 0 (RF-EJ-07).
+            DistanciaBlackoutObligatoria: motivo "black-out" sin distancia o distancia <= 0.
         """
         if self._estado != EstadoPerformance.ResultadoRegistrado:
             raise EstadoInvalidoParaAsignarTarjeta(
@@ -405,31 +418,45 @@ class Performance(AggregateRoot):
         return performance
 
     def _apply_stored(self, event: dict[str, Any]) -> None:
-        """Aplica un evento almacenado al estado interno del aggregate."""
+        """Aplica un evento almacenado al estado interno del aggregate.
+
+        Usa dispatch por tipo de evento (OCP: agregar un tipo nuevo no requiere
+        modificar este método, solo registrar el handler en _event_handlers).
+        """
         event_type = event["event_type"]
         payload = self._parse_payload(event["payload"])
+        handler = self._event_handlers.get(event_type)
+        if handler is not None:
+            handler(payload)
 
-        if event_type == "APRegistrado":
-            self._ap = AP(
-                valor=Decimal(payload["valor_ap"]),
-                unidad=UnidadMedida(payload["unidad"]),
-            )
-            self._estado = EstadoPerformance.AnunciadaAP
-        elif event_type == "AtletaLlamado":
-            self._estado = EstadoPerformance.Llamada
-            self._ot_programado = datetime.fromisoformat(payload["ot_programado"])
-        elif event_type == "ResultadoRegistrado":
-            self._rp = Decimal(payload["valor_rp"])
-            self._estado = EstadoPerformance.ResultadoRegistrado
-        elif event_type == "DNSRegistrado":
-            self._estado = EstadoPerformance.DNS
-        elif event_type == "TarjetaAsignada":
-            self._tarjeta = TipoTarjeta(payload["tipo"])
-            self._estado = EstadoPerformance.Ejecutada
-            if payload.get("distancia_blackout"):
-                self._distancia_blackout = Decimal(payload["distancia_blackout"])
-        elif event_type == "ResultadoCorregido":
-            self._rp = Decimal(payload["valor_rp_nuevo"])
+    def _apply_ap_registrado(self, payload: dict[str, Any]) -> None:
+        self._ap = AP(
+            valor=Decimal(payload["valor_ap"]),
+            unidad=UnidadMedida(payload["unidad"]),
+        )
+        self._estado = EstadoPerformance.AnunciadaAP
+
+    def _apply_atleta_llamado(self, payload: dict[str, Any]) -> None:
+        self._estado = EstadoPerformance.Llamada
+        self._ot_programado = datetime.fromisoformat(payload["ot_programado"])
+        self._posicion_grilla = payload["posicion_grilla"]
+        self._andarivel = payload.get("andarivel", 1)
+
+    def _apply_resultado_registrado(self, payload: dict[str, Any]) -> None:
+        self._rp = Decimal(payload["valor_rp"])
+        self._estado = EstadoPerformance.ResultadoRegistrado
+
+    def _apply_dns_registrado(self, payload: dict[str, Any]) -> None:  # noqa: ARG002
+        self._estado = EstadoPerformance.DNS
+
+    def _apply_tarjeta_asignada(self, payload: dict[str, Any]) -> None:
+        self._tarjeta = TipoTarjeta(payload["tipo"])
+        self._estado = EstadoPerformance.Ejecutada
+        if payload.get("distancia_blackout"):
+            self._distancia_blackout = Decimal(payload["distancia_blackout"])
+
+    def _apply_resultado_corregido(self, payload: dict[str, Any]) -> None:
+        self._rp = Decimal(payload["valor_rp_nuevo"])
 
     @staticmethod
     def _parse_payload(payload: Any) -> dict[str, Any]:

@@ -21,17 +21,15 @@ from competencia.application.commands.registrar_resultado import (
     RegistrarResultadoCommand,
     RegistrarResultadoHandler,
 )
-from competencia.domain.aggregates.performance import (
-    DistanciaBlackoutObligatoria,
-    Performance,
-)
+from competencia.domain.aggregates.performance import Performance
+from competencia.domain.exceptions import DistanciaBlackoutObligatoria
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 scenarios("../US-1.4.1-blackout-con-distancia.feature")
 
 _CREATE_TABLE = """
@@ -78,9 +76,9 @@ def step_performance_en_resultado_registrado():
         cid = uuid4()
         pid = uuid4()
 
-        ap_handler = RegistrarAPHandler(store, stub)
+        ap_handler = RegistrarAPHandler(store, stub, DisciplinaDescriptorAdapter())
         llamar_handler = LlamarAtletaHandler(store, stub)
-        resultado_handler = RegistrarResultadoHandler(store)
+        resultado_handler = RegistrarResultadoHandler(store, DisciplinaDescriptorAdapter())
 
         await ap_handler.handle(
             RegistrarAPCommand(

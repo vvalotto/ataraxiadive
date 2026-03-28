@@ -18,7 +18,7 @@ from competencia.domain.value_objects.estado_performance import EstadoPerformanc
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
 CREATE_EVENTS_TABLE = """
     CREATE TABLE events (
         id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -48,6 +48,7 @@ def handler(event_store: SQLiteEventStore) -> RegistrarAPHandler:
     return RegistrarAPHandler(
         event_store=event_store,
         competencia_estado=StubCompetenciaEstadoAdapter(),
+        disciplina_descriptor=DisciplinaDescriptorAdapter(),
     )
 
 
@@ -151,3 +152,31 @@ async def test_distinta_disciplina_mismo_atleta_es_independiente(
     id2 = await handler.handle(cmd_dnf)
 
     assert id1 != id2
+
+
+# ── US-2.2.2: validación de unidad ────────────────────────────────────────────
+
+
+async def test_registrar_ap_unidad_incompatible_lanza_error(
+    handler: RegistrarAPHandler,
+    event_store: SQLiteEventStore,
+) -> None:
+    """US-2.2.2: STA con Metros lanza UnidadIncompatible y no persiste evento."""
+    from competencia.application.commands.registrar_resultado import UnidadIncompatible
+
+    cid = uuid4()
+    pid = uuid4()
+
+    with pytest.raises(UnidadIncompatible):
+        await handler.handle(
+            RegistrarAPCommand(
+                competencia_id=cid, participante_id=pid,
+                disciplina=Disciplina.STA,
+                valor_ap=Decimal("300"),
+                unidad=UnidadMedida.Metros,  # STA requiere Segundos
+            )
+        )
+
+    stream_id = f"performance-{cid}-{pid}-STA"
+    events = await event_store.load(stream_id)
+    assert events == []

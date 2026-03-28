@@ -14,7 +14,7 @@ from competencia.application.commands.asignar_tarjeta import (
     AsignarTarjetaHandler,
     PerformanceNoEncontrada,
 )
-from competencia.domain.aggregates.performance import (
+from competencia.domain.exceptions import (
     EstadoInvalidoParaAsignarTarjeta,
     MotivoObligatorio,
 )

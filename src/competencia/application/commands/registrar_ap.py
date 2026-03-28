@@ -5,11 +5,19 @@ from dataclasses import dataclass
 from decimal import Decimal
 from uuid import UUID, uuid4
 
+from competencia.application.commands.registrar_resultado import UnidadIncompatible
 from competencia.domain.aggregates.performance import Performance
 from competencia.domain.ports.competencia_estado_port import CompetenciaEstadoPort
+from competencia.domain.ports.disciplina_descriptor_port import DisciplinaDescriptorPort
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.disciplina import Disciplina
+from competencia.application.commands._stream_ids import performance_stream_id
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
+
+
+# ── Re-export para uso externo ─────────────────────────────────────────────────
+
+__all__ = ["UnidadIncompatible", "APYaRegistrado", "PlazoAPVencidoError", "GrillaYaConfirmadaError"]
 
 
 # ── Excepciones de aplicación ─────────────────────────────────────────────────
@@ -68,9 +76,11 @@ class RegistrarAPHandler:
         self,
         event_store: EventStorePort,
         competencia_estado: CompetenciaEstadoPort,
+        disciplina_descriptor: DisciplinaDescriptorPort,
     ) -> None:
         self._event_store = event_store
         self._competencia_estado = competencia_estado
+        self._disciplina_descriptor = disciplina_descriptor
 
     async def handle(self, command: RegistrarAPCommand) -> UUID:
         """Ejecuta el comando RegistrarAP.
@@ -82,11 +92,19 @@ class RegistrarAPHandler:
             UUID del PerformanceId recién creado.
 
         Raises:
+            UnidadIncompatible: la unidad no coincide con la disciplina.
             PlazoAPVencidoError: INV-P-03 — plazo cerrado.
             GrillaYaConfirmadaError: INV-P-04 — grilla congelada.
             APYaRegistrado: INV-P-02 — AP duplicado.
             ValorAPInvalido: INV-P-01 — valor <= 0 (lanzado por AP value object).
         """
+        descriptor = self._disciplina_descriptor.describe(command.disciplina)
+        if command.unidad != descriptor.unidad_esperada:
+            raise UnidadIncompatible(
+                f"{command.disciplina.value} requiere {descriptor.unidad_esperada.value}, "
+                f"recibido {command.unidad.value}"
+            )
+
         # INV-P-03: plazo de AP vencido?
         if await self._competencia_estado.is_plazo_vencido(
             command.competencia_id, command.disciplina
@@ -105,7 +123,7 @@ class RegistrarAPHandler:
             )
 
         # INV-P-02: ya existe un AP para esta combinación?
-        stream_id = _build_stream_id(
+        stream_id = performance_stream_id(
             command.competencia_id, command.participante_id, command.disciplina
         )
         existing_events = await self._event_store.load(stream_id)
@@ -124,7 +142,7 @@ class RegistrarAPHandler:
             participante_id=command.participante_id,
             disciplina=command.disciplina,
         )
-        performance.registrarAP(command.valor_ap, command.unidad)
+        performance.registrar_ap(command.valor_ap, command.unidad)
 
         # Persistir eventos pendientes
         for event in performance.pull_events():
@@ -140,14 +158,3 @@ class RegistrarAPHandler:
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 
-def _build_stream_id(
-    competencia_id: UUID, participante_id: UUID, disciplina: Disciplina
-) -> str:
-    """Construye el stream ID canónico para una Performance.
-
-    El stream ID encoda el natural key de la Performance.
-    Stream vacío → Performance no existe → INV-P-02 satisfecho.
-
-    Format: "performance-{competencia_id}-{participante_id}-{disciplina}"
-    """
-    return f"performance-{competencia_id}-{participante_id}-{disciplina.value}"
