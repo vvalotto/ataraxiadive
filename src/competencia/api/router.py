@@ -55,6 +55,7 @@ from competencia.application.queries.obtener_progreso import (
     ObtenerProgresoQuery,
     ProgresoCompetenciaDTO,
 )
+from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.cambio_grilla import CambioGrilla
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
@@ -66,13 +67,6 @@ from competencia.infrastructure.repositories.disciplina_descriptor_adapter impor
 )
 from competencia.infrastructure.repositories.performances_estado_adapter import (
     PerformancesEstadoAdapter,
-)
-from resultados.application.commands.calcular_ranking import (
-    CalcularRankingCommand,
-    CalcularRankingHandler,
-)
-from resultados.infrastructure.repositories.resultados_competencia_adapter import (
-    ResultadosCompetenciaAdapter,
 )
 
 router = APIRouter(prefix="/competencia", tags=["competencia"])
@@ -112,7 +106,7 @@ class IniciarCompetenciaBody(BaseModel):
 # ── Dependency providers ──────────────────────────────────────────────────────
 
 
-def get_event_store() -> SQLiteEventStore:
+def get_event_store() -> EventStorePort:
     """Dependency: instancia del Event Store según configuración de entorno."""
     db_path = os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db")
     return SQLiteEventStore(db_path)
@@ -144,7 +138,7 @@ def get_obtener_andariveles_activos_handler(
     return ObtenerAndarivelesActivosHandler(AndarivelesActivosAdapter(event_store))
 
 
-EventStoreDep = Annotated[SQLiteEventStore, Depends(get_event_store)]
+EventStoreDep = Annotated[EventStorePort, Depends(get_event_store)]
 DisciplinaDescriptorDep = Annotated[DisciplinaDescriptorAdapter, Depends(get_disciplina_descriptor)]
 ObtenerAndarivelesActivosHandlerDep = Annotated[
     ObtenerAndarivelesActivosHandler, Depends(get_obtener_andariveles_activos_handler)
@@ -153,27 +147,6 @@ PerformancesEstadoAdapterDep = Annotated[
     PerformancesEstadoAdapter, Depends(get_performances_estado_adapter)
 ]
 
-
-def get_on_finalizada_callback(
-    event_store: EventStoreDep,
-    disciplina_descriptor: DisciplinaDescriptorDep,
-) -> "Callable[[UUID, Disciplina], Awaitable[None]]":
-    """Dependency: callback P-08 → CalcularRanking (SP2 llamada directa)."""
-    from typing import Awaitable, Callable
-
-    ranking_db_path = os.getenv("RESULTADOS_DB_PATH", "data/resultados.db")
-
-    async def _on_finalizada(competencia_id: UUID, disciplina: Disciplina) -> None:
-        from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore as SES
-        ranking_store = SES(ranking_db_path)
-        acl = ResultadosCompetenciaAdapter(event_store)
-        handler = CalcularRankingHandler(ranking_store, acl, disciplina_descriptor)
-        await handler.handle(CalcularRankingCommand(
-            competencia_id=competencia_id,
-            disciplina=disciplina,
-        ))
-
-    return _on_finalizada
 
 
 def get_obtener_eventos_handler(

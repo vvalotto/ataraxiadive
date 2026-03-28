@@ -1,6 +1,6 @@
 # US-ADJ-1.4: Router DIP — EventStorePort + mover cross-BC a app.py
 
-**Estado**: `Backlog`
+**Estado**: `Done`
 **Sprint**: SP-ADJ-01 — Ajuste Técnico Post-SP2
 **Issues**: ADJ-04 · ADJ-05
 **Bounded Context**: `competencia` · `app.py`

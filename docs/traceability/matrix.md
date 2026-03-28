@@ -184,7 +184,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 | US-ADJ-1.1 | ADJ-03, ADJ-06, ADJ-08 | `domain/aggregates/`, `infrastructure/` | `@property ot_programado` · `_event_handlers` en `__init__` Competencia · `registrar_ap` snake_case | ✅ Done |
 | US-ADJ-1.2 | ADJ-01 | `domain/aggregates/` | Extraer `_recalcular_ots` + `_aplicar_swap_posicion` — eliminar triplicación de OT en `ajustar_grilla` | ✅ Done |
 | US-ADJ-1.3 | ADJ-02 | `application/commands/` | `_stream_ids.py` — 11 copias de `_build_stream_id` → 2 funciones canónicas | ✅ Done |
-| US-ADJ-1.4 | ADJ-04, ADJ-05 | `api/router.py`, `application/` | DIP — inyectar deps vía constructor, eliminar imports directos de infra en router | ⏳ Pendiente |
+| US-ADJ-1.4 | ADJ-04, ADJ-05 | `api/router.py`, `src/app.py` | DIP: `EventStoreDep` → `EventStorePort`; cableado P-08 movido a composition root `app.py` | ✅ Done |
 | US-ADJ-1.5 | ADJ-07 | `application/` | SRP — descomponer `CompetenciaService` tras resolver DIP | ⏳ Pendiente |
 
 ---
