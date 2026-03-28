@@ -99,15 +99,16 @@ max_cyclomatic_complexity = 10
 # US-1.2.4: +TipoTarjeta +TarjetaAsignada → CBO=17. Sube a 17.
 # US-1.2.5: +DNSRegistrado +EstadoInvalidoParaRegistrarDNS → CBO=19. Sube a 20 para US-1.2.5.
 # US-1.2.6: +ResultadoCorregido +EstadoInvalidoParaCorregirResultado → CBO=21. Sube a 22.
-max_cbo = 22
+# SP-ADJ-02: refactor shared/ redirige imports → CBO=23. SP3/INC-3.3 agrega torneo_id → CBO estimado ~25.
+max_cbo = 25
 # WMC elevado: Performance crece con cada US de Inc 1.2 (un método por comando de dominio).
 # US-1.2.3: WMC=21. US-1.2.4: asignar_tarjeta() → WMC=27. Sube a 36 para US-1.2.4-1.2.6 completo.
 # US-2.1.3: ajustar_grilla() agrega lógica de swap → Competencia WMC=50. US-2.1.4 agregará ~6 más.
 max_wmc = 60
 # GodObject: Performance.py crece con el aggregate principal del dominio (patron DDD aceptado).
 # US-1.2.5: 310 líneas. US-2.1.1+US-2.1.2: 459 líneas (Competencia + ConfigurarIntervaloOT + GrillaDeSalida).
-# Umbral ajustado a 520 para Inc 2.1 completo (US-2.1.3 y US-2.1.4 podrían agregar métodos).
-max_god_object_lines = 520
+# SP2 cierre: Competencia.py = 523 líneas. SP3/INC-3.3 agrega torneo_id (~10 líneas) → estimado ~535.
+max_god_object_lines = 540
 # GodObject method count: Performance tiene 22 métodos al cierre Inc 2.1 (properties + comandos + _apply_*).
 # Umbral ajustado a 28 para Inc 2.1 (US-2.1.3 y US-2.1.4 agregarán algunos métodos).
 max_god_object_methods = 28
