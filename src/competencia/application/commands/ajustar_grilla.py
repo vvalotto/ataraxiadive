@@ -8,7 +8,7 @@ from competencia.domain.aggregates.competencia import Competencia
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.cambio_grilla import CambioGrilla
 from competencia.domain.value_objects.disciplina import Disciplina
-
+from competencia.application.commands._stream_ids import competencia_stream_id
 
 # ── Command ───────────────────────────────────────────────────────────────────
 
@@ -57,7 +57,7 @@ class AjustarGrillaHandler:
             GrillaYaConfirmada: INV-C-02 — grilla confirmada, ajuste no permitido.
             PerformanceNoEncontrada: Si algún performance_id no existe en la grilla.
         """
-        stream_id = _build_stream_id(command.competencia_id)
+        stream_id = competencia_stream_id(command.competencia_id)
         events = await self._event_store.load(stream_id)
 
         competencia = Competencia.reconstitute(
@@ -77,8 +77,3 @@ class AjustarGrillaHandler:
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
-
-
-def _build_stream_id(competencia_id: UUID) -> str:
-    """Construye el stream ID canónico para una Competencia."""
-    return f"competencia-{competencia_id}"

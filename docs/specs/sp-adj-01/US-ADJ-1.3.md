@@ -1,6 +1,6 @@
 # US-ADJ-1.3: Consolidar _build_stream_id en módulo compartido
 
-**Estado**: `Backlog`
+**Estado**: `Done`
 **Sprint**: SP-ADJ-01 — Ajuste Técnico Post-SP2
 **Issues**: ADJ-02
 **Bounded Context**: `competencia`

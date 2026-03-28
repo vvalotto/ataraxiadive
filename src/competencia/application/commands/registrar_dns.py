@@ -11,7 +11,7 @@ from competencia.domain.aggregates.performance import Performance
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.ports.performances_estado_port import PerformancesEstadoPort
 from competencia.domain.value_objects.disciplina import Disciplina
-
+from competencia.application.commands._stream_ids import performance_stream_id
 
 # ── Excepciones de aplicación ─────────────────────────────────────────────────
 
@@ -75,7 +75,7 @@ class RegistrarDNSHandler:
             PerformanceNoEncontrada: no existe Performance para este atleta.
             EstadoInvalidoParaRegistrarDNS: Performance no está en Llamada (INV-P-08).
         """
-        stream_id = _build_stream_id(
+        stream_id = performance_stream_id(
             command.competencia_id, command.participante_id, command.disciplina
         )
         events = await self._event_store.load(stream_id)
@@ -113,11 +113,3 @@ class RegistrarDNSHandler:
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 
-def _build_stream_id(
-    competencia_id: UUID, participante_id: UUID, disciplina: Disciplina
-) -> str:
-    """Construye el stream ID canónico para una Performance.
-
-    Format: "performance-{competencia_id}-{participante_id}-{disciplina}"
-    """
-    return f"performance-{competencia_id}-{participante_id}-{disciplina.value}"

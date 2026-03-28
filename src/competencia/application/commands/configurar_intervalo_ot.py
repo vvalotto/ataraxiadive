@@ -7,7 +7,7 @@ from uuid import UUID
 from competencia.domain.aggregates.competencia import Competencia
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.disciplina import Disciplina
-
+from competencia.application.commands._stream_ids import competencia_stream_id
 
 # ── Command ───────────────────────────────────────────────────────────────────
 
@@ -56,7 +56,7 @@ class ConfigurarIntervaloOTHandler:
             IntervaloInvalido: Si intervalo_minutos <= 0.
             GrillaYaConfirmada: Si la grilla ya fue confirmada.
         """
-        stream_id = _build_stream_id(command.competencia_id)
+        stream_id = competencia_stream_id(command.competencia_id)
         events = await self._event_store.load(stream_id)
 
         competencia = Competencia.reconstitute(
@@ -80,10 +80,3 @@ class ConfigurarIntervaloOTHandler:
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
-
-def _build_stream_id(competencia_id: UUID) -> str:
-    """Construye el stream ID canónico para una Competencia.
-
-    Format: "competencia-{competencia_id}"
-    """
-    return f"competencia-{competencia_id}"

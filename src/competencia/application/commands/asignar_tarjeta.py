@@ -12,6 +12,7 @@ from competencia.domain.aggregates.performance import Performance
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.ports.performances_estado_port import PerformancesEstadoPort
 from competencia.domain.value_objects.disciplina import Disciplina
+from competencia.application.commands._stream_ids import performance_stream_id
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 
 
@@ -83,7 +84,7 @@ class AsignarTarjetaHandler:
             EstadoInvalidoParaAsignarTarjeta: Performance no está en ResultadoRegistrado (INV-P-07).
             MotivoObligatorio: tarjeta Amarilla o Roja sin motivo (INV-P-11).
         """
-        stream_id = _build_stream_id(
+        stream_id = performance_stream_id(
             command.competencia_id, command.participante_id, command.disciplina
         )
         events = await self._event_store.load(stream_id)
@@ -121,10 +122,3 @@ class AsignarTarjetaHandler:
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
-
-
-def _build_stream_id(
-    competencia_id: UUID, participante_id: UUID, disciplina: Disciplina
-) -> str:
-    """Construye el stream ID canónico para una Performance."""
-    return f"performance-{competencia_id}-{participante_id}-{disciplina.value}"

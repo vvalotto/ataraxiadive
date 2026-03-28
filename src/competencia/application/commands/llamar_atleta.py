@@ -10,7 +10,7 @@ from competencia.domain.ports.andariveles_activos_port import AndarivelesActivos
 from competencia.domain.ports.competencia_estado_port import CompetenciaEstadoPort
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.disciplina import Disciplina
-
+from competencia.application.commands._stream_ids import performance_stream_id
 
 # ── Excepciones de aplicación ─────────────────────────────────────────────────
 
@@ -108,7 +108,7 @@ class LlamarAtletaHandler:
             )
 
         # Cargar Performance desde Event Store
-        stream_id = _build_stream_id(
+        stream_id = performance_stream_id(
             command.competencia_id, command.participante_id, command.disciplina
         )
         events = await self._event_store.load(stream_id)
@@ -136,11 +136,3 @@ class LlamarAtletaHandler:
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 
-def _build_stream_id(
-    competencia_id: UUID, participante_id: UUID, disciplina: Disciplina
-) -> str:
-    """Construye el stream ID canónico para una Performance.
-
-    Format: "performance-{competencia_id}-{participante_id}-{disciplina}"
-    """
-    return f"performance-{competencia_id}-{participante_id}-{disciplina.value}"
