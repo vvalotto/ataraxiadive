@@ -5,7 +5,7 @@ from uuid import UUID
 
 from competencia.domain.aggregates.performance import Performance
 from competencia.domain.ports.event_store_port import EventStorePort
-from competencia.domain.value_objects.disciplina import Disciplina
+from shared.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from resultados.domain.ports.resultados_competencia_port import (
     ResultadoFinal,

@@ -177,27 +177,36 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
-## 6. US-IEDD Candidatas para SP1
+## 6. US-IEDD SP1 — Implementadas
 
-SP1 es el próximo SP a implementar. Estas US-IEDD se especifican formalmente
-en `docs/specs/spN/` antes de ejecutar `/implement-us`.
-
-| US candidata | Inc. | RFs cubiertos | Comando principal | Invariantes clave |
-|-------------|------|---------------|------------------|------------------|
-| US-1.1.1 | 1.1 | — | Setup: esqueleto BC Competencia (BC-first) + tabla `events` + health-check | — | ✅ Implementada 2026-03-21 |
-| US-1.2.1 | 1.2 | RF-PR-01/02/03, RF-EJ-08 | `RegistrarAP` | INV-P-01, INV-P-02, INV-P-03, INV-P-04 | ✅ Implementada 2026-03-21 |
-| US-1.2.2 | 1.2 | RF-EJ-02 | `LlamarAtleta` | INV-P-05 | ✅ Implementada 2026-03-22 |
-| US-1.2.3 | 1.2 | RF-EJ-05 | `RegistrarResultado` | INV-P-06, INV-P-09 | ✅ Implementada 2026-03-22 |
-| US-1.2.4 | 1.2 | RF-EJ-10 | `AsignarTarjeta` (blanca/roja) | INV-P-07, INV-P-10, INV-P-11 | ✅ Implementada 2026-03-22 |
-| US-1.2.5 | 1.2 | RF-EJ-02 | `RegistrarDNS` | INV-P-08, INV-P-09 | ✅ Implementada 2026-03-23 |
-| US-1.2.6 | 1.2 | RF-EJ-06 | `CorregirResultado` | INV-P-12, INV-P-13 (INV-P-15 → SP3) | ✅ Implementada 2026-03-23 |
-| US-1.3.1 | 1.3 | RF-EJ-05 | Read Models: `PerformanceActual`, `ProximosAtletas`, `ProgresoCompetencia` — 3 GET endpoints | — | ✅ Implementada 2026-03-23 |
-| US-1.4.1 | 1.4 | RF-EJ-07 | `AsignarTarjeta` roja + black-out con distancia | INV-P-07, INV-P-11 | ✅ Implementada 2026-03-23 |
-| US-1.4.2 | 1.4 | RF-EJ-05/10 | Flujo end-to-end: AP → llamar → resultado → tarjeta + `GET /events` audit log | INV-P-05..10 | ✅ Implementada 2026-03-23 |
+| US | Inc. | RFs cubiertos | Comando principal | Invariantes clave | Estado |
+|----|------|---------------|------------------|------------------|--------|
+| US-1.1.1 | 1.1 | — | Setup: esqueleto BC Competencia (BC-first) + tabla `events` + health-check | — | ✅ 2026-03-21 |
+| US-1.2.1 | 1.2 | RF-PR-01/02/03, RF-EJ-08 | `RegistrarAP` | INV-P-01..04 | ✅ 2026-03-21 |
+| US-1.2.2 | 1.2 | RF-EJ-02 | `LlamarAtleta` | INV-P-05 | ✅ 2026-03-22 |
+| US-1.2.3 | 1.2 | RF-EJ-05 | `RegistrarResultado` | INV-P-06, INV-P-09 | ✅ 2026-03-22 |
+| US-1.2.4 | 1.2 | RF-EJ-10 | `AsignarTarjeta` (blanca/roja) | INV-P-07, INV-P-10, INV-P-11 | ✅ 2026-03-22 |
+| US-1.2.5 | 1.2 | RF-EJ-02 | `RegistrarDNS` | INV-P-08, INV-P-09 | ✅ 2026-03-23 |
+| US-1.2.6 | 1.2 | RF-EJ-06 | `CorregirResultado` | INV-P-12, INV-P-13 | ✅ 2026-03-23 |
+| US-1.3.1 | 1.3 | RF-EJ-05 | Read Models: `PerformanceActual`, `ProximosAtletas`, `ProgresoCompetencia` | — | ✅ 2026-03-23 |
+| US-1.4.1 | 1.4 | RF-EJ-07 | `AsignarTarjeta` roja + black-out con distancia | INV-P-07, INV-P-11 | ✅ 2026-03-23 |
+| US-1.4.2 | 1.4 | RF-EJ-05/10 | Flujo E2E + `GET /events` audit log | INV-P-05..10 | ✅ 2026-03-23 |
 
 ---
 
-## 6. Cobertura Total
+## 7. US-IEDD SP-ADJ-01 — Implementadas (refactoring post-SP2)
+
+| US | Issues | Capas | Descripción | Estado |
+|----|--------|-------|-------------|--------|
+| US-ADJ-1.1 | ADJ-03/06/08 | `domain/` | `@property ot_programado` + `_event_handlers` en `__init__` + snake_case `registrar_ap` | ✅ 2026-03-28 |
+| US-ADJ-1.2 | ADJ-01/02 | `domain/` | Helpers `_recalcular_ots` + `_aplicar_swap_posicion` en Competencia (OCP/SRP) | ✅ 2026-03-28 |
+| US-ADJ-1.3 | ADJ-09 | `application/` | `_stream_ids.py` — fuente única, 11 duplicados DRY eliminados | ✅ 2026-03-28 |
+| US-ADJ-1.4 | ADJ-04/05 | `api/` | DIP en router: `EventStoreDep: EventStorePort` + P-08 a composition root | ✅ 2026-03-28 |
+| US-ADJ-1.5 | ADJ-07 | `api/` | SRP router: `schemas.py` + `dependencies.py` + `router.py` solo endpoints | ✅ 2026-03-28 |
+
+---
+
+## 9. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -215,7 +224,7 @@ en `docs/specs/spN/` antes de ejecutar `/implement-us`.
 
 ---
 
-## 7. US → Tests (se completa durante implementación)
+## 10. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -231,7 +240,7 @@ en `docs/specs/spN/` antes de ejecutar `/implement-us`.
 
 ---
 
-## 8. US → ADR (se completa durante implementación)
+## 11. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -246,5 +255,6 @@ en `docs/specs/spN/` antes de ejecutar `/implement-us`.
 
 *Documento creado: 2026-03-19 — Semana 0, Fase 0*
 *v1.1 — 2026-03-20: US-1.1.1 actualizada a BC-first · ADR-006 agregado · FAZ → FAAS*
+*v1.2 — 2026-03-28: SP-ADJ-01 agregado (§7) · secciones SP1 renumeradas · numeración de §§ corregida*
 *Fuentes: 05-requerimientos_funcionales.md · Context Map v1.1 · estrategia-desarrollo-bc.md · ES Competencia*
 *Mantenido por: Claude Cowork + Victor Valotto*

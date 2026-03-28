@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from competencia.domain.ports.event_store_port import EventStorePort
-from competencia.domain.value_objects.disciplina import Disciplina
+from shared.domain.value_objects.disciplina import Disciplina
 from resultados.domain.aggregates.ranking_competencia import RankingCompetencia
 
 
