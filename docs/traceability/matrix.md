@@ -206,6 +206,16 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
+## 8. US-IEDD SP-ADJ-02-code — Implementadas (refactoring arquitectónico cross-BC)
+
+| US | Issues | Capas | Descripción | Estado |
+|----|--------|-------|-------------|--------|
+| US-ADJ-2.6 | B-01, B-02, B-04 | `shared/domain/`, `shared/infrastructure/`, `resultados/`, `competencia/domain/` | `Disciplina`, `DisciplinaDescriptor`, `UnidadMedida` → `shared/domain/value_objects/`. `EventStorePort`, `SQLiteEventStore` → `shared/`. `DisciplinaDescriptorAdapter` creado en `resultados/infrastructure/`. | ✅ 2026-03-28 |
+| US-ADJ-2.7 | B-03 | `competencia/api/router.py` · `src/app.py` | Eliminado código muerto `get_on_finalizada_callback` del router. `build_on_finalizada_callback` (P-08 composition root) vive en `src/app.py`. | ✅ 2026-03-28 |
+| US-ADJ-2.8 | B-05, D-04 | `competencia/api/router.py` | DIP fix: `get_event_store() -> EventStorePort` + `EventStoreDep = Annotated[EventStorePort, ...]`. | ✅ 2026-03-28 |
+
+---
+
 ## 9. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
@@ -256,5 +266,6 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 *Documento creado: 2026-03-19 — Semana 0, Fase 0*
 *v1.1 — 2026-03-20: US-1.1.1 actualizada a BC-first · ADR-006 agregado · FAZ → FAAS*
 *v1.2 — 2026-03-28: SP-ADJ-01 agregado (§7) · secciones SP1 renumeradas · numeración de §§ corregida*
+*v1.3 — 2026-03-28: SP-ADJ-02-code agregado (§8) · US-ADJ-2.6/2.7/2.8 documentadas*
 *Fuentes: 05-requerimientos_funcionales.md · Context Map v1.1 · estrategia-desarrollo-bc.md · ES Competencia*
 *Mantenido por: Claude Cowork + Victor Valotto*

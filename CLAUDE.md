@@ -416,18 +416,19 @@ Ver `docs/plans/sp-adj-01/PLAN-SP-ADJ-01.md`.
 
 ---
 
-**SP-ADJ-02 — Ajuste Post-Revisión de Hito — 🔄 EN CURSO**
+**SP-ADJ-02 — Ajuste Post-Revisión de Hito — ✅ COMPLETO (2026-03-28)**
 
 | Sub-sprint | Descripción | Estado |
 |------------|-------------|--------|
-| SP-ADJ-02-doc | Gaps documentales (CLAUDE.md, baselines, matrix, domain-model, HITOs) | 🔄 En curso |
-| SP-ADJ-02-code | Gaps arquitectónicos cross-BC (`Disciplina` → `shared/`, DIP router, composition root) | ⏳ Pendiente |
+| SP-ADJ-02-doc | Gaps documentales (CLAUDE.md, baselines, matrix, domain-model, HITOs) | ✅ Completo |
+| SP-ADJ-02-code | Gaps arquitectónicos cross-BC (`Disciplina` → `shared/`, DIP router, composition root) | ✅ Completo |
 
-Ver `.work/revision-consistencia.md` para el inventario completo de gaps.
+3 US de refactoring arquitectónico cross-BC (US-ADJ-2.6, US-ADJ-2.7, US-ADJ-2.8).
+Ver `docs/plans/sp-adj-02-code/PLAN-SP-ADJ-02-code.md` y `.work/revision-consistencia.md`.
 
 ---
 
-**Próximo paso:** completar SP-ADJ-02 → iniciar SP3 (El Torneo, BL-003, tag `v0.4.0`).
+**Próximo paso:** iniciar SP3 (El Torneo, BL-003, tag `v0.4.0`).
 BC objetivo SP3: Torneo + Registro + Identidad + extensión Resultados (Overall).
 
 ---
