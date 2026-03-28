@@ -57,6 +57,7 @@ from competencia.application.queries.obtener_progreso import (
 )
 from competencia.domain.value_objects.cambio_grilla import CambioGrilla
 from competencia.domain.value_objects.disciplina import Disciplina
+from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 from competencia.infrastructure.repositories.andariveles_activos_adapter import (
     AndarivelesActivosAdapter,
@@ -104,7 +105,7 @@ class IniciarCompetenciaBody(BaseModel):
 # ── Dependency providers ──────────────────────────────────────────────────────
 
 
-def get_event_store() -> SQLiteEventStore:
+def get_event_store() -> EventStorePort:
     """Dependency: instancia del Event Store según configuración de entorno."""
     db_path = os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db")
     return SQLiteEventStore(db_path)
@@ -136,7 +137,7 @@ def get_obtener_andariveles_activos_handler(
     return ObtenerAndarivelesActivosHandler(AndarivelesActivosAdapter(event_store))
 
 
-EventStoreDep = Annotated[SQLiteEventStore, Depends(get_event_store)]
+EventStoreDep = Annotated[EventStorePort, Depends(get_event_store)]
 DisciplinaDescriptorDep = Annotated[DisciplinaDescriptorAdapter, Depends(get_disciplina_descriptor)]
 ObtenerAndarivelesActivosHandlerDep = Annotated[
     ObtenerAndarivelesActivosHandler, Depends(get_obtener_andariveles_activos_handler)
