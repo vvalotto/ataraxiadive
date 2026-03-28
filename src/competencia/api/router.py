@@ -67,14 +67,6 @@ from competencia.infrastructure.repositories.disciplina_descriptor_adapter impor
 from competencia.infrastructure.repositories.performances_estado_adapter import (
     PerformancesEstadoAdapter,
 )
-from resultados.application.commands.calcular_ranking import (
-    CalcularRankingCommand,
-    CalcularRankingHandler,
-)
-from resultados.infrastructure.repositories.resultados_competencia_adapter import (
-    ResultadosCompetenciaAdapter,
-)
-
 router = APIRouter(prefix="/competencia", tags=["competencia"])
 
 
@@ -152,28 +144,6 @@ ObtenerAndarivelesActivosHandlerDep = Annotated[
 PerformancesEstadoAdapterDep = Annotated[
     PerformancesEstadoAdapter, Depends(get_performances_estado_adapter)
 ]
-
-
-def get_on_finalizada_callback(
-    event_store: EventStoreDep,
-    disciplina_descriptor: DisciplinaDescriptorDep,
-) -> "Callable[[UUID, Disciplina], Awaitable[None]]":
-    """Dependency: callback P-08 → CalcularRanking (SP2 llamada directa)."""
-    from typing import Awaitable, Callable
-
-    ranking_db_path = os.getenv("RESULTADOS_DB_PATH", "data/resultados.db")
-
-    async def _on_finalizada(competencia_id: UUID, disciplina: Disciplina) -> None:
-        from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore as SES
-        ranking_store = SES(ranking_db_path)
-        acl = ResultadosCompetenciaAdapter(event_store)
-        handler = CalcularRankingHandler(ranking_store, acl, disciplina_descriptor)
-        await handler.handle(CalcularRankingCommand(
-            competencia_id=competencia_id,
-            disciplina=disciplina,
-        ))
-
-    return _on_finalizada
 
 
 def get_obtener_eventos_handler(

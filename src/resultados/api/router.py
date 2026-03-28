@@ -9,7 +9,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
 from shared.domain.value_objects.disciplina import Disciplina
-from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
+from shared.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 from resultados.application.queries.obtener_ranking import (
     ObtenerRankingHandler,
     ObtenerRankingQuery,

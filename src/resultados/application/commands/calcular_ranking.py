@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from uuid import UUID
 
-from competencia.domain.ports.event_store_port import EventStorePort
+from shared.domain.ports.event_store_port import EventStorePort
 from shared.domain.value_objects.disciplina import Disciplina
 from shared.domain.value_objects.disciplina_descriptor import DisciplinaDescriptor
 from resultados.infrastructure.repositories.disciplina_descriptor_adapter import (
