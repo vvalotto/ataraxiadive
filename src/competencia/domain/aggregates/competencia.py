@@ -55,6 +55,14 @@ class Competencia(AggregateRoot):
         self._intervalo: IntervaloDisciplina | None = None
         self._grilla_confirmada: bool = False
         self._grilla: list[EntradaGrilla] = []
+        self._event_handlers: dict[str, Any] = {
+            "IntervaloOTConfigurado": self._apply_intervalo_ot_configurado,
+            "GrillaDeSalidaGenerada": self._apply_grilla_de_salida_generada,
+            "GrillaDeSalidaAjustada": self._apply_grilla_de_salida_ajustada,
+            "GrillaConfirmada": self._apply_grilla_confirmada,
+            "CompetenciaIniciada": self._apply_competencia_iniciada,
+            "CompetenciaFinalizada": self._apply_competencia_finalizada,
+        }
 
     # ── Propiedades ───────────────────────────────────────────────────────────
 
@@ -470,17 +478,7 @@ class Competencia(AggregateRoot):
         """Aplica un evento almacenado al estado interno del aggregate."""
         event_type = event["event_type"]
         payload = self._parse_payload(event["payload"])
-
-        _handlers: dict[str, Any] = {
-            "IntervaloOTConfigurado": self._apply_intervalo_ot_configurado,
-            "GrillaDeSalidaGenerada": self._apply_grilla_de_salida_generada,
-            "GrillaDeSalidaAjustada": self._apply_grilla_de_salida_ajustada,
-            "GrillaConfirmada": self._apply_grilla_confirmada,
-            "CompetenciaIniciada": self._apply_competencia_iniciada,
-            "CompetenciaFinalizada": self._apply_competencia_finalizada,
-        }
-
-        handler = _handlers.get(event_type)
+        handler = self._event_handlers.get(event_type)
         if handler is not None:
             handler(payload)
 

@@ -58,7 +58,7 @@ class AndarivelesActivosAdapter(AndarivelesActivosPort):
         for numero in range(1, andariveles + 1):
             perf_activa = activos.get(numero)
             if perf_activa is not None:
-                ot: datetime | None = perf_activa._ot_programado  # noqa: SLF001
+                ot: datetime | None = perf_activa.ot_programado
                 result.append(
                     AndarivelesActivosData(
                         numero=numero,

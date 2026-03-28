@@ -125,9 +125,14 @@ class Performance(AggregateRoot):
         """Distancia alcanzada en black-out, o None si no aplica."""
         return self._distancia_blackout
 
+    @property
+    def ot_programado(self) -> datetime | None:
+        """OT programado, disponible tras ser llamado. None si aún no fue llamado."""
+        return self._ot_programado
+
     # ── Comandos de dominio ───────────────────────────────────────────────────
 
-    def registrarAP(self, valor: Decimal, unidad: UnidadMedida) -> None:
+    def registrar_ap(self, valor: Decimal, unidad: UnidadMedida) -> None:
         """Registra el Announced Performance del atleta.
 
         Valida INV-P-01 a través del value object AP.

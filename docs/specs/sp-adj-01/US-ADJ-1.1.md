@@ -1,6 +1,6 @@
 # US-ADJ-1.1: Domain Cleanup — Performance property + OCP Competencia + snake_case
 
-**Estado**: `Backlog`
+**Estado**: `Done`
 **Sprint**: SP-ADJ-01 — Ajuste Técnico Post-SP2
 **Issues**: ADJ-03 · ADJ-06 · ADJ-08
 **Bounded Context**: `competencia`

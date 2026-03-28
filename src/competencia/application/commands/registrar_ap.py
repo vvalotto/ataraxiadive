@@ -141,7 +141,7 @@ class RegistrarAPHandler:
             participante_id=command.participante_id,
             disciplina=command.disciplina,
         )
-        performance.registrarAP(command.valor_ap, command.unidad)
+        performance.registrar_ap(command.valor_ap, command.unidad)
 
         # Persistir eventos pendientes
         for event in performance.pull_events():

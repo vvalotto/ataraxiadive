@@ -177,6 +177,18 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
+## 5b. US-IEDD SP-ADJ-01 (Ajuste Técnico Post-SP2)
+
+| US candidata | Issues | Capas afectadas | Contenido principal | Estado |
+|-------------|--------|-----------------|---------------------|--------|
+| US-ADJ-1.1 | ADJ-03, ADJ-06, ADJ-08 | `domain/aggregates/`, `infrastructure/` | `@property ot_programado` · `_event_handlers` en `__init__` Competencia · `registrar_ap` snake_case | ✅ Done |
+| US-ADJ-1.2 | ADJ-01 | `domain/aggregates/` | Eliminar `_build_stream_id` duplicado (11 usos → helper compartido) | ⏳ Pendiente |
+| US-ADJ-1.3 | ADJ-02 | `application/` | FeatureEnvy `AgregarTarjeta` → mover lógica al aggregate | ⏳ Pendiente |
+| US-ADJ-1.4 | ADJ-04, ADJ-05 | `api/router.py`, `application/` | DIP — inyectar deps vía constructor, eliminar imports directos de infra en router | ⏳ Pendiente |
+| US-ADJ-1.5 | ADJ-07 | `application/` | SRP — descomponer `CompetenciaService` tras resolver DIP | ⏳ Pendiente |
+
+---
+
 ## 6. US-IEDD Candidatas para SP1
 
 SP1 es el próximo SP a implementar. Estas US-IEDD se especifican formalmente
