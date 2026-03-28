@@ -8,7 +8,7 @@ from uuid import UUID, uuid4
 
 import pytest
 
-from competencia.domain.value_objects.disciplina import Disciplina
+from shared.domain.value_objects.disciplina import Disciplina
 from resultados.application.commands.calcular_ranking import (
     CalcularRankingCommand,
     CalcularRankingHandler,

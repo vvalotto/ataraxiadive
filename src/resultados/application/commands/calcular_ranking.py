@@ -5,9 +5,9 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from competencia.domain.ports.event_store_port import EventStorePort
-from competencia.domain.value_objects.disciplina import Disciplina
-from competencia.domain.value_objects.disciplina_descriptor import DisciplinaDescriptor
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+from shared.domain.value_objects.disciplina import Disciplina
+from shared.domain.value_objects.disciplina_descriptor import DisciplinaDescriptor
+from resultados.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
 from resultados.domain.aggregates.ranking_competencia import RankingCompetencia

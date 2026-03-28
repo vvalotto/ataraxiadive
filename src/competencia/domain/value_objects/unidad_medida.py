@@ -1,11 +1,4 @@
-"""Value Object UnidadMedida — unidad de medida del AP/RP."""
-from __future__ import annotations
+"""Re-export de UnidadMedida desde shared.domain (fuente canónica)."""
+from shared.domain.value_objects.unidad_medida import UnidadMedida
 
-from enum import StrEnum
-
-
-class UnidadMedida(StrEnum):
-    """Unidades de medida usadas en las performances de apnea."""
-
-    Metros = "Metros"
-    Segundos = "Segundos"
+__all__ = ["UnidadMedida"]

@@ -10,8 +10,8 @@ from shared.domain.base.aggregate_root import AggregateRoot
 from resultados.domain.events.resultados_calculados import ResultadosCalculados
 from resultados.domain.ports.resultados_competencia_port import ResultadoFinal
 from resultados.domain.value_objects.entrada_ranking import EntradaRanking
-from competencia.domain.value_objects.disciplina import Disciplina
-from competencia.domain.value_objects.disciplina_descriptor import DisciplinaDescriptor
+from shared.domain.value_objects.disciplina import Disciplina
+from shared.domain.value_objects.disciplina_descriptor import DisciplinaDescriptor
 
 
 # Tarjetas que producen un resultado válido (se posicionan antes de DNS/Roja)

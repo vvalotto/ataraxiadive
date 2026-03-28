@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from uuid import UUID
 
-from competencia.domain.value_objects.disciplina import Disciplina
+from shared.domain.value_objects.disciplina import Disciplina
 
 
 @dataclass(frozen=True)

@@ -6,7 +6,7 @@ from uuid import UUID, uuid4
 
 import pytest
 
-from competencia.domain.value_objects.disciplina import Disciplina
+from shared.domain.value_objects.disciplina import Disciplina
 from resultados.domain.aggregates.ranking_competencia import RankingCompetencia
 from resultados.domain.exceptions import ResultadosIncompletos
 from resultados.domain.ports.resultados_competencia_port import ResultadoFinal
