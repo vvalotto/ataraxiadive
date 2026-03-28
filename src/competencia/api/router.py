@@ -1,249 +1,55 @@
 """Router FastAPI del BC Competencia — endpoints de la interfaz del juez."""
 from __future__ import annotations
 
-import os
-from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
 
-from competencia.application.commands.ajustar_grilla import (
-    AjustarGrillaCommand,
-    AjustarGrillaHandler,
+from competencia.api.dependencies import (
+    AjustarGrillaHandlerDep,
+    ConfirmarGrillaHandlerDep,
+    ConfigurarIntervaloOTHandlerDep,
+    IniciarCompetenciaHandlerDep,
+    ObtenerAndarivelesActivosHandlerDep,
+    ObtenerEstadoCompetenciaHandlerDep,
+    ObtenerEventosHandlerDep,
+    ObtenerGrillaHandlerDep,
+    ObtenerPerformanceActualHandlerDep,
+    ObtenerProgresoHandlerDep,
+    ObtenerProximasPerformancesHandlerDep,
+    get_event_store,  # re-exportado: tests usan dependency_overrides[get_event_store]
 )
-from competencia.application.commands.confirmar_grilla import (
-    ConfirmarGrillaCommand,
-    ConfirmarGrillaHandler,
-)
-from competencia.application.commands.configurar_intervalo_ot import (
-    ConfigurarIntervaloOTHandler,
-)
-from competencia.application.commands.iniciar_competencia import (
-    IniciarCompetenciaCommand,
-    IniciarCompetenciaHandler,
+from competencia.api.schemas import AjustarGrillaBody, ConfirmarGrillaBody, IniciarCompetenciaBody
+from competencia.application.commands.ajustar_grilla import AjustarGrillaCommand
+from competencia.application.commands.confirmar_grilla import ConfirmarGrillaCommand
+from competencia.application.commands.iniciar_competencia import IniciarCompetenciaCommand
+from competencia.application.queries.obtener_andariveles_activos import (
+    ObtenerAndarivelesActivosQuery,
 )
 from competencia.application.queries.obtener_estado_competencia import (
-    ObtenerEstadoCompetenciaHandler,
     ObtenerEstadoCompetenciaQuery,
 )
-from competencia.application.queries.obtener_eventos import (
-    ObtenerEventosHandler,
-    ObtenerEventosQuery,
-)
-from competencia.application.queries.obtener_grilla import (
-    ObtenerGrillaHandler,
-    ObtenerGrillaQuery,
-)
+from competencia.application.queries.obtener_eventos import ObtenerEventosQuery
+from competencia.application.queries.obtener_grilla import ObtenerGrillaQuery
 from competencia.application.queries.obtener_performance_actual import (
-    ObtenerPerformanceActualHandler,
     ObtenerPerformanceActualQuery,
     PerformanceActualDTO,
 )
-from competencia.application.queries.obtener_proximas_performances import (
-    ObtenerProximasPerformancesHandler,
-    ObtenerProximasPerformancesQuery,
-    ProximoAtletaDTO,
-)
-from competencia.application.queries.obtener_andariveles_activos import (
-    ObtenerAndarivelesActivosHandler,
-    ObtenerAndarivelesActivosQuery,
-)
 from competencia.application.queries.obtener_progreso import (
-    ObtenerProgresoHandler,
     ObtenerProgresoQuery,
     ProgresoCompetenciaDTO,
 )
-from competencia.domain.ports.event_store_port import EventStorePort
+from competencia.application.queries.obtener_proximas_performances import (
+    ObtenerProximasPerformancesQuery,
+    ProximoAtletaDTO,
+)
 from competencia.domain.value_objects.cambio_grilla import CambioGrilla
 from competencia.domain.value_objects.disciplina import Disciplina
-from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.andariveles_activos_adapter import (
-    AndarivelesActivosAdapter,
-)
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
-    DisciplinaDescriptorAdapter,
-)
-from competencia.infrastructure.repositories.performances_estado_adapter import (
-    PerformancesEstadoAdapter,
-)
 
 router = APIRouter(prefix="/competencia", tags=["competencia"])
 
-
-# ── Request body schemas ───────────────────────────────────────────────────────
-
-
-class CambioGrillaSchema(BaseModel):
-    """Schema de un cambio individual sobre la Grilla de Salida."""
-
-    performance_id: UUID
-    campo: str
-    valor_nuevo: int
-
-
-class AjustarGrillaBody(BaseModel):
-    """Body del endpoint POST /ajustar-grilla."""
-
-    disciplina: Disciplina
-    cambios: list[CambioGrillaSchema]
-
-
-class ConfirmarGrillaBody(BaseModel):
-    """Body del endpoint POST /confirmar-grilla."""
-
-    disciplina: Disciplina
-
-
-class IniciarCompetenciaBody(BaseModel):
-    """Body del endpoint POST /iniciar."""
-
-    disciplina: Disciplina
-    juez_id: str
-
-
-# ── Dependency providers ──────────────────────────────────────────────────────
-
-
-def get_event_store() -> EventStorePort:
-    """Dependency: instancia del Event Store según configuración de entorno."""
-    db_path = os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db")
-    return SQLiteEventStore(db_path)
-
-
-def get_disciplina_descriptor() -> DisciplinaDescriptorAdapter:
-    """Dependency: adapter del descriptor de disciplina (sin I/O)."""
-    return DisciplinaDescriptorAdapter()
-
-
-def get_andariveles_activos_adapter(
-    event_store: EventStoreDep,
-) -> AndarivelesActivosAdapter:
-    """Dependency: adapter de andariveles activos."""
-    return AndarivelesActivosAdapter(event_store)
-
-
-def get_performances_estado_adapter(
-    event_store: EventStoreDep,
-) -> PerformancesEstadoAdapter:
-    """Dependency: adapter de estado de performances (P-08 — US-2.4.1)."""
-    return PerformancesEstadoAdapter(event_store)
-
-
-def get_obtener_andariveles_activos_handler(
-    event_store: EventStoreDep,
-) -> ObtenerAndarivelesActivosHandler:
-    """Dependency: handler de consulta de andariveles activos."""
-    return ObtenerAndarivelesActivosHandler(AndarivelesActivosAdapter(event_store))
-
-
-EventStoreDep = Annotated[EventStorePort, Depends(get_event_store)]
-DisciplinaDescriptorDep = Annotated[DisciplinaDescriptorAdapter, Depends(get_disciplina_descriptor)]
-ObtenerAndarivelesActivosHandlerDep = Annotated[
-    ObtenerAndarivelesActivosHandler, Depends(get_obtener_andariveles_activos_handler)
-]
-PerformancesEstadoAdapterDep = Annotated[
-    PerformancesEstadoAdapter, Depends(get_performances_estado_adapter)
-]
-
-
-
-def get_obtener_eventos_handler(
-    event_store: EventStoreDep,
-) -> ObtenerEventosHandler:
-    """Dependency: handler de consulta de eventos."""
-    return ObtenerEventosHandler(event_store)
-
-
-def get_obtener_performance_actual_handler(
-    event_store: EventStoreDep,
-    disciplina_descriptor: DisciplinaDescriptorDep,
-) -> ObtenerPerformanceActualHandler:
-    """Dependency: handler de performance actual."""
-    return ObtenerPerformanceActualHandler(event_store, disciplina_descriptor)
-
-
-def get_obtener_proximas_performances_handler(
-    event_store: EventStoreDep,
-) -> ObtenerProximasPerformancesHandler:
-    """Dependency: handler de próximas performances."""
-    return ObtenerProximasPerformancesHandler(event_store)
-
-
-def get_obtener_progreso_handler(
-    event_store: EventStoreDep,
-) -> ObtenerProgresoHandler:
-    """Dependency: handler de progreso de competencia."""
-    return ObtenerProgresoHandler(event_store)
-
-
-def get_configurar_intervalo_ot_handler(
-    event_store: EventStoreDep,
-) -> ConfigurarIntervaloOTHandler:
-    """Dependency: handler para configurar intervalo OT."""
-    return ConfigurarIntervaloOTHandler(event_store)
-
-
-ObtenerEventosHandlerDep = Annotated[
-    ObtenerEventosHandler, Depends(get_obtener_eventos_handler)
-]
-ObtenerPerformanceActualHandlerDep = Annotated[
-    ObtenerPerformanceActualHandler, Depends(get_obtener_performance_actual_handler)
-]
-ObtenerProximasPerformancesHandlerDep = Annotated[
-    ObtenerProximasPerformancesHandler, Depends(get_obtener_proximas_performances_handler)
-]
-ObtenerProgresoHandlerDep = Annotated[
-    ObtenerProgresoHandler, Depends(get_obtener_progreso_handler)
-]
-ConfigurarIntervaloOTHandlerDep = Annotated[
-    ConfigurarIntervaloOTHandler, Depends(get_configurar_intervalo_ot_handler)
-]
-
-
-def get_ajustar_grilla_handler(event_store: EventStoreDep) -> AjustarGrillaHandler:
-    """Dependency: handler para ajustar la grilla."""
-    return AjustarGrillaHandler(event_store)
-
-
-def get_confirmar_grilla_handler(event_store: EventStoreDep) -> ConfirmarGrillaHandler:
-    """Dependency: handler para confirmar la grilla."""
-    return ConfirmarGrillaHandler(event_store)
-
-
-def get_iniciar_competencia_handler(event_store: EventStoreDep) -> IniciarCompetenciaHandler:
-    """Dependency: handler para iniciar la competencia."""
-    return IniciarCompetenciaHandler(event_store)
-
-
-def get_obtener_grilla_handler(event_store: EventStoreDep) -> ObtenerGrillaHandler:
-    """Dependency: handler de consulta de la grilla."""
-    return ObtenerGrillaHandler(event_store)
-
-
-def get_obtener_estado_competencia_handler(
-    event_store: EventStoreDep,
-) -> ObtenerEstadoCompetenciaHandler:
-    """Dependency: handler de consulta de estado de competencia."""
-    return ObtenerEstadoCompetenciaHandler(event_store)
-
-
-AjustarGrillaHandlerDep = Annotated[
-    AjustarGrillaHandler, Depends(get_ajustar_grilla_handler)
-]
-ConfirmarGrillaHandlerDep = Annotated[
-    ConfirmarGrillaHandler, Depends(get_confirmar_grilla_handler)
-]
-IniciarCompetenciaHandlerDep = Annotated[
-    IniciarCompetenciaHandler, Depends(get_iniciar_competencia_handler)
-]
-ObtenerGrillaHandlerDep = Annotated[
-    ObtenerGrillaHandler, Depends(get_obtener_grilla_handler)
-]
-ObtenerEstadoCompetenciaHandlerDep = Annotated[
-    ObtenerEstadoCompetenciaHandler, Depends(get_obtener_estado_competencia_handler)
-]
+__all__ = ["router", "get_event_store"]
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────

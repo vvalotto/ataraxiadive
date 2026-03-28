@@ -1,6 +1,6 @@
 # US-ADJ-1.5: Router SRP — Separar schemas.py + dependencies.py
 
-**Estado**: `Backlog`
+**Estado**: `Done`
 **Sprint**: SP-ADJ-01 — Ajuste Técnico Post-SP2
 **Issues**: ADJ-07
 **Bounded Context**: `competencia`
