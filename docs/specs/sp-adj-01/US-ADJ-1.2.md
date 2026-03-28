@@ -1,6 +1,6 @@
 # US-ADJ-1.2: Refactor ajustar_grilla — Extraer helpers OT y swap
 
-**Estado**: `Backlog`
+**Estado**: `Done`
 **Sprint**: SP-ADJ-01 — Ajuste Técnico Post-SP2
 **Issues**: ADJ-01
 **Bounded Context**: `competencia`

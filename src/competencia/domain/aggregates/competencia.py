@@ -186,31 +186,30 @@ class Competencia(AggregateRoot):
         ordenadas = _ordenar_performances(performances, descriptor)
         now = GrillaDeSalidaGenerada.now()
 
-        entradas = []
-        perf_payloads = []
-        for posicion, perf in enumerate(ordenadas, start=1):
-            ot_atleta = ot_inicio + timedelta(
-                minutes=(posicion - 1) * self._intervalo.minutos
-            )
-            andarivel = _calcular_andarivel(posicion, andariveles)
-            entradas.append(
+        entradas = _recalcular_ots(
+            [
                 EntradaGrilla(
                     performance_id=perf.performance_id,
                     atleta_id=perf.atleta_id,
                     posicion=posicion,
-                    andarivel=andarivel,
-                    ot_programado=ot_atleta,
+                    andarivel=_calcular_andarivel(posicion, andariveles),
+                    ot_programado=ot_inicio,  # será reemplazado por _recalcular_ots
                 )
-            )
-            perf_payloads.append(
-                {
-                    "performance_id": str(perf.performance_id),
-                    "atleta_id": str(perf.atleta_id),
-                    "posicion": posicion,
-                    "andarivel": andarivel,
-                    "ot_programado": ot_atleta.isoformat(),
-                }
-            )
+                for posicion, perf in enumerate(ordenadas, start=1)
+            ],
+            ot_inicio,
+            self._intervalo,
+        )
+        perf_payloads = [
+            {
+                "performance_id": str(e.performance_id),
+                "atleta_id": str(e.atleta_id),
+                "posicion": e.posicion,
+                "andarivel": e.andarivel,
+                "ot_programado": e.ot_programado.isoformat(),
+            }
+            for e in entradas
+        ]
 
         event = GrillaDeSalidaGenerada(
             event_type="GrillaDeSalidaGenerada",
@@ -273,37 +272,8 @@ class Competencia(AggregateRoot):
                 entrada.posicion if cambio.campo == "posicion" else entrada.andarivel
             )
             if cambio.campo == "posicion":
-                posicion_nueva = cambio.valor_nuevo
-                posicion_vieja = entrada.posicion
-                # Si la posición destino está ocupada, desplazar al ocupante
-                ocupante_id = next(
-                    (pid for pid, e in grilla_mutable.items()
-                     if e.posicion == posicion_nueva and pid != cambio.performance_id),
-                    None,
-                )
-                if ocupante_id is not None:
-                    ocupante = grilla_mutable[ocupante_id]
-                    grilla_mutable[ocupante_id] = EntradaGrilla(
-                        performance_id=ocupante.performance_id,
-                        atleta_id=ocupante.atleta_id,
-                        posicion=posicion_vieja,
-                        andarivel=ocupante.andarivel,
-                        ot_programado=ocupante.ot_programado,
-                    )
-                    cambios_payload.append(
-                        {
-                            "performance_id": str(ocupante_id),
-                            "campo": "posicion",
-                            "valor_anterior": posicion_nueva,
-                            "valor_nuevo": posicion_vieja,
-                        }
-                    )
-                grilla_mutable[cambio.performance_id] = EntradaGrilla(
-                    performance_id=entrada.performance_id,
-                    atleta_id=entrada.atleta_id,
-                    posicion=posicion_nueva,
-                    andarivel=entrada.andarivel,
-                    ot_programado=entrada.ot_programado,
+                _aplicar_swap_posicion(
+                    grilla_mutable, cambio.performance_id, cambio.valor_nuevo, cambios_payload
                 )
                 hubo_cambio_posicion = True
             else:
@@ -327,18 +297,7 @@ class Competencia(AggregateRoot):
 
         if hubo_cambio_posicion and self._intervalo is not None:
             ot_inicio = min(e.ot_programado for e in self._grilla)
-            nueva_grilla = [
-                EntradaGrilla(
-                    performance_id=e.performance_id,
-                    atleta_id=e.atleta_id,
-                    posicion=e.posicion,
-                    andarivel=e.andarivel,
-                    ot_programado=ot_inicio + timedelta(
-                        minutes=(e.posicion - 1) * self._intervalo.minutos
-                    ),
-                )
-                for e in nueva_grilla
-            ]
+            nueva_grilla = _recalcular_ots(nueva_grilla, ot_inicio, self._intervalo)
 
         now = GrillaDeSalidaAjustada.now()
         event = GrillaDeSalidaAjustada(
@@ -522,18 +481,7 @@ class Competencia(AggregateRoot):
         hubo_cambio_posicion = any(c["campo"] == "posicion" for c in payload["cambios"])
         if hubo_cambio_posicion and self._intervalo is not None:
             ot_inicio = min(e.ot_programado for e in self._grilla)
-            nueva_grilla = [
-                EntradaGrilla(
-                    performance_id=e.performance_id,
-                    atleta_id=e.atleta_id,
-                    posicion=e.posicion,
-                    andarivel=e.andarivel,
-                    ot_programado=ot_inicio + timedelta(
-                        minutes=(e.posicion - 1) * self._intervalo.minutos
-                    ),
-                )
-                for e in nueva_grilla
-            ]
+            nueva_grilla = _recalcular_ots(nueva_grilla, ot_inicio, self._intervalo)
         self._grilla = nueva_grilla
 
     def _apply_grilla_confirmada(self, payload: dict[str, Any]) -> None:  # noqa: ARG002
@@ -555,6 +503,85 @@ class Competencia(AggregateRoot):
 
 
 # ── Helpers de dominio ────────────────────────────────────────────────────────
+
+
+def _recalcular_ots(
+    grilla: list[EntradaGrilla],
+    ot_inicio: datetime,
+    intervalo: IntervaloDisciplina,
+) -> list[EntradaGrilla]:
+    """Recalcula los OTs de todas las entradas según posición e intervalo (P-02).
+
+    Args:
+        grilla: Lista ordenada por posición.
+        ot_inicio: Timestamp de inicio de la competencia.
+        intervalo: Intervalo entre OTs consecutivos.
+
+    Returns:
+        Nueva lista con OTs recalculados.
+    """
+    return [
+        EntradaGrilla(
+            performance_id=e.performance_id,
+            atleta_id=e.atleta_id,
+            posicion=e.posicion,
+            andarivel=e.andarivel,
+            ot_programado=ot_inicio + timedelta(minutes=(e.posicion - 1) * intervalo.minutos),
+        )
+        for e in grilla
+    ]
+
+
+def _aplicar_swap_posicion(
+    grilla_mutable: dict[UUID, EntradaGrilla],
+    performance_id: UUID,
+    posicion_nueva: int,
+    cambios_payload: list[dict[str, object]],
+) -> None:
+    """Aplica el cambio de posición con desplazamiento del ocupante si corresponde.
+
+    Modifica grilla_mutable in-place y registra el desplazamiento del ocupante
+    en cambios_payload.
+
+    Args:
+        grilla_mutable: Mapa performance_id → EntradaGrilla a modificar.
+        performance_id: Performance que cambia de posición.
+        posicion_nueva: Posición destino.
+        cambios_payload: Lista donde se registran cambios secundarios (ocupante desplazado).
+    """
+    entrada = grilla_mutable[performance_id]
+    posicion_vieja = entrada.posicion
+
+    ocupante_id = next(
+        (pid for pid, e in grilla_mutable.items()
+         if e.posicion == posicion_nueva and pid != performance_id),
+        None,
+    )
+    if ocupante_id is not None:
+        ocupante = grilla_mutable[ocupante_id]
+        grilla_mutable[ocupante_id] = EntradaGrilla(
+            performance_id=ocupante.performance_id,
+            atleta_id=ocupante.atleta_id,
+            posicion=posicion_vieja,
+            andarivel=ocupante.andarivel,
+            ot_programado=ocupante.ot_programado,
+        )
+        cambios_payload.append(
+            {
+                "performance_id": str(ocupante_id),
+                "campo": "posicion",
+                "valor_anterior": posicion_nueva,
+                "valor_nuevo": posicion_vieja,
+            }
+        )
+
+    grilla_mutable[performance_id] = EntradaGrilla(
+        performance_id=entrada.performance_id,
+        atleta_id=entrada.atleta_id,
+        posicion=posicion_nueva,
+        andarivel=entrada.andarivel,
+        ot_programado=entrada.ot_programado,
+    )
 
 
 def _ordenar_performances(
