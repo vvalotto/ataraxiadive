@@ -260,7 +260,7 @@ classDiagram
 
 ## 4. BC Registro — Supporting
 
-> Modelo de referencia — detalle completo en ES Nivel 2 de Registro (pendiente para SP2/SP3)
+> Modelo de referencia — detalle completo en ES Nivel 2 de Registro (pendiente para SP3)
 
 ### Aggregates
 
@@ -282,7 +282,7 @@ classDiagram
 
 ## 5. BC Resultados — Supporting
 
-> Modelo de referencia — detalle completo en ES Nivel 2 de Resultados (pendiente para SP2)
+> Modelo de referencia — detalle completo en ES Nivel 2 de Resultados (pendiente para SP3)
 
 ### Aggregates
 

@@ -4,9 +4,9 @@
 |-------|-------|
 | **Tipo** | Subproyecto |
 | **Fecha apertura** | 2026-03-21 |
-| **Fecha cierre** | — (en curso) |
+| **Fecha cierre** | 2026-03-24 |
 | **Git tag inicial** | `develop` @ `8bf6da7` (merge PR #12) |
-| **Git tag cierre** | — (se asigna `v0.2.0` al cerrar) |
+| **Git tag cierre** | `v0.2.0` |
 | **Estado** | ✅ Completado — Inc 1.4 cerrado 2026-03-23 |
 | **DoD del SP1** | 5 performances registradas desde el celular. Event Store muestra la traza completa. |
 
@@ -188,4 +188,4 @@ _(se completa al cerrar SP1)_
 
 ---
 
-*Abierta: 2026-03-21. Se cierra con tag `v0.2.0` al completar Inc 1.4.*
+*Abierta: 2026-03-21. Cerrada: 2026-03-24 con tag `v0.2.0`.*
