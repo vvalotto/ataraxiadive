@@ -26,11 +26,7 @@ from resultados.infrastructure.repositories.resultados_competencia_adapter impor
 def build_on_finalizada_callback(
     competencia_event_store: SQLiteEventStore,
 ) -> Callable[[UUID, Disciplina], Awaitable[None]]:
-    """Construye el callback P-08 → CalcularRanking. Vive en el composition root.
-
-    Cuando una Competencia finaliza, dispara CalcularRanking en el BC Resultados.
-    El cableado cross-BC pertenece aquí, no en el router de Competencia (ADR-006).
-    """
+    """Callback P-08 → CalcularRanking. Composition root del cableado cross-BC (ADR-006)."""
     ranking_db_path = os.getenv("RESULTADOS_DB_PATH", "data/resultados.db")
     disciplina_descriptor = DisciplinaDescriptorAdapter()
 

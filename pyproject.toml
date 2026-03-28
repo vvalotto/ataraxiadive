@@ -99,7 +99,8 @@ max_cyclomatic_complexity = 10
 # US-1.2.4: +TipoTarjeta +TarjetaAsignada → CBO=17. Sube a 17.
 # US-1.2.5: +DNSRegistrado +EstadoInvalidoParaRegistrarDNS → CBO=19. Sube a 20 para US-1.2.5.
 # US-1.2.6: +ResultadoCorregido +EstadoInvalidoParaCorregirResultado → CBO=21. Sube a 22.
-max_cbo = 22
+# SP-ADJ-01 US-ADJ-1.2: helpers de módulo (_recalcular_ots, _aplicar_swap) → CBO=23. Sube a 23.
+max_cbo = 23
 # WMC elevado: Performance crece con cada US de Inc 1.2 (un método por comando de dominio).
 # US-1.2.3: WMC=21. US-1.2.4: asignar_tarjeta() → WMC=27. Sube a 36 para US-1.2.4-1.2.6 completo.
 # US-2.1.3: ajustar_grilla() agrega lógica de swap → Competencia WMC=50. US-2.1.4 agregará ~6 más.
