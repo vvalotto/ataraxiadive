@@ -1,0 +1,488 @@
+{
+  "UAT-2.1_health": 
+  {
+    "status": "ok"
+  }
+,
+  "UAT-2.2_estado_pre_confirmar": 
+  {
+    "estado": "Preparacion",
+    "intervalo_minutos": 9,
+    "grilla_confirmada": false
+  }
+,
+  "UAT-2.3_grilla": 
+  [
+    {
+      "performance_id": "5e4cf937-2945-4a11-aac5-836abb0becda",
+      "atleta_id": "1d852079-0eb8-4548-94e3-89fd6ba701c5",
+      "posicion": 1,
+      "andarivel": 1,
+      "ot_programado": "2026-03-29T15:17:00+00:00"
+    },
+    {
+      "performance_id": "056e1e55-4adf-4934-8cbd-7b379e94a797",
+      "atleta_id": "990b48a9-f9dc-4d69-8a13-362ba90c3cbf",
+      "posicion": 2,
+      "andarivel": 2,
+      "ot_programado": "2026-03-29T15:26:00+00:00"
+    },
+    {
+      "performance_id": "10e839b1-0541-4a24-ab2a-3b81215a1dc0",
+      "atleta_id": "b758cec1-0906-4185-aab9-5e9e8b0d922b",
+      "posicion": 3,
+      "andarivel": 3,
+      "ot_programado": "2026-03-29T15:35:00+00:00"
+    },
+    {
+      "performance_id": "a6dcd375-3bc8-4879-a861-bb1c58baaccb",
+      "atleta_id": "86699d7b-27e5-4d6b-bec7-1ced9a336b3c",
+      "posicion": 4,
+      "andarivel": 1,
+      "ot_programado": "2026-03-29T15:44:00+00:00"
+    },
+    {
+      "performance_id": "7465f3d4-ee5c-4a59-9d18-367b38025882",
+      "atleta_id": "3c69b0f0-1e88-4bf3-b66d-478327b6cd1d",
+      "posicion": 5,
+      "andarivel": 2,
+      "ot_programado": "2026-03-29T15:53:00+00:00"
+    }
+  ]
+,
+  "UAT-2.4_confirmar_grilla_status": 
+  {"http_status": 204, "esperado": 204}
+,
+  "UAT-2.5_estado_post_confirmar": 
+  {
+    "estado": "Confirmada",
+    "intervalo_minutos": 9,
+    "grilla_confirmada": true
+  }
+,
+  "UAT-2.6_iniciar_status": 
+  {"http_status": 204, "esperado": 204}
+,
+  "UAT-2.7_estado_post_iniciar": 
+  {
+    "estado": "EnEjecucion",
+    "intervalo_minutos": 9,
+    "grilla_confirmada": true
+  }
+,
+  "UAT-2.8_andariveles_post_iniciar": 
+  [
+    {
+      "numero": 1,
+      "ocupado": false,
+      "atleta_id": null,
+      "performance_id": null,
+      "ot_programado": null
+    },
+    {
+      "numero": 2,
+      "ocupado": false,
+      "atleta_id": null,
+      "performance_id": null,
+      "ot_programado": null
+    },
+    {
+      "numero": 3,
+      "ocupado": false,
+      "atleta_id": null,
+      "performance_id": null,
+      "ot_programado": null
+    }
+  ]
+
+,
+  "UAT-2.9_events": 
+  {
+    "competencia_id": "889870e9-a771-451d-bea4-11d00fc2a83b",
+    "total_events": 20,
+    "events": [
+      {
+        "sequence": 54,
+        "event_type": "APRegistrado",
+        "performance_id": "1d852079-0eb8-4548-94e3-89fd6ba701c5-STA",
+        "occurred_at": "2026-03-29T14:17:58.908Z",
+        "data": {
+          "performance_id": "5e4cf937-2945-4a11-aac5-836abb0becda",
+          "competencia_id": "889870e9-a771-451d-bea4-11d00fc2a83b",
+          "participante_id": "1d852079-0eb8-4548-94e3-89fd6ba701c5",
+          "disciplina": "STA",
+          "valor_ap": "300",
+          "unidad": "Segundos",
+          "occurred_at": "2026-03-29T14:17:58.906151+00:00"
+        }
+      },
+      {
+        "sequence": 55,
+        "event_type": "APRegistrado",
+        "performance_id": "990b48a9-f9dc-4d69-8a13-362ba90c3cbf-STA",
+        "occurred_at": "2026-03-29T14:17:58.925Z",
+        "data": {
+          "performance_id": "056e1e55-4adf-4934-8cbd-7b379e94a797",
+          "competencia_id": "889870e9-a771-451d-bea4-11d00fc2a83b",
+          "participante_id": "990b48a9-f9dc-4d69-8a13-362ba90c3cbf",
+          "disciplina": "STA",
+          "valor_ap": "240",
+          "unidad": "Segundos",
+          "occurred_at": "2026-03-29T14:17:58.922613+00:00"
+        }
+      },
+      {
+        "sequence": 56,
+        "event_type": "APRegistrado",
+        "performance_id": "b758cec1-0906-4185-aab9-5e9e8b0d922b-STA",
+        "occurred_at": "2026-03-29T14:17:58.948Z",
+        "data": {
+          "performance_id": "10e839b1-0541-4a24-ab2a-3b81215a1dc0",
+          "competencia_id": "889870e9-a771-451d-bea4-11d00fc2a83b",
+          "participante_id": "b758cec1-0906-4185-aab9-5e9e8b0d922b",
+          "disciplina": "STA",
+          "valor_ap": "180",
+          "unidad": "Segundos",
+          "occurred_at": "2026-03-29T14:17:58.945520+00:00"
+        }
+      },
+      {
+        "sequence": 57,
+        "event_type": "APRegistrado",
+        "performance_id": "86699d7b-27e5-4d6b-bec7-1ced9a336b3c-STA",
+        "occurred_at": "2026-03-29T14:17:58.964Z",
+        "data": {
+          "performance_id": "a6dcd375-3bc8-4879-a861-bb1c58baaccb",
+          "competencia_id": "889870e9-a771-451d-bea4-11d00fc2a83b",
+          "participante_id": "86699d7b-27e5-4d6b-bec7-1ced9a336b3c",
+          "disciplina": "STA",
+          "valor_ap": "150",
+          "unidad": "Segundos",
+          "occurred_at": "2026-03-29T14:17:58.962419+00:00"
+        }
+      },
+      {
+        "sequence": 58,
+        "event_type": "APRegistrado",
+        "performance_id": "3c69b0f0-1e88-4bf3-b66d-478327b6cd1d-STA",
+        "occurred_at": "2026-03-29T14:17:58.980Z",
+        "data": {
+          "performance_id": "7465f3d4-ee5c-4a59-9d18-367b38025882",
+          "competencia_id": "889870e9-a771-451d-bea4-11d00fc2a83b",
+          "participante_id": "3c69b0f0-1e88-4bf3-b66d-478327b6cd1d",
+          "disciplina": "STA",
+          "valor_ap": "120",
+          "unidad": "Segundos",
+          "occurred_at": "2026-03-29T14:17:58.977176+00:00"
+        }
+      },
+      {
+        "sequence": 62,
+        "event_type": "AtletaLlamado",
+        "performance_id": "1d852079-0eb8-4548-94e3-89fd6ba701c5-STA",
+        "occurred_at": "2026-03-29T14:18:06.154Z",
+        "data": {
+          "performance_id": "5e4cf937-2945-4a11-aac5-836abb0becda",
+          "participante_id": "1d852079-0eb8-4548-94e3-89fd6ba701c5",
+          "disciplina": "STA",
+          "posicion_grilla": 1,
+          "ot_programado": "2026-03-29T15:17:00+00:00",
+          "llamado_en": "2026-03-29T14:18:06.152467+00:00",
+          "andarivel": 1,
+          "occurred_at": "2026-03-29T14:18:06.152467+00:00"
+        }
+      },
+      {
+        "sequence": 63,
+        "event_type": "AtletaLlamado",
+        "performance_id": "990b48a9-f9dc-4d69-8a13-362ba90c3cbf-STA",
+        "occurred_at": "2026-03-29T14:18:06.169Z",
+        "data": {
+          "performance_id": "056e1e55-4adf-4934-8cbd-7b379e94a797",
+          "participante_id": "990b48a9-f9dc-4d69-8a13-362ba90c3cbf",
+          "disciplina": "STA",
+          "posicion_grilla": 2,
+          "ot_programado": "2026-03-29T15:26:00+00:00",
+          "llamado_en": "2026-03-29T14:18:06.167516+00:00",
+          "andarivel": 1,
+          "occurred_at": "2026-03-29T14:18:06.167516+00:00"
+        }
+      },
+      {
+        "sequence": 64,
+        "event_type": "AtletaLlamado",
+        "performance_id": "b758cec1-0906-4185-aab9-5e9e8b0d922b-STA",
+        "occurred_at": "2026-03-29T14:18:06.183Z",
+        "data": {
+          "performance_id": "10e839b1-0541-4a24-ab2a-3b81215a1dc0",
+          "participante_id": "b758cec1-0906-4185-aab9-5e9e8b0d922b",
+          "disciplina": "STA",
+          "posicion_grilla": 3,
+          "ot_programado": "2026-03-29T15:35:00+00:00",
+          "llamado_en": "2026-03-29T14:18:06.181842+00:00",
+          "andarivel": 1,
+          "occurred_at": "2026-03-29T14:18:06.181842+00:00"
+        }
+      },
+      {
+        "sequence": 65,
+        "event_type": "ResultadoRegistrado",
+        "performance_id": "1d852079-0eb8-4548-94e3-89fd6ba701c5-STA",
+        "occurred_at": "2026-03-29T14:18:06.199Z",
+        "data": {
+          "performance_id": "5e4cf937-2945-4a11-aac5-836abb0becda",
+          "participante_id": "1d852079-0eb8-4548-94e3-89fd6ba701c5",
+          "disciplina": "STA",
+          "valor_rp": "300",
+          "unidad": "Segundos",
+          "registrado_por": "juez-uat-sp2",
+          "registrado_en": "2026-03-29T14:18:06.196460+00:00",
+          "occurred_at": "2026-03-29T14:18:06.196460+00:00"
+        }
+      },
+      {
+        "sequence": 66,
+        "event_type": "TarjetaAsignada",
+        "performance_id": "1d852079-0eb8-4548-94e3-89fd6ba701c5-STA",
+        "occurred_at": "2026-03-29T14:18:06.216Z",
+        "data": {
+          "performance_id": "5e4cf937-2945-4a11-aac5-836abb0becda",
+          "participante_id": "1d852079-0eb8-4548-94e3-89fd6ba701c5",
+          "disciplina": "STA",
+          "tipo": "Blanca",
+          "motivo": null,
+          "asignada_por": "juez-uat-sp2",
+          "asignada_en": "2026-03-29T14:18:06.214816+00:00",
+          "distancia_blackout": null,
+          "occurred_at": "2026-03-29T14:18:06.214816+00:00"
+        }
+      },
+      {
+        "sequence": 67,
+        "event_type": "DNSRegistrado",
+        "performance_id": "990b48a9-f9dc-4d69-8a13-362ba90c3cbf-STA",
+        "occurred_at": "2026-03-29T14:18:06.239Z",
+        "data": {
+          "performance_id": "056e1e55-4adf-4934-8cbd-7b379e94a797",
+          "participante_id": "990b48a9-f9dc-4d69-8a13-362ba90c3cbf",
+          "disciplina": "STA",
+          "ot_programado": "2026-03-29T15:26:00+00:00",
+          "registrado_por": "juez-uat-sp2",
+          "registrado_en": "2026-03-29T14:18:06.236717+00:00",
+          "occurred_at": "2026-03-29T14:18:06.236717+00:00"
+        }
+      },
+      {
+        "sequence": 68,
+        "event_type": "AtletaLlamado",
+        "performance_id": "86699d7b-27e5-4d6b-bec7-1ced9a336b3c-STA",
+        "occurred_at": "2026-03-29T14:18:06.262Z",
+        "data": {
+          "performance_id": "a6dcd375-3bc8-4879-a861-bb1c58baaccb",
+          "participante_id": "86699d7b-27e5-4d6b-bec7-1ced9a336b3c",
+          "disciplina": "STA",
+          "posicion_grilla": 4,
+          "ot_programado": "2026-03-29T15:44:00+00:00",
+          "llamado_en": "2026-03-29T14:18:06.260158+00:00",
+          "andarivel": 1,
+          "occurred_at": "2026-03-29T14:18:06.260158+00:00"
+        }
+      },
+      {
+        "sequence": 69,
+        "event_type": "ResultadoRegistrado",
+        "performance_id": "b758cec1-0906-4185-aab9-5e9e8b0d922b-STA",
+        "occurred_at": "2026-03-29T14:18:06.274Z",
+        "data": {
+          "performance_id": "10e839b1-0541-4a24-ab2a-3b81215a1dc0",
+          "participante_id": "b758cec1-0906-4185-aab9-5e9e8b0d922b",
+          "disciplina": "STA",
+          "valor_rp": "180",
+          "unidad": "Segundos",
+          "registrado_por": "juez-uat-sp2",
+          "registrado_en": "2026-03-29T14:18:06.272962+00:00",
+          "occurred_at": "2026-03-29T14:18:06.272962+00:00"
+        }
+      },
+      {
+        "sequence": 70,
+        "event_type": "TarjetaAsignada",
+        "performance_id": "b758cec1-0906-4185-aab9-5e9e8b0d922b-STA",
+        "occurred_at": "2026-03-29T14:18:06.286Z",
+        "data": {
+          "performance_id": "10e839b1-0541-4a24-ab2a-3b81215a1dc0",
+          "participante_id": "b758cec1-0906-4185-aab9-5e9e8b0d922b",
+          "disciplina": "STA",
+          "tipo": "Blanca",
+          "motivo": null,
+          "asignada_por": "juez-uat-sp2",
+          "asignada_en": "2026-03-29T14:18:06.284771+00:00",
+          "distancia_blackout": null,
+          "occurred_at": "2026-03-29T14:18:06.284771+00:00"
+        }
+      },
+      {
+        "sequence": 71,
+        "event_type": "AtletaLlamado",
+        "performance_id": "3c69b0f0-1e88-4bf3-b66d-478327b6cd1d-STA",
+        "occurred_at": "2026-03-29T14:18:06.307Z",
+        "data": {
+          "performance_id": "7465f3d4-ee5c-4a59-9d18-367b38025882",
+          "participante_id": "3c69b0f0-1e88-4bf3-b66d-478327b6cd1d",
+          "disciplina": "STA",
+          "posicion_grilla": 5,
+          "ot_programado": "2026-03-29T15:53:00+00:00",
+          "llamado_en": "2026-03-29T14:18:06.305662+00:00",
+          "andarivel": 1,
+          "occurred_at": "2026-03-29T14:18:06.305662+00:00"
+        }
+      },
+      {
+        "sequence": 72,
+        "event_type": "ResultadoRegistrado",
+        "performance_id": "86699d7b-27e5-4d6b-bec7-1ced9a336b3c-STA",
+        "occurred_at": "2026-03-29T14:18:06.319Z",
+        "data": {
+          "performance_id": "a6dcd375-3bc8-4879-a861-bb1c58baaccb",
+          "participante_id": "86699d7b-27e5-4d6b-bec7-1ced9a336b3c",
+          "disciplina": "STA",
+          "valor_rp": "160",
+          "unidad": "Segundos",
+          "registrado_por": "juez-uat-sp2",
+          "registrado_en": "2026-03-29T14:18:06.318048+00:00",
+          "occurred_at": "2026-03-29T14:18:06.318048+00:00"
+        }
+      },
+      {
+        "sequence": 73,
+        "event_type": "TarjetaAsignada",
+        "performance_id": "86699d7b-27e5-4d6b-bec7-1ced9a336b3c-STA",
+        "occurred_at": "2026-03-29T14:18:06.332Z",
+        "data": {
+          "performance_id": "a6dcd375-3bc8-4879-a861-bb1c58baaccb",
+          "participante_id": "86699d7b-27e5-4d6b-bec7-1ced9a336b3c",
+          "disciplina": "STA",
+          "tipo": "Blanca",
+          "motivo": null,
+          "asignada_por": "juez-uat-sp2",
+          "asignada_en": "2026-03-29T14:18:06.330377+00:00",
+          "distancia_blackout": null,
+          "occurred_at": "2026-03-29T14:18:06.330377+00:00"
+        }
+      },
+      {
+        "sequence": 74,
+        "event_type": "ResultadoCorregido",
+        "performance_id": "86699d7b-27e5-4d6b-bec7-1ced9a336b3c-STA",
+        "occurred_at": "2026-03-29T14:18:06.351Z",
+        "data": {
+          "performance_id": "a6dcd375-3bc8-4879-a861-bb1c58baaccb",
+          "participante_id": "86699d7b-27e5-4d6b-bec7-1ced9a336b3c",
+          "disciplina": "STA",
+          "valor_rp_anterior": "160",
+          "valor_rp_nuevo": "155",
+          "unidad": "Segundos",
+          "motivo": "error de lectura",
+          "registrado_por": "juez-uat-sp2",
+          "corregido_en": "2026-03-29T14:18:06.349871+00:00",
+          "occurred_at": "2026-03-29T14:18:06.349871+00:00"
+        }
+      },
+      {
+        "sequence": 75,
+        "event_type": "ResultadoRegistrado",
+        "performance_id": "3c69b0f0-1e88-4bf3-b66d-478327b6cd1d-STA",
+        "occurred_at": "2026-03-29T14:18:06.362Z",
+        "data": {
+          "performance_id": "7465f3d4-ee5c-4a59-9d18-367b38025882",
+          "participante_id": "3c69b0f0-1e88-4bf3-b66d-478327b6cd1d",
+          "disciplina": "STA",
+          "valor_rp": "90",
+          "unidad": "Segundos",
+          "registrado_por": "juez-uat-sp2",
+          "registrado_en": "2026-03-29T14:18:06.360200+00:00",
+          "occurred_at": "2026-03-29T14:18:06.360200+00:00"
+        }
+      },
+      {
+        "sequence": 76,
+        "event_type": "TarjetaAsignada",
+        "performance_id": "3c69b0f0-1e88-4bf3-b66d-478327b6cd1d-STA",
+        "occurred_at": "2026-03-29T14:18:06.374Z",
+        "data": {
+          "performance_id": "7465f3d4-ee5c-4a59-9d18-367b38025882",
+          "participante_id": "3c69b0f0-1e88-4bf3-b66d-478327b6cd1d",
+          "disciplina": "STA",
+          "tipo": "Roja",
+          "motivo": "black-out",
+          "asignada_por": "juez-uat-sp2",
+          "asignada_en": "2026-03-29T14:18:06.372250+00:00",
+          "distancia_blackout": "30",
+          "occurred_at": "2026-03-29T14:18:06.372250+00:00"
+        }
+      }
+    ]
+  }
+,
+  "UAT-2.10_progreso": 
+  {
+    "total": 5,
+    "ejecutadas": 4,
+    "dns_count": 1,
+    "completadas": 5
+  }
+,
+  "UAT-2.11_ranking": 
+  {
+    "competencia_id": "889870e9-a771-451d-bea4-11d00fc2a83b",
+    "disciplina": "STA",
+    "total": 5,
+    "ranking": [
+      {
+        "posicion": 1,
+        "atleta_id": "1d852079-0eb8-4548-94e3-89fd6ba701c5",
+        "rp": "300",
+        "unidad": "Segundos",
+        "tarjeta": "Blanca",
+        "es_dns": false,
+        "en_podio": true
+      },
+      {
+        "posicion": 2,
+        "atleta_id": "b758cec1-0906-4185-aab9-5e9e8b0d922b",
+        "rp": "180",
+        "unidad": "Segundos",
+        "tarjeta": "Blanca",
+        "es_dns": false,
+        "en_podio": true
+      },
+      {
+        "posicion": 3,
+        "atleta_id": "86699d7b-27e5-4d6b-bec7-1ced9a336b3c",
+        "rp": "155",
+        "unidad": "Segundos",
+        "tarjeta": "Blanca",
+        "es_dns": false,
+        "en_podio": true
+      },
+      {
+        "posicion": 4,
+        "atleta_id": "3c69b0f0-1e88-4bf3-b66d-478327b6cd1d",
+        "rp": null,
+        "unidad": null,
+        "tarjeta": "Roja",
+        "es_dns": false,
+        "en_podio": false
+      },
+      {
+        "posicion": 5,
+        "atleta_id": "990b48a9-f9dc-4d69-8a13-362ba90c3cbf",
+        "rp": null,
+        "unidad": null,
+        "tarjeta": null,
+        "es_dns": true,
+        "en_podio": false
+      }
+    ]
+  }
+}

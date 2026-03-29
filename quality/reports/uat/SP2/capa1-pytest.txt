@@ -1,0 +1,25 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0 -- /Users/victor/PycharmProjects/ataraxiadive/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /Users/victor/PycharmProjects/ataraxiadive
+configfile: pyproject.toml
+plugins: anyio-4.12.1, asyncio-1.3.0, bdd-8.1.0, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 14 items
+
+tests/integration/competencia/test_flujo_e2e_inc21.py::test_grilla_generada_con_orden_correcto_sta PASSED [  7%]
+tests/integration/competencia/test_flujo_e2e_inc21.py::test_ots_calculados_con_intervalo_correcto PASSED [ 14%]
+tests/integration/competencia/test_flujo_e2e_inc21.py::test_juez_avanza_grilla_atleta_por_atleta_con_adapter_real PASSED [ 21%]
+tests/integration/competencia/test_flujo_e2e_inc21.py::test_llamar_atleta_falla_si_competencia_no_iniciada PASSED [ 28%]
+tests/integration/competencia/test_competencia_finalizada_integration.py::test_tarjeta_ultimo_atleta_dispara_competencia_finalizada PASSED [ 35%]
+tests/integration/competencia/test_competencia_finalizada_integration.py::test_dns_ultimo_atleta_dispara_competencia_finalizada PASSED [ 42%]
+tests/integration/competencia/test_competencia_finalizada_integration.py::test_sin_port_no_emite_competencia_finalizada PASSED [ 50%]
+tests/integration/competencia/test_competencia_finalizada_integration.py::test_competencia_finalizada_payload_correcto PASSED [ 57%]
+tests/integration/resultados/test_calcular_ranking_integration.py::test_calcular_ranking_persiste_y_query_devuelve_orden_correcto PASSED [ 64%]
+tests/integration/resultados/test_calcular_ranking_integration.py::test_calcular_ranking_dns_va_al_final PASSED [ 71%]
+tests/integration/resultados/test_calcular_ranking_integration.py::test_calcular_ranking_tarjeta_roja_va_al_final PASSED [ 78%]
+tests/integration/resultados/test_calcular_ranking_integration.py::test_calcular_ranking_empate_posicion_compartida PASSED [ 85%]
+tests/integration/resultados/test_calcular_ranking_integration.py::test_obtener_ranking_sin_calcular_devuelve_lista_vacia PASSED [ 92%]
+tests/integration/resultados/test_calcular_ranking_integration.py::test_calcular_ranking_disciplina_dnf PASSED [100%]
+
+============================== 14 passed in 3.63s ==============================
