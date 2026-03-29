@@ -307,8 +307,6 @@ main          ← baselines etiquetadas (v0.1.0, v0.2.0...)
         └── fix/descripcion-corta
 ```
 
-**Detalle completo:** `docs/plans/WORKFLOW-DESARROLLO.md`
-
 ---
 
 ## 11. Quality Gates (software_limpio)
@@ -318,35 +316,23 @@ main          ← baselines etiquetadas (v0.1.0, v0.2.0...)
 | Cada commit | CodeGuard | Automático — advierte, no bloquea |
 | Cada push (PR) | DesignReviewer | Automático — bloquea si CRITICAL |
 | Cierre de Incremento | DesignReviewer | Manual — confirmar cero CRITICAL |
+| UAT post-SP | Tests funcionales | Manual — Capa 1 + Capa 2 aprobadas |
 | Cierre de Subproyecto | ArchitectAnalyst | Manual — informa tendencias |
-
-Umbrales mínimos para SP1:
-- Pylint ≥ 8.0 en `domain/`
-- Cobertura ≥ 85% en `domain/` + `application/`
-- Cero imports de infraestructura en `domain/`
-
-**Detalle completo (comandos, flujo de bloqueo):** `docs/plans/WORKFLOW-DESARROLLO.md §8`
 
 ---
 
 ## 12. Gestión de la Configuración (CM)
 
-### Al implementar una US
-1. La US-IEDD debe estar en `docs/specs/spX/US-X.Y.Z.md` antes de empezar (donde X = número de SP)
-2. Usar `/implement-us US-X.Y.Z` con las 10 fases
-3. Commit con referencia a la US: `feat(domain): ... [US-1.2.1]`
-4. Actualizar `docs/traceability/matrix.md` al cerrar
+> **Fuente autoritativa del workflow:** `docs/plans/WORKFLOW-DESARROLLO.md`
+> Define el ciclo completo por US, por Incremento y por Subproyecto — incluyendo orden
+> de arranque, artefactos obligatorios por fase, quality gates y procedimiento de UAT.
+> **Ante cualquier duda sobre cómo proceder, ese documento manda.**
 
-### Al cerrar un Incremento
-1. Verificar DoD de integración (test end-to-end observable)
-2. Correr `designreviewer src/` — cero violations CRITICAL
-3. Merge a `develop` con PR
+Resumen operativo (ver WORKFLOW-DESARROLLO.md para el detalle completo):
 
-### Al cerrar un Subproyecto (Baseline)
-1. Correr `architectanalyst src/ --sprint-id BL-NNN --format json`
-2. Registrar métricas en `.cm/baselines/BL-NNN.md`
-3. Tag en git: `git tag v0.N.0`
-4. Retrospectiva documentada en BL-NNN.md (alimenta el libro y el paper)
+- **Por US:** branch → tracker → Fase 0 → 10 fases → PR `--base develop` → merge
+- **Por Incremento:** ajustar umbrales CBO/WMC al inicio · DesignReviewer manual al cierre · registrar en BL activa
+- **Por SP:** ArchitectAnalyst → métricas BL → UAT post-SP → merge develop→main → tag · retrospectiva
 
 ---
 
@@ -497,5 +483,6 @@ Los dos no son excluyentes: un aprendizaje puede vivir en ambos si tiene valor a
 
 ---
 
-*Última actualización: 2026-03-28 — SP-ADJ-02-doc: §14 actualizado (SP1+SP2+ADJ), §9 patrón SP-ADJ, §5 HITOs*
+*Última actualización: 2026-03-29 — §12 WORKFLOW-DESARROLLO.md como fuente autoritativa del workflow; §11 UAT post-SP agregado a quality gates*
+*2026-03-28 — SP-ADJ-02-doc: §14 actualizado (SP1+SP2+ADJ), §9 patrón SP-ADJ, §5 HITOs*
 *Mantenido por: Claude Cowork (decisiones estratégicas) + Claude Code (implementación)*
