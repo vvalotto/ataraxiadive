@@ -221,6 +221,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 | US | Inc. | RFs cubiertos | Contenido principal | Estado |
 |----|------|---------------|---------------------|--------|
 | US-3.1.1 | 3.1 | RF-GT-01/03/04/05/07 | Aggregate `Torneo` — máquina de estados, value objects, puerto abstracto | ✅ 2026-03-29 |
+| US-3.1.2 | 3.1 | RF-GT-01/02/03/04/05/07 | API REST Torneo — CRUD + 7 endpoints de transición + SQLiteTorneoRepository | ✅ 2026-03-30 |
 
 ---
 
@@ -256,6 +257,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 | US-1.4.1 | unit/competencia/domain + unit/competencia/application + integration/competencia + features/US-1.4.1 | ✅ 189 tests (97.57%) |
 | US-1.4.2 | unit/competencia/application + integration/competencia + features/US-1.4.2 | ✅ 207 tests (98%) |
 | US-3.1.1 | unit/torneo/domain/test_torneo + integration/torneo/test_torneo_domain_integration + features/US-3.1.1-aggregate-torneo | ✅ 36 tests (100%) |
+| US-3.1.2 | unit/torneo/application/test_crear_torneo + test_transiciones_handlers + test_obtener_torneo + integration/torneo/test_sqlite_torneo_repository + features/US-3.1.2-api-rest-torneo | ✅ 33 tests (100%) |
 
 ---
 
@@ -277,5 +279,6 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 *v1.2 — 2026-03-28: SP-ADJ-01 agregado (§7) · secciones SP1 renumeradas · numeración de §§ corregida*
 *v1.3 — 2026-03-28: SP-ADJ-02-code agregado (§8) · US-ADJ-2.6/2.7/2.8 documentadas*
 *v1.4 — 2026-03-29: SP3 §9 agregado · US-3.1.1 implementada*
+*v1.5 — 2026-03-30: US-3.1.2 implementada — API REST Torneo completa*
 *Fuentes: 05-requerimientos_funcionales.md · Context Map v1.1 · estrategia-desarrollo-bc.md · ES Competencia*
 *Mantenido por: Claude Cowork + Victor Valotto*
