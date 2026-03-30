@@ -117,9 +117,9 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-US-01 | Un organizador por torneo (no multi-organizador) | Identidad / Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
-| RF-US-02 | Un usuario puede tener múltiples roles | Identidad | SP3 | 3.1 | US-3.1.x | ✅ definido |
-| RF-US-03 | Autenticación mail + contraseña | Identidad | SP3 | 3.1 | US-3.1.x | ✅ definido |
+| RF-US-01 | Un organizador por torneo (no multi-organizador) | Identidad / Torneo | SP3 | 3.2 | US-3.2.1 | ✅ implementado |
+| RF-US-02 | Un usuario puede tener múltiples roles | Identidad | SP3 | 3.2 | US-3.2.1 | ✅ implementado |
+| RF-US-03 | Autenticación mail + contraseña | Identidad | SP3 | 3.2 | US-3.2.1 | ✅ implementado |
 | RF-US-04 | Juez asignado a disciplina específica por el organizador | Identidad / Torneo | SP3 | 3.4 | US-3.4.x | ✅ definido |
 | RF-US-05 | Atletas solo ven resultados finales (no resultados en curso) | Identidad / Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
 
