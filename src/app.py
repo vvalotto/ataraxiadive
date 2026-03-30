@@ -9,6 +9,7 @@ from fastapi.responses import JSONResponse
 from competencia.api.exception_handlers import register_exception_handlers
 from competencia.api.router import router as competencia_router
 from resultados.api.router import router as resultados_router
+from identidad.api.router import router as identidad_router
 from torneo.api.exception_handlers import register_torneo_exception_handlers
 from torneo.api.router import router as torneo_router
 from resultados.application.commands.calcular_ranking import (
@@ -26,6 +27,7 @@ from shared.infrastructure.event_store.sqlite_event_store import SQLiteEventStor
 
 app = FastAPI(title="AtaraxiaDive", version="0.1.0")
 
+app.include_router(identidad_router)
 app.include_router(competencia_router)
 app.include_router(resultados_router)
 app.include_router(torneo_router)
