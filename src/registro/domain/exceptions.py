@@ -4,3 +4,23 @@ class AtletaNoEncontrado(Exception):
 
 class AtletaYaRegistrado(Exception):
     pass
+
+
+class InscripcionNoEncontrada(Exception):
+    pass
+
+
+class AtletaYaInscripto(Exception):
+    pass
+
+
+class TorneoNoDisponible(Exception):
+    pass
+
+
+class DisciplinaNoDisponible(Exception):
+    pass
+
+
+class PlazoCancelacionVencido(Exception):
+    pass
