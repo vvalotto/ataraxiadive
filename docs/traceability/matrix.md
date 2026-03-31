@@ -56,15 +56,15 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-IN-01 | Categorías configurables por edad y género | Registro / Torneo | SP3/SP4 | 3.2 / 4.3 | US-3.2.x | ✅ definido |
-| RF-IN-02 | Brevet no obligatorio | Registro | SP3 | 3.2 | US-3.2.x | ✅ definido |
+| RF-IN-01 | Categorías configurables por edad y género | Registro / Torneo | SP3/SP4 | 3.2 / 4.3 | US-3.2.2 | ✅ implementado |
+| RF-IN-02 | Brevet no obligatorio | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 | RF-IN-03 | Sin límite de atletas por torneo o disciplina | Registro | SP3 | 3.2 | US-3.2.x | ✅ definido |
 | RF-IN-04 | Cancelar inscripción hasta el día anterior | Registro | SP3 | 3.2 | US-3.2.x | ✅ definido |
 | RF-IN-05 | Apto médico como requisito de inscripción | Registro | SP4 | 4.5 | US-4.5.x | ✅ definido |
 | RF-IN-06 | Constancia de pago como requisito | Registro | SP4 | 4.5 | US-4.5.x | ✅ definido |
 | RF-IN-07 | Conflicto de datos con BD FAAS | Registro | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
-| RF-IN-08 | Género solo para categorización — sin otro efecto | Registro | SP3 | 3.2 | US-3.2.x | ✅ definido |
-| RF-IN-09 | Atleta no puede cambiar categoría por disciplina | Registro | SP3 | 3.2 | US-3.2.x | ✅ definido |
+| RF-IN-08 | Género solo para categorización — sin otro efecto | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
+| RF-IN-09 | Atleta no puede cambiar categoría por disciplina | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 
 ---
 

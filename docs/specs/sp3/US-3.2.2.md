@@ -1,6 +1,6 @@
 # US-3.2.2: BC Registro — Aggregate Atleta
 
-**Estado**: `To Do`
+**Estado**: `Done`
 **Sprint**: SP3 — El Torneo
 **Incremento**: INC-3.2
 **Bounded Context**: `registro`
