@@ -1,4 +1,5 @@
 """Command y Handler para ConfigurarIntervaloOT — US-2.1.1."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -7,7 +8,6 @@ from uuid import UUID
 from competencia.domain.aggregates.competencia import Competencia
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.disciplina import Disciplina
-
 
 # ── Command ───────────────────────────────────────────────────────────────────
 
@@ -21,12 +21,14 @@ class ConfigurarIntervaloOTCommand:
         disciplina: Disciplina de la competencia.
         intervalo_minutos: Tiempo en minutos entre OTs. Debe ser > 0.
         configurado_por: Identificador del organizador o juez.
+        torneo_id: Torneo al que pertenece la competencia (opcional — INV-CT-01).
     """
 
     competencia_id: UUID
     disciplina: Disciplina
     intervalo_minutos: int
     configurado_por: str
+    torneo_id: UUID | None = None
 
 
 # ── Handler ───────────────────────────────────────────────────────────────────
@@ -68,6 +70,7 @@ class ConfigurarIntervaloOTHandler:
         competencia.configurar_intervalo_ot(
             intervalo_minutos=command.intervalo_minutos,
             configurado_por=command.configurado_por,
+            torneo_id=command.torneo_id,
         )
 
         for event in competencia.pull_events():

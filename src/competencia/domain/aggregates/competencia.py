@@ -1,4 +1,5 @@
 """Aggregate Competencia — ciclo de vida de una disciplina en un torneo."""
+
 from __future__ import annotations
 
 import json
@@ -41,16 +42,21 @@ class Competencia(AggregateRoot):
 
     Invariantes:
         INV-C-01: intervaloDisciplina debe estar configurado antes de GenerarGrilla.
+        INV-CT-01: torneo_id es opcional — None para competencias standalone (SP1/SP2).
+        INV-CT-02: si torneo_id se provee, se persiste en el payload de IntervaloOTConfigurado.
+        INV-CT-03: streams existentes sin torneo_id se reconstituyen correctamente (backward compat).
     """
 
     def __init__(
         self,
         competencia_id: UUID,
         disciplina: Disciplina,
+        torneo_id: UUID | None = None,
     ) -> None:
         super().__init__()
         self._competencia_id = competencia_id
         self._disciplina = disciplina
+        self._torneo_id: UUID | None = torneo_id
         self._estado: EstadoCompetencia = EstadoCompetencia.Preparacion
         self._intervalo: IntervaloDisciplina | None = None
         self._grilla_confirmada: bool = False
@@ -84,6 +90,11 @@ class Competencia(AggregateRoot):
         return list(self._grilla)
 
     @property
+    def torneo_id(self) -> UUID | None:
+        """Torneo al que pertenece esta competencia, o None si es standalone."""
+        return self._torneo_id
+
+    @property
     def grilla_confirmada(self) -> bool:
         """True si la grilla fue confirmada de forma irreversible."""
         return self._grilla_confirmada
@@ -91,7 +102,7 @@ class Competencia(AggregateRoot):
     # ── Comandos de dominio ───────────────────────────────────────────────────
 
     def configurar_intervalo_ot(
-        self, intervalo_minutos: int, configurado_por: str
+        self, intervalo_minutos: int, configurado_por: str, torneo_id: UUID | None = None
     ) -> None:
         """Configura (o reconfigura) el intervalo de tiempo entre OTs consecutivos.
 
@@ -118,6 +129,9 @@ class Competencia(AggregateRoot):
 
         intervalo = IntervaloDisciplina(minutos=intervalo_minutos)  # valida > 0
 
+        if torneo_id is not None:
+            self._torneo_id = torneo_id
+
         event = IntervaloOTConfigurado(
             event_type="IntervaloOTConfigurado",
             aggregate_id=str(self._competencia_id),
@@ -126,6 +140,7 @@ class Competencia(AggregateRoot):
             disciplina=self._disciplina.value,
             intervalo_minutos=intervalo.minutos,
             configurado_por=configurado_por,
+            torneo_id=str(torneo_id) if torneo_id else None,
         )
         self._intervalo = intervalo
         self._record(event)
@@ -167,8 +182,7 @@ class Competencia(AggregateRoot):
             )
         if self._grilla_confirmada:
             raise GrillaYaConfirmada(
-                f"Competencia {self._competencia_id}: grilla confirmada — "
-                "no se puede regenerar"
+                f"Competencia {self._competencia_id}: grilla confirmada — " "no se puede regenerar"
             )
         if not performances:
             raise SinPerformancesParaGrilla(
@@ -181,9 +195,7 @@ class Competencia(AggregateRoot):
         entradas = []
         perf_payloads = []
         for posicion, perf in enumerate(ordenadas, start=1):
-            ot_atleta = ot_inicio + timedelta(
-                minutes=(posicion - 1) * self._intervalo.minutos
-            )
+            ot_atleta = ot_inicio + timedelta(minutes=(posicion - 1) * self._intervalo.minutos)
             andarivel = _calcular_andarivel(posicion, andariveles)
             entradas.append(
                 EntradaGrilla(
@@ -261,16 +273,17 @@ class Competencia(AggregateRoot):
 
         for cambio in cambios:
             entrada = grilla_mutable[cambio.performance_id]
-            valor_anterior = (
-                entrada.posicion if cambio.campo == "posicion" else entrada.andarivel
-            )
+            valor_anterior = entrada.posicion if cambio.campo == "posicion" else entrada.andarivel
             if cambio.campo == "posicion":
                 posicion_nueva = cambio.valor_nuevo
                 posicion_vieja = entrada.posicion
                 # Si la posición destino está ocupada, desplazar al ocupante
                 ocupante_id = next(
-                    (pid for pid, e in grilla_mutable.items()
-                     if e.posicion == posicion_nueva and pid != cambio.performance_id),
+                    (
+                        pid
+                        for pid, e in grilla_mutable.items()
+                        if e.posicion == posicion_nueva and pid != cambio.performance_id
+                    ),
                     None,
                 )
                 if ocupante_id is not None:
@@ -325,9 +338,8 @@ class Competencia(AggregateRoot):
                     atleta_id=e.atleta_id,
                     posicion=e.posicion,
                     andarivel=e.andarivel,
-                    ot_programado=ot_inicio + timedelta(
-                        minutes=(e.posicion - 1) * self._intervalo.minutos
-                    ),
+                    ot_programado=ot_inicio
+                    + timedelta(minutes=(e.posicion - 1) * self._intervalo.minutos),
                 )
                 for e in nueva_grilla
             ]
@@ -486,6 +498,9 @@ class Competencia(AggregateRoot):
 
     def _apply_intervalo_ot_configurado(self, payload: dict[str, Any]) -> None:
         self._intervalo = IntervaloDisciplina(minutos=payload["intervalo_minutos"])
+        raw = payload.get("torneo_id")
+        if raw is not None:
+            self._torneo_id = UUID(raw)
 
     def _apply_grilla_de_salida_generada(self, payload: dict[str, Any]) -> None:
         self._grilla = [
@@ -530,9 +545,8 @@ class Competencia(AggregateRoot):
                     atleta_id=e.atleta_id,
                     posicion=e.posicion,
                     andarivel=e.andarivel,
-                    ot_programado=ot_inicio + timedelta(
-                        minutes=(e.posicion - 1) * self._intervalo.minutos
-                    ),
+                    ot_programado=ot_inicio
+                    + timedelta(minutes=(e.posicion - 1) * self._intervalo.minutos),
                 )
                 for e in nueva_grilla
             ]

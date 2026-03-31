@@ -1,4 +1,5 @@
 """Domain Event IntervaloOTConfigurado — emitido al configurar el intervalo entre OTs."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -26,6 +27,7 @@ class IntervaloOTConfigurado(DomainEvent):
     disciplina: str
     intervalo_minutos: int
     configurado_por: str
+    torneo_id: str | None = None
 
     def to_payload(self) -> dict[str, Any]:
         """Serializa el evento a payload JSON-serializable para el Event Store."""
@@ -34,6 +36,7 @@ class IntervaloOTConfigurado(DomainEvent):
             "disciplina": self.disciplina,
             "intervalo_minutos": self.intervalo_minutos,
             "configurado_por": self.configurado_por,
+            "torneo_id": self.torneo_id,
             "occurred_at": self.occurred_at.isoformat(),
         }
 
@@ -48,4 +51,5 @@ class IntervaloOTConfigurado(DomainEvent):
             disciplina=payload["disciplina"],
             intervalo_minutos=payload["intervalo_minutos"],
             configurado_por=payload["configurado_por"],
+            torneo_id=payload.get("torneo_id"),
         )

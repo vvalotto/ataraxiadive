@@ -1,6 +1,6 @@
 # US-3.3.1: Competencia — agregar `torneo_id` a ConfigurarIntervaloOT
 
-**Estado**: `To Do`
+**Estado**: `Done`
 **Sprint**: SP3 — El Torneo
 **Incremento**: INC-3.3
 **Bounded Context**: `competencia`
