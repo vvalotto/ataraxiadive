@@ -31,11 +31,29 @@ mergeados en `develop` y BL-003 esté lista para taggear.
 
 ---
 
-## Acciones adicionales (a completar al cierre de SP3)
+## Acciones adicionales (emergidas post-INC-3.3)
 
-| ID | Descripción | Tipo | Estado |
-|----|-------------|------|--------|
-| — | (se completará con deuda que emerja en INC-3.3/3.4/3.5) | — | ⏳ |
+| ID | Descripción | Tipo | Prioridad | Spec |
+|----|-------------|------|-----------|------|
+| **US-ADJ-3.1** | Extraer `GrillaDeSalida` como entidad de dominio — Competencia WMC=64 → ~34 | Refactoring dominio | **Alta** — WMC en límite | `docs/specs/sp-adj-03/US-ADJ-3.1.md` |
+| **US-ADJ-3.2** | Extraer `TarjetaAsignacion` como Value Object — DataClumps en Performance | Refactoring dominio | Media | `docs/specs/sp-adj-03/US-ADJ-3.2.md` |
+
+### Ajuste de umbrales post-refactor (post US-ADJ-3.1)
+
+```toml
+# pyproject.toml — bajar después de implementar US-ADJ-3.1
+max_wmc = 45              # bajado de 65 (GrillaDeSalida reduce Competencia a ~34)
+max_god_object_lines = 420 # bajado de 540
+```
+
+### Secuencia recomendada
+
+```
+1. US-ADJ-3.1 + US-ADJ-3.2  ← mismo PR (ambas en competencia/domain/)
+2. D-05 (composition root)   ← independiente
+3. D-06 (audit cross-BC)     ← independiente
+4. D-02 + D-03 (docs)        ← último
+```
 
 ---
 
@@ -47,4 +65,4 @@ mergeados en `develop` y BL-003 esté lista para taggear.
 ---
 
 *Iniciado: 2026-03-31 — basado en HITO-14*
-*Actualizar a medida que avanza SP3*
+*Actualizado: 2026-04-01 — US-ADJ-3.1/3.2 agregadas post-análisis WMC Competencia (INC-3.3)*

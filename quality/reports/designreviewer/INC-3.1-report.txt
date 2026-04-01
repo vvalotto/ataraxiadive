@@ -1,0 +1,27 @@
+# DesignReviewer — INC-3.1 Torneo: máquina de estados
+
+Fecha: 2026-03-30
+Branch: develop (post-merge US-3.1.1 + US-3.1.2)
+Archivos analizados: 171
+Analyzers ejecutados: 12
+
+## Resultado
+
+CRITICAL blocking issues: 0
+WARNING: 84 (deuda acumulada de SPs anteriores + nueva en torneo/api)
+INFO: 0
+
+## Warnings nuevos en INC-3.1 (torneo/)
+
+- LCOMAnalyzer Torneo: 3/1 (aggregate con múltiples responsabilidades — aceptable en SP3)
+- FeatureEnvyAnalyzer CrearTorneoHandler: 9/1 (handler accede a VOs del dominio — patrón esperado)
+- FeatureEnvyAnalyzer SQLiteTorneoRepository: 11/2 (repo accede a campos del aggregate — patrón esperado)
+- FeatureEnvyAnalyzer TorneoResponse: 11/0 (from_torneo() accede a todos los campos — patrón de mapeo)
+- LongMethodAnalyzer exception_handlers.py: 40/20 (3 handlers en función register — aceptable)
+- FanOutAnalyzer app.py: 8/7 (composition root con 2 BCs nuevos — aceptable)
+
+## Veredicto
+
+✅ APROBADO — 0 CRITICAL. INC-3.1 DoD cumplida.
+
+Deuda WARNING documentada para SP-ADJ-03 si se acumula.

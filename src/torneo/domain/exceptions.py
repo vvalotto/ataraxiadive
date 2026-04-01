@@ -8,3 +8,11 @@ class TransicionEstadoInvalida(Exception):
 
 class TorneoCerrado(Exception):
     pass
+
+
+class DisciplinaNoEnTorneo(Exception):
+    pass
+
+
+class AsignacionNoPermitida(Exception):
+    pass

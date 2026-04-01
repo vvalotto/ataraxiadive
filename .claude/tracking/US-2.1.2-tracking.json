@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "us_id": "US-2.1.2",
+    "us_title": "Generar / Regenerar Grilla de Salida",
+    "us_points": 5,
+    "producto": "ataraxiadive",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-03-25T19:24:53.281168+00:00",
+    "completed_at": "2026-03-26T21:29:14.844597+00:00",
+    "total_elapsed_seconds": 0,
+    "effective_seconds": 0,
+    "paused_seconds": 0
+  },
+  "phases": [],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 0,
+    "completed_tasks": 0,
+    "total_phases": 0,
+    "estimated_total_minutes": 0,
+    "actual_total_minutes": 0,
+    "variance_minutes": 0,
+    "variance_percent": 0.0
+  }
+}

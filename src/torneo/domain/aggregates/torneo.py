@@ -4,7 +4,14 @@ from dataclasses import dataclass, field
 from datetime import date
 from uuid import UUID, uuid4
 
-from torneo.domain.exceptions import TorneoCerrado, TransicionEstadoInvalida
+from shared.domain.value_objects.disciplina import Disciplina
+from torneo.domain.exceptions import (
+    AsignacionNoPermitida,
+    DisciplinaNoEnTorneo,
+    TorneoCerrado,
+    TransicionEstadoInvalida,
+)
+from torneo.domain.value_objects.disciplina_torneo import DisciplinaTorneo
 from torneo.domain.value_objects.entidad_organizadora import EntidadOrganizadora
 from torneo.domain.value_objects.estado_torneo import EstadoTorneo
 from torneo.domain.value_objects.sede import Sede
@@ -22,6 +29,21 @@ _TRANSICIONES_VALIDAS: dict[EstadoTorneo, set[EstadoTorneo]] = {
 _ESTADOS_TERMINALES = {EstadoTorneo.CERRADO, EstadoTorneo.CANCELADO}
 
 
+_ESTADOS_ASIGNACION_VALIDOS = {
+    EstadoTorneo.CREADO,
+    EstadoTorneo.INSCRIPCION_ABIERTA,
+    EstadoTorneo.PREPARACION,
+}
+
+_DISCIPLINAS_SP3 = {
+    Disciplina.STA,
+    Disciplina.DNF,
+    Disciplina.DYN,
+    Disciplina.DYNB,
+    Disciplina.SPE2X50,
+}
+
+
 @dataclass
 class Torneo:
     nombre: str
@@ -32,6 +54,7 @@ class Torneo:
     entidad_organizadora: EntidadOrganizadora
     torneo_id: UUID = field(default_factory=uuid4)
     estado: EstadoTorneo = EstadoTorneo.CREADO
+    disciplinas_torneo: list[DisciplinaTorneo] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         if not self.nombre or not self.nombre.strip():
@@ -43,9 +66,7 @@ class Torneo:
         if self.estado == EstadoTorneo.CERRADO:
             raise TorneoCerrado(f"El torneo está cerrado y no puede transicionar a {nuevo_estado}")
         if nuevo_estado not in _TRANSICIONES_VALIDAS[self.estado]:
-            raise TransicionEstadoInvalida(
-                f"Transición inválida: {self.estado} → {nuevo_estado}"
-            )
+            raise TransicionEstadoInvalida(f"Transición inválida: {self.estado} → {nuevo_estado}")
         self.estado = nuevo_estado
 
     def abrir_inscripcion(self) -> None:
@@ -72,3 +93,30 @@ class Torneo:
         if self.estado == EstadoTorneo.CANCELADO:
             raise TransicionEstadoInvalida("El torneo ya está cancelado")
         self.estado = EstadoTorneo.CANCELADO
+
+    def asignar_disciplinas(self, disciplinas: frozenset[Disciplina]) -> None:
+        """Configura las disciplinas disponibles. Solo en estados CREADO, INSCRIPCION_ABIERTA o PREPARACION."""
+        if self.estado not in _ESTADOS_ASIGNACION_VALIDOS:
+            raise AsignacionNoPermitida(
+                f"No se pueden asignar disciplinas con el torneo en estado {self.estado}"
+            )
+        invalidas = disciplinas - _DISCIPLINAS_SP3
+        if invalidas:
+            raise ValueError(f"Disciplinas no válidas para SP3: {invalidas}")
+        self.disciplinas_torneo = [DisciplinaTorneo(disciplina=d) for d in sorted(disciplinas)]
+
+    def asignar_juez(self, disciplina: Disciplina, juez_id: UUID) -> None:
+        """Asigna juez a una disciplina del torneo. Permite reasignación."""
+        if self.estado not in _ESTADOS_ASIGNACION_VALIDOS:
+            raise AsignacionNoPermitida(
+                f"No se puede asignar juez con el torneo en estado {self.estado}"
+            )
+        for i, dt in enumerate(self.disciplinas_torneo):
+            if dt.disciplina == disciplina:
+                self.disciplinas_torneo[i] = dt.con_juez(juez_id)
+                return
+        raise DisciplinaNoEnTorneo(f"La disciplina {disciplina} no está configurada en este torneo")
+
+    def obtener_disciplinas_de_juez(self, juez_id: UUID) -> list[Disciplina]:
+        """Retorna las disciplinas asignadas al juez dado."""
+        return [dt.disciplina for dt in self.disciplinas_torneo if dt.juez_id == juez_id]
