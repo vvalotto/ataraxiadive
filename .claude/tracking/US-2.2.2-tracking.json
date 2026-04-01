@@ -1,0 +1,73 @@
+{
+  "metadata": {
+    "us_id": "US-2.2.2",
+    "us_title": "API Disciplina-Aware + Avance Autom\u00e1tico",
+    "us_points": 3,
+    "producto": "ataraxiadive",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-03-27T10:26:50.449403+00:00",
+    "completed_at": "2026-03-29T00:00:00Z",
+    "total_elapsed_seconds": 404,
+    "effective_seconds": 404,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validaci\u00f3n de Contexto",
+      "started_at": "2026-03-27T10:26:56.133041+00:00",
+      "completed_at": "2026-03-27T10:27:05.177494+00:00",
+      "elapsed_seconds": 9,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generaci\u00f3n de Escenarios BDD",
+      "started_at": "2026-03-27T10:27:18.893401+00:00",
+      "completed_at": "2026-03-27T10:27:59.522279+00:00",
+      "elapsed_seconds": 40,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de Implementaci\u00f3n",
+      "started_at": "2026-03-27T10:28:03.895194+00:00",
+      "completed_at": "2026-03-27T10:31:55.336121+00:00",
+      "elapsed_seconds": 231,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementaci\u00f3n",
+      "started_at": "2026-03-27T10:33:35.079722+00:00",
+      "completed_at": null,
+      "elapsed_seconds": 0,
+      "status": "in_progress",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 0,
+    "completed_tasks": 0,
+    "total_phases": 4,
+    "estimated_total_minutes": 0,
+    "actual_total_minutes": 0,
+    "variance_minutes": 0,
+    "variance_percent": 0.0
+  },
+  "status": "completed"
+}
