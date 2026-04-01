@@ -1,6 +1,6 @@
 # US-3.3.2: Flujo E2E — inscribir atleta → AP → grilla
 
-**Estado**: `To Do`
+**Estado**: `Done`
 **Sprint**: SP3 — El Torneo
 **Incremento**: INC-3.3
 **Bounded Context**: `competencia` · `registro` · `torneo`
