@@ -5,6 +5,8 @@ from uuid import UUID
 
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
+
+from identidad.api.dependencies import AtletaDep, OrganizadorDep
 from pydantic import BaseModel, field_validator
 
 from registro.application.commands.cancelar_inscripcion import (
@@ -109,7 +111,7 @@ def _torneo_consulta() -> SQLiteTorneoConsulta:
 
 
 @router.post("/atletas", status_code=201)
-async def registrar_atleta(body: RegistrarAtletaRequest) -> JSONResponse:
+async def registrar_atleta(body: RegistrarAtletaRequest, _: AtletaDep) -> JSONResponse:
     repo = _repo()
     handler = RegistrarAtletaHandler(repo)
     cmd = RegistrarAtletaCommand(
@@ -156,7 +158,7 @@ async def obtener_atleta(atleta_id: UUID) -> JSONResponse:
 
 
 @router.post("/inscripciones", status_code=201)
-async def inscribir_atleta(body: InscribirAtletaRequest) -> JSONResponse:
+async def inscribir_atleta(body: InscribirAtletaRequest, _: AtletaDep) -> JSONResponse:
     handler = InscribirAtletaHandler(_inscripcion_repo(), _torneo_consulta())
     cmd = InscribirAtletaCommand(
         atleta_id=body.atleta_id,
@@ -177,7 +179,7 @@ async def inscribir_atleta(body: InscribirAtletaRequest) -> JSONResponse:
 
 
 @router.delete("/inscripciones/{inscripcion_id}", status_code=200)
-async def cancelar_inscripcion(inscripcion_id: UUID) -> JSONResponse:
+async def cancelar_inscripcion(inscripcion_id: UUID, _: AtletaDep) -> JSONResponse:
     handler = CancelarInscripcionHandler(_inscripcion_repo(), _torneo_consulta())
     cmd = CancelarInscripcionCommand(
         inscripcion_id=inscripcion_id,
@@ -193,7 +195,7 @@ async def cancelar_inscripcion(inscripcion_id: UUID) -> JSONResponse:
 
 
 @router.get("/torneos/{torneo_id}/inscriptos", status_code=200)
-async def listar_inscriptos(torneo_id: UUID) -> JSONResponse:
+async def listar_inscriptos(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse:
     handler = ListarInscriptosHandler(_inscripcion_repo())
     inscripciones = await handler.handle(torneo_id)
     return JSONResponse(

@@ -1,4 +1,5 @@
 """Tests unitarios de ObtenerAndarivelesActivosHandler — US-2.3.1."""
+
 from __future__ import annotations
 
 from datetime import datetime

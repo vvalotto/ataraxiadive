@@ -1,4 +1,5 @@
 """Tests unitarios del aggregate RankingCompetencia — US-2.4.2."""
+
 from __future__ import annotations
 
 from decimal import Decimal
@@ -10,7 +11,6 @@ from shared.domain.value_objects.disciplina import Disciplina
 from resultados.domain.aggregates.ranking_competencia import RankingCompetencia
 from resultados.domain.exceptions import ResultadosIncompletos
 from resultados.domain.ports.resultados_competencia_port import ResultadoFinal
-
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -288,9 +288,7 @@ def test_reconstitute_desde_evento_restaura_entries() -> None:
     events = ranking.pull_events()
 
     # Serializar como haría el event store
-    raw_events = [
-        {"event_type": e.event_type, "payload": e.to_payload()} for e in events
-    ]
+    raw_events = [{"event_type": e.event_type, "payload": e.to_payload()} for e in events]
 
     # Reconstituir
     ranking2 = RankingCompetencia.reconstitute(

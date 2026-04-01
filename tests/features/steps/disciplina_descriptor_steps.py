@@ -1,4 +1,5 @@
 """Step definitions BDD — US-2.2.1: DisciplinaDescriptor VO + Port."""
+
 from __future__ import annotations
 
 import asyncio
@@ -27,7 +28,9 @@ from competencia.domain.value_objects.disciplina_descriptor import DisciplinaDes
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
 
 scenarios("../US-2.2.1-disciplina-descriptor.feature")
@@ -106,7 +109,9 @@ def dada_competencia_con_aps(context: dict, disc: str, ap1: str, ap2: str, ap3: 
             )
         )
         for atleta_id, (valor, unidad) in zip(atleta_ids, aps):
-            await RegistrarAPHandler(store, StubCompetenciaEstadoAdapter(), DisciplinaDescriptorAdapter()).handle(
+            await RegistrarAPHandler(
+                store, StubCompetenciaEstadoAdapter(), DisciplinaDescriptorAdapter()
+            ).handle(
                 RegistrarAPCommand(
                     competencia_id=comp_id,
                     participante_id=atleta_id,
@@ -151,6 +156,7 @@ def cuando_genera_grilla(context: dict) -> None:
     )
     # Reconstituir para leer la grilla
     from competencia.domain.aggregates.competencia import Competencia
+
     comp_id = context["competencia_id"]
     stream_id = f"competencia-{comp_id}"
     events = asyncio.run(store.load(stream_id))

@@ -1,4 +1,5 @@
 """Command y Handler para GenerarGrilla — US-2.1.2."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -10,7 +11,6 @@ from competencia.domain.ports.disciplina_descriptor_port import DisciplinaDescri
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.ports.performances_ap_port import PerformancesAPPort
 from competencia.domain.value_objects.disciplina import Disciplina
-
 
 # ── Command ───────────────────────────────────────────────────────────────────
 
@@ -80,9 +80,7 @@ class GenerarGrillaHandler:
             events=events,
         )
 
-        performances = await self._performances_ap.get_performances_con_ap(
-            command.competencia_id
-        )
+        performances = await self._performances_ap.get_performances_con_ap(command.competencia_id)
 
         descriptor = self._disciplina_descriptor.describe(command.disciplina)
 

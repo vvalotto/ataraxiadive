@@ -1,4 +1,5 @@
 """Adapter DisciplinaDescriptorAdapter — implementación local del port para BC Resultados."""
+
 from __future__ import annotations
 
 from competencia.domain.ports.disciplina_descriptor_port import DisciplinaDescriptorPort

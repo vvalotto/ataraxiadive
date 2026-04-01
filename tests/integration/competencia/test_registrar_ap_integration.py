@@ -1,4 +1,5 @@
 """Tests de integración — RegistrarAPHandler con SQLiteEventStore real."""
+
 from __future__ import annotations
 
 from decimal import Decimal
@@ -18,7 +19,10 @@ from competencia.domain.value_objects.estado_performance import EstadoPerformanc
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+
 CREATE_EVENTS_TABLE = """
     CREATE TABLE events (
         id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -140,12 +144,18 @@ async def test_distinta_disciplina_mismo_atleta_es_independiente(
     pid = uuid4()
 
     cmd_sta = RegistrarAPCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=Disciplina.STA, valor_ap=Decimal("330"), unidad=UnidadMedida.Segundos,
+        competencia_id=cid,
+        participante_id=pid,
+        disciplina=Disciplina.STA,
+        valor_ap=Decimal("330"),
+        unidad=UnidadMedida.Segundos,
     )
     cmd_dnf = RegistrarAPCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=Disciplina.DNF, valor_ap=Decimal("100"), unidad=UnidadMedida.Metros,
+        competencia_id=cid,
+        participante_id=pid,
+        disciplina=Disciplina.DNF,
+        valor_ap=Decimal("100"),
+        unidad=UnidadMedida.Metros,
     )
 
     id1 = await handler.handle(cmd_sta)
@@ -170,7 +180,8 @@ async def test_registrar_ap_unidad_incompatible_lanza_error(
     with pytest.raises(UnidadIncompatible):
         await handler.handle(
             RegistrarAPCommand(
-                competencia_id=cid, participante_id=pid,
+                competencia_id=cid,
+                participante_id=pid,
                 disciplina=Disciplina.STA,
                 valor_ap=Decimal("300"),
                 unidad=UnidadMedida.Metros,  # STA requiere Segundos

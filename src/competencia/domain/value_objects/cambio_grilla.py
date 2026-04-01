@@ -1,4 +1,5 @@
 """Value Object CambioGrilla — representa un ajuste manual sobre una entrada de la grilla."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

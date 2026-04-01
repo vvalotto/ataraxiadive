@@ -1,4 +1,5 @@
 """Tests unitarios de SQLiteEventStore.load_all_streams_with_prefix."""
+
 from __future__ import annotations
 
 import tempfile

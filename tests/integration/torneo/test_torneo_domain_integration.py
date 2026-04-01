@@ -3,6 +3,7 @@ Tests de integración del dominio Torneo — US-3.1.1.
 Verifica la coherencia entre aggregate, value objects, excepciones y puerto.
 Los tests de repositorio SQLite se implementan en US-3.1.2.
 """
+
 from datetime import date
 from uuid import UUID
 

@@ -1,4 +1,5 @@
 """Domain Event AtletaLlamado — emitido cuando el sistema llama a un atleta."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

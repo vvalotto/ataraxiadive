@@ -1,4 +1,5 @@
 """Domain Event GrillaConfirmada — grilla de salida congelada, INV-C-02."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

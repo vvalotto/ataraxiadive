@@ -1,4 +1,5 @@
 """Tests unitarios del CalcularRankingHandler y ObtenerRankingHandler — US-2.4.2."""
+
 from __future__ import annotations
 
 from decimal import Decimal
@@ -20,7 +21,6 @@ from resultados.application.queries.obtener_ranking import (
 from resultados.domain.exceptions import ResultadosIncompletos
 from resultados.domain.ports.resultados_competencia_port import ResultadoFinal
 
-
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 
@@ -39,9 +39,7 @@ def _resultado(
     )
 
 
-def _raw_event_resultados_calculados(
-    cid: UUID, atleta_id: UUID
-) -> dict[str, Any]:
+def _raw_event_resultados_calculados(cid: UUID, atleta_id: UUID) -> dict[str, Any]:
     """Evento serializado como lo devolvería el Event Store."""
     import json
 
@@ -96,9 +94,7 @@ class TestCalcularRankingHandler:
         cid = uuid4()
         handler, ranking_store, _ = self._make_handler([_resultado()])
 
-        command = CalcularRankingCommand(
-            competencia_id=cid, disciplina=Disciplina.STA
-        )
+        command = CalcularRankingCommand(competencia_id=cid, disciplina=Disciplina.STA)
         await handler.handle(command)
 
         ranking_store.append.assert_called_once()
@@ -112,22 +108,16 @@ class TestCalcularRankingHandler:
         cid = uuid4()
         handler, _, resultados_port = self._make_handler([_resultado()])
 
-        command = CalcularRankingCommand(
-            competencia_id=cid, disciplina=Disciplina.STA
-        )
+        command = CalcularRankingCommand(competencia_id=cid, disciplina=Disciplina.STA)
         await handler.handle(command)
 
-        resultados_port.get_resultados_finales.assert_called_once_with(
-            cid, Disciplina.STA
-        )
+        resultados_port.get_resultados_finales.assert_called_once_with(cid, Disciplina.STA)
 
     @pytest.mark.asyncio
     async def test_handle_sin_resultados_lanza_resultados_incompletos(self) -> None:
         handler, _, _ = self._make_handler([])
 
-        command = CalcularRankingCommand(
-            competencia_id=uuid4(), disciplina=Disciplina.STA
-        )
+        command = CalcularRankingCommand(competencia_id=uuid4(), disciplina=Disciplina.STA)
         with pytest.raises(ResultadosIncompletos):
             await handler.handle(command)
 
@@ -146,9 +136,7 @@ class TestCalcularRankingHandler:
         ]
 
         handler, ranking_store, _ = self._make_handler(resultados)
-        command = CalcularRankingCommand(
-            competencia_id=cid, disciplina=Disciplina.STA
-        )
+        command = CalcularRankingCommand(competencia_id=cid, disciplina=Disciplina.STA)
         await handler.handle(command)
 
         payload_raw = ranking_store.append.call_args.kwargs["payload"]

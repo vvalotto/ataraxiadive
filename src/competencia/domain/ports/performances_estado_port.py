@@ -1,4 +1,5 @@
 """Puerto PerformancesEstadoPort — consulta el estado agregado de performances."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

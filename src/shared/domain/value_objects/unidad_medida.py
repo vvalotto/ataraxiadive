@@ -1,4 +1,5 @@
 """Value Object UnidadMedida — unidad de medida del AP/RP."""
+
 from __future__ import annotations
 
 from enum import StrEnum

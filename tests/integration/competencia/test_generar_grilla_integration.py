@@ -1,4 +1,5 @@
 """Tests de integración — GenerarGrillaHandler con SQLiteEventStore real."""
+
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
@@ -31,7 +32,9 @@ from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 from competencia.infrastructure.repositories.performances_ap_adapter import (
     PerformancesAPAdapter,
 )
@@ -79,9 +82,7 @@ async def _seed_intervalo(store: SQLiteEventStore) -> None:
     )
 
 
-async def _seed_ap(
-    store: SQLiteEventStore, atleta_id: UUID, valor: str
-) -> None:
+async def _seed_ap(store: SQLiteEventStore, atleta_id: UUID, valor: str) -> None:
     stub = StubCompetenciaEstadoAdapter()
     handler = RegistrarAPHandler(store, stub, DisciplinaDescriptorAdapter())
     await handler.handle(
@@ -97,9 +98,7 @@ async def _seed_ap(
 
 class TestGenerarGrillaIntegracion:
     @pytest.mark.asyncio
-    async def test_grilla_generada_persiste_en_stream(
-        self, event_store: SQLiteEventStore
-    ) -> None:
+    async def test_grilla_generada_persiste_en_stream(self, event_store: SQLiteEventStore) -> None:
         await _seed_intervalo(event_store)
         await _seed_ap(event_store, A001, "330")
 
@@ -119,9 +118,7 @@ class TestGenerarGrillaIntegracion:
         assert "GrillaDeSalidaGenerada" in event_types
 
     @pytest.mark.asyncio
-    async def test_orden_sta_correcto_tres_atletas(
-        self, event_store: SQLiteEventStore
-    ) -> None:
+    async def test_orden_sta_correcto_tres_atletas(self, event_store: SQLiteEventStore) -> None:
         await _seed_intervalo(event_store)
         await _seed_ap(event_store, A001, "330")  # 5:30
         await _seed_ap(event_store, A002, "360")  # 6:00 — mayor, pos=1
@@ -147,9 +144,7 @@ class TestGenerarGrillaIntegracion:
         assert atletas_orden[2] == str(A003)  # menor AP último
 
     @pytest.mark.asyncio
-    async def test_ot_calculados_correctamente(
-        self, event_store: SQLiteEventStore
-    ) -> None:
+    async def test_ot_calculados_correctamente(self, event_store: SQLiteEventStore) -> None:
         await _seed_intervalo(event_store)
         await _seed_ap(event_store, A001, "330")
         await _seed_ap(event_store, A002, "360")
@@ -174,9 +169,7 @@ class TestGenerarGrillaIntegracion:
         assert ot_pos2 - ot_pos1 == timedelta(minutes=9)
 
     @pytest.mark.asyncio
-    async def test_reconstituyendo_grilla_desde_store(
-        self, event_store: SQLiteEventStore
-    ) -> None:
+    async def test_reconstituyendo_grilla_desde_store(self, event_store: SQLiteEventStore) -> None:
         await _seed_intervalo(event_store)
         await _seed_ap(event_store, A001, "330")
 
@@ -197,9 +190,7 @@ class TestGenerarGrillaIntegracion:
         assert c.grilla[0].posicion == 1
 
     @pytest.mark.asyncio
-    async def test_regeneracion_agrega_segundo_evento(
-        self, event_store: SQLiteEventStore
-    ) -> None:
+    async def test_regeneracion_agrega_segundo_evento(self, event_store: SQLiteEventStore) -> None:
         await _seed_intervalo(event_store)
         await _seed_ap(event_store, A001, "330")
 
@@ -219,9 +210,7 @@ class TestGenerarGrillaIntegracion:
         assert len(grilla_events) == 2
 
     @pytest.mark.asyncio
-    async def test_sin_ap_registrado_lanza_excepcion(
-        self, event_store: SQLiteEventStore
-    ) -> None:
+    async def test_sin_ap_registrado_lanza_excepcion(self, event_store: SQLiteEventStore) -> None:
         await _seed_intervalo(event_store)
         # No se registran APs
 

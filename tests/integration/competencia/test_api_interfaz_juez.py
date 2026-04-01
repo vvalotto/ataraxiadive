@@ -1,4 +1,5 @@
 """Tests de integración — API interfaz del juez con SQLiteEventStore real."""
+
 from __future__ import annotations
 
 from decimal import Decimal
@@ -14,14 +15,19 @@ from competencia.application.commands.registrar_resultado import (
     RegistrarResultadoCommand,
     RegistrarResultadoHandler,
 )
-from competencia.application.commands.asignar_tarjeta import AsignarTarjetaCommand, AsignarTarjetaHandler
+from competencia.application.commands.asignar_tarjeta import (
+    AsignarTarjetaCommand,
+    AsignarTarjetaHandler,
+)
 from competencia.application.commands.registrar_dns import RegistrarDNSCommand, RegistrarDNSHandler
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 from app import app
 from competencia.api.router import get_event_store
 
@@ -58,7 +64,9 @@ def client(store: SQLiteEventStore) -> TestClient:
 async def _registrar_ap(
     store: SQLiteEventStore, competencia_id: UUID, participante_id: UUID
 ) -> UUID:
-    handler = RegistrarAPHandler(store, StubCompetenciaEstadoAdapter(), DisciplinaDescriptorAdapter())
+    handler = RegistrarAPHandler(
+        store, StubCompetenciaEstadoAdapter(), DisciplinaDescriptorAdapter()
+    )
     return await handler.handle(
         RegistrarAPCommand(
             competencia_id=competencia_id,
@@ -77,6 +85,7 @@ async def _llamar(
     posicion: int,
 ) -> None:
     from datetime import datetime, timezone
+
     handler = LlamarAtletaHandler(store, StubCompetenciaEstadoAdapter())
     await handler.handle(
         LlamarAtletaCommand(
@@ -89,9 +98,7 @@ async def _llamar(
     )
 
 
-async def _ejecutar(
-    store: SQLiteEventStore, competencia_id: UUID, participante_id: UUID
-) -> None:
+async def _ejecutar(store: SQLiteEventStore, competencia_id: UUID, participante_id: UUID) -> None:
     handler_r = RegistrarResultadoHandler(store, DisciplinaDescriptorAdapter())
     await handler_r.handle(
         RegistrarResultadoCommand(
@@ -115,9 +122,7 @@ async def _ejecutar(
     )
 
 
-async def _dns(
-    store: SQLiteEventStore, competencia_id: UUID, participante_id: UUID
-) -> None:
+async def _dns(store: SQLiteEventStore, competencia_id: UUID, participante_id: UUID) -> None:
     handler = RegistrarDNSHandler(store)
     await handler.handle(
         RegistrarDNSCommand(
@@ -178,9 +183,7 @@ async def test_proximas_retorna_atletas_en_anunciada_ap(
 
 
 @pytest.mark.asyncio
-async def test_progreso_conteo_correcto(
-    store: SQLiteEventStore, client: TestClient
-) -> None:
+async def test_progreso_conteo_correcto(store: SQLiteEventStore, client: TestClient) -> None:
     cid = uuid4()
     p1, p2, p3, p4 = [uuid4() for _ in range(4)]
 

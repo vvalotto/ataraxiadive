@@ -1,4 +1,5 @@
 """Step definitions BDD — US-3.2.1: BC Identidad JWT."""
+
 from __future__ import annotations
 
 import os
@@ -14,6 +15,7 @@ scenarios("../US-3.2.1-bc-identidad-jwt.feature")
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
 
+
 @pytest.fixture
 def context(tmp_path: Any, monkeypatch: Any) -> dict[str, Any]:
     db_path = str(tmp_path / "identidad_test.db")
@@ -26,12 +28,15 @@ def context(tmp_path: Any, monkeypatch: Any) -> dict[str, Any]:
 def client(context: dict[str, Any]) -> TestClient:
     import importlib
     import app as app_module
+
     importlib.reload(app_module)
     from app import app as fastapi_app
+
     return TestClient(fastapi_app)
 
 
 # ── Background ────────────────────────────────────────────────────────────────
+
 
 @given("el sistema de identidad está inicializado")
 def sistema_inicializado(context: dict[str, Any]) -> None:
@@ -39,6 +44,7 @@ def sistema_inicializado(context: dict[str, Any]) -> None:
 
 
 # ── Given helpers ─────────────────────────────────────────────────────────────
+
 
 @given(parsers.parse('un email "{email}" no registrado'))
 def email_no_registrado(context: dict[str, Any], email: str) -> None:
@@ -51,7 +57,9 @@ def usuario_ya_registrado(client: TestClient, context: dict[str, Any], email: st
     context["email"] = email
 
 
-@given(parsers.parse('un usuario registrado con email "{email}" y password "{password}" y rol "{rol}"'))
+@given(
+    parsers.parse('un usuario registrado con email "{email}" y password "{password}" y rol "{rol}"')
+)
 def usuario_registrado_con_rol(
     client: TestClient, context: dict[str, Any], email: str, password: str, rol: str
 ) -> None:
@@ -74,8 +82,11 @@ def access_token_obtenido(client: TestClient, context: dict[str, Any]) -> None:
 
 # ── When ──────────────────────────────────────────────────────────────────────
 
+
 @when(parsers.parse('POST /auth/registro con email "{email}", password "{password}", rol "{rol}"'))
-def post_registro(client: TestClient, context: dict[str, Any], email: str, password: str, rol: str) -> None:
+def post_registro(
+    client: TestClient, context: dict[str, Any], email: str, password: str, rol: str
+) -> None:
     context["response"] = client.post(
         "/auth/registro", json={"email": email, "password": password, "rol": rol}
     )
@@ -83,19 +94,19 @@ def post_registro(client: TestClient, context: dict[str, Any], email: str, passw
 
 @when(parsers.parse('POST /auth/login con email "{email}" y password "{password}"'))
 def post_login(client: TestClient, context: dict[str, Any], email: str, password: str) -> None:
-    context["response"] = client.post(
-        "/auth/login", json={"email": email, "password": password}
-    )
+    context["response"] = client.post("/auth/login", json={"email": email, "password": password})
 
 
 @when("se verifica el token con get_current_user")
 def verificar_token(context: dict[str, Any]) -> None:
     from identidad.infrastructure.jwt_service import JWTService
+
     svc = JWTService()
     context["payload"] = svc.verify(context["access_token"])
 
 
 # ── Then ──────────────────────────────────────────────────────────────────────
+
 
 @then(parsers.parse("la respuesta es {status_code:d}"))
 def respuesta_status(context: dict[str, Any], status_code: int) -> None:
@@ -111,6 +122,7 @@ def respuesta_contiene_campo(context: dict[str, Any], campo: str) -> None:
 @then(parsers.parse('el token contiene email "{email}" y rol "{rol}"'))
 def token_contiene_email_y_rol(context: dict[str, Any], email: str, rol: str) -> None:
     from identidad.infrastructure.jwt_service import JWTService
+
     svc = JWTService()
     payload = svc.verify(context["access_token"])
     assert payload["email"] == email

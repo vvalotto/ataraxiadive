@@ -1,4 +1,5 @@
 """Aggregate RankingCompetencia — calcula y persiste el ranking de una disciplina."""
+
 from __future__ import annotations
 
 import json
@@ -12,7 +13,6 @@ from resultados.domain.ports.resultados_competencia_port import ResultadoFinal
 from resultados.domain.value_objects.entrada_ranking import EntradaRanking
 from shared.domain.value_objects.disciplina import Disciplina
 from shared.domain.value_objects.disciplina_descriptor import DisciplinaDescriptor
-
 
 # Tarjetas que producen un resultado válido (se posicionan antes de DNS/Roja)
 _TARJETAS_VALIDAS = {"Blanca", "Amarilla"}
@@ -80,6 +80,7 @@ class RankingCompetencia(AggregateRoot):
         """
         if not resultados:
             from resultados.domain.exceptions import ResultadosIncompletos
+
             raise ResultadosIncompletos(
                 f"RankingCompetencia {self._competencia_id}: sin resultados para calcular"
             )
@@ -167,28 +168,32 @@ def _calcular_entries(resultados: list[ResultadoFinal]) -> list[EntradaRanking]:
         else:
             pos = posicion_actual
 
-        entries.append(EntradaRanking(
-            posicion=pos,
-            atleta_id=resultado.atleta_id,
-            rp=resultado.rp,
-            unidad=resultado.unidad,
-            tarjeta=resultado.tarjeta,
-            es_dns=False,
-            en_podio=pos <= 3,
-        ))
+        entries.append(
+            EntradaRanking(
+                posicion=pos,
+                atleta_id=resultado.atleta_id,
+                rp=resultado.rp,
+                unidad=resultado.unidad,
+                tarjeta=resultado.tarjeta,
+                es_dns=False,
+                en_podio=pos <= 3,
+            )
+        )
         posicion_actual = len(entries) + 1
 
     # Inválidas al final
     for resultado in invalidas:
-        entries.append(EntradaRanking(
-            posicion=posicion_actual,
-            atleta_id=resultado.atleta_id,
-            rp=None,
-            unidad=None,
-            tarjeta=resultado.tarjeta,
-            es_dns=resultado.es_dns,
-            en_podio=False,
-        ))
+        entries.append(
+            EntradaRanking(
+                posicion=posicion_actual,
+                atleta_id=resultado.atleta_id,
+                rp=None,
+                unidad=None,
+                tarjeta=resultado.tarjeta,
+                es_dns=resultado.es_dns,
+                en_podio=False,
+            )
+        )
         posicion_actual += 1
 
     return entries

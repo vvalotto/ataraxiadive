@@ -1,4 +1,5 @@
 """Command y Handler para CalcularRanking — US-2.4.2."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -12,7 +13,6 @@ from resultados.infrastructure.repositories.disciplina_descriptor_adapter import
 )
 from resultados.domain.aggregates.ranking_competencia import RankingCompetencia
 from resultados.domain.ports.resultados_competencia_port import ResultadosCompetenciaPort
-
 
 # ── Command ───────────────────────────────────────────────────────────────────
 

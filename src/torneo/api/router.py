@@ -6,6 +6,8 @@ from uuid import UUID
 
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
+
+from identidad.api.dependencies import OrganizadorDep
 from pydantic import BaseModel, field_validator, model_validator
 
 from shared.domain.value_objects.disciplina import Disciplina
@@ -117,7 +119,7 @@ def _repo() -> SQLiteTorneoRepository:
 
 
 @router.post("", status_code=201)
-async def crear_torneo(body: CrearTorneoRequest) -> JSONResponse:
+async def crear_torneo(body: CrearTorneoRequest, _: OrganizadorDep) -> JSONResponse:
     repo = _repo()
     handler = CrearTorneoHandler(repo)
     torneo_id = await handler.handle(
@@ -151,43 +153,43 @@ async def obtener_torneo(torneo_id: UUID) -> TorneoResponse:
 
 
 @router.put("/{torneo_id}/abrir-inscripcion", status_code=200)
-async def abrir_inscripcion(torneo_id: UUID) -> JSONResponse:
+async def abrir_inscripcion(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse:
     await AbrirInscripcionHandler(_repo()).handle(TransicionarTorneoCommand(torneo_id))
     return JSONResponse(status_code=200, content={"ok": True})
 
 
 @router.put("/{torneo_id}/cerrar-inscripcion", status_code=200)
-async def cerrar_inscripcion(torneo_id: UUID) -> JSONResponse:
+async def cerrar_inscripcion(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse:
     await CerrarInscripcionHandler(_repo()).handle(TransicionarTorneoCommand(torneo_id))
     return JSONResponse(status_code=200, content={"ok": True})
 
 
 @router.put("/{torneo_id}/iniciar-ejecucion", status_code=200)
-async def iniciar_ejecucion(torneo_id: UUID) -> JSONResponse:
+async def iniciar_ejecucion(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse:
     await IniciarEjecucionHandler(_repo()).handle(TransicionarTorneoCommand(torneo_id))
     return JSONResponse(status_code=200, content={"ok": True})
 
 
 @router.put("/{torneo_id}/volver-preparacion", status_code=200)
-async def volver_preparacion(torneo_id: UUID) -> JSONResponse:
+async def volver_preparacion(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse:
     await VolverAPreparacionHandler(_repo()).handle(TransicionarTorneoCommand(torneo_id))
     return JSONResponse(status_code=200, content={"ok": True})
 
 
 @router.put("/{torneo_id}/iniciar-premiacion", status_code=200)
-async def iniciar_premiacion(torneo_id: UUID) -> JSONResponse:
+async def iniciar_premiacion(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse:
     await IniciarPremiacionHandler(_repo()).handle(TransicionarTorneoCommand(torneo_id))
     return JSONResponse(status_code=200, content={"ok": True})
 
 
 @router.put("/{torneo_id}/cerrar", status_code=200)
-async def cerrar_torneo(torneo_id: UUID) -> JSONResponse:
+async def cerrar_torneo(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse:
     await CerrarTorneoHandler(_repo()).handle(TransicionarTorneoCommand(torneo_id))
     return JSONResponse(status_code=200, content={"ok": True})
 
 
 @router.put("/{torneo_id}/cancelar", status_code=200)
-async def cancelar_torneo(torneo_id: UUID) -> JSONResponse:
+async def cancelar_torneo(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse:
     await CancelarTorneoHandler(_repo()).handle(TransicionarTorneoCommand(torneo_id))
     return JSONResponse(status_code=200, content={"ok": True})
 
@@ -204,7 +206,9 @@ class AsignarJuezRequest(BaseModel):
 
 
 @router.put("/{torneo_id}/disciplinas", status_code=200)
-async def asignar_disciplinas(torneo_id: UUID, body: AsignarDisciplinasRequest) -> JSONResponse:
+async def asignar_disciplinas(
+    torneo_id: UUID, body: AsignarDisciplinasRequest, _: OrganizadorDep
+) -> JSONResponse:
     try:
         disciplinas = frozenset(Disciplina(d) for d in body.disciplinas)
     except ValueError as exc:
@@ -219,7 +223,9 @@ async def asignar_disciplinas(torneo_id: UUID, body: AsignarDisciplinasRequest) 
 
 
 @router.put("/{torneo_id}/disciplinas/{disciplina}/juez", status_code=200)
-async def asignar_juez(torneo_id: UUID, disciplina: str, body: AsignarJuezRequest) -> JSONResponse:
+async def asignar_juez(
+    torneo_id: UUID, disciplina: str, body: AsignarJuezRequest, _: OrganizadorDep
+) -> JSONResponse:
     try:
         disc = Disciplina(disciplina)
     except ValueError:

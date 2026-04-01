@@ -1,4 +1,5 @@
 """Tests unitarios — RegistrarUsuarioHandler + AutenticarUsuarioHandler (mocks)."""
+
 from __future__ import annotations
 
 import os
@@ -45,6 +46,7 @@ def jwt_service(monkeypatch: pytest.MonkeyPatch) -> JWTService:
 
 
 # ── RegistrarUsuarioHandler ───────────────────────────────────────────────────
+
 
 @pytest.mark.asyncio
 async def test_registrar_usuario_exitoso(mock_repo: AsyncMock) -> None:
@@ -93,13 +95,16 @@ async def test_registrar_password_exactamente_8_es_valido(mock_repo: AsyncMock) 
 
 # ── AutenticarUsuarioHandler ──────────────────────────────────────────────────
 
+
 def _make_usuario(email: str, password: str, rol: Rol = Rol.JUEZ, activo: bool = True) -> Usuario:
     hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
     return Usuario(uuid.uuid4(), email, hashed, rol, activo)
 
 
 @pytest.mark.asyncio
-async def test_autenticar_exitoso_retorna_token(mock_repo: AsyncMock, jwt_service: JWTService) -> None:
+async def test_autenticar_exitoso_retorna_token(
+    mock_repo: AsyncMock, jwt_service: JWTService
+) -> None:
     u = _make_usuario("juez@test.com", "clave1234", Rol.JUEZ)
     mock_repo.find_by_email.return_value = u
     handler = AutenticarUsuarioHandler(mock_repo, jwt_service)
@@ -147,6 +152,7 @@ async def test_autenticar_usuario_inactivo_lanza_excepcion(
 
 # ── JWTService ────────────────────────────────────────────────────────────────
 
+
 def test_jwt_generate_y_verify_payload(jwt_service: JWTService) -> None:
     u = _make_usuario("admin@test.com", "pass1234", Rol.ADMIN)
     token = jwt_service.generate(u)
@@ -158,6 +164,7 @@ def test_jwt_generate_y_verify_payload(jwt_service: JWTService) -> None:
 
 def test_jwt_token_invalido_lanza_excepcion(jwt_service: JWTService) -> None:
     from identidad.domain.exceptions import TokenInvalido
+
     with pytest.raises(TokenInvalido):
         jwt_service.verify("token.invalido.xxx")
 

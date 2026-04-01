@@ -1,4 +1,5 @@
 """Domain Event TarjetaAsignada — emitido cuando el juez asigna la tarjeta al atleta."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

@@ -1,4 +1,5 @@
 """Domain Event GrillaDeSalidaGenerada — snapshot completo de la grilla ordenada."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

@@ -1,4 +1,5 @@
 """Tests unitarios del RegistrarDNSHandler — US-1.2.5."""
+
 from __future__ import annotations
 
 from datetime import datetime

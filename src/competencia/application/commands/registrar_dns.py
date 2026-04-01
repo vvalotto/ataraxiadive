@@ -1,4 +1,5 @@
 """Command y Handler para RegistrarDNS — US-1.2.5 / US-2.4.1."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -11,7 +12,6 @@ from competencia.domain.aggregates.performance import Performance
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.ports.performances_estado_port import PerformancesEstadoPort
 from competencia.domain.value_objects.disciplina import Disciplina
-
 
 # ── Excepciones de aplicación ─────────────────────────────────────────────────
 
@@ -113,9 +113,7 @@ class RegistrarDNSHandler:
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 
-def _build_stream_id(
-    competencia_id: UUID, participante_id: UUID, disciplina: Disciplina
-) -> str:
+def _build_stream_id(competencia_id: UUID, participante_id: UUID, disciplina: Disciplina) -> str:
     """Construye el stream ID canónico para una Performance.
 
     Format: "performance-{competencia_id}-{participante_id}-{disciplina}"

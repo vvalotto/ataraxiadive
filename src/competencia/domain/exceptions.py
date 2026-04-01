@@ -18,6 +18,7 @@ Jerarquía (ADR-013):
         ├── CompetenciaNoConfirmada
         └── EstadoInvalidoParaGenerarGrilla
 """
+
 from __future__ import annotations
 
 

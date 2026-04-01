@@ -1,4 +1,5 @@
 """Tests de integración — RegistrarDNSHandler con SQLiteEventStore real."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -18,7 +19,10 @@ from competencia.domain.value_objects.estado_performance import EstadoPerformanc
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+
 OT = datetime(2026, 3, 23, 10, 30, 0)
 
 CREATE_EVENTS_TABLE = """
@@ -54,7 +58,11 @@ def stub() -> StubCompetenciaEstadoAdapter:
 def registrar_ap_handler(
     event_store: SQLiteEventStore, stub: StubCompetenciaEstadoAdapter
 ) -> RegistrarAPHandler:
-    return RegistrarAPHandler(event_store=event_store, competencia_estado=stub, disciplina_descriptor=DisciplinaDescriptorAdapter())
+    return RegistrarAPHandler(
+        event_store=event_store,
+        competencia_estado=stub,
+        disciplina_descriptor=DisciplinaDescriptorAdapter(),
+    )
 
 
 @pytest.fixture

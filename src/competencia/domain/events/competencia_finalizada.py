@@ -1,4 +1,5 @@
 """Domain Event CompetenciaFinalizada — todas las performances completadas (P-08)."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

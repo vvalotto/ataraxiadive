@@ -1,4 +1,5 @@
 """Tests de integración — ConfirmarGrillaHandler e IniciarCompetenciaHandler con SQLiteEventStore real."""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone
@@ -36,7 +37,9 @@ from competencia.domain.value_objects.estado_competencia import EstadoCompetenci
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
 
 CREATE_EVENTS_TABLE = """

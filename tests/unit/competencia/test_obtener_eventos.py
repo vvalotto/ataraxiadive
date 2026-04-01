@@ -1,4 +1,5 @@
 """Tests unitarios — ObtenerEventosHandler (US-1.4.2)."""
+
 from __future__ import annotations
 
 from unittest.mock import AsyncMock

@@ -1,4 +1,5 @@
 """Step definitions BDD — US-2.1.3: Ajustar Grilla Manualmente."""
+
 from __future__ import annotations
 
 import asyncio
@@ -33,7 +34,9 @@ from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
 
 scenarios("../US-2.1.3-ajustar-grilla.feature")
@@ -81,8 +84,8 @@ def ctx_ajustar(tmp_path: object) -> dict:
     return {
         "store_c001": _make_store(str(tmp_path), "c001"),
         "store_c002": _make_store(str(tmp_path), "c002"),
-        "perf_ids": {},   # atleta_id → performance_id (para C001)
-        "raised": {},     # cid_str → exception
+        "perf_ids": {},  # atleta_id → performance_id (para C001)
+        "raised": {},  # cid_str → exception
     }
 
 
@@ -137,7 +140,11 @@ async def _seed_grilla_c001(store: SQLiteEventStore, ctx: dict) -> None:
 # ── Given ─────────────────────────────────────────────────────────────────────
 
 
-@given(parsers.parse('la competencia "{cid}" tiene grilla generada con 3 atletas STA e intervalo 9 min'))
+@given(
+    parsers.parse(
+        'la competencia "{cid}" tiene grilla generada con 3 atletas STA e intervalo 9 min'
+    )
+)
 def dada_competencia_con_grilla(ctx_ajustar: dict, cid: str) -> None:
     store = _store(ctx_ajustar, cid)
     asyncio.run(_seed_grilla_c001(store, ctx_ajustar))
@@ -194,17 +201,23 @@ def cuando_ajusta_posicion(ctx_ajustar: dict, atleta: str, pos: int, cid: str) -
     store = _store(ctx_ajustar, cid)
     p_id = ctx_ajustar["perf_ids"][_ATLETA_IDS[atleta]]
     _ejecutar_ajuste(
-        ctx_ajustar, cid, store,
+        ctx_ajustar,
+        cid,
+        store,
         [CambioGrilla(performance_id=p_id, campo="posicion", valor_nuevo=pos)],
     )
 
 
-@when(parsers.parse('el organizador asigna andarivel {andarivel:d} al atleta "{atleta}" en "{cid}"'))
+@when(
+    parsers.parse('el organizador asigna andarivel {andarivel:d} al atleta "{atleta}" en "{cid}"')
+)
 def cuando_ajusta_andarivel(ctx_ajustar: dict, atleta: str, andarivel: int, cid: str) -> None:
     store = _store(ctx_ajustar, cid)
     p_id = ctx_ajustar["perf_ids"][_ATLETA_IDS[atleta]]
     _ejecutar_ajuste(
-        ctx_ajustar, cid, store,
+        ctx_ajustar,
+        cid,
+        store,
         [CambioGrilla(performance_id=p_id, campo="andarivel", valor_nuevo=andarivel)],
     )
 
@@ -214,7 +227,9 @@ def cuando_intenta_ajustar(ctx_ajustar: dict, cid: str) -> None:
     store = _store(ctx_ajustar, cid)
     pid = ctx_ajustar["perf_ids"].get(_ATLETA_IDS.get("A001", uuid4()), uuid4())
     _ejecutar_ajuste(
-        ctx_ajustar, cid, store,
+        ctx_ajustar,
+        cid,
+        store,
         [CambioGrilla(performance_id=pid, campo="posicion", valor_nuevo=1)],
     )
 
@@ -272,7 +287,9 @@ def entonces_andarivel(ctx_ajustar: dict, atleta: str, cid: str, andarivel: int)
 
 
 @then(parsers.parse('los atletas "{a1}" y "{a2}" de "{cid}" mantienen andarivel {andarivel:d}'))
-def entonces_andarivel_sin_cambio(ctx_ajustar: dict, a1: str, a2: str, cid: str, andarivel: int) -> None:
+def entonces_andarivel_sin_cambio(
+    ctx_ajustar: dict, a1: str, a2: str, cid: str, andarivel: int
+) -> None:
     perfs = _get_grilla_state(ctx_ajustar, cid)
     for atleta in (a1, a2):
         p = next(e for e in perfs if e["atleta_id"] == str(_ATLETA_IDS[atleta]))
@@ -302,6 +319,7 @@ def _get_grilla_state(ctx: dict, cid: str) -> list[dict]:
     store = _store(ctx, cid)
     cid_uuid = _CID_MAP[cid]
     from competencia.domain.aggregates.competencia import Competencia
+
     events = asyncio.run(store.load(_build_stream_id(cid_uuid)))
     c = Competencia.reconstitute(cid_uuid, Disciplina.STA, events)
     return [

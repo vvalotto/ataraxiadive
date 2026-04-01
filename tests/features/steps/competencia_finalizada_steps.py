@@ -5,6 +5,7 @@ cuando todas las performances de la disciplina finalizan.
 
 pytest-bdd no soporta async steps nativamente — se usa asyncio.run() como wrapper.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -18,7 +19,10 @@ import aiosqlite
 import pytest
 from pytest_bdd import given, parsers, scenarios, then, when
 
-from competencia.application.commands.asignar_tarjeta import AsignarTarjetaCommand, AsignarTarjetaHandler
+from competencia.application.commands.asignar_tarjeta import (
+    AsignarTarjetaCommand,
+    AsignarTarjetaHandler,
+)
 from competencia.application.commands.llamar_atleta import LlamarAtletaCommand, LlamarAtletaHandler
 from competencia.application.commands.registrar_ap import RegistrarAPCommand, RegistrarAPHandler
 from competencia.application.commands.registrar_dns import RegistrarDNSCommand, RegistrarDNSHandler
@@ -34,8 +38,12 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
-from competencia.infrastructure.repositories.performances_estado_adapter import PerformancesEstadoAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+from competencia.infrastructure.repositories.performances_estado_adapter import (
+    PerformancesEstadoAdapter,
+)
 
 scenarios("../US-2.4.1-competencia-finalizada.feature")
 
@@ -71,44 +79,71 @@ async def _init_db(db_path: str) -> None:
 
 
 async def _registrar_ap_async(store, stub, descriptor, cid, pid) -> None:
-    h = RegistrarAPHandler(event_store=store, competencia_estado=stub, disciplina_descriptor=descriptor)
-    await h.handle(RegistrarAPCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=Disciplina.STA, valor_ap=Decimal("300"), unidad=UnidadMedida.Segundos,
-    ))
+    h = RegistrarAPHandler(
+        event_store=store, competencia_estado=stub, disciplina_descriptor=descriptor
+    )
+    await h.handle(
+        RegistrarAPCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.STA,
+            valor_ap=Decimal("300"),
+            unidad=UnidadMedida.Segundos,
+        )
+    )
 
 
 async def _llamar_async(store, stub, cid, pid, ot, posicion) -> None:
     h = LlamarAtletaHandler(event_store=store, competencia_estado=stub)
-    await h.handle(LlamarAtletaCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=Disciplina.STA, ot_programado=ot, posicion_grilla=posicion, andarivel=posicion,
-    ))
+    await h.handle(
+        LlamarAtletaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.STA,
+            ot_programado=ot,
+            posicion_grilla=posicion,
+            andarivel=posicion,
+        )
+    )
 
 
 async def _registrar_resultado_async(store, descriptor, cid, pid) -> None:
     h = RegistrarResultadoHandler(event_store=store, disciplina_descriptor=descriptor)
-    await h.handle(RegistrarResultadoCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=Disciplina.STA, valor_rp=Decimal("295"), unidad=UnidadMedida.Segundos,
-        registrado_por="juez",
-    ))
+    await h.handle(
+        RegistrarResultadoCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.STA,
+            valor_rp=Decimal("295"),
+            unidad=UnidadMedida.Segundos,
+            registrado_por="juez",
+        )
+    )
 
 
 async def _asignar_tarjeta_async(store, cid, pid, pe_adapter=None) -> None:
     h = AsignarTarjetaHandler(store, pe_adapter)
-    await h.handle(AsignarTarjetaCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=Disciplina.STA, tipo=TipoTarjeta.Blanca, asignada_por="juez",
-    ))
+    await h.handle(
+        AsignarTarjetaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.STA,
+            tipo=TipoTarjeta.Blanca,
+            asignada_por="juez",
+        )
+    )
 
 
 async def _registrar_dns_async(store, cid, pid, pe_adapter=None) -> None:
     h = RegistrarDNSHandler(store, pe_adapter)
-    await h.handle(RegistrarDNSCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=Disciplina.STA, registrado_por="juez",
-    ))
+    await h.handle(
+        RegistrarDNSCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.STA,
+            registrado_por="juez",
+        )
+    )
 
 
 async def _tiene_evento(store, stream_id, event_type) -> bool:

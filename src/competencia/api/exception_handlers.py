@@ -1,4 +1,5 @@
 """Exception handlers del BC Competencia — mapeo DomainError → RFC 7807 (ADR-012, ADR-013)."""
+
 from __future__ import annotations
 
 from fastapi import FastAPI, Request

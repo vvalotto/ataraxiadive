@@ -3,6 +3,7 @@
 pytest-bdd no soporta async steps nativamente. Los steps que requieren
 operaciones async usan asyncio.run() como wrapper síncrono.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -37,7 +38,10 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+
 scenarios("../US-1.2.4-asignar-tarjeta.feature")
 
 _CREATE_TABLE = """
@@ -105,7 +109,7 @@ def step_atleta_dnf_tarjeta(ctx: dict) -> None:  # type: ignore[type-arg]
 
 @given(
     parsers.parse(
-        'la performance del atleta tiene AP registrado de {valor:d} metros y RP de {rp:f} metros'
+        "la performance del atleta tiene AP registrado de {valor:d} metros y RP de {rp:f} metros"
     )
 )
 def step_ap_y_resultado_registrado(ctx: dict, valor: int, rp: float) -> None:  # type: ignore[type-arg]
@@ -119,25 +123,34 @@ def step_ap_y_resultado_registrado(ctx: dict, valor: int, rp: float) -> None:  #
     asyncio.run(
         RegistrarAPHandler(es, sp, DisciplinaDescriptorAdapter()).handle(
             RegistrarAPCommand(
-                competencia_id=cid, participante_id=pid,
-                disciplina=disc, valor_ap=Decimal(str(valor)), unidad=UnidadMedida.Metros,
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=disc,
+                valor_ap=Decimal(str(valor)),
+                unidad=UnidadMedida.Metros,
             )
         )
     )
     asyncio.run(
         LlamarAtletaHandler(es, sp).handle(
             LlamarAtletaCommand(
-                competencia_id=cid, participante_id=pid,
-                disciplina=disc, ot_programado=OT, posicion_grilla=1,
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=disc,
+                ot_programado=OT,
+                posicion_grilla=1,
             )
         )
     )
     asyncio.run(
         RegistrarResultadoHandler(es, DisciplinaDescriptorAdapter()).handle(
             RegistrarResultadoCommand(
-                competencia_id=cid, participante_id=pid,
-                disciplina=disc, valor_rp=Decimal(str(rp)),
-                unidad=UnidadMedida.Metros, registrado_por="juez-001",
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=disc,
+                valor_rp=Decimal(str(rp)),
+                unidad=UnidadMedida.Metros,
+                registrado_por="juez-001",
             )
         )
     )
@@ -171,16 +184,22 @@ def step_performance_en_llamada(ctx: dict) -> None:  # type: ignore[type-arg]
     asyncio.run(
         RegistrarAPHandler(fresh_store, sp, DisciplinaDescriptorAdapter()).handle(
             RegistrarAPCommand(
-                competencia_id=cid, participante_id=pid,
-                disciplina=disc, valor_ap=Decimal("50"), unidad=UnidadMedida.Metros,
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=disc,
+                valor_ap=Decimal("50"),
+                unidad=UnidadMedida.Metros,
             )
         )
     )
     asyncio.run(
         LlamarAtletaHandler(fresh_store, sp).handle(
             LlamarAtletaCommand(
-                competencia_id=cid, participante_id=pid,
-                disciplina=disc, ot_programado=OT, posicion_grilla=1,
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=disc,
+                ot_programado=OT,
+                posicion_grilla=1,
             )
         )
     )
@@ -212,48 +231,32 @@ def _ejecutar_asignar_tarjeta(
         ctx["error"] = exc
 
 
-@when(
-    parsers.parse('el juez asigna tarjeta blanca sin motivo asignada_por="{juez}"')
-)
+@when(parsers.parse('el juez asigna tarjeta blanca sin motivo asignada_por="{juez}"'))
 def step_asignar_blanca(ctx: dict, juez: str) -> None:  # type: ignore[type-arg]
     _ejecutar_asignar_tarjeta(ctx, TipoTarjeta.Blanca, juez, None)
 
 
-@when(
-    parsers.parse(
-        'el juez asigna tarjeta amarilla con motivo="{motivo}" asignada_por="{juez}"'
-    )
-)
+@when(parsers.parse('el juez asigna tarjeta amarilla con motivo="{motivo}" asignada_por="{juez}"'))
 def step_asignar_amarilla_con_motivo(ctx: dict, motivo: str, juez: str) -> None:  # type: ignore[type-arg]
     _ejecutar_asignar_tarjeta(ctx, TipoTarjeta.Amarilla, juez, motivo)
 
 
-@when(
-    parsers.parse(
-        'el juez asigna tarjeta roja con motivo="{motivo}" asignada_por="{juez}"'
-    )
-)
+@when(parsers.parse('el juez asigna tarjeta roja con motivo="{motivo}" asignada_por="{juez}"'))
 def step_asignar_roja_con_motivo(ctx: dict, motivo: str, juez: str) -> None:  # type: ignore[type-arg]
     _ejecutar_asignar_tarjeta(ctx, TipoTarjeta.Roja, juez, motivo)
 
 
-@when(
-    parsers.parse('el juez intenta asignar tarjeta amarilla sin motivo asignada_por="{juez}"')
-)
+@when(parsers.parse('el juez intenta asignar tarjeta amarilla sin motivo asignada_por="{juez}"'))
 def step_intentar_amarilla_sin_motivo(ctx: dict, juez: str) -> None:  # type: ignore[type-arg]
     _ejecutar_asignar_tarjeta(ctx, TipoTarjeta.Amarilla, juez, None)
 
 
-@when(
-    parsers.parse('el juez intenta asignar tarjeta roja sin motivo asignada_por="{juez}"')
-)
+@when(parsers.parse('el juez intenta asignar tarjeta roja sin motivo asignada_por="{juez}"'))
 def step_intentar_roja_sin_motivo(ctx: dict, juez: str) -> None:  # type: ignore[type-arg]
     _ejecutar_asignar_tarjeta(ctx, TipoTarjeta.Roja, juez, None)
 
 
-@when(
-    parsers.parse('el juez intenta asignar tarjeta blanca sin motivo asignada_por="{juez}"')
-)
+@when(parsers.parse('el juez intenta asignar tarjeta blanca sin motivo asignada_por="{juez}"'))
 def step_intentar_blanca_estado_invalido(ctx: dict, juez: str) -> None:  # type: ignore[type-arg]
     _ejecutar_asignar_tarjeta(ctx, TipoTarjeta.Blanca, juez, None)
 
@@ -273,7 +276,7 @@ def step_estado_tarjeta(ctx: dict, estado: str) -> None:  # type: ignore[type-ar
     assert performance.estado == EstadoPerformance(estado)
 
 
-@then('el evento TarjetaAsignada persiste en el event stream')
+@then("el evento TarjetaAsignada persiste en el event stream")
 def step_evento_tarjeta_en_stream(ctx: dict) -> None:  # type: ignore[type-arg]
     stream_id = (
         f"performance-{ctx['competencia_id']}"
@@ -284,11 +287,7 @@ def step_evento_tarjeta_en_stream(ctx: dict) -> None:  # type: ignore[type-arg]
     assert any(e["event_type"] == "TarjetaAsignada" for e in events)
 
 
-@then(
-    parsers.parse(
-        'el evento contiene tipo="{tipo}", motivo=null y asignadaPor="{juez}"'
-    )
-)
+@then(parsers.parse('el evento contiene tipo="{tipo}", motivo=null y asignadaPor="{juez}"'))
 def step_payload_blanca_correcto(ctx: dict, tipo: str, juez: str) -> None:  # type: ignore[type-arg]
     stream_id = (
         f"performance-{ctx['competencia_id']}"
@@ -303,11 +302,7 @@ def step_payload_blanca_correcto(ctx: dict, tipo: str, juez: str) -> None:  # ty
     assert payload["asignada_por"] == juez
 
 
-@then(
-    parsers.parse(
-        'el evento contiene tipo="{tipo}", motivo="{motivo}" y asignadaPor="{juez}"'
-    )
-)
+@then(parsers.parse('el evento contiene tipo="{tipo}", motivo="{motivo}" y asignadaPor="{juez}"'))
 def step_payload_con_motivo_correcto(
     ctx: dict, tipo: str, motivo: str, juez: str  # type: ignore[type-arg]
 ) -> None:
@@ -332,9 +327,9 @@ def step_error_esperado_tarjeta(ctx: dict, error_type: str) -> None:  # type: ig
     }
     assert ctx["error"] is not None, "Se esperaba un error pero no hubo ninguno"
     expected = error_map[error_type]
-    assert isinstance(ctx["error"], expected), (
-        f"Error esperado: {error_type}, obtenido: {type(ctx['error']).__name__}"
-    )
+    assert isinstance(
+        ctx["error"], expected
+    ), f"Error esperado: {error_type}, obtenido: {type(ctx['error']).__name__}"
 
 
 @then(parsers.parse('la performance permanece en estado "{estado}"'))

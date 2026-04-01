@@ -1,4 +1,5 @@
 """Tests de integración — RegistrarResultadoHandler con SQLiteEventStore real."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -21,7 +22,10 @@ from competencia.domain.value_objects.estado_performance import EstadoPerformanc
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+
 OT = datetime(2026, 3, 22, 10, 30, 0)
 
 CREATE_EVENTS_TABLE = """
@@ -57,7 +61,11 @@ def stub() -> StubCompetenciaEstadoAdapter:
 def registrar_ap_handler(
     event_store: SQLiteEventStore, stub: StubCompetenciaEstadoAdapter
 ) -> RegistrarAPHandler:
-    return RegistrarAPHandler(event_store=event_store, competencia_estado=stub, disciplina_descriptor=DisciplinaDescriptorAdapter())
+    return RegistrarAPHandler(
+        event_store=event_store,
+        competencia_estado=stub,
+        disciplina_descriptor=DisciplinaDescriptorAdapter(),
+    )
 
 
 @pytest.fixture
@@ -69,7 +77,9 @@ def llamar_handler(
 
 @pytest.fixture
 def resultado_handler(event_store: SQLiteEventStore) -> RegistrarResultadoHandler:
-    return RegistrarResultadoHandler(event_store=event_store, disciplina_descriptor=DisciplinaDescriptorAdapter())
+    return RegistrarResultadoHandler(
+        event_store=event_store, disciplina_descriptor=DisciplinaDescriptorAdapter()
+    )
 
 
 # ── Flujo completo ────────────────────────────────────────────────────────────
@@ -143,21 +153,30 @@ async def test_resultado_persiste_payload_correcto(
 
     await registrar_ap_handler.handle(
         RegistrarAPCommand(
-            competencia_id=cid, participante_id=pid,
-            disciplina=Disciplina.DNF, valor_ap=Decimal("50"), unidad=UnidadMedida.Metros,
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.DNF,
+            valor_ap=Decimal("50"),
+            unidad=UnidadMedida.Metros,
         )
     )
     await llamar_handler.handle(
         LlamarAtletaCommand(
-            competencia_id=cid, participante_id=pid,
-            disciplina=Disciplina.DNF, ot_programado=OT, posicion_grilla=2,
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.DNF,
+            ot_programado=OT,
+            posicion_grilla=2,
         )
     )
     await resultado_handler.handle(
         RegistrarResultadoCommand(
-            competencia_id=cid, participante_id=pid,
-            disciplina=Disciplina.DNF, valor_rp=Decimal("48.3"),
-            unidad=UnidadMedida.Metros, registrado_por="juez-007",
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.DNF,
+            valor_rp=Decimal("48.3"),
+            unidad=UnidadMedida.Metros,
+            registrado_por="juez-007",
         )
     )
 
@@ -179,17 +198,23 @@ async def test_resultado_desde_anunciada_lanza_error(
 
     await registrar_ap_handler.handle(
         RegistrarAPCommand(
-            competencia_id=cid, participante_id=pid,
-            disciplina=Disciplina.DNF, valor_ap=Decimal("50"), unidad=UnidadMedida.Metros,
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.DNF,
+            valor_ap=Decimal("50"),
+            unidad=UnidadMedida.Metros,
         )
     )
 
     with pytest.raises(EstadoInvalidoParaRegistrarResultado):
         await resultado_handler.handle(
             RegistrarResultadoCommand(
-                competencia_id=cid, participante_id=pid,
-                disciplina=Disciplina.DNF, valor_rp=Decimal("50"),
-                unidad=UnidadMedida.Metros, registrado_por="juez-001",
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=Disciplina.DNF,
+                valor_rp=Decimal("50"),
+                unidad=UnidadMedida.Metros,
+                registrado_por="juez-001",
             )
         )
 
@@ -211,22 +236,30 @@ async def test_resultado_unidad_incompatible_lanza_error(
 
     await registrar_ap_handler.handle(
         RegistrarAPCommand(
-            competencia_id=cid, participante_id=pid,
-            disciplina=Disciplina.DNF, valor_ap=Decimal("50"), unidad=UnidadMedida.Metros,
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.DNF,
+            valor_ap=Decimal("50"),
+            unidad=UnidadMedida.Metros,
         )
     )
     await llamar_handler.handle(
         LlamarAtletaCommand(
-            competencia_id=cid, participante_id=pid,
-            disciplina=Disciplina.DNF, ot_programado=OT, posicion_grilla=1,
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.DNF,
+            ot_programado=OT,
+            posicion_grilla=1,
         )
     )
 
     with pytest.raises(UnidadIncompatible):
         await resultado_handler.handle(
             RegistrarResultadoCommand(
-                competencia_id=cid, participante_id=pid,
-                disciplina=Disciplina.DNF, valor_rp=Decimal("50"),
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=Disciplina.DNF,
+                valor_rp=Decimal("50"),
                 unidad=UnidadMedida.Segundos,  # incorrecto para DNF
                 registrado_por="juez-001",
             )

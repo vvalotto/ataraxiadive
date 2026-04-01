@@ -1,4 +1,5 @@
 """Tests de integración — AjustarGrillaHandler con SQLiteEventStore real."""
+
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
@@ -33,7 +34,9 @@ from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
 
 CREATE_EVENTS_TABLE = """
@@ -112,9 +115,7 @@ async def _seed_grilla(store: SQLiteEventStore) -> dict[str, UUID]:
 
 class TestAjustarGrillaIntegracion:
     @pytest.mark.asyncio
-    async def test_ajuste_persiste_evento_en_stream(
-        self, event_store: SQLiteEventStore
-    ) -> None:
+    async def test_ajuste_persiste_evento_en_stream(self, event_store: SQLiteEventStore) -> None:
         perf_ids = await _seed_grilla(event_store)
         p_a001 = perf_ids[A001]
 
@@ -182,9 +183,7 @@ class TestAjustarGrillaIntegracion:
         assert len(ajuste_events) == 2
 
     @pytest.mark.asyncio
-    async def test_sin_grilla_generada_lanza_excepcion(
-        self, event_store: SQLiteEventStore
-    ) -> None:
+    async def test_sin_grilla_generada_lanza_excepcion(self, event_store: SQLiteEventStore) -> None:
         handler_intervalo = ConfigurarIntervaloOTHandler(event_store)
         await handler_intervalo.handle(
             ConfigurarIntervaloOTCommand(

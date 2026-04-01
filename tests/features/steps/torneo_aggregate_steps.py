@@ -53,6 +53,7 @@ def ctx() -> dict[str, Any]:
 
 # ── Givens ────────────────────────────────────────────────────────────────────
 
+
 @given("un nombre inválido vacío")
 def nombre_vacio(ctx: dict[str, Any]) -> None:
     ctx["nombre"] = ""
@@ -112,6 +113,7 @@ def torneo_cancelado(ctx: dict[str, Any]) -> None:
 
 # ── Whens ─────────────────────────────────────────────────────────────────────
 
+
 @when("se instancia un Torneo con los datos válidos")
 def instanciar_torneo_valido(ctx: dict[str, Any]) -> None:
     ctx["torneo"] = _make_torneo()
@@ -136,7 +138,9 @@ def instanciar_con_fechas(ctx: dict[str, Any]) -> None:
         ctx["exc"] = exc
 
 
-@when("se ejecutan en secuencia abrir_inscripcion, cerrar_inscripcion, iniciar_ejecucion, iniciar_premiacion, cerrar")
+@when(
+    "se ejecutan en secuencia abrir_inscripcion, cerrar_inscripcion, iniciar_ejecucion, iniciar_premiacion, cerrar"
+)
 def ciclo_completo(ctx: dict[str, Any]) -> None:
     t = ctx["torneo"]
     t.abrir_inscripcion()
@@ -177,6 +181,7 @@ def llamar_abrir_inscripcion(ctx: dict[str, Any]) -> None:
 
 # ── Thens ─────────────────────────────────────────────────────────────────────
 
+
 @then(parsers.parse("el estado es {estado}"))
 def verificar_estado(estado: str, ctx: dict[str, Any]) -> None:
     assert ctx["torneo"].estado == EstadoTorneo(estado)
@@ -190,6 +195,7 @@ def verificar_estado_final(estado: str, ctx: dict[str, Any]) -> None:
 @then("el torneo_id es un UUID válido")
 def verificar_uuid(ctx: dict[str, Any]) -> None:
     from uuid import UUID
+
     assert isinstance(ctx["torneo"].torneo_id, UUID)
 
 

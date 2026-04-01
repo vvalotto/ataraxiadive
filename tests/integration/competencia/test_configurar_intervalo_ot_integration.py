@@ -1,4 +1,5 @@
 """Tests de integración — ConfigurarIntervaloOTHandler con SQLiteEventStore real."""
+
 from __future__ import annotations
 
 from uuid import UUID, uuid4
@@ -108,9 +109,7 @@ class TestConfigurarIntervaloOTIntegracion:
         assert c.intervalo.minutos == 10
 
     @pytest.mark.asyncio
-    async def test_stream_id_aislado_de_performance(
-        self, event_store: SQLiteEventStore
-    ) -> None:
+    async def test_stream_id_aislado_de_performance(self, event_store: SQLiteEventStore) -> None:
         """El stream competencia-* no interfiere con el stream performance-*."""
         handler = ConfigurarIntervaloOTHandler(event_store)
         await handler.handle(_command(9))
@@ -119,9 +118,7 @@ class TestConfigurarIntervaloOTIntegracion:
         assert len(performance_events) == 0
 
     @pytest.mark.asyncio
-    async def test_intervalo_invalido_no_persiste(
-        self, event_store: SQLiteEventStore
-    ) -> None:
+    async def test_intervalo_invalido_no_persiste(self, event_store: SQLiteEventStore) -> None:
         handler = ConfigurarIntervaloOTHandler(event_store)
         with pytest.raises(IntervaloInvalido):
             await handler.handle(_command(0))

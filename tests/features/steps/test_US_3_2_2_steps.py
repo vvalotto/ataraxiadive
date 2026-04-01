@@ -31,8 +31,15 @@ def client(context: dict[str, Any]) -> TestClient:
 
     importlib.reload(app_module)
     from app import app as fastapi_app
+    from identidad.api.dependencies import get_current_user
 
-    return TestClient(fastapi_app)
+    fastapi_app.dependency_overrides[get_current_user] = lambda: {
+        "sub": "test-user",
+        "email": "test@test.com",
+        "rol": "ATLETA",
+    }
+    yield TestClient(fastapi_app)
+    fastapi_app.dependency_overrides.clear()
 
 
 # ── Given ─────────────────────────────────────────────────────────────────────

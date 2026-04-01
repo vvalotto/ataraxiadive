@@ -1,4 +1,5 @@
 """Puerto PerformancesAPPort — consulta de performances con AP registrado."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -38,9 +39,7 @@ class PerformancesAPPort(ABC):
     """
 
     @abstractmethod
-    async def get_performances_con_ap(
-        self, competencia_id: UUID
-    ) -> list[PerformancesAPData]:
+    async def get_performances_con_ap(self, competencia_id: UUID) -> list[PerformancesAPData]:
         """Retorna todas las performances en estado AnunciadaAP para la competencia.
 
         Solo se incluyen performances que tienen un APRegistrado y no han

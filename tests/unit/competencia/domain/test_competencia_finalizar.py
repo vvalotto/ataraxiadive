@@ -1,4 +1,5 @@
 """Tests unitarios de Competencia.finalizar() — US-2.4.1 / INV-C-04."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -11,7 +12,6 @@ from competencia.domain.events.competencia_finalizada import CompetenciaFinaliza
 from competencia.domain.exceptions import CompetenciaNoFinalizable
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_competencia import EstadoCompetencia
-
 
 _CID = uuid4()
 _DISC = Disciplina.STA
@@ -134,8 +134,6 @@ def test_reconstitute_aplica_competencia_finalizada() -> None:
             },
         },
     ]
-    competencia = Competencia.reconstitute(
-        competencia_id=_CID, disciplina=_DISC, events=events
-    )
+    competencia = Competencia.reconstitute(competencia_id=_CID, disciplina=_DISC, events=events)
 
     assert competencia.estado == EstadoCompetencia.Finalizada

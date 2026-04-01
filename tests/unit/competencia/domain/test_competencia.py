@@ -1,4 +1,5 @@
 """Tests unitarios del aggregate Competencia — US-2.1.1."""
+
 from __future__ import annotations
 
 from uuid import UUID, uuid4

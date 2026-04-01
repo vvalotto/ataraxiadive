@@ -1,4 +1,5 @@
 """Tests unitarios de Competencia.generar_grilla() — US-2.1.2."""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone, timedelta
@@ -143,7 +144,7 @@ class TestOrdenamientoDNF:
         c = _make_competencia(Disciplina.DNF)
         performances = [
             _dnf(A001, "80"),
-            _dnf(A002, "60"),   # menor — debe ir primero
+            _dnf(A002, "60"),  # menor — debe ir primero
             _dnf(A003, "100"),  # mayor — debe ir último
         ]
         c.generar_grilla(OT_INICIO, performances, _DESC_DNF)

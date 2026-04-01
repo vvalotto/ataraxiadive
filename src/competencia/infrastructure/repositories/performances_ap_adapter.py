@@ -1,4 +1,5 @@
 """Adaptador PerformancesAPAdapter — implementación de PerformancesAPPort sobre Event Store."""
+
 from __future__ import annotations
 
 from uuid import UUID
@@ -25,9 +26,7 @@ class PerformancesAPAdapter(PerformancesAPPort):
     def __init__(self, event_store: EventStorePort) -> None:
         self._event_store = event_store
 
-    async def get_performances_con_ap(
-        self, competencia_id: UUID
-    ) -> list[PerformancesAPData]:
+    async def get_performances_con_ap(self, competencia_id: UUID) -> list[PerformancesAPData]:
         """Retorna las performances en estado AnunciadaAP para la competencia.
 
         Args:

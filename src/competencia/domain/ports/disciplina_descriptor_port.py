@@ -1,4 +1,5 @@
 """Port DisciplinaDescriptorPort — abstracción para consultar el descriptor de una disciplina."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

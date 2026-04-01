@@ -1,4 +1,5 @@
 """Tests unitarios de DisciplinaDescriptor VO — US-2.2.1."""
+
 from __future__ import annotations
 
 import pytest
@@ -22,14 +23,17 @@ class TestDescriptorSTA:
         assert d.disciplina == Disciplina.STA
 
 
-@pytest.mark.parametrize("disciplina", [
-    Disciplina.DNF,
-    Disciplina.DYN,
-    Disciplina.DYNB,
-    Disciplina.CNF,
-    Disciplina.CWT,
-    Disciplina.FIM,
-])
+@pytest.mark.parametrize(
+    "disciplina",
+    [
+        Disciplina.DNF,
+        Disciplina.DYN,
+        Disciplina.DYNB,
+        Disciplina.CNF,
+        Disciplina.CWT,
+        Disciplina.FIM,
+    ],
+)
 class TestDescriptorDistancia:
     def test_unidad_es_metros(self, disciplina: Disciplina) -> None:
         d = DisciplinaDescriptor.para(disciplina)

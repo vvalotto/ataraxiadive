@@ -1,4 +1,5 @@
 """AtaraxiaDive — FastAPI application entry point (composition root)."""
+
 import os
 from typing import Awaitable, Callable
 from uuid import UUID
@@ -62,10 +63,12 @@ def build_on_finalizada_callback(
         acl = ResultadosCompetenciaAdapter(competencia_event_store)
         descriptor = DisciplinaDescriptorAdapter()
         handler = CalcularRankingHandler(ranking_store, acl, descriptor)
-        await handler.handle(CalcularRankingCommand(
-            competencia_id=competencia_id,
-            disciplina=disciplina,
-        ))
+        await handler.handle(
+            CalcularRankingCommand(
+                competencia_id=competencia_id,
+                disciplina=disciplina,
+            )
+        )
 
     return _on_finalizada
 

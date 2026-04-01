@@ -1,4 +1,5 @@
 """Adaptador ResultadosCompetenciaAdapter — ACL que lee resultados de BC Competencia."""
+
 from __future__ import annotations
 
 from uuid import UUID
@@ -62,12 +63,14 @@ class ResultadosCompetenciaAdapter(ResultadosCompetenciaPort):
             tarjeta = performance.tarjeta.value if performance.tarjeta is not None else None
             unidad = performance.ap.unidad.value if performance.ap is not None else None
 
-            resultados.append(ResultadoFinal(
-                atleta_id=performance.participante_id,
-                rp=performance.rp if not es_dns else None,
-                unidad=unidad if not es_dns else None,
-                tarjeta=tarjeta,
-                es_dns=es_dns,
-            ))
+            resultados.append(
+                ResultadoFinal(
+                    atleta_id=performance.participante_id,
+                    rp=performance.rp if not es_dns else None,
+                    unidad=unidad if not es_dns else None,
+                    tarjeta=tarjeta,
+                    es_dns=es_dns,
+                )
+            )
 
         return resultados

@@ -1,4 +1,5 @@
 """Tests unitarios del AjustarGrillaHandler — US-2.1.3."""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone, timedelta
@@ -42,8 +43,20 @@ _GRILLA_GENERADA_EVENT = {
         "disciplina": "STA",
         "ot_inicio": OT_INICIO.isoformat(),
         "performances": [
-            {"performance_id": str(P_A002), "atleta_id": str(A002), "posicion": 1, "andarivel": 1, "ot_programado": OT_INICIO.isoformat()},
-            {"performance_id": str(P_A001), "atleta_id": str(A001), "posicion": 2, "andarivel": 1, "ot_programado": (OT_INICIO + timedelta(minutes=9)).isoformat()},
+            {
+                "performance_id": str(P_A002),
+                "atleta_id": str(A002),
+                "posicion": 1,
+                "andarivel": 1,
+                "ot_programado": OT_INICIO.isoformat(),
+            },
+            {
+                "performance_id": str(P_A001),
+                "atleta_id": str(A001),
+                "posicion": 2,
+                "andarivel": 1,
+                "ot_programado": (OT_INICIO + timedelta(minutes=9)).isoformat(),
+            },
         ],
         "generada_en": OT_INICIO.isoformat(),
         "occurred_at": OT_INICIO.isoformat(),

@@ -3,6 +3,7 @@
 Usa SQLite síncrono para las migraciones (el driver async aiosqlite
 es exclusivo del código de aplicación en runtime).
 """
+
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool

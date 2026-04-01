@@ -1,4 +1,5 @@
 """Tests de integración — AsignarTarjetaHandler con SQLiteEventStore real."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -29,7 +30,10 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+
 OT = datetime(2026, 3, 22, 10, 30, 0)
 
 CREATE_EVENTS_TABLE = """
@@ -65,7 +69,11 @@ def stub() -> StubCompetenciaEstadoAdapter:
 def registrar_ap_handler(
     event_store: SQLiteEventStore, stub: StubCompetenciaEstadoAdapter
 ) -> RegistrarAPHandler:
-    return RegistrarAPHandler(event_store=event_store, competencia_estado=stub, disciplina_descriptor=DisciplinaDescriptorAdapter())
+    return RegistrarAPHandler(
+        event_store=event_store,
+        competencia_estado=stub,
+        disciplina_descriptor=DisciplinaDescriptorAdapter(),
+    )
 
 
 @pytest.fixture
@@ -77,7 +85,9 @@ def llamar_handler(
 
 @pytest.fixture
 def resultado_handler(event_store: SQLiteEventStore) -> RegistrarResultadoHandler:
-    return RegistrarResultadoHandler(event_store=event_store, disciplina_descriptor=DisciplinaDescriptorAdapter())
+    return RegistrarResultadoHandler(
+        event_store=event_store, disciplina_descriptor=DisciplinaDescriptorAdapter()
+    )
 
 
 @pytest.fixture
@@ -209,22 +219,31 @@ async def test_asignar_tarjeta_desde_llamada_lanza_error(
 
     await registrar_ap_handler.handle(
         RegistrarAPCommand(
-            competencia_id=cid, participante_id=pid,
-            disciplina=Disciplina.DNF, valor_ap=Decimal("50"), unidad=UnidadMedida.Metros,
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.DNF,
+            valor_ap=Decimal("50"),
+            unidad=UnidadMedida.Metros,
         )
     )
     await llamar_handler.handle(
         LlamarAtletaCommand(
-            competencia_id=cid, participante_id=pid,
-            disciplina=Disciplina.DNF, ot_programado=OT, posicion_grilla=1,
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.DNF,
+            ot_programado=OT,
+            posicion_grilla=1,
         )
     )
 
     with pytest.raises(EstadoInvalidoParaAsignarTarjeta):
         await tarjeta_handler.handle(
             AsignarTarjetaCommand(
-                competencia_id=cid, participante_id=pid,
-                disciplina=Disciplina.DNF, tipo=TipoTarjeta.Blanca, asignada_por="juez-001",
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=Disciplina.DNF,
+                tipo=TipoTarjeta.Blanca,
+                asignada_por="juez-001",
             )
         )
 
@@ -249,8 +268,11 @@ async def test_tarjeta_amarilla_sin_motivo_lanza_error(
     with pytest.raises(MotivoObligatorio):
         await tarjeta_handler.handle(
             AsignarTarjetaCommand(
-                competencia_id=cid, participante_id=pid,
-                disciplina=Disciplina.DNF, tipo=TipoTarjeta.Amarilla, asignada_por="juez-001",
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=Disciplina.DNF,
+                tipo=TipoTarjeta.Amarilla,
+                asignada_por="juez-001",
             )
         )
 
@@ -277,9 +299,12 @@ async def test_blackout_persiste_y_reconstitye_distancia(
     )
     await tarjeta_handler.handle(
         AsignarTarjetaCommand(
-            competencia_id=cid, participante_id=pid,
-            disciplina=Disciplina.DNF, tipo=TipoTarjeta.Roja,
-            asignada_por="juez-001", motivo="black-out",
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.DNF,
+            tipo=TipoTarjeta.Roja,
+            asignada_por="juez-001",
+            motivo="black-out",
             distancia_blackout=Decimal("45.5"),
         )
     )
@@ -313,8 +338,11 @@ async def test_blackout_sin_distancia_rechazado_en_integracion(
     with pytest.raises(DistanciaBlackoutObligatoria):
         await tarjeta_handler.handle(
             AsignarTarjetaCommand(
-                competencia_id=cid, participante_id=pid,
-                disciplina=Disciplina.DNF, tipo=TipoTarjeta.Roja,
-                asignada_por="juez-001", motivo="black-out",
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=Disciplina.DNF,
+                tipo=TipoTarjeta.Roja,
+                asignada_por="juez-001",
+                motivo="black-out",
             )
         )

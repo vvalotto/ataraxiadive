@@ -1,4 +1,5 @@
 """Step definitions BDD — US-3.1.2: API REST Torneo — CRUD + transiciones de fase."""
+
 from __future__ import annotations
 
 import tempfile
@@ -14,6 +15,7 @@ scenarios("../US-3.1.2-api-rest-torneo.feature")
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
 
+
 @pytest.fixture
 def context(tmp_path: Any, monkeypatch: Any) -> dict[str, Any]:
     db_path = str(tmp_path / "torneo_test.db")
@@ -25,9 +27,18 @@ def context(tmp_path: Any, monkeypatch: Any) -> dict[str, Any]:
 def client(context: dict[str, Any]) -> TestClient:
     import importlib
     import app as app_module
+
     importlib.reload(app_module)
     from app import app as fastapi_app
-    return TestClient(fastapi_app)
+    from identidad.api.dependencies import get_current_user
+
+    fastapi_app.dependency_overrides[get_current_user] = lambda: {
+        "sub": "test-user",
+        "email": "test@test.com",
+        "rol": "ORGANIZADOR",
+    }
+    yield TestClient(fastapi_app)
+    fastapi_app.dependency_overrides.clear()
 
 
 def _payload(**overrides: Any) -> dict[str, Any]:
@@ -45,12 +56,14 @@ def _payload(**overrides: Any) -> dict[str, Any]:
 
 # ── Background ────────────────────────────────────────────────────────────────
 
+
 @given("la base de datos de torneos está limpia")
 def base_datos_limpia(context: dict[str, Any]) -> None:
     pass  # tmp_path garantiza DB nueva por test
 
 
 # ── Scenario: crear torneo exitosamente ──────────────────────────────────────
+
 
 @given("un payload válido con nombre, fechas, sede y entidad organizadora")
 def payload_valido(context: dict[str, Any]) -> None:
@@ -78,6 +91,7 @@ def get_torneo_estado_creado(client: TestClient, context: dict[str, Any]) -> Non
 
 # ── Scenario: crear torneo con fecha_fin anterior a fecha_inicio ──────────────
 
+
 @given("un payload con fecha_fin anterior a fecha_inicio")
 def payload_fechas_invalidas(context: dict[str, Any]) -> None:
     context["payload"] = _payload(fecha_inicio="2026-06-10", fecha_fin="2026-06-01")
@@ -90,12 +104,14 @@ def respuesta_422(context: dict[str, Any]) -> None:
 
 # ── Scenario: crear torneo con nombre vacío ───────────────────────────────────
 
+
 @given("un payload con nombre vacío")
 def payload_nombre_vacio(context: dict[str, Any]) -> None:
     context["payload"] = _payload(nombre="")
 
 
 # ── Scenario: ciclo completo de transiciones ─────────────────────────────────
+
 
 @given("un torneo creado con estado CREADO")
 def torneo_creado(client: TestClient, context: dict[str, Any]) -> None:
@@ -127,6 +143,7 @@ def estado_final(client: TestClient, context: dict[str, Any], estado: str) -> No
 
 # ── Scenario: retroceso ejecución → preparación ───────────────────────────────
 
+
 @given("un torneo en estado EJECUCION")
 def torneo_en_ejecucion(client: TestClient, context: dict[str, Any]) -> None:
     r = client.post("/torneos", json=_payload())
@@ -154,6 +171,7 @@ def estado_del_torneo(client: TestClient, context: dict[str, Any], estado: str) 
 
 # ── Scenario: transición inválida ─────────────────────────────────────────────
 
+
 @when("PUT /torneos/{torneo_id}/iniciar-ejecucion")
 def put_iniciar_ejecucion(client: TestClient, context: dict[str, Any]) -> None:
     context["response"] = client.put(f"/torneos/{context['torneo_id']}/iniciar-ejecucion")
@@ -173,6 +191,7 @@ def mensaje_transicion(context: dict[str, Any]) -> None:
 
 # ── Scenario: cancelar torneo ─────────────────────────────────────────────────
 
+
 @given("un torneo en estado INSCRIPCION_ABIERTA")
 def torneo_inscripcion_abierta(client: TestClient, context: dict[str, Any]) -> None:
     r = client.post("/torneos", json=_payload())
@@ -187,6 +206,7 @@ def put_cancelar(client: TestClient, context: dict[str, Any]) -> None:
 
 
 # ── Scenario: torneo inexistente ──────────────────────────────────────────────
+
 
 @given("un UUID que no existe en la base de datos")
 def uuid_inexistente(context: dict[str, Any]) -> None:
@@ -204,6 +224,7 @@ def respuesta_404(context: dict[str, Any]) -> None:
 
 
 # ── Scenario: listar torneos ──────────────────────────────────────────────────
+
 
 @given("3 torneos creados")
 def tres_torneos_creados(client: TestClient, context: dict[str, Any]) -> None:
@@ -225,6 +246,7 @@ def respuesta_lista(context: dict[str, Any], n: int) -> None:
 
 # ── Scenario: respuesta completa ──────────────────────────────────────────────
 
+
 @given("un torneo creado con todos sus campos")
 def torneo_campos_completos(client: TestClient, context: dict[str, Any]) -> None:
     r = client.post("/torneos", json=_payload())
@@ -237,12 +259,22 @@ def get_torneo_campos(client: TestClient, context: dict[str, Any]) -> None:
     context["response"] = client.get(f"/torneos/{context['torneo_id']}")
 
 
-@then("la respuesta contiene torneo_id, nombre, descripcion, fechas, sede, entidad_organizadora y estado")
+@then(
+    "la respuesta contiene torneo_id, nombre, descripcion, fechas, sede, entidad_organizadora y estado"
+)
 def respuesta_campos_completos(context: dict[str, Any]) -> None:
     data = context["response"].json()
     assert context["response"].status_code == 200
-    for field in ("torneo_id", "nombre", "descripcion", "fecha_inicio", "fecha_fin",
-                  "sede", "entidad_organizadora", "estado"):
+    for field in (
+        "torneo_id",
+        "nombre",
+        "descripcion",
+        "fecha_inicio",
+        "fecha_fin",
+        "sede",
+        "entidad_organizadora",
+        "estado",
+    ):
         assert field in data, f"Falta campo: {field}"
     assert "ciudad" in data["sede"]
     assert "tipo" in data["entidad_organizadora"]

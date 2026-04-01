@@ -1,4 +1,5 @@
 """Commands del BC Competencia."""
+
 from competencia.application.commands.asignar_tarjeta import (
     AsignarTarjetaCommand,
     AsignarTarjetaHandler,
