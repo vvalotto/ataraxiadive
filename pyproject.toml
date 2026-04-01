@@ -108,7 +108,8 @@ max_cbo = 25
 # US-1.2.3: WMC=21. US-1.2.4: asignar_tarjeta() → WMC=27. Sube a 36 para US-1.2.4-1.2.6 completo.
 # US-2.1.3: ajustar_grilla() agrega lógica de swap → Competencia WMC=50. US-2.1.4 agregará ~6 más.
 # INC-3.1/3.2: Torneo/Atleta/Usuario son simples — WMC <30 por aggregate. Sin cambio.
-max_wmc = 60
+# INC-3.3: torneo_id + _apply_intervalo_ot_configurado → Competencia WMC=64. Sube a 65.
+max_wmc = 65
 # GodObject: Performance.py crece con el aggregate principal del dominio (patron DDD aceptado).
 # US-1.2.5: 310 líneas. US-2.1.1+US-2.1.2: 459 líneas (Competencia + ConfigurarIntervaloOT + GrillaDeSalida).
 # SP2 cierre: Competencia.py = 523 líneas. SP3/INC-3.3 agrega torneo_id (~10 líneas) → estimado ~535.
