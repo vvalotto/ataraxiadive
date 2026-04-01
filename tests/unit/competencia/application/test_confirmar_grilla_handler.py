@@ -1,4 +1,5 @@
 """Tests unitarios de ConfirmarGrillaHandler — US-2.1.4."""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone

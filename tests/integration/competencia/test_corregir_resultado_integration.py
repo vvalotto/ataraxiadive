@@ -1,4 +1,5 @@
 """Tests de integración — CorregirResultadoHandler con SQLiteEventStore real."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -8,11 +9,20 @@ from uuid import uuid4
 import aiosqlite
 import pytest
 
-from competencia.application.commands.asignar_tarjeta import AsignarTarjetaCommand, AsignarTarjetaHandler
-from competencia.application.commands.corregir_resultado import CorregirResultadoCommand, CorregirResultadoHandler
+from competencia.application.commands.asignar_tarjeta import (
+    AsignarTarjetaCommand,
+    AsignarTarjetaHandler,
+)
+from competencia.application.commands.corregir_resultado import (
+    CorregirResultadoCommand,
+    CorregirResultadoHandler,
+)
 from competencia.application.commands.llamar_atleta import LlamarAtletaCommand, LlamarAtletaHandler
 from competencia.application.commands.registrar_ap import RegistrarAPCommand, RegistrarAPHandler
-from competencia.application.commands.registrar_resultado import RegistrarResultadoCommand, RegistrarResultadoHandler
+from competencia.application.commands.registrar_resultado import (
+    RegistrarResultadoCommand,
+    RegistrarResultadoHandler,
+)
 from competencia.domain.aggregates.performance import Performance
 from competencia.domain.exceptions import EstadoInvalidoParaCorregirResultado, MotivoObligatorio
 from competencia.domain.value_objects.disciplina import Disciplina
@@ -21,7 +31,10 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+
 OT = datetime(2026, 3, 23, 10, 30, 0)
 
 CREATE_EVENTS_TABLE = """
@@ -57,7 +70,11 @@ def stub() -> StubCompetenciaEstadoAdapter:
 def registrar_ap_handler(
     event_store: SQLiteEventStore, stub: StubCompetenciaEstadoAdapter
 ) -> RegistrarAPHandler:
-    return RegistrarAPHandler(event_store=event_store, competencia_estado=stub, disciplina_descriptor=DisciplinaDescriptorAdapter())
+    return RegistrarAPHandler(
+        event_store=event_store,
+        competencia_estado=stub,
+        disciplina_descriptor=DisciplinaDescriptorAdapter(),
+    )
 
 
 @pytest.fixture
@@ -69,7 +86,9 @@ def llamar_handler(
 
 @pytest.fixture
 def registrar_resultado_handler(event_store: SQLiteEventStore) -> RegistrarResultadoHandler:
-    return RegistrarResultadoHandler(event_store=event_store, disciplina_descriptor=DisciplinaDescriptorAdapter())
+    return RegistrarResultadoHandler(
+        event_store=event_store, disciplina_descriptor=DisciplinaDescriptorAdapter()
+    )
 
 
 @pytest.fixture
@@ -146,8 +165,12 @@ async def test_flujo_completo_hasta_correccion(
     pid = uuid4()
 
     await _setup_performance_en_ejecutada(
-        registrar_ap_handler, llamar_handler,
-        registrar_resultado_handler, asignar_tarjeta_handler, cid, pid
+        registrar_ap_handler,
+        llamar_handler,
+        registrar_resultado_handler,
+        asignar_tarjeta_handler,
+        cid,
+        pid,
     )
 
     await corregir_resultado_handler.handle(
@@ -185,8 +208,12 @@ async def test_correccion_payload_correcto(
     pid = uuid4()
 
     await _setup_performance_en_ejecutada(
-        registrar_ap_handler, llamar_handler,
-        registrar_resultado_handler, asignar_tarjeta_handler, cid, pid
+        registrar_ap_handler,
+        llamar_handler,
+        registrar_resultado_handler,
+        asignar_tarjeta_handler,
+        cid,
+        pid,
     )
 
     await corregir_resultado_handler.handle(
@@ -257,8 +284,12 @@ async def test_correccion_sin_motivo_lanza_error(
     pid = uuid4()
 
     await _setup_performance_en_ejecutada(
-        registrar_ap_handler, llamar_handler,
-        registrar_resultado_handler, asignar_tarjeta_handler, cid, pid
+        registrar_ap_handler,
+        llamar_handler,
+        registrar_resultado_handler,
+        asignar_tarjeta_handler,
+        cid,
+        pid,
     )
 
     with pytest.raises(MotivoObligatorio):

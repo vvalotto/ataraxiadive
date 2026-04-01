@@ -1,4 +1,5 @@
 """Tests unitarios de exception_handlers — mapeo DomainError → RFC 7807 (ADR-012, ADR-013)."""
+
 from __future__ import annotations
 
 import pytest

@@ -1,4 +1,5 @@
 """Tests unitarios — domain Usuario + exceptions (sin I/O)."""
+
 from __future__ import annotations
 
 import uuid
@@ -16,8 +17,8 @@ from identidad.domain.exceptions import (
 )
 from identidad.domain.value_objects.rol import Rol
 
-
 # ── Rol ───────────────────────────────────────────────────────────────────────
+
 
 def test_rol_valores_validos() -> None:
     assert Rol.ORGANIZADOR == "ORGANIZADOR"
@@ -31,6 +32,7 @@ def test_rol_es_str_enum() -> None:
 
 
 # ── Usuario ───────────────────────────────────────────────────────────────────
+
 
 def test_usuario_creacion_basica() -> None:
     uid = uuid.uuid4()
@@ -68,6 +70,7 @@ def test_usuario_puede_estar_inactivo() -> None:
 
 
 # ── Exceptions ────────────────────────────────────────────────────────────────
+
 
 def test_email_ya_registrado_mensaje() -> None:
     exc = EmailYaRegistrado("dup@test.com")

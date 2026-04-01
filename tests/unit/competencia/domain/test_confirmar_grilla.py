@@ -1,4 +1,5 @@
 """Tests unitarios de Competencia.confirmar_grilla() e iniciar_competencia() — US-2.1.4."""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone
@@ -153,10 +154,7 @@ def test_competencia_iniciada_payload_tiene_campos_correctos() -> None:
 def test_reconstitution_restaura_estado_confirmada() -> None:
     c = _make_competencia_con_grilla()
     c.confirmar_grilla()
-    eventos_raw = [
-        {"event_type": e.event_type, "payload": e.to_payload()}
-        for e in c.pull_events()
-    ]
+    eventos_raw = [{"event_type": e.event_type, "payload": e.to_payload()} for e in c.pull_events()]
     c2 = Competencia.reconstitute(
         competencia_id=COMPETENCIA_ID,
         disciplina=Disciplina.STA,

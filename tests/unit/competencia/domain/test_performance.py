@@ -1,4 +1,5 @@
 """Tests unitarios del aggregate Performance — US-1.2.1 a US-1.4.1."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -264,8 +265,7 @@ def test_reconstitute_con_atleta_llamado_restaura_estado_llamada() -> None:
     llamar_events = p.pull_events()
 
     raw = [
-        {"event_type": e.event_type, "payload": e.to_payload()}
-        for e in ap_events + llamar_events
+        {"event_type": e.event_type, "payload": e.to_payload()} for e in ap_events + llamar_events
     ]
     restored = Performance.reconstitute(raw)
 
@@ -779,9 +779,7 @@ def test_corregir_resultado_desde_anunciada_lanza_excepcion(
     performance.pull_events()
 
     with pytest.raises(EstadoInvalidoParaCorregirResultado):
-        performance.corregir_resultado(
-            Decimal("90.0"), UnidadMedida.Metros, "juez-001", "motivo"
-        )
+        performance.corregir_resultado(Decimal("90.0"), UnidadMedida.Metros, "juez-001", "motivo")
 
 
 def test_corregir_resultado_desde_llamada_lanza_excepcion(
@@ -794,9 +792,7 @@ def test_corregir_resultado_desde_llamada_lanza_excepcion(
     performance.pull_events()
 
     with pytest.raises(EstadoInvalidoParaCorregirResultado):
-        performance.corregir_resultado(
-            Decimal("90.0"), UnidadMedida.Metros, "juez-001", "motivo"
-        )
+        performance.corregir_resultado(Decimal("90.0"), UnidadMedida.Metros, "juez-001", "motivo")
 
 
 def test_corregir_resultado_desde_dns_lanza_excepcion(
@@ -811,9 +807,7 @@ def test_corregir_resultado_desde_dns_lanza_excepcion(
     performance.pull_events()
 
     with pytest.raises(EstadoInvalidoParaCorregirResultado):
-        performance.corregir_resultado(
-            Decimal("90.0"), UnidadMedida.Metros, "juez-001", "motivo"
-        )
+        performance.corregir_resultado(Decimal("90.0"), UnidadMedida.Metros, "juez-001", "motivo")
 
 
 def test_corregir_resultado_sin_motivo_lanza_excepcion(
@@ -834,9 +828,7 @@ def test_corregir_resultado_estado_invalido_no_emite_eventos(
     performance.pull_events()
 
     with pytest.raises(EstadoInvalidoParaCorregirResultado):
-        performance.corregir_resultado(
-            Decimal("90.0"), UnidadMedida.Metros, "juez-001", "motivo"
-        )
+        performance.corregir_resultado(Decimal("90.0"), UnidadMedida.Metros, "juez-001", "motivo")
 
     assert performance.pull_events() == []
 
@@ -907,9 +899,7 @@ def test_blackout_sin_distancia_lanza_excepcion(
 ) -> None:
     """Black-out sin distancia_blackout lanza DistanciaBlackoutObligatoria (RF-EJ-07)."""
     with pytest.raises(DistanciaBlackoutObligatoria):
-        performance_con_resultado.asignar_tarjeta(
-            TipoTarjeta.Roja, "juez-001", motivo="black-out"
-        )
+        performance_con_resultado.asignar_tarjeta(TipoTarjeta.Roja, "juez-001", motivo="black-out")
 
 
 def test_blackout_con_distancia_cero_lanza_excepcion(
@@ -927,9 +917,7 @@ def test_blackout_no_emite_eventos_si_falla(
 ) -> None:
     """Black-out inválido no emite eventos."""
     with pytest.raises(DistanciaBlackoutObligatoria):
-        performance_con_resultado.asignar_tarjeta(
-            TipoTarjeta.Roja, "juez-001", motivo="black-out"
-        )
+        performance_con_resultado.asignar_tarjeta(TipoTarjeta.Roja, "juez-001", motivo="black-out")
     assert performance_con_resultado.pull_events() == []
 
 
@@ -953,7 +941,11 @@ def test_reconstitute_con_blackout_restaura_distancia(
     performance_con_resultado.asignar_tarjeta(
         TipoTarjeta.Roja, "juez-001", motivo="black-out", distancia_blackout=Decimal("38.2")
     )
-    ap_evs = performance_con_resultado._events[:-1] if hasattr(performance_con_resultado, '_events') else []
+    ap_evs = (
+        performance_con_resultado._events[:-1]
+        if hasattr(performance_con_resultado, "_events")
+        else []
+    )
     tarjeta_evs = performance_con_resultado.pull_events()
 
     # Reconstituir desde cero usando reconstitute

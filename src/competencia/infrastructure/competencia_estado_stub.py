@@ -5,6 +5,7 @@ retornando siempre False (plazo activo, grilla no confirmada).
 
 Se reemplaza en SP2 con la implementación real que lee el stream de Competencia.
 """
+
 from __future__ import annotations
 
 from uuid import UUID
@@ -24,15 +25,11 @@ class StubCompetenciaEstadoAdapter(CompetenciaEstadoPort):
     Se reemplaza en SP2 con la implementación real.
     """
 
-    async def is_plazo_vencido(
-        self, competencia_id: UUID, disciplina: Disciplina
-    ) -> bool:
+    async def is_plazo_vencido(self, competencia_id: UUID, disciplina: Disciplina) -> bool:
         """SP1 stub: plazo siempre activo."""
         return False
 
-    async def is_grilla_confirmada(
-        self, competencia_id: UUID, disciplina: Disciplina
-    ) -> bool:
+    async def is_grilla_confirmada(self, competencia_id: UUID, disciplina: Disciplina) -> bool:
         """SP1 stub: grilla nunca confirmada."""
         return False
 

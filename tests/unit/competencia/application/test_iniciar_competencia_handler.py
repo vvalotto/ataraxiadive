@@ -1,4 +1,5 @@
 """Tests unitarios de IniciarCompetenciaHandler — US-2.1.4."""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone
@@ -85,9 +86,7 @@ def _stream_confirmada() -> list[dict[str, Any]]:
 async def test_handler_persiste_competencia_iniciada() -> None:
     store = FakeEventStore(_stream_confirmada())
     handler = IniciarCompetenciaHandler(store)
-    await handler.handle(
-        IniciarCompetenciaCommand(COMPETENCIA_ID, Disciplina.STA, "juez-01")
-    )
+    await handler.handle(IniciarCompetenciaCommand(COMPETENCIA_ID, Disciplina.STA, "juez-01"))
     assert len(store.appended) == 1
     assert store.appended[0]["event_type"] == "CompetenciaIniciada"
     assert store.appended[0]["payload"]["juez_id"] == "juez-01"
@@ -98,9 +97,7 @@ async def test_handler_sin_confirmar_lanza_competencia_no_confirmada() -> None:
     store = FakeEventStore([])  # stream vacío → estado Preparacion
     handler = IniciarCompetenciaHandler(store)
     with pytest.raises(CompetenciaNoConfirmada):
-        await handler.handle(
-            IniciarCompetenciaCommand(COMPETENCIA_ID, Disciplina.STA, "juez-01")
-        )
+        await handler.handle(IniciarCompetenciaCommand(COMPETENCIA_ID, Disciplina.STA, "juez-01"))
 
 
 @pytest.mark.asyncio
@@ -110,6 +107,4 @@ async def test_handler_con_grilla_generada_pero_no_confirmada_lanza_error() -> N
     store = FakeEventStore(stream)
     handler = IniciarCompetenciaHandler(store)
     with pytest.raises(CompetenciaNoConfirmada):
-        await handler.handle(
-            IniciarCompetenciaCommand(COMPETENCIA_ID, Disciplina.STA, "juez-01")
-        )
+        await handler.handle(IniciarCompetenciaCommand(COMPETENCIA_ID, Disciplina.STA, "juez-01"))

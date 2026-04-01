@@ -3,6 +3,7 @@
 pytest-bdd no soporta async steps nativamente. Los steps que requieren
 operaciones async usan asyncio.run() como wrapper síncrono.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -172,6 +173,7 @@ def entonces_estado_preparacion(context: dict) -> None:
     stream_id = _build_stream_id(context["competencia_id"])
     events = asyncio.run(context["event_store"].load(stream_id))
     from competencia.domain.aggregates.competencia import Competencia
+
     c = Competencia.reconstitute(context["competencia_id"], context["disciplina"], events)
     assert c.estado == EstadoCompetencia.Preparacion
 
@@ -186,6 +188,7 @@ def entonces_intervalo_activo(context: dict, minutos: int) -> None:
     stream_id = _build_stream_id(context["competencia_id"])
     events = asyncio.run(context["event_store"].load(stream_id))
     from competencia.domain.aggregates.competencia import Competencia
+
     c = Competencia.reconstitute(context["competencia_id"], context["disciplina"], events)
     assert c.intervalo is not None
     assert c.intervalo.minutos == minutos

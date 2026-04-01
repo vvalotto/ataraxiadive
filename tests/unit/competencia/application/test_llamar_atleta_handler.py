@@ -1,4 +1,5 @@
 """Tests unitarios del LlamarAtletaHandler — US-1.2.2."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -29,6 +30,7 @@ def _ap_registrado_payload(
 ) -> dict[str, Any]:
     """Payload mínimo de APRegistrado para reconstituir una Performance."""
     from datetime import timezone
+
     return {
         "event_type": "APRegistrado",
         "payload": {

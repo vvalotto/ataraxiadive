@@ -64,6 +64,7 @@ from competencia.application.queries.obtener_progreso import (
 from competencia.domain.value_objects.cambio_grilla import CambioGrilla
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.ports.event_store_port import EventStorePort
+from identidad.api.dependencies import OrganizadorDep
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 from competencia.infrastructure.repositories.andariveles_activos_adapter import (
     AndarivelesActivosAdapter,
@@ -268,6 +269,7 @@ ObtenerEstadoCompetenciaHandlerDep = Annotated[
 async def post_configurar_competencia(
     body: ConfigurarOTBody,
     handler: ConfigurarIntervaloOTHandlerDep,
+    _: OrganizadorDep,
 ) -> JSONResponse:
     """Crea y configura una competencia (primer comando de dominio — US-3.3.1).
 
@@ -433,6 +435,7 @@ async def post_ajustar_grilla(
     competencia_id: UUID,
     body: AjustarGrillaBody,
     handler: AjustarGrillaHandlerDep,
+    _: OrganizadorDep,
 ) -> JSONResponse:
     """Aplica ajustes manuales sobre la Grilla de Salida (US-2.1.3).
 
@@ -462,6 +465,7 @@ async def post_confirmar_grilla(
     competencia_id: UUID,
     body: ConfirmarGrillaBody,
     handler: ConfirmarGrillaHandlerDep,
+    _: OrganizadorDep,
 ) -> JSONResponse:
     """Confirma la Grilla de Salida de forma irreversible (INV-C-02).
 
@@ -482,6 +486,7 @@ async def post_iniciar_competencia(
     competencia_id: UUID,
     body: IniciarCompetenciaBody,
     handler: IniciarCompetenciaHandlerDep,
+    _: OrganizadorDep,
 ) -> JSONResponse:
     """Inicia la Competencia, habilitando el registro de performances (INV-C-03).
 

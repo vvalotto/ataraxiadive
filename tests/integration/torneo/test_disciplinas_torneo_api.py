@@ -73,12 +73,19 @@ def app_client(tmp_path: object) -> TestClient:
     import os
     from fastapi import FastAPI
     from torneo.api.router import router
+    from identidad.api.dependencies import get_current_user
 
     db = tempfile.mktemp(suffix=".db")
     os.environ["TORNEO_DB_PATH"] = db
     app = FastAPI()
     app.include_router(router)
-    return TestClient(app)
+    app.dependency_overrides[get_current_user] = lambda: {
+        "sub": "test-user",
+        "email": "test@test.com",
+        "rol": "ORGANIZADOR",
+    }
+    yield TestClient(app)
+    app.dependency_overrides.clear()
 
 
 def _crear_torneo(client: TestClient) -> str:

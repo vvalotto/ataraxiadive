@@ -1,4 +1,5 @@
 """Tests de integración — CalcularRankingHandler + ObtenerRankingHandler (US-2.4.2)."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -110,26 +111,46 @@ async def _performance_ejecutada(
 
     await RegistrarAPHandler(
         event_store=comp_store, competencia_estado=stub, disciplina_descriptor=descriptor
-    ).handle(RegistrarAPCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=disciplina, valor_ap=Decimal(rp_valor), unidad=unidad,
-    ))
-    await LlamarAtletaHandler(
-        event_store=comp_store, competencia_estado=stub
-    ).handle(LlamarAtletaCommand(
-        competencia_id=cid, participante_id=pid, disciplina=disciplina,
-        posicion_grilla=1, ot_programado=ot,
-    ))
+    ).handle(
+        RegistrarAPCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            valor_ap=Decimal(rp_valor),
+            unidad=unidad,
+        )
+    )
+    await LlamarAtletaHandler(event_store=comp_store, competencia_estado=stub).handle(
+        LlamarAtletaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            posicion_grilla=1,
+            ot_programado=ot,
+        )
+    )
     await RegistrarResultadoHandler(
         event_store=comp_store, disciplina_descriptor=descriptor
-    ).handle(RegistrarResultadoCommand(
-        competencia_id=cid, participante_id=pid, disciplina=disciplina,
-        valor_rp=Decimal(rp_valor), unidad=unidad, registrado_por="juez-001",
-    ))
-    await AsignarTarjetaHandler(event_store=comp_store).handle(AsignarTarjetaCommand(
-        competencia_id=cid, participante_id=pid, disciplina=disciplina,
-        tipo=tarjeta, asignada_por="juez-001", motivo=motivo,
-    ))
+    ).handle(
+        RegistrarResultadoCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            valor_rp=Decimal(rp_valor),
+            unidad=unidad,
+            registrado_por="juez-001",
+        )
+    )
+    await AsignarTarjetaHandler(event_store=comp_store).handle(
+        AsignarTarjetaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            tipo=tarjeta,
+            asignada_por="juez-001",
+            motivo=motivo,
+        )
+    )
 
 
 async def _performance_dns(
@@ -145,20 +166,32 @@ async def _performance_dns(
 
     await RegistrarAPHandler(
         event_store=comp_store, competencia_estado=stub, disciplina_descriptor=descriptor
-    ).handle(RegistrarAPCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=disciplina, valor_ap=Decimal("200"), unidad=unidad,
-    ))
-    await LlamarAtletaHandler(
-        event_store=comp_store, competencia_estado=stub
-    ).handle(LlamarAtletaCommand(
-        competencia_id=cid, participante_id=pid, disciplina=disciplina,
-        posicion_grilla=1, ot_programado=OT_A,
-    ))
-    await RegistrarDNSHandler(event_store=comp_store).handle(RegistrarDNSCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=disciplina, registrado_por="juez-001",
-    ))
+    ).handle(
+        RegistrarAPCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            valor_ap=Decimal("200"),
+            unidad=unidad,
+        )
+    )
+    await LlamarAtletaHandler(event_store=comp_store, competencia_estado=stub).handle(
+        LlamarAtletaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            posicion_grilla=1,
+            ot_programado=OT_A,
+        )
+    )
+    await RegistrarDNSHandler(event_store=comp_store).handle(
+        RegistrarDNSCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            registrado_por="juez-001",
+        )
+    )
 
 
 # ── Tests ─────────────────────────────────────────────────────────────────────
@@ -251,8 +284,15 @@ async def test_calcular_ranking_tarjeta_roja_va_al_final(
 
     await _performance_ejecutada(comp_store, stub, descriptor, cid, pid_blanca, "300", ot=OT_A)
     await _performance_ejecutada(
-        comp_store, stub, descriptor, cid, pid_roja, "250", ot=OT_B,
-        tarjeta=TipoTarjeta.Roja, motivo="BO",
+        comp_store,
+        stub,
+        descriptor,
+        cid,
+        pid_roja,
+        "250",
+        ot=OT_B,
+        tarjeta=TipoTarjeta.Roja,
+        motivo="BO",
     )
 
     acl = ResultadosCompetenciaAdapter(comp_store)

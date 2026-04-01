@@ -1,4 +1,5 @@
 """Tests de integración — CompetenciaFinalizada + P-08 (US-2.4.1)."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -81,14 +82,18 @@ async def _registrar_ap(
     cid: object,
     pid: object,
 ) -> None:
-    handler = RegistrarAPHandler(event_store=store, competencia_estado=stub, disciplina_descriptor=descriptor)
-    await handler.handle(RegistrarAPCommand(
-        competencia_id=cid,
-        participante_id=pid,
-        disciplina=Disciplina.STA,
-        valor_ap=Decimal("300"),
-        unidad=UnidadMedida.Segundos,
-    ))
+    handler = RegistrarAPHandler(
+        event_store=store, competencia_estado=stub, disciplina_descriptor=descriptor
+    )
+    await handler.handle(
+        RegistrarAPCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.STA,
+            valor_ap=Decimal("300"),
+            unidad=UnidadMedida.Segundos,
+        )
+    )
 
 
 async def _llamar(
@@ -100,14 +105,16 @@ async def _llamar(
     posicion: int,
 ) -> None:
     handler = LlamarAtletaHandler(event_store=store, competencia_estado=stub)
-    await handler.handle(LlamarAtletaCommand(
-        competencia_id=cid,
-        participante_id=pid,
-        disciplina=Disciplina.STA,
-        ot_programado=ot,
-        posicion_grilla=posicion,
-        andarivel=posicion,
-    ))
+    await handler.handle(
+        LlamarAtletaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.STA,
+            ot_programado=ot,
+            posicion_grilla=posicion,
+            andarivel=posicion,
+        )
+    )
 
 
 async def _registrar_resultado(
@@ -117,14 +124,16 @@ async def _registrar_resultado(
     pid: object,
 ) -> None:
     handler = RegistrarResultadoHandler(event_store=store, disciplina_descriptor=descriptor)
-    await handler.handle(RegistrarResultadoCommand(
-        competencia_id=cid,
-        participante_id=pid,
-        disciplina=Disciplina.STA,
-        valor_rp=Decimal("295"),
-        unidad=UnidadMedida.Segundos,
-        registrado_por="juez",
-    ))
+    await handler.handle(
+        RegistrarResultadoCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.STA,
+            valor_rp=Decimal("295"),
+            unidad=UnidadMedida.Segundos,
+            registrado_por="juez",
+        )
+    )
 
 
 async def _asignar_tarjeta(
@@ -134,13 +143,15 @@ async def _asignar_tarjeta(
     performances_estado: PerformancesEstadoAdapter | None = None,
 ) -> None:
     handler = AsignarTarjetaHandler(store, performances_estado)
-    await handler.handle(AsignarTarjetaCommand(
-        competencia_id=cid,
-        participante_id=pid,
-        disciplina=Disciplina.STA,
-        tipo=TipoTarjeta.Blanca,
-        asignada_por="juez",
-    ))
+    await handler.handle(
+        AsignarTarjetaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.STA,
+            tipo=TipoTarjeta.Blanca,
+            asignada_por="juez",
+        )
+    )
 
 
 async def _registrar_dns(
@@ -150,12 +161,14 @@ async def _registrar_dns(
     performances_estado: PerformancesEstadoAdapter | None = None,
 ) -> None:
     handler = RegistrarDNSHandler(store, performances_estado)
-    await handler.handle(RegistrarDNSCommand(
-        competencia_id=cid,
-        participante_id=pid,
-        disciplina=Disciplina.STA,
-        registrado_por="juez",
-    ))
+    await handler.handle(
+        RegistrarDNSCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.STA,
+            registrado_por="juez",
+        )
+    )
 
 
 async def _get_estado_competencia(store: SQLiteEventStore, cid: object) -> EstadoCompetencia:
@@ -164,6 +177,7 @@ async def _get_estado_competencia(store: SQLiteEventStore, cid: object) -> Estad
     if not events:
         return EstadoCompetencia.Preparacion
     from competencia.domain.aggregates.competencia import Competencia
+
     competencia = Competencia.reconstitute(
         competencia_id=cid, disciplina=Disciplina.STA, events=events
     )
@@ -200,7 +214,9 @@ async def test_tarjeta_ultimo_atleta_dispara_competencia_finalizada(
 
     # Tarjeta a A — no es la última
     await _asignar_tarjeta(event_store, cid, pid_a, performances_estado)
-    assert not await _tiene_evento_en_stream(event_store, f"competencia-{cid}", "CompetenciaFinalizada")
+    assert not await _tiene_evento_en_stream(
+        event_store, f"competencia-{cid}", "CompetenciaFinalizada"
+    )
 
     # Tarjeta a B — es la última
     await _asignar_tarjeta(event_store, cid, pid_b, performances_estado)
@@ -247,7 +263,9 @@ async def test_sin_port_no_emite_competencia_finalizada(
     await _registrar_resultado(event_store, descriptor, cid, pid_a)
     await _asignar_tarjeta(event_store, cid, pid_a, performances_estado=None)
 
-    assert not await _tiene_evento_en_stream(event_store, f"competencia-{cid}", "CompetenciaFinalizada")
+    assert not await _tiene_evento_en_stream(
+        event_store, f"competencia-{cid}", "CompetenciaFinalizada"
+    )
 
 
 @pytest.mark.asyncio
@@ -271,10 +289,15 @@ async def test_competencia_finalizada_payload_correcto(
 
     events = await event_store.load(f"competencia-{cid}")
     import json
+
     cf_events = [e for e in events if e["event_type"] == "CompetenciaFinalizada"]
     assert len(cf_events) == 1
 
-    payload = json.loads(cf_events[0]["payload"]) if isinstance(cf_events[0]["payload"], str) else cf_events[0]["payload"]
+    payload = (
+        json.loads(cf_events[0]["payload"])
+        if isinstance(cf_events[0]["payload"], str)
+        else cf_events[0]["payload"]
+    )
     assert payload["competencia_id"] == str(cid)
     assert payload["disciplina"] == Disciplina.STA.value
     assert payload["total_performances"] == 2

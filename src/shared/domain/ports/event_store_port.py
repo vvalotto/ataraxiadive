@@ -1,4 +1,5 @@
 """Puerto EventStore — contrato de persistencia de eventos (cross-BC)."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -42,9 +43,7 @@ class EventStorePort(ABC):
         """
 
     @abstractmethod
-    async def load_from(
-        self, stream_id: str, from_version: int
-    ) -> list[dict[str, Any]]:
+    async def load_from(self, stream_id: str, from_version: int) -> list[dict[str, Any]]:
         """Carga eventos de un stream a partir de una versión dada.
 
         Args:
@@ -56,9 +55,7 @@ class EventStorePort(ABC):
         """
 
     @abstractmethod
-    async def load_all_streams_with_prefix(
-        self, prefix: str
-    ) -> list[list[dict[str, Any]]]:
+    async def load_all_streams_with_prefix(self, prefix: str) -> list[list[dict[str, Any]]]:
         """Carga todos los streams cuyo stream_id comienza con prefix.
 
         Usado por los query handlers para proyectar read models de una

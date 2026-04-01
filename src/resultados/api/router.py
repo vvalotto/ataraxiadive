@@ -1,4 +1,5 @@
 """Router FastAPI del BC Resultados — endpoints de consulta de ranking."""
+
 from __future__ import annotations
 
 import os
@@ -34,9 +35,7 @@ def get_obtener_ranking_handler(
     return ObtenerRankingHandler(ranking_store)
 
 
-ObtenerRankingHandlerDep = Annotated[
-    ObtenerRankingHandler, Depends(get_obtener_ranking_handler)
-]
+ObtenerRankingHandlerDep = Annotated[ObtenerRankingHandler, Depends(get_obtener_ranking_handler)]
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────

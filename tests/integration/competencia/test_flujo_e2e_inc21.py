@@ -11,6 +11,7 @@ Escenario: disciplina STA con 3 atletas
   Atleta C: AP 120s (2 min) → posición 3
   Flujo: generar → confirmar → iniciar → llamar A → llamar B → llamar C
 """
+
 from __future__ import annotations
 
 from datetime import datetime, timezone
@@ -55,7 +56,9 @@ from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEven
 from competencia.infrastructure.repositories.competencia_estado_adapter import (
     CompetenciaEstadoAdapter,
 )
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
 
 CREATE_EVENTS_TABLE = """

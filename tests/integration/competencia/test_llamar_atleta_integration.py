@@ -1,4 +1,5 @@
 """Tests de integración — LlamarAtletaHandler con SQLiteEventStore real."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -22,7 +23,10 @@ from competencia.domain.value_objects.estado_performance import EstadoPerformanc
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+
 OT = datetime(2026, 3, 22, 10, 30, 0)
 
 CREATE_EVENTS_TABLE = """
@@ -55,12 +59,20 @@ def stub() -> StubCompetenciaEstadoAdapter:
 
 
 @pytest.fixture
-def registrar_handler(event_store: SQLiteEventStore, stub: StubCompetenciaEstadoAdapter) -> RegistrarAPHandler:
-    return RegistrarAPHandler(event_store=event_store, competencia_estado=stub, disciplina_descriptor=DisciplinaDescriptorAdapter())
+def registrar_handler(
+    event_store: SQLiteEventStore, stub: StubCompetenciaEstadoAdapter
+) -> RegistrarAPHandler:
+    return RegistrarAPHandler(
+        event_store=event_store,
+        competencia_estado=stub,
+        disciplina_descriptor=DisciplinaDescriptorAdapter(),
+    )
 
 
 @pytest.fixture
-def llamar_handler(event_store: SQLiteEventStore, stub: StubCompetenciaEstadoAdapter) -> LlamarAtletaHandler:
+def llamar_handler(
+    event_store: SQLiteEventStore, stub: StubCompetenciaEstadoAdapter
+) -> LlamarAtletaHandler:
     return LlamarAtletaHandler(event_store=event_store, competencia_estado=stub)
 
 
@@ -120,14 +132,20 @@ async def test_llamar_persiste_payload_correcto(
 
     await registrar_handler.handle(
         RegistrarAPCommand(
-            competencia_id=cid, participante_id=pid,
-            disciplina=Disciplina.DNF, valor_ap=Decimal("80"), unidad=UnidadMedida.Metros,
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.DNF,
+            valor_ap=Decimal("80"),
+            unidad=UnidadMedida.Metros,
         )
     )
     await llamar_handler.handle(
         LlamarAtletaCommand(
-            competencia_id=cid, participante_id=pid,
-            disciplina=Disciplina.DNF, ot_programado=OT, posicion_grilla=4,
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.DNF,
+            ot_programado=OT,
+            posicion_grilla=4,
         )
     )
 
@@ -145,8 +163,11 @@ async def test_llamar_sin_ap_previo_lanza_error(
     with pytest.raises(PerformanceNoEncontrada):
         await llamar_handler.handle(
             LlamarAtletaCommand(
-                competencia_id=uuid4(), participante_id=uuid4(),
-                disciplina=Disciplina.STA, ot_programado=OT, posicion_grilla=1,
+                competencia_id=uuid4(),
+                participante_id=uuid4(),
+                disciplina=Disciplina.STA,
+                ot_programado=OT,
+                posicion_grilla=1,
             )
         )
 
@@ -159,12 +180,18 @@ async def test_llamar_dos_veces_lanza_error(
     cid = uuid4()
     pid = uuid4()
     cmd_ap = RegistrarAPCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=Disciplina.STA, valor_ap=Decimal("330"), unidad=UnidadMedida.Segundos,
+        competencia_id=cid,
+        participante_id=pid,
+        disciplina=Disciplina.STA,
+        valor_ap=Decimal("330"),
+        unidad=UnidadMedida.Segundos,
     )
     cmd_llamar = LlamarAtletaCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=Disciplina.STA, ot_programado=OT, posicion_grilla=2,
+        competencia_id=cid,
+        participante_id=pid,
+        disciplina=Disciplina.STA,
+        ot_programado=OT,
+        posicion_grilla=2,
     )
 
     await registrar_handler.handle(cmd_ap)

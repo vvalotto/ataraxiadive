@@ -24,6 +24,7 @@ Flujo DoD SP2 — disciplina STA, 3 andariveles, 5 atletas:
     E: AP 120s → grilla pos.5 → Llamar (and.2) → Resultado 90s → Tarjeta roja (black-out)
        → CompetenciaFinalizada → CalcularRanking (P-08)
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -292,14 +293,21 @@ async def fase2() -> None:
     # ── Atleta A: tarjeta blanca → libera andarivel 1 ────────────────────
     await RegistrarResultadoHandler(store, descriptor_adapter).handle(
         RegistrarResultadoCommand(
-            competencia_id=cid, participante_id=pid_a, disciplina=_DISCIPLINA,
-            valor_rp=Decimal("300"), unidad=UnidadMedida.Segundos, registrado_por=_JUEZ,
+            competencia_id=cid,
+            participante_id=pid_a,
+            disciplina=_DISCIPLINA,
+            valor_rp=Decimal("300"),
+            unidad=UnidadMedida.Segundos,
+            registrado_por=_JUEZ,
         )
     )
     await AsignarTarjetaHandler(store, perf_estado_adapter, on_finalizada).handle(
         AsignarTarjetaCommand(
-            competencia_id=cid, participante_id=pid_a, disciplina=_DISCIPLINA,
-            tipo=TipoTarjeta.Blanca, asignada_por=_JUEZ,
+            competencia_id=cid,
+            participante_id=pid_a,
+            disciplina=_DISCIPLINA,
+            tipo=TipoTarjeta.Blanca,
+            asignada_por=_JUEZ,
         )
     )
     print("✓ Atleta A: tarjeta blanca (300s)")
@@ -307,7 +315,9 @@ async def fase2() -> None:
     # ── Atleta B: DNS → libera andarivel 2 ───────────────────────────────
     await RegistrarDNSHandler(store, perf_estado_adapter, on_finalizada).handle(
         RegistrarDNSCommand(
-            competencia_id=cid, participante_id=pid_b, disciplina=_DISCIPLINA,
+            competencia_id=cid,
+            participante_id=pid_b,
+            disciplina=_DISCIPLINA,
             registrado_por=_JUEZ,
         )
     )
@@ -320,14 +330,21 @@ async def fase2() -> None:
     # ── Atleta C: tarjeta blanca → libera andarivel 3 ────────────────────
     await RegistrarResultadoHandler(store, descriptor_adapter).handle(
         RegistrarResultadoCommand(
-            competencia_id=cid, participante_id=pid_c, disciplina=_DISCIPLINA,
-            valor_rp=Decimal("180"), unidad=UnidadMedida.Segundos, registrado_por=_JUEZ,
+            competencia_id=cid,
+            participante_id=pid_c,
+            disciplina=_DISCIPLINA,
+            valor_rp=Decimal("180"),
+            unidad=UnidadMedida.Segundos,
+            registrado_por=_JUEZ,
         )
     )
     await AsignarTarjetaHandler(store, perf_estado_adapter, on_finalizada).handle(
         AsignarTarjetaCommand(
-            competencia_id=cid, participante_id=pid_c, disciplina=_DISCIPLINA,
-            tipo=TipoTarjeta.Blanca, asignada_por=_JUEZ,
+            competencia_id=cid,
+            participante_id=pid_c,
+            disciplina=_DISCIPLINA,
+            tipo=TipoTarjeta.Blanca,
+            asignada_por=_JUEZ,
         )
     )
     print("✓ Atleta C: tarjeta blanca (180s)")
@@ -339,21 +356,32 @@ async def fase2() -> None:
     # ── Atleta D: resultado + tarjeta blanca + corrección ─────────────────
     await RegistrarResultadoHandler(store, descriptor_adapter).handle(
         RegistrarResultadoCommand(
-            competencia_id=cid, participante_id=pid_d, disciplina=_DISCIPLINA,
-            valor_rp=Decimal("160"), unidad=UnidadMedida.Segundos, registrado_por=_JUEZ,
+            competencia_id=cid,
+            participante_id=pid_d,
+            disciplina=_DISCIPLINA,
+            valor_rp=Decimal("160"),
+            unidad=UnidadMedida.Segundos,
+            registrado_por=_JUEZ,
         )
     )
     await AsignarTarjetaHandler(store, perf_estado_adapter, on_finalizada).handle(
         AsignarTarjetaCommand(
-            competencia_id=cid, participante_id=pid_d, disciplina=_DISCIPLINA,
-            tipo=TipoTarjeta.Blanca, asignada_por=_JUEZ,
+            competencia_id=cid,
+            participante_id=pid_d,
+            disciplina=_DISCIPLINA,
+            tipo=TipoTarjeta.Blanca,
+            asignada_por=_JUEZ,
         )
     )
     await CorregirResultadoHandler(store).handle(
         CorregirResultadoCommand(
-            competencia_id=cid, participante_id=pid_d, disciplina=_DISCIPLINA,
-            valor_rp=Decimal("155"), unidad=UnidadMedida.Segundos,
-            registrado_por=_JUEZ, motivo="error de lectura",
+            competencia_id=cid,
+            participante_id=pid_d,
+            disciplina=_DISCIPLINA,
+            valor_rp=Decimal("155"),
+            unidad=UnidadMedida.Segundos,
+            registrado_por=_JUEZ,
+            motivo="error de lectura",
         )
     )
     print("✓ Atleta D: tarjeta blanca (160s → corregido a 155s)")
@@ -361,15 +389,23 @@ async def fase2() -> None:
     # ── Atleta E: resultado + tarjeta roja (última → CompetenciaFinalizada) ─
     await RegistrarResultadoHandler(store, descriptor_adapter).handle(
         RegistrarResultadoCommand(
-            competencia_id=cid, participante_id=pid_e, disciplina=_DISCIPLINA,
-            valor_rp=Decimal("90"), unidad=UnidadMedida.Segundos, registrado_por=_JUEZ,
+            competencia_id=cid,
+            participante_id=pid_e,
+            disciplina=_DISCIPLINA,
+            valor_rp=Decimal("90"),
+            unidad=UnidadMedida.Segundos,
+            registrado_por=_JUEZ,
         )
     )
     await AsignarTarjetaHandler(store, perf_estado_adapter, on_finalizada).handle(
         AsignarTarjetaCommand(
-            competencia_id=cid, participante_id=pid_e, disciplina=_DISCIPLINA,
-            tipo=TipoTarjeta.Roja, asignada_por=_JUEZ,
-            motivo="black-out", distancia_blackout=Decimal("30"),
+            competencia_id=cid,
+            participante_id=pid_e,
+            disciplina=_DISCIPLINA,
+            tipo=TipoTarjeta.Roja,
+            asignada_por=_JUEZ,
+            motivo="black-out",
+            distancia_blackout=Decimal("30"),
         )
     )
     print("✓ Atleta E: tarjeta roja (black-out, dist. 30s) → ÚLTIMA PERFORMANCE")

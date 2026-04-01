@@ -1,4 +1,5 @@
 """Implementación real de CompetenciaEstadoPort — consulta el stream de Competencia."""
+
 from __future__ import annotations
 
 from uuid import UUID
@@ -23,9 +24,7 @@ class CompetenciaEstadoAdapter(CompetenciaEstadoPort):
     def __init__(self, event_store: EventStorePort) -> None:
         self._event_store = event_store
 
-    async def is_plazo_vencido(
-        self, competencia_id: UUID, disciplina: Disciplina
-    ) -> bool:
+    async def is_plazo_vencido(self, competencia_id: UUID, disciplina: Disciplina) -> bool:
         """True si PlazoAPVencido fue emitido para esta competencia/disciplina.
 
         En Inc 2.1 el evento PlazoAPVencido no existe aún — retorna False.
@@ -33,9 +32,7 @@ class CompetenciaEstadoAdapter(CompetenciaEstadoPort):
         events = await self._event_store.load(_build_stream_id(competencia_id))
         return any(e["event_type"] == "PlazoAPVencido" for e in events)
 
-    async def is_grilla_confirmada(
-        self, competencia_id: UUID, disciplina: Disciplina
-    ) -> bool:
+    async def is_grilla_confirmada(self, competencia_id: UUID, disciplina: Disciplina) -> bool:
         """True si GrillaConfirmada fue emitido para esta competencia."""
         events = await self._event_store.load(_build_stream_id(competencia_id))
         return any(e["event_type"] == "GrillaConfirmada" for e in events)

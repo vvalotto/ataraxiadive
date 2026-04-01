@@ -1,4 +1,5 @@
 """Helper de Política P-08: disparar CompetenciaFinalizada cuando corresponde."""
+
 from __future__ import annotations
 
 from typing import Any, Awaitable, Callable

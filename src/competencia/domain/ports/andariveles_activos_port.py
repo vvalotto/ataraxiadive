@@ -1,4 +1,5 @@
 """Puerto AndarivelesActivosPort — consulta del estado de andariveles en ejecución."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

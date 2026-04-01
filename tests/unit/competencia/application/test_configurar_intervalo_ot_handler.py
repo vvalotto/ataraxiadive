@@ -1,4 +1,5 @@
 """Tests unitarios del ConfigurarIntervaloOTHandler — US-2.1.1."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -52,29 +53,39 @@ def _command(intervalo_minutos: int = 9) -> ConfigurarIntervaloOTCommand:
 
 class TestConfiguracionExitosa:
     @pytest.mark.asyncio
-    async def test_append_llamado_una_vez(self, handler: ConfigurarIntervaloOTHandler, mock_event_store: AsyncMock) -> None:
+    async def test_append_llamado_una_vez(
+        self, handler: ConfigurarIntervaloOTHandler, mock_event_store: AsyncMock
+    ) -> None:
         await handler.handle(_command(9))
         assert mock_event_store.append.call_count == 1
 
     @pytest.mark.asyncio
-    async def test_append_con_stream_id_correcto(self, handler: ConfigurarIntervaloOTHandler, mock_event_store: AsyncMock) -> None:
+    async def test_append_con_stream_id_correcto(
+        self, handler: ConfigurarIntervaloOTHandler, mock_event_store: AsyncMock
+    ) -> None:
         await handler.handle(_command(9))
         stream_id = _build_stream_id(COMPETENCIA_ID)
         assert mock_event_store.append.call_args[1]["stream_id"] == stream_id
 
     @pytest.mark.asyncio
-    async def test_append_con_event_type_correcto(self, handler: ConfigurarIntervaloOTHandler, mock_event_store: AsyncMock) -> None:
+    async def test_append_con_event_type_correcto(
+        self, handler: ConfigurarIntervaloOTHandler, mock_event_store: AsyncMock
+    ) -> None:
         await handler.handle(_command(9))
         assert mock_event_store.append.call_args[1]["event_type"] == "IntervaloOTConfigurado"
 
     @pytest.mark.asyncio
-    async def test_payload_contiene_intervalo(self, handler: ConfigurarIntervaloOTHandler, mock_event_store: AsyncMock) -> None:
+    async def test_payload_contiene_intervalo(
+        self, handler: ConfigurarIntervaloOTHandler, mock_event_store: AsyncMock
+    ) -> None:
         await handler.handle(_command(9))
         payload = mock_event_store.append.call_args[1]["payload"]
         assert payload["intervalo_minutos"] == 9
 
     @pytest.mark.asyncio
-    async def test_load_con_stream_id_correcto(self, handler: ConfigurarIntervaloOTHandler, mock_event_store: AsyncMock) -> None:
+    async def test_load_con_stream_id_correcto(
+        self, handler: ConfigurarIntervaloOTHandler, mock_event_store: AsyncMock
+    ) -> None:
         await handler.handle(_command(9))
         stream_id = _build_stream_id(COMPETENCIA_ID)
         mock_event_store.load.assert_called_once_with(stream_id)
@@ -124,9 +135,7 @@ class TestErrores:
             await handler.handle(_command(-1))
 
     @pytest.mark.asyncio
-    async def test_grilla_confirmada_lanza_excepcion(
-        self, mock_event_store: AsyncMock
-    ) -> None:
+    async def test_grilla_confirmada_lanza_excepcion(self, mock_event_store: AsyncMock) -> None:
         mock_event_store.load.return_value = [
             {
                 "event_type": "GrillaConfirmada",

@@ -1,4 +1,5 @@
 """Domain Event ResultadoCorregido — emitido cuando el juez corrige el RP del atleta."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

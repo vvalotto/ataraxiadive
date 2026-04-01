@@ -1,4 +1,5 @@
 """Query y Handler para ObtenerRanking — US-2.4.2."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -7,7 +8,6 @@ from uuid import UUID
 from shared.domain.ports.event_store_port import EventStorePort
 from shared.domain.value_objects.disciplina import Disciplina
 from resultados.domain.aggregates.ranking_competencia import RankingCompetencia
-
 
 # ── Query ─────────────────────────────────────────────────────────────────────
 

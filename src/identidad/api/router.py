@@ -30,6 +30,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 # ── Schemas ──────────────────────────────────────────────────────────────────
 
+
 class RegistroRequest(BaseModel):
     email: str
     password: str
@@ -59,6 +60,7 @@ class LoginResponse(BaseModel):
 
 # ── Helpers de dependencias ───────────────────────────────────────────────────
 
+
 def _repo() -> SQLiteUsuarioRepository:
     return SQLiteUsuarioRepository()
 
@@ -68,6 +70,7 @@ def _jwt() -> JWTService:
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
+
 
 @router.post("/registro", status_code=201)
 async def registrar_usuario(body: RegistroRequest) -> JSONResponse:
@@ -95,5 +98,8 @@ async def autenticar_usuario(body: LoginRequest) -> JSONResponse:
         return JSONResponse(status_code=401, content={"detail": "Credenciales inválidas"})
     return JSONResponse(
         status_code=200,
-        content={"access_token": token_response.access_token, "token_type": token_response.token_type},
+        content={
+            "access_token": token_response.access_token,
+            "token_type": token_response.token_type,
+        },
     )

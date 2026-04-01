@@ -1,4 +1,5 @@
 """Tests unitarios de LlamarAtletaHandler — INV-C-05 andariveles (US-2.3.1)."""
+
 from __future__ import annotations
 
 from datetime import datetime

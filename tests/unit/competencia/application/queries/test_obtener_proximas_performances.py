@@ -1,4 +1,5 @@
 """Tests unitarios de ObtenerProximasPerformancesHandler — US-1.3.1 / US-2.2.2."""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone
@@ -13,7 +14,6 @@ from competencia.application.queries.obtener_proximas_performances import (
     ObtenerProximasPerformancesQuery,
 )
 from competencia.domain.value_objects.disciplina import Disciplina
-
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -168,9 +168,27 @@ async def test_ordena_por_posicion_grilla() -> None:
             "disciplina": "DNF",
             "ot_inicio": ot,
             "performances": [
-                {"performance_id": pid3, "atleta_id": aid, "posicion": 1, "andarivel": 1, "ot_programado": ot},
-                {"performance_id": pid2, "atleta_id": aid, "posicion": 2, "andarivel": 2, "ot_programado": ot},
-                {"performance_id": pid1, "atleta_id": aid, "posicion": 3, "andarivel": 3, "ot_programado": ot},
+                {
+                    "performance_id": pid3,
+                    "atleta_id": aid,
+                    "posicion": 1,
+                    "andarivel": 1,
+                    "ot_programado": ot,
+                },
+                {
+                    "performance_id": pid2,
+                    "atleta_id": aid,
+                    "posicion": 2,
+                    "andarivel": 2,
+                    "ot_programado": ot,
+                },
+                {
+                    "performance_id": pid1,
+                    "atleta_id": aid,
+                    "posicion": 3,
+                    "andarivel": 3,
+                    "ot_programado": ot,
+                },
             ],
             "generada_en": ot,
             "occurred_at": ot,

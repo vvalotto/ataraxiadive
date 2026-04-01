@@ -1,4 +1,5 @@
 """Domain Event DNSRegistrado — emitido cuando el atleta no se presenta al OT."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

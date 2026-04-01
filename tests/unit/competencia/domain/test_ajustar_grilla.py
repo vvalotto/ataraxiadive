@@ -1,4 +1,5 @@
 """Tests unitarios de Competencia.ajustar_grilla() — US-2.1.3."""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone, timedelta
@@ -37,9 +38,24 @@ def _make_competencia_con_grilla() -> Competencia:
     c = Competencia(competencia_id=COMPETENCIA_ID, disciplina=Disciplina.STA)
     c.configurar_intervalo_ot(9, "org-01")
     performances = [
-        PerformancesAPData(performance_id=P_A001, atleta_id=A001, valor_ap=Decimal("330"), unidad=UnidadMedida.Segundos),
-        PerformancesAPData(performance_id=P_A002, atleta_id=A002, valor_ap=Decimal("360"), unidad=UnidadMedida.Segundos),
-        PerformancesAPData(performance_id=P_A003, atleta_id=A003, valor_ap=Decimal("285"), unidad=UnidadMedida.Segundos),
+        PerformancesAPData(
+            performance_id=P_A001,
+            atleta_id=A001,
+            valor_ap=Decimal("330"),
+            unidad=UnidadMedida.Segundos,
+        ),
+        PerformancesAPData(
+            performance_id=P_A002,
+            atleta_id=A002,
+            valor_ap=Decimal("360"),
+            unidad=UnidadMedida.Segundos,
+        ),
+        PerformancesAPData(
+            performance_id=P_A003,
+            atleta_id=A003,
+            valor_ap=Decimal("285"),
+            unidad=UnidadMedida.Segundos,
+        ),
     ]
     c.generar_grilla(OT_INICIO, performances, DisciplinaDescriptor.para(Disciplina.STA))
     c.pull_events()  # limpiar eventos previos
@@ -73,7 +89,9 @@ class TestInvariantes:
         c = _make_competencia_con_grilla()
         pid_desconocido = uuid4()
         with pytest.raises(PerformanceNoEncontrada):
-            c.ajustar_grilla([CambioGrilla(performance_id=pid_desconocido, campo="posicion", valor_nuevo=1)])
+            c.ajustar_grilla(
+                [CambioGrilla(performance_id=pid_desconocido, campo="posicion", valor_nuevo=1)]
+            )
 
 
 # ── Ajuste de posición ────────────────────────────────────────────────────────
@@ -180,9 +198,27 @@ class TestReconstitucion:
             "disciplina": "STA",
             "ot_inicio": OT_INICIO.isoformat(),
             "performances": [
-                {"performance_id": str(P_A002), "atleta_id": str(A002), "posicion": 1, "andarivel": 1, "ot_programado": OT_INICIO.isoformat()},
-                {"performance_id": str(P_A001), "atleta_id": str(A001), "posicion": 2, "andarivel": 1, "ot_programado": (OT_INICIO + timedelta(minutes=9)).isoformat()},
-                {"performance_id": str(P_A003), "atleta_id": str(A003), "posicion": 3, "andarivel": 1, "ot_programado": (OT_INICIO + timedelta(minutes=18)).isoformat()},
+                {
+                    "performance_id": str(P_A002),
+                    "atleta_id": str(A002),
+                    "posicion": 1,
+                    "andarivel": 1,
+                    "ot_programado": OT_INICIO.isoformat(),
+                },
+                {
+                    "performance_id": str(P_A001),
+                    "atleta_id": str(A001),
+                    "posicion": 2,
+                    "andarivel": 1,
+                    "ot_programado": (OT_INICIO + timedelta(minutes=9)).isoformat(),
+                },
+                {
+                    "performance_id": str(P_A003),
+                    "atleta_id": str(A003),
+                    "posicion": 3,
+                    "andarivel": 1,
+                    "ot_programado": (OT_INICIO + timedelta(minutes=18)).isoformat(),
+                },
             ],
             "generada_en": OT_INICIO.isoformat(),
             "occurred_at": OT_INICIO.isoformat(),

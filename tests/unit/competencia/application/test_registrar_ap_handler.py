@@ -1,4 +1,5 @@
 """Tests unitarios del RegistrarAPHandler — US-1.2.1."""
+
 from __future__ import annotations
 
 from decimal import Decimal
@@ -21,7 +22,6 @@ from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
 
@@ -117,7 +117,9 @@ async def test_handle_stream_id_contiene_natural_key(
     participante_id: Any,
 ) -> None:
     """El stream_id incluye competencia_id, participante_id y disciplina."""
-    cmd = make_command(competencia_id, participante_id, disciplina=Disciplina.DNF, unidad=UnidadMedida.Metros)
+    cmd = make_command(
+        competencia_id, participante_id, disciplina=Disciplina.DNF, unidad=UnidadMedida.Metros
+    )
     await handler.handle(cmd)
 
     call_kwargs = mock_event_store.append.call_args
@@ -207,8 +209,10 @@ async def test_handle_unidad_incompatible_lanza_excepcion(
     from competencia.application.commands.registrar_resultado import UnidadIncompatible
 
     cmd = make_command(
-        competencia_id, participante_id,
-        disciplina=Disciplina.STA, unidad=UnidadMedida.Metros,  # STA requiere Segundos
+        competencia_id,
+        participante_id,
+        disciplina=Disciplina.STA,
+        unidad=UnidadMedida.Metros,  # STA requiere Segundos
     )
     with pytest.raises(UnidadIncompatible):
         await handler.handle(cmd)

@@ -1,4 +1,5 @@
 """Domain Event GrillaDeSalidaAjustada — cambios manuales aplicados sobre la grilla."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

@@ -1,4 +1,5 @@
 """Domain Event ResultadoRegistrado — emitido cuando el juez registra el RP del atleta."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

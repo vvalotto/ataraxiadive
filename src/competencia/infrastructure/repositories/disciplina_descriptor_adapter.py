@@ -1,4 +1,5 @@
 """Adapter DisciplinaDescriptorAdapter — implementación concreta del port, sin I/O."""
+
 from __future__ import annotations
 
 from competencia.domain.ports.disciplina_descriptor_port import DisciplinaDescriptorPort

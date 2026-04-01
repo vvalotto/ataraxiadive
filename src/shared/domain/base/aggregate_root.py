@@ -1,4 +1,5 @@
 """Clase base para todos los Aggregate Roots del sistema."""
+
 from __future__ import annotations
 
 from shared.domain.base.domain_event import DomainEvent

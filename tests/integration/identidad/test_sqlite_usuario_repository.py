@@ -1,4 +1,5 @@
 """Tests de integración — SQLiteUsuarioRepository con aiosqlite real."""
+
 from __future__ import annotations
 
 import tempfile
@@ -17,7 +18,9 @@ def repo() -> SQLiteUsuarioRepository:
     return SQLiteUsuarioRepository(db_path=db)
 
 
-def _usuario(email: str = "test@test.com", rol: Rol = Rol.ORGANIZADOR, activo: bool = True) -> Usuario:
+def _usuario(
+    email: str = "test@test.com", rol: Rol = Rol.ORGANIZADOR, activo: bool = True
+) -> Usuario:
     return Usuario(
         usuario_id=uuid.uuid4(),
         email=email,

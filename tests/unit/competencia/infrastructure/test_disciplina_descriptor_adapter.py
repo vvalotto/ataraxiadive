@@ -1,11 +1,14 @@
 """Tests unitarios de DisciplinaDescriptorAdapter — US-2.2.1."""
+
 from __future__ import annotations
 
 import pytest
 
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 
 
 @pytest.fixture
@@ -18,7 +21,9 @@ class TestAdapterSTA:
         desc = adapter.describe(Disciplina.STA)
         assert desc.unidad_esperada == UnidadMedida.Segundos
 
-    def test_describe_sta_retorna_orden_descendente(self, adapter: DisciplinaDescriptorAdapter) -> None:
+    def test_describe_sta_retorna_orden_descendente(
+        self, adapter: DisciplinaDescriptorAdapter
+    ) -> None:
         desc = adapter.describe(Disciplina.STA)
         assert desc.orden_ascendente is False
 
@@ -28,18 +33,23 @@ class TestAdapterDistancia:
         desc = adapter.describe(Disciplina.DNF)
         assert desc.unidad_esperada == UnidadMedida.Metros
 
-    def test_describe_dnf_retorna_orden_ascendente(self, adapter: DisciplinaDescriptorAdapter) -> None:
+    def test_describe_dnf_retorna_orden_ascendente(
+        self, adapter: DisciplinaDescriptorAdapter
+    ) -> None:
         desc = adapter.describe(Disciplina.DNF)
         assert desc.orden_ascendente is True
 
-    @pytest.mark.parametrize("disciplina", [
-        Disciplina.DNF,
-        Disciplina.DYN,
-        Disciplina.DYNB,
-        Disciplina.CNF,
-        Disciplina.CWT,
-        Disciplina.FIM,
-    ])
+    @pytest.mark.parametrize(
+        "disciplina",
+        [
+            Disciplina.DNF,
+            Disciplina.DYN,
+            Disciplina.DYNB,
+            Disciplina.CNF,
+            Disciplina.CWT,
+            Disciplina.FIM,
+        ],
+    )
     def test_todas_distancias_coherentes(
         self, adapter: DisciplinaDescriptorAdapter, disciplina: Disciplina
     ) -> None:
@@ -49,7 +59,9 @@ class TestAdapterDistancia:
 
 
 class TestAdapterTodasDisciplinas:
-    def test_describe_retorna_disciplina_correcta(self, adapter: DisciplinaDescriptorAdapter) -> None:
+    def test_describe_retorna_disciplina_correcta(
+        self, adapter: DisciplinaDescriptorAdapter
+    ) -> None:
         for disciplina in Disciplina:
             desc = adapter.describe(disciplina)
             assert desc.disciplina == disciplina

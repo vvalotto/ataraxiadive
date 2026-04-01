@@ -1,4 +1,5 @@
 """Tests unitarios del RegistrarResultadoHandler — US-1.2.3."""
+
 from __future__ import annotations
 
 from datetime import datetime

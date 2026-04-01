@@ -1,4 +1,5 @@
 """Command y Handler para RegistrarAP — US-1.2.1."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -12,7 +13,6 @@ from competencia.domain.ports.disciplina_descriptor_port import DisciplinaDescri
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
-
 
 # ── Re-export para uso externo ─────────────────────────────────────────────────
 
@@ -157,9 +157,7 @@ class RegistrarAPHandler:
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 
-def _build_stream_id(
-    competencia_id: UUID, participante_id: UUID, disciplina: Disciplina
-) -> str:
+def _build_stream_id(competencia_id: UUID, participante_id: UUID, disciplina: Disciplina) -> str:
     """Construye el stream ID canónico para una Performance.
 
     El stream ID encoda el natural key de la Performance.

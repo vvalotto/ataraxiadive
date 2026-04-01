@@ -1,4 +1,5 @@
 """Value Object DisciplinaDescriptor — reglas de medición y ordenamiento por disciplina."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

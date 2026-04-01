@@ -6,6 +6,7 @@ de la interfaz del juez.
 pytest-bdd no soporta async steps nativamente. Los steps que requieren
 operaciones async usan asyncio.run() como wrapper síncrono.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -21,13 +22,22 @@ from pytest_bdd import given, parsers, scenarios, then, when
 
 from app import app
 from competencia.api.router import get_event_store
-from competencia.application.commands.asignar_tarjeta import AsignarTarjetaCommand, AsignarTarjetaHandler
-from competencia.application.commands.confirmar_grilla import ConfirmarGrillaCommand, ConfirmarGrillaHandler
+from competencia.application.commands.asignar_tarjeta import (
+    AsignarTarjetaCommand,
+    AsignarTarjetaHandler,
+)
+from competencia.application.commands.confirmar_grilla import (
+    ConfirmarGrillaCommand,
+    ConfirmarGrillaHandler,
+)
 from competencia.application.commands.configurar_intervalo_ot import (
     ConfigurarIntervaloOTCommand,
     ConfigurarIntervaloOTHandler,
 )
-from competencia.application.commands.generar_grilla import GenerarGrillaCommand, GenerarGrillaHandler
+from competencia.application.commands.generar_grilla import (
+    GenerarGrillaCommand,
+    GenerarGrillaHandler,
+)
 from competencia.application.commands.iniciar_competencia import (
     IniciarCompetenciaCommand,
     IniciarCompetenciaHandler,
@@ -44,7 +54,9 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
 
 scenarios("../US-2.2.2-api-disciplina-aware.feature")
@@ -141,7 +153,9 @@ def _registrar_ap(
     )
 
 
-def _llamar(store: SQLiteEventStore, cid: UUID, pid: UUID, disciplina: Disciplina, posicion: int) -> None:
+def _llamar(
+    store: SQLiteEventStore, cid: UUID, pid: UUID, disciplina: Disciplina, posicion: int
+) -> None:
     _run(
         LlamarAtletaHandler(store, _ESTADO_STUB).handle(
             LlamarAtletaCommand(
@@ -155,7 +169,14 @@ def _llamar(store: SQLiteEventStore, cid: UUID, pid: UUID, disciplina: Disciplin
     )
 
 
-def _completar(store: SQLiteEventStore, cid: UUID, pid: UUID, disciplina: Disciplina, valor: str, unidad: UnidadMedida) -> None:
+def _completar(
+    store: SQLiteEventStore,
+    cid: UUID,
+    pid: UUID,
+    disciplina: Disciplina,
+    valor: str,
+    unidad: UnidadMedida,
+) -> None:
     _run(
         RegistrarResultadoHandler(store, _DESCRIPTOR).handle(
             RegistrarResultadoCommand(
@@ -191,18 +212,31 @@ def _setup_competencia_sta_con_grilla(ctx: dict) -> None:  # type: ignore[type-a
     _registrar_ap(store, cid, p2, "180", Disciplina.STA, UnidadMedida.Segundos)
     _registrar_ap(store, cid, p3, "120", Disciplina.STA, UnidadMedida.Segundos)
 
-    _run(ConfigurarIntervaloOTHandler(store).handle(
-        ConfigurarIntervaloOTCommand(competencia_id=cid, disciplina=Disciplina.STA, intervalo_minutos=5, configurado_por=_JUEZ)
-    ))
-    _run(GenerarGrillaHandler(store, PerformancesAPAdapter(store), _DESCRIPTOR).handle(
-        GenerarGrillaCommand(competencia_id=cid, disciplina=Disciplina.STA, ot_inicio=_OT)
-    ))
-    _run(ConfirmarGrillaHandler(store).handle(
-        ConfirmarGrillaCommand(competencia_id=cid, disciplina=Disciplina.STA)
-    ))
-    _run(IniciarCompetenciaHandler(store).handle(
-        IniciarCompetenciaCommand(competencia_id=cid, disciplina=Disciplina.STA, juez_id=_JUEZ)
-    ))
+    _run(
+        ConfigurarIntervaloOTHandler(store).handle(
+            ConfigurarIntervaloOTCommand(
+                competencia_id=cid,
+                disciplina=Disciplina.STA,
+                intervalo_minutos=5,
+                configurado_por=_JUEZ,
+            )
+        )
+    )
+    _run(
+        GenerarGrillaHandler(store, PerformancesAPAdapter(store), _DESCRIPTOR).handle(
+            GenerarGrillaCommand(competencia_id=cid, disciplina=Disciplina.STA, ot_inicio=_OT)
+        )
+    )
+    _run(
+        ConfirmarGrillaHandler(store).handle(
+            ConfirmarGrillaCommand(competencia_id=cid, disciplina=Disciplina.STA)
+        )
+    )
+    _run(
+        IniciarCompetenciaHandler(store).handle(
+            IniciarCompetenciaCommand(competencia_id=cid, disciplina=Disciplina.STA, juez_id=_JUEZ)
+        )
+    )
     ctx["current_cid"] = cid
     ctx["current_disciplina"] = Disciplina.STA
 
@@ -215,7 +249,9 @@ def step_background_sta_en_ejecucion(ctx: dict) -> None:  # type: ignore[type-ar
     _setup_competencia_sta_con_grilla(ctx)
 
 
-@given("el orden de grilla es posicion 1 con AP 300s, posicion 2 con AP 180s, posicion 3 con AP 120s")
+@given(
+    "el orden de grilla es posicion 1 con AP 300s, posicion 2 con AP 180s, posicion 3 con AP 120s"
+)
 def step_orden_grilla(ctx: dict) -> None:  # type: ignore[type-arg]
     # El orden es garantizado por el dominio (STA: mayor AP primero).
     # Este step documenta la postcondición del Background.
@@ -234,7 +270,9 @@ def step_atleta_pos1_llamado(ctx: dict) -> None:  # type: ignore[type-arg]
 @given("el atleta en posicion 1 fue llamado y completo su performance")
 def step_atleta_pos1_completo(ctx: dict) -> None:  # type: ignore[type-arg]
     _llamar(ctx["store"], ctx["sta_cid"], ctx["sta_p1"], Disciplina.STA, posicion=1)
-    _completar(ctx["store"], ctx["sta_cid"], ctx["sta_p1"], Disciplina.STA, "290", UnidadMedida.Segundos)
+    _completar(
+        ctx["store"], ctx["sta_cid"], ctx["sta_p1"], Disciplina.STA, "290", UnidadMedida.Segundos
+    )
 
 
 @given("el atleta en posicion 1 esta en estado Llamada para STA")
@@ -251,18 +289,31 @@ def step_competencia_dnf(ctx: dict) -> None:  # type: ignore[type-arg]
     cid = uuid4()
     pid = uuid4()
     _registrar_ap(store, cid, pid, "80", Disciplina.DNF, UnidadMedida.Metros)
-    _run(ConfigurarIntervaloOTHandler(store).handle(
-        ConfigurarIntervaloOTCommand(competencia_id=cid, disciplina=Disciplina.DNF, intervalo_minutos=5, configurado_por=_JUEZ)
-    ))
-    _run(GenerarGrillaHandler(store, PerformancesAPAdapter(store), _DESCRIPTOR).handle(
-        GenerarGrillaCommand(competencia_id=cid, disciplina=Disciplina.DNF, ot_inicio=_OT)
-    ))
-    _run(ConfirmarGrillaHandler(store).handle(
-        ConfirmarGrillaCommand(competencia_id=cid, disciplina=Disciplina.DNF)
-    ))
-    _run(IniciarCompetenciaHandler(store).handle(
-        IniciarCompetenciaCommand(competencia_id=cid, disciplina=Disciplina.DNF, juez_id=_JUEZ)
-    ))
+    _run(
+        ConfigurarIntervaloOTHandler(store).handle(
+            ConfigurarIntervaloOTCommand(
+                competencia_id=cid,
+                disciplina=Disciplina.DNF,
+                intervalo_minutos=5,
+                configurado_por=_JUEZ,
+            )
+        )
+    )
+    _run(
+        GenerarGrillaHandler(store, PerformancesAPAdapter(store), _DESCRIPTOR).handle(
+            GenerarGrillaCommand(competencia_id=cid, disciplina=Disciplina.DNF, ot_inicio=_OT)
+        )
+    )
+    _run(
+        ConfirmarGrillaHandler(store).handle(
+            ConfirmarGrillaCommand(competencia_id=cid, disciplina=Disciplina.DNF)
+        )
+    )
+    _run(
+        IniciarCompetenciaHandler(store).handle(
+            IniciarCompetenciaCommand(competencia_id=cid, disciplina=Disciplina.DNF, juez_id=_JUEZ)
+        )
+    )
     ctx["current_cid"] = cid
     ctx["current_pid"] = pid
     ctx["current_disciplina"] = Disciplina.DNF
@@ -375,9 +426,7 @@ def step_declarar_ap_metros_sta(ctx: dict, valor: str) -> None:  # type: ignore[
 @when("el juez consulta las proximas performances")
 def step_consultar_proximas(ctx: dict) -> None:  # type: ignore[type-arg]
     cid = ctx["current_cid"]
-    ctx["response"] = ctx["client"].get(
-        f"/competencia/{cid}/performance/proximas?disciplina=STA"
-    )
+    ctx["response"] = ctx["client"].get(f"/competencia/{cid}/performance/proximas?disciplina=STA")
 
 
 @when("el juez consulta la performance actual")
@@ -412,9 +461,9 @@ def step_evento_persiste_unidad(ctx: dict, unidad: str) -> None:  # type: ignore
 @then("el sistema rechaza con error UnidadIncompatible")
 def step_rechaza_unidad_incompatible(ctx: dict) -> None:  # type: ignore[type-arg]
     assert ctx["exception"] is not None, "Se esperaba una excepción pero no se lanzó"
-    assert isinstance(ctx["exception"], UnidadIncompatible), (
-        f"Excepción incorrecta: {type(ctx['exception'])}"
-    )
+    assert isinstance(
+        ctx["exception"], UnidadIncompatible
+    ), f"Excepción incorrecta: {type(ctx['exception'])}"
 
 
 @then("ningun evento es persistido")
@@ -448,7 +497,9 @@ def step_primer_resultado_pos2(ctx: dict, valor: str) -> None:  # type: ignore[t
     data = ctx["response"].json()
     assert len(data) >= 1, f"Lista vacía: {data}"
     assert data[0]["posicion"] == 2, f"Esperado posicion=2, obtenido {data[0]['posicion']}"
-    assert data[0]["ap_declarado"] == valor, f"Esperado AP={valor}, obtenido {data[0]['ap_declarado']}"
+    assert (
+        data[0]["ap_declarado"] == valor
+    ), f"Esperado AP={valor}, obtenido {data[0]['ap_declarado']}"
 
 
 @then(parsers.parse("el segundo resultado es el atleta en posicion 3 con AP {valor}s"))
@@ -456,7 +507,9 @@ def step_segundo_resultado_pos3(ctx: dict, valor: str) -> None:  # type: ignore[
     data = ctx["response"].json()
     assert len(data) >= 2, f"Menos de 2 resultados: {data}"
     assert data[1]["posicion"] == 3, f"Esperado posicion=3, obtenido {data[1]['posicion']}"
-    assert data[1]["ap_declarado"] == valor, f"Esperado AP={valor}, obtenido {data[1]['ap_declarado']}"
+    assert (
+        data[1]["ap_declarado"] == valor
+    ), f"Esperado AP={valor}, obtenido {data[1]['ap_declarado']}"
 
 
 @then(parsers.parse("la respuesta incluye unidad_esperada {unidad}"))
@@ -464,6 +517,6 @@ def step_respuesta_incluye_unidad_esperada(ctx: dict, unidad: str) -> None:  # t
     data = ctx["response"].json()
     assert data is not None, "La respuesta es None"
     assert "unidad_esperada" in data, f"Campo unidad_esperada no encontrado en {data}"
-    assert data["unidad_esperada"] == unidad, (
-        f"Esperado unidad_esperada={unidad}, obtenido {data['unidad_esperada']}"
-    )
+    assert (
+        data["unidad_esperada"] == unidad
+    ), f"Esperado unidad_esperada={unidad}, obtenido {data['unidad_esperada']}"

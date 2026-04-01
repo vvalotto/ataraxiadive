@@ -28,6 +28,7 @@ def _torneo(**overrides: object) -> Torneo:
 @pytest.fixture
 def repo(tmp_path: object) -> SQLiteTorneoRepository:
     import tempfile
+
     db = tempfile.mktemp(suffix=".db")
     return SQLiteTorneoRepository(db_path=db)
 

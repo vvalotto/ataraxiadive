@@ -1,4 +1,5 @@
 """Command y Handler para ConfirmarGrilla — US-2.1.4."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

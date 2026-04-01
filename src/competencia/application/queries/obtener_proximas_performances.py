@@ -1,4 +1,5 @@
 """Query y Handler para ObtenerProximasPerformances — US-1.3.1 / US-2.2.2."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field

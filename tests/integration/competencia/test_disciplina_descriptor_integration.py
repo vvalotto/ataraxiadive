@@ -1,4 +1,5 @@
 """Tests de integración — GenerarGrilla con DisciplinaDescriptorAdapter real (US-2.2.1)."""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone
@@ -25,7 +26,9 @@ from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
 
 _CREATE_TABLE = """
@@ -70,7 +73,9 @@ async def _seed_competencia(
         )
     )
     for atleta_id, valor, unidad in aps:
-        await RegistrarAPHandler(store, StubCompetenciaEstadoAdapter(), DisciplinaDescriptorAdapter()).handle(
+        await RegistrarAPHandler(
+            store, StubCompetenciaEstadoAdapter(), DisciplinaDescriptorAdapter()
+        ).handle(
             RegistrarAPCommand(
                 competencia_id=competencia_id,
                 participante_id=atleta_id,
@@ -107,6 +112,7 @@ class TestGrillaSTAOrdenDescendente:
         )
 
         from competencia.domain.aggregates.competencia import Competencia
+
         stream_id = f"competencia-{comp_id}"
         events = await event_store.load(stream_id)
         comp = Competencia.reconstitute(comp_id, Disciplina.STA, events)
@@ -141,6 +147,7 @@ class TestGrillaDNFOrdenAscendente:
         )
 
         from competencia.domain.aggregates.competencia import Competencia
+
         stream_id = f"competencia-{comp_id}"
         events = await event_store.load(stream_id)
         comp = Competencia.reconstitute(comp_id, Disciplina.DNF, events)

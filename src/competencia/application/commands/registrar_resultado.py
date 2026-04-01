@@ -1,4 +1,5 @@
 """Command y Handler para RegistrarResultado — US-1.2.3."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -10,7 +11,6 @@ from competencia.domain.ports.disciplina_descriptor_port import DisciplinaDescri
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
-
 
 # ── Excepciones de aplicación ─────────────────────────────────────────────────
 
@@ -112,9 +112,7 @@ class RegistrarResultadoHandler:
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 
-def _build_stream_id(
-    competencia_id: UUID, participante_id: UUID, disciplina: Disciplina
-) -> str:
+def _build_stream_id(competencia_id: UUID, participante_id: UUID, disciplina: Disciplina) -> str:
     """Construye el stream ID canónico para una Performance.
 
     Format: "performance-{competencia_id}-{participante_id}-{disciplina}"

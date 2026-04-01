@@ -1,4 +1,5 @@
 """Implementación SQLite del Event Store — ADR-007, ADR-008."""
+
 from __future__ import annotations
 
 import json
@@ -77,9 +78,7 @@ class SQLiteEventStore(EventStorePort):
             for row in rows
         ]
 
-    async def load_all_streams_with_prefix(
-        self, prefix: str
-    ) -> list[list[dict[str, Any]]]:
+    async def load_all_streams_with_prefix(self, prefix: str) -> list[list[dict[str, Any]]]:
         async with aiosqlite.connect(self._db_path) as db:
             db.row_factory = aiosqlite.Row
             cursor = await db.execute(
@@ -132,9 +131,7 @@ class SQLiteEventStore(EventStorePort):
             for row in rows
         ]
 
-    async def load_from(
-        self, stream_id: str, from_version: int
-    ) -> list[dict[str, Any]]:
+    async def load_from(self, stream_id: str, from_version: int) -> list[dict[str, Any]]:
         async with aiosqlite.connect(self._db_path) as db:
             db.row_factory = aiosqlite.Row
             cursor = await db.execute(

@@ -1,4 +1,5 @@
 """Puerto ResultadosCompetenciaPort — ACL hacia BC Competencia."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

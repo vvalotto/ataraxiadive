@@ -1,4 +1,5 @@
 """Command y Handler para AjustarGrilla — US-2.1.3."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -8,7 +9,6 @@ from competencia.domain.aggregates.competencia import Competencia
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.cambio_grilla import CambioGrilla
 from competencia.domain.value_objects.disciplina import Disciplina
-
 
 # ── Command ───────────────────────────────────────────────────────────────────
 

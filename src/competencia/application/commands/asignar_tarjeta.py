@@ -1,4 +1,5 @@
 """Command y Handler para AsignarTarjeta — US-1.2.4 / US-1.4.1 / US-2.4.1."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -13,7 +14,6 @@ from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.ports.performances_estado_port import PerformancesEstadoPort
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
-
 
 # ── Excepciones de aplicación ─────────────────────────────────────────────────
 
@@ -123,8 +123,6 @@ class AsignarTarjetaHandler:
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 
-def _build_stream_id(
-    competencia_id: UUID, participante_id: UUID, disciplina: Disciplina
-) -> str:
+def _build_stream_id(competencia_id: UUID, participante_id: UUID, disciplina: Disciplina) -> str:
     """Construye el stream ID canónico para una Performance."""
     return f"performance-{competencia_id}-{participante_id}-{disciplina.value}"

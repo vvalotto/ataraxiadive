@@ -1,4 +1,5 @@
 """Step definitions BDD — US-1.4.2: Flujo Completo E2E: AP → Tarjeta."""
+
 from __future__ import annotations
 
 import asyncio
@@ -36,7 +37,10 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+
 scenarios("../US-1.4.2-flujo-e2e.feature")
 
 _CREATE_TABLE = """
@@ -67,7 +71,9 @@ def _run(coro):  # type: ignore[no-untyped-def]
 
 
 async def _ap_async(store: SQLiteEventStore, cid: UUID, pid: UUID, valor: str) -> None:
-    await RegistrarAPHandler(store, StubCompetenciaEstadoAdapter(), DisciplinaDescriptorAdapter()).handle(
+    await RegistrarAPHandler(
+        store, StubCompetenciaEstadoAdapter(), DisciplinaDescriptorAdapter()
+    ).handle(
         RegistrarAPCommand(
             competencia_id=cid,
             participante_id=pid,
@@ -190,8 +196,12 @@ async def _ejecutar_flujo_completo_async(ctx: dict) -> None:  # type: ignore[typ
     await _llamar_async(store, cid, p["atleta-E"], 5)
     await _resultado_async(store, cid, p["atleta-E"], "90")
     await _tarjeta_async(
-        store, cid, p["atleta-E"], TipoTarjeta.Roja,
-        motivo="black-out", distancia_blackout=Decimal("45"),
+        store,
+        cid,
+        p["atleta-E"],
+        TipoTarjeta.Roja,
+        motivo="black-out",
+        distancia_blackout=Decimal("45"),
     )
 
 
@@ -213,7 +223,13 @@ def step_competencia_activa(comp_id: str):
         store = SQLiteEventStore(db_path)
         cid = uuid4()
         participantes = {f"atleta-{c}": uuid4() for c in ("A", "B", "C", "D", "E")}
-        aps = {"atleta-A": "60", "atleta-B": "40", "atleta-C": "80", "atleta-D": "50", "atleta-E": "90"}
+        aps = {
+            "atleta-A": "60",
+            "atleta-B": "40",
+            "atleta-C": "80",
+            "atleta-D": "50",
+            "atleta-E": "90",
+        }
 
         for nombre, pid in participantes.items():
             await _ap_async(store, cid, pid, aps[nombre])
@@ -263,9 +279,7 @@ def step_atleta_ap_en_llamada(ctx_e2e: dict, nombre: str, valor: str) -> None:  
 
 
 @given(
-    parsers.parse(
-        'el atleta "{nombre}" tiene tarjeta blanca asignada con resultado {valor} metros'
-    )
+    parsers.parse('el atleta "{nombre}" tiene tarjeta blanca asignada con resultado {valor} metros')
 )
 def step_atleta_con_tarjeta_blanca(ctx_e2e: dict, nombre: str, valor: str) -> None:  # type: ignore[type-arg]
     store, cid = ctx_e2e["store"], ctx_e2e["cid"]
@@ -309,11 +323,7 @@ def step_registrar_dns(ctx_e2e: dict, nombre: str) -> None:  # type: ignore[type
     _run(_dns_async(ctx_e2e["store"], ctx_e2e["cid"], pid))
 
 
-@when(
-    parsers.parse(
-        'el juez corrige el resultado a {valor} metros con motivo "{motivo}"'
-    )
-)
+@when(parsers.parse('el juez corrige el resultado a {valor} metros con motivo "{motivo}"'))
 def step_corregir_resultado(ctx_e2e: dict, valor: str, motivo: str) -> None:  # type: ignore[type-arg]
     # Busca el atleta en estado Ejecutada para corregir
     for nombre, pid in ctx_e2e["participantes"].items():
@@ -335,8 +345,12 @@ def step_asignar_blackout(ctx_e2e: dict, distancia: str, nombre: str) -> None:  
     pid = ctx_e2e["participantes"][nombre]
     _run(
         _tarjeta_async(
-            ctx_e2e["store"], ctx_e2e["cid"], pid, TipoTarjeta.Roja,
-            motivo="black-out", distancia_blackout=Decimal(distancia),
+            ctx_e2e["store"],
+            ctx_e2e["cid"],
+            pid,
+            TipoTarjeta.Roja,
+            motivo="black-out",
+            distancia_blackout=Decimal(distancia),
         )
     )
 
@@ -367,7 +381,11 @@ def step_evento_existe(ctx_e2e: dict, event_type: str, nombre: str) -> None:  # 
     assert event_type in tipos, f"{event_type} no encontrado en {tipos}"
 
 
-@then(parsers.parse("el evento TarjetaAsignada contiene distancia_blackout {distancia} para \"{nombre}\""))
+@then(
+    parsers.parse(
+        'el evento TarjetaAsignada contiene distancia_blackout {distancia} para "{nombre}"'
+    )
+)
 def step_tarjeta_contiene_distancia(ctx_e2e: dict, distancia: str, nombre: str) -> None:  # type: ignore[type-arg]
     events = _run(ctx_e2e["store"].load(_stream_id(ctx_e2e, nombre)))
     tarjeta = next(e for e in events if e["event_type"] == "TarjetaAsignada")

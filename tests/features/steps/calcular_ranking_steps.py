@@ -5,6 +5,7 @@ con reglas de empate, podio, DNS y tarjeta roja.
 
 pytest-bdd no soporta async steps nativamente — se usa asyncio.run() como wrapper.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -20,7 +21,10 @@ from fastapi.testclient import TestClient
 from pytest_bdd import given, parsers, scenarios, then, when
 
 from app import app
-from competencia.application.commands.asignar_tarjeta import AsignarTarjetaCommand, AsignarTarjetaHandler
+from competencia.application.commands.asignar_tarjeta import (
+    AsignarTarjetaCommand,
+    AsignarTarjetaHandler,
+)
 from competencia.application.commands.llamar_atleta import LlamarAtletaCommand, LlamarAtletaHandler
 from competencia.application.commands.registrar_ap import RegistrarAPCommand, RegistrarAPHandler
 from competencia.application.commands.registrar_dns import RegistrarDNSCommand, RegistrarDNSHandler
@@ -100,26 +104,44 @@ async def _performance_ejecutada(
 
     await RegistrarAPHandler(
         event_store=store, competencia_estado=stub, disciplina_descriptor=descriptor
-    ).handle(RegistrarAPCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=disciplina, valor_ap=Decimal(rp_valor), unidad=unidad,
-    ))
-    await LlamarAtletaHandler(
-        event_store=store, competencia_estado=stub
-    ).handle(LlamarAtletaCommand(
-        competencia_id=cid, participante_id=pid, disciplina=disciplina,
-        posicion_grilla=1, ot_programado=ot,
-    ))
-    await RegistrarResultadoHandler(
-        event_store=store, disciplina_descriptor=descriptor
-    ).handle(RegistrarResultadoCommand(
-        competencia_id=cid, participante_id=pid, disciplina=disciplina,
-        valor_rp=Decimal(rp_valor), unidad=unidad, registrado_por="juez-001",
-    ))
-    await AsignarTarjetaHandler(event_store=store).handle(AsignarTarjetaCommand(
-        competencia_id=cid, participante_id=pid, disciplina=disciplina,
-        tipo=tarjeta, asignada_por="juez-001", motivo=motivo,
-    ))
+    ).handle(
+        RegistrarAPCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            valor_ap=Decimal(rp_valor),
+            unidad=unidad,
+        )
+    )
+    await LlamarAtletaHandler(event_store=store, competencia_estado=stub).handle(
+        LlamarAtletaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            posicion_grilla=1,
+            ot_programado=ot,
+        )
+    )
+    await RegistrarResultadoHandler(event_store=store, disciplina_descriptor=descriptor).handle(
+        RegistrarResultadoCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            valor_rp=Decimal(rp_valor),
+            unidad=unidad,
+            registrado_por="juez-001",
+        )
+    )
+    await AsignarTarjetaHandler(event_store=store).handle(
+        AsignarTarjetaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            tipo=tarjeta,
+            asignada_por="juez-001",
+            motivo=motivo,
+        )
+    )
 
 
 async def _performance_dns(
@@ -134,20 +156,32 @@ async def _performance_dns(
 
     await RegistrarAPHandler(
         event_store=store, competencia_estado=stub, disciplina_descriptor=descriptor
-    ).handle(RegistrarAPCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=disciplina, valor_ap=Decimal("200"), unidad=unidad,
-    ))
-    await LlamarAtletaHandler(
-        event_store=store, competencia_estado=stub
-    ).handle(LlamarAtletaCommand(
-        competencia_id=cid, participante_id=pid, disciplina=disciplina,
-        posicion_grilla=1, ot_programado=OT_BASE,
-    ))
-    await RegistrarDNSHandler(event_store=store).handle(RegistrarDNSCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=disciplina, registrado_por="juez-001",
-    ))
+    ).handle(
+        RegistrarAPCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            valor_ap=Decimal("200"),
+            unidad=unidad,
+        )
+    )
+    await LlamarAtletaHandler(event_store=store, competencia_estado=stub).handle(
+        LlamarAtletaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            posicion_grilla=1,
+            ot_programado=OT_BASE,
+        )
+    )
+    await RegistrarDNSHandler(event_store=store).handle(
+        RegistrarDNSCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            registrado_por="juez-001",
+        )
+    )
 
 
 # ── Fixtures compartidas (contexto de los escenarios) ────────────────────────
@@ -196,12 +230,15 @@ def seed_performances_sta(ctx: dict) -> None:
         desc = ctx["descriptor"]
         cid = ctx["cid"]
 
-        await _performance_ejecutada(store, stub, desc, cid, ctx["pid_C"], "310",
-                                     Disciplina.STA, OT_OFFSETS[0])
-        await _performance_ejecutada(store, stub, desc, cid, ctx["pid_A"], "295",
-                                     Disciplina.STA, OT_OFFSETS[1])
-        await _performance_ejecutada(store, stub, desc, cid, ctx["pid_D"], "295",
-                                     Disciplina.STA, OT_OFFSETS[2])
+        await _performance_ejecutada(
+            store, stub, desc, cid, ctx["pid_C"], "310", Disciplina.STA, OT_OFFSETS[0]
+        )
+        await _performance_ejecutada(
+            store, stub, desc, cid, ctx["pid_A"], "295", Disciplina.STA, OT_OFFSETS[1]
+        )
+        await _performance_ejecutada(
+            store, stub, desc, cid, ctx["pid_D"], "295", Disciplina.STA, OT_OFFSETS[2]
+        )
         await _performance_dns(store, stub, desc, cid, ctx["pid_B"], Disciplina.STA)
 
     asyncio.run(_run())
@@ -219,9 +256,9 @@ def calcular_ranking(ctx: dict) -> None:
             resultados_port=acl,
             descriptor=ctx["descriptor"],
         )
-        await handler.handle(CalcularRankingCommand(
-            competencia_id=ctx["cid"], disciplina=Disciplina.STA
-        ))
+        await handler.handle(
+            CalcularRankingCommand(competencia_id=ctx["cid"], disciplina=Disciplina.STA)
+        )
 
         qh = ObtenerRankingHandler(ctx["ranking_store"])
         ctx["entries"] = await qh.handle(
@@ -350,9 +387,16 @@ def agregar_atleta_e_roja(ctx: dict, rp: str) -> None:
     async def _run() -> None:
         ctx["pid_E"] = uuid4()
         await _performance_ejecutada(
-            ctx["comp_store"], ctx["stub"], ctx["descriptor"],
-            ctx["cid"], ctx["pid_E"], rp, Disciplina.STA, OT_OFFSETS[4],
-            tarjeta=TipoTarjeta.Roja, motivo="BO",
+            ctx["comp_store"],
+            ctx["stub"],
+            ctx["descriptor"],
+            ctx["cid"],
+            ctx["pid_E"],
+            rp,
+            Disciplina.STA,
+            OT_OFFSETS[4],
+            tarjeta=TipoTarjeta.Roja,
+            motivo="BO",
         )
 
     asyncio.run(_run())
@@ -391,9 +435,9 @@ async def _run_calcular(ctx: dict) -> None:
         resultados_port=acl,
         descriptor=ctx["descriptor"],
     )
-    await handler.handle(CalcularRankingCommand(
-        competencia_id=ctx["cid"], disciplina=Disciplina.STA
-    ))
+    await handler.handle(
+        CalcularRankingCommand(competencia_id=ctx["cid"], disciplina=Disciplina.STA)
+    )
 
 
 @when(parsers.parse("se consulta GET /resultados/{id}/ranking con disciplina STA"))
@@ -457,10 +501,12 @@ def seed_performances_dnf(ctx: dict) -> None:
         ctx["pid_Y"] = uuid4()
         ctx["pid_Z"] = uuid4()
 
-        await _performance_ejecutada(store, stub, desc, cid, ctx["pid_X"], "85",
-                                     Disciplina.DNF, OT_OFFSETS[0])
-        await _performance_ejecutada(store, stub, desc, cid, ctx["pid_Y"], "92",
-                                     Disciplina.DNF, OT_OFFSETS[1])
+        await _performance_ejecutada(
+            store, stub, desc, cid, ctx["pid_X"], "85", Disciplina.DNF, OT_OFFSETS[0]
+        )
+        await _performance_ejecutada(
+            store, stub, desc, cid, ctx["pid_Y"], "92", Disciplina.DNF, OT_OFFSETS[1]
+        )
         await _performance_dns(store, stub, desc, cid, ctx["pid_Z"], Disciplina.DNF)
 
     asyncio.run(_run())
@@ -475,9 +521,9 @@ def calcular_ranking_dnf(ctx: dict) -> None:
             resultados_port=acl,
             descriptor=ctx["descriptor_dnf"],
         )
-        await handler.handle(CalcularRankingCommand(
-            competencia_id=ctx["cid_dnf"], disciplina=Disciplina.DNF
-        ))
+        await handler.handle(
+            CalcularRankingCommand(competencia_id=ctx["cid_dnf"], disciplina=Disciplina.DNF)
+        )
 
         qh = ObtenerRankingHandler(ctx["ranking_store_dnf"])
         ctx["entries_dnf"] = await qh.handle(

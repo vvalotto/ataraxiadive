@@ -1,4 +1,5 @@
 """Aggregate Performance — ciclo de vida de la actuación de un atleta."""
+
 from __future__ import annotations
 
 import json
@@ -347,9 +348,7 @@ class Performance(AggregateRoot):
                 "— solo se puede asignar tarjeta desde ResultadoRegistrado"
             )
         if tipo in (TipoTarjeta.Amarilla, TipoTarjeta.Roja) and not motivo:
-            raise MotivoObligatorio(
-                f"Tarjeta {tipo} requiere motivo obligatorio (INV-P-11)"
-            )
+            raise MotivoObligatorio(f"Tarjeta {tipo} requiere motivo obligatorio (INV-P-11)")
         if motivo == "black-out" and (distancia_blackout is None or distancia_blackout <= 0):
             raise DistanciaBlackoutObligatoria(
                 "Tarjeta roja por black-out requiere distancia_blackout > 0 (RF-EJ-07)"

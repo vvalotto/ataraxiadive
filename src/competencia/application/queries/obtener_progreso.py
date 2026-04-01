@@ -1,4 +1,5 @@
 """Query y Handler para ObtenerProgreso — US-1.3.1."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

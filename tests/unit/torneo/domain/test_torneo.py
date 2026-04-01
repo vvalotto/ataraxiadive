@@ -79,7 +79,9 @@ class TestCreacion:
                 entidad_organizadora=entidad,
             )
 
-    def test_nombre_solo_espacios_lanza_error(self, sede: Sede, entidad: EntidadOrganizadora) -> None:
+    def test_nombre_solo_espacios_lanza_error(
+        self, sede: Sede, entidad: EntidadOrganizadora
+    ) -> None:
         with pytest.raises(ValueError, match="nombre"):
             Torneo(
                 nombre="   ",
@@ -101,7 +103,9 @@ class TestCreacion:
                 entidad_organizadora=entidad,
             )
 
-    def test_fecha_fin_igual_fecha_inicio_es_valido(self, sede: Sede, entidad: EntidadOrganizadora) -> None:
+    def test_fecha_fin_igual_fecha_inicio_es_valido(
+        self, sede: Sede, entidad: EntidadOrganizadora
+    ) -> None:
         t = Torneo(
             nombre="Test",
             descripcion="",
@@ -126,7 +130,9 @@ class TestTransiciones:
         torneo.cerrar()
         assert torneo.estado == EstadoTorneo.CERRADO
 
-    def test_retroceso_ejecucion_a_preparacion(self, sede: Sede, entidad: EntidadOrganizadora) -> None:
+    def test_retroceso_ejecucion_a_preparacion(
+        self, sede: Sede, entidad: EntidadOrganizadora
+    ) -> None:
         t = _torneo_en_estado(EstadoTorneo.EJECUCION, sede, entidad)
         t.volver_a_preparacion()
         assert t.estado == EstadoTorneo.PREPARACION
@@ -141,7 +147,9 @@ class TestTransiciones:
         with pytest.raises(TransicionEstadoInvalida):
             torneo.abrir_inscripcion()
 
-    def test_no_se_puede_avanzar_desde_cerrado(self, sede: Sede, entidad: EntidadOrganizadora) -> None:
+    def test_no_se_puede_avanzar_desde_cerrado(
+        self, sede: Sede, entidad: EntidadOrganizadora
+    ) -> None:
         t = _torneo_en_estado(EstadoTorneo.CERRADO, sede, entidad)
         with pytest.raises(TorneoCerrado):
             t.abrir_inscripcion()
@@ -163,7 +171,9 @@ class TestCancelar:
         t.cancelar()
         assert t.estado == EstadoTorneo.CANCELADO
 
-    def test_cancelar_torneo_cerrado_lanza_error(self, sede: Sede, entidad: EntidadOrganizadora) -> None:
+    def test_cancelar_torneo_cerrado_lanza_error(
+        self, sede: Sede, entidad: EntidadOrganizadora
+    ) -> None:
         t = _torneo_en_estado(EstadoTorneo.CERRADO, sede, entidad)
         with pytest.raises(TorneoCerrado):
             t.cancelar()
