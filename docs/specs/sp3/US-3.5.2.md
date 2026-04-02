@@ -1,6 +1,6 @@
 # US-3.5.2: Política P-09 — todas las disciplinas finalizadas → CalcularOverall
 
-**Estado**: `To Do`
+**Estado**: `Done`
 **Sprint**: SP3 — El Torneo
 **Incremento**: INC-3.5
 **Bounded Context**: `competencia` · `resultados`

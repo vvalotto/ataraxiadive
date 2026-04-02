@@ -1,0 +1,31 @@
+US-3.5.2 - Quality gates ejecutados
+Fecha: 2026-04-02
+
+Scope de CodeGuard:
+- src/app.py
+- src/competencia/application/_p08_finalizacion.py
+- src/competencia/application/commands/asignar_tarjeta.py
+- src/competencia/application/commands/registrar_dns.py
+
+Validaciones ejecutadas:
+- py_compile sobre archivos modificados y tests nuevos: OK
+- git diff --check: OK
+- pytest unitario focalizado: 5 passed
+- pytest integracion focalizado: 2 passed
+- pytest BDD focalizado + backward compat P-08: 10 passed
+- CodeGuard sobre componentes impactados: OK
+
+Resultado CodeGuard:
+- archivos analizados: 4
+- errores: 0
+- warnings: 0
+- infos: 12
+- tiempo total: 10.12s
+
+Comando ejecutado:
+./.venv/bin/codeguard \
+  src/app.py \
+  src/competencia/application/_p08_finalizacion.py \
+  src/competencia/application/commands/asignar_tarjeta.py \
+  src/competencia/application/commands/registrar_dns.py \
+  --format json

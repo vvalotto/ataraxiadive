@@ -7,13 +7,22 @@ from uuid import UUID
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
+from competencia.application.queries.obtener_competencias_por_torneo import (
+    ObtenerCompetenciasPorTorneoHandler,
+    ObtenerCompetenciasPorTorneoQuery,
+)
 from competencia.api.exception_handlers import register_exception_handlers
 from competencia.api.router import router as competencia_router
 from resultados.api.router import router as resultados_router
+from resultados.application.commands.calcular_overall import (
+    CalcularOverallCommand,
+    CalcularOverallHandler,
+)
 from identidad.api.router import router as identidad_router
 from registro.api.router import router as registro_router
 from torneo.api.exception_handlers import register_torneo_exception_handlers
 from torneo.api.router import router as torneo_router
+from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTorneoRepository
 from resultados.application.commands.calcular_ranking import (
     CalcularRankingCommand,
     CalcularRankingHandler,
@@ -46,31 +55,84 @@ register_torneo_exception_handlers(app)
 
 def build_on_finalizada_callback(
     competencia_event_store: SQLiteEventStore,
-) -> Callable[[UUID, Disciplina], Awaitable[None]]:
-    """Construye el callback P-08 → CalcularRanking.
+) -> Callable[[UUID, Disciplina, UUID | None], Awaitable[None]]:
+    """Construye el callback P-08 + P-09.
 
     Args:
         competencia_event_store: Event Store del BC Competencia para que el ACL
             pueda leer las performances al calcular el ranking.
 
     Returns:
-        Callable async (competencia_id, disciplina) → None que dispara CalcularRanking.
+        Callable async (competencia_id, disciplina, torneo_id) → None.
     """
     ranking_db_path = os.getenv("RESULTADOS_DB_PATH", "data/resultados.db")
+    torneo_db_path = os.getenv("TORNEO_DB_PATH", "data/torneo.db")
 
-    async def _on_finalizada(competencia_id: UUID, disciplina: Disciplina) -> None:
+    async def _on_finalizada(
+        competencia_id: UUID,
+        disciplina: Disciplina,
+        torneo_id: UUID | None = None,
+    ) -> None:
         ranking_store = SQLiteEventStore(ranking_db_path)
         acl = ResultadosCompetenciaAdapter(competencia_event_store)
         descriptor = DisciplinaDescriptorAdapter()
-        handler = CalcularRankingHandler(ranking_store, acl, descriptor)
-        await handler.handle(
+        ranking_handler = CalcularRankingHandler(ranking_store, acl, descriptor)
+        await ranking_handler.handle(
             CalcularRankingCommand(
                 competencia_id=competencia_id,
                 disciplina=disciplina,
             )
         )
 
+        if torneo_id is None:
+            return
+
+        if not await _verificar_todas_disciplinas_finalizadas(
+            torneo_id, competencia_event_store
+        ):
+            return
+
+        disciplinas = await _obtener_disciplinas_torneo(torneo_id, torneo_db_path)
+        if not disciplinas:
+            return
+        overall_handler = CalcularOverallHandler(ranking_store, competencia_event_store)
+        await overall_handler.handle(
+            CalcularOverallCommand(
+                torneo_id=torneo_id,
+                disciplinas=disciplinas,
+            )
+        )
+
     return _on_finalizada
+
+
+async def _verificar_todas_disciplinas_finalizadas(
+    torneo_id: UUID,
+    competencia_event_store: SQLiteEventStore,
+) -> bool:
+    """Verifica si todas las competencias del torneo ya emitieron finalizacion."""
+    handler = ObtenerCompetenciasPorTorneoHandler(competencia_event_store)
+    competencias = await handler.handle(ObtenerCompetenciasPorTorneoQuery(torneo_id=torneo_id))
+    if not competencias:
+        return False
+
+    for competencia in competencias:
+        events = await competencia_event_store.load(f"competencia-{competencia.competencia_id}")
+        if not any(event["event_type"] == "CompetenciaFinalizada" for event in events):
+            return False
+    return True
+
+
+async def _obtener_disciplinas_torneo(
+    torneo_id: UUID,
+    torneo_db_path: str,
+) -> list[Disciplina]:
+    """Obtiene las disciplinas del torneo desde su repositorio read model."""
+    torneo_repo = SQLiteTorneoRepository(torneo_db_path)
+    torneo = await torneo_repo.find_by_id(torneo_id)
+    if torneo is None:
+        return []
+    return [Disciplina(disciplina.disciplina) for disciplina in torneo.disciplinas_torneo]
 
 
 @app.get("/health", response_class=JSONResponse)
