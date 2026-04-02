@@ -23,6 +23,7 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | HITO-11 | SP2 pre-Inc 2.1 | 2026-03-26 | Quality gate como catalizador de decisión arquitectónica | ¿Una métrica automatizada puede derivar en una decisión de diseño no anticipada? | [HITO-11](./HITO-11-QUALITY-GATE-COMO-CATALIZADOR-COLABORATIVO.md) |
 | HITO-12 | SP2 Inc 2.2 | 2026-03-26 | Gates de texto vs constraints de herramienta | ¿Las instrucciones procedurales en lenguaje natural son barreras reales para LLMs? | [HITO-12](./HITO-12-GATES-TEXTO-VS-HERRAMIENTA.md) |
 | HITO-13 | SP2 cierre | 2026-03-28 | SP-ADJ como etapa formal del ciclo IEDD | ¿La deuda técnica post-SP merece un sub-sprint formal propio en lugar de backlog? | [HITO-13](./HITO-13-SP-ADJ-DEUDA-TECNICA-COMO-ETAPA-FORMAL.md) |
+| HITO-16 | SP3 Inc 3.5 | 2026-04-02 | Secuencialidad prescriptiva del pipeline | ¿La linealidad de `/implement-us` es una preferencia operativa o parte del método? | [HITO-16](./HITO-16-SECUENCIALIDAD-PRESCRIPTIVA-PIPELINE.md) |
 
 ---
 
@@ -33,6 +34,7 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | Fase 0 / Pre-SP1 | 1, 2 | Validación metodológica inicial, consistencia del stack |
 | SP1 (La Performance) | 3, 4, 5, 6, 7, 8, 9 | Primer ciclo IEDD completo, fricción del ecosistema, BDD + ES |
 | SP2 (La Competencia) | 10, 11, 12, 13 | Patrones DDD avanzados, quality gates, deuda técnica formal |
+| SP3 (El Torneo) | 15, 16 | Proyecciones CQRS emergentes, secuencialidad del pipeline y gobierno del proceso |
 
 ---
 
@@ -45,6 +47,7 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | RQ2: IEDD mejora especificaciones | HITO-1, HITO-4, HITO-6 | 🔄 En evaluación |
 | SP-ADJ como etapa necesaria | HITO-13 | ✅ Confirmada |
 | Gates de texto no son barreras para LLMs | HITO-12 | ✅ Confirmada |
+| La secuencialidad del pipeline es parte del método | HITO-16 | ✅ Confirmada |
 
 ---
 

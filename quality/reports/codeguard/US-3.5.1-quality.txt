@@ -1,0 +1,221 @@
+CodeGuard v0.2.0 (Arquitectura Modular)
+Analizando: /Users/victor/PycharmProjects/ataraxiadive/src/resultados
+Archivos Python encontrados: 26
+Tipo de análisis: pre-commit
+
+Checks disponibles: 6
+---
+╭──────────────────────────────────────────────────────────────────────────────╮
+│  🛡️  CodeGuard - Control de Calidad Automatizado                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Archivos analizados:  26    
+Checks ejecutados:    6     
+Tiempo de ejecución:  67.56s
+Resultados totales:   78    
+
+────────────────────────── 📦  aggregates  (9 issues) ──────────────────────────
+
+                                Informativos (9)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/resultados/domain/aggrega… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/domain/aggrega… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/domain/aggrega… │ ✓ No complex functions         │
+│            │                                │ detected                       │
+│ Security   │ src/resultados/domain/aggrega… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/domain/aggrega… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/domain/aggrega… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+│ Security   │ src/resultados/domain/aggrega… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/domain/aggrega… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/domain/aggrega… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+───────────────────────────── 📦  api  (6 issues) ──────────────────────────────
+
+                                Informativos (6)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/resultados/api/__init__.py │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/api/__init__.py │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/api/__init__.py │ ✓ No complex functions         │
+│            │                                │ detected                       │
+│ Security   │ src/resultados/api/router.py   │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/api/router.py   │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/api/router.py   │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+───────────────────────── 📦  application  (3 issues) ──────────────────────────
+
+                                Informativos (3)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/resultados/application/__… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/application/__… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/application/__… │ ✓ No complex functions         │
+│            │                                │ detected                       │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+─────────────────────────── 📦  commands  (9 issues) ───────────────────────────
+
+                                Informativos (9)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/resultados/application/co… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/application/co… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/application/co… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+│ Security   │ src/resultados/application/co… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/application/co… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/application/co… │ ✓ No complex functions         │
+│            │                                │ detected                       │
+│ Security   │ src/resultados/application/co… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/application/co… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/application/co… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+──────────────────────────── 📦  domain  (6 issues) ────────────────────────────
+
+                                Informativos (6)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/resultados/domain/__init_… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/domain/__init_… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/domain/__init_… │ ✓ No complex functions         │
+│            │                                │ detected                       │
+│ Security   │ src/resultados/domain/excepti… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/domain/excepti… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/domain/excepti… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+──────────────────────────── 📦  events  (9 issues) ────────────────────────────
+
+                                Informativos (9)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/resultados/domain/events/… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/domain/events/… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/domain/events/… │ ✓ No complex functions         │
+│            │                                │ detected                       │
+│ Security   │ src/resultados/domain/events/… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/domain/events/… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/domain/events/… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+│ Security   │ src/resultados/domain/events/… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/domain/events/… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/domain/events/… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+──────────────────────── 📦  infrastructure  (3 issues) ────────────────────────
+
+                                Informativos (3)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/resultados/infrastructure… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/infrastructure… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/infrastructure… │ ✓ No complex functions         │
+│            │                                │ detected                       │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+──────────────────────────── 📦  ports  (6 issues) ─────────────────────────────
+
+                                Informativos (6)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/resultados/domain/ports/_… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/domain/ports/_… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/domain/ports/_… │ ✓ No complex functions         │
+│            │                                │ detected                       │
+│ Security   │ src/resultados/domain/ports/r… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/domain/ports/r… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/domain/ports/r… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+─────────────────────────── 📦  queries  (6 issues) ────────────────────────────
+
+                                Informativos (6)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/resultados/application/qu… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/application/qu… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/application/qu… │ ✓ No complex functions         │
+│            │                                │ detected                       │
+│ Security   │ src/resultados/application/qu… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/application/qu… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/application/qu… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+───────────────────────── 📦  repositories  (9 issues) ─────────────────────────
+
+                                Informativos (9)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/resultados/infrastructure… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/infrastructure… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/infrastructure… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+│ Security   │ src/resultados/infrastructure… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/infrastructure… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/infrastructure… │ ✓ No complex functions         │
+│            │                                │ detected                       │
+│ Security   │ src/resultados/infrastructure… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/infrastructure… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/infrastructure… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+────────────────────────── 📦  resultados  (3 issues) ──────────────────────────
+
+                              Informativos (3)                               
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                  ┃ Mensaje                         ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/resultados/__init__.py │ ✓ No security issues detected   │
+│ PEP8       │ src/resultados/__init__.py │ ✓ PEP8 compliant                │
+│ Complexity │ src/resultados/__init__.py │ ✓ No complex functions detected │
+└────────────┴────────────────────────────┴─────────────────────────────────┘
+
+──────────────────────── 📦  value_objects  (9 issues) ─────────────────────────
+
+                                Informativos (9)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/resultados/domain/value_o… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/domain/value_o… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/domain/value_o… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+│ Security   │ src/resultados/domain/value_o… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/domain/value_o… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/domain/value_o… │ ✓ No complex functions         │
+│            │                                │ detected                       │
+│ Security   │ src/resultados/domain/value_o… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/domain/value_o… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/domain/value_o… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+╭─────────────────────────────── Resumen Final ────────────────────────────────╮
+│  Resumen:                                                                    │
+│            0 errores                                                         │
+│            0 advertencias                                                    │
+│            78 informativos                                                   │
+╰──────────────────────────────────────────────────────────────────────────────╯
