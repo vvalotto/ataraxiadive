@@ -222,6 +222,16 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 |----|------|---------------|---------------------|--------|
 | US-3.1.1 | 3.1 | RF-GT-01/03/04/05/07 | Aggregate `Torneo` — máquina de estados, value objects, puerto abstracto | ✅ 2026-03-29 |
 | US-3.1.2 | 3.1 | RF-GT-01/02/03/04/05/07 | API REST Torneo — CRUD + 7 endpoints de transición + SQLiteTorneoRepository | ✅ 2026-03-30 |
+| US-3.2.1 | 3.2 | RF-US-01..05 | BC Identidad — `Usuario` + JWT mínimo + `/auth` | ✅ 2026-03-30 |
+| US-3.2.2 | 3.2 | RF-IN-01/02/08/09 | Aggregate `Atleta` + registro/consulta + repositorio SQLite | ✅ 2026-03-31 |
+| US-3.2.3 | 3.2 | RF-IN-03/04 | Aggregate `Inscripcion` + inscribir/cancelar + listar inscriptos | ✅ 2026-03-31 |
+| US-3.3.1 | 3.3 | RF-PM-01/02/05 | `torneo_id` opcional en `Competencia` para habilitar overall por torneo | ✅ 2026-03-31 |
+| US-3.3.2 | 3.3 | RF-IN-01..04, RF-GT-02/03 | ACL Torneo/Registro → Competencia para crear competencias por disciplina | ✅ 2026-03-31 |
+| US-3.4.1 | 3.4 | RF-EJ-01 | `AsignarDisciplinas` + `AsignarJuez` en Torneo | ✅ 2026-04-01 |
+| US-3.4.2 | 3.4 | RF-US-02/03/04 | Auth por rol en APIs escribibles con JWT middleware | ✅ 2026-04-01 |
+| US-3.5.1 | 3.5 | RF-PM-01/02 | Aggregate `RankingOverall` + `CalcularOverallHandler` | ✅ 2026-04-02 |
+| US-3.5.2 | 3.5 | RF-PM-05 | Política `P-09`: cálculo automático del overall al cerrar el torneo | ✅ 2026-04-02 |
+| US-3.5.3 | 3.5 | RF-PM-06 | API `GET /resultados/{torneo_id}/overall` | ✅ 2026-04-02 |
 
 ---
 
@@ -258,6 +268,16 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 | US-1.4.2 | unit/competencia/application + integration/competencia + features/US-1.4.2 | ✅ 207 tests (98%) |
 | US-3.1.1 | unit/torneo/domain/test_torneo + integration/torneo/test_torneo_domain_integration + features/US-3.1.1-aggregate-torneo | ✅ 36 tests (100%) |
 | US-3.1.2 | unit/torneo/application/test_crear_torneo + test_transiciones_handlers + test_obtener_torneo + integration/torneo/test_sqlite_torneo_repository + features/US-3.1.2-api-rest-torneo | ✅ 33 tests (100%) |
+| US-3.2.1 | unit/identidad/domain + unit/identidad/application + integration/identidad + features/US-3.2.1 | ✅ 36 tests (100%) |
+| US-3.2.2 | unit/registro + integration/registro + features/US-3.2.2 | ✅ 27 tests (100%) |
+| US-3.2.3 | unit/registro + integration/registro + features/US-3.2.3 | ✅ 31 tests |
+| US-3.3.1 | unit/competencia/domain + unit/competencia/application + integration/competencia + features/US-3.3.1 | ✅ implementada |
+| US-3.3.2 | unit/competencia/application + integration cross-BC + features/US-3.3.2 | ✅ implementada |
+| US-3.4.1 | unit/torneo/domain + integration/torneo + features/US-3.4.1-asignar-disciplinas-juez | ✅ 35 tests |
+| US-3.4.2 | unit/identidad/api + features/US-3.4.2-auth-jwt-middleware | ✅ 15 tests |
+| US-3.5.1 | unit/resultados/domain + unit/resultados/application + integration/resultados + features/US-3.5.1-ranking-overall | ✅ implementada |
+| US-3.5.2 | unit/app + integration/p09 + features/US-3.5.2-politica-p09 | ✅ 17 tests |
+| US-3.5.3 | unit/resultados/application + unit/resultados/api + integration/resultados + features/US-3.5.3-api-overall | ✅ 10 tests focalizados |
 
 ---
 
@@ -280,5 +300,6 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 *v1.3 — 2026-03-28: SP-ADJ-02-code agregado (§8) · US-ADJ-2.6/2.7/2.8 documentadas*
 *v1.4 — 2026-03-29: SP3 §9 agregado · US-3.1.1 implementada*
 *v1.5 — 2026-03-30: US-3.1.2 implementada — API REST Torneo completa*
+*v1.6 — 2026-04-02: SP3 completado a nivel US — §9 y tabla US→Tests actualizadas hasta US-3.5.3*
 *Fuentes: 05-requerimientos_funcionales.md · Context Map v1.1 · estrategia-desarrollo-bc.md · ES Competencia*
 *Mantenido por: Claude Cowork + Victor Valotto*

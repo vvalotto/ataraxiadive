@@ -1,0 +1,1609 @@
+CodeGuard v0.2.0 (Arquitectura Modular)
+Analizando: /Users/victor/PycharmProjects/ataraxiadive/src/resultados/api/router.py, /Users/victor/PycharmProjects/ataraxiadive/src/resultados/application/queries/obtener_overall.py
+Archivos Python encontrados: 2
+Tipo de análisis: pre-commit
+Configuración: pyproject.toml
+
+Checks disponibles: 6
+---
+╭────────────────────────────────────�╭──────────────────────────────────────────────────────────────────────────────╮
+│  🛡️  CodeGuard - Control de Calidad Automatizado                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Archivos analizados:  41     
+Checks ejecutados:    6      
+Tiempo de ejecución:  462.76s
+Resultados totales:   471    
+
+───────────────────────── 📦  aggregates  (28 issues) ──────────────────────────
+
+                                  Errores (1)                                   
+┏━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check ┃ Ubicación                          ┃ Mensaje                         ┃
+┡━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Types │ src/resultados/domain/aggregates/… │ mypy execution timed out (>10s) │
+└───────┴────────────────────────────────────┴─────────────────────────────────┘
+
+                               Advertencias (15)                                
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint │ src/resultados/domain/aggregate… │ ⚠ Pylint score: 0.00/10 (< 8.0). │
+│        │                                  │ Run 'pylint __init__.py' for     │
+│        │                                  │ details.                         │
+│ Pylint │ src/resultados/domain/aggregate… │ ⚠ Pylint score: 6.95/10 (< 8.0). │
+│        │                                  │ Run 'pylint ranking_overall.py'  │
+│        │                                  │ for details.                     │
+│ Pylint │ src/resultados/domain/aggregate… │ ⚠ Pylint score: 4.93/10 (< 8.0). │
+│        │                                  │ Run 'pylint                      │
+│        │                                  │ ranking_competencia.py' for      │
+│        │                                  │ details.                         │
+│ Types  │ src/resultados/domain/aggregate… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.aggregates.r… │
+│ Types  │ src/resultados/domain/aggregate… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.aggregates.r… │
+│ Types  │ src/resultados/domain/aggregate… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.base.aggregate_r… │
+│ Types  │ src/resultados/domain/aggregate… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.events.resul… │
+│ Types  │ src/resultados/domain/aggregate… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.ports.result… │
+│ Types  │ src/resultados/domain/aggregate… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.value_object… │
+│ Types  │ src/resultados/domain/aggregate… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.value_objects.di… │
+│ Types  │ src/resultados/domain/aggregate… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.value_objects.di… │
+│ Types  │ src/resultados/domain/aggregate… │ Type: Class cannot subclass      │
+│        │                                  │ "AggregateRoot" (has type "Any") │
+│ Types  │ src/resultados/domain/aggregate… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.exceptions"   │
+│        │                                  │ ...                              │
+│ Types  │ src/resultados/domain/aggregate… │ Type: Unused "type: ignore"      │
+│        │                                  │ comment                          │
+│ Types  │ src/resultados/domain/aggregate… │ Type: Returning Any from         │
+│        │                                  │ function declared to return      │
+│        │                                  │ "dict"                           │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                               Informativos (12)                                
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check         ┃ Ubicación                    ┃ Mensaje                       ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security      │ src/resultados/domain/aggre… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/domain/aggre… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/domain/aggre… │ ✓ No complex functions        │
+│               │                              │ detected                      │
+│ UnusedImports │ src/resultados/domain/aggre… │ ✓ No unused imports detected  │
+│ Security      │ src/resultados/domain/aggre… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/domain/aggre… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/domain/aggre… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ UnusedImports │ src/resultados/domain/aggre… │ ✓ No unused imports detected  │
+│ Security      │ src/resultados/domain/aggre… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/domain/aggre… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/domain/aggre… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ UnusedImports │ src/resultados/domain/aggre… │ ✓ No unused imports detected  │
+└───────────────┴──────────────────────────────┴───────────────────────────────┘
+
+───────────────────────────── 📦  api  (22 issues) ─────────────────────────────
+
+                                  Errores (3)                                   
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint │ src/resultados/api/__init__.py   │ Could not extract pylint score   │
+│        │                                  │ from output                      │
+│ Types  │ src/resultados/api/router.py     │ mypy execution timed out (>10s)  │
+│ Types  │ tests/unit/resultados/api/test_… │ mypy execution timed out (>10s)  │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                                Advertencias (5)                                
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ PEP8   │ src/resultados/api/router.py:73  │ PEP8: F841 local variable        │
+│        │                                  │ 'entradas' is assigned to but    │
+│        │                                  │ never used                       │
+│ PEP8   │ src/resultados/api/router.py:111 │ PEP8: F821 undefined name        │
+│        │                                  │ 'competencia_id'                 │
+│ PEP8   │ src/resultados/api/router.py:112 │ PEP8: F821 undefined name        │
+│        │                                  │ 'disciplina'                     │
+│ Pylint │ src/resultados/api/router.py     │ ⚠ Pylint score: 0.00/10 (< 8.0). │
+│        │                                  │ Run 'pylint router.py' for       │
+│        │                                  │ details.                         │
+│ Pylint │ tests/unit/resultados/api/test_… │ ⚠ Pylint score: 0.00/10 (< 8.0). │
+│        │                                  │ Run 'pylint                      │
+│        │                                  │ test_router_overall.py' for      │
+│        │                                  │ details.                         │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                               Informativos (14)                                
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check         ┃ Ubicación                     ┃ Mensaje                      ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security      │ src/resultados/api/__init__.… │ ✓ No security issues         │
+│               │                               │ detected                     │
+│ PEP8          │ src/resultados/api/__init__.… │ ✓ PEP8 compliant             │
+│ Complexity    │ src/resultados/api/__init__.… │ ✓ No complex functions       │
+│               │                               │ detected                     │
+│ UnusedImports │ src/resultados/api/__init__.… │ ✓ No unused imports detected │
+│ Security      │ src/resultados/api/router.py  │ ✓ No security issues         │
+│               │                               │ detected                     │
+│ Complexity    │ src/resultados/api/router.py  │ ✓ All functions below        │
+│               │                               │ complexity threshold (≤10)   │
+│ UnusedImports │ src/resultados/api/router.py  │ ✓ No unused imports detected │
+│ Security      │ tests/unit/resultados/api/te… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/unit/resultados/api/te… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/unit/resultados/api/te… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/unit/resultados/api/te… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ PEP8          │ tests/unit/resultados/api/te… │ ✓ PEP8 compliant             │
+│ Complexity    │ tests/unit/resultados/api/te… │ ✓ All functions below        │
+│               │                               │ complexity threshold (≤10)   │
+│ UnusedImports │ tests/unit/resultados/api/te… │ ✓ No unused imports detected │
+└───────────────┴───────────────────────────────┴──────────────────────────────┘
+
+───────────────────────── 📦  application  (60 issues) ─────────────────────────
+
+                                  Errores (4)                                   
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check         ┃ Ubicación                    ┃ Mensaje                       ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint        │ src/resultados/application/… │ Could not extract pylint      │
+│               │                              │ score from output             │
+│ Pylint        │ tests/unit/resultados/appli… │ Could not extract pylint      │
+│               │                              │ score from output             │
+│ Pylint        │ tests/unit/resultados/appli… │ pylint execution timed out    │
+│               │                              │ (>10s)                        │
+│ UnusedImports │ tests/unit/resultados/appli… │ pylint execution timed out    │
+│               │                              │ (>5s)                         │
+└───────────────┴──────────────────────────────┴───────────────────────────────┘
+
+                               Advertencias (15)                                
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint │ tests/unit/resultados/applicati… │ ⚠ Pylint score: 7.50/10 (< 8.0). │
+│        │                                  │ Run 'pylint                      │
+│        │                                  │ test_obtener_overall_handler.py' │
+│        │                                  │ for details.                     │
+│ Types  │ tests/unit/resultados/applicati… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.application.queries… │
+│ Types  │ tests/unit/resultados/applicati… │ Type: Function is missing a type │
+│        │                                  │ annotation for one or more       │
+│        │                                  │ arguments                        │
+│ Pylint │ tests/unit/resultados/applicati… │ ⚠ Pylint score: 6.76/10 (< 8.0). │
+│        │                                  │ Run 'pylint                      │
+│        │                                  │ test_calcular_overall_handler.p… │
+│        │                                  │ for details.                     │
+│ Types  │ tests/unit/resultados/applicati… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.application.command… │
+│ Types  │ tests/unit/resultados/applicati… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.value_objects.di… │
+│ Types  │ tests/unit/resultados/applicati… │ Type: Function is missing a type │
+│        │                                  │ annotation for one or more       │
+│        │                                  │ arguments                        │
+│ Types  │ tests/unit/resultados/applicati… │ Type: Missing type parameters    │
+│        │                                  │ for generic type "dict"          │
+│ Types  │ tests/unit/resultados/applicati… │ Type: Function is missing a type │
+│        │                                  │ annotation for one or more       │
+│        │                                  │ arguments                        │
+│ Types  │ tests/unit/resultados/applicati… │ Type: Missing type parameters    │
+│        │                                  │ for generic type "dict"          │
+│ Types  │ tests/unit/resultados/applicati… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.value_objects.di… │
+│ Types  │ tests/unit/resultados/applicati… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.application.command… │
+│ Types  │ tests/unit/resultados/applicati… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.application.queries… │
+│ Types  │ tests/unit/resultados/applicati… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.exceptions"   │
+│        │                                  │ ...                              │
+│ Types  │ tests/unit/resultados/applicati… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.ports.result… │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                               Informativos (41)                                
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check         ┃ Ubicación                    ┃ Mensaje                       ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security      │ src/resultados/application/… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/application/… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/application/… │ ✓ No complex functions        │
+│               │                              │ detected                      │
+│ UnusedImports │ src/resultados/application/… │ ✓ No unused imports detected  │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ PEP8          │ tests/unit/resultados/appli… │ ✓ PEP8 compliant              │
+│ Complexity    │ tests/unit/resultados/appli… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ UnusedImports │ tests/unit/resultados/appli… │ ✓ No unused imports detected  │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ PEP8          │ tests/unit/resultados/appli… │ ✓ PEP8 compliant              │
+│ Complexity    │ tests/unit/resultados/appli… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ UnusedImports │ tests/unit/resultados/appli… │ ✓ No unused imports detected  │
+│ Security      │ tests/unit/resultados/appli… │ ✓ No security issues detected │
+│ PEP8          │ tests/unit/resultados/appli… │ ✓ PEP8 compliant              │
+│ Complexity    │ tests/unit/resultados/appli… │ ✓ No complex functions        │
+│               │                              │ detected                      │
+│ UnusedImports │ tests/unit/resultados/appli… │ ✓ No unused imports detected  │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/appli… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ PEP8          │ tests/unit/resultados/appli… │ ✓ PEP8 compliant              │
+│ Complexity    │ tests/unit/resultados/appli… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+└───────────────┴──────────────────────────────┴───────────────────────────────┘
+
+────────────────────────── 📦  commands  (27 issues) ───────────────────────────
+
+                                  Errores (2)                                   
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check         ┃ Ubicación                    ┃ Mensaje                       ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ UnusedImports │ src/resultados/application/… │ pylint execution timed out    │
+│               │                              │ (>5s)                         │
+│ Pylint        │ src/resultados/application/… │ Could not extract pylint      │
+│               │                              │ score from output             │
+└───────────────┴──────────────────────────────┴───────────────────────────────┘
+
+                               Advertencias (14)                                
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint │ src/resultados/application/comm… │ ⚠ Pylint score: 0.00/10 (< 8.0). │
+│        │                                  │ Run 'pylint calcular_ranking.py' │
+│        │                                  │ for details.                     │
+│ Types  │ src/resultados/application/comm… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.ports.event_stor… │
+│ Types  │ src/resultados/application/comm… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.value_objects.di… │
+│ Types  │ src/resultados/application/comm… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.value_objects.di… │
+│ Types  │ src/resultados/application/comm… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.infrastructure.repo… │
+│ Types  │ src/resultados/application/comm… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.aggregates.r… │
+│ Types  │ src/resultados/application/comm… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.ports.result… │
+│ Pylint │ src/resultados/application/comm… │ ⚠ Pylint score: 5.80/10 (< 8.0). │
+│        │                                  │ Run 'pylint calcular_overall.py' │
+│        │                                  │ for details.                     │
+│ Types  │ src/resultados/application/comm… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.aggregates.r… │
+│ Types  │ src/resultados/application/comm… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.aggregates.r… │
+│ Types  │ src/resultados/application/comm… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.ports.event_stor… │
+│ Types  │ src/resultados/application/comm… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.value_objects.di… │
+│ Types  │ src/resultados/application/comm… │ Type: Missing type parameters    │
+│        │                                  │ for generic type "list"          │
+│ Types  │ src/resultados/application/comm… │ Type: Returning Any from         │
+│        │                                  │ function declared to return      │
+│        │                                  │ "list[Any]"                      │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                               Informativos (11)                                
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check         ┃ Ubicación                    ┃ Mensaje                       ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security      │ src/resultados/application/… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/application/… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/application/… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ Security      │ src/resultados/application/… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/application/… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/application/… │ ✓ No complex functions        │
+│               │                              │ detected                      │
+│ UnusedImports │ src/resultados/application/… │ ✓ No unused imports detected  │
+│ Security      │ src/resultados/application/… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/application/… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/application/… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ UnusedImports │ src/resultados/application/… │ ✓ No unused imports detected  │
+└───────────────┴──────────────────────────────┴───────────────────────────────┘
+
+─────────────────────────── 📦  domain  (87 issues) ────────────────────────────
+
+                                  Errores (3)                                   
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint │ src/resultados/domain/__init__.… │ Could not extract pylint score   │
+│        │                                  │ from output                      │
+│ Pylint │ tests/unit/resultados/domain/__… │ Could not extract pylint score   │
+│        │                                  │ from output                      │
+│ Pylint │ tests/unit/resultados/domain/te… │ pylint execution timed out       │
+│        │                                  │ (>10s)                           │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                                Advertencias (9)                                
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint │ tests/unit/resultados/domain/te… │ ⚠ Pylint score: 6.08/10 (< 8.0). │
+│        │                                  │ Run 'pylint                      │
+│        │                                  │ test_ranking_overall.py' for     │
+│        │                                  │ details.                         │
+│ Types  │ tests/unit/resultados/domain/te… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.aggregates.r… │
+│ Types  │ tests/unit/resultados/domain/te… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.value_object… │
+│ Types  │ tests/unit/resultados/domain/te… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.value_objects.di… │
+│ Types  │ tests/unit/resultados/domain/te… │ Type: Function is missing a type │
+│        │                                  │ annotation for one or more       │
+│        │                                  │ arguments                        │
+│ Types  │ tests/unit/resultados/domain/te… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.value_objects.di… │
+│ Types  │ tests/unit/resultados/domain/te… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.aggregates.r… │
+│ Types  │ tests/unit/resultados/domain/te… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.exceptions"   │
+│        │                                  │ ...                              │
+│ Types  │ tests/unit/resultados/domain/te… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.ports.result… │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                               Informativos (75)                                
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check         ┃ Ubicación                    ┃ Mensaje                       ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security      │ src/resultados/domain/__ini… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/domain/__ini… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/domain/__ini… │ ✓ No complex functions        │
+│               │                              │ detected                      │
+│ UnusedImports │ src/resultados/domain/__ini… │ ✓ No unused imports detected  │
+│ Security      │ src/resultados/domain/excep… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/domain/excep… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/domain/excep… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ Pylint        │ src/resultados/domain/excep… │ ✓ Pylint score: 10.00/10 (>=  │
+│               │                              │ 8.0)                          │
+│ UnusedImports │ src/resultados/domain/excep… │ ✓ No unused imports detected  │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ PEP8          │ tests/unit/resultados/domai… │ ✓ PEP8 compliant              │
+│ Complexity    │ tests/unit/resultados/domai… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ UnusedImports │ tests/unit/resultados/domai… │ ✓ No unused imports detected  │
+│ Security      │ tests/unit/resultados/domai… │ ✓ No security issues detected │
+│ PEP8          │ tests/unit/resultados/domai… │ ✓ PEP8 compliant              │
+│ Complexity    │ tests/unit/resultados/domai… │ ✓ No complex functions        │
+│               │                              │ detected                      │
+│ UnusedImports │ tests/unit/resultados/domai… │ ✓ No unused imports detected  │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ Security      │ tests/unit/resultados/domai… │ Security [B101]: Use of       │
+│               │                              │ assert detected. The enclosed │
+│               │                              │ code will be removed when     │
+│               │                              │ compiling to opti...          │
+│ PEP8          │ tests/unit/resultados/domai… │ ✓ PEP8 compliant              │
+│ Complexity    │ tests/unit/resultados/domai… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ UnusedImports │ tests/unit/resultados/domai… │ ✓ No unused imports detected  │
+└───────────────┴──────────────────────────────┴───────────────────────────────┘
+
+─────────────────────────── 📦  events  (23 issues) ────────────────────────────
+
+                               Advertencias (11)                                
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint │ src/resultados/domain/events/__… │ ⚠ Pylint score: 0.00/10 (< 8.0). │
+│        │                                  │ Run 'pylint __init__.py' for     │
+│        │                                  │ details.                         │
+│ Pylint │ src/resultados/domain/events/ra… │ ⚠ Pylint score: 0.00/10 (< 8.0). │
+│        │                                  │ Run 'pylint                      │
+│        │                                  │ ranking_overall_calculado.py'    │
+│        │                                  │ for details.                     │
+│ Types  │ src/resultados/domain/events/ra… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.events.ranki… │
+│ Types  │ src/resultados/domain/events/ra… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.events.resul… │
+│ Types  │ src/resultados/domain/events/ra… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.base.domain_even… │
+│ Types  │ src/resultados/domain/events/ra… │ Type: Class cannot subclass      │
+│        │                                  │ "DomainEvent" (has type "Any")   │
+│ Pylint │ src/resultados/domain/events/re… │ ⚠ Pylint score: 0.00/10 (< 8.0). │
+│        │                                  │ Run 'pylint                      │
+│        │                                  │ resultados_calculados.py' for    │
+│        │                                  │ details.                         │
+│ Types  │ src/resultados/domain/events/re… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.events.ranki… │
+│ Types  │ src/resultados/domain/events/re… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.events.resul… │
+│ Types  │ src/resultados/domain/events/re… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.base.domain_even… │
+│ Types  │ src/resultados/domain/events/re… │ Type: Class cannot subclass      │
+│        │                                  │ "DomainEvent" (has type "Any")   │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                               Informativos (12)                                
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check         ┃ Ubicación                    ┃ Mensaje                       ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security      │ src/resultados/domain/event… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/domain/event… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/domain/event… │ ✓ No complex functions        │
+│               │                              │ detected                      │
+│ UnusedImports │ src/resultados/domain/event… │ ✓ No unused imports detected  │
+│ Security      │ src/resultados/domain/event… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/domain/event… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/domain/event… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ UnusedImports │ src/resultados/domain/event… │ ✓ No unused imports detected  │
+│ Security      │ src/resultados/domain/event… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/domain/event… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/domain/event… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ UnusedImports │ src/resultados/domain/event… │ ✓ No unused imports detected  │
+└───────────────┴──────────────────────────────┴───────────────────────────────┘
+
+──────────────────────── 📦  infrastructure  (5 issues) ────────────────────────
+
+                                  Errores (1)                                   
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint │ src/resultados/infrastructure/_… │ Could not extract pylint score   │
+│        │                                  │ from output                      │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                                Informativos (4)                                
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check         ┃ Ubicación                     ┃ Mensaje                      ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security      │ src/resultados/infrastructur… │ ✓ No security issues         │
+│               │                               │ detected                     │
+│ PEP8          │ src/resultados/infrastructur… │ ✓ PEP8 compliant             │
+│ Complexity    │ src/resultados/infrastructur… │ ✓ No complex functions       │
+│               │                               │ detected                     │
+│ UnusedImports │ src/resultados/infrastructur… │ ✓ No unused imports detected │
+└───────────────┴───────────────────────────────┴──────────────────────────────┘
+
+──────────────────────────── 📦  ports  (11 issues) ────────────────────────────
+
+                                  Errores (1)                                   
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint │ src/resultados/domain/ports/__i… │ Could not extract pylint score   │
+│        │                                  │ from output                      │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                                Advertencias (2)                                
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint │ src/resultados/domain/ports/res… │ ⚠ Pylint score: 5.71/10 (< 8.0). │
+│        │                                  │ Run 'pylint                      │
+│        │                                  │ resultados_competencia_port.py'  │
+│        │                                  │ for details.                     │
+│ Types  │ src/resultados/domain/ports/res… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.value_objects.di… │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                                Informativos (8)                                
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check         ┃ Ubicación                    ┃ Mensaje                       ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security      │ src/resultados/domain/ports… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/domain/ports… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/domain/ports… │ ✓ No complex functions        │
+│               │                              │ detected                      │
+│ UnusedImports │ src/resultados/domain/ports… │ ✓ No unused imports detected  │
+│ Security      │ src/resultados/domain/ports… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/domain/ports… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/domain/ports… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ UnusedImports │ src/resultados/domain/ports… │ ✓ No unused imports detected  │
+└───────────────┴──────────────────────────────┴───────────────────────────────┘
+
+─────────────────────────── 📦  queries  (20 issues) ───────────────────────────
+
+                                  Errores (1)                                   
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint │ src/resultados/application/quer… │ Could not extract pylint score   │
+│        │                                  │ from output                      │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                                Advertencias (7)                                
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint │ src/resultados/application/quer… │ ⚠ Pylint score: 4.76/10 (< 8.0). │
+│        │                                  │ Run 'pylint obtener_overall.py'  │
+│        │                                  │ for details.                     │
+│ Types  │ src/resultados/application/quer… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.aggregates.r… │
+│ Types  │ src/resultados/application/quer… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.ports.event_stor… │
+│ Pylint │ src/resultados/application/quer… │ ⚠ Pylint score: 3.60/10 (< 8.0). │
+│        │                                  │ Run 'pylint obtener_ranking.py'  │
+│        │                                  │ for details.                     │
+│ Types  │ src/resultados/application/quer… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.ports.event_stor… │
+│ Types  │ src/resultados/application/quer… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.value_objects.di… │
+│ Types  │ src/resultados/application/quer… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.aggregates.r… │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                               Informativos (12)                                
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check         ┃ Ubicación                    ┃ Mensaje                       ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security      │ src/resultados/application/… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/application/… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/application/… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ UnusedImports │ src/resultados/application/… │ ✓ No unused imports detected  │
+│ Security      │ src/resultados/application/… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/application/… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/application/… │ ✓ No complex functions        │
+│               │                              │ detected                      │
+│ UnusedImports │ src/resultados/application/… │ ✓ No unused imports detected  │
+│ Security      │ src/resultados/application/… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/application/… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/application/… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ UnusedImports │ src/resultados/application/… │ ✓ No unused imports detected  │
+└───────────────┴──────────────────────────────┴───────────────────────────────┘
+
+──────────────────────── 📦  repositories  (25 issues) ─────────────────────────
+
+                                  Errores (1)                                   
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint │ src/resultados/infrastructure/r… │ Could not extract pylint score   │
+│        │                                  │ from output                      │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                               Advertencias (12)                                
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint │ src/resultados/infrastructure/r… │ ⚠ Pylint score: 0.00/10 (< 8.0). │
+│        │                                  │ Run 'pylint                      │
+│        │                                  │ resultados_competencia_adapter.… │
+│        │                                  │ for details.                     │
+│ Types  │ src/resultados/infrastructure/r… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "competencia.domain.aggregates.… │
+│ Types  │ src/resultados/infrastructure/r… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.ports.event_stor… │
+│ Types  │ src/resultados/infrastructure/r… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.value_objects.di… │
+│ Types  │ src/resultados/infrastructure/r… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "competencia.domain.value_objec… │
+│ Types  │ src/resultados/infrastructure/r… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.ports.result… │
+│ Types  │ src/resultados/infrastructure/r… │ Type: Class cannot subclass      │
+│        │                                  │ "ResultadosCompetenciaPort" (has │
+│        │                                  │ type "Any")                      │
+│ Pylint │ src/resultados/infrastructure/r… │ ⚠ Pylint score: 0.00/10 (< 8.0). │
+│        │                                  │ Run 'pylint                      │
+│        │                                  │ disciplina_descriptor_adapter.p… │
+│        │                                  │ for details.                     │
+│ Types  │ src/resultados/infrastructure/r… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "competencia.domain.ports.disci… │
+│ Types  │ src/resultados/infrastructure/r… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.value_objects.di… │
+│ Types  │ src/resultados/infrastructure/r… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.domain.value_objects.di… │
+│ Types  │ src/resultados/infrastructure/r… │ Type: Class cannot subclass      │
+│        │                                  │ "DisciplinaDescriptorPort" (has  │
+│        │                                  │ type "Any")                      │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                               Informativos (12)                                
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check         ┃ Ubicación                    ┃ Mensaje                       ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security      │ src/resultados/infrastructu… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/infrastructu… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/infrastructu… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ UnusedImports │ src/resultados/infrastructu… │ ✓ No unused imports detected  │
+│ Security      │ src/resultados/infrastructu… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/infrastructu… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/infrastructu… │ ✓ No complex functions        │
+│               │                              │ detected                      │
+│ UnusedImports │ src/resultados/infrastructu… │ ✓ No unused imports detected  │
+│ Security      │ src/resultados/infrastructu… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/infrastructu… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/infrastructu… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ UnusedImports │ src/resultados/infrastructu… │ ✓ No unused imports detected  │
+└───────────────┴──────────────────────────────┴───────────────────────────────┘
+
+───────────────────────── 📦  resultados  (99 issues) ──────────────────────────
+
+                                  Errores (5)                                   
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check         ┃ Ubicación                    ┃ Mensaje                       ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ PEP8          │ src/resultados/__init__.py   │ flake8 execution timed out    │
+│               │                              │ (>5s)                         │
+│ Pylint        │ src/resultados/__init__.py   │ Could not extract pylint      │
+│               │                              │ score from output             │
+│ Pylint        │ tests/unit/resultados/__ini… │ Could not extract pylint      │
+│               │                              │ score from output             │
+│ Pylint        │ tests/integration/resultado… │ Could not extract pylint      │
+│               │                              │ score from output             │
+│ UnusedImports │ tests/integration/resultado… │ pylint execution timed out    │
+│               │                              │ (>5s)                         │
+└───────────────┴──────────────────────────────┴───────────────────────────────┘
+
+                               Advertencias (35)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint     │ tests/integration/resultados/… │ ⚠ Pylint score: 4.58/10 (<     │
+│            │                                │ 8.0). Run 'pylint              │
+│            │                                │ test_calcular_overall_integra… │
+│            │                                │ for details.                   │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named "aiosqlite"   │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "resultados.application.comma… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "resultados.domain.aggregates… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "shared.domain.value_objects.… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "shared.infrastructure.event_… │
+│ Types      │ tests/integration/resultados/… │ Type: Function is missing a    │
+│            │                                │ type annotation for one or     │
+│            │                                │ more arguments                 │
+│ Types      │ tests/integration/resultados/… │ Type: Function is missing a    │
+│            │                                │ type annotation for one or     │
+│            │                                │ more arguments                 │
+│ Types      │ tests/integration/resultados/… │ Type: Missing type parameters  │
+│            │                                │ for generic type "dict"        │
+│ Pylint     │ tests/integration/resultados/… │ ⚠ Pylint score: 3.85/10 (<     │
+│            │                                │ 8.0). Run 'pylint              │
+│            │                                │ test_obtener_overall_integrat… │
+│            │                                │ for details.                   │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named "aiosqlite"   │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "resultados.application.queri… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "shared.infrastructure.event_… │
+│ Types      │ tests/integration/resultados/… │ Type: Function is missing a    │
+│            │                                │ type annotation for one or     │
+│            │                                │ more arguments                 │
+│ Types      │ tests/integration/resultados/… │ Type: Missing type parameters  │
+│            │                                │ for generic type "dict"        │
+│ Types      │ tests/integration/resultados/… │ Type: Function is missing a    │
+│            │                                │ type annotation for one or     │
+│            │                                │ more arguments                 │
+│ Complexity │ tests/integration/resultados/… │ Complexity:                    │
+│            │                                │ test_calcular_ranking_empate_… │
+│            │                                │ has cyclomatic complexity 11   │
+│            │                                │ (grade ...                     │
+│ Pylint     │ tests/integration/resultados/… │ ⚠ Pylint score: 2.45/10 (<     │
+│            │                                │ 8.0). Run 'pylint              │
+│            │                                │ test_calcular_ranking_integra… │
+│            │                                │ for details.                   │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named "aiosqlite"   │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "competencia.application.comm… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "competencia.application.comm… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "competencia.application.comm… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "competencia.application.comm… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "competencia.application.comm… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "shared.domain.value_objects.… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "competencia.domain.value_obj… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "shared.domain.value_objects.… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "competencia.infrastructure.c… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "competencia.infrastructure.e… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "resultados.infrastructure.re… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "resultados.application.comma… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "resultados.application.queri… │
+│ Types      │ tests/integration/resultados/… │ Type: Cannot find              │
+│            │                                │ implementation or library stub │
+│            │                                │ for module named               │
+│            │                                │ "resultados.infrastructure.re… │
+│ Types      │ tests/integration/resultados/… │ Type: Unsupported left operand │
+│            │                                │ type for / ("TempPathFactory") │
+│ Types      │ tests/integration/resultados/… │ Type: Unsupported left operand │
+│            │                                │ type for / ("TempPathFactory") │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+                               Informativos (59)                                
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check         ┃ Ubicación                     ┃ Mensaje                      ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security      │ src/resultados/__init__.py    │ ✓ No security issues         │
+│               │                               │ detected                     │
+│ Complexity    │ src/resultados/__init__.py    │ ✓ No complex functions       │
+│               │                               │ detected                     │
+│ UnusedImports │ src/resultados/__init__.py    │ ✓ No unused imports detected │
+│ Security      │ tests/unit/resultados/__init… │ ✓ No security issues         │
+│               │                               │ detected                     │
+│ PEP8          │ tests/unit/resultados/__init… │ ✓ PEP8 compliant             │
+│ Complexity    │ tests/unit/resultados/__init… │ ✓ No complex functions       │
+│               │                               │ detected                     │
+│ UnusedImports │ tests/unit/resultados/__init… │ ✓ No unused imports detected │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ PEP8          │ tests/integration/resultados… │ ✓ PEP8 compliant             │
+│ Complexity    │ tests/integration/resultados… │ ✓ All functions below        │
+│               │                               │ complexity threshold (≤10)   │
+│ UnusedImports │ tests/integration/resultados… │ ✓ No unused imports detected │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ PEP8          │ tests/integration/resultados… │ ✓ PEP8 compliant             │
+│ Complexity    │ tests/integration/resultados… │ ✓ All functions below        │
+│               │                               │ complexity threshold (≤10)   │
+│ UnusedImports │ tests/integration/resultados… │ ✓ No unused imports detected │
+│ Security      │ tests/integration/resultados… │ ✓ No security issues         │
+│               │                               │ detected                     │
+│ PEP8          │ tests/integration/resultados… │ ✓ PEP8 compliant             │
+│ Complexity    │ tests/integration/resultados… │ ✓ No complex functions       │
+│               │                               │ detected                     │
+│ UnusedImports │ tests/integration/resultados… │ ✓ No unused imports detected │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ Security      │ tests/integration/resultados… │ Security [B101]: Use of      │
+│               │                               │ assert detected. The         │
+│               │                               │ enclosed code will be        │
+│               │                               │ removed when compiling to    │
+│               │                               │ opti...                      │
+│ PEP8          │ tests/integration/resultados… │ ✓ PEP8 compliant             │
+└───────────────┴───────────────────────────────┴──────────────────────────────┘
+
+──────────────────────────── 📦  steps  (47 issues) ────────────────────────────
+
+                                  Errores (1)                                   
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check         ┃ Ubicación                    ┃ Mensaje                       ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ UnusedImports │ tests/features/steps/api_ov… │ pylint execution timed out    │
+│               │                              │ (>5s)                         │
+└───────────────┴──────────────────────────────┴───────────────────────────────┘
+
+                               Advertencias (33)                                
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Pylint │ tests/features/steps/api_overal… │ ⚠ Pylint score: 1.56/10 (< 8.0). │
+│        │                                  │ Run 'pylint                      │
+│        │                                  │ api_overall_steps.py' for        │
+│        │                                  │ details.                         │
+│ Types  │ tests/features/steps/api_overal… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "aiosqlite"                      │
+│ Types  │ tests/features/steps/api_overal… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "fastapi"                        │
+│ Types  │ tests/features/steps/api_overal… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "fastapi.testclient"             │
+│        │                                  │ [import-n...                     │
+│ Types  │ tests/features/steps/api_overal… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "pytest_bdd"                     │
+│ Types  │ tests/features/steps/api_overal… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.api.router"          │
+│        │                                  │ [impor...                        │
+│ Types  │ tests/features/steps/api_overal… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "shared.infrastructure.event_st… │
+│ Types  │ tests/features/steps/api_overal… │ Type: Function is missing a type │
+│        │                                  │ annotation for one or more       │
+│        │                                  │ arguments                        │
+│ Types  │ tests/features/steps/api_overal… │ Type: Missing type parameters    │
+│        │                                  │ for generic type "dict"          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Function is missing a type │
+│        │                                  │ annotation for one or more       │
+│        │                                  │ arguments                        │
+│ Types  │ tests/features/steps/api_overal… │ Type: Missing type parameters    │
+│        │                                  │ for generic type "dict"          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Untyped decorator makes    │
+│        │                                  │ function                         │
+│        │                                  │ "given_overall_calculado"        │
+│        │                                  │ untyped                          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Missing type parameters    │
+│        │                                  │ for generic type "dict"          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Untyped decorator makes    │
+│        │                                  │ function                         │
+│        │                                  │ "given_torneo_sin_overall"       │
+│        │                                  │ untyped                          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Missing type parameters    │
+│        │                                  │ for generic type "dict"          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Untyped decorator makes    │
+│        │                                  │ function                         │
+│        │                                  │ "given_overall_con_cinco_atleta… │
+│        │                                  │ untyped                          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Missing type parameters    │
+│        │                                  │ for generic type "dict"          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Untyped decorator makes    │
+│        │                                  │ function "when_consulto_overall" │
+│        │                                  │ untyped                          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Missing type parameters    │
+│        │                                  │ for generic type "dict"          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Untyped decorator makes    │
+│        │                                  │ function "then_calculado_true"   │
+│        │                                  │ untyped                          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Missing type parameters    │
+│        │                                  │ for generic type "dict"          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Untyped decorator makes    │
+│        │                                  │ function "then_ordenado" untyped │
+│ Types  │ tests/features/steps/api_overal… │ Type: Missing type parameters    │
+│        │                                  │ for generic type "dict"          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Untyped decorator makes    │
+│        │                                  │ function "then_calculado_false"  │
+│        │                                  │ untyped                          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Missing type parameters    │
+│        │                                  │ for generic type "dict"          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Untyped decorator makes    │
+│        │                                  │ function "then_vacio" untyped    │
+│ Types  │ tests/features/steps/api_overal… │ Type: Missing type parameters    │
+│        │                                  │ for generic type "dict"          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Untyped decorator makes    │
+│        │                                  │ function                         │
+│        │                                  │ "then_detalle_disciplina"        │
+│        │                                  │ untyped                          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Missing type parameters    │
+│        │                                  │ for generic type "dict"          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Untyped decorator makes    │
+│        │                                  │ function "then_podio_true"       │
+│        │                                  │ untyped                          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Missing type parameters    │
+│        │                                  │ for generic type "dict"          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Untyped decorator makes    │
+│        │                                  │ function "then_podio_false"      │
+│        │                                  │ untyped                          │
+│ Types  │ tests/features/steps/api_overal… │ Type: Missing type parameters    │
+│        │                                  │ for generic type "dict"          │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                               Informativos (13)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ tests/features/steps/api_over… │ Security [B101]: Use of assert │
+│            │                                │ detected. The enclosed code    │
+│            │                                │ will be removed when compiling │
+│            │                                │ to opti...                     │
+│ Security   │ tests/features/steps/api_over… │ Security [B101]: Use of assert │
+│            │                                │ detected. The enclosed code    │
+│            │                                │ will be removed when compiling │
+│            │                                │ to opti...                     │
+│ Security   │ tests/features/steps/api_over… │ Security [B101]: Use of assert │
+│            │                                │ detected. The enclosed code    │
+│            │                                │ will be removed when compiling │
+│            │                                │ to opti...                     │
+│ Security   │ tests/features/steps/api_over… │ Security [B101]: Use of assert │
+│            │                                │ detected. The enclosed code    │
+│            │                                │ will be removed when compiling │
+│            │                                │ to opti...                     │
+│ Security   │ tests/features/steps/api_over… │ Security [B101]: Use of assert │
+│            │                                │ detected. The enclosed code    │
+│            │                                │ will be removed when compiling │
+│            │                                │ to opti...                     │
+│ Security   │ tests/features/steps/api_over… │ Security [B101]: Use of assert │
+│            │                                │ detected. The enclosed code    │
+│            │                                │ will be removed when compiling │
+│            │                                │ to opti...                     │
+│ Security   │ tests/features/steps/api_over… │ Security [B101]: Use of assert │
+│            │                                │ detected. The enclosed code    │
+│            │                                │ will be removed when compiling │
+│            │                                │ to opti...                     │
+│ Security   │ tests/features/steps/api_over… │ Security [B101]: Use of assert │
+│            │                                │ detected. The enclosed code    │
+│            │                                │ will be removed when compiling │
+│            │                                │ to opti...                     │
+│ Security   │ tests/features/steps/api_over… │ Security [B101]: Use of assert │
+│            │                                │ detected. The enclosed code    │
+│            │                                │ will be removed when compiling │
+│            │                                │ to opti...                     │
+│ Security   │ tests/features/steps/api_over… │ Security [B101]: Use of assert │
+│            │                                │ detected. The enclosed code    │
+│            │                                │ will be removed when compiling │
+│            │                                │ to opti...                     │
+│ Security   │ tests/features/steps/api_over… │ Security [B101]: Use of assert │
+│            │                                │ detected. The enclosed code    │
+│            │                                │ will be removed when compiling │
+│            │                                │ to opti...                     │
+│ PEP8       │ tests/features/steps/api_over… │ ✓ PEP8 compliant               │
+│ Complexity │ tests/features/steps/api_over… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+──────────────────────── 📦  value_objects  (17 issues) ────────────────────────
+
+                                Advertencias (3)                                
+┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check  ┃ Ubicación                        ┃ Mensaje                          ┃
+┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Types  │ src/resultados/domain/value_obj… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.value_object… │
+│ Types  │ src/resultados/domain/value_obj… │ Type: Cannot find implementation │
+│        │                                  │ or library stub for module named │
+│        │                                  │ "resultados.domain.value_object… │
+│ Pylint │ src/resultados/domain/value_obj… │ ⚠ Pylint score: 0.00/10 (< 8.0). │
+│        │                                  │ Run 'pylint __init__.py' for     │
+│        │                                  │ details.                         │
+└────────┴──────────────────────────────────┴──────────────────────────────────┘
+
+                               Informativos (14)                                
+┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check         ┃ Ubicación                    ┃ Mensaje                       ┃
+┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security      │ src/resultados/domain/value… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/domain/value… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/domain/value… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ Pylint        │ src/resultados/domain/value… │ ✓ Pylint score: 10.00/10 (>=  │
+│               │                              │ 8.0)                          │
+│ UnusedImports │ src/resultados/domain/value… │ ✓ No unused imports detected  │
+│ Security      │ src/resultados/domain/value… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/domain/value… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/domain/value… │ ✓ No complex functions        │
+│               │                              │ detected                      │
+│ UnusedImports │ src/resultados/domain/value… │ ✓ No unused imports detected  │
+│ Security      │ src/resultados/domain/value… │ ✓ No security issues detected │
+│ PEP8          │ src/resultados/domain/value… │ ✓ PEP8 compliant              │
+│ Complexity    │ src/resultados/domain/value… │ ✓ All functions below         │
+│               │                              │ complexity threshold (≤10)    │
+│ Pylint        │ src/resultados/domain/value… │ ✓ Pylint score: 10.00/10 (>=  │
+│               │                              │ 8.0)                          │
+│ UnusedImports │ src/resultados/domain/value… │ ✓ No unused imports detected  │
+└───────────────┴──────────────────────────────┴───────────────────────────────┘
+
+╭─────────────────────────────── Resumen Final ────────────────────────────────╮
+│  Resumen:                                                                    │
+│            23 errores                                                        │
+│            161 advertencias                                                  │
+│            287 informativos                                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+╭─────────────────────────────── 💡 Sugerencias ───────────────────────────────╮
+│                                                                              │
+│  • Errores detectados: Revisa y corrige antes de commitear                   │
+│  • Advertencias encontradas: Considera resolverlas para mejorar la calidad   │
+│  • PEP8: Ejecuta black . para auto-formatear                                 │
+│  • Imports: Ejecuta autoflake --remove-unused-variables . para limpiar       │
+│  • Complejidad: Refactoriza funciones complejas en funciones más pequeñas    │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
