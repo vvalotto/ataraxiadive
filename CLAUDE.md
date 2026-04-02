@@ -265,7 +265,7 @@ SP-ADJ (ajuste entre SPs)          → opcional, antes de cerrar la Baseline
 |-------------|--------|----------|---------|--------|
 | SP1 | La Performance | BL-001 | `v0.2.0` | ✅ Cerrado 2026-03-24 |
 | SP2 | La Competencia | BL-002 | `v0.3.0` | ✅ Cerrado 2026-03-28 |
-| SP3 | El Torneo | BL-003 | `v0.4.0` | ⏳ Pendiente |
+| SP3 | El Torneo | BL-003 | `v0.4.0` | 🔄 Implementación funcional completa — pendiente cierre formal |
 | SP4 | La Plataforma | BL-004 | `v0.5.0` | ⏳ Pendiente |
 | SP5 | La Puesta en Marcha | BL-005 | `v1.0.0` | ⏳ Pendiente |
 
@@ -414,8 +414,24 @@ Ver `docs/plans/sp-adj-02-code/PLAN-SP-ADJ-02-code.md` y `.work/revision-consist
 
 ---
 
-**Próximo paso:** iniciar SP3 (El Torneo, BL-003, tag `v0.4.0`).
-BC objetivo SP3: Torneo + Registro + Identidad + extensión Resultados (Overall).
+**SP3 — El Torneo — implementación funcional completa (2026-04-02)**
+
+| Artefacto | Estado | Detalle |
+|-----------|--------|---------|
+| BC Torneo | ✅ | Aggregate + API REST + disciplinas y jueces |
+| BC Registro | ✅ | Atleta + inscripción/cancelación + consultas |
+| BC Identidad | ✅ | Registro/login JWT + dependencias por rol |
+| Extensión BC Competencia | ✅ | `torneo_id` + creación de competencias asociadas |
+| Extensión BC Resultados | ✅ | `RankingOverall` + política P-09 + API GET overall |
+| Tests SP3 focalizados | ✅ | US-3.1.1 .. US-3.5.3 implementadas y validadas |
+| HITO-16 | ✅ | Secuencialidad prescriptiva del pipeline documentada |
+
+**Próximo paso:** ejecutar cierre formal de `INC-3.5` y `SP3` según `docs/plans/WORKFLOW-DESARROLLO.md`:
+- DesignReviewer manual consolidado de `INC-3.5`
+- registro en baseline BL-003
+- ArchitectAnalyst manual
+- UAT post-SP3
+- merge/tag de baseline si el cierre queda aprobado
 
 ---
 

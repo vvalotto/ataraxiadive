@@ -15,6 +15,10 @@ from resultados.application.queries.obtener_ranking import (
     ObtenerRankingHandler,
     ObtenerRankingQuery,
 )
+from resultados.application.queries.obtener_overall import (
+    ObtenerOverallHandler,
+    ObtenerOverallQuery,
+)
 
 router = APIRouter(prefix="/resultados", tags=["resultados"])
 
@@ -36,6 +40,16 @@ def get_obtener_ranking_handler(
 
 
 ObtenerRankingHandlerDep = Annotated[ObtenerRankingHandler, Depends(get_obtener_ranking_handler)]
+
+
+def get_obtener_overall_handler(
+    ranking_store: Annotated[SQLiteEventStore, Depends(get_ranking_store)],
+) -> ObtenerOverallHandler:
+    """Dependency: handler de consulta de overall."""
+    return ObtenerOverallHandler(ranking_store)
+
+
+ObtenerOverallHandlerDep = Annotated[ObtenerOverallHandler, Depends(get_obtener_overall_handler)]
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
@@ -72,6 +86,39 @@ async def get_ranking(
                     "unidad": e.unidad,
                     "tarjeta": e.tarjeta,
                     "es_dns": e.es_dns,
+                    "en_podio": e.en_podio,
+                }
+                for e in entradas
+            ],
+        },
+        status_code=200,
+    )
+
+
+@router.get("/{torneo_id}/overall", response_class=JSONResponse)
+async def get_overall(
+    torneo_id: UUID,
+    handler: ObtenerOverallHandlerDep,
+) -> JSONResponse:
+    """Retorna el ranking overall calculado del torneo.
+
+    Returns:
+        JSON con torneo_id, total, calculado y lista de entradas overall.
+        Si aún no existe cálculo persistido, responde calculado=false y
+        ranking=[].
+    """
+    entradas = await handler.handle(ObtenerOverallQuery(torneo_id=torneo_id))
+    return JSONResponse(
+        content={
+            "torneo_id": str(torneo_id),
+            "total": len(entradas),
+            "calculado": len(entradas) > 0,
+            "ranking": [
+                {
+                    "posicion": e.posicion,
+                    "atleta_id": e.atleta_id,
+                    "puntaje": e.puntaje,
+                    "detalle": e.detalle,
                     "en_podio": e.en_podio,
                 }
                 for e in entradas
