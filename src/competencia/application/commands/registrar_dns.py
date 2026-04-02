@@ -59,7 +59,7 @@ class RegistrarDNSHandler:
         self,
         event_store: EventStorePort,
         performances_estado: PerformancesEstadoPort | None = None,
-        on_finalizada: Callable[[UUID, Disciplina], Awaitable[None]] | None = None,
+        on_finalizada: Callable[..., Awaitable[None]] | None = None,
     ) -> None:
         self._event_store = event_store
         self._performances_estado = performances_estado
