@@ -1,17 +1,18 @@
-# US-ADJ-3.1: Extraer `GrillaDeSalida` como entidad de dominio
+# US-ADJ-3.1: Extraer `GrillaDeSalida` como entidad de dominio + eliminar `_DISCIPLINAS_SP3`
 
 **Estado**: `To Do`
 **Sprint**: SP-ADJ-03 — Ajuste Técnico Post-SP3
-**Bounded Context**: `competencia`
-**Capas afectadas**: `competencia/domain/entities/` · `competencia/domain/aggregates/` · `competencia/infrastructure/`
+**Issues**: ADJ-01 · SOLID-01
+**Bounded Context**: `competencia` · `torneo`
+**Capas afectadas**: `competencia/domain/entities/` · `competencia/domain/aggregates/` · `torneo/domain/aggregates/`
 
 ---
 
 ## Descripción
 
 Como **desarrollador del sistema**,
-quiero **extraer `GrillaDeSalida` como entidad de dominio separada de `Competencia`**
-para **reducir el WMC del aggregate (64 → ~34) y separar las responsabilidades de grilla del ciclo de vida de la competencia**.
+quiero **extraer `GrillaDeSalida` como entidad de dominio separada de `Competencia` y eliminar `_DISCIPLINAS_SP3` de `Torneo`**
+para **reducir el WMC del aggregate (64 → ~34), separar responsabilidades de grilla, y eliminar el hardcode de sprint del dominio de Torneo**.
 
 ---
 
@@ -144,9 +145,64 @@ Scenario: la interfaz pública de Competencia no cambia
 
 ---
 
+## SOLID-01 — Eliminar `_DISCIPLINAS_SP3` de `Torneo`
+
+### Contexto de la deuda
+
+`torneo/domain/aggregates/torneo.py:38-44` define:
+
+```python
+_DISCIPLINAS_SP3 = {
+    Disciplina.STA,
+    Disciplina.DNF,
+    Disciplina.DYN,
+    Disciplina.DYNB,
+    Disciplina.SPE2X50,
+}
+```
+
+Este set se usa en `asignar_disciplinas()` para validar cuáles disciplinas son aceptables:
+
+```python
+invalidas = disciplinas - _DISCIPLINAS_SP3
+if invalidas:
+    raise ValueError(f"Disciplinas no válidas para SP3: {invalidas}")
+```
+
+Es una restricción de sprint codificada en el dominio. El dominio de Torneo no debería
+saber en qué sprint está el proyecto — viola OCP: cada vez que se agregue una disciplina
+nueva, hay que modificar el aggregate.
+
+### Postcondición SOLID-01
+
+- `_DISCIPLINAS_SP3` eliminado de `torneo.py`
+- `asignar_disciplinas()` acepta cualquier `Disciplina` válida del enum sin restricción adicional
+- El enum `Disciplina` (en `shared/domain/`) es la única fuente de verdad sobre las disciplinas existentes
+
+### Invariante preservada
+
+- `INV-T-01`: las disciplinas asignadas deben ser instancias válidas de `Disciplina` — el enum mismo lo garantiza; no hace falta una allowlist hardcodeada
+
+### Criterio de aceptación SOLID-01
+
+```gherkin
+Scenario: Torneo acepta cualquier Disciplina del enum sin restricción de sprint
+  Given un Torneo en estado CREADO
+  When se asignan disciplinas que antes estaban fuera de _DISCIPLINAS_SP3
+  Then asignar_disciplinas no lanza ValueError
+
+Scenario: _DISCIPLINAS_SP3 no existe en el código
+  Given el archivo torneo/domain/aggregates/torneo.py
+  Then no contiene la constante _DISCIPLINAS_SP3
+  And no contiene el string "SP3" en el dominio
+```
+
+---
+
 ## Referencias
 
 - Análisis: sesión 2026-04-01 — análisis WMC Competencia post-INC-3.3
+- Revisión SOLID SP3: `.work/revision-sp3/05b-revision-solid-sp3.md` (SOLID-01)
 - DesignReviewer INC-3.3: `quality/reports/designreviewer/INC-3.3-report.txt`
 - US-3.3.1: `torneo_id` en Competencia (el cambio que hizo subir WMC a 64)
 - Plan SP-ADJ-03: `docs/plans/sp-adj-03/PLAN-SP-ADJ-03.md`
@@ -154,3 +210,4 @@ Scenario: la interfaz pública de Competencia no cambia
 ---
 
 *Redactado: 2026-04-01 — SP-ADJ-03*
+*Actualizado: 2026-04-03 — SOLID-01 agregado*
