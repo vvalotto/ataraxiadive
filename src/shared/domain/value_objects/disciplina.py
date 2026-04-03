@@ -9,14 +9,14 @@ class Disciplina(StrEnum):
     """Disciplinas de apnea reconocidas por AIDA/CMAS.
 
     Valores de tiempo (segundos): STA
-    Valores de distancia (metros): DNF, DYN, DYNB, SPE2X50, CNF, CWT, FIM, VWT
+    Valores de distancia (metros): DNF, DYN, DBF, SPE, CNF, CWT, FIM, VWT
     """
 
     STA = "STA"  # Static Apnea — tiempo
     DNF = "DNF"  # Dynamic No Fins — distancia
     DYN = "DYN"  # Dynamic With Fins — distancia
-    DYNB = "DYNB"  # Dynamic Bi-Fins — distancia
-    SPE2X50 = "SPE2X50"  # Speed Endurance 2x50m — distancia
+    DBF = "DBF"  # Dynamic Bi-Fins — distancia (acrónimo oficial AIDA)
+    SPE = "SPE"  # Speed Endurance — distancia (acrónimo oficial AIDA)
     CNF = "CNF"  # Constant No Fins — distancia
     CWT = "CWT"  # Constant Weight — distancia
     FIM = "FIM"  # Free Immersion — distancia
