@@ -32,6 +32,14 @@ mergeados en `develop` y BL-003 esté lista para taggear.
 | `US-ADJ-3.7` | ✅ Cerrada |
 | `US-ADJ-3.5` | ✅ Cerrada |
 
+## Cierre DoD
+
+| Gate | Estado | Evidencia |
+|------|--------|-----------|
+| `pytest` + validaciones por US | ✅ | reportes individuales por `US-ADJ-3.x` |
+| `CodeGuard` por US | ✅ | `quality/reports/codeguard/US-ADJ-3.*-quality.txt` |
+| `DesignReviewer` consolidado | ✅ | `quality/reports/designreviewer/SP-ADJ-03-report.txt` |
+
 ---
 
 ## US planificadas
@@ -208,4 +216,4 @@ en `resultados/domain/ports/`).
 
 *Iniciado: 2026-03-31 — basado en HITO-14*
 *Actualizado: 2026-04-01 — US-ADJ-3.1/3.2 post-análisis WMC*
-*Actualizado: 2026-04-03 — SP-ADJ-03 completado con 8/8 US cerradas*
+*Actualizado: 2026-04-03 — SP-ADJ-03 completado con 8/8 US cerradas y DoD de DesignReviewer cerrado*
