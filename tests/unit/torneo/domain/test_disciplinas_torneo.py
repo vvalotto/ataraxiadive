@@ -74,10 +74,10 @@ class TestAsignarDisciplinas:
         t = _torneo()
         assert t.disciplinas_torneo == []
 
-    def test_disciplinas_invalidas_sp3(self) -> None:
+    def test_acepta_disciplina_fuera_del_scope_sp3_si_existe_en_enum(self) -> None:
         t = _torneo()
-        with pytest.raises(ValueError):
-            t.asignar_disciplinas(frozenset({Disciplina.CNF}))
+        t.asignar_disciplinas(frozenset({Disciplina.CNF}))
+        assert [dt.disciplina for dt in t.disciplinas_torneo] == [Disciplina.CNF]
 
     def test_asignar_en_estado_inscripcion_abierta(self) -> None:
         t = _torneo()

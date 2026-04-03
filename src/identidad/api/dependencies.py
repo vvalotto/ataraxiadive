@@ -6,19 +6,57 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
 from identidad.domain.exceptions import TokenInvalido
+from identidad.domain.ports.password_hashing_port import PasswordHashingPort
+from identidad.domain.ports.token_service_port import TokenServicePort
+from identidad.domain.ports.usuario_repository_port import UsuarioRepositoryPort
 from identidad.domain.value_objects.rol import Rol
+from identidad.infrastructure.bcrypt_password_hasher import BcryptPasswordHasher
 from identidad.infrastructure.jwt_service import JWTService
+from identidad.infrastructure.repositories.sqlite_usuario_repository import (
+    SQLiteUsuarioRepository,
+)
 
 _oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+_token_service: TokenServicePort | None = None
+_password_hasher: PasswordHashingPort | None = None
+
+
+def configure_identity_dependencies(
+    *,
+    token_service: TokenServicePort | None = None,
+    password_hasher: PasswordHashingPort | None = None,
+) -> None:
+    """Permite configurar dependencias tecnicas desde el composition root."""
+    global _token_service, _password_hasher
+    _token_service = token_service
+    _password_hasher = password_hasher
+
+
+def get_usuario_repository() -> UsuarioRepositoryPort:
+    return SQLiteUsuarioRepository()
+
+
+def get_token_service() -> TokenServicePort:
+    global _token_service
+    if _token_service is None:
+        _token_service = JWTService()
+    return _token_service
+
+
+def get_password_hasher() -> PasswordHashingPort:
+    global _password_hasher
+    if _password_hasher is None:
+        _password_hasher = BcryptPasswordHasher()
+    return _password_hasher
 
 
 async def get_current_user(
     token: Annotated[str, Depends(_oauth2_scheme)],
+    token_service: Annotated[TokenServicePort, Depends(get_token_service)],
 ) -> dict:  # type: ignore[type-arg]
     """Verifica JWT y retorna payload {sub, email, rol}. Lanza 401 si inválido."""
     try:
-        jwt_svc = JWTService()
-        return jwt_svc.verify(token)
+        return token_service.verify(token)
     except (TokenInvalido, ValueError) as exc:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -28,12 +66,17 @@ async def get_current_user(
 
 
 def require_rol(*roles: Rol) -> Callable:  # type: ignore[type-arg]
-    """Factory de dependencia que exige uno de los roles dados. Lanza 403 si el rol es insuficiente."""
+    """Factory de dependencia que exige uno de los roles dados."""
     _roles_values = {r.value for r in roles}
 
-    def _dep(current_user: Annotated[dict, Depends(get_current_user)]) -> dict:  # type: ignore[type-arg]
+    def _dep(
+        current_user: Annotated[dict, Depends(get_current_user)],
+    ) -> dict:  # type: ignore[type-arg]
         if current_user.get("rol") not in _roles_values:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Rol insuficiente")
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Rol insuficiente",
+            )
         return current_user
 
     return _dep

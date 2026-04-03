@@ -35,15 +35,6 @@ _ESTADOS_ASIGNACION_VALIDOS = {
     EstadoTorneo.PREPARACION,
 }
 
-_DISCIPLINAS_SP3 = {
-    Disciplina.STA,
-    Disciplina.DNF,
-    Disciplina.DYN,
-    Disciplina.DYNB,
-    Disciplina.SPE2X50,
-}
-
-
 @dataclass
 class Torneo:
     nombre: str
@@ -100,9 +91,6 @@ class Torneo:
             raise AsignacionNoPermitida(
                 f"No se pueden asignar disciplinas con el torneo en estado {self.estado}"
             )
-        invalidas = disciplinas - _DISCIPLINAS_SP3
-        if invalidas:
-            raise ValueError(f"Disciplinas no válidas para SP3: {invalidas}")
         self.disciplinas_torneo = [DisciplinaTorneo(disciplina=d) for d in sorted(disciplinas)]
 
     def asignar_juez(self, disciplina: Disciplina, juez_id: UUID) -> None:

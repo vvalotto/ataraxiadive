@@ -6,6 +6,11 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, field_validator
 
+from identidad.api.dependencies import (
+    get_password_hasher,
+    get_token_service,
+    get_usuario_repository,
+)
 from identidad.application.commands.autenticar_usuario import (
     AutenticarUsuarioCommand,
     AutenticarUsuarioHandler,
@@ -22,8 +27,6 @@ from identidad.domain.exceptions import (
     UsuarioInactivo,
 )
 from identidad.domain.value_objects.rol import Rol
-from identidad.infrastructure.jwt_service import JWTService
-from identidad.infrastructure.repositories.sqlite_usuario_repository import SQLiteUsuarioRepository
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -58,24 +61,14 @@ class LoginResponse(BaseModel):
     token_type: str
 
 
-# ── Helpers de dependencias ───────────────────────────────────────────────────
-
-
-def _repo() -> SQLiteUsuarioRepository:
-    return SQLiteUsuarioRepository()
-
-
-def _jwt() -> JWTService:
-    return JWTService()
-
-
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
 
 @router.post("/registro", status_code=201)
 async def registrar_usuario(body: RegistroRequest) -> JSONResponse:
-    repo = _repo()
-    handler = RegistrarUsuarioHandler(repo)
+    repo = get_usuario_repository()
+    password_hasher = get_password_hasher()
+    handler = RegistrarUsuarioHandler(repo, password_hasher)
     cmd = RegistrarUsuarioCommand(email=body.email, password=body.password, rol=body.rol)
     try:
         usuario_id = await handler.handle(cmd)
@@ -88,9 +81,10 @@ async def registrar_usuario(body: RegistroRequest) -> JSONResponse:
 
 @router.post("/login", status_code=200)
 async def autenticar_usuario(body: LoginRequest) -> JSONResponse:
-    repo = _repo()
-    jwt_svc = _jwt()
-    handler = AutenticarUsuarioHandler(repo, jwt_svc)
+    repo = get_usuario_repository()
+    token_service = get_token_service()
+    password_hasher = get_password_hasher()
+    handler = AutenticarUsuarioHandler(repo, token_service, password_hasher)
     cmd = AutenticarUsuarioCommand(email=body.email, password=body.password)
     try:
         token_response: TokenResponse = await handler.handle(cmd)

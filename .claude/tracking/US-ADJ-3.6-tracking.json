@@ -1,0 +1,141 @@
+{
+  "metadata": {
+    "us_id": "US-ADJ-3.6",
+    "us_title": "TokenServicePort PasswordHashingPort",
+    "us_points": 3,
+    "producto": "ataraxiadive",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-03T12:08:08.503054+00:00",
+    "completed_at": "2026-04-03T13:14:09.543428+00:00",
+    "total_elapsed_seconds": 3961,
+    "effective_seconds": 3961,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validacion de Contexto",
+      "started_at": "2026-04-03T12:08:08.692799+00:00",
+      "completed_at": "2026-04-03T12:08:48.275984+00:00",
+      "elapsed_seconds": 39,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generacion de escenarios BDD",
+      "started_at": "2026-04-03T12:08:48.311245+00:00",
+      "completed_at": null,
+      "elapsed_seconds": 0,
+      "status": "in_progress",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de implementacion",
+      "started_at": "2026-04-03T12:09:03.243489+00:00",
+      "completed_at": "2026-04-03T12:10:38.614413+00:00",
+      "elapsed_seconds": 95,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementacion",
+      "started_at": "2026-04-03T12:10:38.632153+00:00",
+      "completed_at": null,
+      "elapsed_seconds": 0,
+      "status": "in_progress",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Desacoplar identidad de infraestructura",
+          "task_type": "implementation",
+          "estimated_minutes": 35.0,
+          "started_at": "2026-04-03T12:10:46.493692+00:00",
+          "completed_at": null,
+          "elapsed_seconds": 0,
+          "actual_minutes": 0.0,
+          "variance_minutes": -35.0,
+          "file_created": null,
+          "status": "in_progress"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests unitarios",
+      "started_at": "2026-04-03T12:12:42.215304+00:00",
+      "completed_at": null,
+      "elapsed_seconds": 0,
+      "status": "in_progress",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de integracion",
+      "started_at": "2026-04-03T12:13:44.950088+00:00",
+      "completed_at": "2026-04-03T12:14:06.780638+00:00",
+      "elapsed_seconds": 21,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality gates",
+      "started_at": "2026-04-03T12:14:44.595608+00:00",
+      "completed_at": null,
+      "elapsed_seconds": 0,
+      "status": "in_progress",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentacion",
+      "started_at": "2026-04-03T13:13:10.037363+00:00",
+      "completed_at": "2026-04-03T13:14:09.482742+00:00",
+      "elapsed_seconds": 59,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte final",
+      "started_at": "2026-04-03T13:14:09.533320+00:00",
+      "completed_at": null,
+      "elapsed_seconds": 0,
+      "status": "in_progress",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 1,
+    "completed_tasks": 0,
+    "total_phases": 9,
+    "estimated_total_minutes": 35.0,
+    "actual_total_minutes": 0,
+    "variance_minutes": -35.0,
+    "variance_percent": -100.0
+  }
+}

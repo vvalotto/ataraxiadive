@@ -7,11 +7,12 @@ import jwt
 
 from identidad.domain.aggregates.usuario import Usuario
 from identidad.domain.exceptions import TokenInvalido
+from identidad.domain.ports.token_service_port import TokenServicePort
 
 _DEFAULT_EXPIRY_HOURS = 24
 
 
-class JWTService:
+class JWTService(TokenServicePort):
     """Genera y verifica tokens JWT. INV-ID-04/05."""
 
     def __init__(self) -> None:

@@ -18,7 +18,10 @@ from resultados.application.commands.calcular_overall import (
     CalcularOverallCommand,
     CalcularOverallHandler,
 )
+from identidad.api.dependencies import configure_identity_dependencies
 from identidad.api.router import router as identidad_router
+from identidad.infrastructure.bcrypt_password_hasher import BcryptPasswordHasher
+from identidad.infrastructure.jwt_service import JWTService
 from registro.api.router import router as registro_router
 from torneo.api.exception_handlers import register_torneo_exception_handlers
 from torneo.api.router import router as torneo_router
@@ -37,6 +40,12 @@ from shared.domain.value_objects.disciplina import Disciplina
 from shared.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 
 app = FastAPI(title="AtaraxiaDive", version="0.1.0")
+
+if os.getenv("IDENTIDAD_JWT_SECRET"):
+    configure_identity_dependencies(
+        token_service=JWTService(),
+        password_hasher=BcryptPasswordHasher(),
+    )
 
 app.include_router(identidad_router)
 app.include_router(registro_router)
