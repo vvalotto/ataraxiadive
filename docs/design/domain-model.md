@@ -242,6 +242,7 @@ classDiagram
 |-------------|-------------|
 | `FormulaPuntos` | Fórmula deportiva para calcular puntos por disciplina. Configurable por torneo (AIDA / CMAS / genérica). Consumida por BC Resultados para calcular el Overall. |
 | `VentanaImpugnacion` | Lapso en minutos desde `CompetenciaFinalizada` durante el cual se permite `CorregirResultado`. Configurable por torneo. Consumida por BC Competencia como INV-P-15. |
+| `TiempoAP` | Parser y normalizador de APs de tiempo en formato `MM:SS` o `HH:MM:SS` a segundos (`Decimal`). Reutilizable en seeds, ingesta y futuros flujos de registro/anuncio. |
 
 ### Eventos principales
 
