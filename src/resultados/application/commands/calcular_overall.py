@@ -10,6 +10,8 @@ from resultados.domain.aggregates.ranking_competencia import RankingCompetencia
 from shared.domain.ports.event_store_port import EventStorePort
 from shared.domain.value_objects.disciplina import Disciplina
 
+_EVENTO_INTERVALO_OT = "IntervaloOTConfigurado"
+
 
 @dataclass(frozen=True)
 class CalcularOverallCommand:
@@ -73,7 +75,7 @@ async def _mapear_competencias_por_torneo(
 
     for events in streams:
         for event in events:
-            if event["event_type"] != "IntervaloOTConfigurado":
+            if event["event_type"] != _EVENTO_INTERVALO_OT:
                 continue
             payload = event["payload"]
             torneo_raw = payload.get("torneo_id")
