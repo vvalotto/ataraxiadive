@@ -6,7 +6,7 @@
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
 | **Fecha** | 2026-04-03 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | 🔄 v1.1 — SP-ADJ-04 en progreso |
+| **Estado** | ✅ v1.2 — SP-ADJ-04 completado |
 
 ---
 
@@ -31,6 +31,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP1 | Competencia (núcleo) | RF-PR-01/02/03, RF-EJ-02/05/07/08/10 |
 | SP2 | Competencia (completo) + Resultados (núcleo) | RF-PR-04/05/06/07/08, RF-EJ-01, RF-PM-03 |
 | SP3 | Torneo + Registro + Identidad + Resultados | RF-GT-01..07, RF-IN-01..06/08/09, RF-US-01..05, RF-PM-01/02/05/06 |
+| SP-ADJ-04 | Ajustes de Shared + Registro + Resultados + Competencia | RF-GT-02, RF-IN-10, RF-PR-05, RF-PM-05 |
 | SP4 | Notificaciones + extensiones | RF-EJ-03/06, RF-IN-05/06, RF-NT-01..04 |
 | SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
 
@@ -251,7 +252,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
-## 11. US-IEDD SP-ADJ-04 — En progreso (discrepancias de dominio real — pre-cierre BL-003)
+## 11. US-IEDD SP-ADJ-04 — Completadas (discrepancias de dominio real — pre-cierre BL-003)
 
 | US | DISC | RFs corregidos | Descripción | Estado |
 |----|------|----------------|-------------|--------|
@@ -260,7 +261,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 | US-ADJ-4.3 | DISC-07 | — | Renombrar `JUVENIL→JUNIOR` en enum `Categoria` | ✅ 2026-04-03 |
 | US-ADJ-4.4 | DISC-05 | RF-IN-10 | Agregar campo `club` a aggregate `Atleta` | ✅ 2026-04-03 |
 | US-ADJ-4.5 | DISC-01 | RF-PM-05 | Ranking por (disciplina, categoría) en BC Resultados | ✅ 2026-04-03 |
-| US-ADJ-4.6 | DISC-06 | — | Value Object `TiempoAP` — parsear `MM:SS → segundos` | ⏳ Pendiente |
+| US-ADJ-4.6 | DISC-06 | — | Value Object `TiempoAP` — parsear `MM:SS → segundos` | ✅ 2026-04-03 |
 
 ---
 
@@ -288,14 +289,14 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
 | Gestión del Torneo (RF-GT) | 7 | 7 | 0 | 0 |
-| Inscripción (RF-IN) | 9 | 8 | 1 | 0 |
+| Inscripción (RF-IN) | 10 | 9 | 1 | 0 |
 | Preparación (RF-PR) | 8 | 8 | 0 | 0 |
 | Ejecución (RF-EJ) | 10 | 9 | 1 | 1 |
 | Resultados (RF-PM) | 6 | 5 | 0 | 1 |
 | Usuarios (RF-US) | 5 | 5 | 0 | 0 |
 | Notificaciones (RF-NT) | 4 | 3 | 1 | 0 |
 | Integración (RF-IG) | 4 | 0 | 4 | 0 |
-| **Total** | **53** | **45** | **7** | **2** |
+| **Total** | **54** | **45** | **7** | **2** |
 
 > **85% de RFs completamente definidos.** Los 7 pendientes están en SP4+ — no bloquean SP1/SP2.
 
@@ -349,6 +350,6 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.4 — 2026-03-29: SP3 §9 agregado · US-3.1.1 implementada*
 *v1.5 — 2026-03-30: US-3.1.2 implementada — API REST Torneo completa*
 *v1.6 — 2026-04-02: SP3 completado a nivel US — §9 y tabla US→Tests actualizadas hasta US-3.5.3*
-*v1.9 — 2026-04-03: US-ADJ-4.5 implementada (§11), RF-PM-05 pasa a implementado (§3.5), ranking/overall por categoría alineados con Resultados*
+*v1.10 — 2026-04-03: SP-ADJ-04 completado (§2, §11), US-ADJ-4.6 implementada, RF-IN-10 incorporado a cobertura total (§13)*
 *Fuentes: 05-requerimientos_funcionales.md · Context Map v1.1 · estrategia-desarrollo-bc.md · ES Competencia*
 *Mantenido por: Claude Cowork + Victor Valotto*
