@@ -28,11 +28,11 @@ en el UAT de SP3 y producir output verificable contra la documentación oficial 
 
 | US | Descripción | Estado |
 |----|-------------|--------|
-| `US-ADJ-4.1` | Renombrar `DYNB → DBF` y `SPE2X50 → SPE` en enum `Disciplina` | ⏳ Pendiente |
-| `US-ADJ-4.2` | Corregir orden de grilla STA: `orden_ascendente=True` | ⏳ Pendiente |
+| `US-ADJ-4.1` | Renombrar `DYNB → DBF` y `SPE2X50 → SPE` en enum `Disciplina` | ✅ Implementada |
+| `US-ADJ-4.2` | Corregir orden de grilla STA: `orden_ascendente=True` | ✅ Implementada |
 | `US-ADJ-4.3` | Renombrar `JUVENIL → JUNIOR` en enum `Categoria` | ⏳ Pendiente |
-| `US-ADJ-4.4` | Agregar campo `club` a aggregate `Atleta` | ⏳ Pendiente |
-| `US-ADJ-4.5` | Ranking por (disciplina, categoría): segmentar `RankingCompetencia` | ⏳ Pendiente |
+| `US-ADJ-4.4` | Agregar campo `club` a aggregate `Atleta` y exponerlo en grillas/reportes | ⏳ Pendiente |
+| `US-ADJ-4.5` | Ranking y overall por categoría/género | ⏳ Pendiente |
 | `US-ADJ-4.6` | Value Object `TiempoAP` para parsear `MM:SS → segundos` | ⏳ Pendiente |
 
 ---
@@ -128,7 +128,7 @@ de string value — requiere migración de datos almacenados.
 **Issue:** DISC-05
 
 `club` (escuela/club de freediving) es dato obligatorio en todos los documentos
-oficiales del torneo: grilla de salida, resultados, certificados. El aggregate
+oficiales del torneo: grilla de salida, resultados, reportes y certificados. El aggregate
 `Atleta` no lo modela. Sin este campo, la app no puede generar documentación oficial.
 
 **Cambios:**
@@ -136,20 +136,21 @@ oficiales del torneo: grilla de salida, resultados, certificados. El aggregate
 - Agregar `club: str` a `RegistrarAtletaCommand`
 - Agregar columna `club` en `SqliteAtletaRepository`
 - Agregar `club` en el schema de la API (`RegistrarAtletaRequest`, `AtletaResponse`)
+- Propagar `club` a las salidas de grillas y reportes oficiales
 
 **Spec:** `docs/specs/sp-adj-04/US-ADJ-4.4.md`
 
 ---
 
-### US-ADJ-4.5 — Ranking por (disciplina, categoría): segmentar `RankingCompetencia`
+### US-ADJ-4.5 — Ranking y overall por categoría/género
 **Prioridad: Alta**
 **Capa:** `resultados/domain/` + `resultados/application/` + `resultados/infrastructure/`
 **Issue:** DISC-01
 
 BC Resultados produce un ranking flat que mezcla atletas de distintas categorías y sexos.
 En ningún torneo de apnea real existe ese ranking. El ranking real es siempre por
-`(disciplina, categoría)`, donde `Categoria` ya encoda el sexo (`SENIOR_MASCULINO`,
-`MASTER_FEMENINO`, etc.).
+`(disciplina, categoría)` y el overall del torneo también se publica por categoría/género,
+donde `Categoria` ya encoda el sexo (`SENIOR_MASCULINO`, `MASTER_FEMENINO`, etc.).
 
 **Cambios necesarios:**
 1. `ResultadoFinal` (port): agregar campo `categoria: Categoria`
@@ -159,10 +160,28 @@ En ningún torneo de apnea real existe ese ranking. El ranking real es siempre p
    — requiere un nuevo port hacia BC Registro en `resultados/domain/ports/`
 5. `ResultadosCalculados` (evento): incluir `categoria` en el payload de cada entrada
 6. API `GET /resultados/{id}/ranking`: respuesta agrupada por categoría
+7. `RankingOverall` / `CalcularOverall`: segmentar también el overall por categoría
+8. API `GET /resultados/{torneo_id}/overall`: respuesta agrupada por categoría
 
 La categoría viaja como dato del atleta desde BC Registro, atraviesa el ACL en
 `resultados/infrastructure/`, y se incorpora al `ResultadoFinal` que procesa el dominio.
 BC Resultados no "sabe" qué es un atleta — solo ve el `atleta_id` + su `categoria`.
+
+El contrato HTTP acordado para ambos endpoints usa listas de categorías:
+
+```json
+{
+  "calculado": true,
+  "rankings": [
+    {
+      "categoria": "SENIOR_FEMENINO",
+      "entradas": []
+    }
+  ]
+}
+```
+
+No se usarán keys dinámicas por categoría en la respuesta JSON.
 
 **Spec:** `docs/specs/sp-adj-04/US-ADJ-4.5.md`
 
@@ -223,7 +242,7 @@ Ubicación: `shared/domain/value_objects/tiempo_ap.py` si se usa en más de un B
 | 2 (Alta) | US-ADJ-4.2 | Orden STA invertido — la grilla generada es incorrecta |
 | 3 (Alta) | US-ADJ-4.5 | Ranking sin categoría — el output es inútil operacionalmente |
 | 4 (Media) | US-ADJ-4.3 | JUNIOR/JUVENIL — lenguaje ubicuo, fácil, alto impacto simbólico |
-| 5 (Media) | US-ADJ-4.4 | Club en Atleta — dato obligatorio en documentos oficiales |
+| 5 (Media) | US-ADJ-4.4 | Club en Atleta — dato obligatorio en grillas, reportes y documentos oficiales |
 | 6 (Media) | US-ADJ-4.6 | TiempoAP — facilita seed/UAT, encapsula conocimiento del dominio |
 
 ---
@@ -235,12 +254,13 @@ Ubicación: `shared/domain/value_objects/tiempo_ap.py` si se usa en más de un B
 2. US-ADJ-4.2    ← shared/domain/ — corregir orden STA (misma zona de código)
 3. US-ADJ-4.3    ← registro/domain/ — renombrar JUVENIL→JUNIOR
 4. US-ADJ-4.4    ← registro/ — agregar club a Atleta
-5. US-ADJ-4.5    ← resultados/ — ranking por categoría (la más compleja)
+5. US-ADJ-4.5    ← resultados/ — ranking y overall por categoría (la más compleja)
 6. US-ADJ-4.6    ← shared/domain/ — TiempoAP parser
 ```
 
 Las dos primeras (4.1 y 4.2) tocan `shared/domain/` y se pueden agrupar en el mismo
-branch si el scope no lo desaconseja. US-ADJ-4.5 es la más compleja y debe ir sola.
+branch si el scope no lo desaconseja. US-ADJ-4.5 es la más compleja, impacta `ranking`
+y `overall`, y debe ir sola.
 
 ---
 

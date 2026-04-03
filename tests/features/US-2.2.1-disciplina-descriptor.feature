@@ -6,11 +6,11 @@
 Feature: DisciplinaDescriptor — VO que encapsula reglas de disciplina
 
   @US-2.2.1 @happy_path
-  Scenario: Descriptor STA retorna unidad Segundos y orden descendente
+  Scenario: Descriptor STA retorna unidad Segundos y orden ascendente
     Given la disciplina es "STA"
     When se consulta el DisciplinaDescriptorPort
     Then unidad_esperada es "Segundos"
-    And orden_ascendente es False
+    And orden_ascendente es True
 
   @US-2.2.1 @happy_path
   Scenario: Descriptor DNF retorna unidad Metros y orden ascendente
@@ -36,11 +36,11 @@ Feature: DisciplinaDescriptor — VO que encapsula reglas de disciplina
       | FIM        |
 
   @US-2.2.1 @happy_path
-  Scenario: GenerarGrilla usa descriptor para ordenar STA — mayor AP primero
+  Scenario: GenerarGrilla usa descriptor para ordenar STA — menor AP primero
     Given una competencia STA con 3 atletas con APs 120s, 300s y 180s
     And el intervalo OT está configurado en 9 minutos
     When se genera la grilla usando el DisciplinaDescriptorPort
-    Then el orden de la grilla es posición 1 con AP 300s, posición 2 con AP 180s, posición 3 con AP 120s
+    Then el orden de la grilla es posición 1 con AP 120s, posición 2 con AP 180s, posición 3 con AP 300s
 
   @US-2.2.1 @happy_path
   Scenario: GenerarGrilla usa descriptor para ordenar DNF — menor AP primero

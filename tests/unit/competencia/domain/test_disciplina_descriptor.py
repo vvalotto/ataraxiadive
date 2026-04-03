@@ -14,9 +14,9 @@ class TestDescriptorSTA:
         d = DisciplinaDescriptor.para(Disciplina.STA)
         assert d.unidad_esperada == UnidadMedida.Segundos
 
-    def test_orden_descendente(self) -> None:
+    def test_orden_ascendente(self) -> None:
         d = DisciplinaDescriptor.para(Disciplina.STA)
-        assert d.orden_ascendente is False
+        assert d.orden_ascendente is True
 
     def test_disciplina_correcta(self) -> None:
         d = DisciplinaDescriptor.para(Disciplina.STA)
