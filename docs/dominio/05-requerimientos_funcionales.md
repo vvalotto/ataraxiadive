@@ -43,6 +43,7 @@ Este cuestionario tiene como objetivo profundizar y completar la comprensión de
   RF-IN-07   ¿Cómo se resuelve si un atleta se inscribe con datos diferentes a los que tiene la base de datos externa?            Pendiente de definicion
   RF-IN-08   ¿El género se utiliza solo para categorización o tiene algún otro efecto en la competencia?                          Solo categoría
   RF-IN-09   ¿Puede un atleta inscribirse en categorías diferentes según la disciplina?                                           No
+  RF-IN-10   ¿El club del atleta es un dato requerido del registro y debe verse en grillas/reportes?                              Si, es obligatorio y debe reflejarse en grillas y reportes
 
 3. Preparación de Competencias
 ==============================

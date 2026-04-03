@@ -18,6 +18,7 @@ def _atleta(atleta_id=None) -> Atleta:
         email="ana@example.com",
         fecha_nacimiento=date(1990, 5, 15),
         categoria=Categoria.SENIOR_FEMENINO,
+        club="Club Apnea Norte",
     )
 
 

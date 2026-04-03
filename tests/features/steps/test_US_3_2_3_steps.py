@@ -90,6 +90,7 @@ def given_atleta_y_torneo_abierto(context: dict[str, Any], client: TestClient) -
             "email": "ana@test.com",
             "fecha_nacimiento": "1990-01-01",
             "categoria": "SENIOR_FEMENINO",
+            "club": "Club Apnea Norte",
         },
     )
     _seed_torneo(context["torneo_db_path"], torneo_id, "INSCRIPCION_ABIERTA", "2026-12-01")
@@ -128,6 +129,7 @@ def given_atleta_ya_inscripto(context: dict[str, Any], client: TestClient) -> No
             "email": "carlos@test.com",
             "fecha_nacimiento": "1985-05-20",
             "categoria": "SENIOR_MASCULINO",
+            "club": "Club Apnea Norte",
         },
     )
     _seed_torneo(context["torneo_db_path"], torneo_id, "INSCRIPCION_ABIERTA", "2026-12-01")
@@ -155,6 +157,7 @@ def given_inscripcion_activa_maniana(context: dict[str, Any], client: TestClient
             "email": "pedro@test.com",
             "fecha_nacimiento": "1992-03-15",
             "categoria": "SENIOR_MASCULINO",
+            "club": "Club Apnea Norte",
         },
     )
     resp = client.post(
@@ -182,6 +185,7 @@ def given_inscripcion_activa_hoy(context: dict[str, Any], client: TestClient) ->
             "email": "laura@test.com",
             "fecha_nacimiento": "1995-07-10",
             "categoria": "SENIOR_FEMENINO",
+            "club": "Club Apnea Norte",
         },
     )
     resp = client.post(
@@ -208,6 +212,7 @@ def given_tres_inscriptos(context: dict[str, Any], client: TestClient) -> None:
                 "email": f"atleta{i}@test.com",
                 "fecha_nacimiento": "1990-01-01",
                 "categoria": "SENIOR_MASCULINO",
+                "club": "Club Apnea Norte",
             },
         )
         resp = client.post(
