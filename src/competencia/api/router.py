@@ -64,7 +64,6 @@ from competencia.application.queries.obtener_progreso import (
 from competencia.domain.value_objects.cambio_grilla import CambioGrilla
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.ports.event_store_port import EventStorePort
-from identidad.api.dependencies import OrganizadorDep
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 from competencia.infrastructure.repositories.andariveles_activos_adapter import (
     AndarivelesActivosAdapter,
@@ -75,6 +74,7 @@ from competencia.infrastructure.repositories.disciplina_descriptor_adapter impor
 from competencia.infrastructure.repositories.performances_estado_adapter import (
     PerformancesEstadoAdapter,
 )
+from shared.api.dependencies import OrganizadorDep
 
 router = APIRouter(prefix="/competencia", tags=["competencia"])
 

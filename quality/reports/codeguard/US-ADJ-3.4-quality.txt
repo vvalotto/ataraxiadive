@@ -1,0 +1,46 @@
+CodeGuard v0.2.0 (Arquitectura Modular)
+Analizando: /Users/victor/PycharmProjects/ataraxiadive/src/shared/api/dependencies.py, /Users/victor/PycharmProjects/ataraxiadive/src/competencia/api/router.py, /Users/victor/PycharmProjects/ataraxiadive/src/registro/api/router.py, /Users/victor/PycharmProjects/ataraxiadive/src/torneo/api/router.py
+Archivos Python encontrados: 4
+Tipo de análisis: pre-commit
+
+Checks disponibles: 6
+---
+╭──────────────────────────────────────────────────────────────────────────────╮
+│  🛡️  CodeGuard - Control de Calidad Automatizado                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Archivos analizados:  4     
+Checks ejecutados:    6     
+Tiempo de ejecución:  10.42s
+Resultados totales:   12    
+
+───────────────────────────── 📦  api  (12 issues) ─────────────────────────────
+
+                               Informativos (12)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/shared/api/dependencies.py │ ✓ No security issues detected  │
+│ PEP8       │ src/shared/api/dependencies.py │ ✓ PEP8 compliant               │
+│ Complexity │ src/shared/api/dependencies.py │ ✓ No complex functions         │
+│            │                                │ detected                       │
+│ Security   │ src/competencia/api/router.py  │ ✓ No security issues detected  │
+│ PEP8       │ src/competencia/api/router.py  │ ✓ PEP8 compliant               │
+│ Complexity │ src/competencia/api/router.py  │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+│ Security   │ src/registro/api/router.py     │ ✓ No security issues detected  │
+│ PEP8       │ src/registro/api/router.py     │ ✓ PEP8 compliant               │
+│ Complexity │ src/registro/api/router.py     │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+│ Security   │ src/torneo/api/router.py       │ ✓ No security issues detected  │
+│ PEP8       │ src/torneo/api/router.py       │ ✓ PEP8 compliant               │
+│ Complexity │ src/torneo/api/router.py       │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+╭─────────────────────────────── Resumen Final ────────────────────────────────╮
+│  Resumen:                                                                    │
+│            0 errores                                                         │
+│            0 advertencias                                                    │
+│            12 informativos                                                   │
+╰──────────────────────────────────────────────────────────────────────────────╯
