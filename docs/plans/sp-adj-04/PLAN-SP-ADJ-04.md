@@ -33,7 +33,7 @@ en el UAT de SP3 y producir output verificable contra la documentación oficial 
 | `US-ADJ-4.3` | Renombrar `JUVENIL → JUNIOR` en enum `Categoria` | ✅ Implementada |
 | `US-ADJ-4.4` | Agregar campo `club` a aggregate `Atleta` y exponerlo en grillas/reportes | ✅ Implementada |
 | `US-ADJ-4.5` | Ranking y overall por categoría/género | ✅ Implementada |
-| `US-ADJ-4.6` | Value Object `TiempoAP` para parsear `MM:SS → segundos` | ⏳ Pendiente |
+| `US-ADJ-4.6` | Value Object `TiempoAP` para parsear `MM:SS → segundos` | ✅ Implementada |
 
 ---
 
