@@ -36,6 +36,9 @@ from resultados.infrastructure.repositories.disciplina_descriptor_adapter import
 from resultados.infrastructure.repositories.resultados_competencia_adapter import (
     ResultadosCompetenciaAdapter,
 )
+from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
+    SQLiteCompetenciasPorTorneo,
+)
 from shared.domain.value_objects.disciplina import Disciplina
 from shared.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 
@@ -150,7 +153,7 @@ async def _verificar_todas_disciplinas_finalizadas(
     competencia_event_store: SQLiteEventStore,
 ) -> bool:
     """Helper de P-09: verifica si todas las competencias del torneo finalizaron."""
-    handler = ObtenerCompetenciasPorTorneoHandler(competencia_event_store)
+    handler = ObtenerCompetenciasPorTorneoHandler(SQLiteCompetenciasPorTorneo())
     competencias = await handler.handle(ObtenerCompetenciasPorTorneoQuery(torneo_id=torneo_id))
     if not competencias:
         return False

@@ -11,6 +11,9 @@ import pytest
 from pytest_bdd import given, scenarios, then, when
 
 import app as app_module
+from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
+    SQLiteCompetenciasPorTorneo,
+)
 from shared.domain.value_objects.disciplina import Disciplina
 from shared.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 from torneo.domain.aggregates.torneo import Torneo
@@ -71,6 +74,8 @@ async def _append_competencia(
         "occurred_at": "2026-04-02T12:00:00+00:00",
     }
     await store.append(stream_id=stream_id, event_type="IntervaloOTConfigurado", payload=payload)
+    if torneo_id is not None:
+        await SQLiteCompetenciasPorTorneo().guardar(competencia_id, disciplina.value, torneo_id)
     if finalizada:
         await store.append(
             stream_id=stream_id,
@@ -111,6 +116,7 @@ def ctx(tmp_path, monkeypatch: pytest.MonkeyPatch) -> dict:
         await _init_event_db(resultados_db)
         monkeypatch.setenv("RESULTADOS_DB_PATH", resultados_db)
         monkeypatch.setenv("TORNEO_DB_PATH", torneo_db)
+        monkeypatch.setenv("COMPETENCIA_DB_PATH", competencia_db)
         return {
             "torneo_id": uuid4(),
             "competencia_store": SQLiteEventStore(competencia_db),

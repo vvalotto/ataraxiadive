@@ -7,6 +7,9 @@ import aiosqlite
 import pytest
 
 import app as app_module
+from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
+    SQLiteCompetenciasPorTorneo,
+)
 from shared.domain.value_objects.disciplina import Disciplina
 from shared.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 from torneo.domain.aggregates.torneo import Torneo
@@ -68,6 +71,8 @@ async def _append_competencia(
             "occurred_at": "2026-04-02T12:00:00+00:00",
         },
     )
+    if torneo_id is not None:
+        await SQLiteCompetenciasPorTorneo().guardar(competencia_id, disciplina.value, torneo_id)
     if finalizada:
         await store.append(
             stream_id=stream_id,
@@ -92,6 +97,7 @@ async def callback_ctx(tmp_path, monkeypatch: pytest.MonkeyPatch) -> dict:
     await _init_event_db(resultados_db)
     monkeypatch.setenv("RESULTADOS_DB_PATH", resultados_db)
     monkeypatch.setenv("TORNEO_DB_PATH", torneo_db)
+    monkeypatch.setenv("COMPETENCIA_DB_PATH", competencia_db)
     return {
         "competencia_store": SQLiteEventStore(competencia_db),
         "torneo_repo": SQLiteTorneoRepository(torneo_db),
