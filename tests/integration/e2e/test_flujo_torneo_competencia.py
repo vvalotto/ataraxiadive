@@ -162,6 +162,7 @@ async def _registrar_e_inscribir(
             email="juan@test.com",
             fecha_nacimiento=date(1990, 1, 15),
             categoria=Categoria.SENIOR_MASCULINO,
+            club="Club Test",
         )
     )
     await InscribirAtletaHandler(inscripcion_repo, torneo_consulta).handle(
@@ -276,6 +277,7 @@ async def test_atleta_sin_ap_no_aparece_en_grilla(infra):
             email="maria@test.com",
             fecha_nacimiento=date(1992, 5, 20),
             categoria=Categoria.SENIOR_FEMENINO,
+            club="Club Test",
         )
     )
     await InscribirAtletaHandler(infra["inscripcion_repo"], infra["torneo_consulta"]).handle(
@@ -314,6 +316,7 @@ async def test_multiples_atletas_ordenados_por_ap_ascendente(infra):
                 email=f"atleta{ap_segundos}@test.com",
                 fecha_nacimiento=date(1990, 1, 1),
                 categoria=Categoria.SENIOR_MASCULINO,
+                club="Club Test",
             )
         )
         await InscribirAtletaHandler(infra["inscripcion_repo"], infra["torneo_consulta"]).handle(

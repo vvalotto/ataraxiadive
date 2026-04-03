@@ -86,10 +86,10 @@ async def _seed_competencia(
         )
 
 
-class TestGrillaSTAOrdenDescendente:
+class TestGrillaSTAOrdenAscendente:
     @pytest.mark.asyncio
-    async def test_grilla_sta_mayor_ap_primero(self, event_store: SQLiteEventStore) -> None:
-        """STA: AP mayor→menor (primero 300s, último 120s)."""
+    async def test_grilla_sta_menor_ap_primero(self, event_store: SQLiteEventStore) -> None:
+        """STA: AP menor→mayor (primero 120s, último 300s). INV-P-01 corregido en SP-ADJ-04."""
         comp_id = UUID("00000000-0000-0000-0000-000000000001")
         await _seed_competencia(
             event_store,
@@ -118,7 +118,7 @@ class TestGrillaSTAOrdenDescendente:
         comp = Competencia.reconstitute(comp_id, Disciplina.STA, events)
 
         atletas = [str(e.atleta_id) for e in comp.grilla]
-        assert atletas == [str(A002), str(A003), str(A001)]  # 300, 180, 120
+        assert atletas == [str(A001), str(A003), str(A002)]  # 120, 180, 300
 
 
 class TestGrillaDNFOrdenAscendente:

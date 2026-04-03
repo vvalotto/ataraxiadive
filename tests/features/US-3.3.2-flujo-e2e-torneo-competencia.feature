@@ -16,9 +16,9 @@ Feature: US-3.3.2 — Flujo E2E Torneo-Registro-Competencia
     When se genera y confirma la grilla
     Then la grilla contiene solo el atleta con AP
 
-  Scenario: multiples atletas ordenados por AP descendente
+  Scenario: multiples atletas ordenados por AP ascendente
     Given torneo abierto para inscripcion
     And tres atletas con APs de 360 300 y 240 segundos en STA
     And competencia STA configurada con torneo_id
     When se genera y confirma la grilla
-    Then el orden de la grilla es 360 300 240 segundos
+    Then el orden de la grilla es 240 300 360 segundos

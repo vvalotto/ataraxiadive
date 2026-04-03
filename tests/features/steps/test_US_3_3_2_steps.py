@@ -144,7 +144,7 @@ def test_atleta_sin_ap():
     pass
 
 
-@scenario(FEATURE, "multiples atletas ordenados por AP descendente")
+@scenario(FEATURE, "multiples atletas ordenados por AP ascendente")
 def test_orden_ap():
     pass
 
@@ -189,6 +189,7 @@ async def _registrar_e_inscribir(
             email=email,
             fecha_nacimiento=date(1990, 1, 15),
             categoria=Categoria.SENIOR_MASCULINO,
+            club="Club Test",
         )
     )
     await InscribirAtletaHandler(inscripcion_repo, torneo_consulta).handle(
@@ -368,11 +369,11 @@ def grilla_contiene_solo_atleta_con_ap(ctx: dict[str, Any]) -> None:
     assert ctx["grilla"][0].atleta_id == str(ctx["atleta_con_ap"])
 
 
-@then("el orden de la grilla es 360 300 240 segundos")
-def orden_grilla_descendente(ctx: dict[str, Any]) -> None:
+@then("el orden de la grilla es 240 300 360 segundos")
+def orden_grilla_ascendente(ctx: dict[str, Any]) -> None:
     grilla = ctx["grilla"]
     atletas_y_aps = ctx["atletas_y_aps"]
     assert len(grilla) == 3
-    assert grilla[0].atleta_id == str(atletas_y_aps[0][0])  # 360s — posición 1
+    assert grilla[0].atleta_id == str(atletas_y_aps[2][0])  # 240s — posición 1
     assert grilla[1].atleta_id == str(atletas_y_aps[1][0])  # 300s — posición 2
-    assert grilla[2].atleta_id == str(atletas_y_aps[2][0])  # 240s — posición 3
+    assert grilla[2].atleta_id == str(atletas_y_aps[0][0])  # 360s — posición 3
