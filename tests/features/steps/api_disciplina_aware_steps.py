@@ -107,9 +107,9 @@ def ctx() -> dict:  # type: ignore[type-arg]
         "client": client,
         # STA background competencia
         "sta_cid": uuid4(),
-        "sta_p1": uuid4(),  # AP 300s
+        "sta_p1": uuid4(),  # AP 120s
         "sta_p2": uuid4(),  # AP 180s
-        "sta_p3": uuid4(),  # AP 120s
+        "sta_p3": uuid4(),  # AP 300s
         # Competencia actual (puede ser distinta a la STA)
         "current_cid": None,
         "current_pid": None,
@@ -208,9 +208,9 @@ def _setup_competencia_sta_con_grilla(ctx: dict) -> None:  # type: ignore[type-a
     cid = ctx["sta_cid"]
     p1, p2, p3 = ctx["sta_p1"], ctx["sta_p2"], ctx["sta_p3"]
 
-    _registrar_ap(store, cid, p1, "300", Disciplina.STA, UnidadMedida.Segundos)
+    _registrar_ap(store, cid, p1, "120", Disciplina.STA, UnidadMedida.Segundos)
     _registrar_ap(store, cid, p2, "180", Disciplina.STA, UnidadMedida.Segundos)
-    _registrar_ap(store, cid, p3, "120", Disciplina.STA, UnidadMedida.Segundos)
+    _registrar_ap(store, cid, p3, "300", Disciplina.STA, UnidadMedida.Segundos)
 
     _run(
         ConfigurarIntervaloOTHandler(store).handle(
@@ -250,10 +250,10 @@ def step_background_sta_en_ejecucion(ctx: dict) -> None:  # type: ignore[type-ar
 
 
 @given(
-    "el orden de grilla es posicion 1 con AP 300s, posicion 2 con AP 180s, posicion 3 con AP 120s"
+    "el orden de grilla es posicion 1 con AP 120s, posicion 2 con AP 180s, posicion 3 con AP 300s"
 )
 def step_orden_grilla(ctx: dict) -> None:  # type: ignore[type-arg]
-    # El orden es garantizado por el dominio (STA: mayor AP primero).
+    # El orden es garantizado por el dominio (STA: menor AP primero).
     # Este step documenta la postcondición del Background.
     pass
 

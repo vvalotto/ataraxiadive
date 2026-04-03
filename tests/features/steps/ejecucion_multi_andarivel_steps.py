@@ -147,7 +147,7 @@ def _setup_competencia_en_ejecucion(
     andariveles: int = 2,
 ) -> None:
     """Setup completo: AP → ConfigOT → GenerarGrilla → ConfirmarGrilla → Iniciar."""
-    # APs: A=300s, B=280s, C=260s (orden descendente → grilla)
+    # APs: A=300s, B=280s, C=260s (orden ascendente → grilla)
     for pid, valor in [(pid_a, "300"), (pid_b, "280"), (pid_c, "260")]:
         _run(
             RegistrarAPHandler(store, _ESTADO_STUB, _DESCRIPTOR).handle(

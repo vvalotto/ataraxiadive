@@ -1,15 +1,15 @@
 """Test de integración E2E — Inc 2.1: Juez avanza por la grilla atleta a atleta.
 
 DoD observable de Inc 2.1:
-  - Grilla generada con orden correcto (AP STA: mayor a menor)
+  - Grilla generada con orden correcto (AP STA: menor a mayor)
   - Juez confirma grilla → inicia competencia → avanza atleta por atleta
   - CompetenciaEstadoAdapter REAL lee del Event Store (no stub)
 
 Escenario: disciplina STA con 3 atletas
-  Atleta A: AP 300s (5 min) → posición 1 (mayor AP primero en STA)
+  Atleta C: AP 120s (2 min) → posición 1 (menor AP primero en STA)
   Atleta B: AP 180s (3 min) → posición 2
-  Atleta C: AP 120s (2 min) → posición 3
-  Flujo: generar → confirmar → iniciar → llamar A → llamar B → llamar C
+  Atleta A: AP 300s (5 min) → posición 3
+  Flujo: generar → confirmar → iniciar → llamar C → llamar B → llamar A
 """
 
 from __future__ import annotations
@@ -129,7 +129,7 @@ async def _setup_grilla_generada(
 
 @pytest.mark.asyncio
 async def test_grilla_generada_con_orden_correcto_sta(store: SQLiteEventStore) -> None:
-    """STA ordena AP mayor a menor: A(300s) → B(180s) → C(120s)."""
+    """STA ordena AP menor a mayor: C(120s) → B(180s) → A(300s)."""
     cid = uuid4()
     atleta_a, atleta_b, atleta_c = uuid4(), uuid4(), uuid4()
 
@@ -143,10 +143,10 @@ async def test_grilla_generada_con_orden_correcto_sta(store: SQLiteEventStore) -
     assert entradas[0].posicion == 1
     assert entradas[1].posicion == 2
     assert entradas[2].posicion == 3
-    # STA: mayor AP primero → A(300s) en posición 1
-    assert str(atleta_a) in entradas[0].atleta_id
+    # STA: menor AP primero → C(120s) en posición 1
+    assert str(atleta_c) in entradas[0].atleta_id
     assert str(atleta_b) in entradas[1].atleta_id
-    assert str(atleta_c) in entradas[2].atleta_id
+    assert str(atleta_a) in entradas[2].atleta_id
 
 
 @pytest.mark.asyncio

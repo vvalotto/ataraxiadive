@@ -298,8 +298,8 @@ async def test_atleta_sin_ap_no_aparece_en_grilla(infra):
 
 
 @pytest.mark.asyncio
-async def test_multiples_atletas_ordenados_por_ap_descendente(infra):
-    """RF-PR-05: STA — mayor AP primero (360s → 300s → 240s)."""
+async def test_multiples_atletas_ordenados_por_ap_ascendente(infra):
+    """RF-PR-05: STA — menor AP primero (240s → 300s → 360s)."""
     torneo_id = await _crear_torneo_abierto(infra["torneo_repo"])
     competencia_id = await _configurar_competencia(infra["event_store"], torneo_id)
 
@@ -331,6 +331,6 @@ async def test_multiples_atletas_ordenados_por_ap_descendente(infra):
         ObtenerGrillaQuery(competencia_id=competencia_id, disciplina=Disciplina.STA)
     )
     assert len(grilla) == 3
-    assert grilla[0].atleta_id == str(atletas_y_aps[0][0])  # 360s — posición 1
+    assert grilla[0].atleta_id == str(atletas_y_aps[2][0])  # 240s — posición 1
     assert grilla[1].atleta_id == str(atletas_y_aps[1][0])  # 300s — posición 2
-    assert grilla[2].atleta_id == str(atletas_y_aps[2][0])  # 240s — posición 3
+    assert grilla[2].atleta_id == str(atletas_y_aps[0][0])  # 360s — posición 3

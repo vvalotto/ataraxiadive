@@ -13,14 +13,13 @@ class DisciplinaDescriptor:
     """Encapsula las reglas de una disciplina: unidad esperada y orden de grilla.
 
     Política P-01:
-        - STA (tiempo): unidad=Segundos, orden_ascendente=False (mayor AP primero)
+        - STA (tiempo): unidad=Segundos, orden_ascendente=True (menor AP primero)
         - Distancia (DNF, DYN, ...): unidad=Metros, orden_ascendente=True (menor AP primero)
 
     Attributes:
         disciplina: Disciplina a la que pertenece este descriptor.
         unidad_esperada: Unidad de medida válida para APs y RPs de esta disciplina.
-        orden_ascendente: True si la grilla ordena de menor a mayor AP (distancia);
-            False si ordena de mayor a menor (tiempo).
+        orden_ascendente: True si la grilla ordena de menor a mayor AP.
     """
 
     disciplina: Disciplina
@@ -41,7 +40,7 @@ class DisciplinaDescriptor:
             return cls(
                 disciplina=disciplina,
                 unidad_esperada=UnidadMedida.Segundos,
-                orden_ascendente=False,
+                orden_ascendente=True,
             )
         return cls(
             disciplina=disciplina,

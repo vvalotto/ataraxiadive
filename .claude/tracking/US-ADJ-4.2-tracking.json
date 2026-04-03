@@ -1,0 +1,85 @@
+{
+  "metadata": {
+    "us_id": "US-ADJ-4.2",
+    "us_title": "Corregir orden STA",
+    "us_points": 2,
+    "producto": "ataraxiadive",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-03T17:58:44.565120+00:00",
+    "completed_at": "2026-04-03T18:05:05.874855+00:00",
+    "total_elapsed_seconds": 381,
+    "effective_seconds": 381,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validacion de contexto",
+      "started_at": "2026-04-03T17:59:03.855524+00:00",
+      "completed_at": "2026-04-03T18:05:00.096181+00:00",
+      "elapsed_seconds": 356,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de implementacion",
+      "started_at": "2026-04-03T18:08:00.000000+00:00",
+      "completed_at": "2026-04-03T18:10:00.000000+00:00",
+      "elapsed_seconds": 120,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_plan_001",
+          "task_name": "Crear plan US-ADJ-4.2",
+          "task_type": "docs",
+          "estimated_minutes": 10,
+          "started_at": "2026-04-03T18:08:00.000000+00:00",
+          "completed_at": "2026-04-03T18:10:00.000000+00:00",
+          "elapsed_seconds": 120,
+          "status": "completed",
+          "file_created": "docs/plans/sp-adj-04/US-ADJ-4.2-plan.md"
+        }
+      ],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Cierre y evidencia",
+      "started_at": "2026-04-03T18:10:00.000000+00:00",
+      "completed_at": "2026-04-03T18:12:00.000000+00:00",
+      "elapsed_seconds": 120,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_close_001",
+          "task_name": "Crear reporte US-ADJ-4.2",
+          "task_type": "docs",
+          "estimated_minutes": 10,
+          "started_at": "2026-04-03T18:10:00.000000+00:00",
+          "completed_at": "2026-04-03T18:12:00.000000+00:00",
+          "elapsed_seconds": 120,
+          "status": "completed",
+          "file_created": "docs/reports/US-ADJ-4.2-report.md"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 2,
+    "completed_tasks": 2,
+    "total_phases": 3,
+    "estimated_total_minutes": 20,
+    "actual_total_minutes": 10,
+    "variance_minutes": -10,
+    "variance_percent": 0.0
+  }
+}

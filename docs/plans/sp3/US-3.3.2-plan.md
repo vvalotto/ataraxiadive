@@ -39,7 +39,7 @@ Verifica RF-PR-04.
 
 ### T4 — Test E2E orden por AP (5 min)
 `test_multiples_atletas_ordenados_por_ap`: 3 atletas con APs 360s/300s/240s.
-Verifica RF-PR-05 (STA: mayor AP primero).
+Verifica RF-PR-05 (STA: menor AP primero).
 
 ### T5 — Steps BDD (5 min)
 Step definitions para el `.feature` de US-3.3.2 usando el fixture compartido.

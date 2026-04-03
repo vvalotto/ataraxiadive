@@ -138,7 +138,7 @@ BCs previos.
 | Política | Descripción |
 |----------|-------------|
 | 🟣 P-04 | Cuando `PlazoAPVencido` → atletas sin AP quedan en estado NoCompite (no compiten) |
-| 🟣 P-05 | Orden de grilla: disciplinas de distancia (DNF, DYN, DYNB) → menor a mayor AP; disciplinas de tiempo (STA) → mayor a menor AP |
+| 🟣 P-05 | Orden de grilla: disciplinas de distancia (DNF, DYN, DBF, SPE) → menor a mayor AP; disciplinas de tiempo (STA) → menor a mayor AP |
 | 🟣 P-06 | Asignación de andariveles → automática por el sistema al generar la grilla |
 
 ### Hot Spots

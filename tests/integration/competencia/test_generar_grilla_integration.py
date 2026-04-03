@@ -121,8 +121,8 @@ class TestGenerarGrillaIntegracion:
     async def test_orden_sta_correcto_tres_atletas(self, event_store: SQLiteEventStore) -> None:
         await _seed_intervalo(event_store)
         await _seed_ap(event_store, A001, "330")  # 5:30
-        await _seed_ap(event_store, A002, "360")  # 6:00 — mayor, pos=1
-        await _seed_ap(event_store, A003, "285")  # 4:45 — menor, pos=3
+        await _seed_ap(event_store, A002, "360")  # 6:00 — mayor, pos=3
+        await _seed_ap(event_store, A003, "285")  # 4:45 — menor, pos=1
 
         adapter = PerformancesAPAdapter(event_store)
         handler = GenerarGrillaHandler(event_store, adapter, DisciplinaDescriptorAdapter())
@@ -140,8 +140,8 @@ class TestGenerarGrillaIntegracion:
         perfs = grilla_event["payload"]["performances"]
 
         atletas_orden = [p["atleta_id"] for p in perfs]
-        assert atletas_orden[0] == str(A002)  # mayor AP primero
-        assert atletas_orden[2] == str(A003)  # menor AP último
+        assert atletas_orden[0] == str(A003)  # menor AP primero
+        assert atletas_orden[2] == str(A002)  # mayor AP último
 
     @pytest.mark.asyncio
     async def test_ot_calculados_correctamente(self, event_store: SQLiteEventStore) -> None:

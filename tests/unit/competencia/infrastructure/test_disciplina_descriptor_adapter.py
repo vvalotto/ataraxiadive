@@ -21,11 +21,11 @@ class TestAdapterSTA:
         desc = adapter.describe(Disciplina.STA)
         assert desc.unidad_esperada == UnidadMedida.Segundos
 
-    def test_describe_sta_retorna_orden_descendente(
+    def test_describe_sta_retorna_orden_ascendente(
         self, adapter: DisciplinaDescriptorAdapter
     ) -> None:
         desc = adapter.describe(Disciplina.STA)
-        assert desc.orden_ascendente is False
+        assert desc.orden_ascendente is True
 
 
 class TestAdapterDistancia:
