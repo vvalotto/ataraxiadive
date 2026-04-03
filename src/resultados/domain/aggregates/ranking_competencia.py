@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import json
+from collections import defaultdict
 from decimal import Decimal
 from typing import Any
 from uuid import UUID
 
+from registro.domain.value_objects.categoria import Categoria
 from shared.domain.base.aggregate_root import AggregateRoot
 from resultados.domain.events.resultados_calculados import ResultadosCalculados
 from resultados.domain.ports.resultados_competencia_port import ResultadoFinal
@@ -16,6 +18,7 @@ from shared.domain.value_objects.disciplina_descriptor import DisciplinaDescript
 
 # Tarjetas que producen un resultado válido (se posicionan antes de DNS/Roja)
 _TARJETAS_VALIDAS = {"Blanca", "Amarilla"}
+_CATEGORIA_DEFAULT = Categoria.SENIOR_MASCULINO
 
 
 class RankingCompetencia(AggregateRoot):
@@ -148,10 +151,29 @@ def _calcular_entries(resultados: list[ResultadoFinal]) -> list[EntradaRanking]:
     Empates: comparten posición; la siguiente se omite.
     Podio: posiciones 1, 2 y 3.
     """
+    grupos = _agrupar_por_categoria(resultados)
+    entries: list[EntradaRanking] = []
+    for categoria in sorted(grupos, key=lambda cat: cat.value):
+        entries.extend(_calcular_entries_categoria(categoria, grupos[categoria]))
+
+    return entries
+
+
+def _agrupar_por_categoria(
+    resultados: list[ResultadoFinal],
+) -> dict[Categoria, list[ResultadoFinal]]:
+    grupos: dict[Categoria, list[ResultadoFinal]] = defaultdict(list)
+    for resultado in resultados:
+        grupos[resultado.categoria or _CATEGORIA_DEFAULT].append(resultado)
+    return dict(grupos)
+
+
+def _calcular_entries_categoria(
+    categoria: Categoria,
+    resultados: list[ResultadoFinal],
+) -> list[EntradaRanking]:
     validas = [r for r in resultados if r.tarjeta in _TARJETAS_VALIDAS]
     invalidas = [r for r in resultados if r.tarjeta not in _TARJETAS_VALIDAS]
-
-    # Ordenar válidas por RP desc (mayor es mejor — aplica a STA y distancia)
     validas_ordenadas = sorted(
         validas,
         key=lambda r: r.rp if r.rp is not None else Decimal(0),
@@ -160,43 +182,62 @@ def _calcular_entries(resultados: list[ResultadoFinal]) -> list[EntradaRanking]:
 
     entries: list[EntradaRanking] = []
     posicion_actual = 1
-
     for i, resultado in enumerate(validas_ordenadas):
-        if i > 0 and resultado.rp == validas_ordenadas[i - 1].rp:
-            # Empate: misma posición que el anterior
-            pos = entries[-1].posicion
-        else:
-            pos = posicion_actual
-
-        entries.append(
-            EntradaRanking(
-                posicion=pos,
-                atleta_id=resultado.atleta_id,
-                rp=resultado.rp,
-                unidad=resultado.unidad,
-                tarjeta=resultado.tarjeta,
-                es_dns=False,
-                en_podio=pos <= 3,
-            )
-        )
+        pos = _resolver_posicion_valida(entries, validas_ordenadas, resultado, i, posicion_actual)
+        entries.append(_crear_entry_valida(categoria, resultado, pos))
         posicion_actual = len(entries) + 1
 
-    # Inválidas al final
     for resultado in invalidas:
-        entries.append(
-            EntradaRanking(
-                posicion=posicion_actual,
-                atleta_id=resultado.atleta_id,
-                rp=None,
-                unidad=None,
-                tarjeta=resultado.tarjeta,
-                es_dns=resultado.es_dns,
-                en_podio=False,
-            )
-        )
+        entries.append(_crear_entry_invalida(categoria, resultado, posicion_actual))
         posicion_actual += 1
 
     return entries
+
+
+def _resolver_posicion_valida(
+    entries: list[EntradaRanking],
+    validas_ordenadas: list[ResultadoFinal],
+    resultado: ResultadoFinal,
+    index: int,
+    posicion_actual: int,
+) -> int:
+    if index > 0 and resultado.rp == validas_ordenadas[index - 1].rp:
+        return entries[-1].posicion
+    return posicion_actual
+
+
+def _crear_entry_valida(
+    categoria: Categoria,
+    resultado: ResultadoFinal,
+    posicion: int,
+) -> EntradaRanking:
+    return EntradaRanking(
+        posicion=posicion,
+        atleta_id=resultado.atleta_id,
+        categoria=categoria,
+        rp=resultado.rp,
+        unidad=resultado.unidad,
+        tarjeta=resultado.tarjeta,
+        es_dns=False,
+        en_podio=posicion <= 3,
+    )
+
+
+def _crear_entry_invalida(
+    categoria: Categoria,
+    resultado: ResultadoFinal,
+    posicion: int,
+) -> EntradaRanking:
+    return EntradaRanking(
+        posicion=posicion,
+        atleta_id=resultado.atleta_id,
+        categoria=categoria,
+        rp=None if resultado.es_dns else resultado.rp,
+        unidad=None if resultado.es_dns else resultado.unidad,
+        tarjeta=resultado.tarjeta,
+        es_dns=resultado.es_dns,
+        en_podio=False,
+    )
 
 
 def _entrada_a_dict(e: EntradaRanking) -> dict[str, Any]:
@@ -204,6 +245,7 @@ def _entrada_a_dict(e: EntradaRanking) -> dict[str, Any]:
     return {
         "posicion": e.posicion,
         "atleta_id": str(e.atleta_id),
+        "categoria": e.categoria.value,
         "rp": str(e.rp) if e.rp is not None else None,
         "unidad": e.unidad,
         "tarjeta": e.tarjeta,
@@ -217,6 +259,7 @@ def _dict_a_entrada(d: dict[str, Any]) -> EntradaRanking:
     return EntradaRanking(
         posicion=d["posicion"],
         atleta_id=UUID(d["atleta_id"]),
+        categoria=Categoria(d.get("categoria", _CATEGORIA_DEFAULT.value)),
         rp=Decimal(d["rp"]) if d["rp"] is not None else None,
         unidad=d["unidad"],
         tarjeta=d["tarjeta"],

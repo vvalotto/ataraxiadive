@@ -146,10 +146,12 @@ def then_calculado_true(ctx: dict) -> None:
 
 @then("el ranking overall contiene entradas ordenadas por posicion")
 def then_ordenado(ctx: dict) -> None:
-    ranking = ctx["response"].json()["ranking"]
-    assert [entry["posicion"] for entry in ranking] == sorted(
-        entry["posicion"] for entry in ranking
-    )
+    rankings = ctx["response"].json()["rankings"]
+    for grupo in rankings:
+        entradas = grupo["entradas"]
+        assert [entry["posicion"] for entry in entradas] == sorted(
+            entry["posicion"] for entry in entradas
+        )
 
 
 @then("la respuesta es 200 con calculado false")
@@ -161,26 +163,26 @@ def then_calculado_false(ctx: dict) -> None:
 @then("el ranking overall es vacio")
 def then_vacio(ctx: dict) -> None:
     payload = ctx["response"].json()
-    assert payload["ranking"] == []
-    assert payload["total"] == 0
+    assert payload["rankings"] == []
 
 
 @then("cada entrada incluye detalle STA y DNF con sus posiciones")
 def then_detalle_disciplina(ctx: dict) -> None:
-    for entry in ctx["response"].json()["ranking"]:
-        assert "STA" in entry["detalle"]
-        assert "DNF" in entry["detalle"]
+    for grupo in ctx["response"].json()["rankings"]:
+        for entry in grupo["entradas"]:
+            assert "STA" in entry["detalle"]
+            assert "DNF" in entry["detalle"]
 
 
 @then("los puestos 1, 2 y 3 tienen en_podio true")
 def then_podio_true(ctx: dict) -> None:
-    ranking = ctx["response"].json()["ranking"]
-    for entry in ranking[:3]:
-        assert entry["en_podio"] is True
+    for grupo in ctx["response"].json()["rankings"]:
+        for entry in grupo["entradas"][:3]:
+            assert entry["en_podio"] is True
 
 
 @then("los demas puestos tienen en_podio false")
 def then_podio_false(ctx: dict) -> None:
-    ranking = ctx["response"].json()["ranking"]
-    for entry in ranking[3:]:
-        assert entry["en_podio"] is False
+    for grupo in ctx["response"].json()["rankings"]:
+        for entry in grupo["entradas"][3:]:
+            assert entry["en_podio"] is False

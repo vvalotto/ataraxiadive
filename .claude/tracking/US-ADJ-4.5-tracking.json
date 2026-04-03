@@ -1,0 +1,50 @@
+{
+  "metadata": {
+    "us_id": "US-ADJ-4.5",
+    "us_title": "Ranking por categoria",
+    "us_points": 5,
+    "producto": "ataraxiadive",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-03T20:11:50.512146+00:00",
+    "completed_at": "2026-04-03T20:26:43.330528+00:00",
+    "total_elapsed_seconds": 892,
+    "effective_seconds": 892,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validacion de contexto",
+      "started_at": "2026-04-03T20:11:50.539270+00:00",
+      "completed_at": "2026-04-03T20:13:22.564548+00:00",
+      "elapsed_seconds": 92,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de implementacion",
+      "started_at": "2026-04-03T20:13:22.570812+00:00",
+      "completed_at": "2026-04-03T20:26:43.326828+00:00",
+      "elapsed_seconds": 800,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 0,
+    "completed_tasks": 0,
+    "total_phases": 2,
+    "estimated_total_minutes": 0,
+    "actual_total_minutes": 0,
+    "variance_minutes": 0,
+    "variance_percent": 0.0
+  }
+}

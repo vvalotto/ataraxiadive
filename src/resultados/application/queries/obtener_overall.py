@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections import defaultdict
 from dataclasses import dataclass
 from uuid import UUID
 
@@ -27,6 +28,14 @@ class OverallEntradaDTO:
     en_podio: bool
 
 
+@dataclass(frozen=True)
+class OverallCategoriaDTO:
+    """DTO agrupado por categoría para respuesta HTTP."""
+
+    categoria: str
+    entradas: list[OverallEntradaDTO]
+
+
 class ObtenerOverallHandler:
     """Handler de la query ObtenerOverall.
 
@@ -37,7 +46,7 @@ class ObtenerOverallHandler:
     def __init__(self, ranking_store: EventStorePort) -> None:
         self._ranking_store = ranking_store
 
-    async def handle(self, query: ObtenerOverallQuery) -> list[OverallEntradaDTO]:
+    async def handle(self, query: ObtenerOverallQuery) -> list[OverallCategoriaDTO]:
         """Retorna las entradas calculadas del overall.
 
         Returns:
@@ -47,13 +56,18 @@ class ObtenerOverallHandler:
         stream_id = f"ranking-overall-{query.torneo_id}"
         events = await self._ranking_store.load(stream_id)
         ranking = RankingOverall.reconstitute(query.torneo_id, events)
-        return [
-            OverallEntradaDTO(
-                posicion=entry.posicion,
-                atleta_id=str(entry.atleta_id),
-                puntaje=entry.puntaje,
-                detalle=dict(entry.detalle),
-                en_podio=entry.en_podio,
+        agrupado: dict[str, list[OverallEntradaDTO]] = defaultdict(list)
+        for entry in ranking.entries:
+            agrupado[entry.categoria.value].append(
+                OverallEntradaDTO(
+                    posicion=entry.posicion,
+                    atleta_id=str(entry.atleta_id),
+                    puntaje=entry.puntaje,
+                    detalle=dict(entry.detalle),
+                    en_podio=entry.en_podio,
+                )
             )
-            for entry in ranking.entries
+        return [
+            OverallCategoriaDTO(categoria=categoria, entradas=entradas)
+            for categoria, entradas in sorted(agrupado.items())
         ]

@@ -7,6 +7,7 @@ from uuid import uuid4
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
+from registro.domain.value_objects.categoria import Categoria
 from resultados.api.router import (
     get_ranking_store,
     router,
@@ -36,10 +37,8 @@ def test_get_overall_devuelve_calculado_false_sin_eventos(tmp_path) -> None:
 
     assert response.status_code == 200
     assert response.json() == {
-        "torneo_id": str(torneo_id),
-        "total": 0,
         "calculado": False,
-        "ranking": [],
+        "rankings": [],
     }
 
 
@@ -64,6 +63,7 @@ def test_get_overall_devuelve_detalle_y_podio(tmp_path) -> None:
                 {
                     "posicion": 1,
                     "atleta_id": str(atleta_id),
+                    "categoria": Categoria.SENIOR_MASCULINO.value,
                     "puntaje": 3,
                     "detalle": {"STA": 1, "DNF": 2},
                     "en_podio": True,
@@ -77,16 +77,19 @@ def test_get_overall_devuelve_detalle_y_podio(tmp_path) -> None:
 
     assert response.status_code == 200
     assert response.json() == {
-        "torneo_id": str(torneo_id),
-        "total": 1,
         "calculado": True,
-        "ranking": [
+        "rankings": [
             {
-                "posicion": 1,
-                "atleta_id": str(atleta_id),
-                "puntaje": 3,
-                "detalle": {"STA": 1, "DNF": 2},
-                "en_podio": True,
+                "categoria": Categoria.SENIOR_MASCULINO.value,
+                "entradas": [
+                    {
+                        "posicion": 1,
+                        "atleta_id": str(atleta_id),
+                        "puntaje": 3,
+                        "detalle": {"STA": 1, "DNF": 2},
+                        "en_podio": True,
+                    }
+                ],
             }
         ],
     }

@@ -5,8 +5,10 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from decimal import Decimal
+from typing import Optional
 from uuid import UUID
 
+from registro.domain.value_objects.categoria import Categoria
 from shared.domain.value_objects.disciplina import Disciplina
 
 
@@ -19,6 +21,7 @@ class ResultadoFinal:
 
     Attributes:
         atleta_id: Identificador del participante.
+        categoria: Categoría competitiva del atleta.
         rp: Marca efectiva registrada. None para DNS.
         unidad: Unidad de medida del RP. None para DNS.
         tarjeta: Tipo de tarjeta ("Blanca", "Amarilla", "Roja"). None para DNS.
@@ -30,6 +33,7 @@ class ResultadoFinal:
     unidad: str | None
     tarjeta: str | None
     es_dns: bool
+    categoria: Optional[Categoria] = None
 
 
 class ResultadosCompetenciaPort(ABC):
@@ -60,3 +64,11 @@ class ResultadosCompetenciaPort(ABC):
         Returns:
             Lista de ResultadoFinal para todas las performances finalizadas.
         """
+
+
+class AtletaCategoriaPort(ABC):
+    """ACL: consulta la categoría de un atleta en BC Registro."""
+
+    @abstractmethod
+    async def get_categoria(self, atleta_id: UUID) -> Categoria:
+        """Retorna la categoría competitiva del atleta."""

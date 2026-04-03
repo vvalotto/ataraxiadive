@@ -289,7 +289,7 @@ classDiagram
 | Aggregate | Tipo | Responsabilidad |
 |-----------|------|-----------------|
 | `RankingCompetencia` | Aggregate root | Ranking por disciplina y categoría/género, derivado de `CompetenciaFinalizada` |
-| `OverallTorneo` | Aggregate | Ranking general multi-disciplina del torneo completo |
+| `OverallTorneo` | Aggregate | Ranking general multi-disciplina del torneo por categoría/género |
 
 ### Eventos principales
 
