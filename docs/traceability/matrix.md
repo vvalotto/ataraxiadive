@@ -256,7 +256,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 |----|------|----------------|-------------|--------|
 | US-ADJ-4.1 | DISC-02, DISC-03 | RF-GT-02 | Renombrar `DYNB→DBF` y `SPE2X50→SPE` en enum `Disciplina` | ⏳ Pendiente |
 | US-ADJ-4.2 | DISC-04 | RF-PR-05 | Corregir orden grilla STA: `orden_ascendente=True` (ascendente) | ⏳ Pendiente |
-| US-ADJ-4.3 | DISC-07 | — | Renombrar `JUVENIL→JUNIOR` en enum `Categoria` | ⏳ Pendiente |
+| US-ADJ-4.3 | DISC-07 | — | Renombrar `JUVENIL→JUNIOR` en enum `Categoria` | 🔄 En progreso |
 | US-ADJ-4.4 | DISC-05 | — | Agregar campo `club` a aggregate `Atleta` | ⏳ Pendiente |
 | US-ADJ-4.5 | DISC-01 | RF-PM-05 | Ranking por (disciplina, categoría) en BC Resultados | ⏳ Pendiente |
 | US-ADJ-4.6 | DISC-06 | — | Value Object `TiempoAP` — parsear `MM:SS → segundos` | ⏳ Pendiente |

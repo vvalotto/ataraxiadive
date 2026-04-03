@@ -30,7 +30,7 @@ en el UAT de SP3 y producir output verificable contra la documentación oficial 
 |----|-------------|--------|
 | `US-ADJ-4.1` | Renombrar `DYNB → DBF` y `SPE2X50 → SPE` en enum `Disciplina` | ✅ Implementada |
 | `US-ADJ-4.2` | Corregir orden de grilla STA: `orden_ascendente=True` | ✅ Implementada |
-| `US-ADJ-4.3` | Renombrar `JUVENIL → JUNIOR` en enum `Categoria` | ⏳ Pendiente |
+| `US-ADJ-4.3` | Renombrar `JUVENIL → JUNIOR` en enum `Categoria` | ✅ Implementada |
 | `US-ADJ-4.4` | Agregar campo `club` a aggregate `Atleta` y exponerlo en grillas/reportes | ⏳ Pendiente |
 | `US-ADJ-4.5` | Ranking y overall por categoría/género | ⏳ Pendiente |
 | `US-ADJ-4.6` | Value Object `TiempoAP` para parsear `MM:SS → segundos` | ⏳ Pendiente |

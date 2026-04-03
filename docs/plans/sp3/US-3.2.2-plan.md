@@ -35,7 +35,7 @@ src/registro/
 ## Tareas
 
 ### T1 — Domain: `Categoria` VO + `Atleta` aggregate
-- `Categoria(StrEnum)`: 6 valores (SENIOR_M/F, MASTER_M/F, JUVENIL_M/F)
+- `Categoria(StrEnum)`: 6 valores (SENIOR_M/F, MASTER_M/F, JUNIOR_M/F)
 - `Atleta`: dataclass con atleta_id, nombre, apellido, email, fecha_nacimiento, categoria, brevet
 - Validación de invariantes en `__post_init__`: INV-A-01, INV-A-02, INV-A-04
 - **Est:** 10 min
