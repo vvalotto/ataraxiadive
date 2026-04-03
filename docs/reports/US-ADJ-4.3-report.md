@@ -35,7 +35,7 @@ igual, pero ahora serializan y rehidratan con los nuevos values del enum `Catego
 |---------|--------|
 | `docs/plans/sp3/US-3.2.2-plan.md` | Inventario histórico alineado con `JUNIOR_M/F` |
 | `docs/specs/sp3/US-3.2.2.md` | Ejemplo/especificación histórica alineada con `JUNIOR_M/F` |
-| `docs/traceability/matrix.md` | `US-ADJ-4.3` pasa a `🔄 En progreso` mientras se termina el sprint |
+| `docs/traceability/matrix.md` | Estado de `US-ADJ-4.3` alineado dentro de `SP-ADJ-04` |
 
 ---
 

@@ -212,9 +212,9 @@ Para absorber la incorporación futura de disciplinas con mecánicas nuevas (AC-
 
   ------------------------------------- ---------------------------------------------------------------
   **Atributo del descriptor**           **Ejemplo**
-  **Tipo de medición**                  tiempo (STA) o distancia (DNF, DYN, DBF, SPE2X50)
+  **Tipo de medición**                  tiempo (STA, SPE) o distancia (DNF, DYN, DBF)
   **Unidad**                            segundos, metros con decimales (RF-EJ-08)
-  **Orden de salida**                   menor a mayor (distancia) o mayor a menor (tiempo) (RF-PR-05)
+  **Orden de salida**                   menor a mayor en todas las disciplinas (RF-PR-05)
   **Permite andariveles simultáneos**   sí/no, con cantidad máxima
   **Reglas de tarjeta aplicables**      conjunto de tarjetas y penalizaciones válidas
   **Protocolo de superficie**           registra solo efecto (RF-EJ-10)

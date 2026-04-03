@@ -4,9 +4,9 @@
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-03-19 |
+| **Fecha** | 2026-04-03 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.0 — Fase 0 |
+| **Estado** | 🔄 v1.1 — SP-ADJ-04 en progreso |
 
 ---
 
@@ -31,7 +31,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP1 | Competencia (núcleo) | RF-PR-01/02/03, RF-EJ-02/05/07/08/10 |
 | SP2 | Competencia (completo) + Resultados (núcleo) | RF-PR-04/05/06/07/08, RF-EJ-01, RF-PM-03 |
 | SP3 | Torneo + Registro + Identidad + Resultados | RF-GT-01..07, RF-IN-01..06/08/09, RF-US-01..05, RF-PM-01/02/05/06 |
-| SP4 | Notificaciones + extensiones | RF-EJ-03/06, RF-IN-05/06, RF-NT-01..04, RF-PM-05 |
+| SP4 | Notificaciones + extensiones | RF-EJ-03/06, RF-IN-05/06, RF-NT-01..04 |
 | SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
 
 ---
@@ -65,6 +65,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-IN-07 | Conflicto de datos con BD FAAS | Registro | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
 | RF-IN-08 | Género solo para categorización — sin otro efecto | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 | RF-IN-09 | Atleta no puede cambiar categoría por disciplina | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
+| RF-IN-10 | Club obligatorio del atleta y visible en grillas/reportes | Registro | SP-ADJ-04 | — | US-ADJ-4.4 | ✅ implementado |
 
 ---
 
@@ -108,7 +109,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-PM-02 | Overall = ranking general multi-disciplina por categoría | Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
 | RF-PM-03 | Empates = mismo puesto y mismos puntos | Resultados | SP2 | 2.4 | US-2.4.2 | ✅ Implementado |
 | RF-PM-04 | Certificados/diplomas | — | — | — | — | — fuera de alcance v1 |
-| RF-PM-05 | Rankings por categoría y género | Resultados | SP-ADJ-04 | — | US-ADJ-4.5 | ✅ adelantado a SP-ADJ-04 — RF existente nunca implementado, expuesto por HITO-17 |
+| RF-PM-05 | Rankings por categoría y género | Resultados | SP-ADJ-04 | — | US-ADJ-4.5 | 🔄 planificado en SP-ADJ-04 — RF existente nunca implementado, expuesto por HITO-17 |
 | RF-PM-06 | Publicación en plataforma + descarga | Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
 
 ---
@@ -250,14 +251,14 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
-## 11. US-IEDD SP-ADJ-04 — Pendientes (discrepancias de dominio real — pre-cierre BL-003)
+## 11. US-IEDD SP-ADJ-04 — En progreso (discrepancias de dominio real — pre-cierre BL-003)
 
 | US | DISC | RFs corregidos | Descripción | Estado |
 |----|------|----------------|-------------|--------|
-| US-ADJ-4.1 | DISC-02, DISC-03 | RF-GT-02 | Renombrar `DYNB→DBF` y `SPE2X50→SPE` en enum `Disciplina` | ⏳ Pendiente |
-| US-ADJ-4.2 | DISC-04 | RF-PR-05 | Corregir orden grilla STA: `orden_ascendente=True` (ascendente) | ⏳ Pendiente |
-| US-ADJ-4.3 | DISC-07 | — | Renombrar `JUVENIL→JUNIOR` en enum `Categoria` | 🔄 En progreso |
-| US-ADJ-4.4 | DISC-05 | — | Agregar campo `club` a aggregate `Atleta` | ⏳ Pendiente |
+| US-ADJ-4.1 | DISC-02, DISC-03 | RF-GT-02 | Renombrar `DYNB→DBF` y `SPE2X50→SPE` en enum `Disciplina` | ✅ 2026-04-03 |
+| US-ADJ-4.2 | DISC-04 | RF-PR-05 | Corregir orden grilla STA: `orden_ascendente=True` (ascendente) | ✅ 2026-04-03 |
+| US-ADJ-4.3 | DISC-07 | — | Renombrar `JUVENIL→JUNIOR` en enum `Categoria` | ✅ 2026-04-03 |
+| US-ADJ-4.4 | DISC-05 | RF-IN-10 | Agregar campo `club` a aggregate `Atleta` | ✅ 2026-04-03 |
 | US-ADJ-4.5 | DISC-01 | RF-PM-05 | Ranking por (disciplina, categoría) en BC Resultados | ⏳ Pendiente |
 | US-ADJ-4.6 | DISC-06 | — | Value Object `TiempoAP` — parsear `MM:SS → segundos` | ⏳ Pendiente |
 
@@ -348,6 +349,6 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.4 — 2026-03-29: SP3 §9 agregado · US-3.1.1 implementada*
 *v1.5 — 2026-03-30: US-3.1.2 implementada — API REST Torneo completa*
 *v1.6 — 2026-04-02: SP3 completado a nivel US — §9 y tabla US→Tests actualizadas hasta US-3.5.3*
-*v1.7 — 2026-04-03: SP-ADJ-03 (§10) + SP-ADJ-04 (§11) + trazabilidad DISC→US→docs (§12) · RFs corregidos: RF-GT-02 (DBF/SPE), RF-PR-05 (P-01 STA ascendente), RF-PM-05 (adelantado a SP-ADJ-04)*
+*v1.8 — 2026-04-03: estado real de SP-ADJ-04 alineado (§11), RF-IN-10 agregado (§3.2), RF-PM-05 corregido a planificado (§3.5), cobertura por subproyecto actualizada (§2)*
 *Fuentes: 05-requerimientos_funcionales.md · Context Map v1.1 · estrategia-desarrollo-bc.md · ES Competencia*
 *Mantenido por: Claude Cowork + Victor Valotto*

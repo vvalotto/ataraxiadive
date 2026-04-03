@@ -6,7 +6,7 @@
 | **Contexto** | Ajuste de dominio pre-cierre BL-003 |
 | **Fuentes** | HITO-17 · `.work/analisis-discrepancias-dataset-reales.md` |
 | **Branch base** | `develop` (antes de taggear BL-003) |
-| **Estado** | 🔄 Planificado |
+| **Estado** | 🔄 En progreso |
 
 ---
 

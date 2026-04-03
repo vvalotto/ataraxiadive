@@ -157,7 +157,7 @@ metodológico que cualquier revisión de diseño formal previa.
 
 ## Acción pendiente
 
-- [ ] Incorporar DISC-01 a DISC-07 como issues formales del backlog (SP4 o nuevo SP-ADJ-04)
+- [x] Incorporar DISC-01 a DISC-07 como issues formales del backlog (`SP-ADJ-04`)
 - [ ] Priorizar DISC-04 (orden STA) y DISC-01 (ranking por categoría) como bloqueantes
       de cualquier UAT con datos reales
 - [ ] Evaluar si la plantilla IEDD debería incluir un paso formal de "validación empírica"

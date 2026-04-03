@@ -57,7 +57,7 @@ BCs previos.
 | Evento | Datos que transporta |
 |--------|---------------------|
 | `TorneoCreado` | nombre, ciudad, fecha inicio, fecha fin, entidad organizadora |
-| `DisciplinasSeleccionadas` | lista de disciplinas (STA, DNF, DYN, DYNB, SPE2X50...) |
+| `DisciplinasSeleccionadas` | lista de disciplinas (STA, DNF, DYN, DBF, SPE...) |
 | `InscripcionHabilitada` | fecha inicio inscripción, fecha fin inscripción |
 
 ### Hot Spots

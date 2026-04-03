@@ -25,7 +25,7 @@ sin reiniciar el sistema. AC-CF-02 requiere que las penalizaciones sean configur
 
 ## Opciones Consideradas
 
-**Opción A — Hardcoded en el dominio:** Las disciplinas (STA, DNF, DBF, DYN, SPE2X50) y sus
+**Opción A — Hardcoded en el dominio:** Las disciplinas (STA, DNF, DBF, DYN, SPE) y sus
 reglas están en constantes o enums en `domain/`. Cambiar una regla requiere modificar código.
 
 **Opción B — Configuración en archivos (YAML/JSON):** Las reglas viven en archivos de
