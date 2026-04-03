@@ -1,0 +1,20 @@
+CodeGuard v0.2.0 (Arquitectura Modular)
+US: US-ADJ-3.2
+Fecha: 2026-04-03
+Branch: feature/sp-adj-03-ajuste-sp3
+
+Comando ejecutado:
+./.venv/bin/codeguard src/competencia/domain/aggregates/performance.py src/competencia/domain/value_objects/tarjeta_asignacion.py
+
+Archivos analizados: 2
+Checks ejecutados: 6
+Tiempo de ejecucion: 5.27s
+
+Resultado:
+- 0 errores
+- 0 advertencias
+- 6 informativos
+
+Detalle:
+- src/competencia/domain/aggregates/performance.py: sin issues de seguridad, PEP8 compliant, complejidad bajo umbral
+- src/competencia/domain/value_objects/tarjeta_asignacion.py: sin issues de seguridad, PEP8 compliant, complejidad bajo umbral

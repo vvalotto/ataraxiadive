@@ -6,7 +6,7 @@
 | **Contexto** | Ajuste técnico post-SP3 (BL-003) |
 | **Fuentes** | HITO-14, HITO-15 · DesignReviewer · Revisión SOLID · Revisión de consistencia SP3 |
 | **Branch base** | `develop` (después de cerrar BL-003) |
-| **Estado** | ⏳ Pendiente — ejecutar después de cerrar SP3 |
+| **Estado** | 🔄 En ejecucion — 5/8 US cerradas (`US-ADJ-3.1`, `3.6`, `3.4`, `3.8`, `3.2`) |
 
 ---
 
@@ -18,6 +18,19 @@ de BCs nuevos, e HITOs 14 y 15.
 
 El criterio para iniciar SP-ADJ-03 es que todos los incrementos de SP3 estén
 mergeados en `develop` y BL-003 esté lista para taggear.
+
+## Progreso
+
+| US | Estado |
+|----|--------|
+| `US-ADJ-3.1` | ✅ Cerrada |
+| `US-ADJ-3.6` | ✅ Cerrada |
+| `US-ADJ-3.4` | ✅ Cerrada |
+| `US-ADJ-3.8` | ✅ Cerrada |
+| `US-ADJ-3.2` | ✅ Cerrada |
+| `US-ADJ-3.3` | ⏳ Pendiente |
+| `US-ADJ-3.7` | ⏳ Pendiente |
+| `US-ADJ-3.5` | ⏳ Pendiente |
 
 ---
 
@@ -195,4 +208,4 @@ en `resultados/domain/ports/`).
 
 *Iniciado: 2026-03-31 — basado en HITO-14*
 *Actualizado: 2026-04-01 — US-ADJ-3.1/3.2 post-análisis WMC*
-*Actualizado: 2026-04-03 — US-ADJ-3.3 a 3.8 agregadas (07-issues-consolidados + HITO-14 D-06 + HITO-15)*
+*Actualizado: 2026-04-03 — avance de ejecucion: cerradas US-ADJ-3.1, 3.6, 3.4, 3.8 y 3.2*
