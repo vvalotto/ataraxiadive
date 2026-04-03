@@ -81,7 +81,7 @@ def given_torneo_con_disciplinas_simple(disciplinas: str) -> dict:
 @given("el torneo tiene 3 disciplinas y juez asignado a 2 de ellas", target_fixture="ctx")
 def given_torneo_juez_dos_disciplinas() -> dict:
     t = _torneo_base()
-    t.asignar_disciplinas(frozenset({Disciplina.STA, Disciplina.DNF, Disciplina.DYNB}))
+    t.asignar_disciplinas(frozenset({Disciplina.STA, Disciplina.DNF, Disciplina.DBF}))
     juez_id = uuid4()
     t.asignar_juez(Disciplina.STA, juez_id)
     t.asignar_juez(Disciplina.DNF, juez_id)

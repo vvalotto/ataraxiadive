@@ -30,7 +30,7 @@ Feature: DisciplinaDescriptor — VO que encapsula reglas de disciplina
       | disciplina |
       | DNF        |
       | DYN        |
-      | DYNB       |
+      | DBF        |
       | CNF        |
       | CWT        |
       | FIM        |

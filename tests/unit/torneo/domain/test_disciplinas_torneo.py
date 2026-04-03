@@ -66,7 +66,7 @@ class TestDisciplinaTorneoVO:
 class TestAsignarDisciplinas:
     def test_asignar_disciplinas_happy_path(self) -> None:
         t = _torneo()
-        t.asignar_disciplinas(frozenset({Disciplina.STA, Disciplina.DNF, Disciplina.DYNB}))
+        t.asignar_disciplinas(frozenset({Disciplina.STA, Disciplina.DNF, Disciplina.DBF}))
         assert len(t.disciplinas_torneo) == 3
         assert all(dt.juez_id is None for dt in t.disciplinas_torneo)
 
@@ -114,9 +114,9 @@ class TestAsignarDisciplinas:
     def test_reasignar_disciplinas_sobreescribe(self) -> None:
         t = _torneo()
         t.asignar_disciplinas(frozenset({Disciplina.STA, Disciplina.DNF}))
-        t.asignar_disciplinas(frozenset({Disciplina.DYNB}))
+        t.asignar_disciplinas(frozenset({Disciplina.DBF}))
         assert len(t.disciplinas_torneo) == 1
-        assert t.disciplinas_torneo[0].disciplina == Disciplina.DYNB
+        assert t.disciplinas_torneo[0].disciplina == Disciplina.DBF
 
 
 # ── asignar_juez ─────────────────────────────────────────────────────────────
@@ -165,7 +165,7 @@ class TestAsignarJuez:
 class TestObtenerDisciplinasDeJuez:
     def test_retorna_disciplinas_del_juez(self) -> None:
         t = _torneo()
-        t.asignar_disciplinas(frozenset({Disciplina.STA, Disciplina.DNF, Disciplina.DYNB}))
+        t.asignar_disciplinas(frozenset({Disciplina.STA, Disciplina.DNF, Disciplina.DBF}))
         juez = uuid4()
         t.asignar_juez(Disciplina.STA, juez)
         t.asignar_juez(Disciplina.DNF, juez)

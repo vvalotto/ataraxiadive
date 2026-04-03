@@ -215,7 +215,7 @@ classDiagram
 
 | Tipo | Valores / Descripción |
 |------|-----------------------|
-| `Disciplina` | STA, DNF, DYN, DYNB, SPE2X50, CNF, CWT, FIM, VWT |
+| `Disciplina` | STA, DNF, DYN, DBF, SPE, CNF, CWT, FIM, VWT |
 | `EstadoCompetencia` | Preparacion, Confirmada, EnEjecucion, Finalizada |
 | `EstadoPerformance` | AnunciadaAP, Llamada, Ejecutada, DNS |
 | `TipoTarjeta` | Blanca, Amarilla, Roja |

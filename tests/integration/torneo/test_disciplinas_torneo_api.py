@@ -108,7 +108,7 @@ class TestAsignarDisciplinasAPI:
     def test_put_disciplinas_200(self, app_client: TestClient) -> None:
         tid = _crear_torneo(app_client)
         resp = app_client.put(
-            f"/torneos/{tid}/disciplinas", json={"disciplinas": ["STA", "DNF", "DYNB"]}
+            f"/torneos/{tid}/disciplinas", json={"disciplinas": ["STA", "DNF", "DBF"]}
         )
         assert resp.status_code == 200
 
@@ -177,7 +177,7 @@ class TestAsignarJuezAPI:
 class TestDisciplinasDeJuezAPI:
     def test_get_disciplinas_juez(self, app_client: TestClient) -> None:
         tid = _crear_torneo(app_client)
-        app_client.put(f"/torneos/{tid}/disciplinas", json={"disciplinas": ["STA", "DNF", "DYNB"]})
+        app_client.put(f"/torneos/{tid}/disciplinas", json={"disciplinas": ["STA", "DNF", "DBF"]})
         juez_id = str(uuid4())
         app_client.put(f"/torneos/{tid}/disciplinas/STA/juez", json={"juez_id": juez_id})
         app_client.put(f"/torneos/{tid}/disciplinas/DNF/juez", json={"juez_id": juez_id})

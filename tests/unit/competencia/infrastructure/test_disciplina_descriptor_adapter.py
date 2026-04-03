@@ -44,7 +44,7 @@ class TestAdapterDistancia:
         [
             Disciplina.DNF,
             Disciplina.DYN,
-            Disciplina.DYNB,
+            Disciplina.DBF,
             Disciplina.CNF,
             Disciplina.CWT,
             Disciplina.FIM,

@@ -4,7 +4,7 @@ Feature: US-3.4.1 — Torneo: AsignarDisciplinas + AsignarJuez
     Given un torneo creado en estado CREADO
 
   Scenario: asignar disciplinas a torneo
-    When el organizador asigna las disciplinas [STA, DNF, DYNB] al torneo
+    When el organizador asigna las disciplinas [STA, DNF, DBF] al torneo
     Then el torneo tiene 3 disciplinas configuradas sin juez asignado
 
   Scenario: asignar juez a disciplina del torneo
