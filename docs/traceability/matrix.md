@@ -109,7 +109,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-PM-02 | Overall = ranking general multi-disciplina por categoría | Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
 | RF-PM-03 | Empates = mismo puesto y mismos puntos | Resultados | SP2 | 2.4 | US-2.4.2 | ✅ Implementado |
 | RF-PM-04 | Certificados/diplomas | — | — | — | — | — fuera de alcance v1 |
-| RF-PM-05 | Rankings por categoría y género | Resultados | SP-ADJ-04 | — | US-ADJ-4.5 | 🔄 planificado en SP-ADJ-04 — RF existente nunca implementado, expuesto por HITO-17 |
+| RF-PM-05 | Rankings por categoría y género | Resultados | SP-ADJ-04 | — | US-ADJ-4.5 | ✅ implementado en SP-ADJ-04 — ranking y overall segmentados por categoría |
 | RF-PM-06 | Publicación en plataforma + descarga | Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
 
 ---
@@ -259,7 +259,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 | US-ADJ-4.2 | DISC-04 | RF-PR-05 | Corregir orden grilla STA: `orden_ascendente=True` (ascendente) | ✅ 2026-04-03 |
 | US-ADJ-4.3 | DISC-07 | — | Renombrar `JUVENIL→JUNIOR` en enum `Categoria` | ✅ 2026-04-03 |
 | US-ADJ-4.4 | DISC-05 | RF-IN-10 | Agregar campo `club` a aggregate `Atleta` | ✅ 2026-04-03 |
-| US-ADJ-4.5 | DISC-01 | RF-PM-05 | Ranking por (disciplina, categoría) en BC Resultados | ⏳ Pendiente |
+| US-ADJ-4.5 | DISC-01 | RF-PM-05 | Ranking por (disciplina, categoría) en BC Resultados | ✅ 2026-04-03 |
 | US-ADJ-4.6 | DISC-06 | — | Value Object `TiempoAP` — parsear `MM:SS → segundos` | ⏳ Pendiente |
 
 ---
@@ -349,6 +349,6 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.4 — 2026-03-29: SP3 §9 agregado · US-3.1.1 implementada*
 *v1.5 — 2026-03-30: US-3.1.2 implementada — API REST Torneo completa*
 *v1.6 — 2026-04-02: SP3 completado a nivel US — §9 y tabla US→Tests actualizadas hasta US-3.5.3*
-*v1.8 — 2026-04-03: estado real de SP-ADJ-04 alineado (§11), RF-IN-10 agregado (§3.2), RF-PM-05 corregido a planificado (§3.5), cobertura por subproyecto actualizada (§2)*
+*v1.9 — 2026-04-03: US-ADJ-4.5 implementada (§11), RF-PM-05 pasa a implementado (§3.5), ranking/overall por categoría alineados con Resultados*
 *Fuentes: 05-requerimientos_funcionales.md · Context Map v1.1 · estrategia-desarrollo-bc.md · ES Competencia*
 *Mantenido por: Claude Cowork + Victor Valotto*

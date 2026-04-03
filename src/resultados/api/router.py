@@ -67,28 +67,31 @@ async def get_ranking(
     para cada atleta. Las performances DNS y tarjeta roja aparecen al final.
 
     Returns:
-        JSON con competencia_id, disciplina, total y lista de entradas del ranking.
-        Lista vacía si el ranking aún no fue calculado.
+        JSON agrupado por categoría.
     """
-    entradas = await handler.handle(
+    rankings = await handler.handle(
         ObtenerRankingQuery(competencia_id=competencia_id, disciplina=disciplina)
     )
     return JSONResponse(
         content={
-            "competencia_id": str(competencia_id),
-            "disciplina": disciplina.value,
-            "total": len(entradas),
-            "ranking": [
+            "calculado": len(rankings) > 0,
+            "rankings": [
                 {
-                    "posicion": e.posicion,
-                    "atleta_id": e.atleta_id,
-                    "rp": e.rp,
-                    "unidad": e.unidad,
-                    "tarjeta": e.tarjeta,
-                    "es_dns": e.es_dns,
-                    "en_podio": e.en_podio,
+                    "categoria": grupo.categoria,
+                    "entradas": [
+                        {
+                            "posicion": e.posicion,
+                            "atleta_id": e.atleta_id,
+                            "rp": e.rp,
+                            "unidad": e.unidad,
+                            "tarjeta": e.tarjeta,
+                            "es_dns": e.es_dns,
+                            "en_podio": e.en_podio,
+                        }
+                        for e in grupo.entradas
+                    ],
                 }
-                for e in entradas
+                for grupo in rankings
             ],
         },
         status_code=200,
@@ -103,25 +106,27 @@ async def get_overall(
     """Retorna el ranking overall calculado del torneo.
 
     Returns:
-        JSON con torneo_id, total, calculado y lista de entradas overall.
-        Si aún no existe cálculo persistido, responde calculado=false y
-        ranking=[].
+        JSON agrupado por categoría.
     """
-    entradas = await handler.handle(ObtenerOverallQuery(torneo_id=torneo_id))
+    rankings = await handler.handle(ObtenerOverallQuery(torneo_id=torneo_id))
     return JSONResponse(
         content={
-            "torneo_id": str(torneo_id),
-            "total": len(entradas),
-            "calculado": len(entradas) > 0,
-            "ranking": [
+            "calculado": len(rankings) > 0,
+            "rankings": [
                 {
-                    "posicion": e.posicion,
-                    "atleta_id": e.atleta_id,
-                    "puntaje": e.puntaje,
-                    "detalle": e.detalle,
-                    "en_podio": e.en_podio,
+                    "categoria": grupo.categoria,
+                    "entradas": [
+                        {
+                            "posicion": e.posicion,
+                            "atleta_id": e.atleta_id,
+                            "puntaje": e.puntaje,
+                            "detalle": e.detalle,
+                            "en_podio": e.en_podio,
+                        }
+                        for e in grupo.entradas
+                    ],
                 }
-                for e in entradas
+                for grupo in rankings
             ],
         },
         status_code=200,

@@ -6,11 +6,14 @@ import json
 from typing import Any
 from uuid import UUID
 
+from registro.domain.value_objects.categoria import Categoria
 from resultados.domain.events.ranking_overall_calculado import RankingOverallCalculado
 from resultados.domain.value_objects.entrada_overall import EntradaOverall
 from resultados.domain.value_objects.entrada_ranking import EntradaRanking
 from shared.domain.base.aggregate_root import AggregateRoot
 from shared.domain.value_objects.disciplina import Disciplina
+
+_CATEGORIA_DEFAULT = Categoria.SENIOR_MASCULINO
 
 
 class RankingOverall(AggregateRoot):
@@ -98,28 +101,11 @@ def _calcular_entries(
     if not rankings_validos:
         return []
 
-    acumulado = _acumular_puntajes(rankings_validos, penalizacion_ausente)
-    puntuados = _ordenar_puntuados(acumulado)
-
     entries: list[EntradaOverall] = []
-    posicion_actual = 1
-    for index, (atleta_id, detalle, puntaje) in enumerate(puntuados):
-        if index > 0 and puntaje == puntuados[index - 1][2]:
-            posicion = entries[-1].posicion
-        else:
-            posicion = posicion_actual
-
-        entries.append(
-            EntradaOverall(
-                posicion=posicion,
-                atleta_id=atleta_id,
-                puntaje=puntaje,
-                detalle=detalle,
-                en_podio=posicion <= 3,
-            )
-        )
-        posicion_actual = len(entries) + 1
-
+    for categoria in sorted(_categorias_presentes(rankings_validos), key=lambda cat: cat.value):
+        acumulado = _acumular_puntajes_categoria(rankings_validos, categoria, penalizacion_ausente)
+        puntuados = _ordenar_puntuados(acumulado)
+        entries.extend(_crear_entries_categoria(categoria, puntuados))
     return entries
 
 
@@ -131,19 +117,66 @@ def _filtrar_rankings_validos(
     }
 
 
-def _acumular_puntajes(
+def _categorias_presentes(
     rankings_validos: dict[Disciplina, list[EntradaRanking]],
+) -> set[Categoria]:
+    return {
+        entry.categoria for entries in rankings_validos.values() for entry in entries
+    }
+
+
+def _acumular_puntajes_categoria(
+    rankings_validos: dict[Disciplina, list[EntradaRanking]],
+    categoria: Categoria,
     penalizacion_ausente: int | None,
 ) -> dict[UUID, dict[str, int]]:
-    atletas = {entry.atleta_id for entries in rankings_validos.values() for entry in entries}
+    atletas = _atletas_de_categoria(rankings_validos, categoria)
     acumulado: dict[UUID, dict[str, int]] = {atleta_id: {} for atleta_id in atletas}
 
     for disciplina, entries in rankings_validos.items():
-        posiciones = {entry.atleta_id: entry.posicion for entry in entries}
-        peor_posicion = _calcular_penalizacion(entries, penalizacion_ausente)
-        for atleta_id in atletas:
-            acumulado[atleta_id][disciplina.value] = posiciones.get(atleta_id, peor_posicion)
+        entries_categoria = _entries_de_categoria(entries, categoria)
+        if not entries_categoria:
+            continue
+        _acumular_disciplina(
+            acumulado,
+            atletas,
+            disciplina,
+            entries_categoria,
+            penalizacion_ausente,
+        )
     return acumulado
+
+
+def _atletas_de_categoria(
+    rankings_validos: dict[Disciplina, list[EntradaRanking]],
+    categoria: Categoria,
+) -> set[UUID]:
+    return {
+        entry.atleta_id
+        for entries in rankings_validos.values()
+        for entry in entries
+        if entry.categoria == categoria
+    }
+
+
+def _entries_de_categoria(
+    entries: list[EntradaRanking],
+    categoria: Categoria,
+) -> list[EntradaRanking]:
+    return [entry for entry in entries if entry.categoria == categoria]
+
+
+def _acumular_disciplina(
+    acumulado: dict[UUID, dict[str, int]],
+    atletas: set[UUID],
+    disciplina: Disciplina,
+    entries_categoria: list[EntradaRanking],
+    penalizacion_ausente: int | None,
+) -> None:
+    posiciones = {entry.atleta_id: entry.posicion for entry in entries_categoria}
+    peor_posicion = _calcular_penalizacion(entries_categoria, penalizacion_ausente)
+    for atleta_id in atletas:
+        acumulado[atleta_id][disciplina.value] = posiciones.get(atleta_id, peor_posicion)
 
 
 def _calcular_penalizacion(entries: list[EntradaRanking], penalizacion_ausente: int | None) -> int:
@@ -156,9 +189,38 @@ def _ordenar_puntuados(
     acumulado: dict[UUID, dict[str, int]],
 ) -> list[tuple[UUID, dict[str, int], int]]:
     return sorted(
-        ((atleta_id, detalle, sum(detalle.values())) for atleta_id, detalle in acumulado.items()),
+        (
+            (atleta_id, detalle, sum(detalle.values()))
+            for atleta_id, detalle in acumulado.items()
+        ),
         key=lambda item: (item[2], str(item[0])),
     )
+
+
+def _crear_entries_categoria(
+    categoria: Categoria,
+    puntuados: list[tuple[UUID, dict[str, int], int]],
+) -> list[EntradaOverall]:
+    entries: list[EntradaOverall] = []
+    posicion_actual = 1
+    for index, (atleta_id, detalle, puntaje) in enumerate(puntuados):
+        if index > 0 and puntaje == puntuados[index - 1][2]:
+            posicion = entries[-1].posicion
+        else:
+            posicion = posicion_actual
+
+        entries.append(
+            EntradaOverall(
+                posicion=posicion,
+                atleta_id=atleta_id,
+                categoria=categoria,
+                puntaje=puntaje,
+                detalle=detalle,
+                en_podio=posicion <= 3,
+            )
+        )
+        posicion_actual = len(entries) + 1
+    return entries
 
 
 def _entrada_a_dict(entry: EntradaOverall) -> dict[str, Any]:
@@ -166,6 +228,7 @@ def _entrada_a_dict(entry: EntradaOverall) -> dict[str, Any]:
     return {
         "posicion": entry.posicion,
         "atleta_id": str(entry.atleta_id),
+        "categoria": entry.categoria.value,
         "puntaje": entry.puntaje,
         "detalle": entry.detalle,
         "en_podio": entry.en_podio,
@@ -177,6 +240,7 @@ def _dict_a_entrada(data: dict[str, Any]) -> EntradaOverall:
     return EntradaOverall(
         posicion=data["posicion"],
         atleta_id=UUID(data["atleta_id"]),
+        categoria=Categoria(data.get("categoria", _CATEGORIA_DEFAULT.value)),
         puntaje=data["puntaje"],
         detalle=dict(data["detalle"]),
         en_podio=data["en_podio"],

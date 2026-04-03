@@ -8,6 +8,7 @@ from uuid import uuid4
 
 import pytest
 
+from registro.domain.value_objects.categoria import Categoria
 from resultados.application.queries.obtener_overall import (
     ObtenerOverallHandler,
     ObtenerOverallQuery,
@@ -25,6 +26,7 @@ def _raw_event_ranking_overall_calculado(torneo_id, atleta_id_1, atleta_id_2) ->
                 {
                     "posicion": 1,
                     "atleta_id": str(atleta_id_1),
+                    "categoria": Categoria.SENIOR_MASCULINO.value,
                     "puntaje": 3,
                     "detalle": {"STA": 1, "DNF": 2},
                     "en_podio": True,
@@ -32,6 +34,7 @@ def _raw_event_ranking_overall_calculado(torneo_id, atleta_id_1, atleta_id_2) ->
                 {
                     "posicion": 2,
                     "atleta_id": str(atleta_id_2),
+                    "categoria": Categoria.SENIOR_MASCULINO.value,
                     "puntaje": 4,
                     "detalle": {"STA": 2, "DNF": 2},
                     "en_podio": True,
@@ -69,12 +72,14 @@ class TestObtenerOverallHandler:
         handler = ObtenerOverallHandler(ranking_store=ranking_store)
         result = await handler.handle(ObtenerOverallQuery(torneo_id=torneo_id))
 
-        assert len(result) == 2
-        assert result[0].atleta_id == str(atleta_id_1)
-        assert result[0].puntaje == 3
-        assert result[0].detalle == {"STA": 1, "DNF": 2}
-        assert result[0].en_podio is True
-        assert result[1].atleta_id == str(atleta_id_2)
+        assert len(result) == 1
+        assert result[0].categoria == Categoria.SENIOR_MASCULINO.value
+        assert len(result[0].entradas) == 2
+        assert result[0].entradas[0].atleta_id == str(atleta_id_1)
+        assert result[0].entradas[0].puntaje == 3
+        assert result[0].entradas[0].detalle == {"STA": 1, "DNF": 2}
+        assert result[0].entradas[0].en_podio is True
+        assert result[0].entradas[1].atleta_id == str(atleta_id_2)
 
     @pytest.mark.asyncio
     async def test_handle_lee_stream_correcto(self) -> None:

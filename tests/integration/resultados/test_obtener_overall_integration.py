@@ -7,6 +7,7 @@ from uuid import uuid4
 import aiosqlite
 import pytest
 
+from registro.domain.value_objects.categoria import Categoria
 from resultados.application.queries.obtener_overall import (
     ObtenerOverallHandler,
     ObtenerOverallQuery,
@@ -66,6 +67,7 @@ async def test_obtener_overall_reconstituye_ultima_version(tmp_path) -> None:
             {
                 "posicion": 1,
                 "atleta_id": str(atleta_a),
+                "categoria": Categoria.SENIOR_MASCULINO.value,
                 "puntaje": 3,
                 "detalle": {"STA": 1, "DNF": 2},
                 "en_podio": True,
@@ -73,6 +75,7 @@ async def test_obtener_overall_reconstituye_ultima_version(tmp_path) -> None:
             {
                 "posicion": 2,
                 "atleta_id": str(atleta_b),
+                "categoria": Categoria.SENIOR_MASCULINO.value,
                 "puntaje": 4,
                 "detalle": {"STA": 2, "DNF": 2},
                 "en_podio": True,
@@ -83,6 +86,8 @@ async def test_obtener_overall_reconstituye_ultima_version(tmp_path) -> None:
     handler = ObtenerOverallHandler(store)
     entries = await handler.handle(ObtenerOverallQuery(torneo_id=torneo_id))
 
-    assert len(entries) == 2
-    assert entries[0].detalle == {"STA": 1, "DNF": 2}
-    assert entries[0].en_podio is True
+    assert len(entries) == 1
+    assert entries[0].categoria == Categoria.SENIOR_MASCULINO.value
+    assert len(entries[0].entradas) == 2
+    assert entries[0].entradas[0].detalle == {"STA": 1, "DNF": 2}
+    assert entries[0].entradas[0].en_podio is True

@@ -4,15 +4,21 @@ from __future__ import annotations
 
 from uuid import uuid4
 
+from registro.domain.value_objects.categoria import Categoria
 from resultados.domain.aggregates.ranking_overall import RankingOverall
 from resultados.domain.value_objects.entrada_ranking import EntradaRanking
 from shared.domain.value_objects.disciplina import Disciplina
 
 
-def _entry(posicion: int, atleta_id=None) -> EntradaRanking:
+def _entry(
+    posicion: int,
+    atleta_id=None,
+    categoria: Categoria = Categoria.SENIOR_MASCULINO,
+) -> EntradaRanking:
     return EntradaRanking(
         posicion=posicion,
         atleta_id=atleta_id or uuid4(),
+        categoria=categoria,
         rp=None,
         unidad=None,
         tarjeta="Blanca",
@@ -105,3 +111,33 @@ def test_reconstitute_recupera_estado_desde_evento() -> None:
     assert len(reconstituido.entries) == 1
     assert reconstituido.entries[0].atleta_id == atleta_id
     assert reconstituido.calculado is True
+
+
+def test_calcular_overall_segmenta_por_categoria() -> None:
+    atleta_sf = uuid4()
+    atleta_mm = uuid4()
+    ranking = RankingOverall(uuid4())
+
+    entries = ranking.calcular(
+        ranking.torneo_id,
+        {
+            Disciplina.STA: [
+                _entry(1, atleta_sf, Categoria.SENIOR_FEMENINO),
+                _entry(1, atleta_mm, Categoria.MASTER_MASCULINO),
+            ],
+            Disciplina.DNF: [
+                _entry(2, atleta_sf, Categoria.SENIOR_FEMENINO),
+                _entry(2, atleta_mm, Categoria.MASTER_MASCULINO),
+            ],
+        },
+    )
+
+    senior_f = [e for e in entries if e.categoria == Categoria.SENIOR_FEMENINO]
+    master_m = [e for e in entries if e.categoria == Categoria.MASTER_MASCULINO]
+
+    assert len(senior_f) == 1
+    assert senior_f[0].posicion == 1
+    assert senior_f[0].puntaje == 3
+    assert len(master_m) == 1
+    assert master_m[0].posicion == 1
+    assert master_m[0].puntaje == 3

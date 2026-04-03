@@ -33,6 +33,9 @@ from resultados.application.commands.calcular_ranking import (
 from resultados.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
+from resultados.infrastructure.repositories.atleta_categoria_adapter import (
+    AtletaCategoriaAdapter,
+)
 from resultados.infrastructure.repositories.resultados_competencia_adapter import (
     ResultadosCompetenciaAdapter,
 )
@@ -110,8 +113,14 @@ async def _calcular_ranking_por_finalizacion(
 ) -> None:
     """Ejecuta P-08: calcular ranking por disciplina al finalizar competencia."""
     acl = ResultadosCompetenciaAdapter(competencia_event_store)
+    atleta_categoria_acl = AtletaCategoriaAdapter()
     descriptor = DisciplinaDescriptorAdapter()
-    ranking_handler = CalcularRankingHandler(ranking_store, acl, descriptor)
+    ranking_handler = CalcularRankingHandler(
+        ranking_store,
+        acl,
+        atleta_categoria_acl,
+        descriptor,
+    )
     await ranking_handler.handle(
         CalcularRankingCommand(
             competencia_id=competencia_id,

@@ -9,6 +9,7 @@ from uuid import UUID, uuid4
 
 import pytest
 
+from registro.domain.value_objects.categoria import Categoria
 from shared.domain.value_objects.disciplina import Disciplina
 from resultados.application.commands.calcular_ranking import (
     CalcularRankingCommand,
@@ -36,6 +37,7 @@ def _resultado(
         unidad=unidad,
         tarjeta=tarjeta,
         es_dns=False,
+        categoria=Categoria.SENIOR_MASCULINO,
     )
 
 
@@ -51,6 +53,7 @@ def _raw_event_resultados_calculados(cid: UUID, atleta_id: UUID) -> dict[str, An
             {
                 "posicion": 1,
                 "atleta_id": str(atleta_id),
+                "categoria": "SENIOR_MASCULINO",
                 "rp": "330",
                 "unidad": "Segundos",
                 "tarjeta": "Blanca",
@@ -186,13 +189,15 @@ class TestObtenerRankingHandler:
         result = await handler.handle(query)
 
         assert len(result) == 1
-        assert result[0].atleta_id == str(atleta_id)
-        assert result[0].posicion == 1
-        assert result[0].rp == "330"
-        assert result[0].unidad == "Segundos"
-        assert result[0].tarjeta == "Blanca"
-        assert result[0].es_dns is False
-        assert result[0].en_podio is True
+        assert result[0].categoria == "SENIOR_MASCULINO"
+        assert len(result[0].entradas) == 1
+        assert result[0].entradas[0].atleta_id == str(atleta_id)
+        assert result[0].entradas[0].posicion == 1
+        assert result[0].entradas[0].rp == "330"
+        assert result[0].entradas[0].unidad == "Segundos"
+        assert result[0].entradas[0].tarjeta == "Blanca"
+        assert result[0].entradas[0].es_dns is False
+        assert result[0].entradas[0].en_podio is True
 
     @pytest.mark.asyncio
     async def test_handle_lee_stream_correcto(self) -> None:

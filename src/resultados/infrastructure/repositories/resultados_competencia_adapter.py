@@ -83,6 +83,7 @@ def _extraer_resultado_de_stream(
 
     return ResultadoFinal(
         atleta_id=estado["atleta_id"],
+        categoria=None,
         rp=None if estado["es_dns"] else estado["rp"],
         unidad=None if estado["es_dns"] else estado["unidad"],
         tarjeta=estado["tarjeta"],

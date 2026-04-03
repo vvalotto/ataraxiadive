@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections import defaultdict
 from dataclasses import dataclass
 from uuid import UUID
 
@@ -51,6 +52,14 @@ class RankingEntradaDTO:
     en_podio: bool
 
 
+@dataclass(frozen=True)
+class RankingCategoriaDTO:
+    """DTO agrupado por categoría para respuesta HTTP."""
+
+    categoria: str
+    entradas: list[RankingEntradaDTO]
+
+
 # ── Handler ───────────────────────────────────────────────────────────────────
 
 
@@ -67,7 +76,7 @@ class ObtenerRankingHandler:
     def __init__(self, ranking_store: EventStorePort) -> None:
         self._ranking_store = ranking_store
 
-    async def handle(self, query: ObtenerRankingQuery) -> list[RankingEntradaDTO]:
+    async def handle(self, query: ObtenerRankingQuery) -> list[RankingCategoriaDTO]:
         """Retorna las entradas del ranking calculado.
 
         Args:
@@ -86,15 +95,20 @@ class ObtenerRankingHandler:
             events=events,
         )
 
-        return [
-            RankingEntradaDTO(
-                posicion=e.posicion,
-                atleta_id=str(e.atleta_id),
-                rp=str(e.rp) if e.rp is not None else None,
-                unidad=e.unidad,
-                tarjeta=e.tarjeta,
-                es_dns=e.es_dns,
-                en_podio=e.en_podio,
+        agrupado: dict[str, list[RankingEntradaDTO]] = defaultdict(list)
+        for entry in ranking.entries:
+            agrupado[entry.categoria.value].append(
+                RankingEntradaDTO(
+                    posicion=entry.posicion,
+                    atleta_id=str(entry.atleta_id),
+                    rp=str(entry.rp) if entry.rp is not None else None,
+                    unidad=entry.unidad,
+                    tarjeta=entry.tarjeta,
+                    es_dns=entry.es_dns,
+                    en_podio=entry.en_podio,
+                )
             )
-            for e in ranking.entries
+        return [
+            RankingCategoriaDTO(categoria=categoria, entradas=entradas)
+            for categoria, entradas in sorted(agrupado.items())
         ]
