@@ -7,9 +7,9 @@ from uuid import UUID
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from identidad.api.dependencies import OrganizadorDep
 from pydantic import BaseModel, field_validator, model_validator
 
+from shared.api.dependencies import OrganizadorDep
 from shared.domain.value_objects.disciplina import Disciplina
 from torneo.application.commands.asignar_disciplinas import (
     AsignarDisciplinasCommand,

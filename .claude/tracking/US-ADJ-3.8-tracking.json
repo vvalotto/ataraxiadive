@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "us_id": "US-ADJ-3.8",
+    "us_title": "Auditar adapter cross BC resultados",
+    "us_points": 3,
+    "producto": "ataraxiadive",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-03T13:26:57.799771+00:00",
+    "completed_at": null,
+    "total_elapsed_seconds": 0,
+    "effective_seconds": 0,
+    "paused_seconds": 0
+  },
+  "phases": [],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 0,
+    "completed_tasks": 0,
+    "total_phases": 0,
+    "estimated_total_minutes": 0,
+    "actual_total_minutes": 0,
+    "variance_minutes": 0,
+    "variance_percent": 0.0
+  }
+}

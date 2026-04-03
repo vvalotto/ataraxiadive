@@ -63,8 +63,8 @@ from competencia.application.queries.obtener_progreso import (
 )
 from competencia.domain.value_objects.cambio_grilla import CambioGrilla
 from competencia.domain.value_objects.disciplina import Disciplina
+from competencia.domain.ports.competencias_por_torneo_port import CompetenciasPorTorneoPort
 from competencia.domain.ports.event_store_port import EventStorePort
-from identidad.api.dependencies import OrganizadorDep
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 from competencia.infrastructure.repositories.andariveles_activos_adapter import (
     AndarivelesActivosAdapter,
@@ -75,6 +75,10 @@ from competencia.infrastructure.repositories.disciplina_descriptor_adapter impor
 from competencia.infrastructure.repositories.performances_estado_adapter import (
     PerformancesEstadoAdapter,
 )
+from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
+    SQLiteCompetenciasPorTorneo,
+)
+from shared.api.dependencies import OrganizadorDep
 
 router = APIRouter(prefix="/competencia", tags=["competencia"])
 
@@ -134,6 +138,12 @@ def get_disciplina_descriptor() -> DisciplinaDescriptorAdapter:
     return DisciplinaDescriptorAdapter()
 
 
+def get_competencias_por_torneo_projection() -> CompetenciasPorTorneoPort:
+    """Dependency: proyeccion materializada de competencias por torneo."""
+    db_path = os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db")
+    return SQLiteCompetenciasPorTorneo(db_path)
+
+
 def get_andariveles_activos_adapter(
     event_store: EventStoreDep,
 ) -> AndarivelesActivosAdapter:
@@ -157,6 +167,9 @@ def get_obtener_andariveles_activos_handler(
 
 EventStoreDep = Annotated[EventStorePort, Depends(get_event_store)]
 DisciplinaDescriptorDep = Annotated[DisciplinaDescriptorAdapter, Depends(get_disciplina_descriptor)]
+CompetenciasPorTorneoProjectionDep = Annotated[
+    CompetenciasPorTorneoPort, Depends(get_competencias_por_torneo_projection)
+]
 ObtenerAndarivelesActivosHandlerDep = Annotated[
     ObtenerAndarivelesActivosHandler, Depends(get_obtener_andariveles_activos_handler)
 ]
@@ -196,16 +209,17 @@ def get_obtener_progreso_handler(
 
 def get_configurar_intervalo_ot_handler(
     event_store: EventStoreDep,
+    proyeccion: CompetenciasPorTorneoProjectionDep,
 ) -> ConfigurarIntervaloOTHandler:
     """Dependency: handler para configurar intervalo OT."""
-    return ConfigurarIntervaloOTHandler(event_store)
+    return ConfigurarIntervaloOTHandler(event_store, proyeccion)
 
 
 def get_obtener_competencias_por_torneo_handler(
-    event_store: EventStoreDep,
+    proyeccion: CompetenciasPorTorneoProjectionDep,
 ) -> ObtenerCompetenciasPorTorneoHandler:
     """Dependency: handler para listar competencias por torneo."""
-    return ObtenerCompetenciasPorTorneoHandler(event_store)
+    return ObtenerCompetenciasPorTorneoHandler(proyeccion)
 
 
 ObtenerEventosHandlerDep = Annotated[ObtenerEventosHandler, Depends(get_obtener_eventos_handler)]

@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
+from decimal import Decimal
 from uuid import UUID
 
-from competencia.domain.aggregates.performance import Performance
 from shared.domain.ports.event_store_port import EventStorePort
 from shared.domain.value_objects.disciplina import Disciplina
-from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from resultados.domain.ports.resultados_competencia_port import (
     ResultadoFinal,
     ResultadosCompetenciaPort,
@@ -52,25 +51,87 @@ class ResultadosCompetenciaAdapter(ResultadosCompetenciaPort):
             if not stream_events:
                 continue
 
-            performance = Performance.reconstitute(stream_events)
-
-            if performance.disciplina != disciplina:
-                continue
-            if performance.estado not in (EstadoPerformance.Ejecutada, EstadoPerformance.DNS):
+            resultado = _extraer_resultado_de_stream(stream_events, disciplina)
+            if resultado is None:
                 continue
 
-            es_dns = performance.estado == EstadoPerformance.DNS
-            tarjeta = performance.tarjeta.value if performance.tarjeta is not None else None
-            unidad = performance.ap.unidad.value if performance.ap is not None else None
-
-            resultados.append(
-                ResultadoFinal(
-                    atleta_id=performance.participante_id,
-                    rp=performance.rp if not es_dns else None,
-                    unidad=unidad if not es_dns else None,
-                    tarjeta=tarjeta,
-                    es_dns=es_dns,
-                )
-            )
+            resultados.append(resultado)
 
         return resultados
+
+
+def _extraer_resultado_de_stream(
+    stream_events: list[dict],
+    disciplina_buscada: Disciplina,
+) -> ResultadoFinal | None:
+    """Traduce un stream de performance a ResultadoFinal sin reconstituir aggregates."""
+    estado = {
+        "atleta_id": None,
+        "disciplina": None,
+        "tarjeta": None,
+        "rp": None,
+        "unidad": None,
+        "es_dns": False,
+        "finalizada": False,
+    }
+
+    for event in stream_events:
+        _aplicar_evento_en_estado(estado, event)
+
+    if not _es_resultado_relevante(estado, disciplina_buscada):
+        return None
+
+    return ResultadoFinal(
+        atleta_id=estado["atleta_id"],
+        rp=None if estado["es_dns"] else estado["rp"],
+        unidad=None if estado["es_dns"] else estado["unidad"],
+        tarjeta=estado["tarjeta"],
+        es_dns=estado["es_dns"],
+    )
+
+
+def _aplicar_evento_en_estado(estado: dict[str, object], event: dict) -> None:
+    payload = _parse_payload(event["payload"])
+    event_type = event["event_type"]
+
+    if event_type == "APRegistrado":
+        _aplicar_ap_registrado(estado, payload)
+    elif event_type == "ResultadoRegistrado":
+        _aplicar_resultado_registrado(estado, payload)
+    elif event_type == "TarjetaAsignada":
+        estado["tarjeta"] = payload["tipo"]
+        estado["finalizada"] = True
+    elif event_type == "DNSRegistrado":
+        estado["es_dns"] = True
+        estado["finalizada"] = True
+
+
+def _aplicar_ap_registrado(estado: dict[str, object], payload: dict[str, object]) -> None:
+    estado["atleta_id"] = UUID(str(payload["participante_id"]))
+    estado["disciplina"] = Disciplina(str(payload["disciplina"]))
+    estado["unidad"] = payload["unidad"]
+
+
+def _aplicar_resultado_registrado(estado: dict[str, object], payload: dict[str, object]) -> None:
+    rp_value = payload.get("rp") or payload.get("valor_rp")
+    estado["rp"] = Decimal(str(rp_value)) if rp_value is not None else None
+    estado["unidad"] = payload.get("unidad", estado["unidad"])
+
+
+def _es_resultado_relevante(
+    estado: dict[str, object],
+    disciplina_buscada: Disciplina,
+) -> bool:
+    return (
+        estado["disciplina"] == disciplina_buscada
+        and bool(estado["finalizada"])
+        and estado["atleta_id"] is not None
+    )
+
+
+def _parse_payload(payload: object) -> dict[str, object]:
+    if isinstance(payload, str):
+        import json
+
+        return json.loads(payload)
+    return payload

@@ -1,0 +1,20 @@
+CodeGuard v0.2.0 (Arquitectura Modular)
+US: US-ADJ-3.3
+Fecha: 2026-04-03
+Branch: feature/sp-adj-03-ajuste-sp3
+
+Comando ejecutado:
+./.venv/bin/codeguard src/app.py src/resultados/application/commands/calcular_overall.py
+
+Archivos analizados: 2
+Checks ejecutados: 6
+Tiempo de ejecucion: 5.44s
+
+Resultado:
+- 0 errores
+- 0 advertencias
+- 6 informativos
+
+Detalle:
+- src/app.py: sin issues de seguridad, PEP8 compliant, complejidad bajo umbral
+- src/resultados/application/commands/calcular_overall.py: sin issues de seguridad, PEP8 compliant, complejidad bajo umbral

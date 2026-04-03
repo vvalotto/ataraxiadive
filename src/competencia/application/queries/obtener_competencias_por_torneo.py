@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from uuid import UUID
 
-from competencia.domain.ports.event_store_port import EventStorePort
+from competencia.domain.ports.competencias_por_torneo_port import CompetenciasPorTorneoPort
 
 
 @dataclass
@@ -25,39 +25,19 @@ class ObtenerCompetenciasPorTorneoQuery:
 
 
 class ObtenerCompetenciasPorTorneoHandler:
-    """Escanea el Event Store y retorna las competencias de un torneo.
+    """Consulta la proyeccion materializada y retorna las competencias de un torneo."""
 
-    Itera los streams con prefijo 'competencia-' y filtra aquellos cuyo
-    primer evento IntervaloOTConfigurado tenga el torneo_id indicado.
-
-    Args:
-        event_store: Puerto de lectura de eventos.
-    """
-
-    def __init__(self, event_store: EventStorePort) -> None:
-        self._event_store = event_store
+    def __init__(self, proyeccion: CompetenciasPorTorneoPort) -> None:
+        self._proyeccion = proyeccion
 
     async def handle(self, query: ObtenerCompetenciasPorTorneoQuery) -> list[CompetenciaSummaryDTO]:
         """Retorna la lista de competencias pertenecientes al torneo."""
-        streams = await self._event_store.load_all_streams_with_prefix("competencia-")
-        result: list[CompetenciaSummaryDTO] = []
-
-        for stream in streams:
-            for event in stream:
-                if event["event_type"] != "IntervaloOTConfigurado":
-                    continue
-                payload = event["payload"]
-                raw_torneo_id = payload.get("torneo_id")
-                if raw_torneo_id is None:
-                    break
-                if UUID(raw_torneo_id) == query.torneo_id:
-                    result.append(
-                        CompetenciaSummaryDTO(
-                            competencia_id=UUID(payload["competencia_id"]),
-                            disciplina=payload["disciplina"],
-                            torneo_id=query.torneo_id,
-                        )
-                    )
-                break  # solo el primer IntervaloOTConfigurado define el torneo_id
-
-        return result
+        records = await self._proyeccion.listar_por_torneo(query.torneo_id)
+        return [
+            CompetenciaSummaryDTO(
+                competencia_id=record.competencia_id,
+                disciplina=record.disciplina,
+                torneo_id=record.torneo_id,
+            )
+            for record in records
+        ]

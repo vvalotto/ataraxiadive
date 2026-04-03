@@ -1,0 +1,34 @@
+CodeGuard v0.2.0 (Arquitectura Modular)
+Analizando: /Users/victor/PycharmProjects/ataraxiadive/src/resultados/infrastructure/repositories/resultados_competencia_adapter.py
+Archivos Python encontrados: 1
+Tipo de análisis: pre-commit
+
+Checks disponibles: 6
+---
+╭──────────────────────────────────────────────────────────────────────────────╮
+│  🛡️  CodeGuard - Control de Calidad Automatizado                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Archivos analizados:  1    
+Checks ejecutados:    6    
+Tiempo de ejecución:  2.05s
+Resultados totales:   3    
+
+───────────────────────── 📦  repositories  (3 issues) ─────────────────────────
+
+                                Informativos (3)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/resultados/infrastructure… │ ✓ No security issues detected  │
+│ PEP8       │ src/resultados/infrastructure… │ ✓ PEP8 compliant               │
+│ Complexity │ src/resultados/infrastructure… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+╭─────────────────────────────── Resumen Final ────────────────────────────────╮
+│  Resumen:                                                                    │
+│            0 errores                                                         │
+│            0 advertencias                                                    │
+│            3 informativos                                                    │
+╰──────────────────────────────────────────────────────────────────────────────╯

@@ -1,0 +1,38 @@
+CodeGuard v0.2.0 (Arquitectura Modular)
+Analizando: /Users/victor/PycharmProjects/ataraxiadive/src/identidad/application/commands/autenticar_usuario.py, /Users/victor/PycharmProjects/ataraxiadive/src/identidad/application/commands/registrar_usuario.py
+Archivos Python encontrados: 2
+Tipo de análisis: pre-commit
+
+Checks disponibles: 6
+---
+╭──────────────────────────────────────────────────────────────────────────────╮
+│  🛡️  CodeGuard - Control de Calidad Automatizado                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Archivos analizados:  2    
+Checks ejecutados:    6    
+Tiempo de ejecución:  8.89s
+Resultados totales:   6    
+
+─────────────────────────── 📦  commands  (6 issues) ───────────────────────────
+
+                                Informativos (6)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/identidad/application/com… │ ✓ No security issues detected  │
+│ PEP8       │ src/identidad/application/com… │ ✓ PEP8 compliant               │
+│ Complexity │ src/identidad/application/com… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+│ Security   │ src/identidad/application/com… │ ✓ No security issues detected  │
+│ PEP8       │ src/identidad/application/com… │ ✓ PEP8 compliant               │
+│ Complexity │ src/identidad/application/com… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+╭─────────────────────────────── Resumen Final ────────────────────────────────╮
+│  Resumen:                                                                    │
+│            0 errores                                                         │
+│            0 advertencias                                                    │
+│            6 informativos                                                    │
+╰──────────────────────────────────────────────────────────────────────────────╯

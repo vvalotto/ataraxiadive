@@ -6,7 +6,6 @@ from uuid import UUID
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from identidad.api.dependencies import AtletaDep, OrganizadorDep
 from pydantic import BaseModel, field_validator
 
 from registro.application.commands.cancelar_inscripcion import (
@@ -39,6 +38,7 @@ from registro.infrastructure.repositories.sqlite_atleta_repository import SQLite
 from registro.infrastructure.repositories.sqlite_inscripcion_repository import (
     SQLiteInscripcionRepository,
 )
+from shared.api.dependencies import AtletaDep, OrganizadorDep
 from shared.domain.value_objects.disciplina import Disciplina
 
 router = APIRouter(prefix="/registro", tags=["registro"])

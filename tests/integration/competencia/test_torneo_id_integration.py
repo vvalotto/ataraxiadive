@@ -20,6 +20,9 @@ from competencia.application.queries.obtener_competencias_por_torneo import (
 from competencia.domain.aggregates.competencia import Competencia
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
+from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
+    SQLiteCompetenciasPorTorneo,
+)
 
 CREATE_EVENTS_TABLE = """
     CREATE TABLE events (
@@ -48,6 +51,12 @@ async def event_store(tmp_path: Any) -> SQLiteEventStore:
         await db.execute(CREATE_EVENTS_TABLE)
         await db.commit()
     return SQLiteEventStore(db_path)
+
+
+@pytest.fixture
+async def competencias_projection(tmp_path: Any) -> SQLiteCompetenciasPorTorneo:
+    db_path = str(tmp_path / "test_competencia.db")
+    return SQLiteCompetenciasPorTorneo(db_path)
 
 
 def _command(
@@ -109,25 +118,31 @@ class TestTorneoIdPersistencia:
 class TestObtenerCompetenciasPorTorneoIntegracion:
     @pytest.mark.asyncio
     async def test_lista_3_competencias_del_mismo_torneo(
-        self, event_store: SQLiteEventStore
+        self,
+        event_store: SQLiteEventStore,
+        competencias_projection: SQLiteCompetenciasPorTorneo,
     ) -> None:
-        handler_cmd = ConfigurarIntervaloOTHandler(event_store)
+        handler_cmd = ConfigurarIntervaloOTHandler(event_store, competencias_projection)
         await handler_cmd.handle(_command(COMP_1, Disciplina.STA, TORNEO_A))
         await handler_cmd.handle(_command(COMP_2, Disciplina.DNF, TORNEO_A))
         await handler_cmd.handle(_command(COMP_3, Disciplina.DYN, TORNEO_A))
 
-        handler_qry = ObtenerCompetenciasPorTorneoHandler(event_store)
+        handler_qry = ObtenerCompetenciasPorTorneoHandler(competencias_projection)
         result = await handler_qry.handle(ObtenerCompetenciasPorTorneoQuery(torneo_id=TORNEO_A))
         assert len(result) == 3
 
     @pytest.mark.asyncio
-    async def test_filtra_por_torneo_id_correcto(self, event_store: SQLiteEventStore) -> None:
-        handler_cmd = ConfigurarIntervaloOTHandler(event_store)
+    async def test_filtra_por_torneo_id_correcto(
+        self,
+        event_store: SQLiteEventStore,
+        competencias_projection: SQLiteCompetenciasPorTorneo,
+    ) -> None:
+        handler_cmd = ConfigurarIntervaloOTHandler(event_store, competencias_projection)
         await handler_cmd.handle(_command(COMP_1, Disciplina.STA, TORNEO_A))
         await handler_cmd.handle(_command(COMP_2, Disciplina.DNF, TORNEO_A))
         await handler_cmd.handle(_command(COMP_3, Disciplina.DYN, TORNEO_B))
 
-        handler_qry = ObtenerCompetenciasPorTorneoHandler(event_store)
+        handler_qry = ObtenerCompetenciasPorTorneoHandler(competencias_projection)
         result_a = await handler_qry.handle(ObtenerCompetenciasPorTorneoQuery(torneo_id=TORNEO_A))
         result_b = await handler_qry.handle(ObtenerCompetenciasPorTorneoQuery(torneo_id=TORNEO_B))
         assert len(result_a) == 2
@@ -135,12 +150,16 @@ class TestObtenerCompetenciasPorTorneoIntegracion:
         assert result_b[0].competencia_id == COMP_3
 
     @pytest.mark.asyncio
-    async def test_excluye_competencias_standalone(self, event_store: SQLiteEventStore) -> None:
-        handler_cmd = ConfigurarIntervaloOTHandler(event_store)
+    async def test_excluye_competencias_standalone(
+        self,
+        event_store: SQLiteEventStore,
+        competencias_projection: SQLiteCompetenciasPorTorneo,
+    ) -> None:
+        handler_cmd = ConfigurarIntervaloOTHandler(event_store, competencias_projection)
         await handler_cmd.handle(_command(COMP_1, Disciplina.STA, TORNEO_A))
         await handler_cmd.handle(_command(COMP_2, Disciplina.DNF))  # standalone
 
-        handler_qry = ObtenerCompetenciasPorTorneoHandler(event_store)
+        handler_qry = ObtenerCompetenciasPorTorneoHandler(competencias_projection)
         result = await handler_qry.handle(ObtenerCompetenciasPorTorneoQuery(torneo_id=TORNEO_A))
         assert len(result) == 1
         assert result[0].competencia_id == COMP_1

@@ -1,0 +1,19 @@
+CodeGuard v0.2.0 (Arquitectura Modular)
+US: US-ADJ-3.5
+Fecha: 2026-04-03
+Branch: feature/sp-adj-03-ajuste-sp3
+
+Comando ejecutado:
+./.venv/bin/codeguard src/competencia/domain/ports/disciplina_descriptor_port.py
+
+Archivos analizados: 1
+Checks ejecutados: 6
+Tiempo de ejecucion: 8.00s
+
+Resultado:
+- 0 errores
+- 0 advertencias
+- 3 informativos
+
+Detalle:
+- src/competencia/domain/ports/disciplina_descriptor_port.py: sin issues de seguridad, PEP8 compliant, complejidad bajo umbral

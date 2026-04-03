@@ -4,10 +4,9 @@ import uuid
 from dataclasses import dataclass
 from uuid import UUID
 
-import bcrypt
-
 from identidad.domain.aggregates.usuario import Usuario
 from identidad.domain.exceptions import EmailYaRegistrado, PasswordDemasiadoCorto
+from identidad.domain.ports.password_hashing_port import PasswordHashingPort
 from identidad.domain.ports.usuario_repository_port import UsuarioRepositoryPort
 from identidad.domain.value_objects.rol import Rol
 
@@ -22,8 +21,9 @@ class RegistrarUsuarioCommand:
 
 
 class RegistrarUsuarioHandler:
-    def __init__(self, repo: UsuarioRepositoryPort) -> None:
+    def __init__(self, repo: UsuarioRepositoryPort, password_hasher: PasswordHashingPort) -> None:
         self._repo = repo
+        self._password_hasher = password_hasher
 
     async def handle(self, cmd: RegistrarUsuarioCommand) -> UUID:
         # INV-ID-02: mínimo 8 caracteres
@@ -36,7 +36,7 @@ class RegistrarUsuarioHandler:
             raise EmailYaRegistrado(cmd.email)
 
         # INV-ID-03: hash bcrypt — nunca plain text
-        password_hash = bcrypt.hashpw(cmd.password.encode(), bcrypt.gensalt()).decode()
+        password_hash = self._password_hasher.hash(cmd.password)
 
         usuario = Usuario(
             usuario_id=uuid.uuid4(),
