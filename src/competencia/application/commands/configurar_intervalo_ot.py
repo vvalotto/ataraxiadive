@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from competencia.domain.aggregates.competencia import Competencia
+from competencia.domain.ports.competencias_por_torneo_port import CompetenciasPorTorneoPort
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.disciplina import Disciplina
 
@@ -45,8 +46,13 @@ class ConfigurarIntervaloOTHandler:
         event_store: Puerto de persistencia de eventos.
     """
 
-    def __init__(self, event_store: EventStorePort) -> None:
+    def __init__(
+        self,
+        event_store: EventStorePort,
+        proyeccion: CompetenciasPorTorneoPort | None = None,
+    ) -> None:
         self._event_store = event_store
+        self._proyeccion = proyeccion
 
     async def handle(self, command: ConfigurarIntervaloOTCommand) -> None:
         """Ejecuta el comando ConfigurarIntervaloOT.
@@ -78,6 +84,13 @@ class ConfigurarIntervaloOTHandler:
                 stream_id=stream_id,
                 event_type=event.event_type,
                 payload=event.to_payload(),
+            )
+
+        if command.torneo_id is not None and self._proyeccion is not None:
+            await self._proyeccion.guardar(
+                competencia_id=command.competencia_id,
+                disciplina=command.disciplina.value,
+                torneo_id=command.torneo_id,
             )
 
 

@@ -39,6 +39,13 @@ def handler(mock_event_store: AsyncMock) -> ConfigurarIntervaloOTHandler:
     return ConfigurarIntervaloOTHandler(mock_event_store)
 
 
+@pytest.fixture
+def mock_projection() -> AsyncMock:
+    projection = AsyncMock()
+    projection.guardar.return_value = None
+    return projection
+
+
 def _command(intervalo_minutos: int = 9) -> ConfigurarIntervaloOTCommand:
     return ConfigurarIntervaloOTCommand(
         competencia_id=COMPETENCIA_ID,
@@ -114,6 +121,39 @@ class TestReconfiguracion:
         assert mock_event_store.append.call_count == 1
         payload = mock_event_store.append.call_args[1]["payload"]
         assert payload["intervalo_minutos"] == 10
+
+
+class TestProyeccionCompetenciasPorTorneo:
+    @pytest.mark.asyncio
+    async def test_actualiza_proyeccion_si_hay_torneo_id(
+        self, mock_event_store: AsyncMock, mock_projection: AsyncMock
+    ) -> None:
+        torneo_id = UUID("00000000-0000-0000-0000-000000000010")
+        handler = ConfigurarIntervaloOTHandler(mock_event_store, mock_projection)
+
+        await handler.handle(
+            ConfigurarIntervaloOTCommand(
+                competencia_id=COMPETENCIA_ID,
+                disciplina=DISCIPLINA,
+                intervalo_minutos=9,
+                configurado_por=CONFIGURADO_POR,
+                torneo_id=torneo_id,
+            )
+        )
+
+        mock_projection.guardar.assert_called_once_with(
+            competencia_id=COMPETENCIA_ID,
+            disciplina=DISCIPLINA.value,
+            torneo_id=torneo_id,
+        )
+
+    @pytest.mark.asyncio
+    async def test_no_actualiza_proyeccion_si_es_standalone(
+        self, mock_event_store: AsyncMock, mock_projection: AsyncMock
+    ) -> None:
+        handler = ConfigurarIntervaloOTHandler(mock_event_store, mock_projection)
+        await handler.handle(_command(9))
+        mock_projection.guardar.assert_not_called()
 
 
 # ── Error cases ───────────────────────────────────────────────────────────────

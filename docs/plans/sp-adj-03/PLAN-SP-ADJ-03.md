@@ -6,7 +6,7 @@
 | **Contexto** | Ajuste técnico post-SP3 (BL-003) |
 | **Fuentes** | HITO-14, HITO-15 · DesignReviewer · Revisión SOLID · Revisión de consistencia SP3 |
 | **Branch base** | `develop` (después de cerrar BL-003) |
-| **Estado** | 🔄 En ejecucion — 6/8 US cerradas (`US-ADJ-3.1`, `3.6`, `3.4`, `3.8`, `3.2`, `3.3`) |
+| **Estado** | 🔄 En ejecucion — 7/8 US cerradas (`US-ADJ-3.1`, `3.6`, `3.4`, `3.8`, `3.2`, `3.3`, `3.7`) |
 
 ---
 
@@ -29,7 +29,7 @@ mergeados en `develop` y BL-003 esté lista para taggear.
 | `US-ADJ-3.8` | ✅ Cerrada |
 | `US-ADJ-3.2` | ✅ Cerrada |
 | `US-ADJ-3.3` | ✅ Cerrada |
-| `US-ADJ-3.7` | ⏳ Pendiente |
+| `US-ADJ-3.7` | ✅ Cerrada |
 | `US-ADJ-3.5` | ⏳ Pendiente |
 
 ---
@@ -208,4 +208,4 @@ en `resultados/domain/ports/`).
 
 *Iniciado: 2026-03-31 — basado en HITO-14*
 *Actualizado: 2026-04-01 — US-ADJ-3.1/3.2 post-análisis WMC*
-*Actualizado: 2026-04-03 — avance de ejecucion: cerradas US-ADJ-3.1, 3.6, 3.4, 3.8, 3.2 y 3.3*
+*Actualizado: 2026-04-03 — avance de ejecucion: cerradas US-ADJ-3.1, 3.6, 3.4, 3.8, 3.2, 3.3 y 3.7*
