@@ -66,6 +66,7 @@ def datos_personales_completos(
         "email": email,
         "fecha_nacimiento": fecha,
         "categoria": categoria,
+        "club": "Club Apnea Norte",
     }
 
 
@@ -78,6 +79,7 @@ def datos_sin_brevet(context: dict[str, Any]) -> None:
         "email": "carlos@example.com",
         "fecha_nacimiento": "1985-03-20",
         "categoria": "MASTER_MASCULINO",
+        "club": "Club Apnea Norte",
     }
 
 
@@ -91,6 +93,7 @@ def atleta_ya_registrado(client: TestClient, context: dict[str, Any]) -> None:
         "email": "pedro@example.com",
         "fecha_nacimiento": "1988-07-10",
         "categoria": "SENIOR_MASCULINO",
+        "club": "Club Apnea Norte",
     }
     resp = client.post("/registro/atletas", json=payload)
     assert resp.status_code == 201
@@ -107,6 +110,7 @@ def nombre_vacio(context: dict[str, Any]) -> None:
         "email": "vacio@example.com",
         "fecha_nacimiento": "1990-01-01",
         "categoria": "SENIOR_FEMENINO",
+        "club": "Club Apnea Norte",
     }
 
 
@@ -161,6 +165,7 @@ def then_get_atleta(client: TestClient, context: dict[str, Any]) -> None:
     data = get_resp.json()
     assert data["nombre"] == context["payload"]["nombre"]
     assert data["email"] == context["payload"]["email"]
+    assert data["club"] == context["payload"]["club"]
 
 
 @then(parsers.parse("la respuesta es {status_code:d} y brevet es nulo en la respuesta"))

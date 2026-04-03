@@ -18,6 +18,7 @@ def _atleta(**kwargs) -> Atleta:
         email="ana@example.com",
         fecha_nacimiento=date(1990, 5, 15),
         categoria=Categoria.SENIOR_FEMENINO,
+        club="Club Apnea Norte",
         brevet=None,
     )
     defaults.update(kwargs)
@@ -38,6 +39,7 @@ class TestSQLiteAtletaRepository:
         assert result.atleta_id == atleta.atleta_id
         assert result.nombre == atleta.nombre
         assert result.email == atleta.email
+        assert result.club == atleta.club
         assert result.brevet is None
 
     async def test_save_y_find_by_id_con_brevet(self, repo: SQLiteAtletaRepository):
@@ -45,6 +47,7 @@ class TestSQLiteAtletaRepository:
         await repo.save(atleta)
         result = await repo.find_by_id(atleta.atleta_id)
         assert result is not None
+        assert result.club == atleta.club
         assert result.brevet == "AIDA-3"
 
     async def test_find_by_email(self, repo: SQLiteAtletaRepository):
@@ -53,6 +56,7 @@ class TestSQLiteAtletaRepository:
         result = await repo.find_by_email("carlos@example.com")
         assert result is not None
         assert result.atleta_id == atleta.atleta_id
+        assert result.club == atleta.club
 
     async def test_find_by_id_no_existente(self, repo: SQLiteAtletaRepository):
         result = await repo.find_by_id(uuid4())

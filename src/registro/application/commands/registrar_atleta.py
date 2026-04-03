@@ -18,6 +18,7 @@ class RegistrarAtletaCommand:
     email: str
     fecha_nacimiento: date
     categoria: Categoria
+    club: str
     brevet: str | None = None
 
 
@@ -37,6 +38,7 @@ class RegistrarAtletaHandler:
             email=cmd.email,
             fecha_nacimiento=cmd.fecha_nacimiento,
             categoria=cmd.categoria,
+            club=cmd.club,
             brevet=cmd.brevet,
         )
         await self._repo.save(atleta)

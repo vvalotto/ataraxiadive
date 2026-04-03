@@ -266,7 +266,7 @@ classDiagram
 
 | Aggregate | Tipo | Responsabilidad |
 |-----------|------|-----------------|
-| `Atleta` | Aggregate root | Datos personales, brevet, cuenta de usuario |
+| `Atleta` | Aggregate root | Datos personales, club, brevet, cuenta de usuario |
 | `Inscripcion` | Aggregate | Participación de un atleta en un torneo específico |
 
 ### Eventos principales

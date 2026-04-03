@@ -54,6 +54,7 @@ class RegistrarAtletaRequest(BaseModel):
     email: str
     fecha_nacimiento: date
     categoria: Categoria
+    club: str
     brevet: str | None = None
 
     @field_validator("nombre", "apellido")
@@ -71,6 +72,7 @@ class AtletaResponse(BaseModel):
     email: str
     fecha_nacimiento: date
     categoria: Categoria
+    club: str
     brevet: str | None
 
 
@@ -121,6 +123,7 @@ async def registrar_atleta(body: RegistrarAtletaRequest, _: AtletaDep) -> JSONRe
         email=body.email,
         fecha_nacimiento=body.fecha_nacimiento,
         categoria=body.categoria,
+        club=body.club,
         brevet=body.brevet,
     )
     try:
@@ -149,6 +152,7 @@ async def obtener_atleta(atleta_id: UUID) -> JSONResponse:
             email=atleta.email,
             fecha_nacimiento=atleta.fecha_nacimiento,
             categoria=atleta.categoria,
+            club=atleta.club,
             brevet=atleta.brevet,
         ).model_dump(mode="json"),
     )

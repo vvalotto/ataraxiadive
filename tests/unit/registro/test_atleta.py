@@ -15,6 +15,7 @@ def _valid_atleta(**kwargs) -> Atleta:
         email="ana@example.com",
         fecha_nacimiento=date(1990, 5, 15),
         categoria=Categoria.SENIOR_FEMENINO,
+        club="Club Apnea Norte",
         brevet=None,
     )
     defaults.update(kwargs)
@@ -25,6 +26,7 @@ class TestAtletaCreacion:
     def test_crea_atleta_valido(self):
         atleta = _valid_atleta()
         assert atleta.nombre == "Ana"
+        assert atleta.club == "Club Apnea Norte"
         assert atleta.brevet is None
 
     def test_crea_atleta_con_brevet(self):
@@ -69,3 +71,11 @@ class TestAtletaInvariantes:
     def test_inv_a05_brevet_none_permitido(self):
         atleta = _valid_atleta(brevet=None)
         assert atleta.brevet is None
+
+    def test_inv_a05_club_vacio(self):
+        with pytest.raises(ValueError, match="INV-A-05"):
+            _valid_atleta(club="")
+
+    def test_inv_a05_club_espacios(self):
+        with pytest.raises(ValueError, match="INV-A-05"):
+            _valid_atleta(club="   ")

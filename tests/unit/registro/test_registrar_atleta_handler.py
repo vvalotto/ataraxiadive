@@ -21,6 +21,7 @@ def _cmd(**kwargs) -> RegistrarAtletaCommand:
         email="ana@example.com",
         fecha_nacimiento=date(1990, 5, 15),
         categoria=Categoria.SENIOR_FEMENINO,
+        club="Club Apnea Norte",
         brevet=None,
     )
     defaults.update(kwargs)
@@ -49,6 +50,7 @@ class TestRegistrarAtletaHandler:
             email="ana@example.com",
             fecha_nacimiento=date(1990, 5, 15),
             categoria=Categoria.SENIOR_FEMENINO,
+            club="Club Apnea Norte",
         )
         handler = RegistrarAtletaHandler(repo)
         cmd = _cmd(atleta_id=atleta_id)
@@ -67,4 +69,5 @@ class TestRegistrarAtletaHandler:
         await handler.handle(cmd)
 
         saved: Atleta = repo.save.call_args[0][0]
+        assert saved.club == "Club Apnea Norte"
         assert saved.brevet is None

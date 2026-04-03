@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS atletas (
     email            TEXT NOT NULL,
     fecha_nacimiento TEXT NOT NULL,
     categoria        TEXT NOT NULL,
+    club             TEXT NOT NULL,
     brevet           TEXT
 )
 """
@@ -37,8 +38,8 @@ class SQLiteAtletaRepository(AtletaRepositoryPort):
             await conn.execute(
                 """
                 INSERT OR REPLACE INTO atletas
-                    (atleta_id, nombre, apellido, email, fecha_nacimiento, categoria, brevet)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                    (atleta_id, nombre, apellido, email, fecha_nacimiento, categoria, club, brevet)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     str(atleta.atleta_id),
@@ -47,6 +48,7 @@ class SQLiteAtletaRepository(AtletaRepositoryPort):
                     atleta.email,
                     atleta.fecha_nacimiento.isoformat(),
                     str(atleta.categoria),
+                    atleta.club,
                     atleta.brevet,
                 ),
             )
@@ -56,8 +58,11 @@ class SQLiteAtletaRepository(AtletaRepositoryPort):
         async with aiosqlite.connect(self._db_path) as conn:
             await self._ensure_table(conn)
             async with conn.execute(
-                "SELECT atleta_id, nombre, apellido, email, fecha_nacimiento, categoria, brevet "
-                "FROM atletas WHERE atleta_id = ?",
+                (
+                    "SELECT atleta_id, nombre, apellido, email, fecha_nacimiento, "
+                    "categoria, club, brevet "
+                    "FROM atletas WHERE atleta_id = ?"
+                ),
                 (str(atleta_id),),
             ) as cursor:
                 row = await cursor.fetchone()
@@ -67,8 +72,11 @@ class SQLiteAtletaRepository(AtletaRepositoryPort):
         async with aiosqlite.connect(self._db_path) as conn:
             await self._ensure_table(conn)
             async with conn.execute(
-                "SELECT atleta_id, nombre, apellido, email, fecha_nacimiento, categoria, brevet "
-                "FROM atletas WHERE email = ?",
+                (
+                    "SELECT atleta_id, nombre, apellido, email, fecha_nacimiento, "
+                    "categoria, club, brevet "
+                    "FROM atletas WHERE email = ?"
+                ),
                 (email,),
             ) as cursor:
                 row = await cursor.fetchone()
@@ -83,5 +91,6 @@ class SQLiteAtletaRepository(AtletaRepositoryPort):
             email=row[3],
             fecha_nacimiento=date.fromisoformat(row[4]),
             categoria=Categoria(row[5]),
-            brevet=row[6],
+            club=row[6],
+            brevet=row[7],
         )

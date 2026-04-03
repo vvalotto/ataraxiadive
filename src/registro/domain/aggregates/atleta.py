@@ -18,6 +18,7 @@ class Atleta:
     email: str
     fecha_nacimiento: date
     categoria: Categoria
+    club: str
     brevet: str | None = field(default=None)
 
     def __post_init__(self) -> None:
@@ -29,3 +30,5 @@ class Atleta:
             raise ValueError("INV-A-02: email debe tener formato válido")
         if self.fecha_nacimiento >= date.today():
             raise ValueError("INV-A-04: fecha_nacimiento debe ser en el pasado")
+        if not self.club or not self.club.strip():
+            raise ValueError("INV-A-05: club no puede ser vacío")
