@@ -266,7 +266,7 @@ SP-ADJ (ajuste entre SPs)          → opcional, antes de cerrar la Baseline
 |-------------|--------|----------|---------|--------|
 | SP1 | La Performance | BL-001 | `v0.2.0` | ✅ Cerrado 2026-03-24 |
 | SP2 | La Competencia | BL-002 | `v0.3.0` | ✅ Cerrado 2026-03-28 |
-| SP3 | El Torneo | BL-003 | `v0.4.0` | 🔄 Quality gates aprobados — pendiente merge/tag |
+| SP3 | El Torneo | BL-003 | `v0.4.0` | ✅ Cerrado 2026-04-04 |
 | SP4 | La Plataforma | BL-004 | `v0.5.0` | ⏳ Pendiente |
 | SP5 | La Puesta en Marcha | BL-005 | `v1.0.0` | ⏳ Pendiente |
 
@@ -438,7 +438,7 @@ Ver `docs/plans/sp-adj-02-code/PLAN-SP-ADJ-02-code.md` y `.work/revision-consist
 - `identidad`/`shared` D↓ (mejorando): esperado, BCs CRUD estables por diseño
 - `registro` D=0.56 — (estable): sin cambios previstos en SP4
 
-**Próximo paso:** merge develop→main + tag `v0.4.0` (BL-003)
+**Próximo subproyecto:** SP-ADJ-05 (ajuste documental/metodológico) → SP4 (La Plataforma)
 
 ---
 
