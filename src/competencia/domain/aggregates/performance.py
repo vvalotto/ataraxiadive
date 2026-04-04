@@ -1,4 +1,5 @@
 """Aggregate Performance — ciclo de vida de la actuación de un atleta."""
+
 from __future__ import annotations
 
 import json
@@ -15,7 +16,7 @@ from competencia.domain.events.resultado_corregido import ResultadoCorregido
 from competencia.domain.events.resultado_registrado import ResultadoRegistrado
 from competencia.domain.events.tarjeta_asignada import TarjetaAsignada
 from competencia.domain.exceptions import (
-    DistanciaBlackoutObligatoria,
+    DistanciaBlackoutObligatoria,  # noqa: F401 - re-export por compatibilidad
     EstadoInvalidoParaAsignarTarjeta,
     EstadoInvalidoParaCorregirResultado,
     EstadoInvalidoParaLlamar,
@@ -26,8 +27,11 @@ from competencia.domain.exceptions import (
 from competencia.domain.value_objects.ap import AP
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
+from competencia.domain.value_objects.tarjeta_asignacion import TarjetaAsignacion
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
+
+__all__ = ["Performance", "DistanciaBlackoutObligatoria"]
 
 
 class Performance(AggregateRoot):
@@ -112,7 +116,10 @@ class Performance(AggregateRoot):
 
     @property
     def posicion_grilla(self) -> int | None:
-        """Posición en la grilla de salida, disponible tras ser llamado. None si aún no fue llamado."""
+        """Posicion en la grilla de salida.
+
+        Disponible tras ser llamado. None si aun no fue llamado.
+        """
         return self._posicion_grilla
 
     @property
@@ -342,7 +349,8 @@ class Performance(AggregateRoot):
             distancia_blackout: Distancia alcanzada — obligatoria si motivo == "black-out".
 
         Raises:
-            EstadoInvalidoParaAsignarTarjeta: Performance no en ResultadoRegistrado (INV-P-07).
+            EstadoInvalidoParaAsignarTarjeta:
+                Performance no en ResultadoRegistrado (INV-P-07).
             MotivoObligatorio: tarjeta Amarilla o Roja sin motivo (INV-P-11).
             DistanciaBlackoutObligatoria: motivo "black-out" sin distancia o distancia <= 0.
         """
@@ -351,14 +359,12 @@ class Performance(AggregateRoot):
                 f"Performance {self._performance_id} en estado {self._estado} "
                 "— solo se puede asignar tarjeta desde ResultadoRegistrado"
             )
-        if tipo in (TipoTarjeta.Amarilla, TipoTarjeta.Roja) and not motivo:
-            raise MotivoObligatorio(
-                f"Tarjeta {tipo} requiere motivo obligatorio (INV-P-11)"
-            )
-        if motivo == "black-out" and (distancia_blackout is None or distancia_blackout <= 0):
-            raise DistanciaBlackoutObligatoria(
-                "Tarjeta roja por black-out requiere distancia_blackout > 0 (RF-EJ-07)"
-            )
+
+        tarjeta_asignacion = TarjetaAsignacion(
+            tipo=tipo,
+            motivo=motivo,
+            distancia_blackout=distancia_blackout,
+        )
 
         now = TarjetaAsignada.now()
         event = TarjetaAsignada(
@@ -368,14 +374,18 @@ class Performance(AggregateRoot):
             performance_id=str(self._performance_id),
             participante_id=str(self._participante_id),
             disciplina=self._disciplina.value,
-            tipo=tipo.value,
-            motivo=motivo,
+            tipo=tarjeta_asignacion.tipo.value,
+            motivo=tarjeta_asignacion.motivo,
             asignada_por=asignada_por,
             asignada_en=now.isoformat(),
-            distancia_blackout=str(distancia_blackout) if distancia_blackout else None,
+            distancia_blackout=(
+                str(tarjeta_asignacion.distancia_blackout)
+                if tarjeta_asignacion.distancia_blackout
+                else None
+            ),
         )
-        self._tarjeta = tipo
-        self._distancia_blackout = distancia_blackout
+        self._tarjeta = tarjeta_asignacion.tipo
+        self._distancia_blackout = tarjeta_asignacion.distancia_blackout
         self._estado = EstadoPerformance.Ejecutada
         self._record(event)
 

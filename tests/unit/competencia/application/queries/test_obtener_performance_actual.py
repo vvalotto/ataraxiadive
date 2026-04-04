@@ -1,4 +1,5 @@
 """Tests unitarios de ObtenerPerformanceActualHandler — US-1.3.1."""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone
@@ -16,7 +17,6 @@ from competencia.application.queries.obtener_performance_actual import (
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -75,9 +75,7 @@ def _llamado_stream(
     return stream
 
 
-def _ejecutada_stream(
-    competencia_id: str, participante_id: str
-) -> list[dict[str, Any]]:
+def _ejecutada_stream(competencia_id: str, participante_id: str) -> list[dict[str, Any]]:
     stream = _llamado_stream(competencia_id, participante_id)
     pid = stream[0]["payload"]["performance_id"]
     stream.append(

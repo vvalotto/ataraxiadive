@@ -1,0 +1,18 @@
+class TorneoNoEncontrado(Exception):
+    pass
+
+
+class TransicionEstadoInvalida(Exception):
+    pass
+
+
+class TorneoCerrado(Exception):
+    pass
+
+
+class DisciplinaNoEnTorneo(Exception):
+    pass
+
+
+class AsignacionNoPermitida(Exception):
+    pass

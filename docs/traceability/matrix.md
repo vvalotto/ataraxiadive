@@ -4,9 +4,9 @@
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-03-19 |
+| **Fecha** | 2026-04-03 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.0 — Fase 0 |
+| **Estado** | ✅ v1.2 — SP-ADJ-04 completado |
 
 ---
 
@@ -31,7 +31,8 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP1 | Competencia (núcleo) | RF-PR-01/02/03, RF-EJ-02/05/07/08/10 |
 | SP2 | Competencia (completo) + Resultados (núcleo) | RF-PR-04/05/06/07/08, RF-EJ-01, RF-PM-03 |
 | SP3 | Torneo + Registro + Identidad + Resultados | RF-GT-01..07, RF-IN-01..06/08/09, RF-US-01..05, RF-PM-01/02/05/06 |
-| SP4 | Notificaciones + extensiones | RF-EJ-03/06, RF-IN-05/06, RF-NT-01..04, RF-PM-05 |
+| SP-ADJ-04 | Ajustes de Shared + Registro + Resultados + Competencia | RF-GT-02, RF-IN-10, RF-PR-05, RF-PM-05 |
+| SP4 | Notificaciones + extensiones | RF-EJ-03/06, RF-IN-05/06, RF-NT-01..04 |
 | SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
 
 ---
@@ -43,7 +44,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
 | RF-GT-01 | Un torneo tiene una sola sede | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
-| RF-GT-02 | Disciplinas configurables (STA, DNF, DBF, DYN, SPE2X50) | Torneo | SP3/SP4 | 3.1 / 4.3 | US-3.1.x | ✅ definido |
+| RF-GT-02 | Disciplinas configurables (STA, DNF, DBF, DYN, SPE) | Torneo | SP3/SP4 | 3.1 / 4.3 | US-3.1.x | ✅ definido — acrónimos corregidos en SP-ADJ-04 (US-ADJ-4.1) |
 | RF-GT-03 | Múltiples torneos activos simultáneamente | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
 | RF-GT-04 | Cancelar = estado Cancelado, datos preservados | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
 | RF-GT-05 | Restricciones de transición entre fases (con retroceso Ejecución → Preparación) | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
@@ -56,15 +57,16 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-IN-01 | Categorías configurables por edad y género | Registro / Torneo | SP3/SP4 | 3.2 / 4.3 | US-3.2.x | ✅ definido |
-| RF-IN-02 | Brevet no obligatorio | Registro | SP3 | 3.2 | US-3.2.x | ✅ definido |
-| RF-IN-03 | Sin límite de atletas por torneo o disciplina | Registro | SP3 | 3.2 | US-3.2.x | ✅ definido |
-| RF-IN-04 | Cancelar inscripción hasta el día anterior | Registro | SP3 | 3.2 | US-3.2.x | ✅ definido |
+| RF-IN-01 | Categorías configurables por edad y género | Registro / Torneo | SP3/SP4 | 3.2 / 4.3 | US-3.2.2 | ✅ implementado |
+| RF-IN-02 | Brevet no obligatorio | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
+| RF-IN-03 | Sin límite de atletas por torneo o disciplina | Registro | SP3 | 3.2 | US-3.2.3 | ✅ implementado |
+| RF-IN-04 | Cancelar inscripción hasta el día anterior | Registro | SP3 | 3.2 | US-3.2.3 | ✅ implementado |
 | RF-IN-05 | Apto médico como requisito de inscripción | Registro | SP4 | 4.5 | US-4.5.x | ✅ definido |
 | RF-IN-06 | Constancia de pago como requisito | Registro | SP4 | 4.5 | US-4.5.x | ✅ definido |
 | RF-IN-07 | Conflicto de datos con BD FAAS | Registro | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
-| RF-IN-08 | Género solo para categorización — sin otro efecto | Registro | SP3 | 3.2 | US-3.2.x | ✅ definido |
-| RF-IN-09 | Atleta no puede cambiar categoría por disciplina | Registro | SP3 | 3.2 | US-3.2.x | ✅ definido |
+| RF-IN-08 | Género solo para categorización — sin otro efecto | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
+| RF-IN-09 | Atleta no puede cambiar categoría por disciplina | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
+| RF-IN-10 | Club obligatorio del atleta y visible en grillas/reportes | Registro | SP-ADJ-04 | — | US-ADJ-4.4 | ✅ implementado |
 
 ---
 
@@ -76,7 +78,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-PR-02 | AP > 0, sin negativos ni cero (INV-P-01) | Competencia | SP1 | 1.2 | US-P-01 | ✅ definido |
 | RF-PR-03 | AP no modificable una vez registrado (INV-P-02) | Competencia | SP1 | 1.2 | US-P-01 | ✅ definido |
 | RF-PR-04 | Atleta sin AP no compite — no aparece en grilla (P-05) | Competencia | SP2 | 2.1 | US-C-02 | ✅ definido |
-| RF-PR-05 | Orden de grilla: metros menor→mayor / tiempo mayor→menor (P-01) | Competencia | SP2 | 2.1 | US-C-02 | ✅ definido |
+| RF-PR-05 | Orden de grilla: menor AP primero en todas las disciplinas (P-01 corregido) | Competencia | SP2 / SP-ADJ-04 | 2.1 / — | US-C-02 / US-ADJ-4.2 | ✅ corregido en SP-ADJ-04 — STA era descendente, debe ser ascendente |
 | RF-PR-06 | Andariveles simultáneos — varios atletas compiten en paralelo | Competencia | SP2 | 2.3 | US-C-02 | ✅ definido |
 | RF-PR-07 | Organizador puede ajustar manualmente el orden de la grilla | Competencia | SP2 | 2.1 | US-C-03 | ✅ definido |
 | RF-PR-08 | Intervalo entre OTs configurable por competencia (P-02) | Competencia | SP2 | 2.1 | US-C-01 | ✅ definido |
@@ -108,7 +110,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-PM-02 | Overall = ranking general multi-disciplina por categoría | Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
 | RF-PM-03 | Empates = mismo puesto y mismos puntos | Resultados | SP2 | 2.4 | US-2.4.2 | ✅ Implementado |
 | RF-PM-04 | Certificados/diplomas | — | — | — | — | — fuera de alcance v1 |
-| RF-PM-05 | Rankings por categoría y género | Resultados | SP4 | 4.4 | US-4.4.x | ✅ definido |
+| RF-PM-05 | Rankings por categoría y género | Resultados | SP-ADJ-04 | — | US-ADJ-4.5 | ✅ implementado en SP-ADJ-04 — ranking y overall segmentados por categoría |
 | RF-PM-06 | Publicación en plataforma + descarga | Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
 
 ---
@@ -117,9 +119,9 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-US-01 | Un organizador por torneo (no multi-organizador) | Identidad / Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
-| RF-US-02 | Un usuario puede tener múltiples roles | Identidad | SP3 | 3.1 | US-3.1.x | ✅ definido |
-| RF-US-03 | Autenticación mail + contraseña | Identidad | SP3 | 3.1 | US-3.1.x | ✅ definido |
+| RF-US-01 | Un organizador por torneo (no multi-organizador) | Identidad / Torneo | SP3 | 3.2 | US-3.2.1 | ✅ implementado |
+| RF-US-02 | Un usuario puede tener múltiples roles | Identidad | SP3 | 3.2 | US-3.2.1 | ✅ implementado |
+| RF-US-03 | Autenticación mail + contraseña | Identidad | SP3 | 3.2 | US-3.2.1 | ✅ implementado |
 | RF-US-04 | Juez asignado a disciplina específica por el organizador | Identidad / Torneo | SP3 | 3.4 | US-3.4.x | ✅ definido |
 | RF-US-05 | Atletas solo ven resultados finales (no resultados en curso) | Identidad / Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
 
@@ -177,57 +179,130 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
-## 5b. US-IEDD SP-ADJ-01 (Ajuste Técnico Post-SP2)
+## 6. US-IEDD SP1 — Implementadas
 
-| US candidata | Issues | Capas afectadas | Contenido principal | Estado |
-|-------------|--------|-----------------|---------------------|--------|
-| US-ADJ-1.1 | ADJ-03, ADJ-06, ADJ-08 | `domain/aggregates/`, `infrastructure/` | `@property ot_programado` · `_event_handlers` en `__init__` Competencia · `registrar_ap` snake_case | ✅ Done |
-| US-ADJ-1.2 | ADJ-01 | `domain/aggregates/` | Extraer `_recalcular_ots` + `_aplicar_swap_posicion` — eliminar triplicación de OT en `ajustar_grilla` | ✅ Done |
-| US-ADJ-1.3 | ADJ-02 | `application/commands/` | `_stream_ids.py` — 11 copias de `_build_stream_id` → 2 funciones canónicas | ✅ Done |
-| US-ADJ-1.4 | ADJ-04, ADJ-05 | `api/router.py`, `src/app.py` | DIP: `EventStoreDep` → `EventStorePort`; cableado P-08 movido a composition root `app.py` | ✅ Done |
-| US-ADJ-1.5 | ADJ-07 | `competencia/api/` | SRP — router.py → schemas.py + dependencies.py + router.py | ✅ Done |
-
----
-
-## 6. US-IEDD Candidatas para SP1
-
-SP1 es el próximo SP a implementar. Estas US-IEDD se especifican formalmente
-en `docs/specs/spN/` antes de ejecutar `/implement-us`.
-
-| US candidata | Inc. | RFs cubiertos | Comando principal | Invariantes clave |
-|-------------|------|---------------|------------------|------------------|
-| US-1.1.1 | 1.1 | — | Setup: esqueleto BC Competencia (BC-first) + tabla `events` + health-check | — | ✅ Implementada 2026-03-21 |
-| US-1.2.1 | 1.2 | RF-PR-01/02/03, RF-EJ-08 | `RegistrarAP` | INV-P-01, INV-P-02, INV-P-03, INV-P-04 | ✅ Implementada 2026-03-21 |
-| US-1.2.2 | 1.2 | RF-EJ-02 | `LlamarAtleta` | INV-P-05 | ✅ Implementada 2026-03-22 |
-| US-1.2.3 | 1.2 | RF-EJ-05 | `RegistrarResultado` | INV-P-06, INV-P-09 | ✅ Implementada 2026-03-22 |
-| US-1.2.4 | 1.2 | RF-EJ-10 | `AsignarTarjeta` (blanca/roja) | INV-P-07, INV-P-10, INV-P-11 | ✅ Implementada 2026-03-22 |
-| US-1.2.5 | 1.2 | RF-EJ-02 | `RegistrarDNS` | INV-P-08, INV-P-09 | ✅ Implementada 2026-03-23 |
-| US-1.2.6 | 1.2 | RF-EJ-06 | `CorregirResultado` | INV-P-12, INV-P-13 (INV-P-15 → SP3) | ✅ Implementada 2026-03-23 |
-| US-1.3.1 | 1.3 | RF-EJ-05 | Read Models: `PerformanceActual`, `ProximosAtletas`, `ProgresoCompetencia` — 3 GET endpoints | — | ✅ Implementada 2026-03-23 |
-| US-1.4.1 | 1.4 | RF-EJ-07 | `AsignarTarjeta` roja + black-out con distancia | INV-P-07, INV-P-11 | ✅ Implementada 2026-03-23 |
-| US-1.4.2 | 1.4 | RF-EJ-05/10 | Flujo end-to-end: AP → llamar → resultado → tarjeta + `GET /events` audit log | INV-P-05..10 | ✅ Implementada 2026-03-23 |
+| US | Inc. | RFs cubiertos | Comando principal | Invariantes clave | Estado |
+|----|------|---------------|------------------|------------------|--------|
+| US-1.1.1 | 1.1 | — | Setup: esqueleto BC Competencia (BC-first) + tabla `events` + health-check | — | ✅ 2026-03-21 |
+| US-1.2.1 | 1.2 | RF-PR-01/02/03, RF-EJ-08 | `RegistrarAP` | INV-P-01..04 | ✅ 2026-03-21 |
+| US-1.2.2 | 1.2 | RF-EJ-02 | `LlamarAtleta` | INV-P-05 | ✅ 2026-03-22 |
+| US-1.2.3 | 1.2 | RF-EJ-05 | `RegistrarResultado` | INV-P-06, INV-P-09 | ✅ 2026-03-22 |
+| US-1.2.4 | 1.2 | RF-EJ-10 | `AsignarTarjeta` (blanca/roja) | INV-P-07, INV-P-10, INV-P-11 | ✅ 2026-03-22 |
+| US-1.2.5 | 1.2 | RF-EJ-02 | `RegistrarDNS` | INV-P-08, INV-P-09 | ✅ 2026-03-23 |
+| US-1.2.6 | 1.2 | RF-EJ-06 | `CorregirResultado` | INV-P-12, INV-P-13 | ✅ 2026-03-23 |
+| US-1.3.1 | 1.3 | RF-EJ-05 | Read Models: `PerformanceActual`, `ProximosAtletas`, `ProgresoCompetencia` | — | ✅ 2026-03-23 |
+| US-1.4.1 | 1.4 | RF-EJ-07 | `AsignarTarjeta` roja + black-out con distancia | INV-P-07, INV-P-11 | ✅ 2026-03-23 |
+| US-1.4.2 | 1.4 | RF-EJ-05/10 | Flujo E2E + `GET /events` audit log | INV-P-05..10 | ✅ 2026-03-23 |
 
 ---
 
-## 6. Cobertura Total
+## 7. US-IEDD SP-ADJ-01 — Implementadas (refactoring post-SP2)
+
+| US | Issues | Capas | Descripción | Estado |
+|----|--------|-------|-------------|--------|
+| US-ADJ-1.1 | ADJ-03/06/08 | `domain/` | `@property ot_programado` + `_event_handlers` en `__init__` + snake_case `registrar_ap` | ✅ 2026-03-28 |
+| US-ADJ-1.2 | ADJ-01/02 | `domain/` | Helpers `_recalcular_ots` + `_aplicar_swap_posicion` en Competencia (OCP/SRP) | ✅ 2026-03-28 |
+| US-ADJ-1.3 | ADJ-09 | `application/` | `_stream_ids.py` — fuente única, 11 duplicados DRY eliminados | ✅ 2026-03-28 |
+| US-ADJ-1.4 | ADJ-04/05 | `api/` | DIP en router: `EventStoreDep: EventStorePort` + P-08 a composition root | ✅ 2026-03-28 |
+| US-ADJ-1.5 | ADJ-07 | `api/` | SRP router: `schemas.py` + `dependencies.py` + `router.py` solo endpoints | ✅ 2026-03-28 |
+
+---
+
+## 8. US-IEDD SP-ADJ-02-code — Implementadas (refactoring arquitectónico cross-BC)
+
+| US | Issues | Capas | Descripción | Estado |
+|----|--------|-------|-------------|--------|
+| US-ADJ-2.6 | B-01, B-02, B-04 | `shared/domain/`, `shared/infrastructure/`, `resultados/`, `competencia/domain/` | `Disciplina`, `DisciplinaDescriptor`, `UnidadMedida` → `shared/domain/value_objects/`. `EventStorePort`, `SQLiteEventStore` → `shared/`. `DisciplinaDescriptorAdapter` creado en `resultados/infrastructure/`. | ✅ 2026-03-28 |
+| US-ADJ-2.7 | B-03 | `competencia/api/router.py` · `src/app.py` | Eliminado código muerto `get_on_finalizada_callback` del router. `build_on_finalizada_callback` (P-08 composition root) vive en `src/app.py`. | ✅ 2026-03-28 |
+| US-ADJ-2.8 | B-05, D-04 | `competencia/api/router.py` | DIP fix: `get_event_store() -> EventStorePort` + `EventStoreDep = Annotated[EventStorePort, ...]`. | ✅ 2026-03-28 |
+
+---
+
+## 9. US-IEDD SP3 — Implementadas
+
+| US | Inc. | RFs cubiertos | Contenido principal | Estado |
+|----|------|---------------|---------------------|--------|
+| US-3.1.1 | 3.1 | RF-GT-01/03/04/05/07 | Aggregate `Torneo` — máquina de estados, value objects, puerto abstracto | ✅ 2026-03-29 |
+| US-3.1.2 | 3.1 | RF-GT-01/02/03/04/05/07 | API REST Torneo — CRUD + 7 endpoints de transición + SQLiteTorneoRepository | ✅ 2026-03-30 |
+| US-3.2.1 | 3.2 | RF-US-01..05 | BC Identidad — `Usuario` + JWT mínimo + `/auth` | ✅ 2026-03-30 |
+| US-3.2.2 | 3.2 | RF-IN-01/02/08/09 | Aggregate `Atleta` + registro/consulta + repositorio SQLite | ✅ 2026-03-31 |
+| US-3.2.3 | 3.2 | RF-IN-03/04 | Aggregate `Inscripcion` + inscribir/cancelar + listar inscriptos | ✅ 2026-03-31 |
+| US-3.3.1 | 3.3 | RF-PM-01/02/05 | `torneo_id` opcional en `Competencia` para habilitar overall por torneo | ✅ 2026-03-31 |
+| US-3.3.2 | 3.3 | RF-IN-01..04, RF-GT-02/03 | ACL Torneo/Registro → Competencia para crear competencias por disciplina | ✅ 2026-03-31 |
+| US-3.4.1 | 3.4 | RF-EJ-01 | `AsignarDisciplinas` + `AsignarJuez` en Torneo | ✅ 2026-04-01 |
+| US-3.4.2 | 3.4 | RF-US-02/03/04 | Auth por rol en APIs escribibles con JWT middleware | ✅ 2026-04-01 |
+| US-3.5.1 | 3.5 | RF-PM-01/02 | Aggregate `RankingOverall` + `CalcularOverallHandler` | ✅ 2026-04-02 |
+| US-3.5.2 | 3.5 | RF-PM-05 | Política `P-09`: cálculo automático del overall al cerrar el torneo | ✅ 2026-04-02 |
+| US-3.5.3 | 3.5 | RF-PM-06 | API `GET /resultados/{torneo_id}/overall` | ✅ 2026-04-02 |
+
+---
+
+## 10. US-IEDD SP-ADJ-03 — Implementadas (ajuste técnico post-SP3)
+
+| US | Issues | Capas | Descripción | Estado |
+|----|--------|-------|-------------|--------|
+| US-ADJ-3.1 | ADJ-01, SOLID-01 | `competencia/domain/`, `torneo/domain/` | Extraer `GrillaDeSalida` VO + eliminar `_DISCIPLINAS_SP3` (OCP) | ✅ 2026-04-03 |
+| US-ADJ-3.2 | ADJ-02 | `competencia/domain/`, `competencia/application/` | Extraer `TarjetaAsignacion` VO | ✅ 2026-04-03 |
+| US-ADJ-3.3 | ADJ-03/04, SOLID-04 | `src/app.py`, `resultados/application/` | Refactorizar `build_app()` + constante event type | ✅ 2026-04-03 |
+| US-ADJ-3.4 | ADJ-05 | `shared/api/`, `*/api/router.py` | Mover deps auth a `shared/api/dependencies.py` (DIP cross-BC) | ✅ 2026-04-03 |
+| US-ADJ-3.5 | ADJ-06 | `competencia/domain/ports/` | Limpiar imports cross-module en ports | ✅ 2026-04-03 |
+| US-ADJ-3.6 | SOLID-02/03 | `identidad/domain/ports/`, `identidad/application/` | `TokenServicePort` + `PasswordHashingPort` (DIP en Identidad) | ✅ 2026-04-03 |
+| US-ADJ-3.7 | HITO-15 | `competencia/infrastructure/`, `competencia/application/queries/` | Proyección `competencias_por_torneo` O(n)→O(1) | ✅ 2026-04-03 |
+| US-ADJ-3.8 | HITO-14 D-06 | `resultados/infrastructure/` | Desacoplar ACL resultados de BC Competencia | ✅ 2026-04-03 |
+
+---
+
+## 11. US-IEDD SP-ADJ-04 — Completadas (discrepancias de dominio real — pre-cierre BL-003)
+
+| US | DISC | RFs corregidos | Descripción | Estado |
+|----|------|----------------|-------------|--------|
+| US-ADJ-4.1 | DISC-02, DISC-03 | RF-GT-02 | Renombrar `DYNB→DBF` y `SPE2X50→SPE` en enum `Disciplina` | ✅ 2026-04-03 |
+| US-ADJ-4.2 | DISC-04 | RF-PR-05 | Corregir orden grilla STA: `orden_ascendente=True` (ascendente) | ✅ 2026-04-03 |
+| US-ADJ-4.3 | DISC-07 | — | Renombrar `JUVENIL→JUNIOR` en enum `Categoria` | ✅ 2026-04-03 |
+| US-ADJ-4.4 | DISC-05 | RF-IN-10 | Agregar campo `club` a aggregate `Atleta` | ✅ 2026-04-03 |
+| US-ADJ-4.5 | DISC-01 | RF-PM-05 | Ranking por (disciplina, categoría) en BC Resultados | ✅ 2026-04-03 |
+| US-ADJ-4.6 | DISC-06 | — | Value Object `TiempoAP` — parsear `MM:SS → segundos` | ✅ 2026-04-03 |
+
+---
+
+## 12. Trazabilidad: Discrepancias → US → Documentos a actualizar
+
+Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
+
+| DISC | Descripción | Severidad | US-ADJ | Docs a actualizar |
+|------|-------------|-----------|--------|-------------------|
+| DISC-01 | Ranking flat vs. por (disciplina, categoría, sexo) | CRÍTICO | US-ADJ-4.5 | `domain-model.md` §Resultados · `context-map.md` §ACLs · `05-requerimientos_funcionales.md` RF-PM-05 |
+| DISC-02 | `DYNB` ≠ `DBF` — acrónimo incorrecto | CRÍTICO | US-ADJ-4.1 | `domain-model.md` §Disciplina · `05-requerimientos_funcionales.md` RF-GT-02 |
+| DISC-03 | `SPE2X50` ≠ `SPE` — acrónimo incorrecto | CRÍTICO | US-ADJ-4.1 | `domain-model.md` §Disciplina · `05-requerimientos_funcionales.md` RF-GT-02 |
+| DISC-04 | Orden grilla STA invertido (`orden_ascendente=False`) | CRÍTICO | US-ADJ-4.2 | `event-storming-competencia.md` §P-01 · `domain-model.md` §DisciplinaDescriptor |
+| DISC-05 | `Atleta` sin campo `club` | MEDIO | US-ADJ-4.4 | `domain-model.md` §Registro diagrama `Atleta` · `05-requerimientos_funcionales.md` RF-IN |
+| DISC-06 | APs de tiempo en `MM:SS` sin conversión en dominio | MEDIO | US-ADJ-4.6 | `domain-model.md` §Shared VOs · `CLAUDE.md` §8 |
+| DISC-07 | `JUVENIL` ≠ `JUNIOR` — nomenclatura AIDA | MEDIO | US-ADJ-4.3 | `domain-model.md` §Registro `Categoria` · `CLAUDE.md` §8 |
+| DISC-08 | RP > AP sin documentar como invariante permitido | BAJO | — (docstring) | `event-storming-competencia.md` §INV-P · specs US-1.2.3 |
+| DISC-09 | Coma decimal en PDFs de la federación | BAJO | — | seed UAT / scripts de ingesta |
+| DISC-10 | Intervalo OT real difiere de valores en tests | BAJO | — | tests SP2 UAT (seed) |
+
+---
+
+## 13. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
 | Gestión del Torneo (RF-GT) | 7 | 7 | 0 | 0 |
-| Inscripción (RF-IN) | 9 | 8 | 1 | 0 |
+| Inscripción (RF-IN) | 10 | 9 | 1 | 0 |
 | Preparación (RF-PR) | 8 | 8 | 0 | 0 |
 | Ejecución (RF-EJ) | 10 | 9 | 1 | 1 |
 | Resultados (RF-PM) | 6 | 5 | 0 | 1 |
 | Usuarios (RF-US) | 5 | 5 | 0 | 0 |
 | Notificaciones (RF-NT) | 4 | 3 | 1 | 0 |
 | Integración (RF-IG) | 4 | 0 | 4 | 0 |
-| **Total** | **53** | **45** | **7** | **2** |
+| **Total** | **54** | **45** | **7** | **2** |
 
 > **85% de RFs completamente definidos.** Los 7 pendientes están en SP4+ — no bloquean SP1/SP2.
 
 ---
 
-## 7. US → Tests (se completa durante implementación)
+## 14. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -240,10 +315,22 @@ en `docs/specs/spN/` antes de ejecutar `/implement-us`.
 | US-1.3.1 | unit/competencia/application + integration/competencia + features/US-1.3.1 | ✅ 174 tests (97.53%) |
 | US-1.4.1 | unit/competencia/domain + unit/competencia/application + integration/competencia + features/US-1.4.1 | ✅ 189 tests (97.57%) |
 | US-1.4.2 | unit/competencia/application + integration/competencia + features/US-1.4.2 | ✅ 207 tests (98%) |
+| US-3.1.1 | unit/torneo/domain/test_torneo + integration/torneo/test_torneo_domain_integration + features/US-3.1.1-aggregate-torneo | ✅ 36 tests (100%) |
+| US-3.1.2 | unit/torneo/application/test_crear_torneo + test_transiciones_handlers + test_obtener_torneo + integration/torneo/test_sqlite_torneo_repository + features/US-3.1.2-api-rest-torneo | ✅ 33 tests (100%) |
+| US-3.2.1 | unit/identidad/domain + unit/identidad/application + integration/identidad + features/US-3.2.1 | ✅ 36 tests (100%) |
+| US-3.2.2 | unit/registro + integration/registro + features/US-3.2.2 | ✅ 27 tests (100%) |
+| US-3.2.3 | unit/registro + integration/registro + features/US-3.2.3 | ✅ 31 tests |
+| US-3.3.1 | unit/competencia/domain + unit/competencia/application + integration/competencia + features/US-3.3.1 | ✅ implementada |
+| US-3.3.2 | unit/competencia/application + integration cross-BC + features/US-3.3.2 | ✅ implementada |
+| US-3.4.1 | unit/torneo/domain + integration/torneo + features/US-3.4.1-asignar-disciplinas-juez | ✅ 35 tests |
+| US-3.4.2 | unit/identidad/api + features/US-3.4.2-auth-jwt-middleware | ✅ 15 tests |
+| US-3.5.1 | unit/resultados/domain + unit/resultados/application + integration/resultados + features/US-3.5.1-ranking-overall | ✅ implementada |
+| US-3.5.2 | unit/app + integration/p09 + features/US-3.5.2-politica-p09 | ✅ 17 tests |
+| US-3.5.3 | unit/resultados/application + unit/resultados/api + integration/resultados + features/US-3.5.3-api-overall | ✅ 10 tests focalizados |
 
 ---
 
-## 8. US → ADR (se completa durante implementación)
+## 15. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -258,5 +345,11 @@ en `docs/specs/spN/` antes de ejecutar `/implement-us`.
 
 *Documento creado: 2026-03-19 — Semana 0, Fase 0*
 *v1.1 — 2026-03-20: US-1.1.1 actualizada a BC-first · ADR-006 agregado · FAZ → FAAS*
+*v1.2 — 2026-03-28: SP-ADJ-01 agregado (§7) · secciones SP1 renumeradas · numeración de §§ corregida*
+*v1.3 — 2026-03-28: SP-ADJ-02-code agregado (§8) · US-ADJ-2.6/2.7/2.8 documentadas*
+*v1.4 — 2026-03-29: SP3 §9 agregado · US-3.1.1 implementada*
+*v1.5 — 2026-03-30: US-3.1.2 implementada — API REST Torneo completa*
+*v1.6 — 2026-04-02: SP3 completado a nivel US — §9 y tabla US→Tests actualizadas hasta US-3.5.3*
+*v1.10 — 2026-04-03: SP-ADJ-04 completado (§2, §11), US-ADJ-4.6 implementada, RF-IN-10 incorporado a cobertura total (§13)*
 *Fuentes: 05-requerimientos_funcionales.md · Context Map v1.1 · estrategia-desarrollo-bc.md · ES Competencia*
 *Mantenido por: Claude Cowork + Victor Valotto*

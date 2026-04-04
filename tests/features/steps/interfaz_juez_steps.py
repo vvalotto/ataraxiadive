@@ -3,6 +3,7 @@
 pytest-bdd no soporta async steps nativamente. Los steps que requieren
 operaciones async usan asyncio.run() como wrapper síncrono.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -18,7 +19,10 @@ from pytest_bdd import given, parsers, scenarios, then, when
 
 from app import app
 from competencia.api.router import get_event_store
-from competencia.application.commands.asignar_tarjeta import AsignarTarjetaCommand, AsignarTarjetaHandler
+from competencia.application.commands.asignar_tarjeta import (
+    AsignarTarjetaCommand,
+    AsignarTarjetaHandler,
+)
 from competencia.application.commands.llamar_atleta import LlamarAtletaCommand, LlamarAtletaHandler
 from competencia.application.commands.registrar_ap import RegistrarAPCommand, RegistrarAPHandler
 from competencia.application.commands.registrar_dns import RegistrarDNSCommand, RegistrarDNSHandler
@@ -31,7 +35,10 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+
 scenarios("../US-1.3.1-interfaz-juez.feature")
 
 _CREATE_TABLE = """
@@ -73,7 +80,7 @@ def ctx() -> dict:  # type: ignore[type-arg]
         "store": store,
         "client": client,
         "estado_port": StubCompetenciaEstadoAdapter(),
-        "competencias": {},   # "C001" -> UUID
+        "competencias": {},  # "C001" -> UUID
         "participantes": {},  # "P001" -> UUID
         "response": None,
     }
@@ -370,9 +377,9 @@ def step_get_progreso(ctx: dict, cid: str) -> None:  # type: ignore[type-arg]
 
 @then(parsers.parse("la respuesta tiene status {code:d}"))
 def step_status(ctx: dict, code: int) -> None:  # type: ignore[type-arg]
-    assert ctx["response"].status_code == code, (
-        f"Esperado {code}, obtenido {ctx['response'].status_code}: {ctx['response'].text}"
-    )
+    assert (
+        ctx["response"].status_code == code
+    ), f"Esperado {code}, obtenido {ctx['response'].status_code}: {ctx['response'].text}"
 
 
 @then(parsers.parse('la performance actual corresponde al participante "{pid}"'))

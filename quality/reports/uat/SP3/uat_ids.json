@@ -1,0 +1,19 @@
+{
+  "torneo_id": "95c7053a-d52c-44e9-b79f-911046efeaa5",
+  "competencia_id": "caa90064-300f-44b7-ac36-db2cd6c8ef12",
+  "ot_inicio": "2026-04-04T14:12:00+00:00",
+  "intervalo_minutos": 9,
+  "andariveles": 1,
+  "atleta_a": "e4f36b64-d1bf-4a33-8577-b400eea98a96",
+  "atleta_b": "70a48ec7-7245-4b98-b68a-a85727d0ea67",
+  "atleta_c": "42681f50-41c5-405e-96c8-a53106d6010a",
+  "atleta_d": "b2606dcd-b240-45d1-a657-1de014b838a3",
+  "atleta_e": "318754c9-17f5-45ee-a5a0-915f87b2a6e5",
+  "atleta_f": "8359f5da-c8b0-44e5-bffe-869b43248a9e",
+  "inscripcion_a": "dc8726d9-4be3-4d6d-a67f-f07e46678a8b",
+  "inscripcion_b": "45adc78c-db90-44fa-a06c-2f5a9096d4de",
+  "inscripcion_c": "3aa27baf-2c8e-4129-9e60-cbbb0c5a71be",
+  "inscripcion_d": "7fd6a97b-66f1-44c7-8578-78ddd3213297",
+  "inscripcion_e": "d0b8424c-943c-468c-bdd5-64b6dde5ada7",
+  "inscripcion_f": "7fb84722-aaed-461c-8514-19ac4ff2df28"
+}

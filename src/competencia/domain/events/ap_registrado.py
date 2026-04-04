@@ -1,4 +1,5 @@
 """Domain Event APRegistrado — emitido cuando un atleta declara su AP."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

@@ -1,4 +1,5 @@
 """Tests unitarios de Competencia.generar_grilla() — US-2.1.2."""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone, timedelta
@@ -94,21 +95,21 @@ class TestInvariantes:
             c.generar_grilla(OT_INICIO, [_sta(A001, "330")], _DESC_STA)
 
 
-# ── Ordenamiento STA (tiempo, mayor→menor) ────────────────────────────────────
+# ── Ordenamiento STA (tiempo, menor→mayor) ────────────────────────────────────
 
 
 class TestOrdenamientoSTA:
-    def test_orden_mayor_a_menor_por_ap(self) -> None:
+    def test_orden_menor_a_mayor_por_ap(self) -> None:
         c = _make_competencia(Disciplina.STA)
         performances = [
             _sta(A001, "330"),  # 5:30
-            _sta(A002, "360"),  # 6:00 — mayor, debe ir primero
-            _sta(A003, "285"),  # 4:45 — menor, debe ir último
+            _sta(A002, "360"),  # 6:00 — mayor, debe ir último
+            _sta(A003, "285"),  # 4:45 — menor, debe ir primero
         ]
         c.generar_grilla(OT_INICIO, performances, _DESC_STA)
         grilla = c.grilla
         atletas_orden = [str(e.atleta_id) for e in grilla]
-        assert atletas_orden == [A002, A001, A003]
+        assert atletas_orden == [A003, A001, A002]
 
     def test_posiciones_1_based(self) -> None:
         c = _make_competencia(Disciplina.STA)
@@ -143,7 +144,7 @@ class TestOrdenamientoDNF:
         c = _make_competencia(Disciplina.DNF)
         performances = [
             _dnf(A001, "80"),
-            _dnf(A002, "60"),   # menor — debe ir primero
+            _dnf(A002, "60"),  # menor — debe ir primero
             _dnf(A003, "100"),  # mayor — debe ir último
         ]
         c.generar_grilla(OT_INICIO, performances, _DESC_DNF)

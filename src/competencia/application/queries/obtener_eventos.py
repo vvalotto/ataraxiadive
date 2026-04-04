@@ -1,4 +1,5 @@
 """Query y Handler para ObtenerEventos — US-1.4.2."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

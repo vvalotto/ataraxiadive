@@ -1,4 +1,5 @@
 """Tests unitarios del CorregirResultadoHandler — US-1.2.6."""
+
 from __future__ import annotations
 
 from datetime import datetime

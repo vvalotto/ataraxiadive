@@ -1,0 +1,179 @@
+╭──────────────────────────────────────────────────────────────────────────────╮
+│  🔍  DesignReviewer - Análisis de Calidad de Diseño                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Archivos analizados:   199  
+Analyzers ejecutados:  12   
+Tiempo de ejecución:   1.22s
+Resultados totales:    94   
+
+───────────────────────── 📦  aggregates  (22 issues) ──────────────────────────
+
+                          Advertencias de Diseño (22)                           
+┏━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Analyzer           ┃ Clase / Módulo         ┃ Probl… ┃ Val/Umbral ┃ Esfuerzo ┃
+┡━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━┩
+│ LCOMAnalyzer       │ Torneo                 │ Clase… │    3/1     │     3.0h │
+│ LCOMAnalyzer       │ Competencia            │ Clase… │    2/1     │     1.5h │
+│ LongMethodAnalyzer │ Competencia            │ Métod… │   39/20    │     0.9h │
+│ LongMethodAnalyzer │ Competencia            │ Métod… │   86/20    │     3.3h │
+│ LongMethodAnalyzer │ Competencia            │ Métod… │   127/20   │     5.3h │
+│ LongMethodAnalyzer │ Competencia            │ Métod… │   33/20    │     0.7h │
+│ LongMethodAnalyzer │ Competencia            │ Métod… │   30/20    │     0.5h │
+│ LongMethodAnalyzer │ Competencia            │ Métod… │   34/20    │     0.7h │
+│ LongMethodAnalyzer │ Competencia            │ Métod… │   38/20    │     0.9h │
+│ DataClumpsAnalyzer │ performance.py         │ Data … │    2/2     │     2.0h │
+│ FanOutAnalyzer     │ performance.py         │ 'perf… │    8/7     │     0.2h │
+│ LongMethodAnalyzer │ Performance            │ Métod… │   28/20    │     0.4h │
+│ LongMethodAnalyzer │ Performance            │ Métod… │   29/20    │     0.5h │
+│ LongMethodAnalyzer │ Performance            │ Métod… │   38/20    │     0.9h │
+│ LongMethodAnalyzer │ Performance            │ Métod… │   37/20    │     0.8h │
+│ LongMethodAnalyzer │ Performance            │ Métod… │   33/20    │     0.7h │
+│ LongMethodAnalyzer │ Performance            │ Métod… │   48/20    │     1.4h │
+│ LongMethodAnalyzer │ Performance            │ Métod… │   56/20    │     1.8h │
+│ LongMethodAnalyzer │ Performance            │ Métod… │   34/20    │     0.7h │
+│ LCOMAnalyzer       │ RankingCompetencia     │ Clase… │    2/1     │     1.5h │
+│ LongMethodAnalyzer │ RankingCompetencia     │ Métod… │   38/20    │     0.9h │
+│ LongMethodAnalyzer │ ranking_competencia.py │ Métod… │   53/20    │     1.6h │
+└────────────────────┴────────────────────────┴────────┴────────────┴──────────┘
+
+───────────────────────────── 📦  api  (12 issues) ─────────────────────────────
+
+                          Advertencias de Diseño (12)                           
+┏━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Analyzer            ┃ Clase / Módulo        ┃ Probl… ┃ Val/Umbral ┃ Esfuerzo ┃
+┡━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━┩
+│ LongMethodAnalyzer  │ exception_handlers.py │ Métod… │   40/20    │     1.0h │
+│ FeatureEnvyAnalyzer │ TorneoResponse        │ Métod… │    11/0    │     1.5h │
+│ DataClumpsAnalyzer  │ router.py             │ Data … │    4/2     │     2.0h │
+│ DataClumpsAnalyzer  │ router.py             │ Data … │    3/2     │     2.0h │
+│ LongMethodAnalyzer  │ router.py             │ Métod… │   31/20    │     0.6h │
+│ LongMethodAnalyzer  │ router.py             │ Métod… │   27/20    │     0.3h │
+│ LongMethodAnalyzer  │ router.py             │ Métod… │   25/20    │     0.2h │
+│ LongMethodAnalyzer  │ router.py             │ Métod… │   26/20    │     0.3h │
+│ LongMethodAnalyzer  │ router.py             │ Métod… │   27/20    │     0.3h │
+│ LongMethodAnalyzer  │ router.py             │ Métod… │   21/20    │     0.1h │
+│ LongMethodAnalyzer  │ router.py             │ Métod… │   34/20    │     0.7h │
+│ LongMethodAnalyzer  │ router.py             │ Métod… │   37/20    │     0.8h │
+└─────────────────────┴───────────────────────┴────────┴────────────┴──────────┘
+
+───────────────────────── 📦  application  (1 issues) ──────────────────────────
+
+                           Advertencias de Diseño (1)                           
+┏━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Analyzer           ┃ Clase / Módulo       ┃ Problema ┃ Val/Umbral ┃ Esfuerzo ┃
+┡━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━┩
+│ LongMethodAnalyzer │ _p08_finalizacion.py │ Método … │   48/20    │     1.4h │
+└────────────────────┴──────────────────────┴──────────┴────────────┴──────────┘
+
+────────────────────────── 📦  commands  (31 issues) ───────────────────────────
+
+                          Advertencias de Diseño (31)                           
+┏━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━┳━━━━━━━━━━━━┳━━━━━━━━━┓
+┃ Analyzer            ┃ Clase / Módulo               ┃  ┃ Val/Umbral ┃ Esfuer… ┃
+┡━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━╇━━━━━━━━━━━━╇━━━━━━━━━┩
+│ FeatureEnvyAnalyzer │ CrearTorneoHandler           │  │    9/1     │    1.5h │
+│ FeatureEnvyAnalyzer │ RegistrarUsuarioHandler      │  │    6/2     │    1.5h │
+│ LongMethodAnalyzer  │ RegistrarUsuarioHandler      │  │   21/20    │    0.1h │
+│ FeatureEnvyAnalyzer │ AutenticarUsuarioHandler     │  │    3/2     │    1.5h │
+│ FeatureEnvyAnalyzer │ RegistrarAPHandler           │  │    22/5    │    1.5h │
+│ LongMethodAnalyzer  │ RegistrarAPHandler           │  │   71/20    │    2.5h │
+│ FeatureEnvyAnalyzer │ RegistrarResultadoHandler    │  │    13/3    │    1.5h │
+│ LongMethodAnalyzer  │ RegistrarResultadoHandler    │  │   41/20    │    1.1h │
+│ FeatureEnvyAnalyzer │ RegistrarDNSHandler          │  │    9/6     │    1.5h │
+│ LongMethodAnalyzer  │ RegistrarDNSHandler          │  │   43/20    │    1.1h │
+│ FeatureEnvyAnalyzer │ CorregirResultadoHandler     │  │    10/2    │    1.5h │
+│ LongMethodAnalyzer  │ CorregirResultadoHandler     │  │   39/20    │    0.9h │
+│ FeatureEnvyAnalyzer │ GenerarGrillaHandler         │  │    7/4     │    1.5h │
+│ LongMethodAnalyzer  │ GenerarGrillaHandler         │  │   39/20    │    0.9h │
+│ FeatureEnvyAnalyzer │ IniciarCompetenciaHandler    │  │    4/2     │    1.5h │
+│ LongMethodAnalyzer  │ IniciarCompetenciaHandler    │  │   23/20    │    0.1h │
+│ FeatureEnvyAnalyzer │ ConfirmarGrillaHandler       │  │    3/2     │    1.5h │
+│ LongMethodAnalyzer  │ ConfirmarGrillaHandler       │  │   24/20    │    0.2h │
+│ FeatureEnvyAnalyzer │ AjustarGrillaHandler         │  │    4/2     │    1.5h │
+│ LongMethodAnalyzer  │ AjustarGrillaHandler         │  │   28/20    │    0.4h │
+│ FeatureEnvyAnalyzer │ AsignarTarjetaHandler        │  │    12/6    │    1.5h │
+│ LongMethodAnalyzer  │ AsignarTarjetaHandler        │  │   46/20    │    1.3h │
+│ FeatureEnvyAnalyzer │ ConfigurarIntervaloOTHandler │  │    5/2     │    1.5h │
+│ LongMethodAnalyzer  │ ConfigurarIntervaloOTHandler │  │   30/20    │    0.5h │
+│ FeatureEnvyAnalyzer │ LlamarAtletaHandler          │  │    15/5    │    1.5h │
+│ LongMethodAnalyzer  │ LlamarAtletaHandler          │  │   54/20    │    1.7h │
+│ FeatureEnvyAnalyzer │ CalcularRankingHandler       │  │    7/4     │    1.5h │
+│ LongMethodAnalyzer  │ CalcularRankingHandler       │  │   31/20    │    0.6h │
+│ FeatureEnvyAnalyzer │ InscribirAtletaHandler       │  │    12/4    │    1.5h │
+│ LongMethodAnalyzer  │ InscribirAtletaHandler       │  │   31/20    │    0.6h │
+│ FeatureEnvyAnalyzer │ RegistrarAtletaHandler       │  │    9/2     │    1.5h │
+└─────────────────────┴──────────────────────────────┴──┴────────────┴─────────┘
+
+───────────────────────── 📦  event_store  (5 issues) ──────────────────────────
+
+                           Advertencias de Diseño (5)                           
+┏━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Analyzer           ┃ Clase / Módulo   ┃ Problema     ┃ Val/Umbral ┃ Esfuerzo ┃
+┡━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━┩
+│ LongMethodAnalyzer │ SQLiteEventStore │ Método 'SQL… │   30/20    │     0.5h │
+│ LongMethodAnalyzer │ SQLiteEventStore │ Método 'SQL… │   22/20    │     0.1h │
+│ LongMethodAnalyzer │ SQLiteEventStore │ Método 'SQL… │   30/20    │     0.5h │
+│ LongMethodAnalyzer │ SQLiteEventStore │ Método 'SQL… │   23/20    │     0.1h │
+│ LongMethodAnalyzer │ SQLiteEventStore │ Método 'SQL… │   24/20    │     0.2h │
+└────────────────────┴──────────────────┴──────────────┴────────────┴──────────┘
+
+─────────────────────────── 📦  queries  (9 issues) ────────────────────────────
+
+                           Advertencias de Diseño (9)                           
+┏━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━┳━━━━━━━━━━┳━━━━━━━━━┓
+┃ Analyzer          ┃ Clase / Módulo                   ┃  ┃ Val/Umb… ┃ Esfuer… ┃
+┡━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━╇━━━━━━━━━━╇━━━━━━━━━┩
+│ FeatureEnvyAnaly… │ ObtenerGrillaHandler             │  │   3/1    │    1.5h │
+│ LongMethodAnalyz… │ ObtenerProgresoHandler           │  │  22/20   │    0.1h │
+│ FeatureEnvyAnaly… │ ObtenerPerformanceActualHandler  │  │   6/2    │    1.5h │
+│ FeatureEnvyAnaly… │ ObtenerAndarivelesActivosHandler │  │   3/1    │    1.5h │
+│ FeatureEnvyAnaly… │ ObtenerEstadoCompetenciaHandler  │  │   3/1    │    1.5h │
+│ FeatureEnvyAnaly… │ ObtenerProximasPerformancesHand… │  │   4/2    │    1.5h │
+│ LongMethodAnalyz… │ ObtenerProximasPerformancesHand… │  │  29/20   │    0.5h │
+│ FeatureEnvyAnaly… │ ObtenerRankingHandler            │  │   4/1    │    1.5h │
+│ LongMethodAnalyz… │ ObtenerRankingHandler            │  │  31/20   │    0.6h │
+└───────────────────┴──────────────────────────────────┴──┴──────────┴─────────┘
+
+──────────────────────── 📦  repositories  (12 issues) ─────────────────────────
+
+                          Advertencias de Diseño (12)                           
+┏━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━┳━━━━━━━━━━┳━━━━━━━━━┓
+┃ Analyzer           ┃ Clase / Módulo                  ┃  ┃ Val/Umb… ┃ Esfuer… ┃
+┡━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━╇━━━━━━━━━━╇━━━━━━━━━┩
+│ FeatureEnvyAnalyz… │ SQLiteTorneoRepository          │  │   11/2   │    1.5h │
+│ LongMethodAnalyzer │ SQLiteTorneoRepository          │  │  28/20   │    0.4h │
+│ FeatureEnvyAnalyz… │ SQLiteUsuarioRepository         │  │   5/2    │    1.5h │
+│ LongMethodAnalyzer │ PerformancesEstadoAdapter       │  │  40/20   │    1.0h │
+│ LCOMAnalyzer       │ AndarivelesActivosAdapter       │  │   2/1    │    1.5h │
+│ LongMethodAnalyzer │ AndarivelesActivosAdapter       │  │  52/20   │    1.6h │
+│ LongMethodAnalyzer │ AndarivelesActivosAdapter       │  │  29/20   │    0.5h │
+│ LongMethodAnalyzer │ PerformancesAPAdapter           │  │  36/20   │    0.8h │
+│ LongMethodAnalyzer │ ResultadosCompetenciaAdapter    │  │  44/20   │    1.2h │
+│ FanOutAnalyzer     │ sqlite_inscripcion_repository.… │  │   8/7    │    0.2h │
+│ FeatureEnvyAnalyz… │ SQLiteInscripcionRepository     │  │   6/2    │    1.5h │
+│ FeatureEnvyAnalyz… │ SQLiteAtletaRepository          │  │   7/2    │    1.5h │
+└────────────────────┴─────────────────────────────────┴──┴──────────┴─────────┘
+
+───────────────────────────── 📦  src  (2 issues) ──────────────────────────────
+
+                           Advertencias de Diseño (2)                           
+┏━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Analyzer           ┃ Clase / Módulo ┃ Problema       ┃ Val/Umbral ┃ Esfuerzo ┃
+┡━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━┩
+│ FanOutAnalyzer     │ app.py         │ 'app.py' impo… │    10/7    │     0.8h │
+│ LongMethodAnalyzer │ app.py         │ Método 'build… │   25/20    │     0.2h │
+└────────────────────┴────────────────┴────────────────┴────────────┴──────────┘
+
+╭─────────────────────────────── Resumen Final ────────────────────────────────╮
+│  Resumen:                                                                    │
+│            0 blocking issues (CRITICAL)                                      │
+│            94 advertencias (WARNING)                                         │
+│            0 informativos (INFO)                                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+╭────────────────────────────── ⏱  Deuda Técnica ──────────────────────────────╮
+│  Esfuerzo estimado de refactoring:                                           │
+│    Blocking issues: 0.0h                                                     │
+│    Total del changeset: 104.7h                                               │
+╰──────────────────────────────────────────────────────────────────────────────╯

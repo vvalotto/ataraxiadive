@@ -1,4 +1,5 @@
 """Tests unitarios del CalcularRankingHandler y ObtenerRankingHandler — US-2.4.2."""
+
 from __future__ import annotations
 
 from decimal import Decimal
@@ -8,7 +9,8 @@ from uuid import UUID, uuid4
 
 import pytest
 
-from competencia.domain.value_objects.disciplina import Disciplina
+from registro.domain.value_objects.categoria import Categoria
+from shared.domain.value_objects.disciplina import Disciplina
 from resultados.application.commands.calcular_ranking import (
     CalcularRankingCommand,
     CalcularRankingHandler,
@@ -19,7 +21,6 @@ from resultados.application.queries.obtener_ranking import (
 )
 from resultados.domain.exceptions import ResultadosIncompletos
 from resultados.domain.ports.resultados_competencia_port import ResultadoFinal
-
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -36,12 +37,11 @@ def _resultado(
         unidad=unidad,
         tarjeta=tarjeta,
         es_dns=False,
+        categoria=Categoria.SENIOR_MASCULINO,
     )
 
 
-def _raw_event_resultados_calculados(
-    cid: UUID, atleta_id: UUID
-) -> dict[str, Any]:
+def _raw_event_resultados_calculados(cid: UUID, atleta_id: UUID) -> dict[str, Any]:
     """Evento serializado como lo devolvería el Event Store."""
     import json
 
@@ -53,6 +53,7 @@ def _raw_event_resultados_calculados(
             {
                 "posicion": 1,
                 "atleta_id": str(atleta_id),
+                "categoria": "SENIOR_MASCULINO",
                 "rp": "330",
                 "unidad": "Segundos",
                 "tarjeta": "Blanca",
@@ -96,9 +97,7 @@ class TestCalcularRankingHandler:
         cid = uuid4()
         handler, ranking_store, _ = self._make_handler([_resultado()])
 
-        command = CalcularRankingCommand(
-            competencia_id=cid, disciplina=Disciplina.STA
-        )
+        command = CalcularRankingCommand(competencia_id=cid, disciplina=Disciplina.STA)
         await handler.handle(command)
 
         ranking_store.append.assert_called_once()
@@ -112,22 +111,16 @@ class TestCalcularRankingHandler:
         cid = uuid4()
         handler, _, resultados_port = self._make_handler([_resultado()])
 
-        command = CalcularRankingCommand(
-            competencia_id=cid, disciplina=Disciplina.STA
-        )
+        command = CalcularRankingCommand(competencia_id=cid, disciplina=Disciplina.STA)
         await handler.handle(command)
 
-        resultados_port.get_resultados_finales.assert_called_once_with(
-            cid, Disciplina.STA
-        )
+        resultados_port.get_resultados_finales.assert_called_once_with(cid, Disciplina.STA)
 
     @pytest.mark.asyncio
     async def test_handle_sin_resultados_lanza_resultados_incompletos(self) -> None:
         handler, _, _ = self._make_handler([])
 
-        command = CalcularRankingCommand(
-            competencia_id=uuid4(), disciplina=Disciplina.STA
-        )
+        command = CalcularRankingCommand(competencia_id=uuid4(), disciplina=Disciplina.STA)
         with pytest.raises(ResultadosIncompletos):
             await handler.handle(command)
 
@@ -146,9 +139,7 @@ class TestCalcularRankingHandler:
         ]
 
         handler, ranking_store, _ = self._make_handler(resultados)
-        command = CalcularRankingCommand(
-            competencia_id=cid, disciplina=Disciplina.STA
-        )
+        command = CalcularRankingCommand(competencia_id=cid, disciplina=Disciplina.STA)
         await handler.handle(command)
 
         payload_raw = ranking_store.append.call_args.kwargs["payload"]
@@ -198,13 +189,15 @@ class TestObtenerRankingHandler:
         result = await handler.handle(query)
 
         assert len(result) == 1
-        assert result[0].atleta_id == str(atleta_id)
-        assert result[0].posicion == 1
-        assert result[0].rp == "330"
-        assert result[0].unidad == "Segundos"
-        assert result[0].tarjeta == "Blanca"
-        assert result[0].es_dns is False
-        assert result[0].en_podio is True
+        assert result[0].categoria == "SENIOR_MASCULINO"
+        assert len(result[0].entradas) == 1
+        assert result[0].entradas[0].atleta_id == str(atleta_id)
+        assert result[0].entradas[0].posicion == 1
+        assert result[0].entradas[0].rp == "330"
+        assert result[0].entradas[0].unidad == "Segundos"
+        assert result[0].entradas[0].tarjeta == "Blanca"
+        assert result[0].entradas[0].es_dns is False
+        assert result[0].entradas[0].en_podio is True
 
     @pytest.mark.asyncio
     async def test_handle_lee_stream_correcto(self) -> None:

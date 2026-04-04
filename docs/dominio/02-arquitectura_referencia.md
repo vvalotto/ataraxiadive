@@ -4,6 +4,12 @@ Plataforma de Gestión de Torneos de Apnea
 
 Arquitectura de Referencia - Propuesta Inicial
 
+> **Estado documental:** histórico — propuesta inicial de Febrero 2026.
+> Las decisiones de BD, infraestructura y stack descritas aquí fueron reemplazadas
+> por los ADRs vigentes: SQLite por BC (ADR-007), sin Docker en desarrollo (ADR-010),
+> hexagonal BC-first (ADR-006). Conservar como registro del punto de partida.
+> Ver `CLAUDE.md §4` y `docs/adr/` para las decisiones actuales.
+
   ---------------- -------------------------------------------------------------
   **Proyecto:**    Ataraxiadive
   **Versión:**     1.0 - Propuesta inicial
@@ -212,9 +218,9 @@ Para absorber la incorporación futura de disciplinas con mecánicas nuevas (AC-
 
   ------------------------------------- ---------------------------------------------------------------
   **Atributo del descriptor**           **Ejemplo**
-  **Tipo de medición**                  tiempo (STA) o distancia (DNF, DYN, DBF, SPE2X50)
+  **Tipo de medición**                  tiempo (STA, SPE) o distancia (DNF, DYN, DBF)
   **Unidad**                            segundos, metros con decimales (RF-EJ-08)
-  **Orden de salida**                   menor a mayor (distancia) o mayor a menor (tiempo) (RF-PR-05)
+  **Orden de salida**                   menor a mayor en todas las disciplinas (RF-PR-05)
   **Permite andariveles simultáneos**   sí/no, con cantidad máxima
   **Reglas de tarjeta aplicables**      conjunto de tarjetas y penalizaciones válidas
   **Protocolo de superficie**           registra solo efecto (RF-EJ-10)

@@ -11,7 +11,7 @@ Feature: Ajustar Grilla Manualmente
   @US-2.1.3 @happy_path
   Scenario: Ajustar posición de un atleta recalcula OTs
     When el organizador ajusta la posicion del atleta "A001" a 1 en "C001"
-    Then la grilla de "C001" queda: "A001" en posicion 1, "A002" en posicion 2
+    Then la grilla de "C001" queda: "A001" en posicion 1, "A003" en posicion 2
     And los OTs de "C001" son: posicion 1 = "10:00:00", posicion 2 = "10:09:00"
     And el evento GrillaDeSalidaAjustada persiste en el stream de "C001"
 

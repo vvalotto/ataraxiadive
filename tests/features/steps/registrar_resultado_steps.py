@@ -3,6 +3,7 @@
 pytest-bdd no soporta async steps nativamente. Los steps que requieren
 operaciones async usan asyncio.run() como wrapper síncrono.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -20,13 +21,19 @@ from competencia.application.commands.registrar_resultado import (
     RegistrarResultadoCommand,
     RegistrarResultadoHandler,
 )
-from competencia.domain.aggregates.performance import EstadoInvalidoParaRegistrarResultado, Performance
+from competencia.domain.aggregates.performance import (
+    EstadoInvalidoParaRegistrarResultado,
+    Performance,
+)
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+
 scenarios("../US-1.2.3-registrar-resultado.feature")
 
 _CREATE_TABLE = """
@@ -86,9 +93,11 @@ def step_atleta_dnf(ctx: dict) -> None:  # type: ignore[type-arg]
     ctx["disciplina"] = Disciplina.DNF
 
 
-@given(parsers.parse('la performance del atleta tiene AP registrado de {valor:d} metros'))
+@given(parsers.parse("la performance del atleta tiene AP registrado de {valor:d} metros"))
 def step_ap_registrado(ctx: dict, valor: int) -> None:  # type: ignore[type-arg]
-    handler = RegistrarAPHandler(ctx["event_store"], ctx["estado_port"], DisciplinaDescriptorAdapter())
+    handler = RegistrarAPHandler(
+        ctx["event_store"], ctx["estado_port"], DisciplinaDescriptorAdapter()
+    )
     cmd = RegistrarAPCommand(
         competencia_id=ctx["competencia_id"],
         participante_id=ctx["participante_id"],
@@ -119,6 +128,7 @@ def step_performance_llamada(ctx: dict) -> None:  # type: ignore[type-arg]
 def step_performance_anunciada_ap_resultado(ctx: dict) -> None:  # type: ignore[type-arg]
     """Resetea con store fresco y lleva la performance solo hasta AnunciadaAP."""
     import tempfile
+
     fresh_store = _make_event_store(tempfile.mkdtemp())
     cid = uuid4()
     pid = uuid4()
@@ -216,9 +226,7 @@ def step_registrar_resultado(ctx: dict, valor_rp: float, juez: str) -> None:  # 
     _ejecutar_registrar_resultado(ctx, valor_rp, juez)
 
 
-@when(
-    parsers.parse('el juez intenta registrar el resultado con valorRP={valor_rp:f} metros')
-)
+@when(parsers.parse("el juez intenta registrar el resultado con valorRP={valor_rp:f} metros"))
 def step_intentar_registrar_resultado(ctx: dict, valor_rp: float) -> None:  # type: ignore[type-arg]
     _ejecutar_registrar_resultado(ctx, valor_rp, "juez-001")
 
@@ -238,7 +246,7 @@ def step_estado_resultado(ctx: dict, estado: str) -> None:  # type: ignore[type-
     assert performance.estado == EstadoPerformance(estado)
 
 
-@then('el evento ResultadoRegistrado persiste en el event stream')
+@then("el evento ResultadoRegistrado persiste en el event stream")
 def step_evento_resultado_en_stream(ctx: dict) -> None:  # type: ignore[type-arg]
     stream_id = (
         f"performance-{ctx['competencia_id']}"
@@ -277,9 +285,9 @@ def step_error_esperado_resultado(ctx: dict, error_type: str) -> None:  # type: 
     }
     assert ctx["error"] is not None, "Se esperaba un error pero no hubo ninguno"
     expected = error_map[error_type]
-    assert isinstance(ctx["error"], expected), (
-        f"Error esperado: {error_type}, obtenido: {type(ctx['error']).__name__}"
-    )
+    assert isinstance(
+        ctx["error"], expected
+    ), f"Error esperado: {error_type}, obtenido: {type(ctx['error']).__name__}"
 
 
 @then(parsers.parse('la performance permanece en estado "{estado}"'))

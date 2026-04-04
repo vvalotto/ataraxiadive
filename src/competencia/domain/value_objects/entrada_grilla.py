@@ -1,4 +1,5 @@
 """Value Object EntradaGrilla — una fila de la Grilla de Salida."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

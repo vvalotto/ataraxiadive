@@ -1,4 +1,5 @@
 """Value Object IntervaloDisciplina — tiempo en minutos entre OTs consecutivos."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -26,6 +27,4 @@ class IntervaloDisciplina:
     def __post_init__(self) -> None:
         """Valida INV-C-01: intervalo debe ser > 0."""
         if self.minutos <= 0:
-            raise IntervaloInvalido(
-                f"IntervaloDisciplina debe ser > 0, recibido: {self.minutos}"
-            )
+            raise IntervaloInvalido(f"IntervaloDisciplina debe ser > 0, recibido: {self.minutos}")

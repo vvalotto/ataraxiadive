@@ -1,4 +1,5 @@
 """Tests unitarios de ObtenerProgresoHandler — US-1.3.1."""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone
@@ -12,7 +13,6 @@ from competencia.application.queries.obtener_progreso import (
     ObtenerProgresoHandler,
     ObtenerProgresoQuery,
 )
-
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -64,20 +64,30 @@ def _ejecutada_stream(competencia_id: str) -> list[dict[str, Any]]:
         {
             "event_type": "ResultadoRegistrado",
             "payload": {
-                "performance_id": pid, "participante_id": part_id,
-                "disciplina": "DNF", "valor_rp": "48", "unidad": "Metros",
-                "registrado_por": "juez-001", "registrado_en": _ts(),
+                "performance_id": pid,
+                "participante_id": part_id,
+                "disciplina": "DNF",
+                "valor_rp": "48",
+                "unidad": "Metros",
+                "registrado_por": "juez-001",
+                "registrado_en": _ts(),
             },
-            "version": 3, "occurred_at": _ts(),
+            "version": 3,
+            "occurred_at": _ts(),
         },
         {
             "event_type": "TarjetaAsignada",
             "payload": {
-                "performance_id": pid, "participante_id": part_id,
-                "disciplina": "DNF", "tipo": "Blanca", "motivo": None,
-                "asignada_por": "juez-001", "asignada_en": _ts(),
+                "performance_id": pid,
+                "participante_id": part_id,
+                "disciplina": "DNF",
+                "tipo": "Blanca",
+                "motivo": None,
+                "asignada_por": "juez-001",
+                "asignada_en": _ts(),
             },
-            "version": 4, "occurred_at": _ts(),
+            "version": 4,
+            "occurred_at": _ts(),
         },
     ]
 
@@ -93,11 +103,15 @@ def _dns_stream(competencia_id: str) -> list[dict[str, Any]]:
         {
             "event_type": "DNSRegistrado",
             "payload": {
-                "performance_id": pid, "participante_id": part_id,
-                "disciplina": "DNF", "ot_programado": _ts(),
-                "registrado_por": "juez-001", "registrado_en": _ts(),
+                "performance_id": pid,
+                "participante_id": part_id,
+                "disciplina": "DNF",
+                "ot_programado": _ts(),
+                "registrado_por": "juez-001",
+                "registrado_en": _ts(),
             },
-            "version": 3, "occurred_at": _ts(),
+            "version": 3,
+            "occurred_at": _ts(),
         },
     ]
 

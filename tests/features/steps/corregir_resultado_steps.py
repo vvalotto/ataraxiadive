@@ -3,6 +3,7 @@
 pytest-bdd no soporta async steps nativamente. Los steps que requieren
 operaciones async usan asyncio.run() como wrapper síncrono.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -15,11 +16,20 @@ import aiosqlite
 import pytest
 from pytest_bdd import given, parsers, scenarios, then, when
 
-from competencia.application.commands.asignar_tarjeta import AsignarTarjetaCommand, AsignarTarjetaHandler
-from competencia.application.commands.corregir_resultado import CorregirResultadoCommand, CorregirResultadoHandler
+from competencia.application.commands.asignar_tarjeta import (
+    AsignarTarjetaCommand,
+    AsignarTarjetaHandler,
+)
+from competencia.application.commands.corregir_resultado import (
+    CorregirResultadoCommand,
+    CorregirResultadoHandler,
+)
 from competencia.application.commands.llamar_atleta import LlamarAtletaCommand, LlamarAtletaHandler
 from competencia.application.commands.registrar_ap import RegistrarAPCommand, RegistrarAPHandler
-from competencia.application.commands.registrar_resultado import RegistrarResultadoCommand, RegistrarResultadoHandler
+from competencia.application.commands.registrar_resultado import (
+    RegistrarResultadoCommand,
+    RegistrarResultadoHandler,
+)
 from competencia.domain.aggregates.performance import (
     EstadoInvalidoParaCorregirResultado,
     MotivoObligatorio,
@@ -31,7 +41,10 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+
 scenarios("../US-1.2.6-corregir-resultado.feature")
 
 _CREATE_TABLE = """
@@ -92,9 +105,7 @@ def step_atleta_dnf(ctx: dict) -> None:  # type: ignore[type-arg]
 
 
 @given(
-    parsers.parse(
-        "la performance del atleta tiene AP registrado de {valor:d} metros y fue llamada"
-    )
+    parsers.parse("la performance del atleta tiene AP registrado de {valor:d} metros y fue llamada")
 )
 def step_ap_registrado_y_llamada(ctx: dict, valor: int) -> None:  # type: ignore[type-arg]
     """Lleva la performance hasta el estado Llamada."""
@@ -128,9 +139,7 @@ def step_ap_registrado_y_llamada(ctx: dict, valor: int) -> None:  # type: ignore
     )
 
 
-@given(
-    parsers.parse("la performance del atleta tiene resultado de {rp:f} metros registrado")
-)
+@given(parsers.parse("la performance del atleta tiene resultado de {rp:f} metros registrado"))
 def step_resultado_registrado(ctx: dict, rp: float) -> None:  # type: ignore[type-arg]
     """Registra el resultado desde el estado Llamada del Background."""
     asyncio.run(
@@ -169,7 +178,10 @@ def step_tarjeta_asignada(ctx: dict, tipo: str) -> None:  # type: ignore[type-ar
 @given('la performance del atleta está en estado "DNS"')
 def step_performance_en_dns(ctx: dict) -> None:  # type: ignore[type-arg]
     """Resetea con un store fresco y lleva la performance solo hasta DNS."""
-    from competencia.application.commands.registrar_dns import RegistrarDNSCommand, RegistrarDNSHandler
+    from competencia.application.commands.registrar_dns import (
+        RegistrarDNSCommand,
+        RegistrarDNSHandler,
+    )
 
     fresh_store = _make_event_store(tempfile.mkdtemp())
     cid = uuid4()
@@ -307,6 +319,6 @@ def step_error_esperado(ctx: dict, error_type: str) -> None:  # type: ignore[typ
     }
     assert ctx["error"] is not None, "Se esperaba un error pero no hubo ninguno"
     expected = error_map[error_type]
-    assert isinstance(ctx["error"], expected), (
-        f"Error esperado: {error_type}, obtenido: {type(ctx['error']).__name__}"
-    )
+    assert isinstance(
+        ctx["error"], expected
+    ), f"Error esperado: {error_type}, obtenido: {type(ctx['error']).__name__}"

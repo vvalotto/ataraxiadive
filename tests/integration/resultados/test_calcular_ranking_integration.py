@@ -1,8 +1,10 @@
 """Tests de integración — CalcularRankingHandler + ObtenerRankingHandler (US-2.4.2)."""
+
 from __future__ import annotations
 
 from datetime import datetime
 from decimal import Decimal
+from datetime import date
 from uuid import UUID, uuid4
 
 import aiosqlite
@@ -19,12 +21,15 @@ from competencia.application.commands.registrar_resultado import (
     RegistrarResultadoCommand,
     RegistrarResultadoHandler,
 )
-from competencia.domain.value_objects.disciplina import Disciplina
+from shared.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
-from competencia.domain.value_objects.unidad_medida import UnidadMedida
+from shared.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+from registro.domain.aggregates.atleta import Atleta
+from registro.domain.value_objects.categoria import Categoria
+from registro.infrastructure.repositories.sqlite_atleta_repository import SQLiteAtletaRepository
+from resultados.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
 from resultados.application.commands.calcular_ranking import (
@@ -34,6 +39,9 @@ from resultados.application.commands.calcular_ranking import (
 from resultados.application.queries.obtener_ranking import (
     ObtenerRankingHandler,
     ObtenerRankingQuery,
+)
+from resultados.infrastructure.repositories.atleta_categoria_adapter import (
+    AtletaCategoriaAdapter,
 )
 from resultados.infrastructure.repositories.resultados_competencia_adapter import (
     ResultadosCompetenciaAdapter,
@@ -110,26 +118,46 @@ async def _performance_ejecutada(
 
     await RegistrarAPHandler(
         event_store=comp_store, competencia_estado=stub, disciplina_descriptor=descriptor
-    ).handle(RegistrarAPCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=disciplina, valor_ap=Decimal(rp_valor), unidad=unidad,
-    ))
-    await LlamarAtletaHandler(
-        event_store=comp_store, competencia_estado=stub
-    ).handle(LlamarAtletaCommand(
-        competencia_id=cid, participante_id=pid, disciplina=disciplina,
-        posicion_grilla=1, ot_programado=ot,
-    ))
+    ).handle(
+        RegistrarAPCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            valor_ap=Decimal(rp_valor),
+            unidad=unidad,
+        )
+    )
+    await LlamarAtletaHandler(event_store=comp_store, competencia_estado=stub).handle(
+        LlamarAtletaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            posicion_grilla=1,
+            ot_programado=ot,
+        )
+    )
     await RegistrarResultadoHandler(
         event_store=comp_store, disciplina_descriptor=descriptor
-    ).handle(RegistrarResultadoCommand(
-        competencia_id=cid, participante_id=pid, disciplina=disciplina,
-        valor_rp=Decimal(rp_valor), unidad=unidad, registrado_por="juez-001",
-    ))
-    await AsignarTarjetaHandler(event_store=comp_store).handle(AsignarTarjetaCommand(
-        competencia_id=cid, participante_id=pid, disciplina=disciplina,
-        tipo=tarjeta, asignada_por="juez-001", motivo=motivo,
-    ))
+    ).handle(
+        RegistrarResultadoCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            valor_rp=Decimal(rp_valor),
+            unidad=unidad,
+            registrado_por="juez-001",
+        )
+    )
+    await AsignarTarjetaHandler(event_store=comp_store).handle(
+        AsignarTarjetaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            tipo=tarjeta,
+            asignada_por="juez-001",
+            motivo=motivo,
+        )
+    )
 
 
 async def _performance_dns(
@@ -145,20 +173,48 @@ async def _performance_dns(
 
     await RegistrarAPHandler(
         event_store=comp_store, competencia_estado=stub, disciplina_descriptor=descriptor
-    ).handle(RegistrarAPCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=disciplina, valor_ap=Decimal("200"), unidad=unidad,
-    ))
-    await LlamarAtletaHandler(
-        event_store=comp_store, competencia_estado=stub
-    ).handle(LlamarAtletaCommand(
-        competencia_id=cid, participante_id=pid, disciplina=disciplina,
-        posicion_grilla=1, ot_programado=OT_A,
-    ))
-    await RegistrarDNSHandler(event_store=comp_store).handle(RegistrarDNSCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=disciplina, registrado_por="juez-001",
-    ))
+    ).handle(
+        RegistrarAPCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            valor_ap=Decimal("200"),
+            unidad=unidad,
+        )
+    )
+    await LlamarAtletaHandler(event_store=comp_store, competencia_estado=stub).handle(
+        LlamarAtletaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            posicion_grilla=1,
+            ot_programado=OT_A,
+        )
+    )
+    await RegistrarDNSHandler(event_store=comp_store).handle(
+        RegistrarDNSCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            registrado_por="juez-001",
+        )
+    )
+
+
+async def _guardar_atleta(registro_db_path: str, atleta_id: UUID, categoria: Categoria) -> None:
+    repo = SQLiteAtletaRepository(registro_db_path)
+    await repo.save(
+        Atleta(
+            atleta_id=atleta_id,
+            nombre="Atleta",
+            apellido=str(atleta_id)[:8],
+            email=f"{atleta_id}@test.com",
+            fecha_nacimiento=date(1990, 1, 1),
+            categoria=categoria,
+            club="Club Test",
+            brevet=None,
+        )
+    )
 
 
 # ── Tests ─────────────────────────────────────────────────────────────────────
@@ -192,14 +248,16 @@ async def test_calcular_ranking_persiste_y_query_devuelve_orden_correcto(
         ObtenerRankingQuery(competencia_id=cid, disciplina=Disciplina.STA)
     )
 
-    assert len(entries) == 3
-    assert entries[0].atleta_id == str(pid_1)
-    assert entries[0].posicion == 1
-    assert entries[0].en_podio is True
-    assert entries[1].atleta_id == str(pid_2)
-    assert entries[1].posicion == 2
-    assert entries[2].atleta_id == str(pid_3)
-    assert entries[2].posicion == 3
+    assert len(entries) == 1
+    entradas = entries[0].entradas
+    assert len(entradas) == 3
+    assert entradas[0].atleta_id == str(pid_1)
+    assert entradas[0].posicion == 1
+    assert entradas[0].en_podio is True
+    assert entradas[1].atleta_id == str(pid_2)
+    assert entradas[1].posicion == 2
+    assert entradas[2].atleta_id == str(pid_3)
+    assert entradas[2].posicion == 3
 
 
 @pytest.mark.asyncio
@@ -228,13 +286,15 @@ async def test_calcular_ranking_dns_va_al_final(
         ObtenerRankingQuery(competencia_id=cid, disciplina=Disciplina.STA)
     )
 
-    assert len(entries) == 2
-    assert entries[0].atleta_id == str(pid_valido)
-    assert entries[0].posicion == 1
-    assert entries[1].atleta_id == str(pid_dns)
-    assert entries[1].es_dns is True
-    assert entries[1].rp is None
-    assert entries[1].en_podio is False
+    assert len(entries) == 1
+    entradas = entries[0].entradas
+    assert len(entradas) == 2
+    assert entradas[0].atleta_id == str(pid_valido)
+    assert entradas[0].posicion == 1
+    assert entradas[1].atleta_id == str(pid_dns)
+    assert entradas[1].es_dns is True
+    assert entradas[1].rp is None
+    assert entradas[1].en_podio is False
 
 
 @pytest.mark.asyncio
@@ -251,8 +311,15 @@ async def test_calcular_ranking_tarjeta_roja_va_al_final(
 
     await _performance_ejecutada(comp_store, stub, descriptor, cid, pid_blanca, "300", ot=OT_A)
     await _performance_ejecutada(
-        comp_store, stub, descriptor, cid, pid_roja, "250", ot=OT_B,
-        tarjeta=TipoTarjeta.Roja, motivo="BO",
+        comp_store,
+        stub,
+        descriptor,
+        cid,
+        pid_roja,
+        "250",
+        ot=OT_B,
+        tarjeta=TipoTarjeta.Roja,
+        motivo="BO",
     )
 
     acl = ResultadosCompetenciaAdapter(comp_store)
@@ -266,11 +333,12 @@ async def test_calcular_ranking_tarjeta_roja_va_al_final(
         ObtenerRankingQuery(competencia_id=cid, disciplina=Disciplina.STA)
     )
 
-    assert entries[0].atleta_id == str(pid_blanca)
-    assert entries[0].tarjeta == "Blanca"
-    assert entries[1].atleta_id == str(pid_roja)
-    assert entries[1].tarjeta == "Roja"
-    assert entries[1].en_podio is False
+    entradas = entries[0].entradas
+    assert entradas[0].atleta_id == str(pid_blanca)
+    assert entradas[0].tarjeta == "Blanca"
+    assert entradas[1].atleta_id == str(pid_roja)
+    assert entradas[1].tarjeta == "Roja"
+    assert entradas[1].en_podio is False
 
 
 @pytest.mark.asyncio
@@ -301,9 +369,10 @@ async def test_calcular_ranking_empate_posicion_compartida(
         ObtenerRankingQuery(competencia_id=cid, disciplina=Disciplina.STA)
     )
 
-    pos_1_entries = [e for e in entries if e.posicion == 1]
-    pos_3_entries = [e for e in entries if e.posicion == 3]
-    pos_2_entries = [e for e in entries if e.posicion == 2]
+    entradas = entries[0].entradas
+    pos_1_entries = [e for e in entradas if e.posicion == 1]
+    pos_3_entries = [e for e in entradas if e.posicion == 3]
+    pos_2_entries = [e for e in entradas if e.posicion == 2]
 
     assert len(pos_1_entries) == 2
     assert len(pos_2_entries) == 0  # posición 2 omitida
@@ -353,9 +422,53 @@ async def test_calcular_ranking_disciplina_dnf(
         ObtenerRankingQuery(competencia_id=cid, disciplina=Disciplina.DNF)
     )
 
-    assert len(entries) == 2
-    assert entries[0].atleta_id == str(pid_1)
-    assert entries[0].posicion == 1
-    assert entries[0].unidad == "Metros"
-    assert entries[1].atleta_id == str(pid_2)
-    assert entries[1].posicion == 2
+    assert len(entries) == 1
+    entradas = entries[0].entradas
+    assert len(entradas) == 2
+    assert entradas[0].atleta_id == str(pid_1)
+    assert entradas[0].posicion == 1
+    assert entradas[0].unidad == "Metros"
+    assert entradas[1].atleta_id == str(pid_2)
+    assert entradas[1].posicion == 2
+
+
+@pytest.mark.asyncio
+async def test_calcular_ranking_agrupa_por_categoria_con_acl_registro(
+    comp_store: SQLiteEventStore,
+    ranking_store: SQLiteEventStore,
+    stub: StubCompetenciaEstadoAdapter,
+    descriptor: DisciplinaDescriptorAdapter,
+    tmp_path,
+) -> None:
+    cid = uuid4()
+    atleta_sf = uuid4()
+    atleta_mm = uuid4()
+    registro_db_path = str(tmp_path / "registro.db")
+
+    await _guardar_atleta(registro_db_path, atleta_sf, Categoria.SENIOR_FEMENINO)
+    await _guardar_atleta(registro_db_path, atleta_mm, Categoria.MASTER_MASCULINO)
+
+    await _performance_ejecutada(comp_store, stub, descriptor, cid, atleta_sf, "277", ot=OT_A)
+    await _performance_ejecutada(comp_store, stub, descriptor, cid, atleta_mm, "196", ot=OT_B)
+
+    handler = CalcularRankingHandler(
+        ranking_store=ranking_store,
+        resultados_port=ResultadosCompetenciaAdapter(comp_store),
+        atleta_categoria_port=AtletaCategoriaAdapter(registro_db_path),
+        descriptor=descriptor,
+    )
+    await handler.handle(CalcularRankingCommand(competencia_id=cid, disciplina=Disciplina.STA))
+
+    query_handler = ObtenerRankingHandler(ranking_store=ranking_store)
+    rankings = await query_handler.handle(
+        ObtenerRankingQuery(competencia_id=cid, disciplina=Disciplina.STA)
+    )
+
+    assert [grupo.categoria for grupo in rankings] == [
+        Categoria.MASTER_MASCULINO.value,
+        Categoria.SENIOR_FEMENINO.value,
+    ]
+    assert rankings[0].entradas[0].atleta_id == str(atleta_mm)
+    assert rankings[0].entradas[0].posicion == 1
+    assert rankings[1].entradas[0].atleta_id == str(atleta_sf)
+    assert rankings[1].entradas[0].posicion == 1

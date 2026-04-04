@@ -1,0 +1,23 @@
+CodeGuard v0.2.0 (Arquitectura Modular)
+US: US-ADJ-3.7
+Fecha: 2026-04-03
+Branch: feature/sp-adj-03-ajuste-sp3
+
+Comando ejecutado:
+./.venv/bin/codeguard src/competencia/domain/ports/competencias_por_torneo_port.py src/competencia/infrastructure/repositories/sqlite_competencias_por_torneo.py src/competencia/application/commands/configurar_intervalo_ot.py src/competencia/application/queries/obtener_competencias_por_torneo.py src/competencia/api/router.py
+
+Archivos analizados: 5
+Checks ejecutados: 6
+Tiempo de ejecucion: 31.89s
+
+Resultado:
+- 0 errores
+- 0 advertencias
+- 15 informativos
+
+Detalle:
+- src/competencia/api/router.py: sin issues de seguridad, PEP8 compliant, complejidad bajo umbral
+- src/competencia/application/commands/configurar_intervalo_ot.py: sin issues de seguridad, PEP8 compliant, complejidad bajo umbral
+- src/competencia/application/queries/obtener_competencias_por_torneo.py: sin issues de seguridad, PEP8 compliant, complejidad bajo umbral
+- src/competencia/domain/ports/competencias_por_torneo_port.py: sin issues de seguridad, PEP8 compliant, complejidad bajo umbral
+- src/competencia/infrastructure/repositories/sqlite_competencias_por_torneo.py: sin issues de seguridad, PEP8 compliant, complejidad bajo umbral

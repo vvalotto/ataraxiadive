@@ -1,4 +1,5 @@
 """Value Object AP — Announced Performance declarada por el atleta."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -29,9 +30,7 @@ class AP:
     def __post_init__(self) -> None:
         """Valida INV-P-01: valorAP debe ser > 0."""
         if self.valor <= Decimal("0"):
-            raise ValorAPInvalido(
-                f"INV-P-01: valorAP debe ser > 0, recibido: {self.valor}"
-            )
+            raise ValorAPInvalido(f"INV-P-01: valorAP debe ser > 0, recibido: {self.valor}")
 
     def __str__(self) -> str:
         return f"{self.valor} {self.unidad.value}"

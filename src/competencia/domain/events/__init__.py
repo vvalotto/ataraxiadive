@@ -1,4 +1,5 @@
 """Domain Events del BC Competencia."""
+
 from competencia.domain.events.ap_registrado import APRegistrado
 from competencia.domain.events.atleta_llamado import AtletaLlamado
 from competencia.domain.events.dns_registrado import DNSRegistrado

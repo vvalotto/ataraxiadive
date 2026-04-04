@@ -20,7 +20,7 @@ Este cuestionario tiene como objetivo profundizar y completar la comprensión de
   **ID**     **Pregunta**                                                                                                                                         **Respuesta**
   ---------- ---------------------------------------------------------------------------------------------------------------------------------------------------- -------------------------------------------------------------------
   RF-GT-01   ¿Un torneo puede tener más de una sede o ubicación (por ejemplo, distintas piletas para distintas disciplinas)?                                      No
-  RF-GT-02   ¿Qué disciplinas específicas debe soportar el sistema? (STA, DNF, DYN, DYNB, CNF, CWT, FIM, etc.)                                                    Debe ser configurable, inicialmente: STA, DNF, DBF, DYN, SPE2X50.
+  RF-GT-02   ¿Qué disciplinas específicas debe soportar el sistema? (STA, DNF, DYN, DBF, CNF, CWT, FIM, etc.)                                                    Debe ser configurable, inicialmente: STA, DNF, DBF, DYN, SPE.
   RF-GT-03   ¿Pueden existir múltiples torneos activos simultáneamente en el sistema?                                                                             SI
   RF-GT-04   ¿Qué significa exactamente \'cancelar un torneo\'? ¿Se elimina o cambia a un estado cancelado conservando la información?                            Estado cancelado conservando la información
   RF-GT-05   ¿Existen restricciones para la transición entre fases del torneo? Por ejemplo, ¿se puede volver de Ejecución a Preparación si se detecta un error?   Si
@@ -43,6 +43,7 @@ Este cuestionario tiene como objetivo profundizar y completar la comprensión de
   RF-IN-07   ¿Cómo se resuelve si un atleta se inscribe con datos diferentes a los que tiene la base de datos externa?            Pendiente de definicion
   RF-IN-08   ¿El género se utiliza solo para categorización o tiene algún otro efecto en la competencia?                          Solo categoría
   RF-IN-09   ¿Puede un atleta inscribirse en categorías diferentes según la disciplina?                                           No
+  RF-IN-10   ¿El club del atleta es un dato requerido del registro y debe verse en grillas/reportes?                              Si, es obligatorio y debe reflejarse en grillas y reportes
 
 3. Preparación de Competencias
 ==============================
@@ -74,7 +75,7 @@ Este cuestionario tiene como objetivo profundizar y completar la comprensión de
   RF-EJ-05   ¿El cronometraje lo realiza el sistema (cronómetro digital) o el juez ingresa el tiempo manualmente?                                El juez lo toma manualmente,
   RF-EJ-06   ¿Un juez puede corregir un resultado ya registrado para una performance? ¿Hay un período de protesta?                               Si
   RF-EJ-07   ¿Qué información se registra en un back-out? ¿Solo el hecho o también la distancia/tiempo alcanzado?                                Es black-out, la distancia también.
-  RF-EJ-08   ¿Para disciplinas de distancia (DNF, DYN, DYNB), cómo se mide? ¿Metros exactos, con decimales?                                      Si, con decimales
+  RF-EJ-08   ¿Para disciplinas de distancia (DNF, DYN, DBF), cómo se mide? ¿Metros exactos, con decimales?                                      Si, con decimales
   RF-EJ-09   ¿El protocolo de superficie (SP) es evaluado y registrado por el sistema?                                                           No
   RF-EJ-10   ¿Se debe registrar el resultado del protocolo de superficie por separado o solo su efecto (tarjeta blanca/amarilla/roja)?           Solo el resultado
 

@@ -1,4 +1,5 @@
 """Tests unitarios de Competencia.ajustar_grilla() — US-2.1.3."""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone, timedelta
@@ -33,13 +34,28 @@ P_A003 = uuid4()
 
 
 def _make_competencia_con_grilla() -> Competencia:
-    """Crea una Competencia STA con grilla generada: A002(pos=1), A001(pos=2), A003(pos=3)."""
+    """Crea una Competencia STA con grilla generada: A003(pos=1), A001(pos=2), A002(pos=3)."""
     c = Competencia(competencia_id=COMPETENCIA_ID, disciplina=Disciplina.STA)
     c.configurar_intervalo_ot(9, "org-01")
     performances = [
-        PerformancesAPData(performance_id=P_A001, atleta_id=A001, valor_ap=Decimal("330"), unidad=UnidadMedida.Segundos),
-        PerformancesAPData(performance_id=P_A002, atleta_id=A002, valor_ap=Decimal("360"), unidad=UnidadMedida.Segundos),
-        PerformancesAPData(performance_id=P_A003, atleta_id=A003, valor_ap=Decimal("285"), unidad=UnidadMedida.Segundos),
+        PerformancesAPData(
+            performance_id=P_A001,
+            atleta_id=A001,
+            valor_ap=Decimal("330"),
+            unidad=UnidadMedida.Segundos,
+        ),
+        PerformancesAPData(
+            performance_id=P_A002,
+            atleta_id=A002,
+            valor_ap=Decimal("360"),
+            unidad=UnidadMedida.Segundos,
+        ),
+        PerformancesAPData(
+            performance_id=P_A003,
+            atleta_id=A003,
+            valor_ap=Decimal("285"),
+            unidad=UnidadMedida.Segundos,
+        ),
     ]
     c.generar_grilla(OT_INICIO, performances, DisciplinaDescriptor.para(Disciplina.STA))
     c.pull_events()  # limpiar eventos previos
@@ -73,7 +89,9 @@ class TestInvariantes:
         c = _make_competencia_con_grilla()
         pid_desconocido = uuid4()
         with pytest.raises(PerformanceNoEncontrada):
-            c.ajustar_grilla([CambioGrilla(performance_id=pid_desconocido, campo="posicion", valor_nuevo=1)])
+            c.ajustar_grilla(
+                [CambioGrilla(performance_id=pid_desconocido, campo="posicion", valor_nuevo=1)]
+            )
 
 
 # ── Ajuste de posición ────────────────────────────────────────────────────────
@@ -94,15 +112,18 @@ class TestAjustePosicion:
         assert entry.ot_programado == OT_INICIO
 
     def test_ajuste_posicion_recalcula_ot_segunda_posicion(self) -> None:
-        c = _make_competencia_con_grilla()
-        c.ajustar_grilla([CambioGrilla(performance_id=P_A001, campo="posicion", valor_nuevo=1)])
-        entry = _find_entrada(c, P_A002)
-        assert entry.ot_programado == OT_INICIO + timedelta(minutes=9)
-
-    def test_atleta_sin_cambio_posicion_mantiene_ot_relativo(self) -> None:
+        # Orden inicial (ascendente): A003(pos=1), A001(pos=2), A002(pos=3)
+        # Tras mover A001 a pos=1: A001(pos=1), A003(pos=2), A002(pos=3)
         c = _make_competencia_con_grilla()
         c.ajustar_grilla([CambioGrilla(performance_id=P_A001, campo="posicion", valor_nuevo=1)])
         entry = _find_entrada(c, P_A003)
+        assert entry.ot_programado == OT_INICIO + timedelta(minutes=9)
+
+    def test_atleta_sin_cambio_posicion_mantiene_ot_relativo(self) -> None:
+        # A002 permanece en pos=3 (no fue movido directamente): OT debe mantenerse en +18 min
+        c = _make_competencia_con_grilla()
+        c.ajustar_grilla([CambioGrilla(performance_id=P_A001, campo="posicion", valor_nuevo=1)])
+        entry = _find_entrada(c, P_A002)
         assert entry.posicion == 3
         assert entry.ot_programado == OT_INICIO + timedelta(minutes=18)
 
@@ -180,9 +201,27 @@ class TestReconstitucion:
             "disciplina": "STA",
             "ot_inicio": OT_INICIO.isoformat(),
             "performances": [
-                {"performance_id": str(P_A002), "atleta_id": str(A002), "posicion": 1, "andarivel": 1, "ot_programado": OT_INICIO.isoformat()},
-                {"performance_id": str(P_A001), "atleta_id": str(A001), "posicion": 2, "andarivel": 1, "ot_programado": (OT_INICIO + timedelta(minutes=9)).isoformat()},
-                {"performance_id": str(P_A003), "atleta_id": str(A003), "posicion": 3, "andarivel": 1, "ot_programado": (OT_INICIO + timedelta(minutes=18)).isoformat()},
+                {
+                    "performance_id": str(P_A002),
+                    "atleta_id": str(A002),
+                    "posicion": 1,
+                    "andarivel": 1,
+                    "ot_programado": OT_INICIO.isoformat(),
+                },
+                {
+                    "performance_id": str(P_A001),
+                    "atleta_id": str(A001),
+                    "posicion": 2,
+                    "andarivel": 1,
+                    "ot_programado": (OT_INICIO + timedelta(minutes=9)).isoformat(),
+                },
+                {
+                    "performance_id": str(P_A003),
+                    "atleta_id": str(A003),
+                    "posicion": 3,
+                    "andarivel": 1,
+                    "ot_programado": (OT_INICIO + timedelta(minutes=18)).isoformat(),
+                },
             ],
             "generada_en": OT_INICIO.isoformat(),
             "occurred_at": OT_INICIO.isoformat(),

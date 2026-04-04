@@ -1,4 +1,5 @@
 """Value Object TipoTarjeta — tipo de tarjeta asignada a una Performance."""
+
 from __future__ import annotations
 
 from enum import StrEnum

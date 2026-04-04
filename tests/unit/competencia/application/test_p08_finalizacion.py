@@ -1,4 +1,5 @@
 """Tests unitarios de Política P-08 — AsignarTarjetaHandler y RegistrarDNSHandler (US-2.4.1)."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -42,7 +43,9 @@ def _ap_payload(performance_id: Any, competencia_id: Any, participante_id: Any) 
     }
 
 
-def _resultado_payload(performance_id: Any, competencia_id: Any, participante_id: Any) -> dict[str, Any]:
+def _resultado_payload(
+    performance_id: Any, competencia_id: Any, participante_id: Any
+) -> dict[str, Any]:
     return {
         "event_type": "ResultadoRegistrado",
         "payload": {
@@ -58,7 +61,9 @@ def _resultado_payload(performance_id: Any, competencia_id: Any, participante_id
     }
 
 
-def _llamada_payload(performance_id: Any, competencia_id: Any, participante_id: Any) -> dict[str, Any]:
+def _llamada_payload(
+    performance_id: Any, competencia_id: Any, participante_id: Any
+) -> dict[str, Any]:
     return {
         "event_type": "AtletaLlamado",
         "payload": {
@@ -78,13 +83,17 @@ def _make_store_con_resultado(cid: Any, pid: Any) -> AsyncMock:
     """Event Store con Performance en estado ResultadoRegistrado."""
     perf_id = uuid4()
     store = AsyncMock()
-    store.load = AsyncMock(side_effect=lambda stream_id: (
-        [
-            _ap_payload(perf_id, cid, pid),
-            _llamada_payload(perf_id, cid, pid),
-            _resultado_payload(perf_id, cid, pid),
-        ] if "performance" in stream_id else []
-    ))
+    store.load = AsyncMock(
+        side_effect=lambda stream_id: (
+            [
+                _ap_payload(perf_id, cid, pid),
+                _llamada_payload(perf_id, cid, pid),
+                _resultado_payload(perf_id, cid, pid),
+            ]
+            if "performance" in stream_id
+            else []
+        )
+    )
     store.append = AsyncMock(return_value=None)
     return store
 
@@ -93,12 +102,16 @@ def _make_store_con_llamada(cid: Any, pid: Any) -> AsyncMock:
     """Event Store con Performance en estado Llamada."""
     perf_id = uuid4()
     store = AsyncMock()
-    store.load = AsyncMock(side_effect=lambda stream_id: (
-        [
-            _ap_payload(perf_id, cid, pid),
-            _llamada_payload(perf_id, cid, pid),
-        ] if "performance" in stream_id else []
-    ))
+    store.load = AsyncMock(
+        side_effect=lambda stream_id: (
+            [
+                _ap_payload(perf_id, cid, pid),
+                _llamada_payload(perf_id, cid, pid),
+            ]
+            if "performance" in stream_id
+            else []
+        )
+    )
     store.append = AsyncMock(return_value=None)
     return store
 
@@ -143,13 +156,15 @@ async def test_asignar_sin_port_no_dispara_finalizacion(
     store = _make_store_con_resultado(competencia_id, participante_id)
     handler = AsignarTarjetaHandler(store)
 
-    await handler.handle(AsignarTarjetaCommand(
-        competencia_id=competencia_id,
-        participante_id=participante_id,
-        disciplina=Disciplina.STA,
-        tipo=TipoTarjeta.Blanca,
-        asignada_por="juez",
-    ))
+    await handler.handle(
+        AsignarTarjetaCommand(
+            competencia_id=competencia_id,
+            participante_id=participante_id,
+            disciplina=Disciplina.STA,
+            tipo=TipoTarjeta.Blanca,
+            asignada_por="juez",
+        )
+    )
 
     # Solo se persiste TarjetaAsignada, no se carga stream de Competencia
     store.load.assert_called_once()
@@ -163,13 +178,15 @@ async def test_asignar_con_port_no_finalizado_no_emite_competencia_finalizada(
     store = _make_store_con_resultado(competencia_id, participante_id)
     handler = AsignarTarjetaHandler(store, mock_estado_no_finalizado)
 
-    await handler.handle(AsignarTarjetaCommand(
-        competencia_id=competencia_id,
-        participante_id=participante_id,
-        disciplina=Disciplina.STA,
-        tipo=TipoTarjeta.Blanca,
-        asignada_por="juez",
-    ))
+    await handler.handle(
+        AsignarTarjetaCommand(
+            competencia_id=competencia_id,
+            participante_id=participante_id,
+            disciplina=Disciplina.STA,
+            tipo=TipoTarjeta.Blanca,
+            asignada_por="juez",
+        )
+    )
 
     # El stream de Competencia no debe cargarse si no finaliza
     calls = [str(c) for c in store.load.call_args_list]
@@ -184,13 +201,15 @@ async def test_asignar_con_port_finalizado_carga_competencia(
     store = _make_store_con_resultado(competencia_id, participante_id)
     handler = AsignarTarjetaHandler(store, mock_estado_finalizado)
 
-    await handler.handle(AsignarTarjetaCommand(
-        competencia_id=competencia_id,
-        participante_id=participante_id,
-        disciplina=Disciplina.STA,
-        tipo=TipoTarjeta.Blanca,
-        asignada_por="juez",
-    ))
+    await handler.handle(
+        AsignarTarjetaCommand(
+            competencia_id=competencia_id,
+            participante_id=participante_id,
+            disciplina=Disciplina.STA,
+            tipo=TipoTarjeta.Blanca,
+            asignada_por="juez",
+        )
+    )
 
     # Se debe haber llamado load para el stream de Competencia también
     load_calls = [str(c) for c in store.load.call_args_list]
@@ -208,12 +227,14 @@ async def test_registrar_dns_sin_port_no_dispara_finalizacion(
     store = _make_store_con_llamada(competencia_id, participante_id)
     handler = RegistrarDNSHandler(store)
 
-    await handler.handle(RegistrarDNSCommand(
-        competencia_id=competencia_id,
-        participante_id=participante_id,
-        disciplina=Disciplina.STA,
-        registrado_por="juez",
-    ))
+    await handler.handle(
+        RegistrarDNSCommand(
+            competencia_id=competencia_id,
+            participante_id=participante_id,
+            disciplina=Disciplina.STA,
+            registrado_por="juez",
+        )
+    )
 
     store.load.assert_called_once()
 
@@ -226,12 +247,14 @@ async def test_registrar_dns_con_port_finalizado_carga_competencia(
     store = _make_store_con_llamada(competencia_id, participante_id)
     handler = RegistrarDNSHandler(store, mock_estado_finalizado)
 
-    await handler.handle(RegistrarDNSCommand(
-        competencia_id=competencia_id,
-        participante_id=participante_id,
-        disciplina=Disciplina.STA,
-        registrado_por="juez",
-    ))
+    await handler.handle(
+        RegistrarDNSCommand(
+            competencia_id=competencia_id,
+            participante_id=participante_id,
+            disciplina=Disciplina.STA,
+            registrado_por="juez",
+        )
+    )
 
     load_calls = [str(c) for c in store.load.call_args_list]
     assert any(f"competencia-{competencia_id}" in c for c in load_calls)

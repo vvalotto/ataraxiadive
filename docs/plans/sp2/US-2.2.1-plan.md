@@ -15,7 +15,7 @@
   - `DisciplinaDescriptor` dataclass inmutable (frozen)
   - Campos: `disciplina: Disciplina`, `unidad_esperada: UnidadMedida`, `orden_ascendente: bool`
   - Factory method de clase `para(disciplina)` que construye el descriptor correcto
-  - Invariante: STA → Segundos + orden_ascendente=False; distancia → Metros + orden_ascendente=True
+  - Invariante: STA → Segundos + orden_ascendente=True; distancia → Metros + orden_ascendente=True
 
 ### 2. Domain — Port
 
@@ -55,7 +55,7 @@
 ### 7. Unit tests — DisciplinaDescriptor VO
 
 - [ ] `tests/unit/competencia/domain/value_objects/test_disciplina_descriptor.py` (10 min)
-  - Descriptor STA: unidad=Segundos, orden_ascendente=False
+  - Descriptor STA: unidad=Segundos, orden_ascendente=True
   - Descriptor por cada disciplina de distancia: unidad=Metros, orden_ascendente=True
   - Factory method cubre todas las disciplinas del enum
 
@@ -69,7 +69,7 @@
 ### 9. Integration tests — GenerarGrillaHandler con adapter real
 
 - [ ] `tests/integration/competencia/test_generar_grilla_integration.py` (ampliar, 10 min)
-  - Nuevo test: grilla STA ordenada mayor→menor AP usando adapter real
+  - Nuevo test: grilla STA ordenada menor→mayor AP usando adapter real
   - Nuevo test: grilla DNF ordenada menor→mayor AP usando adapter real
 
 ### 10. BDD steps

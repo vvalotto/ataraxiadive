@@ -1,0 +1,54 @@
+CodeGuard v0.2.0 (Arquitectura Modular)
+Analizando: /Users/victor/PycharmProjects/ataraxiadive/src/identidad/infrastructure/jwt_service.py, /Users/victor/PycharmProjects/ataraxiadive/src/identidad/infrastructure/bcrypt_password_hasher.py, /Users/victor/PycharmProjects/ataraxiadive/src/identidad/domain/ports/token_service_port.py, /Users/victor/PycharmProjects/ataraxiadive/src/identidad/domain/ports/password_hashing_port.py
+Archivos Python encontrados: 4
+Tipo de análisis: pre-commit
+
+Checks disponibles: 6
+---
+╭──────────────────────────────────────────────────────────────────────────────╮
+│  🛡️  CodeGuard - Control de Calidad Automatizado                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Archivos analizados:  4     
+Checks ejecutados:    6     
+Tiempo de ejecución:  14.47s
+Resultados totales:   12    
+
+──────────────────────── 📦  infrastructure  (6 issues) ────────────────────────
+
+                                Informativos (6)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/identidad/infrastructure/… │ ✓ No security issues detected  │
+│ PEP8       │ src/identidad/infrastructure/… │ ✓ PEP8 compliant               │
+│ Complexity │ src/identidad/infrastructure/… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+│ Security   │ src/identidad/infrastructure/… │ ✓ No security issues detected  │
+│ PEP8       │ src/identidad/infrastructure/… │ ✓ PEP8 compliant               │
+│ Complexity │ src/identidad/infrastructure/… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+──────────────────────────── 📦  ports  (6 issues) ─────────────────────────────
+
+                                Informativos (6)                                
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check      ┃ Ubicación                      ┃ Mensaje                        ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Security   │ src/identidad/domain/ports/to… │ ✓ No security issues detected  │
+│ PEP8       │ src/identidad/domain/ports/to… │ ✓ PEP8 compliant               │
+│ Complexity │ src/identidad/domain/ports/to… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+│ Security   │ src/identidad/domain/ports/pa… │ ✓ No security issues detected  │
+│ PEP8       │ src/identidad/domain/ports/pa… │ ✓ PEP8 compliant               │
+│ Complexity │ src/identidad/domain/ports/pa… │ ✓ All functions below          │
+│            │                                │ complexity threshold (≤10)     │
+└────────────┴────────────────────────────────┴────────────────────────────────┘
+
+╭─────────────────────────────── Resumen Final ────────────────────────────────╮
+│  Resumen:                                                                    │
+│            0 errores                                                         │
+│            0 advertencias                                                    │
+│            12 informativos                                                   │
+╰──────────────────────────────────────────────────────────────────────────────╯

@@ -2,7 +2,7 @@ Feature: API Disciplina-Aware — validación de unidades y avance por grilla
 
   Background:
     Given una competencia en estado EnEjecucion con 3 atletas en grilla STA
-    And el orden de grilla es posicion 1 con AP 300s, posicion 2 con AP 180s, posicion 3 con AP 120s
+    And el orden de grilla es posicion 1 con AP 120s, posicion 2 con AP 180s, posicion 3 con AP 300s
 
   Scenario: Registrar resultado STA con unidad correcta Segundos
     Given el atleta en posicion 1 fue llamado
@@ -30,7 +30,7 @@ Feature: API Disciplina-Aware — validación de unidades y avance por grilla
     Given el atleta en posicion 1 fue llamado y completo su performance
     When el juez consulta las proximas performances
     Then el primer resultado es el atleta en posicion 2 con AP 180s
-    And el segundo resultado es el atleta en posicion 3 con AP 120s
+    And el segundo resultado es el atleta en posicion 3 con AP 300s
 
   Scenario: PerformanceActual incluye unidad_esperada para STA
     Given el atleta en posicion 1 esta en estado Llamada para STA

@@ -1,4 +1,5 @@
 """Tests unitarios del StubCompetenciaEstadoAdapter — SP1."""
+
 from __future__ import annotations
 
 from uuid import uuid4

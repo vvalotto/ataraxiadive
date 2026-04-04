@@ -11,7 +11,7 @@ Feature: Generar Grilla de Salida
     And OT de inicio es "10:00:00"
 
   @US-2.1.2 @happy_path
-  Scenario: Grilla generada con orden correcto para STA (tiempo mayor→menor)
+  Scenario: Grilla generada con orden correcto para STA (tiempo menor→mayor)
     Given los siguientes APs registrados para STA:
       | atletaId | valorAP_segundos |
       | A001     | 330              |
@@ -19,9 +19,9 @@ Feature: Generar Grilla de Salida
       | A003     | 285              |
     When el organizador genera la grilla
     Then la grilla tiene 3 atletas
-    And la posicion 1 corresponde al atleta "A002" con OT "10:00:00"
+    And la posicion 1 corresponde al atleta "A003" con OT "10:00:00"
     And la posicion 2 corresponde al atleta "A001" con OT "10:09:00"
-    And la posicion 3 corresponde al atleta "A003" con OT "10:18:00"
+    And la posicion 3 corresponde al atleta "A002" con OT "10:18:00"
     And el evento GrillaDeSalidaGenerada persiste en el stream
 
   @US-2.1.2 @happy_path

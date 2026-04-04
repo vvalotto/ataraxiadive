@@ -1,4 +1,5 @@
 """Tests de integración — SQLiteEventStore sobre SQLite in-memory."""
+
 from __future__ import annotations
 
 import pytest
@@ -17,8 +18,7 @@ async def store(tmp_path: pytest.TempPathFactory) -> SQLiteEventStore:
     """EventStore con SQLite in-memory inicializado con el schema de events."""
     db_path = str(tmp_path / "test.db")
     async with aiosqlite.connect(db_path) as db:
-        await db.execute(
-            """
+        await db.execute("""
             CREATE TABLE events (
                 id          INTEGER PRIMARY KEY AUTOINCREMENT,
                 stream_id   TEXT    NOT NULL,
@@ -29,8 +29,7 @@ async def store(tmp_path: pytest.TempPathFactory) -> SQLiteEventStore:
                     DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
                 UNIQUE (stream_id, version)
             )
-            """
-        )
+            """)
         await db.commit()
     return SQLiteEventStore(db_path)
 
@@ -112,18 +111,14 @@ async def test_concurrency_error_cuando_version_no_coincide(
     await store.append(STREAM_ID, "APRegistrado", {"valor_ap": 60.0})
 
     with pytest.raises(ConcurrencyError):
-        await store.append(
-            STREAM_ID, "AtletaLlamado", {}, expected_version=0
-        )
+        await store.append(STREAM_ID, "AtletaLlamado", {}, expected_version=0)
 
 
 async def test_append_con_expected_version_correcto(store: SQLiteEventStore) -> None:
     """append con expected_version correcto (versión actual) procede sin error."""
     await store.append(STREAM_ID, "APRegistrado", {"valor_ap": 60.0})
     # versión actual = 1, expected_version = 1 → OK
-    await store.append(
-        STREAM_ID, "AtletaLlamado", {}, expected_version=1
-    )
+    await store.append(STREAM_ID, "AtletaLlamado", {}, expected_version=1)
 
     eventos = await store.load(STREAM_ID)
     assert len(eventos) == 2

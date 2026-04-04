@@ -1,0 +1,243 @@
+{
+  "metadata": {
+    "us_id": "US-2.4.1",
+    "us_title": "Competencia Finalizada automatico",
+    "us_points": 5,
+    "producto": "competencia",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-03-27T21:44:51.961901+00:00",
+    "completed_at": "2026-03-27T22:00:43.661816+00:00",
+    "total_elapsed_seconds": 951,
+    "effective_seconds": 951,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validacion de Contexto",
+      "started_at": "2026-03-27T21:44:54.931207+00:00",
+      "completed_at": "2026-03-27T21:46:02.219343+00:00",
+      "elapsed_seconds": 67,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generacion de Escenarios BDD",
+      "started_at": "2026-03-27T21:46:08.606695+00:00",
+      "completed_at": "2026-03-27T21:46:42.686729+00:00",
+      "elapsed_seconds": 34,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de Implementacion",
+      "started_at": "2026-03-27T21:46:42.780391+00:00",
+      "completed_at": "2026-03-27T21:48:07.724240+00:00",
+      "elapsed_seconds": 84,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementacion",
+      "started_at": "2026-03-27T21:48:07.804919+00:00",
+      "completed_at": "2026-03-27T21:54:18.388979+00:00",
+      "elapsed_seconds": 370,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "T1",
+          "task_name": "CompetenciaNoFinalizable en exceptions",
+          "task_type": "impl",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-03-27T21:48:14.687809+00:00",
+          "completed_at": "2026-03-27T21:48:29.965161+00:00",
+          "elapsed_seconds": 15,
+          "actual_minutes": 0.25,
+          "variance_minutes": -4.75,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T2",
+          "task_name": "Evento CompetenciaFinalizada",
+          "task_type": "impl",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-03-27T21:48:33.288051+00:00",
+          "completed_at": "2026-03-27T21:48:46.790159+00:00",
+          "elapsed_seconds": 13,
+          "actual_minutes": 0.22,
+          "variance_minutes": -9.78,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T3",
+          "task_name": "PerformancesEstadoPort",
+          "task_type": "impl",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-03-27T21:48:50.385581+00:00",
+          "completed_at": "2026-03-27T21:49:02.550902+00:00",
+          "elapsed_seconds": 12,
+          "actual_minutes": 0.2,
+          "variance_minutes": -9.8,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T4",
+          "task_name": "Competencia.finalizar y reconstitución",
+          "task_type": "impl",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-03-27T21:49:05.706626+00:00",
+          "completed_at": "2026-03-27T21:50:10.082904+00:00",
+          "elapsed_seconds": 64,
+          "actual_minutes": 1.07,
+          "variance_minutes": -8.93,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T5",
+          "task_name": "PerformancesEstadoAdapter",
+          "task_type": "impl",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-03-27T21:50:13.646954+00:00",
+          "completed_at": "2026-03-27T21:50:35.200539+00:00",
+          "elapsed_seconds": 21,
+          "actual_minutes": 0.35,
+          "variance_minutes": -14.65,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T6",
+          "task_name": "P-08 en AsignarTarjetaHandler",
+          "task_type": "impl",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-03-27T21:50:40.053408+00:00",
+          "completed_at": "2026-03-27T21:51:31.747375+00:00",
+          "elapsed_seconds": 51,
+          "actual_minutes": 0.85,
+          "variance_minutes": -14.15,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T7",
+          "task_name": "P-08 en RegistrarDNSHandler",
+          "task_type": "impl",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-03-27T21:51:35.826711+00:00",
+          "completed_at": "2026-03-27T21:53:14.936436+00:00",
+          "elapsed_seconds": 99,
+          "actual_minutes": 1.65,
+          "variance_minutes": -8.35,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T8",
+          "task_name": "Inyeccion en router.py",
+          "task_type": "impl",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-03-27T21:53:18.777241+00:00",
+          "completed_at": "2026-03-27T21:54:18.305455+00:00",
+          "elapsed_seconds": 59,
+          "actual_minutes": 0.98,
+          "variance_minutes": -9.02,
+          "file_created": null,
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-03-27T21:54:27.921293+00:00",
+      "completed_at": "2026-03-27T21:55:48.590453+00:00",
+      "elapsed_seconds": 80,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integracion",
+      "started_at": "2026-03-27T21:55:48.677545+00:00",
+      "completed_at": "2026-03-27T21:56:35.514387+00:00",
+      "elapsed_seconds": 46,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validacion BDD",
+      "started_at": "2026-03-27T21:56:35.593976+00:00",
+      "completed_at": "2026-03-27T21:57:49.902695+00:00",
+      "elapsed_seconds": 74,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-03-27T21:57:50.019176+00:00",
+      "completed_at": "2026-03-27T21:59:50.776583+00:00",
+      "elapsed_seconds": 120,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentacion",
+      "started_at": "2026-03-27T21:59:50.859789+00:00",
+      "completed_at": "2026-03-27T22:00:12.759604+00:00",
+      "elapsed_seconds": 21,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-03-27T22:00:12.843964+00:00",
+      "completed_at": "2026-03-27T22:00:43.570635+00:00",
+      "elapsed_seconds": 30,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 8,
+    "completed_tasks": 8,
+    "total_phases": 10,
+    "estimated_total_minutes": 85.0,
+    "actual_total_minutes": 5.57,
+    "variance_minutes": -79.43,
+    "variance_percent": -93.45
+  }
+}

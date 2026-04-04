@@ -3,6 +3,7 @@
 pytest-bdd no soporta async steps nativamente. Los steps que requieren
 operaciones async usan asyncio.run() como wrapper síncrono.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -28,7 +29,10 @@ from competencia.domain.value_objects.estado_performance import EstadoPerformanc
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+
 scenarios("../US-1.2.2-llamar-atleta.feature")
 
 _CREATE_TABLE = """
@@ -93,7 +97,9 @@ def step_disciplina(ctx: dict, disciplina: str) -> None:  # type: ignore[type-ar
 @given('la performance del participante está en estado "AnunciadaAP"')
 def step_performance_anunciada_ap(ctx: dict) -> None:  # type: ignore[type-arg]
     """Registra un AP para poner la performance en AnunciadaAP."""
-    handler = RegistrarAPHandler(ctx["event_store"], ctx["estado_port"], DisciplinaDescriptorAdapter())
+    handler = RegistrarAPHandler(
+        ctx["event_store"], ctx["estado_port"], DisciplinaDescriptorAdapter()
+    )
     cmd = RegistrarAPCommand(
         competencia_id=ctx["competencia_id"],
         participante_id=ctx["participante_id"],
@@ -199,11 +205,7 @@ def step_evento_en_stream(ctx: dict, event_type: str) -> None:  # type: ignore[t
     assert any(e["event_type"] == event_type for e in events)
 
 
-@then(
-    parsers.parse(
-        'el evento contiene posicion_grilla {posicion:d} y ot_programado "{ot}"'
-    )
-)
+@then(parsers.parse('el evento contiene posicion_grilla {posicion:d} y ot_programado "{ot}"'))
 def step_payload_correcto(ctx: dict, posicion: int, ot: str) -> None:  # type: ignore[type-arg]
     stream_id = (
         f"performance-{ctx['competencia_id']}"
@@ -226,6 +228,6 @@ def step_error_esperado(ctx: dict, error_type: str) -> None:  # type: ignore[typ
     }
     assert ctx["error"] is not None, "Se esperaba un error pero no hubo ninguno"
     expected = error_map[error_type]
-    assert isinstance(ctx["error"], expected), (
-        f"Error esperado: {error_type}, obtenido: {type(ctx['error']).__name__}"
-    )
+    assert isinstance(
+        ctx["error"], expected
+    ), f"Error esperado: {error_type}, obtenido: {type(ctx['error']).__name__}"

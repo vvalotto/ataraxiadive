@@ -1,10 +1,11 @@
 """Port DisciplinaDescriptorPort — abstracción para consultar el descriptor de una disciplina."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from competencia.domain.value_objects.disciplina import Disciplina
-from competencia.domain.value_objects.disciplina_descriptor import DisciplinaDescriptor
+from shared.domain.value_objects.disciplina import Disciplina
+from shared.domain.value_objects.disciplina_descriptor import DisciplinaDescriptor
 
 
 class DisciplinaDescriptorPort(ABC):

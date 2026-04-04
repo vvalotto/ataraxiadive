@@ -1,4 +1,5 @@
 """Tests de integración — GenerarGrilla con DisciplinaDescriptorAdapter real (US-2.2.1)."""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone
@@ -25,7 +26,9 @@ from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
 
 _CREATE_TABLE = """
@@ -70,7 +73,9 @@ async def _seed_competencia(
         )
     )
     for atleta_id, valor, unidad in aps:
-        await RegistrarAPHandler(store, StubCompetenciaEstadoAdapter(), DisciplinaDescriptorAdapter()).handle(
+        await RegistrarAPHandler(
+            store, StubCompetenciaEstadoAdapter(), DisciplinaDescriptorAdapter()
+        ).handle(
             RegistrarAPCommand(
                 competencia_id=competencia_id,
                 participante_id=atleta_id,
@@ -81,10 +86,10 @@ async def _seed_competencia(
         )
 
 
-class TestGrillaSTAOrdenDescendente:
+class TestGrillaSTAOrdenAscendente:
     @pytest.mark.asyncio
-    async def test_grilla_sta_mayor_ap_primero(self, event_store: SQLiteEventStore) -> None:
-        """STA: AP mayor→menor (primero 300s, último 120s)."""
+    async def test_grilla_sta_menor_ap_primero(self, event_store: SQLiteEventStore) -> None:
+        """STA: AP menor→mayor (primero 120s, último 300s). INV-P-01 corregido en SP-ADJ-04."""
         comp_id = UUID("00000000-0000-0000-0000-000000000001")
         await _seed_competencia(
             event_store,
@@ -107,12 +112,13 @@ class TestGrillaSTAOrdenDescendente:
         )
 
         from competencia.domain.aggregates.competencia import Competencia
+
         stream_id = f"competencia-{comp_id}"
         events = await event_store.load(stream_id)
         comp = Competencia.reconstitute(comp_id, Disciplina.STA, events)
 
         atletas = [str(e.atleta_id) for e in comp.grilla]
-        assert atletas == [str(A002), str(A003), str(A001)]  # 300, 180, 120
+        assert atletas == [str(A001), str(A003), str(A002)]  # 120, 180, 300
 
 
 class TestGrillaDNFOrdenAscendente:
@@ -141,6 +147,7 @@ class TestGrillaDNFOrdenAscendente:
         )
 
         from competencia.domain.aggregates.competencia import Competencia
+
         stream_id = f"competencia-{comp_id}"
         events = await event_store.load(stream_id)
         comp = Competencia.reconstitute(comp_id, Disciplina.DNF, events)

@@ -32,7 +32,7 @@ prepara el terreno para la validación de unidades en US-2.2.2.
 
 ### Lenguaje ubicuo relevante
 
-- **Descriptor de disciplina**: conjunto de reglas que caracterizan cómo se mide y ordena una disciplina. Para STA: unidad = Segundos, orden = mayor a menor AP. Para DNF/DYN/...: unidad = Metros, orden = menor a mayor AP.
+- **Descriptor de disciplina**: conjunto de reglas que caracterizan cómo se mide y ordena una disciplina. Para STA: unidad = Segundos, orden = menor a mayor AP. Para DNF/DYN/...: unidad = Metros, orden = menor a mayor AP.
 - **Unidad esperada**: la única unidad válida para registrar un AP o un RP en una disciplina dada.
 - **Orden de grilla**: si los atletas se ordenan con AP ascendente (distancia) o descendente (tiempo).
 
@@ -46,7 +46,7 @@ prepara el terreno para la validación de unidades en US-2.2.2.
 DisciplinaDescriptor(
     disciplina: Disciplina,
     unidad_esperada: UnidadMedida,     # Segundos para STA, Metros para el resto
-    orden_ascendente: bool,            # False (mayor→menor) para STA; True (menor→mayor) para distancia
+    orden_ascendente: bool,            # True (menor→mayor) para STA y distancia
 )
 ```
 
@@ -54,7 +54,7 @@ DisciplinaDescriptor(
 (e.g., STA + Metros es un estado imposible — debe rechazarse con `DescriptorInvalido`).
 
 **Invariante del VO:**
-- `DisciplinaDescriptor` para STA → `unidad_esperada = Segundos`, `orden_ascendente = False`
+- `DisciplinaDescriptor` para STA → `unidad_esperada = Segundos`, `orden_ascendente = True`
 - `DisciplinaDescriptor` para disciplinas de distancia → `unidad_esperada = Metros`, `orden_ascendente = True`
 
 ### El Port DisciplinaDescriptorPort
@@ -92,7 +92,7 @@ El handler `GenerarGrillaHandler` lo obtiene del `DisciplinaDescriptorPort` e in
 
 ```
 Port.describe(Disciplina.STA)
-→ DisciplinaDescriptor(STA, Segundos, orden_ascendente=False)
+→ DisciplinaDescriptor(STA, Segundos, orden_ascendente=True)
 
 Port.describe(Disciplina.DNF)
 → DisciplinaDescriptor(DNF, Metros, orden_ascendente=True)
@@ -105,11 +105,11 @@ Port.describe(Disciplina.DNF)
 ```gherkin
 Feature: DisciplinaDescriptor — VO que encapsula reglas de disciplina
 
-  Scenario: Descriptor STA retorna unidad Segundos y orden descendente
+  Scenario: Descriptor STA retorna unidad Segundos y orden ascendente
     Given la disciplina es "STA"
     When se consulta el DisciplinaDescriptorPort
     Then unidad_esperada es "Segundos"
-    And orden_ascendente es False
+    And orden_ascendente es True
 
   Scenario: Descriptor DNF retorna unidad Metros y orden ascendente
     Given la disciplina es "DNF"
@@ -117,11 +117,11 @@ Feature: DisciplinaDescriptor — VO que encapsula reglas de disciplina
     Then unidad_esperada es "Metros"
     And orden_ascendente es True
 
-  Scenario: GenerarGrilla usa descriptor para ordenar STA (mayor AP primero)
+  Scenario: GenerarGrilla usa descriptor para ordenar STA (menor AP primero)
     Given una competencia STA con 3 atletas: AP 120s, 300s, 180s
     And el intervalo OT está configurado en 9 minutos
     When se genera la grilla usando el DisciplinaDescriptorPort
-    Then el orden de la grilla es: 300s → 180s → 120s (mayor AP primero)
+    Then el orden de la grilla es: 120s → 180s → 300s (menor AP primero)
 
   Scenario: GenerarGrilla usa descriptor para ordenar DNF (menor AP primero)
     Given una competencia DNF con 3 atletas: AP 80m, 40m, 60m

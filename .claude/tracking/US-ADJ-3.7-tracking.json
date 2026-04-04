@@ -1,0 +1,152 @@
+{
+  "metadata": {
+    "us_id": "US-ADJ-3.7",
+    "us_title": "Proyeccion competencias por torneo",
+    "us_points": 5,
+    "producto": "ataraxiadive",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-03T13:48:20+00:00",
+    "completed_at": "2026-04-03T13:56:40+00:00",
+    "total_elapsed_seconds": 500,
+    "effective_seconds": 500,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validacion de Contexto",
+      "started_at": "2026-04-03T13:48:20+00:00",
+      "completed_at": "2026-04-03T13:49:05+00:00",
+      "elapsed_seconds": 45,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generacion de escenarios BDD",
+      "started_at": "2026-04-03T13:49:05+00:00",
+      "completed_at": "2026-04-03T13:49:07+00:00",
+      "elapsed_seconds": 2,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de implementacion",
+      "started_at": "2026-04-03T13:49:07+00:00",
+      "completed_at": "2026-04-03T13:50:00+00:00",
+      "elapsed_seconds": 53,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementacion",
+      "started_at": "2026-04-03T13:50:00+00:00",
+      "completed_at": "2026-04-03T13:52:20+00:00",
+      "elapsed_seconds": 140,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Materializar proyeccion y refactorizar query por torneo",
+          "task_type": "implementation",
+          "estimated_minutes": 35.0,
+          "started_at": "2026-04-03T13:50:00+00:00",
+          "completed_at": "2026-04-03T13:52:20+00:00",
+          "elapsed_seconds": 140,
+          "actual_minutes": 2.3,
+          "variance_minutes": -32.7,
+          "file_created": "src/competencia/infrastructure/repositories/sqlite_competencias_por_torneo.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests unitarios",
+      "started_at": "2026-04-03T13:52:20+00:00",
+      "completed_at": "2026-04-03T13:53:20+00:00",
+      "elapsed_seconds": 60,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de integracion",
+      "started_at": "2026-04-03T13:53:20+00:00",
+      "completed_at": "2026-04-03T13:54:20+00:00",
+      "elapsed_seconds": 60,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validacion BDD",
+      "started_at": "2026-04-03T13:54:20+00:00",
+      "completed_at": "2026-04-03T13:54:22+00:00",
+      "elapsed_seconds": 2,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality gates",
+      "started_at": "2026-04-03T13:54:22+00:00",
+      "completed_at": "2026-04-03T13:55:50+00:00",
+      "elapsed_seconds": 88,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentacion",
+      "started_at": "2026-04-03T13:55:50+00:00",
+      "completed_at": "2026-04-03T13:56:25+00:00",
+      "elapsed_seconds": 35,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte final",
+      "started_at": "2026-04-03T13:56:25+00:00",
+      "completed_at": "2026-04-03T13:56:40+00:00",
+      "elapsed_seconds": 15,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 1,
+    "completed_tasks": 1,
+    "total_phases": 10,
+    "estimated_total_minutes": 35.0,
+    "actual_total_minutes": 2.3,
+    "variance_minutes": -32.7,
+    "variance_percent": -93.4
+  }
+}

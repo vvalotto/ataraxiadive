@@ -6,6 +6,7 @@ AndarivelesActivos en el endpoint GET /competencia/{id}/andariveles.
 pytest-bdd no soporta async steps nativamente. Los steps que requieren
 operaciones async usan asyncio.run() como wrapper síncrono.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -21,13 +22,22 @@ from pytest_bdd import given, parsers, scenarios, then, when
 
 from app import app
 from competencia.api.router import get_event_store
-from competencia.application.commands.asignar_tarjeta import AsignarTarjetaCommand, AsignarTarjetaHandler
-from competencia.application.commands.confirmar_grilla import ConfirmarGrillaCommand, ConfirmarGrillaHandler
+from competencia.application.commands.asignar_tarjeta import (
+    AsignarTarjetaCommand,
+    AsignarTarjetaHandler,
+)
+from competencia.application.commands.confirmar_grilla import (
+    ConfirmarGrillaCommand,
+    ConfirmarGrillaHandler,
+)
 from competencia.application.commands.configurar_intervalo_ot import (
     ConfigurarIntervaloOTCommand,
     ConfigurarIntervaloOTHandler,
 )
-from competencia.application.commands.generar_grilla import GenerarGrillaCommand, GenerarGrillaHandler
+from competencia.application.commands.generar_grilla import (
+    GenerarGrillaCommand,
+    GenerarGrillaHandler,
+)
 from competencia.application.commands.iniciar_competencia import (
     IniciarCompetenciaCommand,
     IniciarCompetenciaHandler,
@@ -47,8 +57,12 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.andariveles_activos_adapter import AndarivelesActivosAdapter
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.andariveles_activos_adapter import (
+    AndarivelesActivosAdapter,
+)
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
 
 scenarios("../US-2.3.1-ejecucion-multi-andarivel.feature")
@@ -125,77 +139,107 @@ def cleanup_overrides() -> None:  # type: ignore[return]
 
 
 def _setup_competencia_en_ejecucion(
-    store: SQLiteEventStore, cid: UUID,
-    pid_a: UUID, pid_b: UUID, pid_c: UUID,
+    store: SQLiteEventStore,
+    cid: UUID,
+    pid_a: UUID,
+    pid_b: UUID,
+    pid_c: UUID,
     andariveles: int = 2,
 ) -> None:
     """Setup completo: AP → ConfigOT → GenerarGrilla → ConfirmarGrilla → Iniciar."""
-    # APs: A=300s, B=280s, C=260s (orden descendente → grilla)
+    # APs: A=300s, B=280s, C=260s (orden ascendente → grilla)
     for pid, valor in [(pid_a, "300"), (pid_b, "280"), (pid_c, "260")]:
-        _run(RegistrarAPHandler(store, _ESTADO_STUB, _DESCRIPTOR).handle(
-            RegistrarAPCommand(
-                competencia_id=cid, participante_id=pid,
-                disciplina=Disciplina.STA,
-                valor_ap=Decimal(valor), unidad=UnidadMedida.Segundos,
+        _run(
+            RegistrarAPHandler(store, _ESTADO_STUB, _DESCRIPTOR).handle(
+                RegistrarAPCommand(
+                    competencia_id=cid,
+                    participante_id=pid,
+                    disciplina=Disciplina.STA,
+                    valor_ap=Decimal(valor),
+                    unidad=UnidadMedida.Segundos,
+                )
             )
-        ))
+        )
 
     # Configurar intervalo OT
-    _run(ConfigurarIntervaloOTHandler(store).handle(
-        ConfigurarIntervaloOTCommand(
-            competencia_id=cid, disciplina=Disciplina.STA,
-            intervalo_minutos=3, configurado_por=_JUEZ,
+    _run(
+        ConfigurarIntervaloOTHandler(store).handle(
+            ConfigurarIntervaloOTCommand(
+                competencia_id=cid,
+                disciplina=Disciplina.STA,
+                intervalo_minutos=3,
+                configurado_por=_JUEZ,
+            )
         )
-    ))
+    )
 
     # Generar grilla con N andariveles
-    _run(GenerarGrillaHandler(store, PerformancesAPAdapter(store), _DESCRIPTOR).handle(
-        GenerarGrillaCommand(
-            competencia_id=cid, disciplina=Disciplina.STA,
-            ot_inicio=_OT_BASE, andariveles=andariveles,
+    _run(
+        GenerarGrillaHandler(store, PerformancesAPAdapter(store), _DESCRIPTOR).handle(
+            GenerarGrillaCommand(
+                competencia_id=cid,
+                disciplina=Disciplina.STA,
+                ot_inicio=_OT_BASE,
+                andariveles=andariveles,
+            )
         )
-    ))
+    )
 
     # Confirmar y arrancar
-    _run(ConfirmarGrillaHandler(store).handle(
-        ConfirmarGrillaCommand(competencia_id=cid, disciplina=Disciplina.STA)
-    ))
-    _run(IniciarCompetenciaHandler(store).handle(
-        IniciarCompetenciaCommand(
-            competencia_id=cid, disciplina=Disciplina.STA, juez_id=_JUEZ
+    _run(
+        ConfirmarGrillaHandler(store).handle(
+            ConfirmarGrillaCommand(competencia_id=cid, disciplina=Disciplina.STA)
         )
-    ))
+    )
+    _run(
+        IniciarCompetenciaHandler(store).handle(
+            IniciarCompetenciaCommand(competencia_id=cid, disciplina=Disciplina.STA, juez_id=_JUEZ)
+        )
+    )
 
 
 def _llamar_atleta(
     store: SQLiteEventStore, cid: UUID, pid: UUID, andarivel: int, posicion: int
 ) -> None:
     adapter = AndarivelesActivosAdapter(store)
-    _run(LlamarAtletaHandler(store, _ESTADO_STUB, adapter).handle(
-        LlamarAtletaCommand(
-            competencia_id=cid, participante_id=pid,
-            disciplina=Disciplina.STA, ot_programado=_OT_BASE,
-            posicion_grilla=posicion, andarivel=andarivel,
+    _run(
+        LlamarAtletaHandler(store, _ESTADO_STUB, adapter).handle(
+            LlamarAtletaCommand(
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=Disciplina.STA,
+                ot_programado=_OT_BASE,
+                posicion_grilla=posicion,
+                andarivel=andarivel,
+            )
         )
-    ))
+    )
 
 
 def _completar_atleta(store: SQLiteEventStore, cid: UUID, pid: UUID) -> None:
-    _run(RegistrarResultadoHandler(store, _DESCRIPTOR).handle(
-        RegistrarResultadoCommand(
-            competencia_id=cid, participante_id=pid,
-            disciplina=Disciplina.STA,
-            valor_rp=Decimal("295"), unidad=UnidadMedida.Segundos,
-            registrado_por=_JUEZ,
+    _run(
+        RegistrarResultadoHandler(store, _DESCRIPTOR).handle(
+            RegistrarResultadoCommand(
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=Disciplina.STA,
+                valor_rp=Decimal("295"),
+                unidad=UnidadMedida.Segundos,
+                registrado_por=_JUEZ,
+            )
         )
-    ))
-    _run(AsignarTarjetaHandler(store).handle(
-        AsignarTarjetaCommand(
-            competencia_id=cid, participante_id=pid,
-            disciplina=Disciplina.STA,
-            tipo=TipoTarjeta.Blanca, asignada_por=_JUEZ,
+    )
+    _run(
+        AsignarTarjetaHandler(store).handle(
+            AsignarTarjetaCommand(
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=Disciplina.STA,
+                tipo=TipoTarjeta.Blanca,
+                asignada_por=_JUEZ,
+            )
         )
-    ))
+    )
 
 
 # ── Background ────────────────────────────────────────────────────────────────
@@ -204,14 +248,21 @@ def _completar_atleta(store: SQLiteEventStore, cid: UUID, pid: UUID) -> None:
 @given(parsers.parse("una competencia STA en estado EnEjecucion con 2 andariveles"))
 def setup_competencia_2_andariveles(ctx: dict) -> None:
     _setup_competencia_en_ejecucion(
-        ctx["store"], ctx["cid"],
-        ctx["pid_a"], ctx["pid_b"], ctx["pid_c"],
+        ctx["store"],
+        ctx["cid"],
+        ctx["pid_a"],
+        ctx["pid_b"],
+        ctx["pid_c"],
         andariveles=2,
     )
     ctx["andariveles"] = 2
 
 
-@given(parsers.parse("la grilla tiene pos 1 Atleta A andarivel 1, pos 2 Atleta B andarivel 2, pos 3 Atleta C andarivel 1"))
+@given(
+    parsers.parse(
+        "la grilla tiene pos 1 Atleta A andarivel 1, pos 2 Atleta B andarivel 2, pos 3 Atleta C andarivel 1"
+    )
+)
 def grilla_ya_configurada(ctx: dict) -> None:
     # La grilla fue generada en el step anterior; solo verificamos que existe.
     response = ctx["client"].get(
@@ -245,7 +296,9 @@ def ambos_llamados_persisten(ctx: dict) -> None:
     assert len(llamados) == 2
 
 
-@then(parsers.parse("GET andariveles muestra andarivel 1 ocupado por A y andarivel 2 ocupado por B"))
+@then(
+    parsers.parse("GET andariveles muestra andarivel 1 ocupado por A y andarivel 2 ocupado por B")
+)
 def andariveles_ambos_ocupados(ctx: dict) -> None:
     response = ctx["client"].get(
         f"/competencia/{ctx['cid']}/andariveles",
@@ -363,7 +416,11 @@ def andarivel_2_libre(ctx: dict) -> None:
 # ── Scenario 5: GenerarGrilla distribuye andariveles ─────────────────────────
 
 
-@given(parsers.parse("una competencia STA en estado Preparacion con 4 atletas y 2 andariveles configurados"))
+@given(
+    parsers.parse(
+        "una competencia STA en estado Preparacion con 4 atletas y 2 andariveles configurados"
+    )
+)
 def setup_4_atletas_2_andariveles(ctx: dict) -> None:
     """4 atletas con AP, intervalo configurado, grilla generada con 2 andariveles."""
     cid = uuid4()
@@ -374,27 +431,39 @@ def setup_4_atletas_2_andariveles(ctx: dict) -> None:
 
     valores = ["300", "280", "260", "240"]
     for pid, valor in zip(pids, valores):
-        _run(RegistrarAPHandler(store, _ESTADO_STUB, _DESCRIPTOR).handle(
-            RegistrarAPCommand(
-                competencia_id=cid, participante_id=pid,
-                disciplina=Disciplina.STA,
-                valor_ap=Decimal(valor), unidad=UnidadMedida.Segundos,
+        _run(
+            RegistrarAPHandler(store, _ESTADO_STUB, _DESCRIPTOR).handle(
+                RegistrarAPCommand(
+                    competencia_id=cid,
+                    participante_id=pid,
+                    disciplina=Disciplina.STA,
+                    valor_ap=Decimal(valor),
+                    unidad=UnidadMedida.Segundos,
+                )
             )
-        ))
-
-    _run(ConfigurarIntervaloOTHandler(store).handle(
-        ConfigurarIntervaloOTCommand(
-            competencia_id=cid, disciplina=Disciplina.STA,
-            intervalo_minutos=3, configurado_por=_JUEZ,
         )
-    ))
 
-    _run(GenerarGrillaHandler(store, PerformancesAPAdapter(store), _DESCRIPTOR).handle(
-        GenerarGrillaCommand(
-            competencia_id=cid, disciplina=Disciplina.STA,
-            ot_inicio=_OT_BASE, andariveles=2,
+    _run(
+        ConfigurarIntervaloOTHandler(store).handle(
+            ConfigurarIntervaloOTCommand(
+                competencia_id=cid,
+                disciplina=Disciplina.STA,
+                intervalo_minutos=3,
+                configurado_por=_JUEZ,
+            )
         )
-    ))
+    )
+
+    _run(
+        GenerarGrillaHandler(store, PerformancesAPAdapter(store), _DESCRIPTOR).handle(
+            GenerarGrillaCommand(
+                competencia_id=cid,
+                disciplina=Disciplina.STA,
+                ot_inicio=_OT_BASE,
+                andariveles=2,
+            )
+        )
+    )
 
 
 @when(parsers.parse("se genera la grilla"))

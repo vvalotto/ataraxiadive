@@ -1,4 +1,5 @@
 """Query y Handler para ObtenerPerformanceActual — US-1.3.1 / US-2.2.2."""
+
 from __future__ import annotations
 
 import json
@@ -61,9 +62,7 @@ class ObtenerPerformanceActualHandler:  # pylint: disable=too-few-public-methods
                 return self._to_dto(performance, stream)
         return None
 
-    def _to_dto(
-        self, performance: Performance, stream: list[dict]
-    ) -> PerformanceActualDTO:
+    def _to_dto(self, performance: Performance, stream: list[dict]) -> PerformanceActualDTO:
         ap = performance.ap
         ap_valor = str(ap.valor) if ap else ""
         ap_unidad = ap.unidad.value if ap else ""

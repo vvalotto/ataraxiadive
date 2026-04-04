@@ -159,8 +159,8 @@ tests/
     └── US-X.Y.Z.feature  ← organizados por US-IEDD
 
 docs/
-├── adr/             ← ADR-001 a ADR-012 ✅
-├── contexto/        ← Documentos fundacionales del experimento ✅
+├── adr/             ← ADR-001 a ADR-013 ✅
+├── contexto/        ← Documentos fundacionales del experimento + HITO-N-*.md ✅
 ├── design/          ← Context Map ✅ · ES Big Picture ✅ · Domain Model ✅ · Architecture ✅
 ├── dominio/         ← Descripción del dominio y RFs ✅
 ├── iedd/            ← Marco metodológico IEDD ✅
@@ -210,16 +210,17 @@ Decisión formal: `docs/adr/ADR-005-bounded-contexts-ddd-estrategico.md` ✅
 
 **6 Bounded Contexts definitivos** — emergieron del Event Storming Big Picture:
 
-| Bounded Context | Tipo | Impl. | Contenido principal |
-|----------------|------|:-----:|---------------------|
-| **Competencia** | Core Domain | ES | AP, grilla, ejecución, tarjetas — lógica no trivial del deporte |
-| **Torneo** | Supporting | CRUD | Ciclo de vida del torneo, disciplinas, `EntidadOrganizadora`, `Sede` |
-| **Registro** | Supporting | CRUD | Atleta como persona, inscripción, anuncios, cancelaciones |
-| **Resultados** | Supporting | CRUD | Rankings por disciplina/género, Overall, publicación incremental |
-| **Identidad** | Generic | CRUD | Usuarios, roles (organizador/juez/atleta), autenticación JWT |
-| **Notificaciones** | Generic | ES | Ciclo de vida de notificación, idempotencia exactly-once, Email/Push |
+| Bounded Context | Tipo | Impl. | Madurez | Contenido principal |
+|----------------|------|:-----:|:-------:|---------------------|
+| **Competencia** | Core Domain | ES | operativo | AP, grilla, ejecución, tarjetas — lógica no trivial del deporte |
+| **Torneo** | Supporting | CRUD | operativo | Ciclo de vida del torneo, disciplinas, `EntidadOrganizadora`, `Sede` |
+| **Registro** | Supporting | CRUD | operativo | Atleta como persona, inscripción, anuncios, cancelaciones |
+| **Resultados** | Supporting | CRUD | operativo | Rankings por disciplina/género, Overall, publicación incremental |
+| **Identidad** | Generic | CRUD | operativo | Usuarios, roles (organizador/juez/atleta), autenticación JWT |
+| **Notificaciones** | Generic | ES | modelado | Ciclo de vida de notificación, idempotencia exactly-once, Email/Push |
 
 > **ES** = Event Sourcing · **CRUD** = persistencia relacional estándar
+> **Madurez:** `operativo` = aggregate + API + tests completos · `modelado` = diseño DDD completo, implementación mínima
 
 **`Configuración` fue eliminado:** sus conceptos (disciplinas → Torneo; reglas de tarjetas → Competencia)
 son atributos de los BCs que los usan. No emergió como frontera natural en el ES Big Picture.
@@ -256,15 +257,23 @@ duros y el Event Sourcing principal. Todo lo demás sirve a Competencia.
 Subproyecto (SP1–SP5)              → genera Baseline (BL-NNN)
   └── Incremento (ej: 1.2)         → DoD de integración verificable
         └── US-IEDD (ej: US-1.2.1) → /implement-us → 10 fases
+
+SP-ADJ (ajuste entre SPs)          → opcional, antes de cerrar la Baseline
+  └── US-ADJ-N.M                   → refactor técnico o documental formal
 ```
 
-| Subproyecto | Nombre | Baseline |
-|-------------|--------|----------|
-| SP1 | La Performance | BL-001 |
-| SP2 | La Competencia | BL-002 |
-| SP3 | El Torneo | BL-003 |
-| SP4 | La Plataforma | BL-004 |
-| SP5 | La Puesta en Marcha | BL-005 |
+| Subproyecto | Nombre | Baseline | Tag git | Estado |
+|-------------|--------|----------|---------|--------|
+| SP1 | La Performance | BL-001 | `v0.2.0` | ✅ Cerrado 2026-03-24 |
+| SP2 | La Competencia | BL-002 | `v0.3.0` | ✅ Cerrado 2026-03-28 |
+| SP3 | El Torneo | BL-003 | `v0.4.0` | ✅ Cerrado 2026-04-04 |
+| SP4 | La Plataforma | BL-004 | `v0.5.0` | ⏳ Pendiente |
+| SP5 | La Puesta en Marcha | BL-005 | `v1.0.0` | ⏳ Pendiente |
+
+> **SP-ADJ:** sub-sprint de ajuste técnico o documental entre SPs. Se ejecuta antes de
+> cerrar la baseline cuando hay deuda acumulada que no conviene arrastrar al siguiente SP.
+> SP-ADJ-01 (post-SP2) resolvió deuda SOLID. SP-ADJ-02 (post-SP2) resuelve deuda documental
+> y arquitectónica cross-BC. Ver `docs/contexto/HITO-13-SP-ADJ-DEUDA-TECNICA-COMO-ETAPA-FORMAL.md`.
 
 **Documento de referencia:** `docs/dominio/04-estrategia_desarrollo.md`
 
@@ -299,8 +308,6 @@ main          ← baselines etiquetadas (v0.1.0, v0.2.0...)
         └── fix/descripcion-corta
 ```
 
-**Detalle completo:** `docs/plans/WORKFLOW-DESARROLLO.md`
-
 ---
 
 ## 11. Quality Gates (software_limpio)
@@ -310,35 +317,23 @@ main          ← baselines etiquetadas (v0.1.0, v0.2.0...)
 | Cada commit | CodeGuard | Automático — advierte, no bloquea |
 | Cada push (PR) | DesignReviewer | Automático — bloquea si CRITICAL |
 | Cierre de Incremento | DesignReviewer | Manual — confirmar cero CRITICAL |
+| UAT post-SP | Tests funcionales | Manual — Capa 1 + Capa 2 aprobadas |
 | Cierre de Subproyecto | ArchitectAnalyst | Manual — informa tendencias |
-
-Umbrales mínimos para SP1:
-- Pylint ≥ 8.0 en `domain/`
-- Cobertura ≥ 85% en `domain/` + `application/`
-- Cero imports de infraestructura en `domain/`
-
-**Detalle completo (comandos, flujo de bloqueo):** `docs/plans/WORKFLOW-DESARROLLO.md §8`
 
 ---
 
 ## 12. Gestión de la Configuración (CM)
 
-### Al implementar una US
-1. La US-IEDD debe estar en `docs/specs/spX/US-X.Y.Z.md` antes de empezar (donde X = número de SP)
-2. Usar `/implement-us US-X.Y.Z` con las 10 fases
-3. Commit con referencia a la US: `feat(domain): ... [US-1.2.1]`
-4. Actualizar `docs/traceability/matrix.md` al cerrar
+> **Fuente autoritativa del workflow:** `docs/plans/WORKFLOW-DESARROLLO.md`
+> Define el ciclo completo por US, por Incremento y por Subproyecto — incluyendo orden
+> de arranque, artefactos obligatorios por fase, quality gates y procedimiento de UAT.
+> **Ante cualquier duda sobre cómo proceder, ese documento manda.**
 
-### Al cerrar un Incremento
-1. Verificar DoD de integración (test end-to-end observable)
-2. Correr `designreviewer src/` — cero violations CRITICAL
-3. Merge a `develop` con PR
+Resumen operativo (ver WORKFLOW-DESARROLLO.md para el detalle completo):
 
-### Al cerrar un Subproyecto (Baseline)
-1. Correr `architectanalyst src/ --sprint-id BL-NNN --format json`
-2. Registrar métricas en `.cm/baselines/BL-NNN.md`
-3. Tag en git: `git tag v0.N.0`
-4. Retrospectiva documentada en BL-NNN.md (alimenta el libro y el paper)
+- **Por US:** branch → tracker → Fase 0 → 10 fases → PR `--base develop` → merge
+- **Por Incremento:** ajustar umbrales CBO/WMC al inicio · DesignReviewer manual al cierre · registrar en BL activa
+- **Por SP:** ArchitectAnalyst → métricas BL → UAT post-SP → merge develop→main → tag · retrospectiva
 
 ---
 
@@ -372,38 +367,78 @@ isort src/ tests/
 
 **Fase 0 — ✅ COMPLETA (2026-03-19) — tag `v0.1.0`**
 
-| Artefacto | Estado | Ubicación |
-|-----------|--------|-----------|
-| Repositorio inicializado | ✅ | — |
-| BL-000 baseline pre-código | ✅ | `.cm/baselines/BL-000-pre-codigo.md` |
-| ADR-001 a ADR-012 | ✅ | `docs/adr/` |
-| Contexto del experimento | ✅ | `docs/contexto/` (5 archivos) |
-| Documentos del dominio | ✅ | `docs/dominio/` (5 archivos) |
-| Marco metodológico IEDD | ✅ | `docs/iedd/` (4 archivos) |
-| FASE-0-PLAN.md | ✅ | `docs/plans/FASE-0-PLAN.md` |
-| DECISION-EVENT-STORMING.md | ✅ | `docs/contexto/DECISION-EVENT-STORMING.md` |
-| vision.md | ✅ | `docs/requirements/vision.md` |
-| Event Storming Big Picture | ✅ | `docs/design/event-storming-big-picture.md` |
-| Context Map | ✅ | `docs/design/context-map.md` |
-| ADR-005 BCs estratégico | ✅ | `docs/adr/ADR-005-bounded-contexts-ddd-estrategico.md` |
-| Event Storming Competencia | ✅ | `docs/design/event-storming-competencia.md` |
-| Domain Model | ✅ | `docs/design/domain-model.md` |
-| Architecture doc | ✅ | `docs/design/architecture.md` |
-| Estrategia desarrollo → BCs | ✅ | `docs/design/estrategia-desarrollo-bc.md` |
-| Traceability matrix | ✅ | `docs/traceability/matrix.md` |
-| BL-000 actualizada | ✅ | `.cm/baselines/BL-000-pre-codigo.md` |
+Todos los artefactos de diseño, dominio e infraestructura del experimento.
+Ver `.cm/baselines/BL-000-pre-codigo.md` para el inventario completo.
 
-**Herramientas (prerequisito para SP1):**
+---
 
-| Herramienta | Estado |
-|-------------|--------|
-| Claude Dev Kit (`/implement-us`) | ✅ Instalado — `.claude/skills/implement-us/`, perfil `fastapi-rest` |
-| software_limpio / quality-agents | ✅ Instalado — `quality-agents v0.3.1` vía `uv pip install` desde git |
-| CodeGuard pre-commit hook | ✅ Operativo — `codeguard src/` |
-| DesignReviewer | ✅ Operativo — `designreviewer src/` |
-| ArchitectAnalyst | ✅ Operativo — `architectanalyst src/ --sprint-id BL-NNN` |
+**SP1 — La Performance — ✅ COMPLETO (2026-03-24) — tag `v0.2.0`**
 
-**Próximo paso:** crear branch `feature/US-1.1` desde develop → implementar Inc 1.1 (fundación técnica) o redactar `docs/specs/sp1/US-1.2.1.md` y ejecutar `/implement-us US-1.2.1`.
+| Artefacto | Estado | Detalle |
+|-----------|--------|---------|
+| BC Competencia — aggregate Performance | ✅ | Event Sourcing completo, 6 comandos, 6 eventos |
+| API REST juez | ✅ | Endpoints AP, resultado, tarjeta, DNS, corrección, audit log |
+| Tests SP1 | ✅ | 207 tests (unit + integration + BDD), cobertura 98% |
+| ADR-013 exception management | ✅ | `docs/adr/ADR-013-exception-management.md` |
+| HITOs 1–9 | ✅ | `docs/contexto/HITO-N-*.md` |
+| BL-001 | ✅ | `.cm/baselines/BL-001-sp1-la-performance.md` |
+
+---
+
+**SP2 — La Competencia — ✅ COMPLETO (2026-03-28) — tag `v0.3.0`**
+
+| Artefacto | Estado | Detalle |
+|-----------|--------|---------|
+| BC Competencia — aggregate Competencia | ✅ | Grilla, andariveles, ejecución multi-andarivel |
+| BC Resultados — aggregate RankingCompetencia | ✅ | Ranking por disciplina, empates, podio |
+| API REST grilla + ranking | ✅ | Endpoints configurar, generar, ajustar, confirmar, iniciar, ranking |
+| Tests SP2 | ✅ | 481 tests totales (100% pasando) |
+| HITOs 10–13 | ✅ | `docs/contexto/HITO-N-*.md` |
+| BL-002 | ✅ | `.cm/baselines/BL-002.md` |
+
+**SP-ADJ-01 — Ajuste Técnico Post-SP2 — ✅ COMPLETO (2026-03-28)**
+
+5 US de refactoring SOLID (DRY, OCP, DIP, SRP) integradas en BL-002.
+Ver `docs/plans/sp-adj-01/PLAN-SP-ADJ-01.md`.
+
+---
+
+**SP-ADJ-02 — Ajuste Post-Revisión de Hito — ✅ COMPLETO (2026-03-28)**
+
+| Sub-sprint | Descripción | Estado |
+|------------|-------------|--------|
+| SP-ADJ-02-doc | Gaps documentales (CLAUDE.md, baselines, matrix, domain-model, HITOs) | ✅ Completo |
+| SP-ADJ-02-code | Gaps arquitectónicos cross-BC (`Disciplina` → `shared/`, DIP router, composition root) | ✅ Completo |
+
+3 US de refactoring arquitectónico cross-BC (US-ADJ-2.6, US-ADJ-2.7, US-ADJ-2.8).
+Ver `docs/plans/sp-adj-02-code/PLAN-SP-ADJ-02-code.md` y `.work/revision-consistencia.md`.
+
+---
+
+**SP3 — El Torneo — quality gates completados (2026-04-04) — pendiente merge/tag**
+
+| Artefacto | Estado | Detalle |
+|-----------|--------|---------|
+| BC Torneo | ✅ | Aggregate + API REST + disciplinas y jueces |
+| BC Registro | ✅ | Atleta + inscripción/cancelación + consultas |
+| BC Identidad | ✅ | Registro/login JWT + dependencias por rol |
+| Extensión BC Competencia | ✅ | `torneo_id` + creación de competencias asociadas |
+| Extensión BC Resultados | ✅ | `RankingOverall` + política P-09 + API GET overall |
+| Tests SP3 focalizados | ✅ | US-3.1.1 .. US-3.5.3 implementadas y validadas |
+| HITO-16 | ✅ | Secuencialidad prescriptiva del pipeline documentada |
+| SP-ADJ-03 | ✅ | 8 US de refactoring SOLID/DDD (GrillaDeSalida, TarjetaAsignacion, DIP Identidad…) |
+| SP-ADJ-04 | ✅ | 6 US de correcciones dominio real (BA 2025: acrónimos AIDA, orden STA, categorías, club, ranking) |
+| UAT SP3 | ✅ | 28/28 checks — datos reales BA 2025, 6 RPs correctos |
+| DesignReviewer SP-ADJ-04 | ✅ | 0 CRITICAL, 119 WARNING — `quality/reports/designreviewer/SP-ADJ-04-report.txt` |
+| ArchitectAnalyst BL-003 | ✅ | should_block=false · 4 CRITICAL DistanceAnalyzer (Zone of Pain — BCs CRUD, esperado) |
+| HITO-17 | ✅ | Dataset real como oráculo empírico del dominio |
+
+**ArchitectAnalyst BL-003 — hallazgos a monitorear en BL-004:**
+- `competencia` D=0.62 ↑ (tendencia degradante): si supera 0.70 en BL-004, evaluar nuevas abstracciones en Core Domain
+- `identidad`/`shared` D↓ (mejorando): esperado, BCs CRUD estables por diseño
+- `registro` D=0.56 — (estable): sin cambios previstos en SP4
+
+**Próximo subproyecto:** SP-ADJ-05 (ajuste documental/metodológico) → SP4 (La Plataforma)
 
 ---
 
@@ -471,5 +506,6 @@ Los dos no son excluyentes: un aprendizaje puede vivir en ambos si tiene valor a
 
 ---
 
-*Última actualización: 2026-03-22 — distinción HITO/BL vs memory/ formalizada*
+*Última actualización: 2026-03-29 — §12 WORKFLOW-DESARROLLO.md como fuente autoritativa del workflow; §11 UAT post-SP agregado a quality gates*
+*2026-03-28 — SP-ADJ-02-doc: §14 actualizado (SP1+SP2+ADJ), §9 patrón SP-ADJ, §5 HITOs*
 *Mantenido por: Claude Cowork (decisiones estratégicas) + Claude Code (implementación)*

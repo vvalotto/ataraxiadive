@@ -15,6 +15,7 @@ Flujo DoD SP1:
     D: AP 50m → Llamar → Resultado 55m → Tarjeta blanca → Corregir a 53m
     E: AP 90m → Llamar → Resultado 90m → Tarjeta roja (black-out, distancia 45m)
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -50,7 +51,10 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+
 _DISCIPLINA = Disciplina.STA
 _JUEZ = "juez-uat-001"
 _OT = datetime.now(timezone.utc)
@@ -90,20 +94,30 @@ async def seed() -> dict[str, str]:
     # ── Atleta A: tarjeta blanca ────────────────────────────────────────────
     await LlamarAtletaHandler(store, stub).handle(
         LlamarAtletaCommand(
-            competencia_id=cid, participante_id=pid_a, disciplina=_DISCIPLINA,
-            ot_programado=_OT, posicion_grilla=1,
+            competencia_id=cid,
+            participante_id=pid_a,
+            disciplina=_DISCIPLINA,
+            ot_programado=_OT,
+            posicion_grilla=1,
         )
     )
     await RegistrarResultadoHandler(store, DisciplinaDescriptorAdapter()).handle(
         RegistrarResultadoCommand(
-            competencia_id=cid, participante_id=pid_a, disciplina=_DISCIPLINA,
-            valor_rp=Decimal("60"), unidad=UnidadMedida.Metros, registrado_por=_JUEZ,
+            competencia_id=cid,
+            participante_id=pid_a,
+            disciplina=_DISCIPLINA,
+            valor_rp=Decimal("60"),
+            unidad=UnidadMedida.Metros,
+            registrado_por=_JUEZ,
         )
     )
     await AsignarTarjetaHandler(store).handle(
         AsignarTarjetaCommand(
-            competencia_id=cid, participante_id=pid_a, disciplina=_DISCIPLINA,
-            tipo=TipoTarjeta.Blanca, asignada_por=_JUEZ,
+            competencia_id=cid,
+            participante_id=pid_a,
+            disciplina=_DISCIPLINA,
+            tipo=TipoTarjeta.Blanca,
+            asignada_por=_JUEZ,
         )
     )
     print("✓ Atleta A: tarjeta blanca")
@@ -111,13 +125,18 @@ async def seed() -> dict[str, str]:
     # ── Atleta B: DNS ───────────────────────────────────────────────────────
     await LlamarAtletaHandler(store, stub).handle(
         LlamarAtletaCommand(
-            competencia_id=cid, participante_id=pid_b, disciplina=_DISCIPLINA,
-            ot_programado=_OT, posicion_grilla=2,
+            competencia_id=cid,
+            participante_id=pid_b,
+            disciplina=_DISCIPLINA,
+            ot_programado=_OT,
+            posicion_grilla=2,
         )
     )
     await RegistrarDNSHandler(store).handle(
         RegistrarDNSCommand(
-            competencia_id=cid, participante_id=pid_b, disciplina=_DISCIPLINA,
+            competencia_id=cid,
+            participante_id=pid_b,
+            disciplina=_DISCIPLINA,
             registrado_por=_JUEZ,
         )
     )
@@ -126,20 +145,31 @@ async def seed() -> dict[str, str]:
     # ── Atleta C: tarjeta amarilla ──────────────────────────────────────────
     await LlamarAtletaHandler(store, stub).handle(
         LlamarAtletaCommand(
-            competencia_id=cid, participante_id=pid_c, disciplina=_DISCIPLINA,
-            ot_programado=_OT, posicion_grilla=3,
+            competencia_id=cid,
+            participante_id=pid_c,
+            disciplina=_DISCIPLINA,
+            ot_programado=_OT,
+            posicion_grilla=3,
         )
     )
     await RegistrarResultadoHandler(store, DisciplinaDescriptorAdapter()).handle(
         RegistrarResultadoCommand(
-            competencia_id=cid, participante_id=pid_c, disciplina=_DISCIPLINA,
-            valor_rp=Decimal("72"), unidad=UnidadMedida.Metros, registrado_por=_JUEZ,
+            competencia_id=cid,
+            participante_id=pid_c,
+            disciplina=_DISCIPLINA,
+            valor_rp=Decimal("72"),
+            unidad=UnidadMedida.Metros,
+            registrado_por=_JUEZ,
         )
     )
     await AsignarTarjetaHandler(store).handle(
         AsignarTarjetaCommand(
-            competencia_id=cid, participante_id=pid_c, disciplina=_DISCIPLINA,
-            tipo=TipoTarjeta.Amarilla, asignada_por=_JUEZ, motivo="sin superficie",
+            competencia_id=cid,
+            participante_id=pid_c,
+            disciplina=_DISCIPLINA,
+            tipo=TipoTarjeta.Amarilla,
+            asignada_por=_JUEZ,
+            motivo="sin superficie",
         )
     )
     print("✓ Atleta C: tarjeta amarilla")
@@ -147,27 +177,41 @@ async def seed() -> dict[str, str]:
     # ── Atleta D: tarjeta blanca + corrección ──────────────────────────────
     await LlamarAtletaHandler(store, stub).handle(
         LlamarAtletaCommand(
-            competencia_id=cid, participante_id=pid_d, disciplina=_DISCIPLINA,
-            ot_programado=_OT, posicion_grilla=4,
+            competencia_id=cid,
+            participante_id=pid_d,
+            disciplina=_DISCIPLINA,
+            ot_programado=_OT,
+            posicion_grilla=4,
         )
     )
     await RegistrarResultadoHandler(store, DisciplinaDescriptorAdapter()).handle(
         RegistrarResultadoCommand(
-            competencia_id=cid, participante_id=pid_d, disciplina=_DISCIPLINA,
-            valor_rp=Decimal("55"), unidad=UnidadMedida.Metros, registrado_por=_JUEZ,
+            competencia_id=cid,
+            participante_id=pid_d,
+            disciplina=_DISCIPLINA,
+            valor_rp=Decimal("55"),
+            unidad=UnidadMedida.Metros,
+            registrado_por=_JUEZ,
         )
     )
     await AsignarTarjetaHandler(store).handle(
         AsignarTarjetaCommand(
-            competencia_id=cid, participante_id=pid_d, disciplina=_DISCIPLINA,
-            tipo=TipoTarjeta.Blanca, asignada_por=_JUEZ,
+            competencia_id=cid,
+            participante_id=pid_d,
+            disciplina=_DISCIPLINA,
+            tipo=TipoTarjeta.Blanca,
+            asignada_por=_JUEZ,
         )
     )
     await CorregirResultadoHandler(store).handle(
         CorregirResultadoCommand(
-            competencia_id=cid, participante_id=pid_d, disciplina=_DISCIPLINA,
-            valor_rp=Decimal("53"), unidad=UnidadMedida.Metros,
-            registrado_por=_JUEZ, motivo="error de lectura",
+            competencia_id=cid,
+            participante_id=pid_d,
+            disciplina=_DISCIPLINA,
+            valor_rp=Decimal("53"),
+            unidad=UnidadMedida.Metros,
+            registrado_por=_JUEZ,
+            motivo="error de lectura",
         )
     )
     print("✓ Atleta D: tarjeta blanca + corrección a 53m")
@@ -175,21 +219,32 @@ async def seed() -> dict[str, str]:
     # ── Atleta E: black-out con distancia ──────────────────────────────────
     await LlamarAtletaHandler(store, stub).handle(
         LlamarAtletaCommand(
-            competencia_id=cid, participante_id=pid_e, disciplina=_DISCIPLINA,
-            ot_programado=_OT, posicion_grilla=5,
+            competencia_id=cid,
+            participante_id=pid_e,
+            disciplina=_DISCIPLINA,
+            ot_programado=_OT,
+            posicion_grilla=5,
         )
     )
     await RegistrarResultadoHandler(store, DisciplinaDescriptorAdapter()).handle(
         RegistrarResultadoCommand(
-            competencia_id=cid, participante_id=pid_e, disciplina=_DISCIPLINA,
-            valor_rp=Decimal("90"), unidad=UnidadMedida.Metros, registrado_por=_JUEZ,
+            competencia_id=cid,
+            participante_id=pid_e,
+            disciplina=_DISCIPLINA,
+            valor_rp=Decimal("90"),
+            unidad=UnidadMedida.Metros,
+            registrado_por=_JUEZ,
         )
     )
     await AsignarTarjetaHandler(store).handle(
         AsignarTarjetaCommand(
-            competencia_id=cid, participante_id=pid_e, disciplina=_DISCIPLINA,
-            tipo=TipoTarjeta.Roja, asignada_por=_JUEZ,
-            motivo="black-out", distancia_blackout=Decimal("45"),
+            competencia_id=cid,
+            participante_id=pid_e,
+            disciplina=_DISCIPLINA,
+            tipo=TipoTarjeta.Roja,
+            asignada_por=_JUEZ,
+            motivo="black-out",
+            distancia_blackout=Decimal("45"),
         )
     )
     print("✓ Atleta E: tarjeta roja (black-out, distancia 45m)")

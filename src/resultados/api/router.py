@@ -1,4 +1,5 @@
 """Router FastAPI del BC Resultados — endpoints de consulta de ranking."""
+
 from __future__ import annotations
 
 import os
@@ -8,11 +9,15 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
-from competencia.domain.value_objects.disciplina import Disciplina
-from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
+from shared.domain.value_objects.disciplina import Disciplina
+from shared.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 from resultados.application.queries.obtener_ranking import (
     ObtenerRankingHandler,
     ObtenerRankingQuery,
+)
+from resultados.application.queries.obtener_overall import (
+    ObtenerOverallHandler,
+    ObtenerOverallQuery,
 )
 
 router = APIRouter(prefix="/resultados", tags=["resultados"])
@@ -34,9 +39,17 @@ def get_obtener_ranking_handler(
     return ObtenerRankingHandler(ranking_store)
 
 
-ObtenerRankingHandlerDep = Annotated[
-    ObtenerRankingHandler, Depends(get_obtener_ranking_handler)
-]
+ObtenerRankingHandlerDep = Annotated[ObtenerRankingHandler, Depends(get_obtener_ranking_handler)]
+
+
+def get_obtener_overall_handler(
+    ranking_store: Annotated[SQLiteEventStore, Depends(get_ranking_store)],
+) -> ObtenerOverallHandler:
+    """Dependency: handler de consulta de overall."""
+    return ObtenerOverallHandler(ranking_store)
+
+
+ObtenerOverallHandlerDep = Annotated[ObtenerOverallHandler, Depends(get_obtener_overall_handler)]
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
@@ -54,28 +67,66 @@ async def get_ranking(
     para cada atleta. Las performances DNS y tarjeta roja aparecen al final.
 
     Returns:
-        JSON con competencia_id, disciplina, total y lista de entradas del ranking.
-        Lista vacía si el ranking aún no fue calculado.
+        JSON agrupado por categoría.
     """
-    entradas = await handler.handle(
+    rankings = await handler.handle(
         ObtenerRankingQuery(competencia_id=competencia_id, disciplina=disciplina)
     )
     return JSONResponse(
         content={
-            "competencia_id": str(competencia_id),
-            "disciplina": disciplina.value,
-            "total": len(entradas),
-            "ranking": [
+            "calculado": len(rankings) > 0,
+            "rankings": [
                 {
-                    "posicion": e.posicion,
-                    "atleta_id": e.atleta_id,
-                    "rp": e.rp,
-                    "unidad": e.unidad,
-                    "tarjeta": e.tarjeta,
-                    "es_dns": e.es_dns,
-                    "en_podio": e.en_podio,
+                    "categoria": grupo.categoria,
+                    "entradas": [
+                        {
+                            "posicion": e.posicion,
+                            "atleta_id": e.atleta_id,
+                            "rp": e.rp,
+                            "unidad": e.unidad,
+                            "tarjeta": e.tarjeta,
+                            "es_dns": e.es_dns,
+                            "en_podio": e.en_podio,
+                        }
+                        for e in grupo.entradas
+                    ],
                 }
-                for e in entradas
+                for grupo in rankings
+            ],
+        },
+        status_code=200,
+    )
+
+
+@router.get("/{torneo_id}/overall", response_class=JSONResponse)
+async def get_overall(
+    torneo_id: UUID,
+    handler: ObtenerOverallHandlerDep,
+) -> JSONResponse:
+    """Retorna el ranking overall calculado del torneo.
+
+    Returns:
+        JSON agrupado por categoría.
+    """
+    rankings = await handler.handle(ObtenerOverallQuery(torneo_id=torneo_id))
+    return JSONResponse(
+        content={
+            "calculado": len(rankings) > 0,
+            "rankings": [
+                {
+                    "categoria": grupo.categoria,
+                    "entradas": [
+                        {
+                            "posicion": e.posicion,
+                            "atleta_id": e.atleta_id,
+                            "puntaje": e.puntaje,
+                            "detalle": e.detalle,
+                            "en_podio": e.en_podio,
+                        }
+                        for e in grupo.entradas
+                    ],
+                }
+                for grupo in rankings
             ],
         },
         status_code=200,

@@ -1,0 +1,50 @@
+{
+  "metadata": {
+    "us_id": "US-ADJ-4.3",
+    "us_title": "Corregir categoria JUNIOR",
+    "us_points": 2,
+    "producto": "ataraxiadive",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-03T18:19:50.010553+00:00",
+    "completed_at": "2026-04-03T18:21:55.592002+00:00",
+    "total_elapsed_seconds": 125,
+    "effective_seconds": 125,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validacion de contexto",
+      "started_at": "2026-04-03T18:20:09.673350+00:00",
+      "completed_at": "2026-04-03T18:20:18.674629+00:00",
+      "elapsed_seconds": 9,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de implementacion",
+      "started_at": "2026-04-03T18:20:18.782597+00:00",
+      "completed_at": "2026-04-03T18:21:00.528361+00:00",
+      "elapsed_seconds": 41,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 0,
+    "completed_tasks": 0,
+    "total_phases": 2,
+    "estimated_total_minutes": 0,
+    "actual_total_minutes": 0,
+    "variance_minutes": 0,
+    "variance_percent": 0.0
+  }
+}

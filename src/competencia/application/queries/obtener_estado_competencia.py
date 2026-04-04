@@ -1,4 +1,5 @@
 """Query y Handler para ObtenerEstadoCompetencia — US-2.1.4."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -16,6 +17,7 @@ class EstadoCompetenciaDTO:
     estado: str
     intervalo_minutos: int | None
     grilla_confirmada: bool
+    torneo_id: UUID | None = None
 
 
 @dataclass(frozen=True)  # pylint: disable=too-few-public-methods
@@ -51,4 +53,5 @@ class ObtenerEstadoCompetenciaHandler:
                 competencia.intervalo.minutos if competencia.intervalo is not None else None
             ),
             grilla_confirmada=competencia.grilla_confirmada,
+            torneo_id=competencia.torneo_id,
         )

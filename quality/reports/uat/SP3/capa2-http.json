@@ -1,0 +1,373 @@
+{
+  "UAT-2.1_health": 
+  {
+    "status": "ok"
+  }
+,
+  "UAT-2.2_auth_registro_status": 
+  {"http_status": 409, "esperado": "201 o 409 si ya existe"}
+,
+  "UAT-2.3_auth_login": 
+  {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5OGQ0YzlhMi02ODk2LTQ0YTktYjg4Yy04MTZkMjgyN2EzMTUiLCJlbWFpbCI6InVhdC1hZG1pbkB1YXQtc3AzLnRlc3QiLCJyb2wiOiJBRE1JTiIsImV4cCI6MTc3NTM5NDcyM30.oR0Uf3Zi8peujJ-6sQYBcgHwCXY2up0ovz9SblOQaVI",
+    "token_type": "bearer"
+  }
+,
+  "UAT-2.4_torneo_estado": 
+  {
+    "torneo_id": "95c7053a-d52c-44e9-b79f-911046efeaa5",
+    "nombre": "Apnea Indoor Buenos Aires 2025",
+    "descripcion": "Torneo oficial AIDA Indoor \u2014 Buenos Aires, Argentina",
+    "fecha_inicio": "2025-11-15",
+    "fecha_fin": "2025-11-16",
+    "sede": {
+      "nombre": "Club de Nataci\u00f3n San Andr\u00e9s",
+      "ciudad": "Buenos Aires",
+      "pais": "Argentina"
+    },
+    "entidad_organizadora": {
+      "nombre": "AIDA Argentina",
+      "tipo": "Federaci\u00f3n"
+    },
+    "estado": "INSCRIPCION_ABIERTA"
+  }
+,
+  "UAT-2.5_torneo_disciplinas": 
+  [
+    {
+      "disciplina": "STA",
+      "juez_id": null
+    }
+  ]
+,
+  "UAT-2.6_torneos_lista_count": 
+  {"total_torneos": 5}
+,
+  "UAT-2.7_torneo_ya_inscripcion_status": 
+  {"http_status": 409, "nota": "ya abierto en seed — transition error esperado"}
+,
+  "UAT-2.8_registrar_atleta_http_status": 
+  {"http_status": 201, "esperado": 201}
+,
+  "UAT-2.9_inscribir_atleta_http_status": 
+  {"http_status": 201, "esperado": 201}
+,
+  "UAT-2.10_inscriptos": 
+  [
+    {
+      "inscripcion_id": "dc8726d9-4be3-4d6d-a67f-f07e46678a8b",
+      "atleta_id": "e4f36b64-d1bf-4a33-8577-b400eea98a96",
+      "torneo_id": "95c7053a-d52c-44e9-b79f-911046efeaa5",
+      "disciplinas": [
+        "STA"
+      ],
+      "estado": "ACTIVA",
+      "fecha_inscripcion": "2026-04-04T13:12:02.530149"
+    },
+    {
+      "inscripcion_id": "45adc78c-db90-44fa-a06c-2f5a9096d4de",
+      "atleta_id": "70a48ec7-7245-4b98-b68a-a85727d0ea67",
+      "torneo_id": "95c7053a-d52c-44e9-b79f-911046efeaa5",
+      "disciplinas": [
+        "STA"
+      ],
+      "estado": "ACTIVA",
+      "fecha_inscripcion": "2026-04-04T13:12:02.537682"
+    },
+    {
+      "inscripcion_id": "3aa27baf-2c8e-4129-9e60-cbbb0c5a71be",
+      "atleta_id": "42681f50-41c5-405e-96c8-a53106d6010a",
+      "torneo_id": "95c7053a-d52c-44e9-b79f-911046efeaa5",
+      "disciplinas": [
+        "STA"
+      ],
+      "estado": "ACTIVA",
+      "fecha_inscripcion": "2026-04-04T13:12:02.545510"
+    },
+    {
+      "inscripcion_id": "7fd6a97b-66f1-44c7-8578-78ddd3213297",
+      "atleta_id": "b2606dcd-b240-45d1-a657-1de014b838a3",
+      "torneo_id": "95c7053a-d52c-44e9-b79f-911046efeaa5",
+      "disciplinas": [
+        "STA"
+      ],
+      "estado": "ACTIVA",
+      "fecha_inscripcion": "2026-04-04T13:12:02.551918"
+    },
+    {
+      "inscripcion_id": "d0b8424c-943c-468c-bdd5-64b6dde5ada7",
+      "atleta_id": "318754c9-17f5-45ee-a5a0-915f87b2a6e5",
+      "torneo_id": "95c7053a-d52c-44e9-b79f-911046efeaa5",
+      "disciplinas": [
+        "STA"
+      ],
+      "estado": "ACTIVA",
+      "fecha_inscripcion": "2026-04-04T13:12:02.558258"
+    },
+    {
+      "inscripcion_id": "7fb84722-aaed-461c-8514-19ac4ff2df28",
+      "atleta_id": "8359f5da-c8b0-44e5-bffe-869b43248a9e",
+      "torneo_id": "95c7053a-d52c-44e9-b79f-911046efeaa5",
+      "disciplinas": [
+        "STA"
+      ],
+      "estado": "ACTIVA",
+      "fecha_inscripcion": "2026-04-04T13:12:02.564719"
+    },
+    {
+      "inscripcion_id": "7eb70264-d59c-48a7-82e9-eed918b7dcda",
+      "atleta_id": "e8e68ab6-fd2c-41c8-bd31-eb70f4a84010",
+      "torneo_id": "95c7053a-d52c-44e9-b79f-911046efeaa5",
+      "disciplinas": [
+        "STA"
+      ],
+      "estado": "ACTIVA",
+      "fecha_inscripcion": "2026-04-04T13:12:04.566773"
+    }
+  ]
+,
+  "UAT-2.11_crear_competencia_http_status": 
+  {"http_status": 401, "esperado": 201}
+,
+  "UAT-2.12_grilla_sta": 
+  [
+    {
+      "performance_id": "98c03ab7-52e4-4a61-8ba8-cd1f2548d18b",
+      "atleta_id": "e4f36b64-d1bf-4a33-8577-b400eea98a96",
+      "posicion": 1,
+      "andarivel": 1,
+      "ot_programado": "2026-04-04T14:12:00+00:00"
+    },
+    {
+      "performance_id": "adc9b4e8-bfdd-441f-81a9-22ff47218c9e",
+      "atleta_id": "42681f50-41c5-405e-96c8-a53106d6010a",
+      "posicion": 2,
+      "andarivel": 1,
+      "ot_programado": "2026-04-04T14:21:00+00:00"
+    },
+    {
+      "performance_id": "069a0563-3c22-43d8-ba22-449be36bc0dd",
+      "atleta_id": "b2606dcd-b240-45d1-a657-1de014b838a3",
+      "posicion": 3,
+      "andarivel": 1,
+      "ot_programado": "2026-04-04T14:30:00+00:00"
+    },
+    {
+      "performance_id": "70cfff30-a2db-4ea5-9ed6-5f5dda2d6cb5",
+      "atleta_id": "8359f5da-c8b0-44e5-bffe-869b43248a9e",
+      "posicion": 4,
+      "andarivel": 1,
+      "ot_programado": "2026-04-04T14:39:00+00:00"
+    },
+    {
+      "performance_id": "7e4e49c9-80f3-4efe-8fb1-d8b491dbfd9d",
+      "atleta_id": "318754c9-17f5-45ee-a5a0-915f87b2a6e5",
+      "posicion": 5,
+      "andarivel": 1,
+      "ot_programado": "2026-04-04T14:48:00+00:00"
+    },
+    {
+      "performance_id": "dfa2b8b3-3477-41cc-a015-50e7f6bfc3fb",
+      "atleta_id": "70a48ec7-7245-4b98-b68a-a85727d0ea67",
+      "posicion": 6,
+      "andarivel": 1,
+      "ot_programado": "2026-04-04T14:57:00+00:00"
+    }
+  ]
+,
+  "UAT-2.13_confirmar_grilla_status": 
+  {"http_status": 204, "esperado": 204}
+,
+  "UAT-2.14_estado_post_confirmar": 
+  {
+    "estado": "Confirmada",
+    "intervalo_minutos": 9,
+    "grilla_confirmada": true,
+    "torneo_id": "95c7053a-d52c-44e9-b79f-911046efeaa5"
+  }
+,
+  "UAT-2.15_torneo_iniciar_ejecucion_status": 
+  {"http_status": 200, "esperado": 200}
+,
+  "UAT-2.16_iniciar_status": 
+  {"http_status": 204, "esperado": 204}
+
+,
+  "UAT-2.17_estado_post_ejecucion": 
+  {
+    "estado": "Finalizada",
+    "intervalo_minutos": 9,
+    "grilla_confirmada": true,
+    "torneo_id": "95c7053a-d52c-44e9-b79f-911046efeaa5"
+  }
+,
+  "UAT-2.18_progreso": 
+  {
+    "total": 6,
+    "ejecutadas": 6,
+    "dns_count": 0,
+    "completadas": 6
+  }
+,
+  "UAT-2.19_ranking_por_categoria": 
+  {
+    "calculado": true,
+    "rankings": [
+      {
+        "categoria": "MASTER_FEMENINO",
+        "entradas": [
+          {
+            "posicion": 1,
+            "atleta_id": "8359f5da-c8b0-44e5-bffe-869b43248a9e",
+            "rp": "243",
+            "unidad": "Segundos",
+            "tarjeta": "Blanca",
+            "es_dns": false,
+            "en_podio": true
+          }
+        ]
+      },
+      {
+        "categoria": "MASTER_MASCULINO",
+        "entradas": [
+          {
+            "posicion": 1,
+            "atleta_id": "b2606dcd-b240-45d1-a657-1de014b838a3",
+            "rp": "273",
+            "unidad": "Segundos",
+            "tarjeta": "Blanca",
+            "es_dns": false,
+            "en_podio": true
+          },
+          {
+            "posicion": 2,
+            "atleta_id": "318754c9-17f5-45ee-a5a0-915f87b2a6e5",
+            "rp": "244",
+            "unidad": "Segundos",
+            "tarjeta": "Blanca",
+            "es_dns": false,
+            "en_podio": true
+          }
+        ]
+      },
+      {
+        "categoria": "SENIOR_FEMENINO",
+        "entradas": [
+          {
+            "posicion": 1,
+            "atleta_id": "42681f50-41c5-405e-96c8-a53106d6010a",
+            "rp": "277",
+            "unidad": "Segundos",
+            "tarjeta": "Blanca",
+            "es_dns": false,
+            "en_podio": true
+          }
+        ]
+      },
+      {
+        "categoria": "SENIOR_MASCULINO",
+        "entradas": [
+          {
+            "posicion": 1,
+            "atleta_id": "e4f36b64-d1bf-4a33-8577-b400eea98a96",
+            "rp": "393",
+            "unidad": "Segundos",
+            "tarjeta": "Blanca",
+            "es_dns": false,
+            "en_podio": true
+          },
+          {
+            "posicion": 2,
+            "atleta_id": "70a48ec7-7245-4b98-b68a-a85727d0ea67",
+            "rp": "342",
+            "unidad": "Segundos",
+            "tarjeta": "Blanca",
+            "es_dns": false,
+            "en_podio": true
+          }
+        ]
+      }
+    ]
+  }
+,
+  "UAT-2.20_overall": 
+  {
+    "calculado": true,
+    "rankings": [
+      {
+        "categoria": "MASTER_FEMENINO",
+        "entradas": [
+          {
+            "posicion": 1,
+            "atleta_id": "8359f5da-c8b0-44e5-bffe-869b43248a9e",
+            "puntaje": 1,
+            "detalle": {
+              "STA": 1
+            },
+            "en_podio": true
+          }
+        ]
+      },
+      {
+        "categoria": "MASTER_MASCULINO",
+        "entradas": [
+          {
+            "posicion": 1,
+            "atleta_id": "b2606dcd-b240-45d1-a657-1de014b838a3",
+            "puntaje": 1,
+            "detalle": {
+              "STA": 1
+            },
+            "en_podio": true
+          },
+          {
+            "posicion": 2,
+            "atleta_id": "318754c9-17f5-45ee-a5a0-915f87b2a6e5",
+            "puntaje": 2,
+            "detalle": {
+              "STA": 2
+            },
+            "en_podio": true
+          }
+        ]
+      },
+      {
+        "categoria": "SENIOR_FEMENINO",
+        "entradas": [
+          {
+            "posicion": 1,
+            "atleta_id": "42681f50-41c5-405e-96c8-a53106d6010a",
+            "puntaje": 1,
+            "detalle": {
+              "STA": 1
+            },
+            "en_podio": true
+          }
+        ]
+      },
+      {
+        "categoria": "SENIOR_MASCULINO",
+        "entradas": [
+          {
+            "posicion": 1,
+            "atleta_id": "e4f36b64-d1bf-4a33-8577-b400eea98a96",
+            "puntaje": 1,
+            "detalle": {
+              "STA": 1
+            },
+            "en_podio": true
+          },
+          {
+            "posicion": 2,
+            "atleta_id": "70a48ec7-7245-4b98-b68a-a85727d0ea67",
+            "puntaje": 2,
+            "detalle": {
+              "STA": 2
+            },
+            "en_podio": true
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -21,7 +21,7 @@
 - ✅ **DisciplinaDescriptor** (`src/competencia/domain/value_objects/disciplina_descriptor.py`)
   - Frozen dataclass: `disciplina`, `unidad_esperada`, `orden_ascendente`
   - Factory method `para(disciplina)` — encapsula política P-01
-  - STA → Segundos + orden_ascendente=False; distancia → Metros + orden_ascendente=True
+  - STA → Segundos + orden_ascendente=True; distancia → Metros + orden_ascendente=True
 
 - ✅ **DisciplinaDescriptorPort** (`src/competencia/domain/ports/disciplina_descriptor_port.py`)
   - ABC con método `describe(disciplina: Disciplina) -> DisciplinaDescriptor`
@@ -63,7 +63,7 @@
 ### Tests Unitarios (34 tests nuevos)
 
 - ✅ `tests/unit/competencia/domain/test_disciplina_descriptor.py`
-  - Descriptor STA: unidad=Segundos, orden_ascendente=False
+  - Descriptor STA: unidad=Segundos, orden_ascendente=True
   - Descriptor por cada disciplina de distancia: unidad=Metros, orden_ascendente=True
   - Factory method cubre todas las disciplinas del enum
   - Inmutabilidad del VO
@@ -76,16 +76,16 @@
 ### Tests de Integración (2 tests nuevos)
 
 - ✅ `tests/integration/competencia/test_disciplina_descriptor_integration.py`
-  - Grilla STA ordenada mayor→menor AP con adapter real
+  - Grilla STA ordenada menor→mayor AP con adapter real
   - Grilla DNF ordenada menor→mayor AP con adapter real
 
 ### Escenarios BDD (12 escenarios)
 
 - ✅ `tests/features/US-2.2.1-disciplina-descriptor.feature`
-  - Descriptor STA retorna unidad Segundos y orden descendente
+  - Descriptor STA retorna unidad Segundos y orden ascendente
   - Descriptor DNF retorna unidad Metros y orden ascendente
   - Todas las disciplinas de distancia retornan Metros y orden ascendente (6 ejemplos)
-  - GenerarGrilla usa descriptor para ordenar STA — mayor AP primero
+  - GenerarGrilla usa descriptor para ordenar STA — menor AP primero
   - GenerarGrilla usa descriptor para ordenar DNF — menor AP primero
 
 **Todos los tests pasando:** ✅ 395 passed, 0 failed
@@ -126,7 +126,7 @@
 
 ## Criterios de Aceptación
 
-- [x] `DisciplinaDescriptor.para(STA)` → unidad=Segundos, orden_ascendente=False
+- [x] `DisciplinaDescriptor.para(STA)` → unidad=Segundos, orden_ascendente=True
 - [x] `DisciplinaDescriptor.para(DNF)` → unidad=Metros, orden_ascendente=True
 - [x] Todas las disciplinas de distancia retornan Metros + orden_ascendente=True
 - [x] `GenerarGrillaHandler` inyecta `DisciplinaDescriptorPort` y lo usa en `handle()`

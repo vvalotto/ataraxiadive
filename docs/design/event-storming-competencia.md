@@ -130,7 +130,7 @@ classDiagram
 
 | Política | Descripción |
 |----------|-------------|
-| 🟣 P-01 | Orden grilla: disciplinas de distancia (DNF, DYN, DYNB) → AP menor a mayor; tiempo (STA) → AP mayor a menor |
+| 🟣 P-01 | Orden grilla: disciplinas de distancia (DNF, DYN, DBF, SPE) → AP menor a mayor; tiempo (STA) → AP menor a mayor |
 | 🟣 P-02 | OT de cada atleta = OT_inicio + (posición × intervaloDisciplina) |
 | 🟣 P-03 | Si se modifica `IntervaloOTConfigurado` → los OTs de la grilla quedan desactualizados hasta regenerar |
 | 🟣 P-04 | `GrillaConfirmada` → grilla congelada; `GenerarGrilla` y `ConfigurarIntervaloOT` no permitidos |

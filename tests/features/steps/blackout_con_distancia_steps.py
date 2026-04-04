@@ -1,4 +1,5 @@
 """Step definitions BDD — US-1.4.1: Black-out con Distancia."""
+
 from __future__ import annotations
 
 import asyncio
@@ -29,7 +30,10 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+
 scenarios("../US-1.4.1-blackout-con-distancia.feature")
 
 _CREATE_TABLE = """
@@ -82,21 +86,29 @@ def step_performance_en_resultado_registrado():
 
         await ap_handler.handle(
             RegistrarAPCommand(
-                competencia_id=cid, participante_id=pid,
-                disciplina=Disciplina.DNF, valor_ap=Decimal("50"), unidad=UnidadMedida.Metros,
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=Disciplina.DNF,
+                valor_ap=Decimal("50"),
+                unidad=UnidadMedida.Metros,
             )
         )
         await llamar_handler.handle(
             LlamarAtletaCommand(
-                competencia_id=cid, participante_id=pid,
-                disciplina=Disciplina.DNF, ot_programado=OT, posicion_grilla=1,
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=Disciplina.DNF,
+                ot_programado=OT,
+                posicion_grilla=1,
             )
         )
         await resultado_handler.handle(
             RegistrarResultadoCommand(
-                competencia_id=cid, participante_id=pid,
+                competencia_id=cid,
+                participante_id=pid,
                 disciplina=Disciplina.DNF,
-                valor_rp=Decimal("45.5"), unidad=UnidadMedida.Metros,
+                valor_rp=Decimal("45.5"),
+                unidad=UnidadMedida.Metros,
                 registrado_por="juez-001",
             )
         )
@@ -108,7 +120,11 @@ def step_performance_en_resultado_registrado():
 # ── When ──────────────────────────────────────────────────────────────────────
 
 
-@when(parsers.parse('el juez asigna tarjeta roja con motivo "black-out" y distancia {distancia} metros'))
+@when(
+    parsers.parse(
+        'el juez asigna tarjeta roja con motivo "black-out" y distancia {distancia} metros'
+    )
+)
 def step_asignar_blackout_con_distancia(ctx_blackout, distancia: str):
     handler = AsignarTarjetaHandler(ctx_blackout["store"])
 

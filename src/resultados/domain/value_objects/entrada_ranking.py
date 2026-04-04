@@ -1,9 +1,12 @@
 """Value Object EntradaRanking — una línea del ranking de la disciplina."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import Decimal
 from uuid import UUID
+
+from registro.domain.value_objects.categoria import Categoria
 
 
 @dataclass(frozen=True)
@@ -13,6 +16,7 @@ class EntradaRanking:
     Attributes:
         posicion: Posición en el ranking (1-based). Comparten posición en empate.
         atleta_id: Identificador del participante.
+        categoria: Categoría del atleta dentro del ranking.
         rp: Marca efectiva registrada. None para DNS y tarjeta roja.
         unidad: Unidad de medida del RP ("Segundos", "Metros"). None si no hay RP.
         tarjeta: Tipo de tarjeta asignada ("Blanca", "Amarilla", "Roja"). None para DNS.
@@ -22,6 +26,7 @@ class EntradaRanking:
 
     posicion: int
     atleta_id: UUID
+    categoria: Categoria
     rp: Decimal | None
     unidad: str | None
     tarjeta: str | None

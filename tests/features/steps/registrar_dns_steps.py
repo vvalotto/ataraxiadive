@@ -3,6 +3,7 @@
 pytest-bdd no soporta async steps nativamente. Los steps que requieren
 operaciones async usan asyncio.run() como wrapper síncrono.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -29,7 +30,10 @@ from competencia.domain.value_objects.estado_performance import EstadoPerformanc
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+
 scenarios("../US-1.2.5-registrar-dns.feature")
 
 _CREATE_TABLE = """
@@ -90,9 +94,7 @@ def step_atleta_dnf_dns(ctx: dict) -> None:  # type: ignore[type-arg]
 
 
 @given(
-    parsers.parse(
-        "la performance del atleta tiene AP registrado de {valor:d} metros y fue llamada"
-    )
+    parsers.parse("la performance del atleta tiene AP registrado de {valor:d} metros y fue llamada")
 )
 def step_ap_registrado_y_llamada(ctx: dict, valor: int) -> None:  # type: ignore[type-arg]
     """Lleva la performance hasta el estado Llamada."""
@@ -154,9 +156,7 @@ def step_performance_en_anunciada(ctx: dict) -> None:  # type: ignore[type-arg]
     )
 
 
-@given(
-    parsers.parse("la performance del atleta tiene RP registrado de {rp:f} metros")
-)
+@given(parsers.parse("la performance del atleta tiene RP registrado de {rp:f} metros"))
 def step_performance_con_resultado(ctx: dict, rp: float) -> None:  # type: ignore[type-arg]
     """Avanza la performance hasta ResultadoRegistrado desde el estado Llamada del Background."""
     es = ctx["event_store"]
@@ -248,9 +248,9 @@ def step_error_esperado_dns(ctx: dict, error_type: str) -> None:  # type: ignore
     }
     assert ctx["error"] is not None, "Se esperaba un error pero no hubo ninguno"
     expected = error_map[error_type]
-    assert isinstance(ctx["error"], expected), (
-        f"Error esperado: {error_type}, obtenido: {type(ctx['error']).__name__}"
-    )
+    assert isinstance(
+        ctx["error"], expected
+    ), f"Error esperado: {error_type}, obtenido: {type(ctx['error']).__name__}"
 
 
 @then(parsers.parse('la performance permanece en estado "{estado}"'))

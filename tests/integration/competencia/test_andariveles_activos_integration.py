@@ -1,4 +1,5 @@
 """Tests de integración — AndarivelesActivosAdapter + LlamarAtletaHandler (US-2.3.1)."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -73,31 +74,50 @@ def descriptor() -> DisciplinaDescriptorAdapter:
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 
-async def _registrar_ap(store: SQLiteEventStore, stub: StubCompetenciaEstadoAdapter,
-                         descriptor: DisciplinaDescriptorAdapter,
-                         cid: object, pid: object) -> None:
-    handler = RegistrarAPHandler(event_store=store, competencia_estado=stub, disciplina_descriptor=descriptor)
-    await handler.handle(RegistrarAPCommand(
-        competencia_id=cid,
-        participante_id=pid,
-        disciplina=Disciplina.STA,
-        valor_ap=Decimal("300"),
-        unidad=UnidadMedida.Segundos,
-    ))
+async def _registrar_ap(
+    store: SQLiteEventStore,
+    stub: StubCompetenciaEstadoAdapter,
+    descriptor: DisciplinaDescriptorAdapter,
+    cid: object,
+    pid: object,
+) -> None:
+    handler = RegistrarAPHandler(
+        event_store=store, competencia_estado=stub, disciplina_descriptor=descriptor
+    )
+    await handler.handle(
+        RegistrarAPCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.STA,
+            valor_ap=Decimal("300"),
+            unidad=UnidadMedida.Segundos,
+        )
+    )
 
 
-async def _llamar(store: SQLiteEventStore, stub: StubCompetenciaEstadoAdapter,
-                   adapter: AndarivelesActivosAdapter,
-                   cid: object, pid: object, andarivel: int, ot: datetime, posicion: int) -> None:
-    handler = LlamarAtletaHandler(event_store=store, competencia_estado=stub, andariveles_activos=adapter)
-    await handler.handle(LlamarAtletaCommand(
-        competencia_id=cid,
-        participante_id=pid,
-        disciplina=Disciplina.STA,
-        ot_programado=ot,
-        posicion_grilla=posicion,
-        andarivel=andarivel,
-    ))
+async def _llamar(
+    store: SQLiteEventStore,
+    stub: StubCompetenciaEstadoAdapter,
+    adapter: AndarivelesActivosAdapter,
+    cid: object,
+    pid: object,
+    andarivel: int,
+    ot: datetime,
+    posicion: int,
+) -> None:
+    handler = LlamarAtletaHandler(
+        event_store=store, competencia_estado=stub, andariveles_activos=adapter
+    )
+    await handler.handle(
+        LlamarAtletaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.STA,
+            ot_programado=ot,
+            posicion_grilla=posicion,
+            andarivel=andarivel,
+        )
+    )
 
 
 # ── Tests ─────────────────────────────────────────────────────────────────────
@@ -173,14 +193,16 @@ async def test_andarivel_liberado_tras_resultado(
         event_store=event_store,
         disciplina_descriptor=descriptor,
     )
-    await resultado_handler.handle(RegistrarResultadoCommand(
-        competencia_id=cid,
-        participante_id=pid_a,
-        disciplina=Disciplina.STA,
-        valor_rp=Decimal("295"),
-        unidad=UnidadMedida.Segundos,
-        registrado_por="juez",
-    ))
+    await resultado_handler.handle(
+        RegistrarResultadoCommand(
+            competencia_id=cid,
+            participante_id=pid_a,
+            disciplina=Disciplina.STA,
+            valor_rp=Decimal("295"),
+            unidad=UnidadMedida.Segundos,
+            registrado_por="juez",
+        )
+    )
 
     # Ahora C puede llamarse en andarivel 1
     await _llamar(event_store, stub, adapter, cid, pid_c, andarivel=1, ot=OT_C, posicion=3)

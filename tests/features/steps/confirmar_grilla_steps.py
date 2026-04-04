@@ -1,4 +1,5 @@
 """Step definitions BDD — US-2.1.4: Confirmar Grilla + Iniciar Competencia."""
+
 from __future__ import annotations
 
 import asyncio
@@ -41,7 +42,9 @@ from competencia.domain.value_objects.estado_competencia import EstadoCompetenci
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 from competencia.infrastructure.repositories.competencia_estado_adapter import (
     CompetenciaEstadoAdapter,
 )
@@ -161,9 +164,7 @@ def given_grilla_confirmada(ctx_214: dict, comp: str) -> None:
         # Re-cargar tras seed (si aplica) para no confirmar dos veces
         events2 = await store.load(f"competencia-{comp_id}")
         if not any(e["event_type"] == "GrillaConfirmada" for e in events2):
-            await ConfirmarGrillaHandler(store).handle(
-                ConfirmarGrillaCommand(comp_id, _DISCIPLINA)
-            )
+            await ConfirmarGrillaHandler(store).handle(ConfirmarGrillaCommand(comp_id, _DISCIPLINA))
 
     asyncio.run(_run())
 
@@ -179,9 +180,7 @@ def given_competencia_iniciada(ctx_214: dict, comp: str) -> None:
             await _seed_grilla(store, comp_id)
         events2 = await store.load(f"competencia-{comp_id}")
         if not any(e["event_type"] == "GrillaConfirmada" for e in events2):
-            await ConfirmarGrillaHandler(store).handle(
-                ConfirmarGrillaCommand(comp_id, _DISCIPLINA)
-            )
+            await ConfirmarGrillaHandler(store).handle(ConfirmarGrillaCommand(comp_id, _DISCIPLINA))
         events3 = await store.load(f"competencia-{comp_id}")
         if not any(e["event_type"] == "CompetenciaIniciada" for e in events3):
             await IniciarCompetenciaHandler(store).handle(

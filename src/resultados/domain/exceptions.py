@@ -1,4 +1,5 @@
 """Excepciones de dominio del BC Resultados."""
+
 from __future__ import annotations
 
 

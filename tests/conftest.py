@@ -1,4 +1,5 @@
 """Fixtures compartidas para todos los tests del proyecto."""
+
 from __future__ import annotations
 
 import aiosqlite

@@ -1,4 +1,5 @@
 """Query y Handler para ObtenerAndarivelesActivos — US-2.3.1."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -9,7 +10,6 @@ from competencia.domain.ports.andariveles_activos_port import (
     AndarivelesActivosPort,
 )
 from competencia.domain.value_objects.disciplina import Disciplina
-
 
 # ── Query ─────────────────────────────────────────────────────────────────────
 
@@ -44,9 +44,7 @@ class ObtenerAndarivelesActivosHandler:
     def __init__(self, andariveles_activos: AndarivelesActivosPort) -> None:
         self._andariveles_activos = andariveles_activos
 
-    async def handle(
-        self, query: ObtenerAndarivelesActivosQuery
-    ) -> list[AndarivelesActivosData]:
+    async def handle(self, query: ObtenerAndarivelesActivosQuery) -> list[AndarivelesActivosData]:
         """Ejecuta la consulta de andariveles activos.
 
         Args:

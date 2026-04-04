@@ -215,7 +215,7 @@ classDiagram
 
 | Tipo | Valores / Descripción |
 |------|-----------------------|
-| `Disciplina` | STA, DNF, DYN, DYNB, SPE2X50, CNF, CWT, FIM, VWT |
+| `Disciplina` | STA, DNF, DYN, DBF, SPE, CNF, CWT, FIM, VWT |
 | `EstadoCompetencia` | Preparacion, Confirmada, EnEjecucion, Finalizada |
 | `EstadoPerformance` | AnunciadaAP, Llamada, Ejecutada, DNS |
 | `TipoTarjeta` | Blanca, Amarilla, Roja |
@@ -242,6 +242,7 @@ classDiagram
 |-------------|-------------|
 | `FormulaPuntos` | Fórmula deportiva para calcular puntos por disciplina. Configurable por torneo (AIDA / CMAS / genérica). Consumida por BC Resultados para calcular el Overall. |
 | `VentanaImpugnacion` | Lapso en minutos desde `CompetenciaFinalizada` durante el cual se permite `CorregirResultado`. Configurable por torneo. Consumida por BC Competencia como INV-P-15. |
+| `TiempoAP` | Parser y normalizador de APs de tiempo en formato `MM:SS` o `HH:MM:SS` a segundos (`Decimal`). Reutilizable en seeds, ingesta y futuros flujos de registro/anuncio. |
 
 ### Eventos principales
 
@@ -260,13 +261,13 @@ classDiagram
 
 ## 4. BC Registro — Supporting
 
-> Modelo de referencia — detalle completo en ES Nivel 2 de Registro (pendiente para SP2/SP3)
+> Modelo de referencia — detalle completo en ES Nivel 2 de Registro (pendiente para SP3)
 
 ### Aggregates
 
 | Aggregate | Tipo | Responsabilidad |
 |-----------|------|-----------------|
-| `Atleta` | Aggregate root | Datos personales, brevet, cuenta de usuario |
+| `Atleta` | Aggregate root | Datos personales, club, brevet, cuenta de usuario |
 | `Inscripcion` | Aggregate | Participación de un atleta en un torneo específico |
 
 ### Eventos principales
@@ -282,14 +283,14 @@ classDiagram
 
 ## 5. BC Resultados — Supporting
 
-> Modelo de referencia — detalle completo en ES Nivel 2 de Resultados (pendiente para SP2)
+> Modelo de referencia — detalle completo en ES Nivel 2 de Resultados (pendiente para SP3)
 
 ### Aggregates
 
 | Aggregate | Tipo | Responsabilidad |
 |-----------|------|-----------------|
 | `RankingCompetencia` | Aggregate root | Ranking por disciplina y categoría/género, derivado de `CompetenciaFinalizada` |
-| `OverallTorneo` | Aggregate | Ranking general multi-disciplina del torneo completo |
+| `OverallTorneo` | Aggregate | Ranking general multi-disciplina del torneo por categoría/género |
 
 ### Eventos principales
 

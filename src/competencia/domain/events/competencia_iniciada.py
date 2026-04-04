@@ -1,4 +1,5 @@
 """Domain Event CompetenciaIniciada — disciplina en marcha, performances habilitadas."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

@@ -5,6 +5,7 @@ con reglas de empate, podio, DNS y tarjeta roja.
 
 pytest-bdd no soporta async steps nativamente — se usa asyncio.run() como wrapper.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -20,7 +21,10 @@ from fastapi.testclient import TestClient
 from pytest_bdd import given, parsers, scenarios, then, when
 
 from app import app
-from competencia.application.commands.asignar_tarjeta import AsignarTarjetaCommand, AsignarTarjetaHandler
+from competencia.application.commands.asignar_tarjeta import (
+    AsignarTarjetaCommand,
+    AsignarTarjetaHandler,
+)
 from competencia.application.commands.llamar_atleta import LlamarAtletaCommand, LlamarAtletaHandler
 from competencia.application.commands.registrar_ap import RegistrarAPCommand, RegistrarAPHandler
 from competencia.application.commands.registrar_dns import RegistrarDNSCommand, RegistrarDNSHandler
@@ -43,6 +47,7 @@ from resultados.application.commands.calcular_ranking import (
 from resultados.application.queries.obtener_ranking import (
     ObtenerRankingHandler,
     ObtenerRankingQuery,
+    RankingCategoriaDTO,
     RankingEntradaDTO,
 )
 from resultados.api.router import get_ranking_store
@@ -100,26 +105,44 @@ async def _performance_ejecutada(
 
     await RegistrarAPHandler(
         event_store=store, competencia_estado=stub, disciplina_descriptor=descriptor
-    ).handle(RegistrarAPCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=disciplina, valor_ap=Decimal(rp_valor), unidad=unidad,
-    ))
-    await LlamarAtletaHandler(
-        event_store=store, competencia_estado=stub
-    ).handle(LlamarAtletaCommand(
-        competencia_id=cid, participante_id=pid, disciplina=disciplina,
-        posicion_grilla=1, ot_programado=ot,
-    ))
-    await RegistrarResultadoHandler(
-        event_store=store, disciplina_descriptor=descriptor
-    ).handle(RegistrarResultadoCommand(
-        competencia_id=cid, participante_id=pid, disciplina=disciplina,
-        valor_rp=Decimal(rp_valor), unidad=unidad, registrado_por="juez-001",
-    ))
-    await AsignarTarjetaHandler(event_store=store).handle(AsignarTarjetaCommand(
-        competencia_id=cid, participante_id=pid, disciplina=disciplina,
-        tipo=tarjeta, asignada_por="juez-001", motivo=motivo,
-    ))
+    ).handle(
+        RegistrarAPCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            valor_ap=Decimal(rp_valor),
+            unidad=unidad,
+        )
+    )
+    await LlamarAtletaHandler(event_store=store, competencia_estado=stub).handle(
+        LlamarAtletaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            posicion_grilla=1,
+            ot_programado=ot,
+        )
+    )
+    await RegistrarResultadoHandler(event_store=store, disciplina_descriptor=descriptor).handle(
+        RegistrarResultadoCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            valor_rp=Decimal(rp_valor),
+            unidad=unidad,
+            registrado_por="juez-001",
+        )
+    )
+    await AsignarTarjetaHandler(event_store=store).handle(
+        AsignarTarjetaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            tipo=tarjeta,
+            asignada_por="juez-001",
+            motivo=motivo,
+        )
+    )
 
 
 async def _performance_dns(
@@ -134,20 +157,32 @@ async def _performance_dns(
 
     await RegistrarAPHandler(
         event_store=store, competencia_estado=stub, disciplina_descriptor=descriptor
-    ).handle(RegistrarAPCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=disciplina, valor_ap=Decimal("200"), unidad=unidad,
-    ))
-    await LlamarAtletaHandler(
-        event_store=store, competencia_estado=stub
-    ).handle(LlamarAtletaCommand(
-        competencia_id=cid, participante_id=pid, disciplina=disciplina,
-        posicion_grilla=1, ot_programado=OT_BASE,
-    ))
-    await RegistrarDNSHandler(event_store=store).handle(RegistrarDNSCommand(
-        competencia_id=cid, participante_id=pid,
-        disciplina=disciplina, registrado_por="juez-001",
-    ))
+    ).handle(
+        RegistrarAPCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            valor_ap=Decimal("200"),
+            unidad=unidad,
+        )
+    )
+    await LlamarAtletaHandler(event_store=store, competencia_estado=stub).handle(
+        LlamarAtletaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            posicion_grilla=1,
+            ot_programado=OT_BASE,
+        )
+    )
+    await RegistrarDNSHandler(event_store=store).handle(
+        RegistrarDNSCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=disciplina,
+            registrado_por="juez-001",
+        )
+    )
 
 
 # ── Fixtures compartidas (contexto de los escenarios) ────────────────────────
@@ -196,12 +231,15 @@ def seed_performances_sta(ctx: dict) -> None:
         desc = ctx["descriptor"]
         cid = ctx["cid"]
 
-        await _performance_ejecutada(store, stub, desc, cid, ctx["pid_C"], "310",
-                                     Disciplina.STA, OT_OFFSETS[0])
-        await _performance_ejecutada(store, stub, desc, cid, ctx["pid_A"], "295",
-                                     Disciplina.STA, OT_OFFSETS[1])
-        await _performance_ejecutada(store, stub, desc, cid, ctx["pid_D"], "295",
-                                     Disciplina.STA, OT_OFFSETS[2])
+        await _performance_ejecutada(
+            store, stub, desc, cid, ctx["pid_C"], "310", Disciplina.STA, OT_OFFSETS[0]
+        )
+        await _performance_ejecutada(
+            store, stub, desc, cid, ctx["pid_A"], "295", Disciplina.STA, OT_OFFSETS[1]
+        )
+        await _performance_ejecutada(
+            store, stub, desc, cid, ctx["pid_D"], "295", Disciplina.STA, OT_OFFSETS[2]
+        )
         await _performance_dns(store, stub, desc, cid, ctx["pid_B"], Disciplina.STA)
 
     asyncio.run(_run())
@@ -219,9 +257,9 @@ def calcular_ranking(ctx: dict) -> None:
             resultados_port=acl,
             descriptor=ctx["descriptor"],
         )
-        await handler.handle(CalcularRankingCommand(
-            competencia_id=ctx["cid"], disciplina=Disciplina.STA
-        ))
+        await handler.handle(
+            CalcularRankingCommand(competencia_id=ctx["cid"], disciplina=Disciplina.STA)
+        )
 
         qh = ObtenerRankingHandler(ctx["ranking_store"])
         ctx["entries"] = await qh.handle(
@@ -248,9 +286,16 @@ def evento_persiste(ctx: dict) -> None:
 # ── Then — posiciones ─────────────────────────────────────────────────────────
 
 
+def _all_entries(ctx: dict) -> list[RankingEntradaDTO]:
+    entries = ctx["entries"]
+    if entries and isinstance(entries[0], RankingCategoriaDTO):
+        return [entry for grupo in entries for entry in grupo.entradas]
+    return entries
+
+
 def _entry_by_pid(ctx: dict, key: str) -> RankingEntradaDTO:
     pid = str(ctx[key])
-    for e in ctx["entries"]:
+    for e in _all_entries(ctx):
         if e.atleta_id == pid:
             return e
     raise AssertionError(f"No entry for {key}={pid}")
@@ -312,7 +357,7 @@ def a_y_d_posicion_2(ctx: dict) -> None:
 
 @then("no existe entrada con posición 3")
 def no_existe_posicion_3(ctx: dict) -> None:
-    pos3 = [e for e in ctx["entries"] if e.posicion == 3]
+    pos3 = [e for e in _all_entries(ctx) if e.posicion == 3]
     assert len(pos3) == 0, f"No debería existir posición 3, encontrados: {pos3}"
 
 
@@ -327,7 +372,7 @@ def b_posicion_4(ctx: dict) -> None:
 
 @then("B aparece después de todas las performances válidas")
 def b_al_final(ctx: dict) -> None:
-    entries = ctx["entries"]
+    entries = _all_entries(ctx)
     pid_b = str(ctx["pid_B"])
     validas = [e for e in entries if not e.es_dns and e.tarjeta not in (None, "Roja")]
     b_idx = next(i for i, e in enumerate(entries) if e.atleta_id == pid_b)
@@ -350,9 +395,16 @@ def agregar_atleta_e_roja(ctx: dict, rp: str) -> None:
     async def _run() -> None:
         ctx["pid_E"] = uuid4()
         await _performance_ejecutada(
-            ctx["comp_store"], ctx["stub"], ctx["descriptor"],
-            ctx["cid"], ctx["pid_E"], rp, Disciplina.STA, OT_OFFSETS[4],
-            tarjeta=TipoTarjeta.Roja, motivo="BO",
+            ctx["comp_store"],
+            ctx["stub"],
+            ctx["descriptor"],
+            ctx["cid"],
+            ctx["pid_E"],
+            rp,
+            Disciplina.STA,
+            OT_OFFSETS[4],
+            tarjeta=TipoTarjeta.Roja,
+            motivo="BO",
         )
 
     asyncio.run(_run())
@@ -360,7 +412,7 @@ def agregar_atleta_e_roja(ctx: dict, rp: str) -> None:
 
 @then("E aparece después de C, A y D")
 def e_al_final(ctx: dict) -> None:
-    entries = ctx["entries"]
+    entries = _all_entries(ctx)
     pid_e = str(ctx["pid_E"])
     e_idx = next(i for i, e in enumerate(entries) if e.atleta_id == pid_e)
     for key in ("pid_C", "pid_A", "pid_D"):
@@ -391,9 +443,9 @@ async def _run_calcular(ctx: dict) -> None:
         resultados_port=acl,
         descriptor=ctx["descriptor"],
     )
-    await handler.handle(CalcularRankingCommand(
-        competencia_id=ctx["cid"], disciplina=Disciplina.STA
-    ))
+    await handler.handle(
+        CalcularRankingCommand(competencia_id=ctx["cid"], disciplina=Disciplina.STA)
+    )
 
 
 @when(parsers.parse("se consulta GET /resultados/{id}/ranking con disciplina STA"))
@@ -414,12 +466,15 @@ def respuesta_status(ctx: dict, status: int) -> None:
 @then("la respuesta incluye posición, atleta_id, rp y tarjeta para cada entrada")
 def respuesta_incluye_campos(ctx: dict) -> None:
     data = ctx["response"].json()
-    assert "ranking" in data
-    for entry in data["ranking"]:
-        assert "posicion" in entry
-        assert "atleta_id" in entry
-        assert "rp" in entry or entry.get("rp") is None
-        assert "tarjeta" in entry or entry.get("tarjeta") is None
+    assert "rankings" in data
+    for grupo in data["rankings"]:
+        assert "categoria" in grupo
+        assert "entradas" in grupo
+        for entry in grupo["entradas"]:
+            assert "posicion" in entry
+            assert "atleta_id" in entry
+            assert "rp" in entry or entry.get("rp") is None
+            assert "tarjeta" in entry or entry.get("tarjeta") is None
 
 
 # ── Scenario: DNF ─────────────────────────────────────────────────────────────
@@ -457,10 +512,12 @@ def seed_performances_dnf(ctx: dict) -> None:
         ctx["pid_Y"] = uuid4()
         ctx["pid_Z"] = uuid4()
 
-        await _performance_ejecutada(store, stub, desc, cid, ctx["pid_X"], "85",
-                                     Disciplina.DNF, OT_OFFSETS[0])
-        await _performance_ejecutada(store, stub, desc, cid, ctx["pid_Y"], "92",
-                                     Disciplina.DNF, OT_OFFSETS[1])
+        await _performance_ejecutada(
+            store, stub, desc, cid, ctx["pid_X"], "85", Disciplina.DNF, OT_OFFSETS[0]
+        )
+        await _performance_ejecutada(
+            store, stub, desc, cid, ctx["pid_Y"], "92", Disciplina.DNF, OT_OFFSETS[1]
+        )
         await _performance_dns(store, stub, desc, cid, ctx["pid_Z"], Disciplina.DNF)
 
     asyncio.run(_run())
@@ -475,9 +532,9 @@ def calcular_ranking_dnf(ctx: dict) -> None:
             resultados_port=acl,
             descriptor=ctx["descriptor_dnf"],
         )
-        await handler.handle(CalcularRankingCommand(
-            competencia_id=ctx["cid_dnf"], disciplina=Disciplina.DNF
-        ))
+        await handler.handle(
+            CalcularRankingCommand(competencia_id=ctx["cid_dnf"], disciplina=Disciplina.DNF)
+        )
 
         qh = ObtenerRankingHandler(ctx["ranking_store_dnf"])
         ctx["entries_dnf"] = await qh.handle(
@@ -490,7 +547,7 @@ def calcular_ranking_dnf(ctx: dict) -> None:
 @then(parsers.parse("el orden DNF es posición {pos:d} para Y con {rp}m"))
 def orden_dnf_y(ctx: dict, pos: int, rp: str) -> None:
     pid_y = str(ctx["pid_Y"])
-    entry = next(e for e in ctx["entries_dnf"] if e.atleta_id == pid_y)
+    entry = next(e for e in _all_entries({"entries": ctx["entries_dnf"]}) if e.atleta_id == pid_y)
     assert entry.posicion == pos
     assert entry.rp == rp
 
@@ -498,7 +555,7 @@ def orden_dnf_y(ctx: dict, pos: int, rp: str) -> None:
 @then(parsers.parse("el orden DNF es posición {pos:d} para X con {rp}m"))
 def orden_dnf_x(ctx: dict, pos: int, rp: str) -> None:
     pid_x = str(ctx["pid_X"])
-    entry = next(e for e in ctx["entries_dnf"] if e.atleta_id == pid_x)
+    entry = next(e for e in _all_entries({"entries": ctx["entries_dnf"]}) if e.atleta_id == pid_x)
     assert entry.posicion == pos
     assert entry.rp == rp
 
@@ -506,6 +563,6 @@ def orden_dnf_x(ctx: dict, pos: int, rp: str) -> None:
 @then(parsers.parse("Z aparece en posición {pos:d} como DNS en DNF"))
 def z_dns_dnf(ctx: dict, pos: int) -> None:
     pid_z = str(ctx["pid_Z"])
-    entry = next(e for e in ctx["entries_dnf"] if e.atleta_id == pid_z)
+    entry = next(e for e in _all_entries({"entries": ctx["entries_dnf"]}) if e.atleta_id == pid_z)
     assert entry.posicion == pos
     assert entry.es_dns is True

@@ -1,4 +1,5 @@
 """Value Object EstadoCompetencia — máquina de estados del aggregate Competencia."""
+
 from __future__ import annotations
 
 from enum import StrEnum

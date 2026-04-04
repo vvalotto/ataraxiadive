@@ -1,4 +1,5 @@
 """Tests unitarios del GenerarGrillaHandler — US-2.1.2."""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone
@@ -20,7 +21,9 @@ from competencia.domain.exceptions import (
 from competencia.domain.ports.performances_ap_port import PerformancesAPData
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 
 COMPETENCIA_ID = UUID("00000000-0000-0000-0000-000000000001")
 OT_INICIO = datetime(2026, 1, 1, 10, 0, 0, tzinfo=timezone.utc)
@@ -107,9 +110,7 @@ class TestGenerarGrillaHandlerExitoso:
 
 class TestGenerarGrillaHandlerErrores:
     @pytest.mark.asyncio
-    async def test_sin_intervalo_lanza_excepcion(
-        self, mock_performances_ap: AsyncMock
-    ) -> None:
+    async def test_sin_intervalo_lanza_excepcion(self, mock_performances_ap: AsyncMock) -> None:
         store = AsyncMock()
         store.load.return_value = []  # sin IntervaloOTConfigurado
         handler = GenerarGrillaHandler(store, mock_performances_ap, _DESCRIPTOR_ADAPTER)
@@ -117,9 +118,7 @@ class TestGenerarGrillaHandlerErrores:
             await handler.handle(_command())
 
     @pytest.mark.asyncio
-    async def test_sin_performances_lanza_excepcion(
-        self, mock_event_store: AsyncMock
-    ) -> None:
+    async def test_sin_performances_lanza_excepcion(self, mock_event_store: AsyncMock) -> None:
         port = AsyncMock()
         port.get_performances_con_ap.return_value = []
         handler = GenerarGrillaHandler(mock_event_store, port, _DESCRIPTOR_ADAPTER)
@@ -127,9 +126,7 @@ class TestGenerarGrillaHandlerErrores:
             await handler.handle(_command())
 
     @pytest.mark.asyncio
-    async def test_append_no_llamado_si_error(
-        self, mock_event_store: AsyncMock
-    ) -> None:
+    async def test_append_no_llamado_si_error(self, mock_event_store: AsyncMock) -> None:
         port = AsyncMock()
         port.get_performances_con_ap.return_value = []
         handler = GenerarGrillaHandler(mock_event_store, port, _DESCRIPTOR_ADAPTER)

@@ -1,4 +1,5 @@
 """Step definitions BDD — US-2.1.2: Generar Grilla de Salida."""
+
 from __future__ import annotations
 
 import asyncio
@@ -32,7 +33,9 @@ from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import DisciplinaDescriptorAdapter
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
 from competencia.infrastructure.repositories.performances_ap_adapter import (
     PerformancesAPAdapter,
 )
@@ -96,6 +99,7 @@ def _get_store(context: dict) -> SQLiteEventStore:
 
 # ── Given ─────────────────────────────────────────────────────────────────────
 
+
 @given(parsers.parse('una competencia "{cid}" con disciplina "STA" en estado "Preparacion"'))
 def dada_competencia_sta(context: dict, cid: str) -> None:
     context["active_competencia_id"] = _C001
@@ -103,7 +107,7 @@ def dada_competencia_sta(context: dict, cid: str) -> None:
     context["active_store"] = context["store_c001"]
 
 
-@given(parsers.parse('el intervalo OT está configurado en {minutos:d} minutos'))
+@given(parsers.parse("el intervalo OT está configurado en {minutos:d} minutos"))
 def dado_intervalo(context: dict, minutos: int) -> None:
     store = _get_store(context)
     cid = context["active_competencia_id"]
@@ -223,6 +227,7 @@ def dados_aps_dnf(context: dict, datatable: object) -> None:
 
 # ── When ──────────────────────────────────────────────────────────────────────
 
+
 @when("el organizador genera la grilla")
 def cuando_genera_grilla(context: dict) -> None:
     _ejecutar_generar_grilla(context)
@@ -269,6 +274,7 @@ def _ejecutar_generar_grilla(context: dict) -> None:
 
 
 # ── Then ──────────────────────────────────────────────────────────────────────
+
 
 @then(parsers.parse("la grilla tiene {n:d} atletas"))
 def entonces_grilla_tiene_n_atletas(context: dict, n: int) -> None:
@@ -329,6 +335,7 @@ def entonces_posicion_atleta(context: dict, pos: int, atleta: str) -> None:
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
+
 
 def _get_grilla_perfs(context: dict) -> list[dict]:
     store = _get_store(context)

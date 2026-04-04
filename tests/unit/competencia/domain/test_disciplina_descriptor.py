@@ -1,4 +1,5 @@
 """Tests unitarios de DisciplinaDescriptor VO — US-2.2.1."""
+
 from __future__ import annotations
 
 import pytest
@@ -13,23 +14,26 @@ class TestDescriptorSTA:
         d = DisciplinaDescriptor.para(Disciplina.STA)
         assert d.unidad_esperada == UnidadMedida.Segundos
 
-    def test_orden_descendente(self) -> None:
+    def test_orden_ascendente(self) -> None:
         d = DisciplinaDescriptor.para(Disciplina.STA)
-        assert d.orden_ascendente is False
+        assert d.orden_ascendente is True
 
     def test_disciplina_correcta(self) -> None:
         d = DisciplinaDescriptor.para(Disciplina.STA)
         assert d.disciplina == Disciplina.STA
 
 
-@pytest.mark.parametrize("disciplina", [
-    Disciplina.DNF,
-    Disciplina.DYN,
-    Disciplina.DYNB,
-    Disciplina.CNF,
-    Disciplina.CWT,
-    Disciplina.FIM,
-])
+@pytest.mark.parametrize(
+    "disciplina",
+    [
+        Disciplina.DNF,
+        Disciplina.DYN,
+        Disciplina.DBF,
+        Disciplina.CNF,
+        Disciplina.CWT,
+        Disciplina.FIM,
+    ],
+)
 class TestDescriptorDistancia:
     def test_unidad_es_metros(self, disciplina: Disciplina) -> None:
         d = DisciplinaDescriptor.para(disciplina)

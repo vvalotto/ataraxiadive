@@ -1,4 +1,5 @@
 """Tests unitarios del aggregate RankingCompetencia — US-2.4.2."""
+
 from __future__ import annotations
 
 from decimal import Decimal
@@ -6,11 +7,11 @@ from uuid import UUID, uuid4
 
 import pytest
 
-from competencia.domain.value_objects.disciplina import Disciplina
+from registro.domain.value_objects.categoria import Categoria
+from shared.domain.value_objects.disciplina import Disciplina
 from resultados.domain.aggregates.ranking_competencia import RankingCompetencia
 from resultados.domain.exceptions import ResultadosIncompletos
 from resultados.domain.ports.resultados_competencia_port import ResultadoFinal
-
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -21,6 +22,7 @@ def _resultado(
     tarjeta: str | None = "Blanca",
     es_dns: bool = False,
     atleta_id: UUID | None = None,
+    categoria: Categoria = Categoria.SENIOR_MASCULINO,
 ) -> ResultadoFinal:
     return ResultadoFinal(
         atleta_id=atleta_id or uuid4(),
@@ -28,16 +30,21 @@ def _resultado(
         unidad=unidad,
         tarjeta=tarjeta,
         es_dns=es_dns,
+        categoria=categoria,
     )
 
 
-def _dns(atleta_id: UUID | None = None) -> ResultadoFinal:
+def _dns(
+    atleta_id: UUID | None = None,
+    categoria: Categoria = Categoria.SENIOR_MASCULINO,
+) -> ResultadoFinal:
     return ResultadoFinal(
         atleta_id=atleta_id or uuid4(),
         rp=None,
         unidad=None,
         tarjeta=None,
         es_dns=True,
+        categoria=categoria,
     )
 
 
@@ -268,6 +275,29 @@ def test_calcular_solo_dns() -> None:
     assert all(e.es_dns for e in entries)
 
 
+def test_calcular_segmenta_por_categoria_y_reinicia_posiciones() -> None:
+    atleta_sf_1 = uuid4()
+    atleta_sf_2 = uuid4()
+    atleta_mm_1 = uuid4()
+
+    resultados = [
+        _resultado("277", atleta_id=atleta_sf_1, categoria=Categoria.SENIOR_FEMENINO),
+        _resultado("225", atleta_id=atleta_sf_2, categoria=Categoria.SENIOR_FEMENINO),
+        _resultado("196", atleta_id=atleta_mm_1, categoria=Categoria.MASTER_MASCULINO),
+    ]
+
+    ranking = _make_ranking()
+    ranking.calcular(resultados, None)
+
+    senior_f = [e for e in ranking.entries if e.categoria == Categoria.SENIOR_FEMENINO]
+    master_m = [e for e in ranking.entries if e.categoria == Categoria.MASTER_MASCULINO]
+
+    assert [e.posicion for e in senior_f] == [1, 2]
+    assert [e.atleta_id for e in senior_f] == [atleta_sf_1, atleta_sf_2]
+    assert [e.posicion for e in master_m] == [1]
+    assert master_m[0].atleta_id == atleta_mm_1
+
+
 # ── reconstitución ────────────────────────────────────────────────────────────
 
 
@@ -288,9 +318,7 @@ def test_reconstitute_desde_evento_restaura_entries() -> None:
     events = ranking.pull_events()
 
     # Serializar como haría el event store
-    raw_events = [
-        {"event_type": e.event_type, "payload": e.to_payload()} for e in events
-    ]
+    raw_events = [{"event_type": e.event_type, "payload": e.to_payload()} for e in events]
 
     # Reconstituir
     ranking2 = RankingCompetencia.reconstitute(

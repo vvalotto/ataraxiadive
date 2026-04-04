@@ -1,4 +1,5 @@
 """Puerto CompetenciaEstadoPort — consulta de estado del aggregate Competencia."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -19,9 +20,7 @@ class CompetenciaEstadoPort(ABC):
     """
 
     @abstractmethod
-    async def is_plazo_vencido(
-        self, competencia_id: UUID, disciplina: Disciplina
-    ) -> bool:
+    async def is_plazo_vencido(self, competencia_id: UUID, disciplina: Disciplina) -> bool:
         """Verifica si el plazo de registro de AP venció (INV-P-03).
 
         Args:
@@ -33,9 +32,7 @@ class CompetenciaEstadoPort(ABC):
         """
 
     @abstractmethod
-    async def is_grilla_confirmada(
-        self, competencia_id: UUID, disciplina: Disciplina
-    ) -> bool:
+    async def is_grilla_confirmada(self, competencia_id: UUID, disciplina: Disciplina) -> bool:
         """Verifica si la grilla fue confirmada (INV-P-04).
 
         Args:
