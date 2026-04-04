@@ -10,11 +10,11 @@ Repositorio del experimento IEDD + Software Limpio aplicado a un producto real.
 |-------------|--------|----------|
 | SP1 — La Performance | ✅ Cerrado | BL-001 |
 | SP2 — La Competencia | ✅ Cerrado | BL-002 |
-| SP3 — El Torneo | 🔄 Implementación funcional completa, cierre formal pendiente | BL-003 |
+| SP3 — El Torneo | ✅ Cerrado | BL-003 |
 | SP4 — La Plataforma | 🔲 Pendiente | BL-004 |
 | SP5 — La Puesta en Marcha | 🔲 Pendiente | BL-005 |
 
-SP3 ya dejó implementados `Torneo`, `Registro`, `Identidad`, auth por rol y el flujo de overall por torneo (`US-3.5.1` a `US-3.5.3`).
+SP3 implementó `Torneo`, `Registro`, `Identidad`, auth por rol y el flujo de overall por torneo (`US-3.5.1` a `US-3.5.3`). Cerrado con tag `v0.4.0`.
 
 ## Stack
 

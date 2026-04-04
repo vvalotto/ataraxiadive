@@ -4,6 +4,11 @@ Plataforma de Gestión de Torneos de Apnea
 
 Estrategia de Desarrollo --- Subproyectos e Incrementos
 
+> **Estado documental:** histórico — planificación inicial de Febrero 2026.
+> Las DoDs de SP1/SP2 mencionan PostgreSQL y docker-compose, que fueron reemplazados
+> por SQLite por BC (ADR-007) y desarrollo sin Docker (ADR-010) antes de iniciar la implementación.
+> La estructura de subproyectos e incrementos sigue vigente. Ver `CLAUDE.md §9` para el estado actual.
+
   **Proyecto:**            Ataraxiadive
   ------------------------ ------------------------------------------------------------------
   **Versión:**             2.0

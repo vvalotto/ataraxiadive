@@ -6,7 +6,7 @@
 | **Capa IEDD** | Capa 2 — Modelo DDD (diseño estratégico) |
 | **Fecha** | 2026-03-18 |
 | **Fuente** | Event Storming Big Picture (`docs/design/event-storming-big-picture.md`) |
-| **Estado** | ✅ v1.1 — Notificaciones promovido a BC Generic con Event Sourcing |
+| **Estado** | ✅ v1.2 — Columna Madurez agregada post-BL-003 |
 
 ---
 
@@ -16,14 +16,16 @@ El ES Big Picture identificó 4 BCs de dominio + 1 genérico. El análisis del C
 incorporó `Notificaciones` como BC Generic adicional con Event Sourcing.
 Resultado final: **4 BCs de dominio + 2 genéricos**.
 
-| BC | Tipo DDD | Event Sourcing | Descripción |
-|----|----------|:--------------:|-------------|
-| **Torneo** | Supporting | — | Ciclo de vida del torneo: creación, disciplinas, organización, sede, estados (Abierto → Cerrado/Cancelado). Incluye catálogos de `EntidadOrganizadora` y `Sede`. |
-| **Registro** | Supporting | — | Atleta como persona (datos personales, brevet). Inscripción al torneo: habilitación, anuncios de participación, cancelaciones. |
-| **Competencia** | **Core Domain** | ✅ | Announced Performance, grilla de salida, ejecución de performances, asignación de tarjetas. Modela el corazón del deporte. |
-| **Resultados** | Supporting | — | Cálculo de rankings por disciplina y género, Overall multi-disciplina, publicación incremental. |
-| **Identidad** | Generic | — | Usuarios del sistema, roles (organizador, juez, atleta), autenticación/autorización. Cross-cutting. |
-| **Notificaciones** | Generic | ✅ | Suscribe a eventos de todos los BCs. Gestiona el ciclo de vida de cada notificación (solicitada → enviada → fallida). Idempotencia por Event Sourcing. |
+| BC | Tipo DDD | Event Sourcing | Madurez | Descripción |
+|----|----------|:--------------:|:-------:|-------------|
+| **Torneo** | Supporting | — | operativo | Ciclo de vida del torneo: creación, disciplinas, organización, sede, estados (Abierto → Cerrado/Cancelado). Incluye catálogos de `EntidadOrganizadora` y `Sede`. |
+| **Registro** | Supporting | — | operativo | Atleta como persona (datos personales, brevet). Inscripción al torneo: habilitación, anuncios de participación, cancelaciones. |
+| **Competencia** | **Core Domain** | ✅ | operativo | Announced Performance, grilla de salida, ejecución de performances, asignación de tarjetas. Modela el corazón del deporte. |
+| **Resultados** | Supporting | — | operativo | Cálculo de rankings por disciplina y género, Overall multi-disciplina, publicación incremental. |
+| **Identidad** | Generic | — | operativo | Usuarios del sistema, roles (organizador, juez, atleta), autenticación/autorización. Cross-cutting. |
+| **Notificaciones** | Generic | ✅ | modelado | Suscribe a eventos de todos los BCs. Gestiona el ciclo de vida de cada notificación (solicitada → enviada → fallida). Idempotencia por Event Sourcing. |
+
+> **Madurez:** `operativo` = aggregate + API + tests completos · `modelado` = diseño DDD completo, implementación mínima (estado post-BL-003)
 
 > **Nota — Configuración:** no emergió como BC propio en el ES. Los conceptos de
 > disciplinas y reglas de tarjetas son datos de configuración que residen en los BCs
@@ -359,5 +361,6 @@ Este Context Map es insumo directo para:
 
 *Documento creado: 2026-03-18 — Semana 0, Fase 0*
 *v1.1: Notificaciones promovido a BC Generic con Event Sourcing*
+*v1.2: Columna Madurez agregada — estado post-BL-003 (SP-ADJ-5.3)*
 *Fuente: Event Storming Big Picture + análisis Context Map con Victor Valotto*
 *Mantenido por: Claude Cowork + Victor Valotto*
