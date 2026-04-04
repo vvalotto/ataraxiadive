@@ -92,6 +92,7 @@ contraste, máximo 6 toques por performance (AC-US-02, AC-US-03).
 | US-4.2.1 | Pantalla de selección de competencia — juez ve sus disciplinas asignadas |
 | US-4.2.2 | Flujo de performance — los 6 pasos conectados al backend (AP, llamar, confirmar, resultado, tarjeta) |
 | US-4.2.3 | Casos alternativos — DNS y black-out desde la UI |
+| US-4.2.4 | Tarjeta amarilla como estado de revisión — flujo `Amarilla → Blanca\|Roja` + invariante cierre |
 
 ---
 
@@ -168,6 +169,25 @@ Vite + React + TypeScript
 ```
 
 La elección final de librería UI y estrategia de estado se decide en INC-4.0.
+
+### Tarjeta amarilla — flujo de revisión (nuevo en SP4)
+
+La tarjeta amarilla es un **estado transitorio**, no un resultado final:
+
+```
+AsignarTarjeta(Amarilla)  →  Performance en revisión
+  ├── ResolverRevision(Blanca)  →  Performance válida
+  └── ResolverRevision(Roja)   →  Performance descalificada
+```
+
+**INV-nuevo:** `CerrarCompetencia` falla si existe alguna `Performance` con tarjeta
+`Amarilla` sin resolver. El sistema debe forzar la resolución antes de permitir el cierre.
+
+Impacto en el dominio existente:
+- `Performance` necesita distinguir `tarjeta_final` (Blanca/Roja) de `tarjeta_revision` (Amarilla)
+- Nuevo comando `ResolverRevision(performance_id, resolucion: Blanca|Roja, motivo)`
+- Nuevo evento `RevisionResuelta`
+- `CerrarCompetencia` agrega precondición: `all(p.tarjeta != Amarilla for p in performances)`
 
 ### BC Notificaciones — event store
 
