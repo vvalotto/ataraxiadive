@@ -1,0 +1,31 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0 -- /Users/victor/PycharmProjects/ataraxiadive/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /Users/victor/PycharmProjects/ataraxiadive
+configfile: pyproject.toml
+plugins: anyio-4.12.1, asyncio-1.3.0, bdd-8.1.0, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 14 items
+
+tests/integration/e2e/test_flujo_torneo_competencia.py::test_flujo_completo_inscripcion_ap_grilla PASSED [  7%]
+tests/integration/e2e/test_flujo_torneo_competencia.py::test_atleta_sin_ap_no_aparece_en_grilla PASSED [ 14%]
+tests/integration/e2e/test_flujo_torneo_competencia.py::test_multiples_atletas_ordenados_por_ap_ascendente PASSED [ 21%]
+tests/features/steps/test_US_3_3_2_steps.py::test_flujo_completo PASSED  [ 28%]
+tests/features/steps/test_US_3_3_2_steps.py::test_atleta_sin_ap PASSED   [ 35%]
+tests/features/steps/test_US_3_3_2_steps.py::test_orden_ap PASSED        [ 42%]
+tests/integration/resultados/test_calcular_overall_integration.py::test_calcular_overall_persiste_y_reconstituye PASSED [ 50%]
+tests/integration/resultados/test_calcular_ranking_integration.py::test_calcular_ranking_persiste_y_query_devuelve_orden_correcto PASSED [ 57%]
+tests/integration/resultados/test_calcular_ranking_integration.py::test_calcular_ranking_dns_va_al_final PASSED [ 64%]
+tests/integration/resultados/test_calcular_ranking_integration.py::test_calcular_ranking_tarjeta_roja_va_al_final PASSED [ 71%]
+tests/integration/resultados/test_calcular_ranking_integration.py::test_calcular_ranking_empate_posicion_compartida PASSED [ 78%]
+tests/integration/resultados/test_calcular_ranking_integration.py::test_obtener_ranking_sin_calcular_devuelve_lista_vacia PASSED [ 85%]
+tests/integration/resultados/test_calcular_ranking_integration.py::test_calcular_ranking_disciplina_dnf PASSED [ 92%]
+tests/integration/resultados/test_calcular_ranking_integration.py::test_calcular_ranking_agrupa_por_categoria_con_acl_registro PASSED [100%]
+
+=============================== warnings summary ===============================
+tests/integration/e2e/test_flujo_torneo_competencia.py: 6 warnings
+tests/features/steps/test_US_3_3_2_steps.py: 6 warnings
+  <string>:8: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 14 passed, 12 warnings in 0.99s ========================
