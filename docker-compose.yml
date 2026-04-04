@@ -1,3 +1,8 @@
+# ESTADO: histórico — propuesta pre-ADR de Febrero 2026.
+# El stack actual usa SQLite por BC (ADR-007) y no requiere Docker en desarrollo (ADR-010).
+# Ver: CLAUDE.md §13 para el comando de desarrollo actual (uv run fastapi dev src/app.py).
+# Conservar como referencia de despliegue productivo futuro (a actualizar en SP5).
+
 services:
   db:
     image: postgres:16-alpine
