@@ -1,5 +1,11 @@
 # Plan del Experimento: AtaraxiaDive como Laboratorio Vivo
 
+> **Estado documental:** histórico — fundacional al inicio del proyecto (2026-03-14).
+> Algunas decisiones aquí planteadas como hipótesis ya fueron cerradas en el código:
+> stack = FastAPI + SQLite por BC (ADR-007, ADR-010), sin Docker (ADR-010),
+> arquitectura hexagonal BC-first (ADR-006). Leer como contexto del punto de partida,
+> no como estado actual. Ver `CLAUDE.md` para el estado operativo vigente.
+
 **Fecha:** 2026-03-14
 **Versión:** 1.1 — Corrección: jerarquía Incremento → US → /implement-us
 **Propósito:** Desarrollar AtaraxiaDive con el entorno completo (CM + Dev Kit + Software Limpio + IEDD), aprender sistemáticamente, y volcar ese aprendizaje en producción intelectual.

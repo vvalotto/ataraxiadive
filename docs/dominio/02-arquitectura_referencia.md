@@ -4,6 +4,12 @@ Plataforma de Gestión de Torneos de Apnea
 
 Arquitectura de Referencia - Propuesta Inicial
 
+> **Estado documental:** histórico — propuesta inicial de Febrero 2026.
+> Las decisiones de BD, infraestructura y stack descritas aquí fueron reemplazadas
+> por los ADRs vigentes: SQLite por BC (ADR-007), sin Docker en desarrollo (ADR-010),
+> hexagonal BC-first (ADR-006). Conservar como registro del punto de partida.
+> Ver `CLAUDE.md §4` y `docs/adr/` para las decisiones actuales.
+
   ---------------- -------------------------------------------------------------
   **Proyecto:**    Ataraxiadive
   **Versión:**     1.0 - Propuesta inicial

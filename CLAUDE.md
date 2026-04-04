@@ -210,16 +210,17 @@ Decisión formal: `docs/adr/ADR-005-bounded-contexts-ddd-estrategico.md` ✅
 
 **6 Bounded Contexts definitivos** — emergieron del Event Storming Big Picture:
 
-| Bounded Context | Tipo | Impl. | Contenido principal |
-|----------------|------|:-----:|---------------------|
-| **Competencia** | Core Domain | ES | AP, grilla, ejecución, tarjetas — lógica no trivial del deporte |
-| **Torneo** | Supporting | CRUD | Ciclo de vida del torneo, disciplinas, `EntidadOrganizadora`, `Sede` |
-| **Registro** | Supporting | CRUD | Atleta como persona, inscripción, anuncios, cancelaciones |
-| **Resultados** | Supporting | CRUD | Rankings por disciplina/género, Overall, publicación incremental |
-| **Identidad** | Generic | CRUD | Usuarios, roles (organizador/juez/atleta), autenticación JWT |
-| **Notificaciones** | Generic | ES | Ciclo de vida de notificación, idempotencia exactly-once, Email/Push |
+| Bounded Context | Tipo | Impl. | Madurez | Contenido principal |
+|----------------|------|:-----:|:-------:|---------------------|
+| **Competencia** | Core Domain | ES | operativo | AP, grilla, ejecución, tarjetas — lógica no trivial del deporte |
+| **Torneo** | Supporting | CRUD | operativo | Ciclo de vida del torneo, disciplinas, `EntidadOrganizadora`, `Sede` |
+| **Registro** | Supporting | CRUD | operativo | Atleta como persona, inscripción, anuncios, cancelaciones |
+| **Resultados** | Supporting | CRUD | operativo | Rankings por disciplina/género, Overall, publicación incremental |
+| **Identidad** | Generic | CRUD | operativo | Usuarios, roles (organizador/juez/atleta), autenticación JWT |
+| **Notificaciones** | Generic | ES | modelado | Ciclo de vida de notificación, idempotencia exactly-once, Email/Push |
 
 > **ES** = Event Sourcing · **CRUD** = persistencia relacional estándar
+> **Madurez:** `operativo` = aggregate + API + tests completos · `modelado` = diseño DDD completo, implementación mínima
 
 **`Configuración` fue eliminado:** sus conceptos (disciplinas → Torneo; reglas de tarjetas → Competencia)
 son atributos de los BCs que los usan. No emergió como frontera natural en el ES Big Picture.
@@ -265,7 +266,7 @@ SP-ADJ (ajuste entre SPs)          → opcional, antes de cerrar la Baseline
 |-------------|--------|----------|---------|--------|
 | SP1 | La Performance | BL-001 | `v0.2.0` | ✅ Cerrado 2026-03-24 |
 | SP2 | La Competencia | BL-002 | `v0.3.0` | ✅ Cerrado 2026-03-28 |
-| SP3 | El Torneo | BL-003 | `v0.4.0` | 🔄 Implementación funcional completa — pendiente cierre formal |
+| SP3 | El Torneo | BL-003 | `v0.4.0` | 🔄 Quality gates aprobados — pendiente merge/tag |
 | SP4 | La Plataforma | BL-004 | `v0.5.0` | ⏳ Pendiente |
 | SP5 | La Puesta en Marcha | BL-005 | `v1.0.0` | ⏳ Pendiente |
 
@@ -414,7 +415,7 @@ Ver `docs/plans/sp-adj-02-code/PLAN-SP-ADJ-02-code.md` y `.work/revision-consist
 
 ---
 
-**SP3 — El Torneo — implementación funcional completa (2026-04-02)**
+**SP3 — El Torneo — quality gates completados (2026-04-04) — pendiente merge/tag**
 
 | Artefacto | Estado | Detalle |
 |-----------|--------|---------|
@@ -425,13 +426,19 @@ Ver `docs/plans/sp-adj-02-code/PLAN-SP-ADJ-02-code.md` y `.work/revision-consist
 | Extensión BC Resultados | ✅ | `RankingOverall` + política P-09 + API GET overall |
 | Tests SP3 focalizados | ✅ | US-3.1.1 .. US-3.5.3 implementadas y validadas |
 | HITO-16 | ✅ | Secuencialidad prescriptiva del pipeline documentada |
+| SP-ADJ-03 | ✅ | 8 US de refactoring SOLID/DDD (GrillaDeSalida, TarjetaAsignacion, DIP Identidad…) |
+| SP-ADJ-04 | ✅ | 6 US de correcciones dominio real (BA 2025: acrónimos AIDA, orden STA, categorías, club, ranking) |
+| UAT SP3 | ✅ | 28/28 checks — datos reales BA 2025, 6 RPs correctos |
+| DesignReviewer SP-ADJ-04 | ✅ | 0 CRITICAL, 119 WARNING — `quality/reports/designreviewer/SP-ADJ-04-report.txt` |
+| ArchitectAnalyst BL-003 | ✅ | should_block=false · 4 CRITICAL DistanceAnalyzer (Zone of Pain — BCs CRUD, esperado) |
+| HITO-17 | ✅ | Dataset real como oráculo empírico del dominio |
 
-**Próximo paso:** ejecutar cierre formal de `INC-3.5` y `SP3` según `docs/plans/WORKFLOW-DESARROLLO.md`:
-- DesignReviewer manual consolidado de `INC-3.5`
-- registro en baseline BL-003
-- ArchitectAnalyst manual
-- UAT post-SP3
-- merge/tag de baseline si el cierre queda aprobado
+**ArchitectAnalyst BL-003 — hallazgos a monitorear en BL-004:**
+- `competencia` D=0.62 ↑ (tendencia degradante): si supera 0.70 en BL-004, evaluar nuevas abstracciones en Core Domain
+- `identidad`/`shared` D↓ (mejorando): esperado, BCs CRUD estables por diseño
+- `registro` D=0.56 — (estable): sin cambios previstos en SP4
+
+**Próximo paso:** merge develop→main + tag `v0.4.0` (BL-003)
 
 ---
 
