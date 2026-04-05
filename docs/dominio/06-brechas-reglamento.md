@@ -19,152 +19,94 @@ Las brechas están agrupadas por tema y ordenadas por impacto funcional.
 
 ---
 
-## 1. Protocolo de Superficie — validación post-performance (§1.2.2)
+## 1. Motivo de la tarjeta roja — CRUD de causas (§1.2.2, §1.1.10, §1.1.14)
 
 ### Qué dice el reglamento
 
-Cuando el atleta termina su performance y sale a la superficie, no basta con que haya
-completado la distancia o el tiempo. El resultado solo es válido si el atleta completa el
-**Protocolo de Superficie** dentro de los 20 segundos posteriores a la emersión. Este
-protocolo consiste en:
-
-1. Mantener la cabeza fuera del agua (vías respiratorias y nivel de las orejas sobre la
-   superficie, de forma continua).
-2. Realizar el **signo OK** convencional de buceo (dos dedos formando un círculo) en
-   dirección al Juez Principal, ubicado en el borde de la pileta.
-3. No recibir ningún tipo de ayuda externa, no apoyarse en la línea del carril ni en ninguna
-   parte del cuerpo de otra persona.
-
-Si el atleta no puede completar este protocolo en 20 segundos, o necesita ayuda durante
-ese período, es descalificado — incluso si la performance en sí fue perfecta. El juez
-tiene hasta 3 minutos para deliberar y mostrar la tarjeta correspondiente.
+Una tarjeta roja puede emitirse por múltiples causas distintas: Black-out, no seguir el
+protocolo de superficie (signo OK, mantener cabeza fuera del agua, no apoyarse en el
+carril), o infracciones técnicas que implican descalificación directa. El reglamento
+trata cada causa como un evento diferente con sus propias consecuencias (por ejemplo,
+el BKO tiene implicancias para los días siguientes del torneo; el fallo de protocolo de
+superficie no).
 
 ### Qué hace la aplicación hoy
 
-El flujo del juez va directamente de "Finalizar Performance" a "Registrar RP" y luego
-a "Asignar Tarjeta". No existe ningún paso entre la finalización de la performance y la
-asignación de la tarjeta que represente la observación y validación del protocolo de
-superficie.
+Cuando el juez asigna tarjeta roja, la aplicación solo registra el resultado final
+(tarjeta roja) sin capturar el motivo. La excepción es el BKO, que tiene su propia
+pantalla dedicada. Las demás causas de descalificación no se distinguen entre sí.
 
-### La diferencia
+### La diferencia — decisión de diseño
 
-Hoy el juez asigna la tarjeta basándose solo en lo que ocurrió bajo el agua. El
-reglamento requiere que la tarjeta refleje también lo que ocurrió en superficie durante
-los 20 segundos post-emersión. Una performance correcta bajo el agua puede resultar
-en tarjeta roja si el protocolo de superficie falla. Esta brecha afecta directamente al
-flujo principal del juez.
+El flujo del juez **no cambia**: se registra la performance, se asigna la tarjeta.
+Lo que se agrega es que al seleccionar tarjeta roja se abre una selección de motivo
+obligatoria con las causas posibles. Las causas son configurables (CRUD) dado que
+el reglamento puede evolucionar o variar según la federación. Causas iniciales:
+
+- Black-out (BKO) — ya existe como flujo separado, se integra aquí
+- No siguió protocolo de superficie
+- Penalización / infracción técnica
+
+Esto convierte el BKO en un motivo de tarjeta roja dentro de un mecanismo unificado,
+en lugar de un flujo paralelo. El registro queda más completo y permite estadísticas
+por causa de descalificación.
 
 ---
 
 ## 2. Dos tipos de Black-out con consecuencias distintas (§1.1.10)
 
-### Qué dice el reglamento
-
-El reglamento distingue explícitamente dos situaciones de pérdida de consciencia:
-
-**Black-out en superficie (§1.1.10.2):** el atleta pierde la consciencia después de
-emerger, durante o después del protocolo de superficie. Consecuencias:
-- Descalificado del evento.
-- Debe ser examinado por un médico.
-- El médico **puede autorizar** que compita al día siguiente.
-
-**Black-out bajo el agua (§1.1.10.3):** el atleta pierde la consciencia durante la
-performance, antes de emerger. Consecuencias:
-- Descalificado del evento.
-- **No puede competir al día siguiente** bajo ninguna circunstancia.
-- Solo puede volver a competir el día subsiguiente, y únicamente con aprobación médica.
-
-### Qué hace la aplicación hoy
-
-La aplicación modela un único evento de Black-out (BKO) que siempre resulta en
-tarjeta roja automática. No distingue dónde ocurrió ni registra ningún tipo de
-inhabilitación temporal del atleta para competir en días sucesivos.
-
-### La diferencia
-
-Hay dos diferencias funcionales. La primera es informativa: el registro del BKO debería
-indicar si ocurrió en superficie o bajo el agua, ya que esto cambia la gravedad del
-evento y tiene implicancias médicas. La segunda es operativa: el organizador necesita
-saber si un atleta que sufrió un BKO puede o no inscribirse en las disciplinas del día
-siguiente, lo que hoy no es posible determinar desde la aplicación.
+> **Decisión:** esta brecha queda resuelta por la brecha #1. Los dos tipos de BKO
+> (superficie y bajo el agua) son motivos de tarjeta roja dentro del CRUD de causas.
+> BKO superficie y BKO subacuático son entradas distintas en esa lista, con sus
+> respectivas descripciones de consecuencias para el organizador.
+> No requiere tratamiento separado.
 
 ---
 
-## 3. Penalizaciones técnicas generales — más allá de la tarjeta amarilla (§1.1.13)
+## 3. Penalizaciones técnicas — concepto de "Tarjeta Blanca con penalizaciones" (§1.1.13)
 
 ### Qué dice el reglamento
 
-Una "penalización general" es una sanción que se aplica cuando el atleta comete una
-infracción técnica específica durante la performance, pero que no invalida el intento
-completo. Para las disciplinas dinámicas, la penalización general consiste en restar
-3 metros a la distancia realizada.
+Una "penalización general" se aplica cuando el atleta comete una infracción técnica
+durante la performance que no invalida el intento pero sí reduce el resultado. Para
+disciplinas dinámicas: −3 metros por infracción. Las penalizaciones se acumulan
+(dos infracciones = −6 metros). Las situaciones que las generan:
 
-Las situaciones que generan penalización general son:
-- **Sin contacto con la pared al iniciar (§2.2.1.4):** el atleta inicia la fase de apnea
-  sin estar tocando la pared de la piscina.
-- **Cuerpo completo fuera del carril (§2.2.2.2):** si todo el cuerpo del atleta sale
-  del carril de competencia (las desviaciones parciales están permitidas).
-- **Asistente no retira a 3 minutos del OT (§2.1.6.2):** si el asistente personal del
-  atleta permanece en la zona de competencia después de la llamada de 3 minutos.
-- **Patada de delfín en evento de bialetas (§1.1.3.3):** en disciplinas con bialetas
-  (DBF), se aplica una penalización general por cada ciclo de patada de delfín
-  realizado fuera de las zonas permitidas (los 3 metros al inicio y en los giros).
-
-Las penalizaciones generales pueden acumularse.
+- Sin contacto con la pared al iniciar (§2.2.1.4)
+- Cuerpo completo fuera del carril (§2.2.2.2)
+- Asistente no retira de la zona a 3 min del OT (§2.1.6.2)
+- Patada de delfín en evento de bialetas — por cada ciclo (§1.1.3.3)
 
 ### Qué hace la aplicación hoy
 
-La aplicación conoce la penalización de −3 metros únicamente en el contexto de la
-tarjeta amarilla resuelta como blanca (donde la penalización puede aplicarse como
-parte de la deliberación). No existe una forma de registrar una penalización técnica
-separada de la asignación de tarjeta.
+El modelo actual tiene tres resultados posibles: Blanca, Amarilla (en revisión) y Roja.
+La penalización de −3m existe solo como parte de la resolución de una tarjeta amarilla.
+No existe el concepto de una performance válida con penalizaciones aplicadas
+directamente por el juez, sin pasar por el proceso de deliberación de la amarilla.
 
-### La diferencia
+### La diferencia — decisión de diseño
 
-Hoy la única forma de reflejar una penalización es a través de la tarjeta amarilla,
-que requiere deliberación y puede resultar en blanca o roja. Pero las penalizaciones
-técnicas del reglamento son independientes de la tarjeta: el atleta puede recibir
-tarjeta blanca y aun así tener −3 metros en su distancia final por haber salido del
-carril. Son dos mecanismos distintos que hoy la app trata como uno solo.
+Se necesita un nuevo resultado: **Tarjeta Blanca con penalizaciones**. Su lógica:
+
+- La performance es válida (el atleta completó el intento y el protocolo de superficie).
+- El juez registra una o más infracciones técnicas al momento de asignar la tarjeta.
+- Cada infracción aplica −3m (dinámica) o el equivalente según la disciplina.
+- El RP final para el ranking = distancia medida − suma de penalizaciones.
+- La tarjeta mostrada al atleta es **Blanca**, pero el registro interno incluye
+  las infracciones y el RP penalizado.
+
+Esto es distinto de la tarjeta amarilla: no hay deliberación, no hay resolución
+posterior. El juez constata la infracción en el momento y la aplica directamente.
+La tarjeta amarilla queda reservada para los casos donde hay duda sobre si el
+resultado es válido o no (requiere revisión por los jueces antes de decidir).
 
 ---
 
 ## 4. Categorías de competencia — sistema completo con Masters (§1.1.7)
 
-### Qué dice el reglamento
-
-Las competencias oficiales organizan a los atletas en categorías por edad y género.
-El sistema de categorías es:
-
-| Categoría | Rango de edad |
-|-----------|--------------|
-| Junior | 15–17 años |
-| Senior | 18–49 años |
-| Masters 50-54 | 50–54 años |
-| Masters 55-59 | 55–59 años |
-| Masters 60-64 | 60–64 años |
-| Masters 65-70 | 65–70 años |
-| Masters 70+ | 70 años o más |
-
-Reglas adicionales:
-- La edad se calcula como: `año de la temporada - año de nacimiento` (no la edad exacta
-  al día de la competencia).
-- Un atleta de categoría Masters puede optar por competir en la categoría Senior.
-  Si en ese contexto bate un récord Masters, el récord se homologa igualmente.
-
-### Qué hace la aplicación hoy
-
-La aplicación registra el género del atleta, pero no implementa el sistema de
-categorías. Los rankings actuales agrupan por disciplina y género, sin distinción de
-categoría etaria.
-
-### La diferencia
-
-En un torneo oficial, los rankings y podios se determinan dentro de cada categoría
-por separado. Un atleta Senior y un atleta Masters 50-54 pueden competir juntos en
-la misma grilla de salida pero se clasifican en tablas distintas. La aplicación hoy
-produce un único ranking por disciplina y género sin esta subdivisión. Tampoco
-gestiona la opción de un atleta Masters de competir en la categoría Senior.
+> **Decisión:** fuera de alcance. No se distinguirán subcategorías Masters por ahora.
+> La aplicación manejará Junior, Senior y Masters como categoría única sin subdivisión
+> etaria. Si en el futuro se necesita, se incorpora como extensión del BC Registro.
 
 ---
 
@@ -175,27 +117,30 @@ gestiona la opción de un atleta Masters de competir en la categoría Senior.
 Las disciplinas de velocidad-resistencia no son una sola prueba sino cuatro variantes
 definidas por la distancia total:
 
-| Nombre | Distancia | Tipo |
-|--------|-----------|------|
-| Velocidad 2×50m | 100 m (2 largos de 50m) | Velocidad |
-| Velocidad 4×50m | 200 m (4 largos de 50m) | Velocidad |
-| Resistencia 8×50m | 400 m (8 largos de 50m) | Resistencia |
-| Resistencia 16×50m | 800 m (16 largos de 50m) | Resistencia |
+| Nombre | Largos | Distancia total | Tipo |
+|--------|--------|-----------------|------|
+| SPE 2×50m | 2 | 100 m | Velocidad |
+| SPE 4×50m | 4 | 200 m | Velocidad |
+| SPE 8×50m | 8 | 400 m | Resistencia |
+| SPE 16×50m | 16 | 800 m | Resistencia |
 
-En todas ellas el atleta alterna apnea activa con recuperación pasiva en los extremos
-de la pileta. Los récords se homologan por variante separadamente.
+En todas el atleta alterna apnea activa con recuperación pasiva en cada extremo.
+El resultado es un tiempo (menor es mejor). Los récords se homologan por variante.
 
 ### Qué hace la aplicación hoy
 
-La disciplina `SPE` (velocidad/resistencia) está definida como una sola disciplina,
-sin distinción de variante ni distancia total.
+La disciplina `SPE` está definida como una sola disciplina sin distinción de variante.
+Un torneo solo puede tener una instancia de SPE, sin especificar cuántos largos son.
 
-### La diferencia
+### La diferencia — decisión de incorporar
 
-Un torneo puede incluir, por ejemplo, `2×50m` y `8×50m` como dos eventos distintos,
-cada uno con su propia grilla de salida y su propio ranking. Hoy la aplicación no puede
-representar esto: solo puede tener una instancia de SPE por torneo, y esa instancia no
-especifica cuántos largos son.
+Se incorporan las cuatro variantes como subdisciplinas de SPE. Cada variante es un
+evento independiente dentro del torneo: tiene su propia grilla de salida, su propio
+ranking y su propio conjunto de performances. Un torneo puede incluir `SPE 2×50m` y
+`SPE 8×50m` simultáneamente como dos eventos distintos.
+
+El modelo de disciplina pasa de `tipo = SPE` a `tipo = SPE, variante = 2x50 | 4x50 | 8x50 | 16x50`.
+El resultado de SPE siempre es un tiempo, no una distancia.
 
 ---
 
@@ -216,49 +161,27 @@ La razón de la inversión para SPE es que en esta disciplina el resultado es un
 
 ### Qué hace la aplicación hoy
 
-La grilla de salida se genera y puede ordenarse, pero no implementa esta regla de
-ordenamiento automático basado en el tipo de disciplina y el AP declarado.
+La grilla de salida se genera y puede ordenarse, pero no implementa la regla de
+ordenamiento automático basada en el tipo de disciplina y el AP declarado.
 
-### La diferencia
+### La diferencia — decisión de incorporar
 
-En un torneo oficial, la grilla de salida no es arbitraria: tiene un orden definido por
-el reglamento. El organizador puede ajustar el orden, pero el punto de partida debe
-ser el orden reglamentario. Hoy la aplicación no genera ese orden automáticamente.
+La generación de la grilla debe aplicar el orden reglamentario como punto de partida:
+
+- **DNF, DYN, DBF, STA:** orden ascendente por AP — menor performance declarada
+  primero, mayor al final.
+- **SPE (todas las variantes):** orden descendente por AP — mayor tiempo declarado
+  primero (los más lentos), menor tiempo al final (los más rápidos).
+
+El organizador puede ajustar el orden manualmente después de la generación, pero
+el orden inicial que produce el sistema debe cumplir el reglamento.
 
 ---
 
 ## 7. Protocolo del juez durante la apnea estática — señales táctiles (§3.2.1)
 
-### Qué dice el reglamento
-
-Durante una performance de apnea estática (STA), el atleta permanece inmóvil bajo
-el agua y no hay forma visual de saber si está bien. El reglamento establece un
-protocolo de control de seguridad obligatorio: el juez de superficie debe comunicarse
-con el atleta mediante **contacto táctil** a intervalos específicos calculados desde el
-AP declarado:
-
-- A `AP − 1 minuto`
-- A `AP − 30 segundos`
-- A `AP − 15 segundos`
-- En el momento del `AP`
-- A partir de ahí, cada **15 segundos** si el atleta continúa
-
-El atleta y el juez acuerdan antes del intento la señal y la respuesta esperada. Si el
-atleta no responde a la señal del juez, el juez repite el toque. Si persiste la no
-respuesta, el juez interrumpe el intento y extrae al atleta (BKO).
-
-### Qué hace la aplicación hoy
-
-El flujo del juez para STA es el mismo que para las disciplinas dinámicas: cronómetro
-activo, botón de finalizar, posibilidad de registrar BKO. No existe ninguna guía o
-registro de las señales táctiles obligatorias.
-
-### La diferencia
-
-El protocolo de señales táctiles es una responsabilidad del juez con consecuencias
-de seguridad. La aplicación podría asistir al juez mostrando los momentos en que debe
-contactar al atleta, calculados automáticamente desde el AP declarado. Hoy esa
-información no está disponible en la interfaz durante la performance.
+> **Decisión:** fuera de alcance. Las señales táctiles son responsabilidad operativa
+> del juez y no se registran en la aplicación.
 
 ---
 
@@ -281,13 +204,17 @@ en el Paso 3, lo que conceptualmente ocurre cuando el atleta se sumerge. Para la
 disciplinas dinámicas esto es equivalente. Para STA, sin embargo, el cronómetro que
 mide el resultado es el de la inmersión de vías respiratorias, no el inicio del movimiento.
 
-### La diferencia
+### La diferencia — decisión de incorporar
 
-En la práctica el flujo puede ser el mismo si el juez presiona el botón en el momento
-exacto de la inmersión de las vías respiratorias. Pero el reglamento es preciso: el
-resultado de STA se mide desde las vías respiratorias, y el botón actual dice "ATLETA
-INICIA" (que en dinámica significa el inicio del movimiento, no necesariamente de la
-apnea). La distinción es sutil pero relevante para la exactitud del registro.
+El flujo del Paso 3 en STA debe diferenciarse del flujo dinámico. En dinámica,
+"ATLETA INICIA" marca el momento en que el atleta se desplaza. En STA, el botón
+equivalente debe llamarse **"VÍAS RESPIRATORIAS EN AGUA"** y el cronómetro
+que arranca en ese momento es el que determina el RT oficial.
+
+El Paso 3 detecta la disciplina y muestra la etiqueta correcta. El resultado registrado
+es el tiempo entre ese toque y el momento en que el juez presiona "FINALIZAR"
+(cuando las vías respiratorias emergen). La ventana OT+30s aplica igual que en
+dinámica para determinar si el inicio es válido.
 
 ---
 
@@ -308,44 +235,19 @@ La aplicación registra DQ para el caso en que el atleta no inicia dentro de la 
 OT+30s. No hay un tipo específico de DQ para el inicio anticipado, ni una etiqueta
 diferenciada para SPE.
 
-### La diferencia
+### La diferencia — decisión de incorporar
 
-Es principalmente una diferencia de nomenclatura y registro. El reglamento reconoce
-la "Salida en falso" como un resultado específico de SPE. Para el audit log y para
-estadísticas, sería importante distinguir entre "no inició en ventana" (llegó tarde) y
-"inició antes del OT" (salida en falso), ya que son infracciones distintas con causas
-distintas.
+"Salida en falso" es un motivo de tarjeta roja dentro del CRUD de causas definido
+en la brecha #1. Se incorpora como motivo específico de descalificación, disponible
+para todas las disciplinas (aunque en SPE tiene nombre propio reglamentario).
+Junto con "No inició en ventana OT+30s", cubren los dos tipos de DQ por problema
+en el inicio.
 
 ---
 
 ## 10. Conducta antideportiva — sanciones que trascienden el evento (Anexo FAAS)
 
-### Qué dice el reglamento
-
-El Anexo FAAS establece que la comisión de apnea tiene potestad para sancionar la
-conducta antideportiva con medidas que van más allá de la descalificación del evento.
-Las sanciones pueden incluir:
-
-- Prohibición de competir en fechas futuras del mismo torneo.
-- Prohibición de participar en competencias internacionales.
-
-La sanción puede aplicarse al deportista, al entrenador, o a toda la escuela/club.
-La conducta antideportiva no necesita estar explícitamente detallada en el reglamento
-para ser sancionada.
-
-### Qué hace la aplicación hoy
-
-Las únicas consecuencias que la aplicación puede registrar son las que ocurren dentro
-de una performance: tarjeta blanca, amarilla, roja, DNS, o DQ. No existe ningún
-mecanismo para registrar sanciones que afecten la participación futura del atleta.
-
-### La diferencia
-
-Una sanción por conducta antideportiva afecta al atleta en múltiples torneos y en el
-tiempo. Hoy no hay manera de que el organizador registre este tipo de sanción en la
-plataforma, ni de que el sistema impida la inscripción de un atleta sancionado. Esta
-brecha es principalmente administrativa y de gestión de federación, no de gestión
-de performance individual.
+> **Decisión:** fuera de alcance por ahora. Es gestión de federación, no de torneo.
 
 ---
 
@@ -353,16 +255,16 @@ de performance individual.
 
 | # | Brecha | Artículo | Prioridad funcional |
 |---|--------|----------|-------------------|
-| 1 | Protocolo de superficie — 20s + signo OK post-performance | §1.2.2 | Alta |
-| 2 | Dos tipos de BKO con consecuencias distintas | §1.1.10 | Alta |
-| 3 | Penalizaciones técnicas independientes de la tarjeta | §1.1.13, §2.2.1.4, §2.2.2.2, §2.1.6.2 | Media |
-| 4 | Sistema completo de categorías con Masters | §1.1.7 | Media |
-| 5 | SPE tiene 4 variantes de distancia distintas | §1.1.8.7 | Media |
-| 6 | Orden de grilla por tipo de disciplina (invertido en SPE) | §1.2.4.3 | Media |
-| 7 | Señales táctiles del juez durante STA | §3.2.1.4 | Baja |
-| 8 | Inicio de cronómetro STA — inmersión de vías respiratorias | §3.1.3.1 | Baja |
-| 9 | "Salida en falso" como resultado específico de SPE | §4.2.1.3 | Baja |
-| 10 | Conducta antideportiva — sanciones multi-torneo | Anexo FAAS | Baja |
+| 1 | Motivo de tarjeta roja — CRUD de causas (BKO, protocolo, infracción) | §1.2.2, §1.1.10 | Alta |
+| 2 | Dos tipos de BKO — resuelto por brecha #1 (motivos de tarjeta roja) | §1.1.10 | — |
+| 3 | Tarjeta Blanca con penalizaciones — nuevo resultado con RP reducido | §1.1.13, §2.2.1.4, §2.2.2.2 | Alta |
+| 4 | Categorías Masters — fuera de alcance por ahora | §1.1.7 | — |
+| 5 | Subdisciplinas SPE — 4 variantes (2×50, 4×50, 8×50, 16×50) — incorporar | §1.1.8.7 | Media |
+| 6 | Orden de grilla reglamentario por tipo de disciplina — incorporar | §1.2.4.3 | Media |
+| 7 | Señales táctiles STA — fuera de alcance | §3.2.1.4 | — |
+| 8 | Inicio cronómetro STA — botón "Vías respiratorias en agua" — incorporar | §3.1.3.1 | Baja |
+| 9 | Salida en falso — motivo de tarjeta roja, resuelto por brecha #1 | §4.2.1.3 | — |
+| 10 | Conducta antideportiva — fuera de alcance | Anexo FAAS | — |
 
 ---
 
