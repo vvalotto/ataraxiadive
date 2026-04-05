@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AtaraxiaDive — Interfaz del Juez (Prototipo INC-4.0)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --bg:        #0f172a;
+    --surface:   #1e293b;
+    --surface2:  #334155;
+    --border:    #475569;
+    --text:      #f8fafc;
+    --muted:     #94a3b8;
+    --accent:    #38bdf8;
+    --blanca:    #22c55e;
+    --amarilla:  #eab308;
+    --roja:      #ef4444;
+    --dns:       #64748b;
+    --r: 14px;
+    --btn-h: 58px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  /* ── Contenedor mobile ── */
+  #app {
+    width: 100%;
+    max-width: 390px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── Screens ── */
+  .screen {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    padding: 0 0 24px;
+    animation: fadeIn .18s ease;
+  }
+  .screen.active { display: flex; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ── Header ── */
+  .header {
+    background: var(--surface);
+    padding: 16px 20px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .header-title { font-size: 17px; font-weight: 700; }
+  .header-sub   { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .back-btn {
+    background: none; border: none; color: var(--accent);
+    font-size: 15px; font-weight: 600; cursor: pointer; padding: 4px 0;
+  }
+
+  /* ── Offline badge ── */
+  .conn-badge {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 12px; font-weight: 600; padding: 3px 9px;
+    border-radius: 20px; letter-spacing: .3px;
+  }
+  .conn-badge.online  { background: rgba(34,197,94,.15); color: #4ade80; }
+  .conn-badge.offline { background: rgba(239,68,68,.15);  color: #f87171; }
+  .conn-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .online  .conn-dot { background: #4ade80; }
+  .offline .conn-dot { background: #f87171; animation: blink 1.2s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  /* ── Pasos indicator ── */
+  .steps {
+    display: flex; gap: 6px; justify-content: center;
+    padding: 14px 20px 4px;
+  }
+  .step-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--surface2);
+    transition: background .2s;
+  }
+  .step-dot.done    { background: var(--blanca); }
+  .step-dot.current { background: var(--accent); }
+
+  /* ── Atleta card ── */
+  .atleta-card {
+    background: var(--surface);
+    border-radius: var(--r);
+    margin: 16px 20px 0;
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+  }
+  .atleta-nombre { font-size: 22px; font-weight: 800; }
+  .atleta-meta   { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+  .atleta-chip {
+    background: var(--surface2); border-radius: 8px;
+    padding: 4px 10px; font-size: 13px; font-weight: 600;
+  }
+  .atleta-chip.ap  { color: var(--accent); }
+  .atleta-chip.pos { color: var(--muted); }
+
+  /* ── Action label ── */
+  .action-label {
+    font-size: 14px; color: var(--muted); font-weight: 500;
+    margin: 20px 20px 6px;
+    text-transform: uppercase; letter-spacing: .6px;
+  }
+
+  /* ── Botones principales ── */
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    min-height: var(--btn-h); border-radius: var(--r);
+    border: none; cursor: pointer; font-weight: 700;
+    font-size: 17px; letter-spacing: .2px;
+    transition: filter .12s, transform .08s;
+    width: 100%;
+  }
+  .btn:active { filter: brightness(.88); transform: scale(.98); }
+  .btn-primary { background: var(--accent); color: #0f172a; }
+  .btn-blanca  { background: var(--blanca); color: #fff; }
+  .btn-amarilla{ background: var(--amarilla); color: #0f172a; }
+  .btn-roja    { background: var(--roja);   color: #fff; }
+  .btn-dns     { background: var(--dns);    color: #fff; font-size: 15px; }
+  .btn-outline {
+    background: transparent; color: var(--text);
+    border: 2px solid var(--border); font-size: 15px;
+  }
+  .btn-ghost   { background: var(--surface2); color: var(--muted); font-size: 14px; min-height: 48px; }
+
+  .btn-row { display: flex; gap: 12px; }
+  .btn-row .btn { flex: 1; }
+
+  /* ── Zona de botones ── */
+  .actions { padding: 0 20px; display: flex; flex-direction: column; gap: 12px; margin-top: 6px; }
+
+  /* ── Cronómetro ── */
+  .cronometro {
+    text-align: center;
+    margin: 24px 20px 0;
+    background: var(--surface);
+    border-radius: var(--r);
+    padding: 24px;
+    border: 1px solid var(--border);
+  }
+  .crono-label { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+  .crono-time  { font-size: 52px; font-weight: 800; font-variant-numeric: tabular-nums; margin: 8px 0 4px; letter-spacing: -1px; }
+  .crono-time.running { color: var(--blanca); }
+  .crono-time.waiting { color: var(--accent); }
+
+  /* ── Input marca ── */
+  .marca-input-wrap {
+    margin: 20px 20px 0;
+    background: var(--surface);
+    border-radius: var(--r);
+    padding: 20px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .marca-label { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+  .marca-input {
+    background: var(--surface2); border: 2px solid var(--border);
+    border-radius: 10px; color: var(--text);
+    font-size: 36px; font-weight: 800; text-align: center;
+    padding: 12px; width: 100%; outline: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .marca-input:focus { border-color: var(--accent); }
+  .marca-hint { font-size: 12px; color: var(--muted); text-align: center; }
+
+  /* ── Lista disciplinas ── */
+  .disc-list { padding: 16px 20px 0; display: flex; flex-direction: column; gap: 10px; }
+  .disc-card {
+    background: var(--surface); border-radius: var(--r);
+    padding: 16px 18px; border: 1px solid var(--border);
+    cursor: pointer; display: flex; align-items: center;
+    justify-content: space-between;
+    transition: border-color .15s;
+    min-height: var(--btn-h);
+  }
+  .disc-card:hover, .disc-card:active { border-color: var(--accent); }
+  .disc-nombre { font-size: 20px; font-weight: 800; }
+  .disc-hora   { font-size: 14px; color: var(--muted); margin-top: 3px; }
+  .disc-badge  {
+    padding: 4px 12px; border-radius: 20px;
+    font-size: 12px; font-weight: 700; letter-spacing: .4px;
+  }
+  .disc-badge.activa  { background: rgba(34,197,94,.15); color: #4ade80; }
+  .disc-badge.pend    { background: var(--surface2); color: var(--muted); }
+
+  /* ── Lista atletas grilla ── */
+  .grilla-list { padding: 12px 20px 0; display: flex; flex-direction: column; gap: 8px; }
+  .grilla-row {
+    background: var(--surface); border-radius: var(--r);
+    padding: 14px 16px; border: 1px solid var(--border);
+    cursor: pointer; display: flex; align-items: center; gap: 14px;
+    transition: border-color .15s; min-height: var(--btn-h);
+  }
+  .grilla-row:hover, .grilla-row:active { border-color: var(--accent); }
+  .grilla-row.done  { opacity: .45; cursor: default; border-color: var(--border); }
+  .grilla-row.dns   { opacity: .55; cursor: default; }
+  .grilla-pos  { font-size: 20px; font-weight: 800; color: var(--muted); min-width: 28px; text-align: center; }
+  .grilla-info { flex: 1; }
+  .grilla-nombre { font-size: 16px; font-weight: 700; }
+  .grilla-ot     { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .grilla-ap     { font-size: 14px; font-weight: 600; color: var(--accent); }
+  .grilla-estado { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 10px; white-space: nowrap; }
+  .estado-ok    { background: rgba(34,197,94,.15);  color: #4ade80; }
+  .estado-dns   { background: rgba(100,116,139,.2); color: var(--muted); }
+  .estado-pend  { background: var(--surface2); color: var(--muted); }
+  .estado-rev   { background: rgba(234,179,8,.15); color: #facc15; }
+
+  /* ── Resultado final ── */
+  .result-hero {
+    margin: 24px 20px 0;
+    background: var(--surface);
+    border-radius: var(--r);
+    padding: 28px 20px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .result-icon { font-size: 48px; margin-bottom: 10px; }
+  .result-label{ font-size: 26px; font-weight: 800; }
+  .result-marca{ font-size: 18px; color: var(--muted); margin-top: 6px; }
+
+  /* ── Alerta ── */
+  .alerta {
+    margin: 16px 20px 0;
+    background: rgba(234,179,8,.1);
+    border: 1px solid rgba(234,179,8,.4);
+    border-radius: var(--r);
+    padding: 14px 16px;
+    font-size: 14px; color: #fde047; line-height: 1.5;
+  }
+  .alerta-roja {
+    background: rgba(239,68,68,.1);
+    border-color: rgba(239,68,68,.4);
+    color: #fca5a5;
+  }
+
+  /* ── Login ── */
+  .login-wrap {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: center; padding: 40px 28px;
+    gap: 20px;
+  }
+  .login-logo  { font-size: 32px; font-weight: 900; color: var(--accent); text-align: center; letter-spacing: -1px; }
+  .login-sub   { font-size: 14px; color: var(--muted); text-align: center; margin-top: -12px; }
+  .input-field {
+    background: var(--surface); border: 2px solid var(--border);
+    border-radius: var(--r); color: var(--text);
+    font-size: 16px; padding: 14px 16px; width: 100%; outline: none;
+  }
+  .input-field:focus { border-color: var(--accent); }
+  .input-label { font-size: 13px; color: var(--muted); margin-bottom: 4px; letter-spacing: .3px; }
+
+  /* ── BKO ── */
+  .bko-warn {
+    margin: 20px 20px 0;
+    background: rgba(239,68,68,.12); border: 2px solid var(--roja);
+    border-radius: var(--r); padding: 16px; text-align: center;
+  }
+  .bko-title { font-size: 20px; font-weight: 800; color: var(--roja); }
+  .bko-desc  { font-size: 14px; color: var(--muted); margin-top: 6px; }
+
+  /* ── Revisión amarilla ── */
+  .rev-badge {
+    margin: 16px 20px 0;
+    background: rgba(234,179,8,.12); border: 1px solid var(--amarilla);
+    border-radius: var(--r); padding: 14px 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .rev-icon  { font-size: 28px; }
+  .rev-text  { font-size: 15px; font-weight: 700; color: #fde047; }
+  .rev-sub   { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  /* ── Separador ── */
+  .sep { height: 1px; background: var(--border); margin: 16px 20px; }
+
+  /* ── Scroll ── */
+  .scroll-area { flex: 1; overflow-y: auto; }
+
+  /* ── Paso label ── */
+  .paso-label {
+    font-size: 12px; font-weight: 600; color: var(--muted);
+    text-align: center; letter-spacing: .5px; margin-top: 20px;
+    text-transform: uppercase;
+  }
+
+  /* ── Siguiente indicator ── */
+  .grilla-row.siguiente { border-color: var(--accent); background: rgba(56,189,248,.06); }
+  .estado-sig { background: rgba(56,189,248,.2); color: var(--accent); }
+
+  /* ── Display combinado m + cm ── */
+  .rp-display-row {
+    display: flex; align-items: baseline; justify-content: center;
+    gap: 6px; padding: 14px 0 6px;
+  }
+  .rp-m-val {
+    font-size: 58px; font-weight: 900; color: var(--accent);
+    font-variant-numeric: tabular-nums; letter-spacing: -2px; line-height: 1;
+  }
+  .rp-m-unit { font-size: 22px; color: var(--muted); font-weight: 600; }
+  .rp-sep { font-size: 44px; color: var(--border); font-weight: 200; margin: 0 2px; line-height: 1; }
+  .rp-cm-val {
+    font-size: 44px; font-weight: 800; color: var(--border);
+    font-variant-numeric: tabular-nums; letter-spacing: -1px;
+    min-width: 56px; text-align: center; line-height: 1;
+    transition: color .15s;
+  }
+  .rp-cm-val.has-value { color: var(--text); }
+  .rp-cm-unit { font-size: 18px; color: var(--muted); font-weight: 600; }
+
+  /* ── Presets y ajuste metros ── */
+  .preset-row { display: flex; gap: 7px; margin-top: 8px; }
+  .preset-btn {
+    flex: 1; min-height: 54px; background: var(--surface2);
+    border: 2px solid var(--border); border-radius: 10px;
+    color: var(--text); font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: border-color .12s, background .12s;
+  }
+  .preset-btn:active { background: var(--accent); color: #0f172a; border-color: var(--accent); }
+  .preset-btn.selected { border-color: var(--accent); color: var(--accent); background: rgba(56,189,248,.1); }
+  .m-adj-row { display: flex; gap: 8px; margin-top: 8px; }
+  .m-adj-btn {
+    flex: 1; min-height: 52px; background: var(--surface2);
+    border: 2px solid var(--border); border-radius: 10px;
+    font-size: 16px; font-weight: 700; cursor: pointer; color: var(--text);
+  }
+  .m-adj-btn.neg { color: #f87171; border-color: rgba(239,68,68,.3); }
+  .m-adj-btn.pos { color: #4ade80; border-color: rgba(34,197,94,.3); }
+  .m-adj-btn:active { filter: brightness(.75); transform: scale(.97); }
+
+  /* ── Numpad centímetros ── */
+  .numpad {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 8px; margin-top: 8px;
+  }
+  .np-btn {
+    min-height: 58px; background: var(--surface2);
+    border: 2px solid var(--border); border-radius: 10px;
+    font-size: 24px; font-weight: 700; cursor: pointer; color: var(--text);
+    transition: background .1s, border-color .1s;
+  }
+  .np-btn:active { background: var(--accent); color: #0f172a; border-color: var(--accent); transform: scale(.96); }
+  .np-zero { grid-column: 1 / 3; }
+  .np-del  { background: rgba(239,68,68,.08); color: #f87171; border-color: rgba(239,68,68,.25); font-size: 20px; }
+  .np-del:active { background: #ef4444; color: #fff; }
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ══════════════════════════════════════════
+     S-00  LOGIN
+══════════════════════════════════════════ -->
+<div class="screen active" id="s-login">
+  <div class="login-wrap">
+    <div>
+      <div class="login-logo">AtaraxiaDive</div>
+      <div class="login-sub">Gestión de torneos de apnea</div>
+    </div>
+    <div>
+      <div class="input-label">Email</div>
+      <input class="input-field" type="email" value="carlos.mendez@juez.com" placeholder="tu@email.com">
+    </div>
+    <div>
+      <div class="input-label">Contraseña</div>
+      <input class="input-field" type="password" value="••••••••" placeholder="Contraseña">
+    </div>
+    <div class="actions" style="margin-top:4px; padding:0;">
+      <button class="btn btn-primary" onclick="go('s-disciplinas')">INGRESAR</button>
+    </div>
+    <div style="text-align:center; font-size:13px; color:var(--muted);">Rol activo: <strong style="color:var(--accent)">Juez</strong></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-01  MIS DISCIPLINAS
+══════════════════════════════════════════ -->
+<div class="screen" id="s-disciplinas">
+  <div class="header">
+    <div>
+      <div class="header-title">Mis disciplinas</div>
+      <div class="header-sub">Carlos Méndez · Torneo BA 2026</div>
+    </div>
+    <div id="conn1" class="conn-badge online"><div class="conn-dot"></div>En línea</div>
+  </div>
+  <div class="disc-list">
+    <div class="disc-card" onclick="go('s-grilla')">
+      <div>
+        <div class="disc-nombre">DNF</div>
+        <div class="disc-hora">14:00 · 12 atletas · Andarivel A/B</div>
+      </div>
+      <div class="disc-badge activa">ACTIVA</div>
+    </div>
+    <div class="disc-card" onclick="alert('Disciplina aún no iniciada')">
+      <div>
+        <div class="disc-nombre">STA</div>
+        <div class="disc-hora">16:30 · 8 atletas · Andarivel A</div>
+      </div>
+      <div class="disc-badge pend">PENDIENTE</div>
+    </div>
+  </div>
+  <div style="margin:24px 20px 0; padding:14px 16px; background:var(--surface); border-radius:var(--r); border:1px solid var(--border);">
+    <div style="font-size:13px;color:var(--muted);">Torneo</div>
+    <div style="font-size:16px;font-weight:700;margin-top:4px;">Apnea Indoor Buenos Aires 2026</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:4px;">4 de abril · Club Náutico BA</div>
+  </div>
+  <div style="flex:1"></div>
+  <div class="actions">
+    <button class="btn btn-ghost" onclick="go('s-login')">Cerrar sesión</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-02  GRILLA DE SALIDA
+══════════════════════════════════════════ -->
+<div class="screen" id="s-grilla">
+  <div class="header">
+    <button class="back-btn" onclick="go('s-disciplinas')">← Disciplinas</button>
+    <div style="text-align:right">
+      <div class="header-title">DNF</div>
+      <div class="header-sub">EN EJECUCIÓN</div>
+    </div>
+  </div>
+  <div class="scroll-area">
+    <div style="padding:12px 20px 4px; display:flex; justify-content:space-between; align-items:center;">
+      <div style="font-size:13px;color:var(--muted);">12 atletas · Intervalo 9 min</div>
+      <div id="conn2" class="conn-badge online"><div class="conn-dot"></div>En línea</div>
+    </div>
+    <div class="grilla-list">
+      <!-- Atleta 1 — BLANCA (OT más temprano, ya ejecutó) -->
+      <div class="grilla-row done">
+        <div class="grilla-pos">1</div>
+        <div class="grilla-info">
+          <div class="grilla-nombre">García, Martina</div>
+          <div class="grilla-ot">OT 14:00 · And. A</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+          <div class="grilla-ap">65.0 m</div>
+          <div class="grilla-estado estado-ok">✓ BLANCA</div>
+        </div>
+      </div>
+      <!-- Atleta 2 — en revisión (amarilla, OT ya pasó — tappable) -->
+      <div class="grilla-row" onclick="go('s-revision')">
+        <div class="grilla-pos">2</div>
+        <div class="grilla-info">
+          <div class="grilla-nombre">López, Andrés</div>
+          <div class="grilla-ot">OT 14:09 · And. B</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+          <div class="grilla-ap">72.0 m</div>
+          <div class="grilla-estado estado-rev">⚠ REVISIÓN</div>
+        </div>
+      </div>
+      <!-- Atleta 3 — SIGUIENTE (primer pendiente, OT 14:18) -->
+      <div class="grilla-row siguiente" onclick="go('s-paso1')">
+        <div class="grilla-pos">3</div>
+        <div class="grilla-info">
+          <div class="grilla-nombre">Ramírez, Sofía</div>
+          <div class="grilla-ot">OT 14:18 · And. A</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+          <div class="grilla-ap">58.0 m</div>
+          <div class="grilla-estado estado-sig">▶ SIGUIENTE</div>
+        </div>
+      </div>
+      <!-- Atleta 4 — pendiente (OT posterior) -->
+      <div class="grilla-row" onclick="go('s-paso1')">
+        <div class="grilla-pos">4</div>
+        <div class="grilla-info">
+          <div class="grilla-nombre">Torres, Iván</div>
+          <div class="grilla-ot">OT 14:27 · And. B</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+          <div class="grilla-ap">80.0 m</div>
+          <div class="grilla-estado estado-pend">PENDIENTE</div>
+        </div>
+      </div>
+      <!-- Atleta 5 — pendiente (OT posterior) -->
+      <div class="grilla-row" onclick="go('s-paso1')">
+        <div class="grilla-pos">5</div>
+        <div class="grilla-info">
+          <div class="grilla-nombre">Vega, Claudia</div>
+          <div class="grilla-ot">OT 14:36 · And. A</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+          <div class="grilla-ap">61.5 m</div>
+          <div class="grilla-estado estado-pend">PENDIENTE</div>
+        </div>
+      </div>
+    </div>
+    <div style="height:16px"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-03  PASO 1 — LLAMAR ATLETA
+══════════════════════════════════════════ -->
+<div class="screen" id="s-paso1">
+  <div class="header">
+    <button class="back-btn" onclick="go('s-grilla')">← Grilla</button>
+    <div style="text-align:right">
+      <div class="header-title">DNF · 14:00</div>
+      <div class="header-sub">Performance #1</div>
+    </div>
+  </div>
+  <div class="steps">
+    <div class="step-dot current"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+  </div>
+  <div class="atleta-card">
+    <div class="atleta-nombre">García, Martina</div>
+    <div class="atleta-meta">
+      <div class="atleta-chip ap">AP: 65.0 m</div>
+      <div class="atleta-chip pos">#1 · And. A</div>
+      <div class="atleta-chip pos">OT 14:00</div>
+    </div>
+  </div>
+  <div class="paso-label">Paso 1 de 6</div>
+  <div class="actions" style="margin-top:16px">
+    <button class="btn btn-primary" onclick="go('s-paso2')">📢 LLAMAR ATLETA</button>
+    <div class="sep" style="margin:4px 0"></div>
+    <button class="btn btn-dns" onclick="go('s-dns')">DNS — No se presenta</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-04  PASO 2 — CONFIRMAR PRESENCIA
+══════════════════════════════════════════ -->
+<div class="screen" id="s-paso2">
+  <div class="header">
+    <button class="back-btn" onclick="go('s-paso1')">← Atrás</button>
+    <div style="text-align:right">
+      <div class="header-title">DNF · 14:00</div>
+      <div class="header-sub">Atleta llamado</div>
+    </div>
+  </div>
+  <div class="steps">
+    <div class="step-dot done"></div>
+    <div class="step-dot current"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+  </div>
+  <div class="atleta-card">
+    <div class="atleta-nombre">García, Martina</div>
+    <div class="atleta-meta">
+      <div class="atleta-chip ap">AP: 65.0 m</div>
+      <div class="atleta-chip pos">#1 · And. A</div>
+    </div>
+  </div>
+  <div style="margin: 20px 20px 0; font-size:15px; color:var(--muted);">¿El atleta se presenta en el andarivel?</div>
+  <div class="paso-label">Paso 2 de 6</div>
+  <div class="actions" style="margin-top:16px">
+    <button class="btn btn-primary" onclick="go('s-paso3')">✓ PRESENTE</button>
+    <div class="sep" style="margin:4px 0"></div>
+    <button class="btn btn-dns" onclick="go('s-dns')">DNS — No se presenta</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-05  PASO 3 — INICIAR PERFORMANCE (OT)
+══════════════════════════════════════════ -->
+<div class="screen" id="s-paso3">
+  <div class="header">
+    <button class="back-btn" onclick="go('s-paso2')">← Atrás</button>
+    <div style="text-align:right">
+      <div class="header-title">DNF · 14:00</div>
+      <div class="header-sub">Confirmado</div>
+    </div>
+  </div>
+  <div class="steps">
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot current"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+  </div>
+  <div class="atleta-card">
+    <div class="atleta-nombre">García, Martina</div>
+    <div class="atleta-meta">
+      <div class="atleta-chip ap">AP: 65.0 m</div>
+      <div class="atleta-chip pos">OT 14:00:00</div>
+    </div>
+  </div>
+
+  <!-- Banner con OT programado -->
+  <div style="margin:16px 20px 0; background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:14px 16px; text-align:center;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;">Hora de salida programada</div>
+    <div style="font-size:32px;font-weight:900;color:var(--text);margin:4px 0;font-variant-numeric:tabular-nums;">14:00:00</div>
+    <div id="ot-estado-label" style="font-size:12px;color:var(--muted);">Presioná cuando llegue el Tiempo Oficial</div>
+  </div>
+
+  <!-- Countdown +30s — oculto hasta que el juez presione TIEMPO OFICIAL -->
+  <div id="ot-window-panel" style="display:none; margin:12px 20px 0; background:rgba(56,189,248,.06); border:2px solid var(--accent); border-radius:var(--r); padding:16px 20px; text-align:center;">
+    <div style="font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:.8px;font-weight:700;">⏱ Ventana activa — el atleta puede sumergirse</div>
+    <div id="ot-countdown" style="font-size:80px;font-weight:900;color:var(--blanca);font-variant-numeric:tabular-nums;letter-spacing:-4px;line-height:1.1;">30</div>
+    <div style="font-size:12px;color:var(--muted);">segundos restantes · máx OT +30s</div>
+  </div>
+
+  <div class="paso-label">Paso 3 de 6</div>
+  <div class="actions" style="margin-top:16px; gap:12px;">
+
+    <!-- Botón principal: TIEMPO OFICIAL (estado inicial) -->
+    <button id="btn-tiempo-oficial" class="btn btn-primary" style="font-size:19px;min-height:66px;" onclick="marcarTiempoOficial()">⏱ TIEMPO OFICIAL</button>
+
+    <!-- Botón ATLETA INICIA — oculto hasta que corra la ventana -->
+    <button id="btn-atleta-inicia" class="btn" style="font-size:19px;min-height:66px;background:var(--blanca);color:#fff;display:none;" onclick="atletaInicia()">▶ ATLETA INICIA</button>
+
+    <!-- DQ por ventana vencida — oculto -->
+    <div id="dq-ventana" style="display:none; flex-direction:column; gap:10px;">
+      <div class="alerta alerta-roja" style="margin:0;">⏱ Ventana de +30s vencida. El atleta no inició en el tiempo reglamentario.</div>
+      <button class="btn btn-roja" onclick="go('s-resultado-roja')">REGISTRAR DQ — No inició en ventana</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-06  PASO 4 — PERFORMANCE EN CURSO
+══════════════════════════════════════════ -->
+<div class="screen" id="s-paso4">
+  <div class="header">
+    <div>
+      <div class="header-title">DNF — EN CURSO</div>
+      <div class="header-sub">García, Martina</div>
+    </div>
+    <div id="conn4" class="conn-badge online"><div class="conn-dot"></div>En línea</div>
+  </div>
+  <div class="steps">
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot current"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+  </div>
+  <div class="cronometro">
+    <div class="crono-label">Tiempo en curso</div>
+    <div class="crono-time running" id="timer-display">00:00</div>
+    <div style="font-size:13px;color:var(--muted);">Cronómetro activo</div>
+  </div>
+  <div class="atleta-card" style="margin-top:14px">
+    <div class="atleta-nombre">García, Martina</div>
+    <div class="atleta-meta">
+      <div class="atleta-chip ap">AP: 65.0 m</div>
+      <div class="atleta-chip pos">And. A</div>
+    </div>
+  </div>
+  <div class="paso-label">Paso 4 de 6</div>
+  <div class="actions" style="margin-top:16px">
+    <button class="btn btn-primary" onclick="go('s-paso5'); stopTimer()">⏹ FINALIZAR PERFORMANCE</button>
+    <div class="sep" style="margin:4px 0"></div>
+    <button class="btn btn-roja" style="min-height:52px;font-size:15px" onclick="go('s-bko'); stopTimer()">⚡ BKO — Black-out</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-07  PASO 5 — REGISTRAR MARCA (RP)
+══════════════════════════════════════════ -->
+<div class="screen" id="s-paso5">
+  <div class="header">
+    <button class="back-btn" onclick="go('s-paso4')">← Atrás</button>
+    <div style="text-align:right">
+      <div class="header-title">DNF · Resultado</div>
+      <div class="header-sub">García, Martina</div>
+    </div>
+  </div>
+  <div class="steps">
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot current"></div>
+    <div class="step-dot"></div>
+  </div>
+  <div class="atleta-card">
+    <div class="atleta-nombre">García, Martina</div>
+    <div class="atleta-meta">
+      <div class="atleta-chip ap">AP: 65.0 m</div>
+    </div>
+  </div>
+  <div class="marca-input-wrap">
+    <div class="marca-label">Distancia realizada (RP)</div>
+    <!-- Display m + cm -->
+    <div class="rp-display-row">
+      <span class="rp-m-val" id="rp-meters">0</span>
+      <span class="rp-m-unit">m</span>
+      <span class="rp-sep">·</span>
+      <span class="rp-cm-val" id="rp-cm">--</span>
+      <span class="rp-cm-unit">cm</span>
+    </div>
+    <!-- Metros: presets -->
+    <div class="marca-label">Metros — selección rápida</div>
+    <div class="preset-row">
+      <button class="preset-btn" onclick="rpSetM(25)">25</button>
+      <button class="preset-btn" onclick="rpSetM(50)">50</button>
+      <button class="preset-btn" onclick="rpSetM(75)">75</button>
+      <button class="preset-btn" onclick="rpSetM(100)">100</button>
+      <button class="preset-btn" onclick="rpSetM(125)">125</button>
+    </div>
+    <!-- Metros: ajuste fino -->
+    <div class="m-adj-row">
+      <button class="m-adj-btn neg" onclick="rpAdjM(-1)">−1</button>
+      <button class="m-adj-btn pos" onclick="rpAdjM(1)">+1</button>
+      <button class="m-adj-btn pos" onclick="rpAdjM(5)">+5</button>
+      <button class="m-adj-btn pos" onclick="rpAdjM(10)">+10</button>
+    </div>
+    <!-- Centímetros: numpad -->
+    <div class="marca-label" style="margin-top:12px">Centímetros</div>
+    <div class="numpad">
+      <button class="np-btn" onclick="rpCmAdd('7')">7</button>
+      <button class="np-btn" onclick="rpCmAdd('8')">8</button>
+      <button class="np-btn" onclick="rpCmAdd('9')">9</button>
+      <button class="np-btn" onclick="rpCmAdd('4')">4</button>
+      <button class="np-btn" onclick="rpCmAdd('5')">5</button>
+      <button class="np-btn" onclick="rpCmAdd('6')">6</button>
+      <button class="np-btn" onclick="rpCmAdd('1')">1</button>
+      <button class="np-btn" onclick="rpCmAdd('2')">2</button>
+      <button class="np-btn" onclick="rpCmAdd('3')">3</button>
+      <button class="np-btn np-zero" onclick="rpCmAdd('0')">0</button>
+      <button class="np-btn np-del"  onclick="rpCmDel()">⌫</button>
+    </div>
+  </div>
+  <div class="paso-label">Paso 5 de 6</div>
+  <div class="actions" style="margin-top:16px">
+    <button class="btn btn-primary" onclick="go('s-paso6')">CONFIRMAR MARCA</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-08  PASO 6 — ASIGNAR TARJETA
+══════════════════════════════════════════ -->
+<div class="screen" id="s-paso6">
+  <div class="header">
+    <button class="back-btn" onclick="go('s-paso5')">← Atrás</button>
+    <div style="text-align:right">
+      <div class="header-title">DNF · Tarjeta</div>
+      <div class="header-sub">García, Martina</div>
+    </div>
+  </div>
+  <div class="steps">
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot current"></div>
+  </div>
+  <div class="atleta-card">
+    <div class="atleta-nombre">García, Martina</div>
+    <div class="atleta-meta">
+      <div class="atleta-chip ap">AP: 65.0 m</div>
+      <div class="atleta-chip" style="color:var(--blanca)">RP: 58.3 m</div>
+    </div>
+  </div>
+  <div class="paso-label">Paso 6 de 6 — Asignar tarjeta</div>
+  <div class="actions" style="margin-top:16px; gap:14px">
+    <button class="btn btn-blanca" style="font-size:19px" onclick="go('s-resultado-blanca')">⬜ TARJETA BLANCA</button>
+    <button class="btn btn-amarilla" style="font-size:19px" onclick="go('s-resultado-amarilla')">🟨 TARJETA AMARILLA</button>
+    <button class="btn btn-roja"    style="font-size:19px" onclick="go('s-resultado-roja')">🟥 TARJETA ROJA</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-09  RESULTADO — BLANCA
+══════════════════════════════════════════ -->
+<div class="screen" id="s-resultado-blanca">
+  <div class="header">
+    <div><div class="header-title">Performance completada</div></div>
+  </div>
+  <div class="result-hero">
+    <div class="result-icon">⬜</div>
+    <div class="result-label" style="color:var(--blanca)">TARJETA BLANCA</div>
+    <div class="result-marca">García, Martina · 58.3 m</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:8px">Performance válida · AP: 65.0 m</div>
+  </div>
+  <div class="actions" style="margin-top:24px">
+    <button class="btn btn-primary" onclick="go('s-grilla')">SIGUIENTE ATLETA →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-10  RESULTADO — AMARILLA (REVISIÓN)
+══════════════════════════════════════════ -->
+<div class="screen" id="s-resultado-amarilla">
+  <div class="header">
+    <div><div class="header-title">Tarjeta en revisión</div></div>
+  </div>
+  <div class="rev-badge">
+    <div class="rev-icon">🟨</div>
+    <div>
+      <div class="rev-text">TARJETA AMARILLA — EN REVISIÓN</div>
+      <div class="rev-sub">Debe resolverse antes de cerrar la disciplina</div>
+    </div>
+  </div>
+  <div class="atleta-card" style="margin-top:14px">
+    <div class="atleta-nombre">García, Martina</div>
+    <div class="atleta-meta">
+      <div class="atleta-chip ap">AP: 65.0 m</div>
+      <div class="atleta-chip" style="color:var(--blanca)">RP: 58.3 m</div>
+    </div>
+  </div>
+  <div class="alerta">⚠ La competencia no puede cerrarse mientras existan tarjetas amarillas sin resolver.</div>
+  <div class="action-label" style="margin-top:20px">Resolver revisión</div>
+  <div class="actions">
+    <button class="btn btn-blanca" onclick="go('s-resultado-blanca')">⬜ RESOLVER → BLANCA</button>
+    <button class="btn btn-roja"   onclick="go('s-resultado-roja')">🟥 RESOLVER → ROJA</button>
+  </div>
+  <div class="sep"></div>
+  <div class="actions" style="margin-top:0">
+    <button class="btn btn-ghost" onclick="go('s-grilla')">Volver a la grilla (queda en revisión)</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-11  RESULTADO — ROJA
+══════════════════════════════════════════ -->
+<div class="screen" id="s-resultado-roja">
+  <div class="header">
+    <div><div class="header-title">Performance completada</div></div>
+  </div>
+  <div class="result-hero">
+    <div class="result-icon">🟥</div>
+    <div class="result-label" style="color:var(--roja)">TARJETA ROJA</div>
+    <div class="result-marca">García, Martina · Descalificada</div>
+  </div>
+  <div class="actions" style="margin-top:24px">
+    <button class="btn btn-primary" onclick="go('s-grilla')">SIGUIENTE ATLETA →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-12  BKO — BLACK-OUT
+══════════════════════════════════════════ -->
+<div class="screen" id="s-bko">
+  <div class="header">
+    <button class="back-btn" onclick="go('s-paso4'); startTimer()">← Atrás</button>
+    <div style="text-align:right">
+      <div class="header-title">BKO — Black-out</div>
+      <div class="header-sub">Tarjeta roja automática</div>
+    </div>
+  </div>
+  <div class="bko-warn">
+    <div class="bko-title">⚡ BLACK-OUT DETECTADO</div>
+    <div class="bko-desc">Se asigna tarjeta ROJA automáticamente</div>
+  </div>
+  <div class="atleta-card">
+    <div class="atleta-nombre">García, Martina</div>
+    <div class="atleta-meta">
+      <div class="atleta-chip ap">AP: 65.0 m</div>
+    </div>
+  </div>
+  <div class="alerta alerta-roja">El campo de distancia alcanzada es <strong>obligatorio</strong> para registrar el BKO.</div>
+  <div class="marca-input-wrap">
+    <div class="marca-label">Distancia alcanzada antes del BKO</div>
+    <div class="rp-display-row">
+      <span class="rp-m-val" id="bko-meters">0</span>
+      <span class="rp-m-unit">m</span>
+      <span class="rp-sep">·</span>
+      <span class="rp-cm-val" id="bko-cm">--</span>
+      <span class="rp-cm-unit">cm</span>
+    </div>
+    <div class="marca-label">Metros</div>
+    <div class="preset-row">
+      <button class="preset-btn" onclick="bkoSetM(25)">25</button>
+      <button class="preset-btn" onclick="bkoSetM(50)">50</button>
+      <button class="preset-btn" onclick="bkoSetM(75)">75</button>
+      <button class="preset-btn" onclick="bkoSetM(100)">100</button>
+      <button class="preset-btn" onclick="bkoSetM(125)">125</button>
+    </div>
+    <div class="m-adj-row">
+      <button class="m-adj-btn neg" onclick="bkoAdjM(-1)">−1</button>
+      <button class="m-adj-btn pos" onclick="bkoAdjM(1)">+1</button>
+      <button class="m-adj-btn pos" onclick="bkoAdjM(5)">+5</button>
+      <button class="m-adj-btn pos" onclick="bkoAdjM(10)">+10</button>
+    </div>
+    <div class="marca-label" style="margin-top:12px">Centímetros</div>
+    <div class="numpad">
+      <button class="np-btn" onclick="bkoCmAdd('7')">7</button>
+      <button class="np-btn" onclick="bkoCmAdd('8')">8</button>
+      <button class="np-btn" onclick="bkoCmAdd('9')">9</button>
+      <button class="np-btn" onclick="bkoCmAdd('4')">4</button>
+      <button class="np-btn" onclick="bkoCmAdd('5')">5</button>
+      <button class="np-btn" onclick="bkoCmAdd('6')">6</button>
+      <button class="np-btn" onclick="bkoCmAdd('1')">1</button>
+      <button class="np-btn" onclick="bkoCmAdd('2')">2</button>
+      <button class="np-btn" onclick="bkoCmAdd('3')">3</button>
+      <button class="np-btn np-zero" onclick="bkoCmAdd('0')">0</button>
+      <button class="np-btn np-del"  onclick="bkoCmDel()">⌫</button>
+    </div>
+    <div class="marca-hint">Estimación del juez</div>
+  </div>
+  <div class="actions" style="margin-top:16px">
+    <button class="btn btn-roja" style="font-size:17px" onclick="go('s-resultado-roja')">CONFIRMAR BKO — TARJETA ROJA</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-13  DNS
+══════════════════════════════════════════ -->
+<div class="screen" id="s-dns">
+  <div class="header">
+    <button class="back-btn" onclick="history.back ? go('s-paso1') : go('s-paso1')">← Atrás</button>
+    <div style="text-align:right">
+      <div class="header-title">DNS</div>
+      <div class="header-sub">Did Not Start</div>
+    </div>
+  </div>
+  <div class="atleta-card">
+    <div class="atleta-nombre">García, Martina</div>
+    <div class="atleta-meta">
+      <div class="atleta-chip ap">AP: 65.0 m</div>
+      <div class="atleta-chip pos">#1 · And. A · OT 14:00</div>
+    </div>
+  </div>
+  <div class="alerta">El atleta no se presentó al OT programado. Se registrará DNS.</div>
+  <div class="actions" style="margin-top:20px">
+    <button class="btn btn-dns" onclick="go('s-resultado-dns')">CONFIRMAR DNS</button>
+    <button class="btn btn-outline" onclick="go('s-paso1')">Cancelar</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-14  RESULTADO DNS
+══════════════════════════════════════════ -->
+<div class="screen" id="s-resultado-dns">
+  <div class="header">
+    <div><div class="header-title">DNS registrado</div></div>
+  </div>
+  <div class="result-hero">
+    <div class="result-icon">—</div>
+    <div class="result-label" style="color:var(--muted)">DNS</div>
+    <div class="result-marca">García, Martina · No se presentó</div>
+  </div>
+  <div class="actions" style="margin-top:24px">
+    <button class="btn btn-primary" onclick="go('s-grilla')">SIGUIENTE ATLETA →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-15  TARJETA AMARILLA desde GRILLA (revisión pendiente)
+══════════════════════════════════════════ -->
+<div class="screen" id="s-revision">
+  <div class="header">
+    <button class="back-btn" onclick="go('s-grilla')">← Grilla</button>
+    <div style="text-align:right">
+      <div class="header-title">En revisión</div>
+      <div class="header-sub">DNF #2</div>
+    </div>
+  </div>
+  <div class="rev-badge" style="margin-top:20px">
+    <div class="rev-icon">🟨</div>
+    <div>
+      <div class="rev-text">TARJETA AMARILLA — PENDIENTE</div>
+      <div class="rev-sub">Requiere resolución antes del cierre</div>
+    </div>
+  </div>
+  <div class="atleta-card">
+    <div class="atleta-nombre">López, Andrés</div>
+    <div class="atleta-meta">
+      <div class="atleta-chip ap">AP: 72.0 m</div>
+      <div class="atleta-chip" style="color:var(--blanca)">RP: 66.0 m</div>
+      <div class="atleta-chip pos">#2 · And. B</div>
+    </div>
+  </div>
+  <div class="alerta">⚠ La disciplina DNF no puede cerrarse hasta resolver esta tarjeta.</div>
+  <div class="action-label" style="margin-top:20px">Resolver revisión</div>
+  <div class="actions">
+    <button class="btn btn-blanca" onclick="go('s-grilla')">⬜ RESOLVER → BLANCA</button>
+    <button class="btn btn-roja"   onclick="go('s-grilla')">🟥 RESOLVER → ROJA</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-16  OFFLINE DEMO
+══════════════════════════════════════════ -->
+<div class="screen" id="s-offline-demo">
+  <div class="header">
+    <button class="back-btn" onclick="go('s-paso4')">← Volver</button>
+    <div id="conn-offline" class="conn-badge offline"><div class="conn-dot"></div>Sin conexión</div>
+  </div>
+  <div class="alerta" style="margin-top:20px">
+    📵 <strong>Modo offline activo.</strong><br>
+    Las acciones se guardan localmente y se sincronizarán al reconectar.
+  </div>
+  <div style="margin:16px 20px 0; background:var(--surface); border-radius:var(--r); padding:16px; border:1px solid var(--border);">
+    <div style="font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">Cola de sincronización</div>
+    <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">
+      <div style="display:flex;justify-content:space-between;font-size:14px;">
+        <span>Performance #3 — Blanca</span><span style="color:var(--amarilla)">⏳ pendiente</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:14px;">
+        <span>Performance #4 — DNS</span><span style="color:var(--amarilla)">⏳ pendiente</span>
+      </div>
+    </div>
+  </div>
+  <div class="actions" style="margin-top:20px">
+    <button class="btn btn-primary" onclick="simulateSync()">SIMULAR RECONEXIÓN</button>
+  </div>
+  <div id="sync-ok" style="display:none;margin:16px 20px 0;background:rgba(34,197,94,.1);border:1px solid var(--blanca);border-radius:var(--r);padding:14px;text-align:center;color:var(--blanca);font-weight:700;">
+    ✓ 2 eventos sincronizados correctamente
+  </div>
+</div>
+
+</div><!-- #app -->
+
+<script>
+// ── Navegación ──────────────────────────────────────────
+function go(screenId) {
+  clearInterval(otInterval); // cancela ventana OT si navegamos fuera
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(screenId);
+  if (target) target.classList.add('active');
+  window.scrollTo(0, 0);
+  if (screenId === 's-paso3') resetOtPanel();
+}
+
+// ── Cronómetro ──────────────────────────────────────────
+let timerInterval = null;
+let timerSeconds  = 0;
+
+function startTimer() {
+  timerSeconds = 0;
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timerSeconds++;
+    const m = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+    const s = String(timerSeconds % 60).padStart(2, '0');
+    const el = document.getElementById('timer-display');
+    if (el) el.textContent = `${m}:${s}`;
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+// ── Simulación offline ──────────────────────────────────
+function simulateSync() {
+  const badges = document.querySelectorAll('.conn-badge');
+  badges.forEach(b => { b.className = 'conn-badge online'; b.innerHTML = '<div class="conn-dot"></div>En línea'; });
+  document.getElementById('sync-ok').style.display = 'block';
+  setTimeout(() => go('s-grilla'), 1800);
+}
+
+// ── Ventana OT (+30s) ─────────────────────────────────
+let otInterval = null;
+let otSeconds  = 30;
+
+function resetOtPanel() {
+  // Restaura paso3 a estado inicial (antes de presionar TIEMPO OFICIAL)
+  otSeconds = 30;
+  clearInterval(otInterval);
+  const countEl  = document.getElementById('ot-countdown');
+  const panelEl  = document.getElementById('ot-window-panel');
+  const btnTO    = document.getElementById('btn-tiempo-oficial');
+  const btnIA    = document.getElementById('btn-atleta-inicia');
+  const dqEl     = document.getElementById('dq-ventana');
+  const labelEl  = document.getElementById('ot-estado-label');
+  if (countEl)  { countEl.textContent = '30'; countEl.style.color = 'var(--blanca)'; }
+  if (panelEl)  panelEl.style.display = 'none';
+  if (btnTO)    { btnTO.style.display = 'flex'; btnTO.disabled = false; btnTO.style.opacity = '1'; }
+  if (btnIA)    btnIA.style.display = 'none';
+  if (dqEl)     dqEl.style.display = 'none';
+  if (labelEl)  { labelEl.textContent = 'Presioná cuando llegue el Tiempo Oficial'; labelEl.style.color = 'var(--muted)'; }
+}
+
+function marcarTiempoOficial() {
+  // El juez presiona cuando llega el OT → arranca la ventana de +30s
+  const panelEl  = document.getElementById('ot-window-panel');
+  const btnTO    = document.getElementById('btn-tiempo-oficial');
+  const btnIA    = document.getElementById('btn-atleta-inicia');
+  const countEl  = document.getElementById('ot-countdown');
+  const labelEl  = document.getElementById('ot-estado-label');
+
+  // Ocultar botón TO, mostrar panel y botón ATLETA INICIA
+  if (btnTO)   { btnTO.style.display = 'none'; }
+  if (panelEl) panelEl.style.display = 'block';
+  if (btnIA)   btnIA.style.display = 'flex';
+  if (labelEl) { labelEl.textContent = '✓ Tiempo Oficial marcado'; labelEl.style.color = 'var(--blanca)'; }
+
+  // Arrancar countdown
+  otSeconds = 30;
+  clearInterval(otInterval);
+  otInterval = setInterval(() => {
+    otSeconds--;
+    if (countEl) {
+      countEl.textContent = otSeconds;
+      if (otSeconds <= 10 && otSeconds > 5) countEl.style.color = 'var(--amarilla)';
+      if (otSeconds <= 5  && otSeconds > 0) countEl.style.color = 'var(--roja)';
+    }
+    if (otSeconds <= 0) {
+      clearInterval(otInterval);
+      if (countEl) { countEl.textContent = '0'; countEl.style.color = 'var(--roja)'; }
+      if (btnIA)   { btnIA.disabled = true; btnIA.style.opacity = '.3'; }
+      const dqEl = document.getElementById('dq-ventana');
+      if (dqEl)    dqEl.style.display = 'flex';
+    }
+  }, 1000);
+}
+
+function atletaInicia() {
+  clearInterval(otInterval);
+  go('s-paso4');
+  startTimer();
+}
+
+// ── Demo: botón offline desde grilla ───────────────────
+// Click largo en el header de grilla abre demo offline
+document.getElementById('s-grilla')?.querySelector('.header')
+  ?.addEventListener('dblclick', () => go('s-offline-demo'));
+
+// ── Selector de marca RP (metros + centímetros) ────────
+let rpM = 0;      // metros enteros
+let rpCm = '';    // buffer de cm: '' | '4' | '43'
+
+function rpSetM(val) {
+  rpM = Math.max(0, val);
+  document.querySelectorAll('#s-paso5 .preset-btn').forEach(b =>
+    b.classList.toggle('selected', parseInt(b.textContent) === rpM));
+  rpRefresh();
+}
+function rpAdjM(d) { rpSetM(rpM + d); }
+
+function rpCmAdd(digit) {
+  rpCm = (rpCm + digit).slice(-2); // máx 2 dígitos, desplaza hacia izquierda
+  rpRefresh();
+}
+function rpCmDel() {
+  rpCm = rpCm.slice(0, -1);
+  rpRefresh();
+}
+function rpRefresh() {
+  const mEl = document.getElementById('rp-meters');
+  const cmEl = document.getElementById('rp-cm');
+  if (mEl) mEl.textContent = rpM;
+  if (cmEl) {
+    cmEl.textContent = rpCm === '' ? '--' : rpCm.padStart(2, '0');
+    cmEl.classList.toggle('has-value', rpCm !== '');
+  }
+}
+
+// ── Selector de distancia BKO ─────────────────────────
+let bkoM = 0;
+let bkoCm = '';
+
+function bkoSetM(val) {
+  bkoM = Math.max(0, val);
+  document.querySelectorAll('#s-bko .preset-btn').forEach(b =>
+    b.classList.toggle('selected', parseInt(b.textContent) === bkoM));
+  bkoRefresh();
+}
+function bkoAdjM(d) { bkoSetM(bkoM + d); }
+
+function bkoCmAdd(digit) {
+  bkoCm = (bkoCm + digit).slice(-2);
+  bkoRefresh();
+}
+function bkoCmDel() {
+  bkoCm = bkoCm.slice(0, -1);
+  bkoRefresh();
+}
+function bkoRefresh() {
+  const mEl = document.getElementById('bko-meters');
+  const cmEl = document.getElementById('bko-cm');
+  if (mEl) mEl.textContent = bkoM;
+  if (cmEl) {
+    cmEl.textContent = bkoCm === '' ? '--' : bkoCm.padStart(2, '0');
+    cmEl.classList.toggle('has-value', bkoCm !== '');
+  }
+}
+</script>
+</body>
+</html>
