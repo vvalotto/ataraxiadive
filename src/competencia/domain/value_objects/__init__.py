@@ -10,6 +10,7 @@ from competencia.domain.value_objects.intervalo_disciplina import (
     IntervaloDisciplina,
     IntervaloInvalido,
 )
+from competencia.domain.value_objects.motivo_dq import MotivoDQ
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
 __all__ = [
@@ -21,6 +22,7 @@ __all__ = [
     "EstadoPerformance",
     "IntervaloDisciplina",
     "IntervaloInvalido",
+    "MotivoDQ",
     "UnidadMedida",
     "ValorAPInvalido",
 ]

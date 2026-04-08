@@ -16,10 +16,13 @@ from competencia.application.commands.asignar_tarjeta import (
     PerformanceNoEncontrada,
 )
 from competencia.domain.exceptions import (
+    DistanciaBlackoutNoAplica,
     EstadoInvalidoParaAsignarTarjeta,
+    MotivoDQObligatorio,
     MotivoObligatorio,
 )
 from competencia.domain.value_objects.disciplina import Disciplina
+from competencia.domain.value_objects.motivo_dq import MotivoDQ
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 
 OT = datetime(2026, 3, 22, 10, 30, 0)
@@ -111,7 +114,8 @@ def _make_command(
     competencia_id: Any,
     participante_id: Any,
     tipo: TipoTarjeta = TipoTarjeta.Blanca,
-    motivo: str | None = None,
+    motivo_dq: MotivoDQ | None = None,
+    motivo_texto: str | None = None,
 ) -> AsignarTarjetaCommand:
     return AsignarTarjetaCommand(
         competencia_id=competencia_id,
@@ -119,7 +123,8 @@ def _make_command(
         disciplina=Disciplina.DNF,
         tipo=tipo,
         asignada_por="juez-001",
-        motivo=motivo,
+        motivo_dq=motivo_dq,
+        motivo_texto=motivo_texto,
     )
 
 
@@ -149,7 +154,7 @@ async def test_asignar_tarjeta_blanca_payload_correcto(
     competencia_id: Any,
     participante_id: Any,
 ) -> None:
-    """El payload de TarjetaAsignada (Blanca) contiene tipo, motivo=null y asignadaPor."""
+    """El payload de TarjetaAsignada (Blanca) contiene campos de motivo en null."""
     handler = AsignarTarjetaHandler(mock_event_store_con_resultado)
     command = _make_command(competencia_id, participante_id, TipoTarjeta.Blanca)
 
@@ -157,7 +162,8 @@ async def test_asignar_tarjeta_blanca_payload_correcto(
 
     payload = mock_event_store_con_resultado.append.call_args.kwargs["payload"]
     assert payload["tipo"] == "Blanca"
-    assert payload["motivo"] is None
+    assert payload["motivo_dq_codigo"] is None
+    assert payload["motivo_texto"] is None
     assert payload["asignada_por"] == "juez-001"
 
 
@@ -170,31 +176,41 @@ async def test_asignar_tarjeta_amarilla_con_motivo_persiste(
     """AsignarTarjetaHandler persiste TarjetaAsignada (Amarilla) con motivo."""
     handler = AsignarTarjetaHandler(mock_event_store_con_resultado)
     command = _make_command(
-        competencia_id, participante_id, TipoTarjeta.Amarilla, "superficie sin protocolo"
+        competencia_id,
+        participante_id,
+        TipoTarjeta.Amarilla,
+        motivo_texto="superficie sin protocolo",
     )
 
     await handler.handle(command)
 
     payload = mock_event_store_con_resultado.append.call_args.kwargs["payload"]
     assert payload["tipo"] == "Amarilla"
-    assert payload["motivo"] == "superficie sin protocolo"
+    assert payload["motivo_texto"] == "superficie sin protocolo"
+    assert payload["motivo_dq_codigo"] is None
 
 
 @pytest.mark.asyncio
-async def test_asignar_tarjeta_roja_con_motivo_persiste(
+async def test_asignar_tarjeta_roja_con_motivo_dq_persiste(
     mock_event_store_con_resultado: AsyncMock,
     competencia_id: Any,
     participante_id: Any,
 ) -> None:
-    """AsignarTarjetaHandler persiste TarjetaAsignada (Roja) con motivo."""
+    """AsignarTarjetaHandler persiste TarjetaAsignada (Roja) con MotivoDQ."""
     handler = AsignarTarjetaHandler(mock_event_store_con_resultado)
-    command = _make_command(competencia_id, participante_id, TipoTarjeta.Roja, "tiempo excedido")
+    command = _make_command(
+        competencia_id,
+        participante_id,
+        TipoTarjeta.Roja,
+        motivo_dq=MotivoDQ.PROTOCOLO_SUPERFICIE,
+    )
 
     await handler.handle(command)
 
     payload = mock_event_store_con_resultado.append.call_args.kwargs["payload"]
     assert payload["tipo"] == "Roja"
-    assert payload["motivo"] == "tiempo excedido"
+    assert payload["motivo_dq_codigo"] == MotivoDQ.PROTOCOLO_SUPERFICIE.value
+    assert payload["motivo_texto"] is None
 
 
 # ── Performance no encontrada ─────────────────────────────────────────────────
@@ -284,11 +300,11 @@ async def test_asignar_tarjeta_roja_sin_motivo_no_persiste(
     competencia_id: Any,
     participante_id: Any,
 ) -> None:
-    """INV-P-11: si MotivoObligatorio falla, no se persiste ningún evento."""
+    """INV-P-11: si MotivoDQObligatorio falla, no se persiste ningún evento."""
     handler = AsignarTarjetaHandler(mock_event_store_con_resultado)
     command = _make_command(competencia_id, participante_id, TipoTarjeta.Roja)
 
-    with pytest.raises(MotivoObligatorio):
+    with pytest.raises(MotivoDQObligatorio):
         await handler.handle(command)
 
     mock_event_store_con_resultado.append.assert_not_called()
@@ -303,7 +319,7 @@ async def test_handler_blackout_persiste_distancia(
     competencia_id: Any,
     participante_id: Any,
 ) -> None:
-    """Handler con black-out persiste TarjetaAsignada con distancia_blackout."""
+    """Handler con BKO persiste TarjetaAsignada con distancia_blackout."""
     handler = AsignarTarjetaHandler(mock_event_store_con_resultado)
     command = AsignarTarjetaCommand(
         competencia_id=competencia_id,
@@ -311,7 +327,7 @@ async def test_handler_blackout_persiste_distancia(
         disciplina=Disciplina.DNF,
         tipo=TipoTarjeta.Roja,
         asignada_por="juez-001",
-        motivo="black-out",
+        motivo_dq=MotivoDQ.BKO_SUPERFICIE,
         distancia_blackout=Decimal("45.5"),
     )
     await handler.handle(command)
@@ -327,7 +343,7 @@ async def test_handler_blackout_sin_distancia_lanza_excepcion(
     competencia_id: Any,
     participante_id: Any,
 ) -> None:
-    """Handler con black-out sin distancia lanza DistanciaBlackoutObligatoria."""
+    """Handler con BKO sin distancia lanza DistanciaBlackoutObligatoria."""
     from competencia.domain.aggregates.performance import DistanciaBlackoutObligatoria
 
     handler = AsignarTarjetaHandler(mock_event_store_con_resultado)
@@ -337,9 +353,31 @@ async def test_handler_blackout_sin_distancia_lanza_excepcion(
         disciplina=Disciplina.DNF,
         tipo=TipoTarjeta.Roja,
         asignada_por="juez-001",
-        motivo="black-out",
+        motivo_dq=MotivoDQ.BKO_SUPERFICIE,
     )
     with pytest.raises(DistanciaBlackoutObligatoria):
         await handler.handle(command)
 
     mock_event_store_con_resultado.append.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_handler_motivo_no_bko_rechaza_distancia(
+    mock_event_store_con_resultado: AsyncMock,
+    competencia_id: Any,
+    participante_id: Any,
+) -> None:
+    """Los motivos no BKO rechazan distancia_blackout."""
+    handler = AsignarTarjetaHandler(mock_event_store_con_resultado)
+    command = AsignarTarjetaCommand(
+        competencia_id=competencia_id,
+        participante_id=participante_id,
+        disciplina=Disciplina.DNF,
+        tipo=TipoTarjeta.Roja,
+        asignada_por="juez-001",
+        motivo_dq=MotivoDQ.SALIDA_EN_FALSO,
+        distancia_blackout=Decimal("20"),
+    )
+
+    with pytest.raises(DistanciaBlackoutNoAplica):
+        await handler.handle(command)

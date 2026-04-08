@@ -13,6 +13,7 @@ from competencia.domain.aggregates.performance import Performance
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.ports.performances_estado_port import PerformancesEstadoPort
 from competencia.domain.value_objects.disciplina import Disciplina
+from competencia.domain.value_objects.motivo_dq import MotivoDQ
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 
 # ── Excepciones de aplicación ─────────────────────────────────────────────────
@@ -35,7 +36,8 @@ class AsignarTarjetaCommand:
         disciplina: Disciplina en la que compitió.
         tipo: Tipo de tarjeta — Blanca, Amarilla o Roja.
         asignada_por: Identificador del juez que asigna la tarjeta.
-        motivo: Motivo obligatorio para Amarilla y Roja (INV-P-11). None para Blanca.
+        motivo_dq: Motivo reglamentario para tarjeta roja.
+        motivo_texto: Motivo libre para tarjeta amarilla.
     """
 
     competencia_id: UUID
@@ -43,7 +45,8 @@ class AsignarTarjetaCommand:
     disciplina: Disciplina
     tipo: TipoTarjeta
     asignada_por: str
-    motivo: str | None = field(default=None)
+    motivo_dq: MotivoDQ | None = field(default=None)
+    motivo_texto: str | None = field(default=None)
     distancia_blackout: Decimal | None = field(default=None)
 
 
@@ -81,7 +84,7 @@ class AsignarTarjetaHandler:
         Raises:
             PerformanceNoEncontrada: no existe Performance para este atleta.
             EstadoInvalidoParaAsignarTarjeta: Performance no está en ResultadoRegistrado (INV-P-07).
-            MotivoObligatorio: tarjeta Amarilla o Roja sin motivo (INV-P-11).
+            MotivoObligatorio: tarjeta Amarilla sin motivo libre.
         """
         stream_id = _build_stream_id(
             command.competencia_id, command.participante_id, command.disciplina
@@ -98,7 +101,11 @@ class AsignarTarjetaHandler:
 
         # Ejecuta (lanza EstadoInvalidoParaAsignarTarjeta o MotivoObligatorio si aplica)
         performance.asignar_tarjeta(
-            command.tipo, command.asignada_por, command.motivo, command.distancia_blackout
+            command.tipo,
+            command.asignada_por,
+            command.motivo_dq,
+            command.motivo_texto,
+            command.distancia_blackout,
         )
 
         # Persistir eventos pendientes

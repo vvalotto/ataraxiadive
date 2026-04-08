@@ -1,0 +1,10 @@
+{
+  "us_id": "US-4.1.1",
+  "tool": "codeguard",
+  "status": "inconclusive",
+  "scope": "src/competencia",
+  "notes": [
+    "El binario disponible no acepta --output y la corrida interactiva no devolvio resumen final util dentro del tiempo observado en este entorno.",
+    "La validacion de calidad manual completada para esta US fue designreviewer sobre src/competencia con 0 CRITICAL."
+  ]
+}

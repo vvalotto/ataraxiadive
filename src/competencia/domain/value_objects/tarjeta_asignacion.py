@@ -5,7 +5,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from decimal import Decimal
 
-from competencia.domain.exceptions import DistanciaBlackoutObligatoria, MotivoObligatorio
+from competencia.domain.exceptions import (
+    DistanciaBlackoutNoAplica,
+    DistanciaBlackoutObligatoria,
+    MotivoDQObligatorio,
+    MotivoObligatorio,
+)
+from competencia.domain.value_objects.motivo_dq import MotivoDQ
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 
 
@@ -14,18 +20,34 @@ class TarjetaAsignacion:
     """Encapsula tipo, motivo y distancia de blackout como un solo concepto."""
 
     tipo: TipoTarjeta
-    motivo: str | None
+    motivo_dq: MotivoDQ | None
+    motivo_texto: str | None
     distancia_blackout: Decimal | None
 
     def __post_init__(self) -> None:
-        if self.tipo in (TipoTarjeta.Amarilla, TipoTarjeta.Roja) and not self.motivo:
+        if self.tipo == TipoTarjeta.Amarilla and not self.motivo_texto:
             raise MotivoObligatorio(
-                f"Tarjeta {self.tipo.value} requiere motivo obligatorio (INV-P-11)"
+                f"Tarjeta {self.tipo.value} requiere motivo en texto obligatorio (INV-P-11b)"
             )
 
-        if self.motivo == "black-out" and (
-            self.distancia_blackout is None or self.distancia_blackout <= 0
-        ):
-            raise DistanciaBlackoutObligatoria(
-                "Tarjeta roja por black-out requiere distancia_blackout > 0 (RF-EJ-07)"
+        if self.tipo == TipoTarjeta.Roja and self.motivo_dq is None:
+            raise MotivoDQObligatorio(
+                f"Tarjeta {self.tipo.value} requiere MotivoDQ obligatorio (INV-P-11)"
+            )
+
+        if self.tipo != TipoTarjeta.Amarilla and self.motivo_texto:
+            raise MotivoDQObligatorio(
+                f"Tarjeta {self.tipo.value} no acepta motivo_texto en nuevas asignaciones"
+            )
+
+        if self.motivo_dq is not None and self.motivo_dq.requiere_distancia_blackout():
+            if self.distancia_blackout is None or self.distancia_blackout <= 0:
+                raise DistanciaBlackoutObligatoria(
+                    "Tarjeta roja por blackout requiere distancia_blackout > 0 (INV-DQ-01)"
+                )
+            return
+
+        if self.distancia_blackout is not None:
+            raise DistanciaBlackoutNoAplica(
+                "distancia_blackout solo aplica a motivos BKO (INV-DQ-02)"
             )

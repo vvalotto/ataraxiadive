@@ -6,19 +6,19 @@ Feature: US-1.4.1 — Black-out con Distancia
   Background:
     Given una Performance en estado ResultadoRegistrado
 
-  Scenario: Juez registra black-out con distancia válida
-    When el juez asigna tarjeta roja con motivo "black-out" y distancia 45.5 metros
+  Scenario: Juez registra BKO_SUPERFICIE con distancia válida
+    When el juez asigna tarjeta roja con motivo_dq "BKO_SUPERFICIE" y distancia 45.5 metros
     Then la Performance queda en estado Ejecutada
     And el evento TarjetaAsignada contiene distancia_blackout 45.5
 
-  Scenario: Black-out sin distancia es rechazado
-    When el juez asigna tarjeta roja con motivo "black-out" sin distancia
+  Scenario: BKO_SUPERFICIE sin distancia es rechazado
+    When el juez asigna tarjeta roja con motivo_dq "BKO_SUPERFICIE" sin distancia
     Then se lanza DistanciaBlackoutObligatoria
 
-  Scenario: Black-out con distancia cero es rechazado
-    When el juez asigna tarjeta roja con motivo "black-out" y distancia 0 metros
+  Scenario: BKO_SUPERFICIE con distancia cero es rechazado
+    When el juez asigna tarjeta roja con motivo_dq "BKO_SUPERFICIE" y distancia 0 metros
     Then se lanza DistanciaBlackoutObligatoria
 
-  Scenario: Tarjeta roja sin black-out sigue funcionando (regresión)
-    When el juez asigna tarjeta roja con motivo "tiempo excedido" sin distancia
-    Then la Performance queda en estado Ejecutada
+  Scenario: Motivo no BKO con distancia es rechazado
+    When el juez asigna tarjeta roja con motivo_dq "SALIDA_EN_FALSO" y distancia 20 metros
+    Then se lanza DistanciaBlackoutNoAplica

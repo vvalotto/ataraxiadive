@@ -138,7 +138,7 @@ classDiagram
         +registrarAP(valor, unidad) APRegistrado
         +llamar(otProgramado) AtletaLlamado
         +registrarResultado(valor, juezId) ResultadoRegistrado
-        +asignarTarjeta(tipo, motivo, juezId) TarjetaAsignada
+        +asignarTarjeta(tipo, motivoDQ|motivoTexto, juezId) TarjetaAsignada
         +registrarDNS(juezId) DNSRegistrado
         +corregirResultado(valor, motivo, juezId) ResultadoCorregido
     }
@@ -156,9 +156,10 @@ classDiagram
 
     class Tarjeta {
         +TipoTarjeta tipo
-        +String motivo
+        +MotivoDQ motivoDQ
+        +String motivoTexto
         +UserId juezId
-        +requiereMotivo() bool
+        +requiereMotivoDQ() bool
     }
 
     Performance "1" *-- "1" AP
@@ -178,6 +179,10 @@ classDiagram
 | `ResultadoCorregido` | `corregirResultado()` |
 
 **Invariantes:** INV-P-01 a INV-P-14 (ver `event-storming-competencia.md`)
+
+**Nota US-4.1.1:** la tarjeta roja ya no usa string libre. El BC `competencia`
+modela un catálogo formal `MotivoDQ` y el evento `TarjetaAsignada` separa
+`motivo_dq_codigo` de `motivo_texto` para preservar compatibilidad histórica.
 
 ---
 

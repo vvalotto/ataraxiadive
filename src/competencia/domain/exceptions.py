@@ -59,8 +59,16 @@ class MotivoObligatorio(DomainError):
     """
 
 
+class MotivoDQObligatorio(DomainError):
+    """Tarjeta roja requiere un motivo formal del catálogo MotivoDQ (INV-P-11)."""
+
+
 class DistanciaBlackoutObligatoria(DomainError):
     """Tarjeta roja con motivo black-out requiere distancia_blackout > 0 (RF-EJ-07)."""
+
+
+class DistanciaBlackoutNoAplica(DomainError):
+    """Solo los motivos BKO admiten distancia_blackout asociada."""
 
 
 # ── Competencia ───────────────────────────────────────────────────────────────

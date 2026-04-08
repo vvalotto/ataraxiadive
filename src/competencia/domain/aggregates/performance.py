@@ -17,21 +17,29 @@ from competencia.domain.events.resultado_registrado import ResultadoRegistrado
 from competencia.domain.events.tarjeta_asignada import TarjetaAsignada
 from competencia.domain.exceptions import (
     DistanciaBlackoutObligatoria,  # noqa: F401 - re-export por compatibilidad
+    DistanciaBlackoutNoAplica,  # noqa: F401 - re-export por compatibilidad
     EstadoInvalidoParaAsignarTarjeta,
     EstadoInvalidoParaCorregirResultado,
     EstadoInvalidoParaLlamar,
     EstadoInvalidoParaRegistrarDNS,
     EstadoInvalidoParaRegistrarResultado,
+    MotivoDQObligatorio,  # noqa: F401 - re-export por compatibilidad
     MotivoObligatorio,
 )
 from competencia.domain.value_objects.ap import AP
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
+from competencia.domain.value_objects.motivo_dq import MotivoDQ
 from competencia.domain.value_objects.tarjeta_asignacion import TarjetaAsignacion
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
-__all__ = ["Performance", "DistanciaBlackoutObligatoria"]
+__all__ = [
+    "Performance",
+    "DistanciaBlackoutObligatoria",
+    "DistanciaBlackoutNoAplica",
+    "MotivoDQObligatorio",
+]
 
 
 class Performance(AggregateRoot):
@@ -63,6 +71,8 @@ class Performance(AggregateRoot):
         self._ap: AP | None = None
         self._rp: Decimal | None = None
         self._tarjeta: TipoTarjeta | None = None
+        self._motivo_dq: MotivoDQ | None = None
+        self._motivo_texto: str | None = None
         self._estado: EstadoPerformance | None = None
         self._ot_programado: datetime | None = None
         self._posicion_grilla: int | None = None
@@ -113,6 +123,16 @@ class Performance(AggregateRoot):
     def disciplina(self) -> Disciplina:
         """Disciplina de esta Performance."""
         return self._disciplina
+
+    @property
+    def motivo_dq(self) -> MotivoDQ | None:
+        """Motivo formal de DQ asociado a la tarjeta roja."""
+        return self._motivo_dq
+
+    @property
+    def motivo_texto(self) -> str | None:
+        """Motivo textual libre asociado a la tarjeta."""
+        return self._motivo_texto
 
     @property
     def posicion_grilla(self) -> int | None:
@@ -328,26 +348,31 @@ class Performance(AggregateRoot):
         self,
         tipo: TipoTarjeta,
         asignada_por: str,
-        motivo: str | None = None,
+        motivo_dq: MotivoDQ | None = None,
+        motivo_texto: str | None = None,
         distancia_blackout: Decimal | None = None,
     ) -> None:
         """Asigna la tarjeta al atleta tras registrar el resultado.
 
         Verifica que la Performance esté en estado ResultadoRegistrado (INV-P-07).
-        Exige motivo si la tarjeta es Amarilla o Roja (INV-P-11).
-        Exige distancia_blackout > 0 si motivo == "black-out" (RF-EJ-07).
+        Exige `motivo_texto` si la tarjeta es Amarilla (INV-P-11b).
+        Exige `motivo_dq` si la tarjeta es Roja (INV-P-11).
+        Exige distancia_blackout > 0 solo para motivos de blackout.
 
         Args:
             tipo: Tipo de tarjeta — Blanca, Amarilla o Roja.
             asignada_por: Identificador del juez que asigna la tarjeta.
-            motivo: Motivo obligatorio para Amarilla y Roja (INV-P-11).
-            distancia_blackout: Distancia alcanzada — obligatoria si motivo == "black-out".
+            motivo_dq: Motivo reglamentario obligatorio para Roja.
+            motivo_texto: Motivo libre obligatorio para Amarilla.
+            distancia_blackout: Distancia alcanzada — obligatoria para motivos BKO.
 
         Raises:
             EstadoInvalidoParaAsignarTarjeta:
                 Performance no en ResultadoRegistrado (INV-P-07).
-            MotivoObligatorio: tarjeta Amarilla o Roja sin motivo (INV-P-11).
-            DistanciaBlackoutObligatoria: motivo "black-out" sin distancia o distancia <= 0.
+            MotivoObligatorio: tarjeta Amarilla sin motivo libre.
+            MotivoDQObligatorio: tarjeta Roja sin motivo reglamentario.
+            DistanciaBlackoutObligatoria: blackout sin distancia o distancia <= 0.
+            DistanciaBlackoutNoAplica: distancia informada para motivo sin blackout.
         """
         if self._estado != EstadoPerformance.ResultadoRegistrado:
             raise EstadoInvalidoParaAsignarTarjeta(
@@ -357,7 +382,8 @@ class Performance(AggregateRoot):
 
         tarjeta_asignacion = TarjetaAsignacion(
             tipo=tipo,
-            motivo=motivo,
+            motivo_dq=motivo_dq,
+            motivo_texto=motivo_texto,
             distancia_blackout=distancia_blackout,
         )
 
@@ -370,16 +396,21 @@ class Performance(AggregateRoot):
             participante_id=str(self._participante_id),
             disciplina=self._disciplina.value,
             tipo=tarjeta_asignacion.tipo.value,
-            motivo=tarjeta_asignacion.motivo,
+            motivo_dq_codigo=(
+                tarjeta_asignacion.motivo_dq.value if tarjeta_asignacion.motivo_dq else None
+            ),
+            motivo_texto=tarjeta_asignacion.motivo_texto,
             asignada_por=asignada_por,
             asignada_en=now.isoformat(),
             distancia_blackout=(
                 str(tarjeta_asignacion.distancia_blackout)
-                if tarjeta_asignacion.distancia_blackout
+                if tarjeta_asignacion.distancia_blackout is not None
                 else None
             ),
         )
         self._tarjeta = tarjeta_asignacion.tipo
+        self._motivo_dq = tarjeta_asignacion.motivo_dq
+        self._motivo_texto = tarjeta_asignacion.motivo_texto
         self._distancia_blackout = tarjeta_asignacion.distancia_blackout
         self._estado = EstadoPerformance.Ejecutada
         self._record(event)
@@ -457,7 +488,18 @@ class Performance(AggregateRoot):
     def _apply_tarjeta_asignada(self, payload: dict[str, Any]) -> None:
         self._tarjeta = TipoTarjeta(payload["tipo"])
         self._estado = EstadoPerformance.Ejecutada
-        if payload.get("distancia_blackout"):
+        legacy_motivo = payload.get("motivo")
+        motivo_dq_codigo = payload.get("motivo_dq_codigo")
+        self._motivo_texto = payload.get("motivo_texto")
+
+        if motivo_dq_codigo:
+            self._motivo_dq = MotivoDQ(motivo_dq_codigo)
+        elif legacy_motivo == "black-out":
+            self._motivo_dq = MotivoDQ.BKO_SUPERFICIE
+        elif isinstance(legacy_motivo, str):
+            self._motivo_texto = legacy_motivo
+
+        if payload.get("distancia_blackout") is not None:
             self._distancia_blackout = Decimal(payload["distancia_blackout"])
 
     def _apply_resultado_corregido(self, payload: dict[str, Any]) -> None:

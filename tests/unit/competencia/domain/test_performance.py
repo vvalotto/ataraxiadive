@@ -10,17 +10,20 @@ import pytest
 
 from competencia.domain.aggregates.performance import Performance
 from competencia.domain.exceptions import (
+    DistanciaBlackoutNoAplica,
     DistanciaBlackoutObligatoria,
     EstadoInvalidoParaAsignarTarjeta,
     EstadoInvalidoParaCorregirResultado,
     EstadoInvalidoParaLlamar,
     EstadoInvalidoParaRegistrarDNS,
     EstadoInvalidoParaRegistrarResultado,
+    MotivoDQObligatorio,
     MotivoObligatorio,
 )
 from competencia.domain.value_objects.ap import ValorAPInvalido
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
+from competencia.domain.value_objects.motivo_dq import MotivoDQ
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
@@ -437,39 +440,42 @@ def test_asignar_tarjeta_blanca_transiciona_a_ejecutada(
 
 
 def test_asignar_tarjeta_blanca_payload_correcto(performance_con_resultado: Performance) -> None:
-    """TarjetaAsignada (Blanca) contiene tipo, motivo=null y asignadaPor correctos."""
+    """TarjetaAsignada (Blanca) contiene motivo_dq/motivo_texto nulos."""
     performance_con_resultado.asignar_tarjeta(TipoTarjeta.Blanca, "juez-007")
 
     events = performance_con_resultado.pull_events()
     payload = events[0].to_payload()
     assert payload["tipo"] == "Blanca"
-    assert payload["motivo"] is None
+    assert payload["motivo_dq_codigo"] is None
+    assert payload["motivo_texto"] is None
     assert payload["asignada_por"] == "juez-007"
 
 
 def test_asignar_tarjeta_amarilla_con_motivo(performance_con_resultado: Performance) -> None:
-    """asignar_tarjeta(Amarilla, motivo) emite TarjetaAsignada con motivo correcto."""
+    """asignar_tarjeta(Amarilla, motivo_texto) emite TarjetaAsignada correcta."""
     performance_con_resultado.asignar_tarjeta(
-        TipoTarjeta.Amarilla, "juez-001", motivo="superficie sin protocolo"
+        TipoTarjeta.Amarilla, "juez-001", motivo_texto="superficie sin protocolo"
     )
 
     events = performance_con_resultado.pull_events()
     payload = events[0].to_payload()
     assert payload["tipo"] == "Amarilla"
-    assert payload["motivo"] == "superficie sin protocolo"
+    assert payload["motivo_texto"] == "superficie sin protocolo"
+    assert payload["motivo_dq_codigo"] is None
     assert performance_con_resultado.estado == EstadoPerformance.Ejecutada
 
 
-def test_asignar_tarjeta_roja_con_motivo(performance_con_resultado: Performance) -> None:
-    """asignar_tarjeta(Roja, motivo) emite TarjetaAsignada con motivo correcto."""
+def test_asignar_tarjeta_roja_con_motivo_dq(performance_con_resultado: Performance) -> None:
+    """asignar_tarjeta(Roja, motivo_dq) emite TarjetaAsignada con código formal."""
     performance_con_resultado.asignar_tarjeta(
-        TipoTarjeta.Roja, "juez-001", motivo="tiempo excedido"
+        TipoTarjeta.Roja, "juez-001", motivo_dq=MotivoDQ.PROTOCOLO_SUPERFICIE
     )
 
     events = performance_con_resultado.pull_events()
     payload = events[0].to_payload()
     assert payload["tipo"] == "Roja"
-    assert payload["motivo"] == "tiempo excedido"
+    assert payload["motivo_dq_codigo"] == MotivoDQ.PROTOCOLO_SUPERFICIE.value
+    assert payload["motivo_texto"] is None
     assert performance_con_resultado.estado == EstadoPerformance.Ejecutada
 
 
@@ -504,8 +510,8 @@ def test_asignar_tarjeta_amarilla_sin_motivo_lanza_excepcion(
 def test_asignar_tarjeta_roja_sin_motivo_lanza_excepcion(
     performance_con_resultado: Performance,
 ) -> None:
-    """INV-P-11: tarjeta Roja sin motivo lanza MotivoObligatorio."""
-    with pytest.raises(MotivoObligatorio):
+    """INV-P-11: tarjeta Roja sin motivo_dq lanza MotivoDQObligatorio."""
+    with pytest.raises(MotivoDQObligatorio):
         performance_con_resultado.asignar_tarjeta(TipoTarjeta.Roja, "juez-001")
 
 
@@ -585,7 +591,7 @@ def test_reconstitute_tarjeta_roja_restaura_tipo() -> None:
     llamar_evs = p.pull_events()
     p.registrar_resultado(Decimal("30"), UnidadMedida.Metros, "juez-001")
     res_evs = p.pull_events()
-    p.asignar_tarjeta(TipoTarjeta.Roja, "juez-001", motivo="tiempo excedido")
+    p.asignar_tarjeta(TipoTarjeta.Roja, "juez-001", motivo_dq=MotivoDQ.PROTOCOLO_SUPERFICIE)
     tarjeta_evs = p.pull_events()
 
     raw = [
@@ -873,13 +879,16 @@ def test_blackout_con_distancia_valida_emite_evento(
 ) -> None:
     """Black-out con distancia válida emite TarjetaAsignada con distancia_blackout."""
     performance_con_resultado.asignar_tarjeta(
-        TipoTarjeta.Roja, "juez-001", motivo="black-out", distancia_blackout=Decimal("45.5")
+        TipoTarjeta.Roja,
+        "juez-001",
+        motivo_dq=MotivoDQ.BKO_SUPERFICIE,
+        distancia_blackout=Decimal("45.5"),
     )
     events = performance_con_resultado.pull_events()
     assert len(events) == 1
     payload = events[0].to_payload()
     assert payload["distancia_blackout"] == "45.5"
-    assert payload["motivo"] == "black-out"
+    assert payload["motivo_dq_codigo"] == MotivoDQ.BKO_SUPERFICIE.value
     assert payload["tipo"] == TipoTarjeta.Roja.value
 
 
@@ -888,7 +897,10 @@ def test_blackout_con_distancia_valida_estado_ejecutada(
 ) -> None:
     """Black-out con distancia válida transiciona a Ejecutada."""
     performance_con_resultado.asignar_tarjeta(
-        TipoTarjeta.Roja, "juez-001", motivo="black-out", distancia_blackout=Decimal("45.5")
+        TipoTarjeta.Roja,
+        "juez-001",
+        motivo_dq=MotivoDQ.BKO_SUPERFICIE,
+        distancia_blackout=Decimal("45.5"),
     )
     assert performance_con_resultado.estado == EstadoPerformance.Ejecutada
     assert performance_con_resultado.distancia_blackout == Decimal("45.5")
@@ -899,7 +911,9 @@ def test_blackout_sin_distancia_lanza_excepcion(
 ) -> None:
     """Black-out sin distancia_blackout lanza DistanciaBlackoutObligatoria (RF-EJ-07)."""
     with pytest.raises(DistanciaBlackoutObligatoria):
-        performance_con_resultado.asignar_tarjeta(TipoTarjeta.Roja, "juez-001", motivo="black-out")
+        performance_con_resultado.asignar_tarjeta(
+            TipoTarjeta.Roja, "juez-001", motivo_dq=MotivoDQ.BKO_SUPERFICIE
+        )
 
 
 def test_blackout_con_distancia_cero_lanza_excepcion(
@@ -908,7 +922,10 @@ def test_blackout_con_distancia_cero_lanza_excepcion(
     """Black-out con distancia_blackout=0 lanza DistanciaBlackoutObligatoria (RF-EJ-07)."""
     with pytest.raises(DistanciaBlackoutObligatoria):
         performance_con_resultado.asignar_tarjeta(
-            TipoTarjeta.Roja, "juez-001", motivo="black-out", distancia_blackout=Decimal("0")
+            TipoTarjeta.Roja,
+            "juez-001",
+            motivo_dq=MotivoDQ.BKO_SUBACUATICO,
+            distancia_blackout=Decimal("0"),
         )
 
 
@@ -917,21 +934,23 @@ def test_blackout_no_emite_eventos_si_falla(
 ) -> None:
     """Black-out inválido no emite eventos."""
     with pytest.raises(DistanciaBlackoutObligatoria):
-        performance_con_resultado.asignar_tarjeta(TipoTarjeta.Roja, "juez-001", motivo="black-out")
+        performance_con_resultado.asignar_tarjeta(
+            TipoTarjeta.Roja, "juez-001", motivo_dq=MotivoDQ.BKO_SUPERFICIE
+        )
     assert performance_con_resultado.pull_events() == []
 
 
-def test_tarjeta_roja_sin_blackout_sigue_funcionando(
+def test_motivo_dq_sin_blackout_no_acepta_distancia(
     performance_con_resultado: Performance,
 ) -> None:
-    """Tarjeta roja con motivo distinto a black-out funciona sin distancia (regresión)."""
-    performance_con_resultado.asignar_tarjeta(
-        TipoTarjeta.Roja, "juez-001", motivo="tiempo excedido"
-    )
-    events = performance_con_resultado.pull_events()
-    assert len(events) == 1
-    payload = events[0].to_payload()
-    assert payload["distancia_blackout"] is None
+    """Los motivos no BKO rechazan distancia_blackout."""
+    with pytest.raises(DistanciaBlackoutNoAplica):
+        performance_con_resultado.asignar_tarjeta(
+            TipoTarjeta.Roja,
+            "juez-001",
+            motivo_dq=MotivoDQ.SALIDA_EN_FALSO,
+            distancia_blackout=Decimal("20"),
+        )
 
 
 def test_reconstitute_con_blackout_restaura_distancia(
@@ -939,7 +958,10 @@ def test_reconstitute_con_blackout_restaura_distancia(
 ) -> None:
     """reconstitute restaura distancia_blackout desde el payload del evento."""
     performance_con_resultado.asignar_tarjeta(
-        TipoTarjeta.Roja, "juez-001", motivo="black-out", distancia_blackout=Decimal("38.2")
+        TipoTarjeta.Roja,
+        "juez-001",
+        motivo_dq=MotivoDQ.BKO_SUPERFICIE,
+        distancia_blackout=Decimal("38.2"),
     )
     ap_evs = (
         performance_con_resultado._events[:-1]
@@ -962,7 +984,10 @@ def test_reconstitute_con_blackout_restaura_distancia(
     p2.registrar_resultado(Decimal("38.2"), UnidadMedida.Metros, "juez-001")
     resultado = p2.pull_events()
     p2.asignar_tarjeta(
-        TipoTarjeta.Roja, "juez-001", motivo="black-out", distancia_blackout=Decimal("38.2")
+        TipoTarjeta.Roja,
+        "juez-001",
+        motivo_dq=MotivoDQ.BKO_SUPERFICIE,
+        distancia_blackout=Decimal("38.2"),
     )
     tarjeta = p2.pull_events()
 
