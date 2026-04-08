@@ -132,13 +132,15 @@ classDiagram
         +Disciplina disciplina
         +AP apDeclarado
         +RP rpRegistrado
+        +RP rpMedido
+        +RP rpPenalizado
         +Tarjeta tarjeta
         +EstadoPerformance estado
         --
         +registrarAP(valor, unidad) APRegistrado
         +llamar(otProgramado) AtletaLlamado
         +registrarResultado(valor, juezId) ResultadoRegistrado
-        +asignarTarjeta(tipo, motivoDQ|motivoTexto, juezId) TarjetaAsignada
+        +asignarTarjeta(tipo, motivoDQ|motivoTexto|penalizaciones, juezId) TarjetaAsignada
         +registrarDNS(juezId) DNSRegistrado
         +corregirResultado(valor, motivo, juezId) ResultadoCorregido
     }
@@ -158,6 +160,7 @@ classDiagram
         +TipoTarjeta tipo
         +MotivoDQ motivoDQ
         +String motivoTexto
+        +List~PenalizacionTecnica~ penalizaciones
         +UserId juezId
         +requiereMotivoDQ() bool
     }
@@ -183,6 +186,16 @@ classDiagram
 **Nota US-4.1.1:** la tarjeta roja ya no usa string libre. El BC `competencia`
 modela un catálogo formal `MotivoDQ` y el evento `TarjetaAsignada` separa
 `motivo_dq_codigo` de `motivo_texto` para preservar compatibilidad histórica.
+
+**Nota US-4.1.2:** `TipoTarjeta` incorpora `BlancaConPenalizaciones` como
+resultado válido para disciplinas dinámicas. `Performance` preserva `rp_medido`
+y calcula `rp_penalizado`; la propiedad compatible `rp` expone el valor
+penalizado si existe para que `RankingCompetencia` mantenga su contrato.
+
+**Nota US-4.1.3:** la familia SPE queda desagregada en `SPE_2X50`, `SPE_4X50`,
+`SPE_8X50` y `SPE_16X50` para torneos nuevos. Estas variantes usan segundos y
+generan competencias/rankings independientes. `SPE` genérica se mantiene solo
+como valor legacy para compatibilidad histórica.
 
 ---
 
@@ -220,10 +233,10 @@ classDiagram
 
 | Tipo | Valores / Descripción |
 |------|-----------------------|
-| `Disciplina` | STA, DNF, DYN, DBF, SPE, CNF, CWT, FIM, VWT |
+| `Disciplina` | STA, DNF, DYN, DBF, SPE, SPE_2X50, SPE_4X50, SPE_8X50, SPE_16X50, CNF, CWT, FIM, VWT |
 | `EstadoCompetencia` | Preparacion, Confirmada, EnEjecucion, Finalizada |
 | `EstadoPerformance` | AnunciadaAP, Llamada, Ejecutada, DNS |
-| `TipoTarjeta` | Blanca, Amarilla, Roja |
+| `TipoTarjeta` | Blanca, BlancaConPenalizaciones, Amarilla, Roja |
 | `UnidadMedida` | Metros, Segundos |
 | `OT` | DateTime con precisión de segundos |
 

@@ -14,6 +14,7 @@ class DisciplinaDescriptor:
 
     Política P-01:
         - STA (tiempo): unidad=Segundos, orden_ascendente=True (menor AP primero)
+        - SPE_* (tiempo): unidad=Segundos, orden_ascendente=False
         - Distancia (DNF, DYN, ...): unidad=Metros, orden_ascendente=True (menor AP primero)
 
     Attributes:
@@ -36,6 +37,12 @@ class DisciplinaDescriptor:
         Returns:
             DisciplinaDescriptor con unidad y orden correctos según política P-01.
         """
+        if disciplina.es_spe() and disciplina != Disciplina.SPE:
+            return cls(
+                disciplina=disciplina,
+                unidad_esperada=UnidadMedida.Segundos,
+                orden_ascendente=False,
+            )
         if disciplina.es_tiempo():
             return cls(
                 disciplina=disciplina,

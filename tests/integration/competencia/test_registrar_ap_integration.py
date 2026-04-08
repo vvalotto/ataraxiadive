@@ -191,3 +191,51 @@ async def test_registrar_ap_unidad_incompatible_lanza_error(
     stream_id = f"performance-{cid}-{pid}-STA"
     events = await event_store.load(stream_id)
     assert events == []
+
+
+async def test_registrar_ap_spe_variante_en_segundos_persiste(
+    handler: RegistrarAPHandler,
+    event_store: SQLiteEventStore,
+) -> None:
+    cid = uuid4()
+    pid = uuid4()
+
+    await handler.handle(
+        RegistrarAPCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.SPE_4X50,
+            valor_ap=Decimal("180"),
+            unidad=UnidadMedida.Segundos,
+        )
+    )
+
+    stream_id = f"performance-{cid}-{pid}-{Disciplina.SPE_4X50.value}"
+    events = await event_store.load(stream_id)
+    assert len(events) == 1
+    assert events[0]["payload"]["unidad"] == "Segundos"
+
+
+async def test_registrar_ap_spe_variante_en_metros_lanza_error(
+    handler: RegistrarAPHandler,
+    event_store: SQLiteEventStore,
+) -> None:
+    from competencia.application.commands.registrar_resultado import UnidadIncompatible
+
+    cid = uuid4()
+    pid = uuid4()
+
+    with pytest.raises(UnidadIncompatible):
+        await handler.handle(
+            RegistrarAPCommand(
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=Disciplina.SPE_2X50,
+                valor_ap=Decimal("100"),
+                unidad=UnidadMedida.Metros,
+            )
+        )
+
+    stream_id = f"performance-{cid}-{pid}-{Disciplina.SPE_2X50.value}"
+    events = await event_store.load(stream_id)
+    assert events == []

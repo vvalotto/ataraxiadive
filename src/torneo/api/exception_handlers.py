@@ -3,7 +3,12 @@ from __future__ import annotations
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from torneo.domain.exceptions import TorneoCerrado, TorneoNoEncontrado, TransicionEstadoInvalida
+from torneo.domain.exceptions import (
+    DisciplinaObsoleta,
+    TorneoCerrado,
+    TorneoNoEncontrado,
+    TransicionEstadoInvalida,
+)
 
 
 def register_torneo_exception_handlers(app: FastAPI) -> None:
@@ -42,6 +47,20 @@ def register_torneo_exception_handlers(app: FastAPI) -> None:
             content={
                 "type": "https://ataraxiadive.com/errors/torneo-cerrado",
                 "title": "Torneo cerrado",
+                "status": 409,
+                "detail": str(exc),
+            },
+        )
+
+    @app.exception_handler(DisciplinaObsoleta)
+    async def disciplina_obsoleta_handler(
+        request: Request, exc: DisciplinaObsoleta
+    ) -> JSONResponse:
+        return JSONResponse(
+            status_code=409,
+            content={
+                "type": "https://ataraxiadive.com/errors/disciplina-obsoleta",
+                "title": "Disciplina obsoleta",
                 "status": 409,
                 "detail": str(exc),
             },

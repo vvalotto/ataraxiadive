@@ -7,6 +7,7 @@ from uuid import UUID, uuid4
 from shared.domain.value_objects.disciplina import Disciplina
 from torneo.domain.exceptions import (
     AsignacionNoPermitida,
+    DisciplinaObsoleta,
     DisciplinaNoEnTorneo,
     TorneoCerrado,
     TransicionEstadoInvalida,
@@ -90,6 +91,10 @@ class Torneo:
         if self.estado not in _ESTADOS_ASIGNACION_VALIDOS:
             raise AsignacionNoPermitida(
                 f"No se pueden asignar disciplinas con el torneo en estado {self.estado}"
+            )
+        if Disciplina.SPE in disciplinas:
+            raise DisciplinaObsoleta(
+                "Disciplina.SPE es legacy y no puede configurarse en torneos nuevos"
             )
         self.disciplinas_torneo = [DisciplinaTorneo(disciplina=d) for d in sorted(disciplinas)]
 
