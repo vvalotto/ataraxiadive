@@ -1,0 +1,141 @@
+{
+  "metadata": {
+    "us_id": "US-4.1.7",
+    "us_title": "Simplificar GrillaDeSalida y RankingCompetencia",
+    "us_points": 3,
+    "producto": "ataraxiadive",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-08T18:54:01.234735+00:00",
+    "completed_at": null,
+    "total_elapsed_seconds": 522,
+    "effective_seconds": 522,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-04-08T18:54:35.040556+00:00",
+      "completed_at": "2026-04-08T18:55:26.883457+00:00",
+      "elapsed_seconds": 51,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-08T18:55:27+00:00",
+      "completed_at": "2026-04-08T18:55:27.100000+00:00",
+      "elapsed_seconds": 0,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-04-08T18:55:27.200000+00:00",
+      "completed_at": "2026-04-08T18:57:01.080974+00:00",
+      "elapsed_seconds": 93,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación Guiada por Tareas",
+      "started_at": "2026-04-08T18:57:04.614758+00:00",
+      "completed_at": "2026-04-08T18:59:23.698762+00:00",
+      "elapsed_seconds": 139,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Partir grilla ranking y adapter",
+          "task_type": "domain",
+          "estimated_minutes": 140.0,
+          "started_at": "2026-04-08T18:57:12.657439+00:00",
+          "completed_at": "2026-04-08T18:59:20.367745+00:00",
+          "elapsed_seconds": 127,
+          "actual_minutes": 2.12,
+          "variance_minutes": -137.88,
+          "file_created": "src/competencia/domain/entities/grilla_de_salida.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-08T18:59:28.359235+00:00",
+      "completed_at": "2026-04-08T18:59:32.847494+00:00",
+      "elapsed_seconds": 4,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-04-08T18:59:39.296001+00:00",
+      "completed_at": "2026-04-08T18:59:42.789269+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-04-08T18:59:46.047683+00:00",
+      "completed_at": "2026-04-08T18:59:51.490945+00:00",
+      "elapsed_seconds": 5,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-08T18:59:57.284593+00:00",
+      "completed_at": "2026-04-08T19:00:33.969045+00:00",
+      "elapsed_seconds": 36,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Actualización de Documentación",
+      "started_at": "2026-04-08T19:00:49.336697+00:00",
+      "completed_at": "2026-04-08T19:02:43.842814+00:00",
+      "elapsed_seconds": 114,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 1,
+    "completed_tasks": 1,
+    "total_phases": 9,
+    "estimated_total_minutes": 140.0,
+    "actual_total_minutes": 2.12,
+    "variance_minutes": -137.88,
+    "variance_percent": -98.49
+  }
+}
