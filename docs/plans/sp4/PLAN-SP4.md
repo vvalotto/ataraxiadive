@@ -27,9 +27,10 @@ notificaciones email en los momentos clave.
 
 | BC | Tipo | Novedad en SP4 |
 |----|------|----------------|
-| **Competencia** | Core / ES | Extensión — auditoría visible via API + hash SHA-256 al cierre de disciplina |
+| **Competencia** | Core / ES | Extensión — motivos tarjeta roja, tarjeta blanca con penalizaciones, orden de grilla, auditoría + hash SHA-256 |
+| **Torneo** | Supporting / CRUD | Extensión — subdisciplinas SPE (variante) |
+| **Resultados** | Supporting / CRUD | Extensión — RP penalizado, ranking por variante SPE, exportación CSV/JSON |
 | **Notificaciones** | Generic / ES | **Nuevo** — primera implementación real: aggregate + event store + email |
-| **Resultados** | Supporting / CRUD | Extensión — endpoint exportación CSV/JSON |
 | **Frontend** | React PWA | **Nuevo** — creación desde cero con Vite |
 
 ---
@@ -67,7 +68,33 @@ antes de escribir una línea de frontend.
 
 ---
 
-### INC-4.1 — Fundación Frontend
+### INC-4.1 — Correcciones de dominio por reglamento CMAS/FAAS
+
+**Prerequisito:** INC-4.0 aprobado.
+**DoD:** el dominio refleja el reglamento oficial en los puntos identificados. Cero regresiones
+en los 785 tests existentes. Las nuevas reglas tienen cobertura de tests unitarios ≥ 90%.
+
+> Este incremento es backend puro — no toca el frontend. Debe completarse antes de INC-4.3
+> (Interfaz del Juez) para que el frontend se construya sobre el modelo correcto.
+> Fuente: `docs/dominio/06-brechas-reglamento.md`
+
+| US | Descripción | BC afectado |
+|----|-------------|-------------|
+| US-4.1.1 | Motivos de tarjeta roja — CRUD de causas de descalificación (BKO superficie, BKO subacuático, no siguió protocolo, infracción técnica, no inició en ventana, salida en falso) | `competencia/domain/` |
+| US-4.1.2 | Tarjeta Blanca con penalizaciones — nuevo resultado: performance válida con infracciones técnicas; RP final = medido − N×3m; las penalizaciones se acumulan | `competencia/domain/`, `resultados/domain/` |
+| US-4.1.3 | Subdisciplinas SPE — cuatro variantes (2×50m, 4×50m, 8×50m, 16×50m); la disciplina SPE pasa a tener atributo `variante`; cada variante tiene su propia grilla y ranking | `torneo/domain/`, `resultados/domain/` |
+| US-4.1.4 | Orden de grilla reglamentario — generación de grilla con ordenamiento por AP ascendente (DNF/DYN/DBF/STA) o descendente (SPE); el organizador puede ajustar manualmente después | `competencia/domain/` |
+
+**Documentos a actualizar al cerrar INC-4.1:**
+- `docs/design/domain-model.md` — nuevos conceptos: motivos de tarjeta roja, tarjeta blanca con penalizaciones, variante SPE
+- `docs/design/event-storming-competencia.md` — nuevos eventos y comandos derivados de las correcciones
+- `CLAUDE.md §8` — lenguaje ubicuo: agregar términos Tarjeta Blanca con Penalizaciones, Motivo de DQ, Variante SPE
+- `docs/traceability/matrix.md` — registrar US-4.1.1 a US-4.1.4
+- ADR nuevo si alguna decisión de diseño lo amerita (ej: modelo de penalizaciones acumulables)
+
+---
+
+### INC-4.2 — Fundación Frontend
 
 **DoD:** la aplicación React PWA levanta, conecta con el backend existente, y muestra
 un health-check visual. La estructura de carpetas está establecida (BC-first o por feature
@@ -75,12 +102,12 @@ un health-check visual. La estructura de carpetas está establecida (BC-first o 
 
 | US | Descripción |
 |----|-------------|
-| US-4.1.1 | Scaffold Vite + React + PWA — estructura, routing base, health-check visual conectado a `GET /health` |
-| US-4.1.2 | Autenticación en frontend — login JWT, contexto de usuario, rutas protegidas por rol |
+| US-4.2.1 | Scaffold Vite + React + PWA — estructura, routing base, health-check visual conectado a `GET /health` |
+| US-4.2.2 | Autenticación en frontend — login JWT, contexto de usuario, rutas protegidas por rol |
 
 ---
 
-### INC-4.2 — Interfaz del Juez
+### INC-4.3 — Interfaz del Juez
 
 **DoD:** el juez puede ejecutar el flujo completo (6 pasos: Llamar → Confirmar → Iniciar →
 Finalizar → Registrar marca → Asignar tarjeta) desde la PWA en el celular, con los datos
@@ -89,14 +116,15 @@ contraste, máximo 6 toques por performance (AC-US-02, AC-US-03).
 
 | US | Descripción |
 |----|-------------|
-| US-4.2.1 | Pantalla de selección de competencia — juez ve sus disciplinas asignadas |
-| US-4.2.2 | Flujo de performance — los 6 pasos conectados al backend (AP, llamar, confirmar, resultado, tarjeta) |
-| US-4.2.3 | Casos alternativos — DNS y black-out desde la UI |
-| US-4.2.4 | Tarjeta amarilla como estado de revisión — flujo `Amarilla → Blanca\|Roja` + invariante cierre |
+| US-4.3.1 | Pantalla de selección de competencia — juez ve sus disciplinas asignadas |
+| US-4.3.2 | Flujo de performance — los 6 pasos conectados al backend (AP, llamar, confirmar, resultado, tarjeta) |
+| US-4.3.3 | Casos alternativos — DNS, motivos de tarjeta roja y tarjeta blanca con penalizaciones desde la UI |
+| US-4.3.4 | Tarjeta amarilla como estado de revisión — flujo `Amarilla → Blanca\|Roja` + invariante cierre |
+| US-4.3.5 | Adaptación STA — Paso 3 muestra botón "Vías respiratorias en agua" en lugar de "Atleta inicia"; cronómetro arranca en ese momento |
 
 ---
 
-### INC-4.3 — Offline-first
+### INC-4.4 — Offline-first
 
 **DoD:** el juez puede poner el celular en modo avión, registrar 5 performances, reconectar,
 y verificar que se sincronizaron al servidor. Un indicador visible muestra el estado de
@@ -104,13 +132,13 @@ conexión. Los datos persistidos en IndexedDB sobreviven un cierre del navegador
 
 | US | Descripción |
 |----|-------------|
-| US-4.3.1 | Service Worker + pre-carga — al abrir una disciplina se pre-cargan grilla, atletas y reglas en IndexedDB |
-| US-4.3.2 | Operación offline — el flujo de los 6 pasos funciona sin conexión (eventos locales en IndexedDB) |
-| US-4.3.3 | Sincronización — Background Sync API envía eventos locales al reconectar; indicador de conexión |
+| US-4.4.1 | Service Worker + pre-carga — al abrir una disciplina se pre-cargan grilla, atletas y reglas en IndexedDB |
+| US-4.4.2 | Operación offline — el flujo de los 6 pasos funciona sin conexión (eventos locales en IndexedDB) |
+| US-4.4.3 | Sincronización — Background Sync API envía eventos locales al reconectar; indicador de conexión |
 
 ---
 
-### INC-4.4 — BC Notificaciones
+### INC-4.5 — BC Notificaciones
 
 **DoD:** al confirmar la inscripción de un atleta se envía un email real a una dirección
 de prueba. El aggregate `Notificacion` tiene event store funcional. La idempotencia
@@ -118,14 +146,14 @@ exactly-once está verificada por test: un mismo evento fuente no dispara dos em
 
 | US | Descripción | BC afectado |
 |----|-------------|-------------|
-| US-4.4.1 | Aggregate `Notificacion` — ciclo de vida (Solicitada → Enviada / Fallida), event store, idempotencia | `notificaciones/domain/` |
-| US-4.4.2 | Adaptador email — integración con servicio gestionado (SendGrid / SES / Resend), puerto + adaptador | `notificaciones/infrastructure/` |
-| US-4.4.3 | Política P-10 — `InscripcionConfirmada` (Registro) → `SolicitarNotificacion` → email al atleta | `src/app.py`, `notificaciones/application/` |
-| US-4.4.4 | Política P-11 — `ResultadosPublicados` (Resultados) → email a atletas de esa disciplina | `src/app.py`, `notificaciones/application/` |
+| US-4.5.1 | Aggregate `Notificacion` — ciclo de vida (Solicitada → Enviada / Fallida), event store, idempotencia | `notificaciones/domain/` |
+| US-4.5.2 | Adaptador email — integración con servicio gestionado (SendGrid / SES / Resend), puerto + adaptador | `notificaciones/infrastructure/` |
+| US-4.5.3 | Política P-10 — `InscripcionConfirmada` (Registro) → `SolicitarNotificacion` → email al atleta | `src/app.py`, `notificaciones/application/` |
+| US-4.5.4 | Política P-11 — `ResultadosPublicados` (Resultados) → email a atletas de esa disciplina | `src/app.py`, `notificaciones/application/` |
 
 ---
 
-### INC-4.5 — Auditoría y Exportación
+### INC-4.6 — Auditoría y Exportación
 
 **DoD:** el organizador puede ver la traza completa de eventos de cualquier performance
 desde la UI. Al cerrar una disciplina se calcula y persiste el hash SHA-256 de todos
@@ -133,10 +161,10 @@ sus eventos. La exportación CSV/JSON de resultados funciona y descarga un archi
 
 | US | Descripción | BC afectado |
 |----|-------------|-------------|
-| US-4.5.1 | API de auditoría — `GET /competencias/{id}/performances/{pid}/audit-log` devuelve secuencia de eventos | `competencia/api/` |
-| US-4.5.2 | Hash SHA-256 al cierre — al ejecutar `CerrarCompetencia`, calcular y persistir hash de todos los eventos | `competencia/domain/`, `competencia/infrastructure/` |
-| US-4.5.3 | UI auditoría — pantalla del organizador: traza de eventos por performance, hash de disciplina cerrada | `frontend/` |
-| US-4.5.4 | Exportación — `GET /resultados/{torneo_id}/export?format=csv|json` descarga resultados completos | `resultados/api/` |
+| US-4.6.1 | API de auditoría — `GET /competencias/{id}/performances/{pid}/audit-log` devuelve secuencia de eventos | `competencia/api/` |
+| US-4.6.2 | Hash SHA-256 al cierre — al ejecutar `CerrarCompetencia`, calcular y persistir hash de todos los eventos | `competencia/domain/`, `competencia/infrastructure/` |
+| US-4.6.3 | UI auditoría — pantalla del organizador: traza de eventos por performance, hash de disciplina cerrada | `frontend/` |
+| US-4.6.4 | Exportación — `GET /resultados/{torneo_id}/export?format=csv|json` descarga resultados completos | `resultados/api/` |
 
 ---
 
@@ -144,14 +172,16 @@ sus eventos. La exportación CSV/JSON de resultados funciona y descarga un archi
 
 ```
 INC-4.0 (UX Design)
-  └── INC-4.1 (Fundación Frontend)
-        └── INC-4.2 (Interfaz del Juez)   ← prerequisito: tooling /implement-us
-              └── INC-4.3 (Offline-first)
-  INC-4.4 (Notificaciones)               ← independiente del frontend, paralelo a INC-4.2/4.3
-  INC-4.5 (Auditoría)                    ← depende de INC-4.1 (UI) e INC-4.2 (backend)
+  ├── INC-4.1 (Correcciones dominio)      ← backend puro, prerequisito de INC-4.3
+  └── INC-4.2 (Fundación Frontend)        ← prerequisito: tooling /implement-us
+        └── INC-4.3 (Interfaz del Juez)   ← requiere INC-4.1 + INC-4.2
+              └── INC-4.4 (Offline-first)
+  INC-4.5 (Notificaciones)               ← independiente del frontend, paralelo a INC-4.3/4.4
+  INC-4.6 (Auditoría)                    ← depende de INC-4.2 (UI) e INC-4.3 (backend)
 ```
 
-> INC-4.4 puede ejecutarse en paralelo con INC-4.2/4.3 — es backend puro.
+> INC-4.1 e INC-4.2 pueden ejecutarse en paralelo — son independientes entre sí.
+> INC-4.5 puede ejecutarse en paralelo con INC-4.3/4.4 — es backend puro.
 
 ---
 
@@ -227,7 +257,7 @@ Al ejecutar `CerrarCompetencia`, el command handler:
 ## DoD de Cierre (BL-004)
 
 - [ ] `pytest tests/` — 100% pass
-- [ ] Flujo E2E frontend: login juez → seleccionar disciplina → registrar 3 performances → ver ranking
+- [ ] Flujo E2E frontend: login juez → seleccionar disciplina → registrar 3 performances (con y sin penalizaciones) → ver ranking
 - [ ] Offline verificado: modo avión → 3 performances → reconectar → sincronización confirmada
 - [ ] Email enviado realmente a dirección de prueba al confirmar inscripción
 - [ ] `designreviewer src/` — cero CRITICAL

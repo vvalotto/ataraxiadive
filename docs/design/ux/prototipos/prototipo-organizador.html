@@ -1,0 +1,927 @@
+/<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AtaraxiaDive — Panel Organizador (Prototipo INC-4.0)</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0f172a;
+  --surface:  #1e293b;
+  --surface2: #334155;
+  --border:   #475569;
+  --text:     #f8fafc;
+  --muted:    #94a3b8;
+  --accent:   #38bdf8;
+  --blanca:   #22c55e;
+  --amarilla: #eab308;
+  --roja:     #ef4444;
+  --dns:      #64748b;
+  --r: 10px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+}
+
+/* ── Screens ── */
+.screen { display: none; min-height: 100vh; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* ── Top navbar ── */
+.navbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  position: sticky; top: 0; z-index: 100;
+  height: 56px;
+}
+.navbar-brand {
+  font-size: 18px; font-weight: 900; color: var(--accent);
+  letter-spacing: -.5px; margin-right: 32px; white-space: nowrap;
+}
+.nav-items { display: flex; gap: 2px; flex: 1; }
+.nav-item {
+  padding: 0 14px; height: 56px; display: flex; align-items: center;
+  font-size: 13px; font-weight: 600; color: var(--muted);
+  cursor: pointer; border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s; white-space: nowrap;
+  background: none; border-top: none; border-left: none; border-right: none;
+}
+.nav-item:hover { color: var(--text); }
+.nav-item.active { color: var(--accent); border-bottom-color: var(--accent); }
+.navbar-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+.conn-badge {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 600; padding: 3px 9px;
+  border-radius: 20px;
+}
+.conn-badge.online { background: rgba(34,197,94,.15); color: #4ade80; }
+.conn-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; }
+.navbar-user { font-size: 13px; color: var(--muted); }
+
+/* ── Content area ── */
+.content {
+  flex: 1; max-width: 1100px; width: 100%;
+  margin: 0 auto; padding: 28px 24px;
+}
+
+/* ── Page title ── */
+.page-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+.page-sub   { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+/* ── KPI cards ── */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+.kpi-card {
+  background: var(--surface); border-radius: var(--r);
+  border: 1px solid var(--border); padding: 18px 20px;
+}
+.kpi-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+.kpi-value { font-size: 36px; font-weight: 900; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.kpi-sub   { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* ── Sección con título ── */
+.section-title {
+  font-size: 13px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .5px;
+  margin-bottom: 10px;
+}
+
+/* ── Alerta card ── */
+.alert-card {
+  border-radius: var(--r); padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer; transition: filter .12s;
+  margin-bottom: 8px;
+}
+.alert-card:hover { filter: brightness(1.1); }
+.alert-amarilla { background: rgba(234,179,8,.1); border: 1px solid rgba(234,179,8,.4); }
+.alert-icon { font-size: 22px; }
+.alert-text { flex: 1; }
+.alert-title { font-size: 14px; font-weight: 700; color: #fde047; }
+.alert-desc  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.alert-action { font-size: 12px; color: var(--accent); font-weight: 600; }
+
+/* ── Estado disciplina ── */
+.disc-status {
+  background: var(--surface); border-radius: var(--r);
+  border: 1px solid var(--border); padding: 20px;
+  margin-bottom: 24px;
+}
+.disc-status-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.disc-name { font-size: 20px; font-weight: 800; }
+.badge-activa { background: rgba(34,197,94,.15); color: #4ade80; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+.badge-pend   { background: var(--surface2); color: var(--muted); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+.badge-cerrada{ background: rgba(56,189,248,.15); color: var(--accent); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+.progress-bar {
+  background: var(--surface2); border-radius: 4px; height: 8px;
+  margin: 10px 0 6px; overflow: hidden;
+}
+.progress-fill { height: 100%; background: var(--blanca); border-radius: 4px; transition: width .3s; }
+.progress-label { font-size: 12px; color: var(--muted); }
+
+/* ── Tabla grilla ── */
+.table-wrap { background: var(--surface); border-radius: var(--r); border: 1px solid var(--border); overflow: hidden; }
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  background: var(--surface2); padding: 10px 14px;
+  font-size: 11px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .4px; text-align: left;
+}
+tbody tr { border-top: 1px solid var(--border); transition: background .1s; }
+tbody tr:hover { background: rgba(255,255,255,.03); }
+tbody tr.row-done { opacity: .5; }
+tbody tr.row-siguiente { background: rgba(56,189,248,.05); }
+tbody td { padding: 11px 14px; font-size: 14px; }
+.td-pos    { font-weight: 800; color: var(--muted); width: 36px; }
+.td-nombre { font-weight: 600; }
+.td-ot     { color: var(--muted); font-size: 13px; }
+.td-ap     { color: var(--accent); font-weight: 600; }
+.td-rp     { font-weight: 700; }
+.chip {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 700;
+}
+.chip-blanca   { background: rgba(34,197,94,.15); color: #4ade80; }
+.chip-amarilla { background: rgba(234,179,8,.15); color: #facc15; }
+.chip-roja     { background: rgba(239,68,68,.15); color: #fca5a5; }
+.chip-dns      { background: rgba(100,116,139,.2); color: var(--muted); }
+.chip-sig      { background: rgba(56,189,248,.2); color: var(--accent); }
+.chip-pend     { background: var(--surface2); color: var(--muted); }
+.chip-juez     { background: rgba(139,92,246,.2); color: #c4b5fd; font-size: 11px; }
+.row-action { cursor: pointer; }
+.row-action:hover td { background: rgba(255,255,255,.03); }
+
+/* ── Botones ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 0 18px; height: 38px; border-radius: 8px;
+  border: none; cursor: pointer; font-weight: 700; font-size: 14px;
+  transition: filter .12s;
+}
+.btn:hover { filter: brightness(1.1); }
+.btn:active { filter: brightness(.88); transform: scale(.98); }
+.btn-primary { background: var(--accent); color: #0f172a; }
+.btn-outline { background: transparent; color: var(--text); border: 2px solid var(--border); }
+.btn-roja    { background: var(--roja); color: #fff; }
+.btn-blanca  { background: var(--blanca); color: #fff; }
+.btn-ghost   { background: var(--surface2); color: var(--muted); }
+.btn-sm { height: 30px; padding: 0 12px; font-size: 12px; }
+
+/* ── Two-col layout ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+/* ── Detail panel (para modal) ── */
+.detail-panel {
+  background: var(--surface); border-radius: var(--r);
+  border: 1px solid var(--border); padding: 20px;
+}
+.detail-panel h3 { font-size: 16px; font-weight: 800; margin-bottom: 14px; }
+
+/* ── Ranking list ── */
+.rank-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 0; border-top: 1px solid var(--border);
+}
+.rank-pos  { font-size: 22px; font-weight: 900; color: var(--muted); min-width: 32px; }
+.rank-pos.gold   { color: #fbbf24; }
+.rank-pos.silver { color: #94a3b8; }
+.rank-pos.bronze { color: #b45309; }
+.rank-name { flex: 1; font-weight: 600; }
+.rank-dist { font-size: 16px; font-weight: 800; color: var(--accent); }
+
+/* ── Form elements ── */
+.field { margin-bottom: 16px; }
+.field label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .3px; }
+.input {
+  width: 100%; background: var(--surface2); border: 2px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 14px;
+  padding: 10px 12px; outline: none;
+}
+.input:focus { border-color: var(--accent); }
+select.input { cursor: pointer; }
+
+/* ── Audit log ── */
+.log-item {
+  display: flex; gap: 14px; padding: 12px 0;
+  border-top: 1px solid var(--border); font-size: 13px;
+}
+.log-time  { color: var(--muted); white-space: nowrap; min-width: 58px; }
+.log-event { flex: 1; }
+.log-actor { color: var(--accent); font-weight: 600; }
+.log-hash  { font-size: 11px; color: var(--border); font-family: monospace; margin-top: 2px; }
+
+/* ── Login ── */
+.login-wrap {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 20px; padding: 40px;
+}
+.login-box {
+  width: 100%; max-width: 380px;
+  background: var(--surface); border-radius: 14px;
+  border: 1px solid var(--border); padding: 32px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.login-logo { font-size: 28px; font-weight: 900; color: var(--accent); text-align: center; }
+.login-sub  { font-size: 13px; color: var(--muted); text-align: center; margin-top: -8px; }
+
+/* ── Jueces ── */
+.juez-card {
+  background: var(--surface); border-radius: var(--r);
+  border: 1px solid var(--border); padding: 16px 18px;
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 8px;
+}
+.juez-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--surface2); display: flex; align-items: center;
+  justify-content: center; font-weight: 800; font-size: 16px; color: var(--accent);
+}
+.juez-info { flex: 1; }
+.juez-nombre { font-weight: 700; font-size: 15px; }
+.juez-assign { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* ── Disciplinas list (gestión torneo) ── */
+.disc-card-mgmt {
+  background: var(--surface); border-radius: var(--r);
+  border: 1px solid var(--border); padding: 16px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.disc-card-mgmt .disc-info h4 { font-size: 16px; font-weight: 800; }
+.disc-card-mgmt .disc-info p  { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+/* ── Empty state ── */
+.empty { text-align: center; padding: 48px 20px; color: var(--muted); }
+.empty-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-text { font-size: 15px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     S-00  LOGIN
+══════════════════════════════════════════ -->
+<div class="screen active" id="s-login">
+  <div class="login-wrap">
+    <div class="login-box">
+      <div class="login-logo">AtaraxiaDive</div>
+      <div class="login-sub">Panel de Organización</div>
+      <div class="field">
+        <label>Email</label>
+        <input class="input" type="email" value="organizer@ataraxiadive.com">
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label>Contraseña</label>
+        <input class="input" type="password" value="••••••••">
+      </div>
+      <button class="btn btn-primary" style="width:100%;height:44px;font-size:15px" onclick="go('s-dashboard')">INGRESAR</button>
+      <div style="text-align:center;font-size:13px;color:var(--muted)">Rol activo: <strong style="color:var(--accent)">Organizador</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-01  DASHBOARD — PANEL PRINCIPAL
+══════════════════════════════════════════ -->
+<div class="screen" id="s-dashboard">
+  <nav class="navbar">
+    <span class="navbar-brand">AtaraxiaDive</span>
+    <div class="nav-items">
+      <button class="nav-item active" onclick="go('s-dashboard')">📊 Panel</button>
+      <button class="nav-item" onclick="go('s-grilla')">📋 Grilla</button>
+      <button class="nav-item" onclick="go('s-resultados')">🏆 Resultados</button>
+      <button class="nav-item" onclick="go('s-jueces')">👥 Jueces</button>
+      <button class="nav-item" onclick="go('s-torneo')">📝 Torneo</button>
+      <button class="nav-item" onclick="go('s-audit')">🔍 Audit Log</button>
+    </div>
+    <div class="navbar-right">
+      <div class="conn-badge online"><div class="conn-dot"></div>En línea</div>
+      <div class="navbar-user">Roberto Silva</div>
+    </div>
+  </nav>
+  <div class="content">
+    <div class="page-title">Apnea Indoor Buenos Aires 2026</div>
+    <div class="page-sub">5 de abril · Club Náutico BA · Organizador: Roberto Silva</div>
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Atletas totales</div>
+        <div class="kpi-value">28</div>
+        <div class="kpi-sub">3 disciplinas</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Completados</div>
+        <div class="kpi-value" style="color:var(--blanca)">2</div>
+        <div class="kpi-sub">de 12 en DNF</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">En revisión</div>
+        <div class="kpi-value" style="color:var(--amarilla)">1</div>
+        <div class="kpi-sub">tarjeta amarilla</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Tiempo estimado</div>
+        <div class="kpi-value" style="color:var(--accent)">83'</div>
+        <div class="kpi-sub">para fin de DNF</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <!-- Disciplina activa -->
+        <div class="section-title">Disciplina en ejecución</div>
+        <div class="disc-status">
+          <div class="disc-status-header">
+            <div>
+              <div class="disc-name">DNF — Dinámica sin aletas</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:2px">14:00 hs · Andariveles A y B · 12 atletas</div>
+            </div>
+            <span class="badge-activa">EN EJECUCIÓN</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:17%"></div>
+          </div>
+          <div class="progress-label">2 de 12 atletas completados (17%)</div>
+          <div style="display:flex;gap:10px;margin-top:14px">
+            <button class="btn btn-outline btn-sm" onclick="go('s-grilla')">Ver grilla completa</button>
+            <button class="btn btn-roja btn-sm" onclick="alert('Acción: Cerrar disciplina DNF')">Cerrar disciplina</button>
+          </div>
+        </div>
+
+        <!-- Otras disciplinas -->
+        <div class="section-title">Otras disciplinas del torneo</div>
+        <div class="disc-card-mgmt">
+          <div class="disc-info">
+            <h4>STA — Apnea Estática</h4>
+            <p>16:30 hs · 8 atletas · Andarivel A</p>
+          </div>
+          <span class="badge-pend">PENDIENTE</span>
+        </div>
+        <div class="disc-card-mgmt">
+          <div class="disc-info">
+            <h4>DBF — Dinámica con bialetas</h4>
+            <p>18:00 hs · 8 atletas · Andarivel A</p>
+          </div>
+          <span class="badge-pend">PENDIENTE</span>
+        </div>
+      </div>
+
+      <div>
+        <!-- Alertas -->
+        <div class="section-title">Alertas activas</div>
+        <div class="alert-card alert-amarilla" onclick="go('s-grilla')">
+          <div class="alert-icon">🟨</div>
+          <div class="alert-text">
+            <div class="alert-title">Tarjeta amarilla sin resolver</div>
+            <div class="alert-desc">López, Andrés · DNF #2 · OT 14:09 · RP 66.0 m</div>
+          </div>
+          <div class="alert-action">Resolver →</div>
+        </div>
+
+        <!-- Próximos atletas -->
+        <div class="section-title" style="margin-top:20px">Próximos en DNF</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th><th>Atleta</th><th>OT</th><th>AP</th><th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-siguiente">
+                <td class="td-pos">3</td>
+                <td class="td-nombre">Ramírez, Sofía</td>
+                <td class="td-ot">14:18</td>
+                <td class="td-ap">58.0 m</td>
+                <td><span class="chip chip-sig">▶ SIGUIENTE</span></td>
+              </tr>
+              <tr>
+                <td class="td-pos">4</td>
+                <td class="td-nombre">Torres, Iván</td>
+                <td class="td-ot">14:27</td>
+                <td class="td-ap">80.0 m</td>
+                <td><span class="chip chip-pend">PENDIENTE</span></td>
+              </tr>
+              <tr>
+                <td class="td-pos">5</td>
+                <td class="td-nombre">Vega, Claudia</td>
+                <td class="td-ot">14:36</td>
+                <td class="td-ap">61.5 m</td>
+                <td><span class="chip chip-pend">PENDIENTE</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-02  GRILLA DE SALIDA (COMPLETA)
+══════════════════════════════════════════ -->
+<div class="screen" id="s-grilla">
+  <nav class="navbar">
+    <span class="navbar-brand">AtaraxiaDive</span>
+    <div class="nav-items">
+      <button class="nav-item" onclick="go('s-dashboard')">📊 Panel</button>
+      <button class="nav-item active" onclick="go('s-grilla')">📋 Grilla</button>
+      <button class="nav-item" onclick="go('s-resultados')">🏆 Resultados</button>
+      <button class="nav-item" onclick="go('s-jueces')">👥 Jueces</button>
+      <button class="nav-item" onclick="go('s-torneo')">📝 Torneo</button>
+      <button class="nav-item" onclick="go('s-audit')">🔍 Audit Log</button>
+    </div>
+    <div class="navbar-right">
+      <div class="conn-badge online"><div class="conn-dot"></div>En línea</div>
+    </div>
+  </nav>
+  <div class="content">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div class="page-title">Grilla — DNF</div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-outline btn-sm" onclick="alert('Exportar grilla PDF')">↓ Exportar PDF</button>
+        <button class="btn btn-ghost btn-sm" onclick="go('s-dashboard')">← Panel</button>
+      </div>
+    </div>
+    <div class="page-sub">En ejecución · 12 atletas · Intervalo 9 min · Andariveles A y B</div>
+
+    <!-- Filtro -->
+    <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+      <button class="btn btn-outline btn-sm" style="border-color:var(--accent);color:var(--accent)">Todos (12)</button>
+      <button class="btn btn-ghost btn-sm">Pendientes (9)</button>
+      <button class="btn btn-ghost btn-sm">Completados (2)</button>
+      <button class="btn btn-ghost btn-sm" style="color:var(--amarilla)">⚠ Revisión (1)</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Atleta</th><th>Cat.</th><th>OT</th><th>And.</th><th>AP</th><th>RP</th><th>Juez</th><th>Estado</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-done">
+            <td class="td-pos">1</td>
+            <td class="td-nombre">García, Martina</td>
+            <td style="color:var(--muted);font-size:13px">Senior F</td>
+            <td class="td-ot">14:00</td>
+            <td style="font-size:13px;color:var(--muted)">A</td>
+            <td class="td-ap">65.0 m</td>
+            <td class="td-rp">65.0 m</td>
+            <td><span class="chip chip-juez">C. Méndez</span></td>
+            <td><span class="chip chip-blanca">✓ BLANCA</span></td>
+            <td><button class="btn btn-ghost btn-sm" onclick="go('s-audit')">Log</button></td>
+          </tr>
+          <tr class="row-action" onclick="go('s-detalle-amarilla')">
+            <td class="td-pos">2</td>
+            <td class="td-nombre">López, Andrés</td>
+            <td style="color:var(--muted);font-size:13px">Senior M</td>
+            <td class="td-ot">14:09</td>
+            <td style="font-size:13px;color:var(--muted)">B</td>
+            <td class="td-ap">72.0 m</td>
+            <td class="td-rp">66.0 m</td>
+            <td><span class="chip chip-juez">C. Méndez</span></td>
+            <td><span class="chip chip-amarilla">⚠ REVISIÓN</span></td>
+            <td><button class="btn btn-outline btn-sm" style="border-color:var(--amarilla);color:var(--amarilla)" onclick="event.stopPropagation();go('s-detalle-amarilla')">Resolver</button></td>
+          </tr>
+          <tr class="row-siguiente row-action" onclick="go('s-dashboard')">
+            <td class="td-pos">3</td>
+            <td class="td-nombre">Ramírez, Sofía</td>
+            <td style="color:var(--muted);font-size:13px">Junior F</td>
+            <td class="td-ot">14:18</td>
+            <td style="font-size:13px;color:var(--muted)">A</td>
+            <td class="td-ap">58.0 m</td>
+            <td class="td-rp">—</td>
+            <td><span class="chip chip-juez">C. Méndez</span></td>
+            <td><span class="chip chip-sig">▶ SIGUIENTE</span></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="td-pos">4</td>
+            <td class="td-nombre">Torres, Iván</td>
+            <td style="color:var(--muted);font-size:13px">Master M</td>
+            <td class="td-ot">14:27</td>
+            <td style="font-size:13px;color:var(--muted)">B</td>
+            <td class="td-ap">80.0 m</td>
+            <td class="td-rp">—</td>
+            <td><span class="chip chip-juez">A. Ruiz</span></td>
+            <td><span class="chip chip-pend">PENDIENTE</span></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="td-pos">5</td>
+            <td class="td-nombre">Vega, Claudia</td>
+            <td style="color:var(--muted);font-size:13px">Senior F</td>
+            <td class="td-ot">14:36</td>
+            <td style="font-size:13px;color:var(--muted)">A</td>
+            <td class="td-ap">61.5 m</td>
+            <td class="td-rp">—</td>
+            <td><span class="chip chip-juez">C. Méndez</span></td>
+            <td><span class="chip chip-pend">PENDIENTE</span></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="td-pos" colspan="9" style="color:var(--muted);font-size:12px;padding:10px 14px;">
+              + 7 atletas más · OT 14:45 → 16:21
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-03  DETALLE AMARILLA — RESOLUCIÓN
+══════════════════════════════════════════ -->
+<div class="screen" id="s-detalle-amarilla">
+  <nav class="navbar">
+    <span class="navbar-brand">AtaraxiaDive</span>
+    <div class="nav-items">
+      <button class="nav-item" onclick="go('s-dashboard')">📊 Panel</button>
+      <button class="nav-item active" onclick="go('s-grilla')">📋 Grilla</button>
+      <button class="nav-item" onclick="go('s-resultados')">🏆 Resultados</button>
+      <button class="nav-item" onclick="go('s-jueces')">👥 Jueces</button>
+      <button class="nav-item" onclick="go('s-torneo')">📝 Torneo</button>
+      <button class="nav-item" onclick="go('s-audit')">🔍 Audit Log</button>
+    </div>
+    <div class="navbar-right">
+      <div class="conn-badge online"><div class="conn-dot"></div>En línea</div>
+    </div>
+  </nav>
+  <div class="content">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+      <button class="btn btn-ghost btn-sm" onclick="go('s-grilla')">← Grilla</button>
+      <div class="page-title" style="margin-bottom:0">Resolución — Tarjeta Amarilla</div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="detail-panel">
+          <h3>Performance en revisión</h3>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Atleta</span><strong>López, Andrés</strong></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Disciplina</span><span>DNF — #2</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">OT</span><span>14:09 · Andarivel B</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">AP declarado</span><span style="color:var(--accent);font-weight:700">72.0 m</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">RP medido</span><span style="font-weight:700">66.0 m</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Juez</span><span>Carlos Méndez</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Motivo revisión</span><span style="color:var(--amarilla)">Protocolo superficie dudoso</span></div>
+          </div>
+        </div>
+
+        <div class="detail-panel" style="margin-top:14px;">
+          <h3>Penalización aplicable (CMAS 1.1.13)</h3>
+          <div style="font-size:13px;color:var(--muted);line-height:1.6;">
+            En caso de resolver como <strong style="color:var(--blanca)">BLANCA</strong> con penalización general:
+            se restan <strong>3 metros</strong> a la distancia realizada.<br><br>
+            RP efectivo con penalización: <strong style="color:var(--accent)">63.0 m</strong>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="detail-panel">
+          <h3>Resolución</h3>
+          <div style="background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.3);border-radius:8px;padding:12px;margin-bottom:16px;font-size:13px;color:#fde047;">
+            ⚠ Los jueces tienen máximo <strong>3 minutos</strong> para dar la decisión final (CMAS 1.2.3.1).
+          </div>
+          <div class="field">
+            <label>Decisión</label>
+            <select class="input">
+              <option>Seleccionar resolución...</option>
+              <option>BLANCA — Performance válida (sin penalización)</option>
+              <option>BLANCA con penalización — RP: 63.0 m (−3 m)</option>
+              <option>ROJA — Descalificada (DQ)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Observaciones</label>
+            <textarea class="input" rows="3" style="resize:vertical" placeholder="Motivo de la decisión..."></textarea>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:4px">
+            <button class="btn btn-blanca" style="flex:1" onclick="go('s-grilla')">⬜ CONFIRMAR BLANCA</button>
+            <button class="btn btn-roja"   style="flex:1" onclick="go('s-grilla')">🟥 CONFIRMAR ROJA</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-04  RESULTADOS
+══════════════════════════════════════════ -->
+<div class="screen" id="s-resultados">
+  <nav class="navbar">
+    <span class="navbar-brand">AtaraxiaDive</span>
+    <div class="nav-items">
+      <button class="nav-item" onclick="go('s-dashboard')">📊 Panel</button>
+      <button class="nav-item" onclick="go('s-grilla')">📋 Grilla</button>
+      <button class="nav-item active" onclick="go('s-resultados')">🏆 Resultados</button>
+      <button class="nav-item" onclick="go('s-jueces')">👥 Jueces</button>
+      <button class="nav-item" onclick="go('s-torneo')">📝 Torneo</button>
+      <button class="nav-item" onclick="go('s-audit')">🔍 Audit Log</button>
+    </div>
+    <div class="navbar-right">
+      <div class="conn-badge online"><div class="conn-dot"></div>En línea</div>
+    </div>
+  </nav>
+  <div class="content">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div class="page-title">Resultados</div>
+      <button class="btn btn-primary btn-sm" onclick="alert('Publicar resultados oficiales')">Publicar resultados</button>
+    </div>
+    <div class="page-sub">DNF — Ranking parcial · 2 de 12 atletas completados</div>
+
+    <div class="two-col">
+      <div>
+        <div class="section-title">Ranking DNF — Parcial</div>
+        <div class="detail-panel">
+          <div class="rank-row">
+            <div class="rank-pos gold">1</div>
+            <div class="rank-name">García, Martina<br><span style="font-size:12px;color:var(--muted)">Senior F</span></div>
+            <div class="rank-dist">65.0 m</div>
+            <span class="chip chip-blanca" style="margin-left:8px">BLANCA</span>
+          </div>
+          <div class="rank-row" style="opacity:.7">
+            <div class="rank-pos" style="color:var(--muted)">—</div>
+            <div class="rank-name">López, Andrés<br><span style="font-size:12px;color:var(--muted)">Senior M</span></div>
+            <div class="rank-dist" style="color:var(--muted)">66.0 m</div>
+            <span class="chip chip-amarilla" style="margin-left:8px">EN REVISIÓN</span>
+          </div>
+          <div style="padding:16px 0;color:var(--muted);font-size:13px;border-top:1px solid var(--border);margin-top:8px;">
+            10 atletas pendientes de ejecución…
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="section-title">Overall ranking</div>
+        <div class="detail-panel">
+          <div class="empty">
+            <div class="empty-icon">🏆</div>
+            <div class="empty-text">Disponible al cerrar todas las disciplinas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-05  JUECES
+══════════════════════════════════════════ -->
+<div class="screen" id="s-jueces">
+  <nav class="navbar">
+    <span class="navbar-brand">AtaraxiaDive</span>
+    <div class="nav-items">
+      <button class="nav-item" onclick="go('s-dashboard')">📊 Panel</button>
+      <button class="nav-item" onclick="go('s-grilla')">📋 Grilla</button>
+      <button class="nav-item" onclick="go('s-resultados')">🏆 Resultados</button>
+      <button class="nav-item active" onclick="go('s-jueces')">👥 Jueces</button>
+      <button class="nav-item" onclick="go('s-torneo')">📝 Torneo</button>
+      <button class="nav-item" onclick="go('s-audit')">🔍 Audit Log</button>
+    </div>
+    <div class="navbar-right">
+      <div class="conn-badge online"><div class="conn-dot"></div>En línea</div>
+    </div>
+  </nav>
+  <div class="content">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div class="page-title">Jueces asignados</div>
+      <button class="btn btn-outline btn-sm" onclick="alert('Agregar juez')">+ Agregar juez</button>
+    </div>
+    <div class="page-sub">DNF — 2 jueces activos · 2 andariveles</div>
+
+    <div class="section-title">En línea</div>
+    <div class="juez-card">
+      <div class="juez-avatar">CM</div>
+      <div class="juez-info">
+        <div class="juez-nombre">Carlos Méndez</div>
+        <div class="juez-assign">DNF · Andarivel A — Atletas 1, 3, 5, 7, 9, 11</div>
+      </div>
+      <div class="conn-badge online"><div class="conn-dot"></div>En línea</div>
+      <button class="btn btn-ghost btn-sm">Reasignar</button>
+    </div>
+    <div class="juez-card">
+      <div class="juez-avatar">AR</div>
+      <div class="juez-info">
+        <div class="juez-nombre">Ana Ruiz</div>
+        <div class="juez-assign">DNF · Andarivel B — Atletas 2, 4, 6, 8, 10, 12</div>
+      </div>
+      <div class="conn-badge online"><div class="conn-dot"></div>En línea</div>
+      <button class="btn btn-ghost btn-sm">Reasignar</button>
+    </div>
+
+    <div class="section-title" style="margin-top:20px">Pendientes (disciplinas futuras)</div>
+    <div class="juez-card" style="opacity:.6">
+      <div class="juez-avatar" style="background:var(--surface2);color:var(--muted)">MP</div>
+      <div class="juez-info">
+        <div class="juez-nombre">Marcos Pérez</div>
+        <div class="juez-assign">STA · 16:30 hs — Aún no iniciada</div>
+      </div>
+      <span style="font-size:12px;color:var(--muted)">Sin conexión</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-06  GESTIÓN DEL TORNEO
+══════════════════════════════════════════ -->
+<div class="screen" id="s-torneo">
+  <nav class="navbar">
+    <span class="navbar-brand">AtaraxiaDive</span>
+    <div class="nav-items">
+      <button class="nav-item" onclick="go('s-dashboard')">📊 Panel</button>
+      <button class="nav-item" onclick="go('s-grilla')">📋 Grilla</button>
+      <button class="nav-item" onclick="go('s-resultados')">🏆 Resultados</button>
+      <button class="nav-item" onclick="go('s-jueces')">👥 Jueces</button>
+      <button class="nav-item active" onclick="go('s-torneo')">📝 Torneo</button>
+      <button class="nav-item" onclick="go('s-audit')">🔍 Audit Log</button>
+    </div>
+    <div class="navbar-right">
+      <div class="conn-badge online"><div class="conn-dot"></div>En línea</div>
+    </div>
+  </nav>
+  <div class="content">
+    <div class="page-title">Gestión del Torneo</div>
+    <div class="page-sub">Apnea Indoor Buenos Aires 2026</div>
+
+    <div class="two-col">
+      <div>
+        <div class="section-title">Datos generales</div>
+        <div class="detail-panel">
+          <div class="field">
+            <label>Nombre del torneo</label>
+            <input class="input" value="Apnea Indoor Buenos Aires 2026">
+          </div>
+          <div class="field">
+            <label>Fecha</label>
+            <input class="input" type="date" value="2026-04-05">
+          </div>
+          <div class="field">
+            <label>Sede</label>
+            <input class="input" value="Club Náutico BA">
+          </div>
+          <div class="field" style="margin-bottom:0">
+            <label>Estado</label>
+            <select class="input">
+              <option>En ejecución</option>
+              <option>Inscripciones abiertas</option>
+              <option>Finalizado</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" style="margin-top:16px">Guardar cambios</button>
+        </div>
+      </div>
+      <div>
+        <div class="section-title">Disciplinas</div>
+        <div class="disc-card-mgmt">
+          <div class="disc-info">
+            <h4>DNF</h4>
+            <p>14:00 · 12 atletas · And. A/B · 9 min intervalo</p>
+          </div>
+          <span class="badge-activa">ACTIVA</span>
+        </div>
+        <div class="disc-card-mgmt">
+          <div class="disc-info">
+            <h4>STA</h4>
+            <p>16:30 · 8 atletas · And. A · 5 min intervalo</p>
+          </div>
+          <span class="badge-pend">PENDIENTE</span>
+        </div>
+        <div class="disc-card-mgmt">
+          <div class="disc-info">
+            <h4>DBF</h4>
+            <p>18:00 · 8 atletas · And. A · 9 min intervalo</p>
+          </div>
+          <span class="badge-pend">PENDIENTE</span>
+        </div>
+        <button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="alert('Agregar disciplina')">+ Agregar disciplina</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-07  AUDIT LOG
+══════════════════════════════════════════ -->
+<div class="screen" id="s-audit">
+  <nav class="navbar">
+    <span class="navbar-brand">AtaraxiaDive</span>
+    <div class="nav-items">
+      <button class="nav-item" onclick="go('s-dashboard')">📊 Panel</button>
+      <button class="nav-item" onclick="go('s-grilla')">📋 Grilla</button>
+      <button class="nav-item" onclick="go('s-resultados')">🏆 Resultados</button>
+      <button class="nav-item" onclick="go('s-jueces')">👥 Jueces</button>
+      <button class="nav-item" onclick="go('s-torneo')">📝 Torneo</button>
+      <button class="nav-item active" onclick="go('s-audit')">🔍 Audit Log</button>
+    </div>
+    <div class="navbar-right">
+      <div class="conn-badge online"><div class="conn-dot"></div>En línea</div>
+    </div>
+  </nav>
+  <div class="content">
+    <div class="page-title">Audit Log</div>
+    <div class="page-sub">Historial de eventos · Integridad SHA-256</div>
+
+    <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+      <select class="input" style="width:auto;min-width:160px">
+        <option>Todas las disciplinas</option>
+        <option>DNF</option><option>STA</option><option>DBF</option>
+      </select>
+      <select class="input" style="width:auto;min-width:160px">
+        <option>Todos los atletas</option>
+        <option>García, Martina</option>
+        <option>López, Andrés</option>
+      </select>
+      <select class="input" style="width:auto;min-width:160px">
+        <option>Todos los jueces</option>
+        <option>Carlos Méndez</option>
+        <option>Ana Ruiz</option>
+      </select>
+    </div>
+
+    <div class="table-wrap" style="padding:0 20px">
+      <div class="log-item">
+        <div class="log-time">14:19</div>
+        <div class="log-event">
+          <span class="chip chip-amarilla" style="margin-right:6px">AMARILLA</span>
+          <span>Tarjeta amarilla asignada · <span class="log-actor">López, Andrés</span> · DNF #2 · RP 66.0 m</span>
+          <div class="log-hash">sha256: a3f9c2d1... · Juez: C. Méndez</div>
+        </div>
+      </div>
+      <div class="log-item">
+        <div class="log-time">14:17</div>
+        <div class="log-event">
+          <span class="chip chip-blanca" style="margin-right:6px">RP</span>
+          <span>Resultado registrado · <span class="log-actor">López, Andrés</span> · 66.0 m</span>
+          <div class="log-hash">sha256: 7b2e4f8a... · Juez: C. Méndez</div>
+        </div>
+      </div>
+      <div class="log-item">
+        <div class="log-time">14:09</div>
+        <div class="log-event">
+          <span class="chip chip-sig" style="margin-right:6px;background:rgba(56,189,248,.2);color:var(--accent)">OT</span>
+          <span>Tiempo Oficial marcado · <span class="log-actor">López, Andrés</span> · Andarivel B</span>
+          <div class="log-hash">sha256: 1d6c9e3b... · Juez: C. Méndez</div>
+        </div>
+      </div>
+      <div class="log-item">
+        <div class="log-time">14:07</div>
+        <div class="log-event">
+          <span class="chip chip-blanca" style="margin-right:6px">BLANCA</span>
+          <span>Tarjeta blanca asignada · <span class="log-actor">García, Martina</span> · DNF #1 · RP 65.0 m</span>
+          <div class="log-hash">sha256: 4e1a7c5f... · Juez: C. Méndez</div>
+        </div>
+      </div>
+      <div class="log-item">
+        <div class="log-time">14:05</div>
+        <div class="log-event">
+          <span class="chip chip-blanca" style="margin-right:6px">RP</span>
+          <span>Resultado registrado · <span class="log-actor">García, Martina</span> · 65.0 m</span>
+          <div class="log-hash">sha256: 9c3d2a1e... · Juez: C. Méndez</div>
+        </div>
+      </div>
+      <div class="log-item">
+        <div class="log-time">14:00</div>
+        <div class="log-event">
+          <span class="chip chip-sig" style="margin-right:6px;background:rgba(56,189,248,.2);color:var(--accent)">OT</span>
+          <span>Tiempo Oficial marcado · <span class="log-actor">García, Martina</span> · Andarivel A</span>
+          <div class="log-hash">sha256: 2f8b6e4d... · Juez: C. Méndez</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(screenId);
+  if (target) target.classList.add('active');
+  window.scrollTo(0, 0);
+  // Sync navbar active state
+  const navMap = {
+    's-dashboard': 0, 's-grilla': 1, 's-detalle-amarilla': 1,
+    's-resultados': 2, 's-jueces': 3, 's-torneo': 4, 's-audit': 5
+  };
+  document.querySelectorAll('.nav-item').forEach((btn, i) => {
+    btn.classList.toggle('active', i === navMap[screenId]);
+  });
+}
+</script>
+</body>
+</html>
