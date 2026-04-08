@@ -1,0 +1,31 @@
+{
+  "us_id": "US-4.1.4",
+  "generated_at": "2026-04-08T12:40:00-03:00",
+  "status": "completed",
+  "designreviewer": {
+    "command": ".venv/bin/designreviewer src/shared/domain/value_objects/disciplina_descriptor.py src/competencia/domain/entities/grilla_de_salida.py src/competencia/application/commands/generar_grilla.py --config pyproject.toml",
+    "result": {
+      "blocking": 0,
+      "warnings": 6,
+      "notes": "Sin bloqueantes. Las advertencias corresponden a deuda estructural en GenerarGrillaHandler, GrillaDeSalida y DisciplinaDescriptor."
+    }
+  },
+  "codeguard": {
+    "command": ".venv/bin/codeguard -c pyproject.toml -f json src/competencia/domain/entities/grilla_de_salida.py tests/unit/competencia/domain/test_generar_grilla.py tests/integration/competencia/test_generar_grilla_integration.py tests/features/steps/test_US_4_1_4_steps.py",
+    "result": {
+      "files_analyzed": 4,
+      "errors": 0,
+      "warnings": 7,
+      "infos": 44,
+      "notes": [
+        "src/competencia/domain/entities/grilla_de_salida.py:187 - E501 line too long (104 > 100 characters)",
+        "src/competencia/domain/entities/grilla_de_salida.py:55 - Complexity warning on GrillaDeSalida.ajustar",
+        "tests/integration/competencia/test_generar_grilla_integration.py:8 - F401 uuid4 imported but unused",
+        "tests/integration/competencia/test_generar_grilla_integration.py:27 - F401 IntervaloNoConfigurado imported but unused",
+        "tests/integration/competencia/test_generar_grilla_integration.py:250 - E501 line too long (102 > 100 characters)",
+        "tests/integration/competencia/test_generar_grilla_integration.py:287 - E501 line too long (102 > 100 characters)",
+        "tests/features/steps/test_US_4_1_4_steps.py:68 - E501 line too long (103 > 100 characters)"
+      ]
+    }
+  }
+}
