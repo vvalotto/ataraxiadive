@@ -24,6 +24,7 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | HITO-12 | SP2 Inc 2.2 | 2026-03-26 | Gates de texto vs constraints de herramienta | ¿Las instrucciones procedurales en lenguaje natural son barreras reales para LLMs? | [HITO-12](./HITO-12-GATES-TEXTO-VS-HERRAMIENTA.md) |
 | HITO-13 | SP2 cierre | 2026-03-28 | SP-ADJ como etapa formal del ciclo IEDD | ¿La deuda técnica post-SP merece un sub-sprint formal propio en lugar de backlog? | [HITO-13](./HITO-13-SP-ADJ-DEUDA-TECNICA-COMO-ETAPA-FORMAL.md) |
 | HITO-16 | SP3 Inc 3.5 | 2026-04-02 | Secuencialidad prescriptiva del pipeline | ¿La linealidad de `/implement-us` es una preferencia operativa o parte del método? | [HITO-16](./HITO-16-SECUENCIALIDAD-PRESCRIPTIVA-PIPELINE.md) |
+| HITO-19 | SP4 cierre INC-4.1 | 2026-04-08 | Cierre de incremento como captura formal de deuda de diseño | ¿El incremento es la unidad correcta para agrupar hallazgos estructurales y planificar ajustes? | [HITO-19](./HITO-19-INC-4-1-HALLAZGOS-DISENO-CIERRE.md) |
 
 ---
 
@@ -35,6 +36,7 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | SP1 (La Performance) | 3, 4, 5, 6, 7, 8, 9 | Primer ciclo IEDD completo, fricción del ecosistema, BDD + ES |
 | SP2 (La Competencia) | 10, 11, 12, 13 | Patrones DDD avanzados, quality gates, deuda técnica formal |
 | SP3 (El Torneo) | 15, 16 | Proyecciones CQRS emergentes, secuencialidad del pipeline y gobierno del proceso |
+| SP4 (La Plataforma) | 17, 18, 19 | Datos reales como oráculo, validación UX y captura formal de hallazgos estructurales al cierre de incremento |
 
 ---
 
@@ -48,6 +50,7 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | SP-ADJ como etapa necesaria | HITO-13 | ✅ Confirmada |
 | Gates de texto no son barreras para LLMs | HITO-12 | ✅ Confirmada |
 | La secuencialidad del pipeline es parte del método | HITO-16 | ✅ Confirmada |
+| El incremento es la unidad correcta para leer deuda estructural acumulada | HITO-19 | ✅ Evidencia inicial |
 
 ---
 

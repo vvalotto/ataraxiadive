@@ -23,9 +23,10 @@ from competencia.application.commands.registrar_resultado import (
     RegistrarResultadoHandler,
 )
 from competencia.domain.aggregates.performance import Performance
-from competencia.domain.exceptions import DistanciaBlackoutObligatoria
+from competencia.domain.exceptions import DistanciaBlackoutNoAplica, DistanciaBlackoutObligatoria
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
+from competencia.domain.value_objects.motivo_dq import MotivoDQ
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
@@ -122,7 +123,7 @@ def step_performance_en_resultado_registrado():
 
 @when(
     parsers.parse(
-        'el juez asigna tarjeta roja con motivo "black-out" y distancia {distancia} metros'
+        'el juez asigna tarjeta roja con motivo_dq "BKO_SUPERFICIE" y distancia {distancia} metros'
     )
 )
 def step_asignar_blackout_con_distancia(ctx_blackout, distancia: str):
@@ -137,7 +138,7 @@ def step_asignar_blackout_con_distancia(ctx_blackout, distancia: str):
                     disciplina=Disciplina.DNF,
                     tipo=TipoTarjeta.Roja,
                     asignada_por="juez-001",
-                    motivo="black-out",
+                    motivo_dq=MotivoDQ.BKO_SUPERFICIE,
                     distancia_blackout=Decimal(distancia),
                 )
             )
@@ -147,7 +148,7 @@ def step_asignar_blackout_con_distancia(ctx_blackout, distancia: str):
     asyncio.run(_run())
 
 
-@when('el juez asigna tarjeta roja con motivo "black-out" sin distancia')
+@when('el juez asigna tarjeta roja con motivo_dq "BKO_SUPERFICIE" sin distancia')
 def step_asignar_blackout_sin_distancia(ctx_blackout):
     handler = AsignarTarjetaHandler(ctx_blackout["store"])
 
@@ -160,7 +161,7 @@ def step_asignar_blackout_sin_distancia(ctx_blackout):
                     disciplina=Disciplina.DNF,
                     tipo=TipoTarjeta.Roja,
                     asignada_por="juez-001",
-                    motivo="black-out",
+                    motivo_dq=MotivoDQ.BKO_SUPERFICIE,
                 )
             )
         except Exception as e:
@@ -169,7 +170,7 @@ def step_asignar_blackout_sin_distancia(ctx_blackout):
     asyncio.run(_run())
 
 
-@when('el juez asigna tarjeta roja con motivo "tiempo excedido" sin distancia')
+@when('el juez asigna tarjeta roja con motivo_dq "SALIDA_EN_FALSO" y distancia 20 metros')
 def step_asignar_roja_sin_blackout(ctx_blackout):
     handler = AsignarTarjetaHandler(ctx_blackout["store"])
 
@@ -182,7 +183,8 @@ def step_asignar_roja_sin_blackout(ctx_blackout):
                     disciplina=Disciplina.DNF,
                     tipo=TipoTarjeta.Roja,
                     asignada_por="juez-001",
-                    motivo="tiempo excedido",
+                    motivo_dq=MotivoDQ.SALIDA_EN_FALSO,
+                    distancia_blackout=Decimal("20"),
                 )
             )
         except Exception as e:
@@ -221,3 +223,8 @@ def step_evento_contiene_distancia(ctx_blackout, distancia: str):
 @then("se lanza DistanciaBlackoutObligatoria")
 def step_lanza_distancia_obligatoria(ctx_blackout):
     assert isinstance(ctx_blackout["exception"], DistanciaBlackoutObligatoria)
+
+
+@then("se lanza DistanciaBlackoutNoAplica")
+def step_lanza_distancia_no_aplica(ctx_blackout):
+    assert isinstance(ctx_blackout["exception"], DistanciaBlackoutNoAplica)

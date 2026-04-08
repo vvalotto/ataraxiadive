@@ -333,3 +333,19 @@ def test_reconstitute_desde_evento_restaura_entries() -> None:
     assert ranking2.entries[0].posicion == 1
     assert ranking2.entries[1].atleta_id == atleta_b
     assert ranking2.entries[1].posicion == 2
+
+
+def test_calcular_blanca_con_penalizaciones_es_valida_y_ordena_por_rp() -> None:
+    atleta_penalizado = uuid4()
+    atleta_valido = uuid4()
+
+    resultados = [
+        _resultado("66", tarjeta="BlancaConPenalizaciones", atleta_id=atleta_penalizado),
+        _resultado("70", tarjeta="Blanca", atleta_id=atleta_valido),
+    ]
+
+    ranking = _make_ranking()
+    ranking.calcular(resultados, None)
+
+    assert ranking.entries[0].atleta_id == atleta_valido
+    assert ranking.entries[1].atleta_id == atleta_penalizado

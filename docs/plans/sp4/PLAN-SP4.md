@@ -84,12 +84,19 @@ en los 785 tests existentes. Las nuevas reglas tienen cobertura de tests unitari
 | US-4.1.2 | Tarjeta Blanca con penalizaciones — nuevo resultado: performance válida con infracciones técnicas; RP final = medido − N×3m; las penalizaciones se acumulan | `competencia/domain/`, `resultados/domain/` |
 | US-4.1.3 | Subdisciplinas SPE — cuatro variantes (2×50m, 4×50m, 8×50m, 16×50m); la disciplina SPE pasa a tener atributo `variante`; cada variante tiene su propia grilla y ranking | `torneo/domain/`, `resultados/domain/` |
 | US-4.1.4 | Orden de grilla reglamentario — generación de grilla con ordenamiento por AP ascendente (DNF/DYN/DBF/STA) o descendente (SPE); el organizador puede ajustar manualmente después | `competencia/domain/` |
+| US-4.1.5 | Descomponer aggregate `Performance` — eliminar GodObject (métrica 31/28 DesignReviewer) extrayendo VOs de resolución de tarjeta y cálculo de RP penalizado | `competencia/domain/` |
+| US-4.1.6 | Aliviar handlers de `competencia` — reducir FeatureEnvy y LongMethod en AsignarTarjetaHandler, GenerarGrillaHandler y otros handlers core | `competencia/application/` |
+| US-4.1.7 | Simplificar `GrillaDeSalida` y `RankingCompetencia` — partir métodos largos de ajuste de grilla y cálculo de ranking en submétodos cohesivos | `competencia/domain/`, `resultados/domain/`, `resultados/infrastructure/` |
+| US-4.1.8 | Limpiar `Torneo`, `SQLiteTorneoRepository` y VOs de soporte — reducir complejidad accidental en objetos con responsabilidad expandida | `torneo/domain/`, `torneo/infrastructure/`, `competencia/domain/value_objects/` |
+
+> **US-4.1.5 a US-4.1.8:** ajustes técnicos derivados del DesignReviewer al cierre del incremento funcional (HITO-19).
+> Son parte del mismo INC-4.1 — se implementan antes del PR de cierre.
 
 **Documentos a actualizar al cerrar INC-4.1:**
 - `docs/design/domain-model.md` — nuevos conceptos: motivos de tarjeta roja, tarjeta blanca con penalizaciones, variante SPE
 - `docs/design/event-storming-competencia.md` — nuevos eventos y comandos derivados de las correcciones
 - `CLAUDE.md §8` — lenguaje ubicuo: agregar términos Tarjeta Blanca con Penalizaciones, Motivo de DQ, Variante SPE
-- `docs/traceability/matrix.md` — registrar US-4.1.1 a US-4.1.4
+- `docs/traceability/matrix.md` — registrar US-4.1.1 a US-4.1.8
 - ADR nuevo si alguna decisión de diseño lo amerita (ej: modelo de penalizaciones acumulables)
 
 ---

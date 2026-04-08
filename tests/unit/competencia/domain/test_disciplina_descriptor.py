@@ -23,6 +23,45 @@ class TestDescriptorSTA:
         assert d.disciplina == Disciplina.STA
 
 
+class TestDescriptorSPEVariantes:
+    @pytest.mark.parametrize(
+        "disciplina",
+        [
+            Disciplina.SPE_2X50,
+            Disciplina.SPE_4X50,
+            Disciplina.SPE_8X50,
+            Disciplina.SPE_16X50,
+        ],
+    )
+    def test_unidad_es_segundos(self, disciplina: Disciplina) -> None:
+        d = DisciplinaDescriptor.para(disciplina)
+        assert d.unidad_esperada == UnidadMedida.Segundos
+
+    @pytest.mark.parametrize(
+        "disciplina",
+        [
+            Disciplina.SPE_2X50,
+            Disciplina.SPE_4X50,
+            Disciplina.SPE_8X50,
+            Disciplina.SPE_16X50,
+        ],
+    )
+    def test_orden_es_descendente(self, disciplina: Disciplina) -> None:
+        d = DisciplinaDescriptor.para(disciplina)
+        assert d.orden_ascendente is False
+
+    def test_spe_generica_permanece_legacy(self) -> None:
+        d = DisciplinaDescriptor.para(Disciplina.SPE)
+        assert d.unidad_esperada == UnidadMedida.Metros
+        assert d.orden_ascendente is True
+
+    def test_helpers_spe(self) -> None:
+        assert Disciplina.SPE_2X50.es_spe() is True
+        assert Disciplina.SPE_2X50.es_tiempo() is True
+        assert Disciplina.SPE.es_spe() is True
+        assert Disciplina.SPE.es_tiempo() is False
+
+
 @pytest.mark.parametrize(
     "disciplina",
     [

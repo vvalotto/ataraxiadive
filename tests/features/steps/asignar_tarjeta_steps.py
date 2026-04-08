@@ -30,10 +30,12 @@ from competencia.application.commands.registrar_resultado import (
 from competencia.domain.aggregates.performance import Performance
 from competencia.domain.exceptions import (
     EstadoInvalidoParaAsignarTarjeta,
+    MotivoDQObligatorio,
     MotivoObligatorio,
 )
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
+from competencia.domain.value_objects.motivo_dq import MotivoDQ
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
@@ -212,7 +214,8 @@ def _ejecutar_asignar_tarjeta(
     ctx: dict,  # type: ignore[type-arg]
     tipo: TipoTarjeta,
     asignada_por: str,
-    motivo: str | None,
+    motivo_texto: str | None = None,
+    motivo_dq: MotivoDQ | None = None,
 ) -> None:
     handler = AsignarTarjetaHandler(ctx["event_store"])
     cmd = AsignarTarjetaCommand(
@@ -221,12 +224,13 @@ def _ejecutar_asignar_tarjeta(
         disciplina=ctx["disciplina"],
         tipo=tipo,
         asignada_por=asignada_por,
-        motivo=motivo,
+        motivo_texto=motivo_texto,
+        motivo_dq=motivo_dq,
     )
     try:
         ctx["result"] = asyncio.run(handler.handle(cmd))
         ctx["tipo_tarjeta"] = tipo
-        ctx["motivo_tarjeta"] = motivo
+        ctx["motivo_tarjeta"] = motivo_texto or (motivo_dq.value if motivo_dq else None)
     except Exception as exc:
         ctx["error"] = exc
 
@@ -238,12 +242,12 @@ def step_asignar_blanca(ctx: dict, juez: str) -> None:  # type: ignore[type-arg]
 
 @when(parsers.parse('el juez asigna tarjeta amarilla con motivo="{motivo}" asignada_por="{juez}"'))
 def step_asignar_amarilla_con_motivo(ctx: dict, motivo: str, juez: str) -> None:  # type: ignore[type-arg]
-    _ejecutar_asignar_tarjeta(ctx, TipoTarjeta.Amarilla, juez, motivo)
+    _ejecutar_asignar_tarjeta(ctx, TipoTarjeta.Amarilla, juez, motivo_texto=motivo)
 
 
-@when(parsers.parse('el juez asigna tarjeta roja con motivo="{motivo}" asignada_por="{juez}"'))
-def step_asignar_roja_con_motivo(ctx: dict, motivo: str, juez: str) -> None:  # type: ignore[type-arg]
-    _ejecutar_asignar_tarjeta(ctx, TipoTarjeta.Roja, juez, motivo)
+@when(parsers.parse('el juez asigna tarjeta roja con motivo_dq="{motivo_dq}" asignada_por="{juez}"'))
+def step_asignar_roja_con_motivo_dq(ctx: dict, motivo_dq: str, juez: str) -> None:  # type: ignore[type-arg]
+    _ejecutar_asignar_tarjeta(ctx, TipoTarjeta.Roja, juez, motivo_dq=MotivoDQ(motivo_dq))
 
 
 @when(parsers.parse('el juez intenta asignar tarjeta amarilla sin motivo asignada_por="{juez}"'))
@@ -287,7 +291,7 @@ def step_evento_tarjeta_en_stream(ctx: dict) -> None:  # type: ignore[type-arg]
     assert any(e["event_type"] == "TarjetaAsignada" for e in events)
 
 
-@then(parsers.parse('el evento contiene tipo="{tipo}", motivo=null y asignadaPor="{juez}"'))
+@then(parsers.parse('el evento contiene tipo="{tipo}", motivo_dq=null, motivo_texto=null y asignadaPor="{juez}"'))
 def step_payload_blanca_correcto(ctx: dict, tipo: str, juez: str) -> None:  # type: ignore[type-arg]
     stream_id = (
         f"performance-{ctx['competencia_id']}"
@@ -298,12 +302,13 @@ def step_payload_blanca_correcto(ctx: dict, tipo: str, juez: str) -> None:  # ty
     tarjeta_ev = next(e for e in events if e["event_type"] == "TarjetaAsignada")
     payload = tarjeta_ev["payload"]
     assert payload["tipo"] == tipo
-    assert payload["motivo"] is None
+    assert payload["motivo_dq_codigo"] is None
+    assert payload["motivo_texto"] is None
     assert payload["asignada_por"] == juez
 
 
-@then(parsers.parse('el evento contiene tipo="{tipo}", motivo="{motivo}" y asignadaPor="{juez}"'))
-def step_payload_con_motivo_correcto(
+@then(parsers.parse('el evento contiene tipo="{tipo}", motivo_texto="{motivo}" y asignadaPor="{juez}"'))
+def step_payload_con_motivo_texto_correcto(
     ctx: dict, tipo: str, motivo: str, juez: str  # type: ignore[type-arg]
 ) -> None:
     stream_id = (
@@ -315,7 +320,26 @@ def step_payload_con_motivo_correcto(
     tarjeta_ev = next(e for e in events if e["event_type"] == "TarjetaAsignada")
     payload = tarjeta_ev["payload"]
     assert payload["tipo"] == tipo
-    assert payload["motivo"] == motivo
+    assert payload["motivo_texto"] == motivo
+    assert payload["motivo_dq_codigo"] is None
+    assert payload["asignada_por"] == juez
+
+
+@then(parsers.parse('el evento contiene tipo="{tipo}", motivo_dq="{motivo_dq}" y asignadaPor="{juez}"'))
+def step_payload_con_motivo_dq_correcto(
+    ctx: dict, tipo: str, motivo_dq: str, juez: str  # type: ignore[type-arg]
+) -> None:
+    stream_id = (
+        f"performance-{ctx['competencia_id']}"
+        f"-{ctx['participante_id']}"
+        f"-{ctx['disciplina'].value}"
+    )
+    events = asyncio.run(ctx["event_store"].load(stream_id))
+    tarjeta_ev = next(e for e in events if e["event_type"] == "TarjetaAsignada")
+    payload = tarjeta_ev["payload"]
+    assert payload["tipo"] == tipo
+    assert payload["motivo_dq_codigo"] == motivo_dq
+    assert payload["motivo_texto"] is None
     assert payload["asignada_por"] == juez
 
 
@@ -323,6 +347,7 @@ def step_payload_con_motivo_correcto(
 def step_error_esperado_tarjeta(ctx: dict, error_type: str) -> None:  # type: ignore[type-arg]
     error_map = {
         "MotivoObligatorio": MotivoObligatorio,
+        "MotivoDQObligatorio": MotivoDQObligatorio,
         "EstadoInvalidoParaAsignarTarjeta": EstadoInvalidoParaAsignarTarjeta,
     }
     assert ctx["error"] is not None, "Se esperaba un error pero no hubo ninguno"

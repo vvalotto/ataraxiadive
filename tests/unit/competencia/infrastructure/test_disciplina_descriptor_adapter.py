@@ -65,3 +65,35 @@ class TestAdapterTodasDisciplinas:
         for disciplina in Disciplina:
             desc = adapter.describe(disciplina)
             assert desc.disciplina == disciplina
+
+
+class TestAdapterSPEVariantes:
+    @pytest.mark.parametrize(
+        "disciplina",
+        [
+            Disciplina.SPE_2X50,
+            Disciplina.SPE_4X50,
+            Disciplina.SPE_8X50,
+            Disciplina.SPE_16X50,
+        ],
+    )
+    def test_describe_spe_variante_retorna_segundos(
+        self, adapter: DisciplinaDescriptorAdapter, disciplina: Disciplina
+    ) -> None:
+        desc = adapter.describe(disciplina)
+        assert desc.unidad_esperada == UnidadMedida.Segundos
+
+    @pytest.mark.parametrize(
+        "disciplina",
+        [
+            Disciplina.SPE_2X50,
+            Disciplina.SPE_4X50,
+            Disciplina.SPE_8X50,
+            Disciplina.SPE_16X50,
+        ],
+    )
+    def test_describe_spe_variante_retorna_orden_descendente(
+        self, adapter: DisciplinaDescriptorAdapter, disciplina: Disciplina
+    ) -> None:
+        desc = adapter.describe(disciplina)
+        assert desc.orden_ascendente is False

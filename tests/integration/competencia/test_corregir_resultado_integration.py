@@ -27,6 +27,8 @@ from competencia.domain.aggregates.performance import Performance
 from competencia.domain.exceptions import EstadoInvalidoParaCorregirResultado, MotivoObligatorio
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
+from competencia.domain.value_objects.penalizacion_tecnica import PenalizacionTecnica
+from competencia.domain.value_objects.tipo_penalizacion import TipoPenalizacion
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
@@ -235,6 +237,79 @@ async def test_correccion_payload_correcto(
     assert payload["valor_rp_nuevo"] == "90.0"
     assert payload["motivo"] == "Corrección confirmada por árbitro"
     assert payload["registrado_por"] == "juez-007"
+
+
+async def test_correccion_recalcula_rp_penalizado_con_tarjeta_blanca_penalizada(
+    registrar_ap_handler: RegistrarAPHandler,
+    llamar_handler: LlamarAtletaHandler,
+    registrar_resultado_handler: RegistrarResultadoHandler,
+    asignar_tarjeta_handler: AsignarTarjetaHandler,
+    corregir_resultado_handler: CorregirResultadoHandler,
+    event_store: SQLiteEventStore,
+) -> None:
+    """Una correccion preserva penalizaciones acumuladas en el RP final."""
+    cid = uuid4()
+    pid = uuid4()
+
+    await registrar_ap_handler.handle(
+        RegistrarAPCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.DNF,
+            valor_ap=Decimal("90"),
+            unidad=UnidadMedida.Metros,
+        )
+    )
+    await llamar_handler.handle(
+        LlamarAtletaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.DNF,
+            ot_programado=OT,
+            posicion_grilla=1,
+        )
+    )
+    await registrar_resultado_handler.handle(
+        RegistrarResultadoCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.DNF,
+            valor_rp=Decimal("89.5"),
+            unidad=UnidadMedida.Metros,
+            registrado_por="juez-001",
+        )
+    )
+    await asignar_tarjeta_handler.handle(
+        AsignarTarjetaCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.DNF,
+            tipo=TipoTarjeta.BlancaConPenalizaciones,
+            asignada_por="juez-001",
+            penalizaciones=(
+                PenalizacionTecnica(TipoPenalizacion.SIN_CONTACTO_PARED, Decimal("3")),
+                PenalizacionTecnica(TipoPenalizacion.FUERA_DE_CARRIL, Decimal("3")),
+            ),
+        )
+    )
+
+    await corregir_resultado_handler.handle(
+        CorregirResultadoCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.DNF,
+            valor_rp=Decimal("95.0"),
+            unidad=UnidadMedida.Metros,
+            registrado_por="juez-002",
+            motivo="Revisión arbitral",
+        )
+    )
+
+    stream_id = f"performance-{cid}-{pid}-{Disciplina.DNF.value}"
+    performance = Performance.reconstitute(await event_store.load(stream_id))
+    assert performance.rp_medido == Decimal("95.0")
+    assert performance.rp_penalizado == Decimal("89.0")
+    assert performance.rp == Decimal("89.0")
 
 
 # ── INV-P-12/13 ───────────────────────────────────────────────────────────────

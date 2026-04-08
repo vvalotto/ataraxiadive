@@ -56,28 +56,7 @@ class SQLiteTorneoRepository(TorneoRepositoryPort):
                      sede, entidad, estado, disciplinas_torneo)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
-                (
-                    str(torneo.torneo_id),
-                    torneo.nombre,
-                    torneo.descripcion,
-                    torneo.fecha_inicio.isoformat(),
-                    torneo.fecha_fin.isoformat(),
-                    json.dumps(
-                        {
-                            "nombre": torneo.sede.nombre,
-                            "ciudad": torneo.sede.ciudad,
-                            "pais": torneo.sede.pais,
-                        }
-                    ),
-                    json.dumps(
-                        {
-                            "nombre": torneo.entidad_organizadora.nombre,
-                            "tipo": torneo.entidad_organizadora.tipo,
-                        }
-                    ),
-                    torneo.estado.value,
-                    json.dumps([dt.to_dict() for dt in torneo.disciplinas_torneo]),
-                ),
+                self._torneo_to_row(torneo),
             )
             await conn.commit()
 
@@ -102,17 +81,63 @@ class SQLiteTorneoRepository(TorneoRepositoryPort):
                 return [self._row_to_torneo(row) for row in rows]
 
     def _row_to_torneo(self, row: aiosqlite.Row) -> Torneo:
-        sede_data = json.loads(row["sede"])
-        entidad_data = json.loads(row["entidad"])
-        disciplinas_raw = json.loads(row["disciplinas_torneo"]) if row["disciplinas_torneo"] else []
         return Torneo(
             torneo_id=UUID(row["torneo_id"]),
             nombre=row["nombre"],
             descripcion=row["descripcion"],
             fecha_inicio=date.fromisoformat(row["fecha_inicio"]),
             fecha_fin=date.fromisoformat(row["fecha_fin"]),
-            sede=Sede(**sede_data),
-            entidad_organizadora=EntidadOrganizadora(**entidad_data),
+            sede=self._deserialize_sede(row["sede"]),
+            entidad_organizadora=self._deserialize_entidad(row["entidad"]),
             estado=EstadoTorneo(row["estado"]),
-            disciplinas_torneo=[DisciplinaTorneo.from_dict(d) for d in disciplinas_raw],
+            disciplinas_torneo=self._deserialize_disciplinas(row["disciplinas_torneo"]),
         )
+
+    def _torneo_to_row(self, torneo: Torneo) -> tuple[str, str, str, str, str, str, str, str, str]:
+        return (
+            str(torneo.torneo_id),
+            torneo.nombre,
+            torneo.descripcion,
+            torneo.fecha_inicio.isoformat(),
+            torneo.fecha_fin.isoformat(),
+            self._serialize_sede(torneo.sede),
+            self._serialize_entidad(torneo.entidad_organizadora),
+            torneo.estado.value,
+            self._serialize_disciplinas(torneo.disciplinas_torneo),
+        )
+
+    @staticmethod
+    def _serialize_sede(sede: Sede) -> str:
+        return json.dumps(
+            {
+                "nombre": sede.nombre,
+                "ciudad": sede.ciudad,
+                "pais": sede.pais,
+            }
+        )
+
+    @staticmethod
+    def _serialize_entidad(entidad: EntidadOrganizadora) -> str:
+        return json.dumps(
+            {
+                "nombre": entidad.nombre,
+                "tipo": entidad.tipo,
+            }
+        )
+
+    @staticmethod
+    def _serialize_disciplinas(disciplinas: list[DisciplinaTorneo]) -> str:
+        return json.dumps([disciplina.to_dict() for disciplina in disciplinas])
+
+    @staticmethod
+    def _deserialize_sede(raw: str) -> Sede:
+        return Sede(**json.loads(raw))
+
+    @staticmethod
+    def _deserialize_entidad(raw: str) -> EntidadOrganizadora:
+        return EntidadOrganizadora(**json.loads(raw))
+
+    @staticmethod
+    def _deserialize_disciplinas(raw: str) -> list[DisciplinaTorneo]:
+        disciplinas_raw = json.loads(raw) if raw else []
+        return [DisciplinaTorneo.from_dict(disciplina) for disciplina in disciplinas_raw]

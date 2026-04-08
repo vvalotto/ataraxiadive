@@ -1,0 +1,26 @@
+{
+  "us_id": "US-4.1.3",
+  "generated_at": "2026-04-08T12:05:00-03:00",
+  "status": "completed",
+  "designreviewer": {
+    "command": ".venv/bin/designreviewer src/shared src/torneo src/resultados --config pyproject.toml",
+    "result": {
+      "blocking": 0,
+      "warnings": 37,
+      "notes": "Sin bloqueantes para el scope de US-4.1.3. Las advertencias corresponden a deuda estructural preexistente y complejidad acumulada."
+    }
+  },
+  "codeguard": {
+    "command": ".venv/bin/codeguard -c pyproject.toml -f json src/shared/domain/value_objects/disciplina.py src/shared/domain/value_objects/disciplina_descriptor.py src/torneo/domain/exceptions.py src/torneo/domain/aggregates/torneo.py src/torneo/api/exception_handlers.py src/torneo/api/router.py",
+    "result": {
+      "files_analyzed": 6,
+      "errors": 0,
+      "warnings": 2,
+      "infos": 17,
+      "notes": [
+        "src/torneo/domain/aggregates/torneo.py:39 - E302 expected 2 blank lines, found 1",
+        "src/torneo/domain/aggregates/torneo.py:90 - E501 line too long (111 > 100 characters)"
+      ]
+    }
+  }
+}

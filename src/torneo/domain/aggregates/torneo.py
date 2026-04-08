@@ -7,6 +7,7 @@ from uuid import UUID, uuid4
 from shared.domain.value_objects.disciplina import Disciplina
 from torneo.domain.exceptions import (
     AsignacionNoPermitida,
+    DisciplinaObsoleta,
     DisciplinaNoEnTorneo,
     TorneoCerrado,
     TransicionEstadoInvalida,
@@ -48,16 +49,11 @@ class Torneo:
     disciplinas_torneo: list[DisciplinaTorneo] = field(default_factory=list)
 
     def __post_init__(self) -> None:
-        if not self.nombre or not self.nombre.strip():
-            raise ValueError("El nombre del torneo no puede estar vacío")
-        if self.fecha_fin < self.fecha_inicio:
-            raise ValueError("fecha_fin debe ser mayor o igual a fecha_inicio")
+        self._validar_nombre()
+        self._validar_fechas()
 
     def _transicionar(self, nuevo_estado: EstadoTorneo) -> None:
-        if self.estado == EstadoTorneo.CERRADO:
-            raise TorneoCerrado(f"El torneo está cerrado y no puede transicionar a {nuevo_estado}")
-        if nuevo_estado not in _TRANSICIONES_VALIDAS[self.estado]:
-            raise TransicionEstadoInvalida(f"Transición inválida: {self.estado} → {nuevo_estado}")
+        self._validar_transicion(nuevo_estado)
         self.estado = nuevo_estado
 
     def abrir_inscripcion(self) -> None:
@@ -79,26 +75,18 @@ class Torneo:
         self._transicionar(EstadoTorneo.CERRADO)
 
     def cancelar(self) -> None:
-        if self.estado == EstadoTorneo.CERRADO:
-            raise TorneoCerrado("Un torneo cerrado no puede cancelarse")
-        if self.estado == EstadoTorneo.CANCELADO:
-            raise TransicionEstadoInvalida("El torneo ya está cancelado")
+        self._validar_cancelacion()
         self.estado = EstadoTorneo.CANCELADO
 
     def asignar_disciplinas(self, disciplinas: frozenset[Disciplina]) -> None:
         """Configura las disciplinas disponibles. Solo en estados CREADO, INSCRIPCION_ABIERTA o PREPARACION."""
-        if self.estado not in _ESTADOS_ASIGNACION_VALIDOS:
-            raise AsignacionNoPermitida(
-                f"No se pueden asignar disciplinas con el torneo en estado {self.estado}"
-            )
+        self._validar_estado_asignacion()
+        self._validar_disciplinas(disciplinas)
         self.disciplinas_torneo = [DisciplinaTorneo(disciplina=d) for d in sorted(disciplinas)]
 
     def asignar_juez(self, disciplina: Disciplina, juez_id: UUID) -> None:
         """Asigna juez a una disciplina del torneo. Permite reasignación."""
-        if self.estado not in _ESTADOS_ASIGNACION_VALIDOS:
-            raise AsignacionNoPermitida(
-                f"No se puede asignar juez con el torneo en estado {self.estado}"
-            )
+        self._validar_estado_asignacion("juez")
         for i, dt in enumerate(self.disciplinas_torneo):
             if dt.disciplina == disciplina:
                 self.disciplinas_torneo[i] = dt.con_juez(juez_id)
@@ -108,3 +96,36 @@ class Torneo:
     def obtener_disciplinas_de_juez(self, juez_id: UUID) -> list[Disciplina]:
         """Retorna las disciplinas asignadas al juez dado."""
         return [dt.disciplina for dt in self.disciplinas_torneo if dt.juez_id == juez_id]
+
+    def _validar_nombre(self) -> None:
+        if not self.nombre or not self.nombre.strip():
+            raise ValueError("El nombre del torneo no puede estar vacío")
+
+    def _validar_fechas(self) -> None:
+        if self.fecha_fin < self.fecha_inicio:
+            raise ValueError("fecha_fin debe ser mayor o igual a fecha_inicio")
+
+    def _validar_transicion(self, nuevo_estado: EstadoTorneo) -> None:
+        if self.estado == EstadoTorneo.CERRADO:
+            raise TorneoCerrado(f"El torneo está cerrado y no puede transicionar a {nuevo_estado}")
+        if nuevo_estado not in _TRANSICIONES_VALIDAS[self.estado]:
+            raise TransicionEstadoInvalida(f"Transición inválida: {self.estado} → {nuevo_estado}")
+
+    def _validar_cancelacion(self) -> None:
+        if self.estado == EstadoTorneo.CERRADO:
+            raise TorneoCerrado("Un torneo cerrado no puede cancelarse")
+        if self.estado == EstadoTorneo.CANCELADO:
+            raise TransicionEstadoInvalida("El torneo ya está cancelado")
+
+    def _validar_estado_asignacion(self, contexto: str = "disciplinas") -> None:
+        if self.estado not in _ESTADOS_ASIGNACION_VALIDOS:
+            raise AsignacionNoPermitida(
+                f"No se puede asignar {contexto} con el torneo en estado {self.estado}"
+            )
+
+    @staticmethod
+    def _validar_disciplinas(disciplinas: frozenset[Disciplina]) -> None:
+        if Disciplina.SPE in disciplinas:
+            raise DisciplinaObsoleta(
+                "Disciplina.SPE es legacy y no puede configurarse en torneos nuevos"
+            )

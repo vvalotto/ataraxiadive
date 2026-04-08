@@ -1,0 +1,311 @@
+"""Step definitions BDD — US-4.1.1: Motivos de tarjeta roja."""
+
+from __future__ import annotations
+
+import asyncio
+import tempfile
+from datetime import datetime
+from decimal import Decimal
+from uuid import uuid4
+
+import aiosqlite
+import pytest
+from pytest_bdd import given, parsers, scenarios, then, when
+
+from competencia.application.commands.asignar_tarjeta import (
+    AsignarTarjetaCommand,
+    AsignarTarjetaHandler,
+)
+from competencia.application.commands.llamar_atleta import LlamarAtletaCommand, LlamarAtletaHandler
+from competencia.application.commands.registrar_ap import RegistrarAPCommand, RegistrarAPHandler
+from competencia.application.commands.registrar_resultado import (
+    RegistrarResultadoCommand,
+    RegistrarResultadoHandler,
+)
+from competencia.domain.aggregates.performance import Performance
+from competencia.domain.exceptions import (
+    DistanciaBlackoutNoAplica,
+    DistanciaBlackoutObligatoria,
+    MotivoDQObligatorio,
+)
+from competencia.domain.value_objects.disciplina import Disciplina
+from competencia.domain.value_objects.estado_performance import EstadoPerformance
+from competencia.domain.value_objects.motivo_dq import MotivoDQ
+from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
+from competencia.domain.value_objects.unidad_medida import UnidadMedida
+from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
+from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
+from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
+)
+
+scenarios("../US-4.1.1-motivos-tarjeta-roja.feature")
+
+_CREATE_TABLE = """
+    CREATE TABLE events (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        stream_id   TEXT    NOT NULL,
+        event_type  TEXT    NOT NULL,
+        payload     TEXT    NOT NULL,
+        version     INTEGER NOT NULL,
+        occurred_at TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+        UNIQUE (stream_id, version)
+    )
+"""
+
+OT = datetime(2026, 4, 8, 10, 30, 0)
+
+
+@pytest.fixture
+def ctx_us_4_1_1():
+    db_file = tempfile.NamedTemporaryFile(suffix=".db", delete=False)
+    db_path = db_file.name
+    db_file.close()
+
+    async def _setup():
+        async with aiosqlite.connect(db_path) as db:
+            await db.execute(_CREATE_TABLE)
+            await db.commit()
+
+        store = SQLiteEventStore(db_path)
+        stub = StubCompetenciaEstadoAdapter()
+        cid = uuid4()
+        pid = uuid4()
+
+        await RegistrarAPHandler(store, stub, DisciplinaDescriptorAdapter()).handle(
+            RegistrarAPCommand(
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=Disciplina.DYN,
+                valor_ap=Decimal("60"),
+                unidad=UnidadMedida.Metros,
+            )
+        )
+        await LlamarAtletaHandler(store, stub).handle(
+            LlamarAtletaCommand(
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=Disciplina.DYN,
+                ot_programado=OT,
+                posicion_grilla=1,
+            )
+        )
+        await RegistrarResultadoHandler(store, DisciplinaDescriptorAdapter()).handle(
+            RegistrarResultadoCommand(
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=Disciplina.DYN,
+                valor_rp=Decimal("45"),
+                unidad=UnidadMedida.Metros,
+                registrado_por="juez-001",
+            )
+        )
+
+        return {
+            "store": store,
+            "cid": cid,
+            "pid": pid,
+            "error": None,
+            "motivo_dq": None,
+        }
+
+    return asyncio.run(_setup())
+
+
+@given("una Performance en estado ResultadoRegistrado para disciplina DYN", target_fixture="ctx")
+def given_performance(ctx_us_4_1_1):
+    return ctx_us_4_1_1
+
+
+@given("el juez detecto black-out en superficie")
+def given_bko_superficie(ctx):
+    ctx["motivo_dq"] = MotivoDQ.BKO_SUPERFICIE
+
+
+@given("el atleta no realizo el protocolo de superficie reglamentario")
+def given_protocolo_superficie(ctx):
+    ctx["motivo_dq"] = MotivoDQ.PROTOCOLO_SUPERFICIE
+
+
+def _run_command(ctx, command: AsignarTarjetaCommand) -> None:
+    handler = AsignarTarjetaHandler(ctx["store"])
+
+    async def _execute():
+        try:
+            await handler.handle(command)
+        except Exception as exc:  # pragma: no cover - usado por BDD
+            ctx["error"] = exc
+
+    asyncio.run(_execute())
+
+
+@when(parsers.parse("asigna tarjeta Roja con motivo BKO_SUPERFICIE y distancia_blackout {distancia}"))
+def when_roja_bko(ctx, distancia: str):
+    _run_command(
+        ctx,
+        AsignarTarjetaCommand(
+            competencia_id=ctx["cid"],
+            participante_id=ctx["pid"],
+            disciplina=Disciplina.DYN,
+            tipo=TipoTarjeta.Roja,
+            asignada_por="juez-001",
+            motivo_dq=MotivoDQ.BKO_SUPERFICIE,
+            distancia_blackout=Decimal(distancia),
+        ),
+    )
+
+
+@when("asigna tarjeta Roja con motivo PROTOCOLO_SUPERFICIE")
+def when_roja_protocolo(ctx):
+    _run_command(
+        ctx,
+        AsignarTarjetaCommand(
+            competencia_id=ctx["cid"],
+            participante_id=ctx["pid"],
+            disciplina=Disciplina.DYN,
+            tipo=TipoTarjeta.Roja,
+            asignada_por="juez-001",
+            motivo_dq=MotivoDQ.PROTOCOLO_SUPERFICIE,
+        ),
+    )
+
+
+@when("asigna tarjeta Roja sin especificar MotivoDQ")
+def when_roja_sin_motivo(ctx):
+    _run_command(
+        ctx,
+        AsignarTarjetaCommand(
+            competencia_id=ctx["cid"],
+            participante_id=ctx["pid"],
+            disciplina=Disciplina.DYN,
+            tipo=TipoTarjeta.Roja,
+            asignada_por="juez-001",
+        ),
+    )
+
+
+@when("asigna tarjeta Roja con motivo BKO_SUPERFICIE sin distancia_blackout")
+def when_roja_bko_sin_distancia(ctx):
+    _run_command(
+        ctx,
+        AsignarTarjetaCommand(
+            competencia_id=ctx["cid"],
+            participante_id=ctx["pid"],
+            disciplina=Disciplina.DYN,
+            tipo=TipoTarjeta.Roja,
+            asignada_por="juez-001",
+            motivo_dq=MotivoDQ.BKO_SUPERFICIE,
+        ),
+    )
+
+
+@when(parsers.parse("asigna tarjeta Roja con motivo BKO_SUBACUATICO y distancia_blackout {distancia}"))
+def when_roja_bko_subacuatico(ctx, distancia: str):
+    _run_command(
+        ctx,
+        AsignarTarjetaCommand(
+            competencia_id=ctx["cid"],
+            participante_id=ctx["pid"],
+            disciplina=Disciplina.DYN,
+            tipo=TipoTarjeta.Roja,
+            asignada_por="juez-001",
+            motivo_dq=MotivoDQ.BKO_SUBACUATICO,
+            distancia_blackout=Decimal(distancia),
+        ),
+    )
+
+
+@when(parsers.parse("asigna tarjeta Roja con motivo SALIDA_EN_FALSO y distancia_blackout {distancia}"))
+def when_roja_no_bko_con_distancia(ctx, distancia: str):
+    _run_command(
+        ctx,
+        AsignarTarjetaCommand(
+            competencia_id=ctx["cid"],
+            participante_id=ctx["pid"],
+            disciplina=Disciplina.DYN,
+            tipo=TipoTarjeta.Roja,
+            asignada_por="juez-001",
+            motivo_dq=MotivoDQ.SALIDA_EN_FALSO,
+            distancia_blackout=Decimal(distancia),
+        ),
+    )
+
+
+@when(parsers.parse('asigna tarjeta Amarilla con motivo texto "{motivo}"'))
+def when_amarilla_con_texto(ctx, motivo: str):
+    _run_command(
+        ctx,
+        AsignarTarjetaCommand(
+            competencia_id=ctx["cid"],
+            participante_id=ctx["pid"],
+            disciplina=Disciplina.DYN,
+            tipo=TipoTarjeta.Amarilla,
+            asignada_por="juez-001",
+            motivo_texto=motivo,
+        ),
+    )
+
+
+def _load_events(ctx):
+    async def _load():
+        stream_id = f"performance-{ctx['cid']}-{ctx['pid']}-{Disciplina.DYN.value}"
+        return await ctx["store"].load(stream_id)
+
+    return asyncio.run(_load())
+
+
+@then("la Performance pasa a estado Ejecutada")
+def then_performance_ejecutada(ctx):
+    assert ctx["error"] is None
+    performance = Performance.reconstitute(_load_events(ctx))
+    assert performance.estado == EstadoPerformance.Ejecutada
+
+
+@then(parsers.parse('el evento TarjetaAsignada registra motivo_dq_codigo "{codigo}"'))
+def then_evento_motivo_dq(ctx, codigo: str):
+    events = _load_events(ctx)
+    tarjeta = next(e for e in events if e["event_type"] == "TarjetaAsignada")
+    assert tarjeta["payload"]["motivo_dq_codigo"] == codigo
+
+
+@then(parsers.parse('el evento TarjetaAsignada registra distancia_blackout "{distancia}"'))
+def then_evento_distancia(ctx, distancia: str):
+    events = _load_events(ctx)
+    tarjeta = next(e for e in events if e["event_type"] == "TarjetaAsignada")
+    assert tarjeta["payload"]["distancia_blackout"] == distancia
+
+
+@then("el evento TarjetaAsignada no registra distancia_blackout")
+def then_evento_sin_distancia(ctx):
+    events = _load_events(ctx)
+    tarjeta = next(e for e in events if e["event_type"] == "TarjetaAsignada")
+    assert tarjeta["payload"]["distancia_blackout"] is None
+
+
+@then("se lanza MotivoDQObligatorio")
+def then_motivo_dq_obligatorio(ctx):
+    assert isinstance(ctx["error"], MotivoDQObligatorio)
+
+
+@then("se lanza DistanciaBlackoutObligatoria")
+def then_distancia_obligatoria(ctx):
+    assert isinstance(ctx["error"], DistanciaBlackoutObligatoria)
+
+
+@then("se lanza DistanciaBlackoutNoAplica")
+def then_distancia_no_aplica(ctx):
+    assert isinstance(ctx["error"], DistanciaBlackoutNoAplica)
+
+
+@then(parsers.parse('el evento TarjetaAsignada registra motivo_texto "{motivo}"'))
+def then_evento_motivo_texto(ctx, motivo: str):
+    events = _load_events(ctx)
+    tarjeta = next(e for e in events if e["event_type"] == "TarjetaAsignada")
+    assert tarjeta["payload"]["motivo_texto"] == motivo
+
+
+@then("el evento TarjetaAsignada no registra motivo_dq_codigo")
+def then_evento_sin_motivo_dq(ctx):
+    events = _load_events(ctx)
+    tarjeta = next(e for e in events if e["event_type"] == "TarjetaAsignada")
+    assert tarjeta["payload"]["motivo_dq_codigo"] is None

@@ -16,3 +16,7 @@ class DisciplinaNoEnTorneo(Exception):
 
 class AsignacionNoPermitida(Exception):
     pass
+
+
+class DisciplinaObsoleta(Exception):
+    pass
