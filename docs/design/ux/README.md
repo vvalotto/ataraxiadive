@@ -5,7 +5,7 @@
 | **Incremento** | INC-4.0 — UX Design |
 | **Sprint** | SP4 — La Plataforma |
 | **Responsable** | Cowork (claude.ai) con input de Victor |
-| **Fecha** | 2026-04-04 |
+| **Fecha** | 2026-04-08 |
 | **DoD** | Todos los artefactos comprometidos en esta carpeta y aprobados por Victor antes de escribir una línea de frontend |
 
 ---
@@ -34,19 +34,37 @@ Ambos se commitean al repo — los prototipos son documentación viva del diseñ
 
 | Artefacto | Estado | Descripción |
 |-----------|--------|-------------|
-| `flujos-por-rol.md` | ⏳ Pendiente | Flujos de usuario por rol: juez, organizador, atleta |
-| `wireframes-juez.md` | ⏳ Pendiente | Pantallas del juez: 6 pasos + amarilla en revisión + BKO + offline |
-| `wireframes-organizador.md` | ⏳ Pendiente | Panel del organizador: torneo, grilla, jueces asignados, auditoría |
-| `wireframes-atleta.md` | ⏳ Pendiente | Portal del atleta: inscripción, anuncios, resultados |
-| `decisiones-frontend.md` | ⏳ Pendiente | Stack final: librería UI, routing, state management, estrategia offline |
+| `flujos-por-rol.md` | ✅ Completo | Flujos de usuario por rol: juez, organizador y atleta |
+| `wireframes-juez.md` | ✅ Completo | Pantallas del juez: 6 pasos + amarilla en revisión + BKO + offline |
+| `wireframes-organizador.md` | ✅ Completo | Panel del organizador: torneo, grilla, jueces asignados, auditoría |
+| `wireframes-atleta.md` | ✅ Completo | Portal del atleta: inscripción, anuncios, grilla y resultados |
+| `wireframes-registro-roles.md` | ✅ Completo | Onboarding, perfil multirol, notificaciones e invitaciones de juez |
+| `wireframes-setup-torneo.md` | ✅ Completo | Flujo de preparación del torneo: disciplinas, grilla y asignación de jueces |
+| `decisiones-frontend.md` | ✅ Completo | Stack final: librería UI, routing, state management y estrategia offline |
+| `decisiones-registro-usuario.md` | ✅ Completo | Decisiones específicas del flujo de registro, roles y certificaciones |
 
 ### Prototipos (HTML — input para validación visual)
 
 | Artefacto | Estado | Descripción |
 |-----------|--------|-------------|
-| `prototipos/prototipo-juez.html` | ⏳ Pendiente | Flujo completo del juez — navegable, mobile-first |
-| `prototipos/prototipo-organizador.html` | ⏳ Pendiente | Panel del organizador — navegable |
-| `prototipos/prototipo-atleta.html` | ⏳ Pendiente | Portal del atleta — navegable |
+| `prototipos/prototipo-juez.html` | ✅ Completo | Flujo completo del juez — navegable, mobile-first |
+| `prototipos/prototipo-organizador.html` | ✅ Completo | Panel del organizador operativo — navegable |
+| `prototipos/prototipo-atleta.html` | ✅ Completo | Portal del atleta — navegable |
+| `prototipos/prototipo-registro-roles.html` | ✅ Completo | Registro, perfil multirol, notificaciones e invitaciones |
+| `prototipos/prototipo-setup-torneo.html` | ✅ Completo | Setup del torneo antes de la operación en vivo |
+
+### Estado del paquete UX
+
+El paquete base de INC-4.0 quedó cubierto con estos bloques:
+
+- autenticación, onboarding y gestión multirol
+- operación del juez en competencia
+- operación del organizador en vivo
+- preparación y publicación del torneo
+- experiencia del atleta pre-competencia y post-competencia
+- decisiones de frontend para iniciar INC-4.1
+
+En otras palabras, esta carpeta ya contiene el set mínimo de contratos UX necesarios para comenzar la implementación del frontend.
 
 ---
 
