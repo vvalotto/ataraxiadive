@@ -1055,3 +1055,25 @@ def test_blanca_con_penalizaciones_clampa_rp_a_cero() -> None:
     )
 
     assert p.rp_penalizado == Decimal("0")
+
+
+def test_corregir_resultado_recalcula_rp_penalizado_con_penalizaciones(
+    performance_con_resultado: Performance,
+) -> None:
+    performance_con_resultado.asignar_tarjeta(
+        TipoTarjeta.BlancaConPenalizaciones,
+        "juez-001",
+        penalizaciones=(
+            PenalizacionTecnica(TipoPenalizacion.SIN_CONTACTO_PARED, Decimal("3")),
+            PenalizacionTecnica(TipoPenalizacion.FUERA_DE_CARRIL, Decimal("3")),
+        ),
+    )
+    performance_con_resultado.pull_events()
+
+    performance_con_resultado.corregir_resultado(
+        Decimal("60.5"), UnidadMedida.Metros, "juez-009", "Corrección con penalización"
+    )
+
+    assert performance_con_resultado.rp_medido == Decimal("60.5")
+    assert performance_con_resultado.rp_penalizado == Decimal("54.5")
+    assert performance_con_resultado.rp == Decimal("54.5")
