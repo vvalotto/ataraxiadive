@@ -6,7 +6,12 @@ from dataclasses import dataclass
 from datetime import datetime
 from uuid import UUID
 
-from competencia.domain.aggregates.performance import Performance
+from competencia.application.commands._handler_utils import (
+    build_performance_stream_id,
+    cargar_o_fallar,
+    persistir_eventos_pendientes,
+    reconstruir_performance,
+)
 from competencia.domain.ports.andariveles_activos_port import AndarivelesActivosPort
 from competencia.domain.ports.competencia_estado_port import CompetenciaEstadoPort
 from competencia.domain.ports.event_store_port import EventStorePort
@@ -89,13 +94,35 @@ class LlamarAtletaHandler:
             PerformanceNoEncontrada: no existe AP registrado para este atleta.
             EstadoInvalidoParaLlamar: Performance no está en AnunciadaAP.
         """
-        # INV-P-05: Competencia en EnEjecucion?
+        await self._validar_competencia_en_ejecucion(command)
+        await self._validar_andarivel(command)
+        stream_id = build_performance_stream_id(
+            command.competencia_id, command.participante_id, command.disciplina
+        )
+        events = await cargar_o_fallar(
+            event_store=self._event_store,
+            stream_id=stream_id,
+            exception_factory=lambda: PerformanceNoEncontrada(
+                f"No existe Performance para participante={command.participante_id} "
+                f"disciplina={command.disciplina.value} "
+                f"competencia={command.competencia_id}"
+            ),
+        )
+        performance = reconstruir_performance(events)
+        performance.llamar(command.ot_programado, command.posicion_grilla, command.andarivel)
+        await persistir_eventos_pendientes(
+            event_store=self._event_store,
+            stream_id=stream_id,
+            aggregate=performance,
+        )
+
+    async def _validar_competencia_en_ejecucion(self, command: LlamarAtletaCommand) -> None:
         if not await self._competencia_estado.is_en_ejecucion(command.competencia_id):
             raise CompetenciaNoEnEjecucion(
                 f"INV-P-05: competencia={command.competencia_id} no está en EnEjecucion"
             )
 
-        # INV-C-05: andarivel libre? (solo si el port está inyectado)
+    async def _validar_andarivel(self, command: LlamarAtletaCommand) -> None:
         andarivel_activo = (
             self._andariveles_activos is not None
             and await self._andariveles_activos.is_andarivel_activo(
@@ -107,31 +134,6 @@ class LlamarAtletaHandler:
                 f"INV-C-05: andarivel={command.andarivel} ya tiene una Performance en Llamada"
             )
 
-        # Cargar Performance desde Event Store
-        stream_id = _build_stream_id(
-            command.competencia_id, command.participante_id, command.disciplina
-        )
-        events = await self._event_store.load(stream_id)
-        if not events:
-            raise PerformanceNoEncontrada(
-                f"No existe Performance para participante={command.participante_id} "
-                f"disciplina={command.disciplina.value} "
-                f"competencia={command.competencia_id}"
-            )
-
-        performance = Performance.reconstitute(events)
-
-        # Ejecutar (lanza EstadoInvalidoParaLlamar si no está en AnunciadaAP)
-        performance.llamar(command.ot_programado, command.posicion_grilla, command.andarivel)
-
-        # Persistir eventos pendientes
-        for event in performance.pull_events():
-            await self._event_store.append(
-                stream_id=stream_id,
-                event_type=event.event_type,
-                payload=event.to_payload(),
-            )
-
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -141,4 +143,4 @@ def _build_stream_id(competencia_id: UUID, participante_id: UUID, disciplina: Di
 
     Format: "performance-{competencia_id}-{participante_id}-{disciplina}"
     """
-    return f"performance-{competencia_id}-{participante_id}-{disciplina.value}"
+    return build_performance_stream_id(competencia_id, participante_id, disciplina)

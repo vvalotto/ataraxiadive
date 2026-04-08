@@ -6,6 +6,11 @@ from dataclasses import dataclass
 from datetime import datetime
 from uuid import UUID
 
+from competencia.application.commands._handler_utils import (
+    build_competencia_stream_id,
+    persistir_eventos_pendientes,
+    reconstruir_competencia,
+)
 from competencia.domain.aggregates.competencia import Competencia
 from competencia.domain.ports.disciplina_descriptor_port import DisciplinaDescriptorPort
 from competencia.domain.ports.event_store_port import EventStorePort
@@ -71,32 +76,26 @@ class GenerarGrillaHandler:
             GrillaYaConfirmada: La grilla fue confirmada — regeneración no permitida.
             SinPerformancesParaGrilla: No hay performances con AP.
         """
-        stream_id = _build_stream_id(command.competencia_id)
+        stream_id = build_competencia_stream_id(command.competencia_id)
         events = await self._event_store.load(stream_id)
-
-        competencia = Competencia.reconstitute(
+        competencia = reconstruir_competencia(
             competencia_id=command.competencia_id,
             disciplina=command.disciplina,
             events=events,
         )
-
         performances = await self._performances_ap.get_performances_con_ap(command.competencia_id)
-
         descriptor = self._disciplina_descriptor.describe(command.disciplina)
-
         competencia.generar_grilla(
             ot_inicio=command.ot_inicio,
             performances=performances,
             descriptor=descriptor,
             andariveles=command.andariveles,
         )
-
-        for event in competencia.pull_events():
-            await self._event_store.append(
-                stream_id=stream_id,
-                event_type=event.event_type,
-                payload=event.to_payload(),
-            )
+        await persistir_eventos_pendientes(
+            event_store=self._event_store,
+            stream_id=stream_id,
+            aggregate=competencia,
+        )
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -107,4 +106,4 @@ def _build_stream_id(competencia_id: UUID) -> str:
 
     Format: "competencia-{competencia_id}"
     """
-    return f"competencia-{competencia_id}"
+    return build_competencia_stream_id(competencia_id)
