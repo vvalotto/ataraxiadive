@@ -101,6 +101,9 @@ def _aplicar_evento_en_estado(estado: dict[str, object], event: dict) -> None:
         _aplicar_resultado_registrado(estado, payload)
     elif event_type == "TarjetaAsignada":
         estado["tarjeta"] = payload["tipo"]
+        rp_final = payload.get("rp_penalizado") or payload.get("rp_medido")
+        if rp_final is not None:
+            estado["rp"] = Decimal(str(rp_final))
         estado["finalizada"] = True
     elif event_type == "DNSRegistrado":
         estado["es_dns"] = True

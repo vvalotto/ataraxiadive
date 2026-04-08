@@ -17,7 +17,7 @@ from shared.domain.value_objects.disciplina import Disciplina
 from shared.domain.value_objects.disciplina_descriptor import DisciplinaDescriptor
 
 # Tarjetas que producen un resultado válido (se posicionan antes de DNS/Roja)
-_TARJETAS_VALIDAS = {"Blanca", "Amarilla"}
+_TARJETAS_VALIDAS = {"Blanca", "BlancaConPenalizaciones", "Amarilla"}
 _CATEGORIA_DEFAULT = Categoria.SENIOR_MASCULINO
 
 
@@ -30,7 +30,7 @@ class RankingCompetencia(AggregateRoot):
     Stream ID: "ranking-{competencia_id}-{disciplina}"
 
     Reglas de ordenamiento (RF-PM-03):
-        1. Performances válidas (Blanca/Amarilla): RP mayor → menor.
+        1. Performances válidas (Blanca/BlancaConPenalizaciones/Amarilla): RP mayor → menor.
         2. Empates: comparten posición; la siguiente posición se omite.
         3. DNS y tarjeta roja: al final, sin marca numérica.
         4. Podio: posiciones 1, 2 y 3 (incluyendo empates en esas posiciones).
@@ -146,7 +146,7 @@ class RankingCompetencia(AggregateRoot):
 def _calcular_entries(resultados: list[ResultadoFinal]) -> list[EntradaRanking]:
     """Aplica reglas de ordenamiento y asignación de posiciones.
 
-    Válidas (Blanca/Amarilla): ordenadas por RP desc (mayor es mejor).
+    Válidas (Blanca/BlancaConPenalizaciones/Amarilla): ordenadas por RP desc (mayor es mejor).
     Inválidas (DNS/Roja): al final, en orden de aparición.
     Empates: comparten posición; la siguiente se omite.
     Podio: posiciones 1, 2 y 3.

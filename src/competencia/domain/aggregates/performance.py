@@ -16,6 +16,7 @@ from competencia.domain.events.resultado_corregido import ResultadoCorregido
 from competencia.domain.events.resultado_registrado import ResultadoRegistrado
 from competencia.domain.events.tarjeta_asignada import TarjetaAsignada
 from competencia.domain.exceptions import (
+    DisciplinaNoAdmitePenalizaciones,  # noqa: F401 - re-export por compatibilidad
     DistanciaBlackoutObligatoria,  # noqa: F401 - re-export por compatibilidad
     DistanciaBlackoutNoAplica,  # noqa: F401 - re-export por compatibilidad
     EstadoInvalidoParaAsignarTarjeta,
@@ -25,20 +26,25 @@ from competencia.domain.exceptions import (
     EstadoInvalidoParaRegistrarResultado,
     MotivoDQObligatorio,  # noqa: F401 - re-export por compatibilidad
     MotivoObligatorio,
+    PenalizacionesObligatorias,  # noqa: F401 - re-export por compatibilidad
 )
 from competencia.domain.value_objects.ap import AP
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from competencia.domain.value_objects.motivo_dq import MotivoDQ
+from competencia.domain.value_objects.penalizacion_tecnica import PenalizacionTecnica
 from competencia.domain.value_objects.tarjeta_asignacion import TarjetaAsignacion
+from competencia.domain.value_objects.tipo_penalizacion import TipoPenalizacion
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
 __all__ = [
     "Performance",
+    "DisciplinaNoAdmitePenalizaciones",
     "DistanciaBlackoutObligatoria",
     "DistanciaBlackoutNoAplica",
     "MotivoDQObligatorio",
+    "PenalizacionesObligatorias",
 ]
 
 
@@ -70,9 +76,12 @@ class Performance(AggregateRoot):
         self._disciplina = disciplina
         self._ap: AP | None = None
         self._rp: Decimal | None = None
+        self._rp_medido: Decimal | None = None
+        self._rp_penalizado: Decimal | None = None
         self._tarjeta: TipoTarjeta | None = None
         self._motivo_dq: MotivoDQ | None = None
         self._motivo_texto: str | None = None
+        self._penalizaciones: tuple[PenalizacionTecnica, ...] = ()
         self._estado: EstadoPerformance | None = None
         self._ot_programado: datetime | None = None
         self._posicion_grilla: int | None = None
@@ -111,8 +120,18 @@ class Performance(AggregateRoot):
 
     @property
     def rp(self) -> Decimal | None:
-        """RP registrado, o None si aún no fue registrado."""
-        return self._rp
+        """RP efectivo para ranking: penalizado si existe, medido en caso contrario."""
+        return self._rp_penalizado if self._rp_penalizado is not None else self._rp_medido
+
+    @property
+    def rp_medido(self) -> Decimal | None:
+        """RP medido antes de aplicar penalizaciones."""
+        return self._rp_medido
+
+    @property
+    def rp_penalizado(self) -> Decimal | None:
+        """RP final luego de aplicar penalizaciones."""
+        return self._rp_penalizado
 
     @property
     def tarjeta(self) -> TipoTarjeta | None:
@@ -133,6 +152,11 @@ class Performance(AggregateRoot):
     def motivo_texto(self) -> str | None:
         """Motivo textual libre asociado a la tarjeta."""
         return self._motivo_texto
+
+    @property
+    def penalizaciones(self) -> tuple[PenalizacionTecnica, ...]:
+        """Penalizaciones técnicas acumuladas de la performance."""
+        return self._penalizaciones
 
     @property
     def posicion_grilla(self) -> int | None:
@@ -258,6 +282,8 @@ class Performance(AggregateRoot):
             registrado_en=now.isoformat(),
         )
         self._rp = valor_rp
+        self._rp_medido = valor_rp
+        self._rp_penalizado = None
         self._estado = EstadoPerformance.ResultadoRegistrado
         self._record(event)
 
@@ -341,7 +367,9 @@ class Performance(AggregateRoot):
             registrado_por=registrado_por,
             corregido_en=now.isoformat(),
         )
-        self._rp = valor_rp
+        self._rp_medido = valor_rp
+        self._rp_penalizado = self._calcular_rp_penalizado_desde_estado()
+        self._rp = self.rp
         self._record(event)
 
     def asignar_tarjeta(
@@ -351,6 +379,7 @@ class Performance(AggregateRoot):
         motivo_dq: MotivoDQ | None = None,
         motivo_texto: str | None = None,
         distancia_blackout: Decimal | None = None,
+        penalizaciones: tuple[PenalizacionTecnica, ...] = (),
     ) -> None:
         """Asigna la tarjeta al atleta tras registrar el resultado.
 
@@ -365,6 +394,7 @@ class Performance(AggregateRoot):
             motivo_dq: Motivo reglamentario obligatorio para Roja.
             motivo_texto: Motivo libre obligatorio para Amarilla.
             distancia_blackout: Distancia alcanzada — obligatoria para motivos BKO.
+            penalizaciones: Penalizaciones técnicas para BlancaConPenalizaciones.
 
         Raises:
             EstadoInvalidoParaAsignarTarjeta:
@@ -385,7 +415,16 @@ class Performance(AggregateRoot):
             motivo_dq=motivo_dq,
             motivo_texto=motivo_texto,
             distancia_blackout=distancia_blackout,
+            penalizaciones=penalizaciones,
         )
+
+        rp_penalizado = self._rp_medido
+        if tarjeta_asignacion.tipo == TipoTarjeta.BlancaConPenalizaciones and self._rp_medido is not None:
+            rp_penalizado = self._rp_medido - sum(
+                (p.deduccion for p in tarjeta_asignacion.penalizaciones), start=Decimal("0")
+            )
+            if rp_penalizado < 0:
+                rp_penalizado = Decimal("0")
 
         now = TarjetaAsignada.now()
         event = TarjetaAsignada(
@@ -407,11 +446,17 @@ class Performance(AggregateRoot):
                 if tarjeta_asignacion.distancia_blackout is not None
                 else None
             ),
+            penalizaciones=tuple(p.to_payload() for p in tarjeta_asignacion.penalizaciones),
+            rp_medido=str(self._rp_medido) if self._rp_medido is not None else None,
+            rp_penalizado=str(rp_penalizado) if rp_penalizado is not None else None,
         )
         self._tarjeta = tarjeta_asignacion.tipo
         self._motivo_dq = tarjeta_asignacion.motivo_dq
         self._motivo_texto = tarjeta_asignacion.motivo_texto
         self._distancia_blackout = tarjeta_asignacion.distancia_blackout
+        self._penalizaciones = tarjeta_asignacion.penalizaciones
+        self._rp_penalizado = rp_penalizado
+        self._rp = rp_penalizado
         self._estado = EstadoPerformance.Ejecutada
         self._record(event)
 
@@ -480,6 +525,8 @@ class Performance(AggregateRoot):
 
     def _apply_resultado_registrado(self, payload: dict[str, Any]) -> None:
         self._rp = Decimal(payload["valor_rp"])
+        self._rp_medido = self._rp
+        self._rp_penalizado = None
         self._estado = EstadoPerformance.ResultadoRegistrado
 
     def _apply_dns_registrado(self, payload: dict[str, Any]) -> None:  # noqa: ARG002
@@ -501,9 +548,23 @@ class Performance(AggregateRoot):
 
         if payload.get("distancia_blackout") is not None:
             self._distancia_blackout = Decimal(payload["distancia_blackout"])
+        if payload.get("rp_medido") is not None:
+            self._rp_medido = Decimal(payload["rp_medido"])
+        if payload.get("rp_penalizado") is not None:
+            self._rp_penalizado = Decimal(payload["rp_penalizado"])
+            self._rp = self._rp_penalizado
+        self._penalizaciones = tuple(
+            PenalizacionTecnica(
+                tipo=TipoPenalizacion(p["tipo"]),
+                deduccion=Decimal(p["deduccion"]),
+            )
+            for p in payload.get("penalizaciones", [])
+        )
 
     def _apply_resultado_corregido(self, payload: dict[str, Any]) -> None:
-        self._rp = Decimal(payload["valor_rp_nuevo"])
+        self._rp_medido = Decimal(payload["valor_rp_nuevo"])
+        self._rp_penalizado = self._calcular_rp_penalizado_desde_estado()
+        self._rp = self.rp
 
     @staticmethod
     def _parse_payload(payload: Any) -> dict[str, Any]:
@@ -511,3 +572,14 @@ class Performance(AggregateRoot):
         if isinstance(payload, str):
             return json.loads(payload)  # type: ignore[no-any-return]
         return payload  # type: ignore[return-value]
+
+    def _calcular_rp_penalizado_desde_estado(self) -> Decimal | None:
+        """Recalcula RP penalizado si la performance tiene penalizaciones acumuladas."""
+        if self._rp_medido is None:
+            return None
+        if not self._penalizaciones:
+            return None
+        rp_penalizado = self._rp_medido - sum(
+            (p.deduccion for p in self._penalizaciones), start=Decimal("0")
+        )
+        return max(rp_penalizado, Decimal("0"))

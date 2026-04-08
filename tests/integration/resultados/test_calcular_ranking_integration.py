@@ -21,6 +21,9 @@ from competencia.application.commands.registrar_resultado import (
     RegistrarResultadoCommand,
     RegistrarResultadoHandler,
 )
+from competencia.domain.value_objects.motivo_dq import MotivoDQ
+from competencia.domain.value_objects.penalizacion_tecnica import PenalizacionTecnica
+from competencia.domain.value_objects.tipo_penalizacion import TipoPenalizacion
 from shared.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from shared.domain.value_objects.unidad_medida import UnidadMedida
@@ -111,7 +114,9 @@ async def _performance_ejecutada(
     disciplina: Disciplina = Disciplina.STA,
     ot: datetime = OT_A,
     tarjeta: TipoTarjeta = TipoTarjeta.Blanca,
-    motivo: str | None = None,
+    motivo_dq: MotivoDQ | None = None,
+    motivo_texto: str | None = None,
+    penalizaciones: tuple[PenalizacionTecnica, ...] = (),
 ) -> None:
     """Lleva una Performance hasta Ejecutada (TarjetaAsignada)."""
     unidad = UnidadMedida.Segundos if disciplina.es_tiempo() else UnidadMedida.Metros
@@ -155,7 +160,9 @@ async def _performance_ejecutada(
             disciplina=disciplina,
             tipo=tarjeta,
             asignada_por="juez-001",
-            motivo=motivo,
+            motivo_dq=motivo_dq,
+            motivo_texto=motivo_texto,
+            penalizaciones=penalizaciones,
         )
     )
 
@@ -319,7 +326,7 @@ async def test_calcular_ranking_tarjeta_roja_va_al_final(
         "250",
         ot=OT_B,
         tarjeta=TipoTarjeta.Roja,
-        motivo="BO",
+        motivo_dq=MotivoDQ.INFRACCION_TECNICA_DQ,
     )
 
     acl = ResultadosCompetenciaAdapter(comp_store)
@@ -472,3 +479,103 @@ async def test_calcular_ranking_agrupa_por_categoria_con_acl_registro(
     assert rankings[0].entradas[0].posicion == 1
     assert rankings[1].entradas[0].atleta_id == str(atleta_sf)
     assert rankings[1].entradas[0].posicion == 1
+
+
+@pytest.mark.asyncio
+async def test_calcular_ranking_usa_rp_penalizado_para_ordenar(
+    comp_store: SQLiteEventStore,
+    ranking_store: SQLiteEventStore,
+    stub: StubCompetenciaEstadoAdapter,
+    descriptor: DisciplinaDescriptorAdapter,
+) -> None:
+    cid = uuid4()
+    atleta_penalizado = uuid4()
+    atleta_valido = uuid4()
+
+    await _performance_ejecutada(
+        comp_store,
+        stub,
+        descriptor,
+        cid,
+        atleta_penalizado,
+        "72",
+        disciplina=Disciplina.DYN,
+        ot=OT_A,
+        tarjeta=TipoTarjeta.BlancaConPenalizaciones,
+        penalizaciones=(
+            PenalizacionTecnica(TipoPenalizacion.SIN_CONTACTO_PARED, Decimal("3")),
+            PenalizacionTecnica(TipoPenalizacion.FUERA_DE_CARRIL, Decimal("3")),
+        ),
+    )
+    await _performance_ejecutada(
+        comp_store,
+        stub,
+        descriptor,
+        cid,
+        atleta_valido,
+        "70",
+        disciplina=Disciplina.DYN,
+        ot=OT_B,
+    )
+
+    acl = ResultadosCompetenciaAdapter(comp_store)
+    handler = CalcularRankingHandler(
+        ranking_store=ranking_store, resultados_port=acl, descriptor=descriptor
+    )
+    await handler.handle(CalcularRankingCommand(competencia_id=cid, disciplina=Disciplina.DYN))
+
+    query_handler = ObtenerRankingHandler(ranking_store=ranking_store)
+    rankings = await query_handler.handle(
+        ObtenerRankingQuery(competencia_id=cid, disciplina=Disciplina.DYN)
+    )
+
+    assert rankings[0].entradas[0].atleta_id == str(atleta_valido)
+    assert rankings[0].entradas[1].atleta_id == str(atleta_penalizado)
+
+
+@pytest.mark.asyncio
+async def test_calcular_ranking_spe_2x50_no_incluye_performances_spe_8x50(
+    comp_store: SQLiteEventStore,
+    ranking_store: SQLiteEventStore,
+    stub: StubCompetenciaEstadoAdapter,
+    descriptor: DisciplinaDescriptorAdapter,
+) -> None:
+    cid = uuid4()
+    atleta_spe_2 = uuid4()
+    atleta_spe_8 = uuid4()
+
+    await _performance_ejecutada(
+        comp_store,
+        stub,
+        descriptor,
+        cid,
+        atleta_spe_2,
+        "180",
+        disciplina=Disciplina.SPE_2X50,
+        ot=OT_A,
+    )
+    await _performance_ejecutada(
+        comp_store,
+        stub,
+        descriptor,
+        cid,
+        atleta_spe_8,
+        "420",
+        disciplina=Disciplina.SPE_8X50,
+        ot=OT_B,
+    )
+
+    handler = CalcularRankingHandler(
+        ranking_store=ranking_store,
+        resultados_port=ResultadosCompetenciaAdapter(comp_store),
+        descriptor=descriptor,
+    )
+    await handler.handle(CalcularRankingCommand(competencia_id=cid, disciplina=Disciplina.SPE_2X50))
+
+    query_handler = ObtenerRankingHandler(ranking_store=ranking_store)
+    rankings = await query_handler.handle(
+        ObtenerRankingQuery(competencia_id=cid, disciplina=Disciplina.SPE_2X50)
+    )
+
+    assert len(rankings[0].entradas) == 1
+    assert rankings[0].entradas[0].atleta_id == str(atleta_spe_2)

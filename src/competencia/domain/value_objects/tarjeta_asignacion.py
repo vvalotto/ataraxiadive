@@ -6,12 +6,15 @@ from dataclasses import dataclass
 from decimal import Decimal
 
 from competencia.domain.exceptions import (
+    DisciplinaNoAdmitePenalizaciones,
     DistanciaBlackoutNoAplica,
     DistanciaBlackoutObligatoria,
     MotivoDQObligatorio,
     MotivoObligatorio,
+    PenalizacionesObligatorias,
 )
 from competencia.domain.value_objects.motivo_dq import MotivoDQ
+from competencia.domain.value_objects.penalizacion_tecnica import PenalizacionTecnica
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 
 
@@ -23,8 +26,14 @@ class TarjetaAsignacion:
     motivo_dq: MotivoDQ | None
     motivo_texto: str | None
     distancia_blackout: Decimal | None
+    penalizaciones: tuple[PenalizacionTecnica, ...] = ()
 
     def __post_init__(self) -> None:
+        if self.tipo == TipoTarjeta.BlancaConPenalizaciones and not self.penalizaciones:
+            raise PenalizacionesObligatorias(
+                "Tarjeta BlancaConPenalizaciones requiere al menos una penalizacion"
+            )
+
         if self.tipo == TipoTarjeta.Amarilla and not self.motivo_texto:
             raise MotivoObligatorio(
                 f"Tarjeta {self.tipo.value} requiere motivo en texto obligatorio (INV-P-11b)"
@@ -38,6 +47,11 @@ class TarjetaAsignacion:
         if self.tipo != TipoTarjeta.Amarilla and self.motivo_texto:
             raise MotivoDQObligatorio(
                 f"Tarjeta {self.tipo.value} no acepta motivo_texto en nuevas asignaciones"
+            )
+
+        if self.tipo != TipoTarjeta.BlancaConPenalizaciones and self.penalizaciones:
+            raise DisciplinaNoAdmitePenalizaciones(
+                f"Tarjeta {self.tipo.value} no acepta penalizaciones tecnicas"
             )
 
         if self.motivo_dq is not None and self.motivo_dq.requiere_distancia_blackout():

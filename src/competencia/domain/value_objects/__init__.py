@@ -11,6 +11,8 @@ from competencia.domain.value_objects.intervalo_disciplina import (
     IntervaloInvalido,
 )
 from competencia.domain.value_objects.motivo_dq import MotivoDQ
+from competencia.domain.value_objects.penalizacion_tecnica import PenalizacionTecnica
+from competencia.domain.value_objects.tipo_penalizacion import TipoPenalizacion
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
 __all__ = [
@@ -23,6 +25,8 @@ __all__ = [
     "IntervaloDisciplina",
     "IntervaloInvalido",
     "MotivoDQ",
+    "PenalizacionTecnica",
+    "TipoPenalizacion",
     "UnidadMedida",
     "ValorAPInvalido",
 ]

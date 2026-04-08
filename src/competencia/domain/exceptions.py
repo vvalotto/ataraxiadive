@@ -71,6 +71,14 @@ class DistanciaBlackoutNoAplica(DomainError):
     """Solo los motivos BKO admiten distancia_blackout asociada."""
 
 
+class PenalizacionesObligatorias(DomainError):
+    """BlancaConPenalizaciones requiere al menos una penalización técnica."""
+
+
+class DisciplinaNoAdmitePenalizaciones(DomainError):
+    """La disciplina de la performance no admite BlancaConPenalizaciones."""
+
+
 # ── Competencia ───────────────────────────────────────────────────────────────
 
 

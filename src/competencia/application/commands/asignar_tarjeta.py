@@ -10,10 +10,12 @@ from typing import Awaitable, Callable
 
 from competencia.application._p08_finalizacion import trigger_finalizacion_si_corresponde
 from competencia.domain.aggregates.performance import Performance
+from competencia.domain.exceptions import DisciplinaNoAdmitePenalizaciones
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.ports.performances_estado_port import PerformancesEstadoPort
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.motivo_dq import MotivoDQ
+from competencia.domain.value_objects.penalizacion_tecnica import PenalizacionTecnica
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 
 # ── Excepciones de aplicación ─────────────────────────────────────────────────
@@ -21,6 +23,13 @@ from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 
 class PerformanceNoEncontrada(Exception):
     """El stream de la Performance no existe en el Event Store."""
+
+
+_DISCIPLINAS_DINAMICAS_CON_PENALIZACION = {
+    Disciplina.DNF,
+    Disciplina.DYN,
+    Disciplina.DBF,
+}
 
 
 # ── Command ───────────────────────────────────────────────────────────────────
@@ -48,6 +57,7 @@ class AsignarTarjetaCommand:
     motivo_dq: MotivoDQ | None = field(default=None)
     motivo_texto: str | None = field(default=None)
     distancia_blackout: Decimal | None = field(default=None)
+    penalizaciones: tuple[PenalizacionTecnica, ...] = field(default_factory=tuple)
 
 
 # ── Handler ───────────────────────────────────────────────────────────────────
@@ -99,6 +109,14 @@ class AsignarTarjetaHandler:
 
         performance = Performance.reconstitute(events)
 
+        if (
+            command.tipo == TipoTarjeta.BlancaConPenalizaciones
+            and command.disciplina not in _DISCIPLINAS_DINAMICAS_CON_PENALIZACION
+        ):
+            raise DisciplinaNoAdmitePenalizaciones(
+                f"La disciplina {command.disciplina.value} no admite BlancaConPenalizaciones"
+            )
+
         # Ejecuta (lanza EstadoInvalidoParaAsignarTarjeta o MotivoObligatorio si aplica)
         performance.asignar_tarjeta(
             command.tipo,
@@ -106,6 +124,7 @@ class AsignarTarjetaHandler:
             command.motivo_dq,
             command.motivo_texto,
             command.distancia_blackout,
+            command.penalizaciones,
         )
 
         # Persistir eventos pendientes

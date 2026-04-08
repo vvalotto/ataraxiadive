@@ -1,0 +1,152 @@
+{
+  "metadata": {
+    "us_id": "US-4.1.2",
+    "us_title": "Tarjeta Blanca con penalizaciones",
+    "us_points": 5,
+    "producto": "ataraxiadive",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-08T13:59:24.590371+00:00",
+    "completed_at": "2026-04-08T14:14:11.933849+00:00",
+    "total_elapsed_seconds": 887,
+    "effective_seconds": 887,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-04-08T13:59:30.822389+00:00",
+      "completed_at": "2026-04-08T14:00:15.356984+00:00",
+      "elapsed_seconds": 44,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-08T14:00:18.554816+00:00",
+      "completed_at": "2026-04-08T14:00:21.547454+00:00",
+      "elapsed_seconds": 2,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-04-08T14:00:26.736146+00:00",
+      "completed_at": "2026-04-08T14:00:32.774154+00:00",
+      "elapsed_seconds": 6,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación Guiada por Tareas",
+      "started_at": "2026-04-08T14:00:37.750479+00:00",
+      "completed_at": "2026-04-08T14:13:04.437208+00:00",
+      "elapsed_seconds": 746,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Crear ADR-014 y modelar penalizaciones",
+          "task_type": "domain",
+          "estimated_minutes": 80.0,
+          "started_at": "2026-04-08T14:01:21.990960+00:00",
+          "completed_at": "2026-04-08T14:13:00.622817+00:00",
+          "elapsed_seconds": 698,
+          "actual_minutes": 11.63,
+          "variance_minutes": -68.37,
+          "file_created": "docs/adr/ADR-014-penalizaciones-acumulables.md",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-08T14:13:08.647387+00:00",
+      "completed_at": "2026-04-08T14:13:12.640053+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-04-08T14:13:17.909554+00:00",
+      "completed_at": "2026-04-08T14:13:20.601013+00:00",
+      "elapsed_seconds": 2,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-04-08T14:13:23.725915+00:00",
+      "completed_at": "2026-04-08T14:13:32.249594+00:00",
+      "elapsed_seconds": 8,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-08T14:13:35.556084+00:00",
+      "completed_at": "2026-04-08T14:13:43.064683+00:00",
+      "elapsed_seconds": 7,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Actualización de Documentación",
+      "started_at": "2026-04-08T14:13:50.453982+00:00",
+      "completed_at": "2026-04-08T14:13:53.587215+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-04-08T14:13:59.050725+00:00",
+      "completed_at": "2026-04-08T14:14:08.111301+00:00",
+      "elapsed_seconds": 9,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 1,
+    "completed_tasks": 1,
+    "total_phases": 10,
+    "estimated_total_minutes": 80.0,
+    "actual_total_minutes": 11.63,
+    "variance_minutes": -68.37,
+    "variance_percent": -85.46
+  }
+}

@@ -16,13 +16,17 @@ from competencia.application.commands.asignar_tarjeta import (
     PerformanceNoEncontrada,
 )
 from competencia.domain.exceptions import (
+    DisciplinaNoAdmitePenalizaciones,
     DistanciaBlackoutNoAplica,
     EstadoInvalidoParaAsignarTarjeta,
     MotivoDQObligatorio,
     MotivoObligatorio,
+    PenalizacionesObligatorias,
 )
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.motivo_dq import MotivoDQ
+from competencia.domain.value_objects.penalizacion_tecnica import PenalizacionTecnica
+from competencia.domain.value_objects.tipo_penalizacion import TipoPenalizacion
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 
 OT = datetime(2026, 3, 22, 10, 30, 0)
@@ -380,4 +384,76 @@ async def test_handler_motivo_no_bko_rechaza_distancia(
     )
 
     with pytest.raises(DistanciaBlackoutNoAplica):
+        await handler.handle(command)
+
+
+@pytest.mark.asyncio
+async def test_handler_blanca_con_penalizaciones_persiste_rp_penalizado(
+    mock_event_store_con_resultado: AsyncMock,
+    competencia_id: Any,
+    participante_id: Any,
+) -> None:
+    handler = AsignarTarjetaHandler(mock_event_store_con_resultado)
+    for event in mock_event_store_con_resultado.load.return_value:
+        event["payload"]["disciplina"] = Disciplina.DYN.value
+
+    command = AsignarTarjetaCommand(
+        competencia_id=competencia_id,
+        participante_id=participante_id,
+        disciplina=Disciplina.DYN,
+        tipo=TipoTarjeta.BlancaConPenalizaciones,
+        asignada_por="juez-001",
+        penalizaciones=(
+            PenalizacionTecnica(TipoPenalizacion.SIN_CONTACTO_PARED, Decimal("3")),
+        ),
+    )
+    await handler.handle(command)
+
+    payload = mock_event_store_con_resultado.append.call_args.kwargs["payload"]
+    assert payload["tipo"] == TipoTarjeta.BlancaConPenalizaciones.value
+    assert payload["rp_medido"] == "50.5"
+    assert payload["rp_penalizado"] == "47.5"
+    assert len(payload["penalizaciones"]) == 1
+
+
+@pytest.mark.asyncio
+async def test_handler_blanca_con_penalizaciones_vacia_lanza_error(
+    mock_event_store_con_resultado: AsyncMock,
+    competencia_id: Any,
+    participante_id: Any,
+) -> None:
+    handler = AsignarTarjetaHandler(mock_event_store_con_resultado)
+    for event in mock_event_store_con_resultado.load.return_value:
+        event["payload"]["disciplina"] = Disciplina.DYN.value
+
+    command = AsignarTarjetaCommand(
+        competencia_id=competencia_id,
+        participante_id=participante_id,
+        disciplina=Disciplina.DYN,
+        tipo=TipoTarjeta.BlancaConPenalizaciones,
+        asignada_por="juez-001",
+        penalizaciones=(),
+    )
+    with pytest.raises(PenalizacionesObligatorias):
+        await handler.handle(command)
+
+
+@pytest.mark.asyncio
+async def test_handler_penalizaciones_en_sta_lanza_error(
+    mock_event_store_con_resultado: AsyncMock,
+    competencia_id: Any,
+    participante_id: Any,
+) -> None:
+    handler = AsignarTarjetaHandler(mock_event_store_con_resultado)
+    command = AsignarTarjetaCommand(
+        competencia_id=competencia_id,
+        participante_id=participante_id,
+        disciplina=Disciplina.STA,
+        tipo=TipoTarjeta.BlancaConPenalizaciones,
+        asignada_por="juez-001",
+        penalizaciones=(
+            PenalizacionTecnica(TipoPenalizacion.SIN_CONTACTO_PARED, Decimal("3")),
+        ),
+    )
+    with pytest.raises(DisciplinaNoAdmitePenalizaciones):
         await handler.handle(command)

@@ -10,6 +10,7 @@ import pytest
 
 from competencia.domain.aggregates.performance import Performance
 from competencia.domain.exceptions import (
+    PenalizacionesObligatorias,
     DistanciaBlackoutNoAplica,
     DistanciaBlackoutObligatoria,
     EstadoInvalidoParaAsignarTarjeta,
@@ -24,6 +25,8 @@ from competencia.domain.value_objects.ap import ValorAPInvalido
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from competencia.domain.value_objects.motivo_dq import MotivoDQ
+from competencia.domain.value_objects.penalizacion_tecnica import PenalizacionTecnica
+from competencia.domain.value_objects.tipo_penalizacion import TipoPenalizacion
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
@@ -998,3 +1001,57 @@ def test_reconstitute_con_blackout_restaura_distancia(
     restored = Performance.reconstitute(raw)
     assert restored.distancia_blackout == Decimal("38.2")
     assert restored.estado == EstadoPerformance.Ejecutada
+
+
+def test_blanca_con_penalizaciones_calcula_rp_penalizado(
+    performance_con_resultado: Performance,
+) -> None:
+    performance_con_resultado.asignar_tarjeta(
+        TipoTarjeta.BlancaConPenalizaciones,
+        "juez-001",
+        penalizaciones=(
+            PenalizacionTecnica(TipoPenalizacion.SIN_CONTACTO_PARED, Decimal("3")),
+            PenalizacionTecnica(TipoPenalizacion.FUERA_DE_CARRIL, Decimal("3")),
+        ),
+    )
+
+    assert performance_con_resultado.rp_medido == Decimal("50.5")
+    assert performance_con_resultado.rp_penalizado == Decimal("44.5")
+    assert performance_con_resultado.rp == Decimal("44.5")
+
+
+def test_blanca_con_penalizaciones_vacia_lanza_excepcion(
+    performance_con_resultado: Performance,
+) -> None:
+    with pytest.raises(PenalizacionesObligatorias):
+        performance_con_resultado.asignar_tarjeta(
+            TipoTarjeta.BlancaConPenalizaciones,
+            "juez-001",
+            penalizaciones=(),
+        )
+
+
+def test_blanca_con_penalizaciones_clampa_rp_a_cero() -> None:
+    p = Performance(
+        performance_id=uuid4(),
+        competencia_id=uuid4(),
+        participante_id=uuid4(),
+        disciplina=Disciplina.DYN,
+    )
+    p.registrarAP(Decimal("4"), UnidadMedida.Metros)
+    p.pull_events()
+    p.llamar(OT, posicion_grilla=1)
+    p.pull_events()
+    p.registrar_resultado(Decimal("4"), UnidadMedida.Metros, "juez-001")
+    p.pull_events()
+
+    p.asignar_tarjeta(
+        TipoTarjeta.BlancaConPenalizaciones,
+        "juez-001",
+        penalizaciones=(
+            PenalizacionTecnica(TipoPenalizacion.SIN_CONTACTO_PARED, Decimal("3")),
+            PenalizacionTecnica(TipoPenalizacion.FUERA_DE_CARRIL, Decimal("3")),
+        ),
+    )
+
+    assert p.rp_penalizado == Decimal("0")
