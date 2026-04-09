@@ -2,14 +2,14 @@
 
 > **Este documento es de lectura obligatoria en Fase 0 de `/implement-us`.**
 > Provee el contexto arquitectónico, de paths y de patrones DDD específicos del proyecto.
-> Reemplaza y corrige cualquier asunción del perfil genérico `fastapi-rest`.
+> Complementa el perfil `hexagonal-ddd-bc` con los detalles específicos de AtaraxiaDive.
 
 ---
 
 ## 1. Arquitectura: Hexagonal DDD BC-First
 
 AtaraxiaDive usa **arquitectura hexagonal con DDD**, organizada por Bounded Context.
-No es layered architecture. El perfil `fastapi-rest` es solo la base — este documento lo sobrescribe.
+No es layered architecture. El perfil activo es `hexagonal-ddd-bc` — este documento provee los overrides específicos del proyecto.
 
 ### Regla de Oro (absoluta, sin excepciones)
 

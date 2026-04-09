@@ -12,38 +12,26 @@
 
 Este skill utiliza las siguientes variables definidas en `config.json` y personalizables mediante perfiles en `customizations/`:
 
-| Variable | Descripción | Valor Default | Ejemplos por Perfil |
-|----------|-------------|---------------|---------------------|
-| `{ARCHITECTURE_PATTERN}` | Patrón arquitectónico del proyecto | `generic` | **PyQt:** `mvc`<br>**FastAPI:** `layered`<br>**Django:** `mvt`<br>**Generic:** `generic` |
-| `{COMPONENT_TYPE}` | Tipo de componente a implementar | `Component` | **PyQt:** `Panel`, `Dialog`<br>**FastAPI:** `Endpoint`, `Service`<br>**Django:** `View`, `Model`<br>**Generic:** `Module` |
-| `{COMPONENT_PATH}` | Ruta base para componentes | `src/{name}/` | **PyQt:** `app/presentacion/{name}/`<br>**FastAPI:** `app/{layer}/{name}/`<br>**Django:** `{app}/{name}/`<br>**Generic:** `src/{name}/` |
-| `{TEST_FRAMEWORK}` | Framework de testing | `pytest` | **PyQt:** `pytest + pytest-qt`<br>**FastAPI:** `pytest + httpx`<br>**Django:** `pytest-django`<br>**Generic:** `pytest` |
-| `{BASE_CLASS}` | Clase base para componentes | `object` | **PyQt:** `QWidget`, `ModeloBase`<br>**FastAPI:** `BaseModel`, `BaseService`<br>**Django:** `Model`, `View`<br>**Generic:** `object` |
-| `{DOMAIN_CONTEXT}` | Contexto de dominio del proyecto | `application` | **PyQt:** `presentacion`, `dominio`<br>**FastAPI:** `api`, `domain`<br>**Django:** `apps`, `models`<br>**Generic:** `domain` |
-| `{PROJECT_ROOT}` | Raíz del proyecto | `.` | **PyQt:** `app/`<br>**FastAPI:** `src/`<br>**Django:** `project/`<br>**Generic:** `.` |
-| `{PRODUCT}` | Nombre del producto/módulo | `main` | Cualquier nombre de producto/módulo |
+| Variable | Descripción | Valor en AtaraxiaDive |
+|----------|-------------|----------------------|
+| `{ARCHITECTURE_PATTERN}` | Patrón arquitectónico del proyecto | `hexagonal-ddd-bc` |
+| `{COMPONENT_TYPE}` | Tipo de componente DDD | `AggregateRoot`, `ValueObject`, `DomainEvent`, `Port`, `CommandHandler`, `QueryHandler`, `Repository`, `ApiRouter` |
+| `{COMPONENT_PATH}` | Ruta base por tipo de componente | `src/{bc}/domain/aggregates/`, `src/{bc}/domain/value_objects/`, etc. (ver `hexagonal-ddd-bc.json`) |
+| `{TEST_FRAMEWORK}` | Framework de testing | `pytest + httpx + pytest-bdd` |
+| `{PROJECT_ROOT}` | Raíz del código fuente | `src/` |
+| `{PRODUCT}` | Bounded Context activo | `competencia`, `torneo`, `registro`, `resultados`, `identidad`, `notificaciones` |
+
+**Perfil activo:** `hexagonal-ddd-bc`
+**Customización proyecto:** `.claude/skills/implement-us/customizations/hexagonal-ddd-bc.json`
+**Contexto obligatorio Fase 0:** `docs/contexto/ATARAXIADIVE-CONTEXT.md`
 
 ### Cómo se Resuelven las Variables
 
 Las variables se resuelven en el siguiente orden de prioridad:
 
-1. **Perfil de customización** (`.claude/skills/implement-us/customizations/{perfil}.json`)
+1. **Perfil de customización** (`.claude/skills/implement-us/customizations/hexagonal-ddd-bc.json`)
 2. **Configuración base** (`.claude/skills/implement-us/config.json`)
-3. **Valores por defecto** (tabla anterior)
-
-**Ejemplo de configuración:**
-
-```json
-{
-  "architecture_pattern": "mvc",
-  "component_type": "Panel",
-  "component_path": "app/presentacion/paneles/{name}/",
-  "test_framework": "pytest-qt",
-  "base_class": "ModeloBase",
-  "domain_context": "presentacion",
-  "project_root": "app/"
-}
-```
+3. **Valores por defecto**
 
 ---
 

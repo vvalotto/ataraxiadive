@@ -1,8 +1,13 @@
 # Discrepancias: /implement-us vs AtaraxiaDive
 
-**Fecha:** 2026-03-20
-**Perfil activo:** `fastapi-rest`
-**Problema raíz:** El perfil `fastapi-rest` asume arquitectura en capas (layered), no hexagonal BC-first con DDD.
+> **Estado: RESUELTO — 2026-04-09**
+> Perfil migrado a `hexagonal-ddd-bc`. Las discrepancias documentadas abajo
+> estaban activas con el perfil `fastapi-rest` (v2.0.0). Se conservan como
+> registro histórico del problema que motivó la migración.
+
+**Fecha original:** 2026-03-20
+**Perfil en ese momento:** `fastapi-rest` (asumía arquitectura layered)
+**Perfil actual:** `hexagonal-ddd-bc` (hexagonal DDD BC-first — resuelve todas las discrepancias)
 
 ---
 
