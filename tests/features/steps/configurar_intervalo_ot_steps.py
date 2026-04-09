@@ -16,8 +16,8 @@ from pytest_bdd import given, parsers, scenarios, then, when
 from competencia.application.commands.configurar_intervalo_ot import (
     ConfigurarIntervaloOTCommand,
     ConfigurarIntervaloOTHandler,
-    _build_stream_id,
 )
+from competencia.application.commands._stream_ids import competencia_stream_id as _build_stream_id
 from competencia.domain.exceptions import GrillaYaConfirmada
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_competencia import EstadoCompetencia

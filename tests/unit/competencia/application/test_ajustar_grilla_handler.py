@@ -12,8 +12,8 @@ import pytest
 from competencia.application.commands.ajustar_grilla import (
     AjustarGrillaCommand,
     AjustarGrillaHandler,
-    _build_stream_id,
 )
+from competencia.application.commands._stream_ids import competencia_stream_id as _build_stream_id
 from competencia.domain.exceptions import GrillaNoGenerada, GrillaYaConfirmada
 from competencia.domain.value_objects.cambio_grilla import CambioGrilla
 from competencia.domain.value_objects.disciplina import Disciplina

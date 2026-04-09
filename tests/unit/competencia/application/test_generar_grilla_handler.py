@@ -12,8 +12,8 @@ import pytest
 from competencia.application.commands.generar_grilla import (
     GenerarGrillaCommand,
     GenerarGrillaHandler,
-    _build_stream_id,
 )
+from competencia.application.commands._stream_ids import competencia_stream_id as _build_stream_id
 from competencia.domain.exceptions import (
     IntervaloNoConfigurado,
     SinPerformancesParaGrilla,

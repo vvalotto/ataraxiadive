@@ -14,8 +14,8 @@ from pytest_bdd import given, parsers, scenarios, then, when
 from competencia.application.commands.ajustar_grilla import (
     AjustarGrillaCommand,
     AjustarGrillaHandler,
-    _build_stream_id,
 )
+from competencia.application.commands._stream_ids import competencia_stream_id as _build_stream_id
 from competencia.application.commands.configurar_intervalo_ot import (
     ConfigurarIntervaloOTCommand,
     ConfigurarIntervaloOTHandler,
