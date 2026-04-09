@@ -14,15 +14,10 @@
 
   "variables": {
     "architecture_pattern": {
-      "default": "generic",
+      "default": "hexagonal-ddd-bc",
       "description": "Patrón arquitectónico del proyecto",
-      "available": ["mvc", "mvt", "layered", "clean-architecture", "generic"],
-      "examples": {
-        "pyqt": "mvc",
-        "fastapi": "layered",
-        "django": "mvt",
-        "generic": "generic"
-      }
+      "available": ["hexagonal-ddd-bc"],
+      "active_customization": "hexagonal-ddd-bc"
     },
     "component_type": {
       "default": "Component",

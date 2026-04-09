@@ -1,0 +1,34 @@
+{
+  "_comment": "Override de hexagonal-ddd-bc.json para AtaraxiaDive",
+
+  "profile_metadata": {
+    "name": "hexagonal-ddd-bc",
+    "display_name": "AtaraxiaDive — Hexagonal DDD BC-First",
+    "version": "1.0.0",
+    "target_stack": "FastAPI + Python 3.14 + uv",
+    "context_document": "docs/contexto/ATARAXIADIVE-CONTEXT.md"
+  },
+
+  "variables": {
+    "project_root": {
+      "bounded_contexts": ["competencia", "torneo", "registro", "resultados", "identidad", "notificaciones"],
+      "shared": "src/shared/domain/",
+      "app_entry": "src/app.py"
+    }
+  },
+
+  "quality_gates": {
+    "codeguard": {
+      "command": "codeguard src/{bc}/ --format json > quality/reports/codeguard/{US_ID}-codeguard.json",
+      "designreviewer_command": "designreviewer src/ --config pyproject.toml"
+    },
+    "coverage": { "min_percent": 90.0 }
+  },
+
+  "documentation_config": {
+    "spec_path": "docs/specs/sp{SP}/",
+    "plan_path": "docs/plans/sp{SP}/",
+    "report_path": "docs/reports/",
+    "adr_path": "docs/adr/"
+  }
+}
