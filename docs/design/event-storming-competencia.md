@@ -130,7 +130,7 @@ classDiagram
 
 | Política | Descripción |
 |----------|-------------|
-| 🟣 P-01 | Orden grilla: disciplinas de distancia (DNF, DYN, DBF, SPE) → AP menor a mayor; tiempo (STA) → AP menor a mayor |
+| 🟣 P-01 | Orden grilla: DNF/DYN/DBF/STA → AP ascendente (menor a mayor); SPE y variantes SPE_2X50/4X50/8X50/16X50 → AP descendente (mayor a menor, per reglamento CMAS/FAAS) |
 | 🟣 P-02 | OT de cada atleta = OT_inicio + (posición × intervaloDisciplina) |
 | 🟣 P-03 | Si se modifica `IntervaloOTConfigurado` → los OTs de la grilla quedan desactualizados hasta regenerar |
 | 🟣 P-04 | `GrillaConfirmada` → grilla congelada; `GenerarGrilla` y `ConfigurarIntervaloOT` no permitidos |
@@ -262,7 +262,7 @@ Variante DNS:
 | `AtletaLlamado` | performanceId, atletaId, disciplina, posicionGrilla, OTProgramado, llamadoEn |
 | `DNSRegistrado` | performanceId, atletaId, disciplina, OTProgramado, registradoPor |
 | `ResultadoRegistrado` | performanceId, atletaId, disciplina, valorRP, unidad, registradoPor |
-| `TarjetaAsignada` | performanceId, atletaId, disciplina, tipo (blanca/amarilla/roja), motivo?, asignadaPor, juezId |
+| `TarjetaAsignada` | performanceId, atletaId, disciplina, tipo (Blanca/BlancaConPenalizaciones/Amarilla/Roja), motivo_dq_codigo?, motivo_texto?, penalizaciones[], rp_final?, asignadaPor, juezId |
 | `CompetenciaFinalizada` | competenciaId, disciplina, totalEjecutadas, totalDNS, finalizadaEn |
 
 ### Políticas
@@ -283,7 +283,9 @@ INV-P-08: RegistrarDNS solo permitido si Performance en estado Llamada
 INV-P-09: DNSRegistrado y ResultadoRegistrado son mutuamente excluyentes
 INV-P-10: TarjetaAsignada es el estado final de Ejecutada — no modificable
           (excepto por flujo de Corrección — ver Flujo 4)
-INV-P-11: motivo es obligatorio si tarjeta = amarilla o roja
+INV-P-11: MotivoDQ obligatorio si tarjeta = Roja (catálogo formal — ver MotivoDQ en domain-model.md)
+INV-P-11b: PenalizacionTecnica obligatoria (≥1) si tarjeta = BlancaConPenalizaciones
+INV-P-11c: BlancaConPenalizaciones solo válida para disciplinas dinámicas (DNF, DYN, DBF, SPE y variantes)
 ```
 
 ### Read Models
@@ -366,7 +368,9 @@ INV-P-15: CorregirResultado solo permitido dentro de la ventanaImpugnacion del t
 | INV-P-08 | `RegistrarDNS` solo si Performance = `Llamada` |
 | INV-P-09 | `DNSRegistrado` y `ResultadoRegistrado` mutuamente excluyentes |
 | INV-P-10 | `TarjetaAsignada` es estado final — solo modificable vía `CorregirResultado` |
-| INV-P-11 | `motivo` obligatorio si tarjeta = amarilla o roja |
+| INV-P-11 | `MotivoDQ` obligatorio si tarjeta = Roja (catálogo formal en `MotivoDQ` StrEnum) |
+| INV-P-11b | `PenalizacionTecnica` (≥1) obligatoria si tarjeta = `BlancaConPenalizaciones` |
+| INV-P-11c | `BlancaConPenalizaciones` solo válida para disciplinas dinámicas (DNF, DYN, DBF, SPE y variantes) |
 | INV-P-12 | `motivo` obligatorio en `ResultadoCorregido` — sin excepción |
 | INV-P-13 | `CorregirResultado` no permitido si Performance = DNS |
 | INV-P-14 | Se corrige sobre el estado actual proyectado — no sobre eventos anteriores |
@@ -478,4 +482,5 @@ especificación — es la primera mitad de ella.
 ---
 
 *Documento creado: 2026-03-18 — Semana 0, Fase 0*
+*v1.1 — 2026-04-09: SP4 INC-4.1 — P-01 actualizado (SPE descendente), TarjetaAsignada payload expandido, INV-P-11b/11c agregados (BlancaConPenalizaciones), tabla resumen actualizada*
 *Mantenido por: Claude Cowork + Victor Valotto*

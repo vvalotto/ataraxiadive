@@ -123,6 +123,11 @@ classDiagram
 
 ### 2.2 Aggregate: Performance
 
+> **Estructura interna (US-4.1.5):** el aggregate fue descompuesto en tres módulos:
+> `performance.py` (aggregate root + comandos), `performance_state.py` (aplicación de eventos),
+> `performance_events.py` (builders de eventos). Los VOs `ResolucionTarjeta` y `RPFinal`
+> encapsulan la lógica de tarjeta y cálculo de RP penalizado.
+
 ```mermaid
 classDiagram
     class Performance {
@@ -131,18 +136,53 @@ classDiagram
         +ParticipanteId participanteId
         +Disciplina disciplina
         +AP apDeclarado
-        +RP rpRegistrado
         +RP rpMedido
-        +RP rpPenalizado
-        +Tarjeta tarjeta
         +EstadoPerformance estado
         --
+        +rp() RP
         +registrarAP(valor, unidad) APRegistrado
         +llamar(otProgramado) AtletaLlamado
         +registrarResultado(valor, juezId) ResultadoRegistrado
-        +asignarTarjeta(tipo, motivoDQ|motivoTexto|penalizaciones, juezId) TarjetaAsignada
+        +asignarTarjeta(asignacion, juezId) TarjetaAsignada
         +registrarDNS(juezId) DNSRegistrado
         +corregirResultado(valor, motivo, juezId) ResultadoCorregido
+    }
+
+    class TarjetaAsignacion {
+        +TipoTarjeta tipo
+        +MotivoDQ motivoDQ
+        +String motivoTexto
+        +tuple~PenalizacionTecnica~ penalizaciones
+        +validar() void
+    }
+
+    class ResolucionTarjeta {
+        +TipoTarjeta tipo
+        +MotivoDQ motivoDQ
+        +tuple~PenalizacionTecnica~ penalizaciones
+        +RPFinal rpFinal
+        +desde_asignacion(asignacion, rpMedido) ResolucionTarjeta
+    }
+
+    class RPFinal {
+        +Decimal valor
+        +UnidadMedida unidad
+        +desde_medicion(rpMedido, penalizaciones) RPFinal
+    }
+
+    class PenalizacionTecnica {
+        +TipoPenalizacion tipo
+        +Decimal deduccion
+    }
+
+    class MotivoDQ {
+        <<enumeration>>
+        BKO_SUPERFICIE
+        BKO_SUBACUATICO
+        NO_PROTOCOLO
+        INFRACCION_TECNICA
+        NO_INICIO_VENTANA
+        SALIDA_FALSO
     }
 
     class AP {
@@ -151,24 +191,23 @@ classDiagram
         +validar() bool
     }
 
-    class RP {
-        +Decimal valor
-        +UnidadMedida unidad
-    }
-
-    class Tarjeta {
-        +TipoTarjeta tipo
-        +MotivoDQ motivoDQ
-        +String motivoTexto
-        +List~PenalizacionTecnica~ penalizaciones
-        +UserId juezId
-        +requiereMotivoDQ() bool
-    }
-
     Performance "1" *-- "1" AP
-    Performance "1" *-- "0..1" RP
-    Performance "1" *-- "0..1" Tarjeta
+    Performance "1" *-- "0..1" ResolucionTarjeta
+    ResolucionTarjeta "1" *-- "0..1" RPFinal
+    ResolucionTarjeta "1" *-- "N" PenalizacionTecnica
+    ResolucionTarjeta "1" *-- "0..1" MotivoDQ
+    TarjetaAsignacion "1" *-- "0..1" MotivoDQ
+    TarjetaAsignacion "1" *-- "N" PenalizacionTecnica
 ```
+
+**Tipos de tarjeta (`TipoTarjeta`):**
+
+| Valor | Significado | Requiere |
+|-------|-------------|---------|
+| `Blanca` | Performance válida sin infracciones | — |
+| `BlancaConPenalizaciones` | Performance válida con infracciones técnicas; RP = medido − Σ deducciones | ≥1 `PenalizacionTecnica` |
+| `Amarilla` | En revisión — debe cerrarse como Blanca, BlancaConPenalizaciones o Roja | — |
+| `Roja` | Descalificación | `MotivoDQ` obligatorio |
 
 **Eventos de dominio:**
 
@@ -177,20 +216,11 @@ classDiagram
 | `APRegistrado` | `registrarAP()` |
 | `AtletaLlamado` | `llamar()` |
 | `ResultadoRegistrado` | `registrarResultado()` |
-| `TarjetaAsignada` | `asignarTarjeta()` |
+| `TarjetaAsignada` | `asignarTarjeta()` — payload incluye `resolucion` con tipo, motivo, penalizaciones y rp_final |
 | `DNSRegistrado` | `registrarDNS()` |
 | `ResultadoCorregido` | `corregirResultado()` |
 
 **Invariantes:** INV-P-01 a INV-P-14 (ver `event-storming-competencia.md`)
-
-**Nota US-4.1.1:** la tarjeta roja ya no usa string libre. El BC `competencia`
-modela un catálogo formal `MotivoDQ` y el evento `TarjetaAsignada` separa
-`motivo_dq_codigo` de `motivo_texto` para preservar compatibilidad histórica.
-
-**Nota US-4.1.2:** `TipoTarjeta` incorpora `BlancaConPenalizaciones` como
-resultado válido para disciplinas dinámicas. `Performance` preserva `rp_medido`
-y calcula `rp_penalizado`; la propiedad compatible `rp` expone el valor
-penalizado si existe para que `RankingCompetencia` mantenga su contrato.
 
 **Nota US-4.1.3:** la familia SPE queda desagregada en `SPE_2X50`, `SPE_4X50`,
 `SPE_8X50` y `SPE_16X50` para torneos nuevos. Estas variantes usan segundos y

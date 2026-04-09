@@ -242,10 +242,13 @@ duros y el Event Sourcing principal. Todo lo demás sirve a Competencia.
 | RP | Realized Performance — marca efectivamente lograda |
 | OT | Official Top — momento de inicio de la performance |
 | DNS | Did Not Start — atleta no se presentó al OT |
-| Tarjeta blanca | Performance válida |
-| Tarjeta amarilla | Penalización parcial (con deducción) |
-| Tarjeta roja | Descalificación |
-| Black-out | Pérdida de conciencia → tarjeta roja automática |
+| Tarjeta blanca | Performance válida sin infracciones |
+| Tarjeta Blanca con Penalizaciones | Performance válida con infracciones técnicas; RP final = RP medido − Σ deducciones (N × 3m); penalizaciones acumulables (ADR-014) |
+| Tarjeta amarilla | Estado de revisión pendiente → se cierra como Blanca, Blanca con Penalizaciones o Roja |
+| Tarjeta roja | Descalificación — requiere `MotivoDQ` obligatorio (INV-P-11) |
+| MotivoDQ | Catálogo formal de causas de descalificación: BKO_SUPERFICIE, BKO_SUBACUATICO, NO_PROTOCOLO, INFRACCION_TECNICA, NO_INICIO_VENTANA, SALIDA_FALSO |
+| Black-out | Pérdida de conciencia → tarjeta roja automática con `MotivoDQ.BKO_SUPERFICIE` o `BKO_SUBACUATICO` |
+| Variante SPE | Una de las cuatro variantes de sincronizado: SPE_2X50, SPE_4X50, SPE_8X50, SPE_16X50 — cada una genera grilla y ranking independientes; orden de grilla: AP descendente (mayor primero) |
 | DoD | Definition of Done — criterio binario de cierre de incremento |
 | US-IEDD | User Story con precondición, postcondición e invariantes formales |
 

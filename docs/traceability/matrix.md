@@ -4,9 +4,9 @@
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-04-03 |
+| **Fecha** | 2026-04-09 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.2 — SP-ADJ-04 completado |
+| **Estado** | ✅ v1.11 — SP4 INC-4.1 completado |
 
 ---
 
@@ -32,7 +32,8 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP2 | Competencia (completo) + Resultados (núcleo) | RF-PR-04/05/06/07/08, RF-EJ-01, RF-PM-03 |
 | SP3 | Torneo + Registro + Identidad + Resultados | RF-GT-01..07, RF-IN-01..06/08/09, RF-US-01..05, RF-PM-01/02/05/06 |
 | SP-ADJ-04 | Ajustes de Shared + Registro + Resultados + Competencia | RF-GT-02, RF-IN-10, RF-PR-05, RF-PM-05 |
-| SP4 | Notificaciones + extensiones | RF-EJ-03/06, RF-IN-05/06, RF-NT-01..04 |
+| SP4 INC-4.1 | Competencia + Torneo + Resultados (correcciones CMAS/FAAS) | RF-GT-02 (variantes SPE), RF-PR-05 (orden SPE), brechas reglamento (ver §3) |
+| SP4 (resto) | Notificaciones + Frontend | RF-EJ-03/06, RF-IN-05/06, RF-NT-01..04 |
 | SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
 
 ---
@@ -44,7 +45,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
 | RF-GT-01 | Un torneo tiene una sola sede | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
-| RF-GT-02 | Disciplinas configurables (STA, DNF, DBF, DYN, SPE) | Torneo | SP3/SP4 | 3.1 / 4.3 | US-3.1.x | ✅ definido — acrónimos corregidos en SP-ADJ-04 (US-ADJ-4.1) |
+| RF-GT-02 | Disciplinas configurables (STA, DNF, DBF, DYN, SPE y variantes) | Torneo | SP3/SP4 | 3.1 / 4.1 | US-3.1.x / US-4.1.3 | ✅ completado — acrónimos corregidos en SP-ADJ-04; variantes SPE_2X50/4X50/8X50/16X50 agregadas en INC-4.1 |
 | RF-GT-03 | Múltiples torneos activos simultáneamente | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
 | RF-GT-04 | Cancelar = estado Cancelado, datos preservados | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
 | RF-GT-05 | Restricciones de transición entre fases (con retroceso Ejecución → Preparación) | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
@@ -78,7 +79,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-PR-02 | AP > 0, sin negativos ni cero (INV-P-01) | Competencia | SP1 | 1.2 | US-P-01 | ✅ definido |
 | RF-PR-03 | AP no modificable una vez registrado (INV-P-02) | Competencia | SP1 | 1.2 | US-P-01 | ✅ definido |
 | RF-PR-04 | Atleta sin AP no compite — no aparece en grilla (P-05) | Competencia | SP2 | 2.1 | US-C-02 | ✅ definido |
-| RF-PR-05 | Orden de grilla: menor AP primero en todas las disciplinas (P-01 corregido) | Competencia | SP2 / SP-ADJ-04 | 2.1 / — | US-C-02 / US-ADJ-4.2 | ✅ corregido en SP-ADJ-04 — STA era descendente, debe ser ascendente |
+| RF-PR-05 | Orden de grilla: AP ascendente (DNF/DYN/DBF/STA) o descendente (SPE) | Competencia | SP2 / SP-ADJ-04 / SP4 | 2.1 / — / 4.1 | US-C-02 / US-ADJ-4.2 / US-4.1.4 | ✅ completado en INC-4.1 — SPE usa orden descendente (mayor AP primero) per reglamento CMAS/FAAS |
 | RF-PR-06 | Andariveles simultáneos — varios atletas compiten en paralelo | Competencia | SP2 | 2.3 | US-C-02 | ✅ definido |
 | RF-PR-07 | Organizador puede ajustar manualmente el orden de la grilla | Competencia | SP2 | 2.1 | US-C-03 | ✅ definido |
 | RF-PR-08 | Intervalo entre OTs configurable por competencia (P-02) | Competencia | SP2 | 2.1 | US-C-01 | ✅ definido |
@@ -265,7 +266,25 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
-## 12. Trazabilidad: Discrepancias → US → Documentos a actualizar
+## 12. US-IEDD SP4 INC-4.1 — Implementadas (correcciones de dominio CMAS/FAAS)
+
+| US | Inc. | RFs / Brechas cubiertos | Contenido principal | Estado |
+|----|------|-------------------------|---------------------|--------|
+| US-4.1.1 | 4.1 | Brecha CMAS #1 — motivos DQ | `MotivoDQ` StrEnum (BKO_SUPERFICIE, BKO_SUBACUATICO, NO_PROTOCOLO, INFRACCION_TECNICA, NO_INICIO_VENTANA, SALIDA_FALSO) · `TarjetaAsignacion` VO extendido · tests 102 passed | ✅ 2026-04-08 |
+| US-4.1.2 | 4.1 | Brecha CMAS #2 — tarjeta blanca con penalizaciones | `TipoTarjeta.BlancaConPenalizaciones` · `PenalizacionTecnica` VO · RP = medido − Σ deducciones · tests 107 passed | ✅ 2026-04-08 |
+| US-4.1.3 | 4.1 | RF-GT-02 — variantes SPE | Subdisciplinas `SPE_2X50`, `SPE_4X50`, `SPE_8X50`, `SPE_16X50` en `shared/domain/` · tests 73 passed | ✅ 2026-04-08 |
+| US-4.1.4 | 4.1 | RF-PR-05 — orden SPE descendente | `GrillaDeSalida.generar()` usa orden descendente para SPE (AP mayor→menor) · tests 68 passed | ✅ 2026-04-08 |
+| US-4.1.5 | 4.1 | — (refactoring técnico) | Descomponer aggregate `Performance` → `performance.py` + `performance_state.py` + `performance_events.py` + VOs `ResolucionTarjeta` y `RPFinal` · tests 82 passed | ✅ 2026-04-08 |
+| US-4.1.6 | 4.1 | — (refactoring técnico) | `_handler_utils.py` — helpers comunes; alivia `AsignarTarjetaHandler`, `GenerarGrillaHandler`, `LlamarAtletaHandler`, `RegistrarAPHandler` · tests 36 passed | ✅ 2026-04-08 |
+| US-4.1.7 | 4.1 | — (refactoring técnico) | `GrillaDeSalida.ajustar()` partido en submétodos · `RankingCompetencia` descompuesto · tests 32 passed | ✅ 2026-04-08 |
+| US-4.1.8 | 4.1 | — (refactoring técnico) | `Torneo` limpiado · `SQLiteTorneoRepository` simplificado · `DisciplinaDescriptor` y `TarjetaAsignacion` aliviados · tests 91 passed | ✅ 2026-04-08 |
+
+> **US-4.1.5 a US-4.1.8:** ajustes técnicos derivados del DesignReviewer al cierre del incremento funcional (HITO-19).
+> Patrón acordado: los quality gate issues del DesignReviewer se resuelven como US-IEDD dentro del mismo INC, no como SP-ADJ.
+
+---
+
+## 13. Trazabilidad: Discrepancias → US → Documentos a actualizar
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -284,7 +303,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 13. Cobertura Total
+## 14. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -302,7 +321,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 14. US → Tests
+## 15. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -327,10 +346,18 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-3.5.1 | unit/resultados/domain + unit/resultados/application + integration/resultados + features/US-3.5.1-ranking-overall | ✅ implementada |
 | US-3.5.2 | unit/app + integration/p09 + features/US-3.5.2-politica-p09 | ✅ 17 tests |
 | US-3.5.3 | unit/resultados/application + unit/resultados/api + integration/resultados + features/US-3.5.3-api-overall | ✅ 10 tests focalizados |
+| US-4.1.1 | unit/competencia/domain + unit/competencia/application + integration/competencia + features/US-4.1.1 | ✅ 102 passed |
+| US-4.1.2 | unit/competencia/domain + unit/competencia/application + unit/resultados + integration/resultados + features/US-4.1.2 | ✅ 107 passed |
+| US-4.1.3 | unit/shared + unit/torneo + integration/torneo + features/US-4.1.3 | ✅ 73 passed |
+| US-4.1.4 | unit/competencia/domain + integration/competencia + features/US-4.1.4 | ✅ 68 passed |
+| US-4.1.5 | unit/competencia/domain + integration/competencia | ✅ 82 passed (BDD waiver — refactoring interno sin comportamiento nuevo) |
+| US-4.1.6 | unit/competencia/application | ✅ 36 passed (BDD waiver — refactoring handlers) |
+| US-4.1.7 | unit/competencia/domain + unit/resultados/domain | ✅ 32 passed (BDD waiver — refactoring estructural) |
+| US-4.1.8 | unit/torneo/domain + unit/competencia/domain + unit/competencia/infrastructure | ✅ 91 passed (BDD waiver — refactoring estructural) |
 
 ---
 
-## 15. US → ADR
+## 16. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -340,6 +367,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-1.1.1 | ADR-008 | Event Store como tabla `events` append-only en SQLite |
 | US-1.1.1 | ADR-009 | Migraciones Alembic en `competencia/infrastructure/migrations/` |
 | US-1.2.x | ADR-005 | Event Sourcing en BC Competencia |
+| US-4.1.2 | ADR-014 | Penalizaciones acumulables — modelo de deducción N×3m en tarjeta blanca |
 
 ---
 
@@ -350,6 +378,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.4 — 2026-03-29: SP3 §9 agregado · US-3.1.1 implementada*
 *v1.5 — 2026-03-30: US-3.1.2 implementada — API REST Torneo completa*
 *v1.6 — 2026-04-02: SP3 completado a nivel US — §9 y tabla US→Tests actualizadas hasta US-3.5.3*
-*v1.10 — 2026-04-03: SP-ADJ-04 completado (§2, §11), US-ADJ-4.6 implementada, RF-IN-10 incorporado a cobertura total (§13)*
+*v1.10 — 2026-04-03: SP-ADJ-04 completado (§2, §11), US-ADJ-4.6 implementada, RF-IN-10 incorporado a cobertura total (§14)*
+*v1.11 — 2026-04-09: SP4 INC-4.1 agregado (§12 nuevo) · RF-GT-02 y RF-PR-05 actualizados · §13-§16 renumerados · US-4.1.x en §15 y §16*
 *Fuentes: 05-requerimientos_funcionales.md · Context Map v1.1 · estrategia-desarrollo-bc.md · ES Competencia*
 *Mantenido por: Claude Cowork + Victor Valotto*
