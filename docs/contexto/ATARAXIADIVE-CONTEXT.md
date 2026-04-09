@@ -2,14 +2,14 @@
 
 > **Este documento es de lectura obligatoria en Fase 0 de `/implement-us`.**
 > Provee el contexto arquitectónico, de paths y de patrones DDD específicos del proyecto.
-> Reemplaza y corrige cualquier asunción del perfil genérico `fastapi-rest`.
+> Complementa el perfil `hexagonal-ddd-bc` con los detalles específicos de AtaraxiaDive.
 
 ---
 
 ## 1. Arquitectura: Hexagonal DDD BC-First
 
 AtaraxiaDive usa **arquitectura hexagonal con DDD**, organizada por Bounded Context.
-No es layered architecture. El perfil `fastapi-rest` es solo la base — este documento lo sobrescribe.
+No es layered architecture. El perfil activo es `hexagonal-ddd-bc` — este documento provee los overrides específicos del proyecto.
 
 ### Regla de Oro (absoluta, sin excepciones)
 
@@ -36,17 +36,22 @@ src/
 ├── competencia/          ← Core Domain (Event Sourcing)
 │   ├── domain/
 │   │   ├── aggregates/   ← aggregates raíz con invariantes
+│   │   │   ├── {aggregate}.py
+│   │   │   ├── {aggregate}_events.py  ← solo ES: aplica eventos al estado
+│   │   │   └── {aggregate}_state.py   ← solo ES: objeto de estado del aggregate
 │   │   ├── value_objects/ ← value objects inmutables
 │   │   ├── events/       ← domain events (DomainEvent base)
+│   │   ├── entities/     ← solo ES: entidades con identidad que no son aggregate root
 │   │   └── ports/        ← interfaces de repositorios y servicios externos
 │   ├── application/
 │   │   ├── commands/     ← command handlers
-│   │   └── queries/      ← query handlers
+│   │   ├── queries/      ← query handlers
+│   │   └── _{policy}.py  ← helpers de política (ej: _p08_finalizacion.py)
 │   ├── infrastructure/
 │   │   ├── event_store/  ← solo BCs con Event Sourcing
 │   │   └── repositories/ ← implementaciones de puertos
 │   └── api/              ← router FastAPI del BC
-├── torneo/               ← Supporting (CRUD — sin event_store)
+├── torneo/               ← Supporting (CRUD — sin event_store, sin entities/)
 ├── registro/             ← Supporting (CRUD)
 ├── resultados/           ← Supporting (CRUD)
 ├── identidad/            ← Generic (CRUD)
@@ -57,6 +62,14 @@ src/
 │       └── base/         ← clases base (DomainEvent, AggregateRoot, etc.)
 └── app.py                ← ensamble central de routers FastAPI
 ```
+
+> **Convenciones específicas de Event Sourcing (competencia, notificaciones):**
+> - `{aggregate}_events.py` — módulo de aplicación de eventos al estado del aggregate (para reconstrucción desde event store). NO es un DomainEvent — es lógica interna del aggregate.
+> - `{aggregate}_state.py` — dataclass de estado mutable que el aggregate reconstruye.
+> - `entities/` — entidades con identidad que participan en el aggregate pero no son aggregate root (ej: `GrillaDeSalida`).
+> - `_{policy}.py` en `application/` — helpers de política de aplicación que no encajan como CommandHandler ni QueryHandler (ej: `_p08_finalizacion.py`).
+>
+> **BCs CRUD (torneo, registro, resultados, identidad) NO tienen** `entities/`, `event_store/`, ni archivos `_state`/`_events`.
 
 ### Tests
 
@@ -94,6 +107,9 @@ tests/
 ---
 
 ## 4. Tipos de Componente DDD por Capa
+
+**Orden de implementación obligatorio** (cada elemento depende del anterior):
+ValueObjects → DomainEvents → AggregateRoot → Ports → CommandHandlers → QueryHandlers → Repositories → ApiRouter
 
 Al implementar una US, los componentes a generar son:
 
@@ -164,14 +180,19 @@ Al implementar una US, los componentes a generar son:
 
 | Término | Significado |
 |---------|-------------|
-| AP | Announced Performance — marca declarada |
-| RP | Realized Performance — marca lograda |
-| OT | Official Top — inicio de la performance |
-| DNS | Did Not Start |
-| Tarjeta blanca | Performance válida |
-| Tarjeta amarilla | Penalización parcial |
-| Tarjeta roja | Descalificación |
+| AP | Announced Performance — marca declarada antes de competir |
+| RP | Realized Performance — marca efectivamente lograda |
+| OT | Official Top — momento de inicio de la performance |
+| DNS | Did Not Start — atleta no se presentó al OT |
+| Tarjeta blanca | Performance válida sin infracciones |
+| Tarjeta Blanca con Penalizaciones | Performance válida con infracciones técnicas; RP final = RP medido − Σ deducciones (N × 3m) |
+| Tarjeta amarilla | Estado de revisión pendiente |
+| Tarjeta roja | Descalificación — requiere `MotivoDQ` obligatorio |
+| MotivoDQ | Catálogo de causas de descalificación: `BKO_SUPERFICIE`, `BKO_SUBACUATICO`, `NO_PROTOCOLO`, `INFRACCION_TECNICA`, `NO_INICIO_VENTANA`, `SALIDA_FALSO` |
 | Black-out | Pérdida de conciencia → tarjeta roja automática |
+| Variante SPE | Sincronizado: `SPE_2X50`, `SPE_4X50`, `SPE_8X50`, `SPE_16X50` — cada una genera grilla y ranking independientes |
+| DoD | Definition of Done — criterio binario de cierre de incremento |
+| US-IEDD | User Story con precondición, postcondición e invariantes formales |
 
 ---
 
