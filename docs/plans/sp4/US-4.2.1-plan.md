@@ -5,96 +5,86 @@
 **Estimación Total:** 1h 45min
 **Modo:** `--skip-bdd` — criterios de aceptación verificados manualmente
 
+> **Nota de implementación:** Vite 8 (default de `npm create vite@latest`) no era compatible con
+> `vite-plugin-pwa@1.2.0` (requiere ≤ v7). Se downgradeó a Vite 6 + `@vitejs/plugin-react@5.2.0`.
+> Tailwind v4 instalada (npm instaló v4.2.2 en lugar de v3) — usa `@tailwindcss/vite` y `@import "tailwindcss"` en CSS.
+
 ---
 
 ## Componentes a Implementar
 
 ### 1. Scaffold base (15 min)
-- [ ] `npm create vite@latest frontend -- --template react-ts` (5 min)
-  - Genera estructura base: `frontend/` con `src/main.tsx`, `src/App.tsx`, `tsconfig.json`, `vite.config.ts`
-- [ ] Validar `tsconfig.json`: `"strict": true` (2 min)
-- [ ] Crear `.env.example` con `VITE_API_URL=http://localhost:8000` (3 min)
-- [ ] Crear `.env` local (no commiteado) con el mismo valor (2 min)
-- [ ] Agregar `frontend/.env` a `.gitignore` (3 min)
+- [x] `npm create vite@latest frontend -- --template react-ts` (5 min)
+- [x] `tsconfig.app.json`: `"strict": true` agregado (2 min)
+- [x] `.env.example` con `VITE_API_URL=http://localhost:8000` (3 min)
+- [x] `.env` local (no commiteado) — cubierto por `.gitignore` raíz (2 min)
 
-### 2. Dependencias de producción (15 min)
-- [ ] Tailwind CSS + PostCSS: `npm install -D tailwindcss postcss autoprefixer` + `npx tailwindcss init -p` (5 min)
-- [ ] React Router DOM v6: `npm install react-router-dom@6` (3 min)
-- [ ] Zustand: `npm install zustand` (2 min)
-- [ ] TanStack Query v5: `npm install @tanstack/react-query` (3 min)
-- [ ] vite-plugin-pwa: `npm install -D vite-plugin-pwa` (2 min)
+### 2. Dependencias instaladas
+- [x] Tailwind v4 + `@tailwindcss/vite` (en lugar de PostCSS — Tailwind v4 usa plugin Vite)
+- [x] React Router DOM v6: `npm install react-router-dom@6`
+- [x] Zustand v5: `npm install zustand`
+- [x] TanStack Query v5: `npm install @tanstack/react-query`
+- [x] vite-plugin-pwa v1.2.0: `npm install -D vite-plugin-pwa` (con Vite 6)
 
-### 3. Configuración vite.config.ts (15 min)
-- [ ] Proxy al backend: `/api → VITE_API_URL` (5 min)
-- [ ] Plugin PWA: manifest + workbox `NetworkFirst` con timeout 3s para `/api/**` (10 min)
-  - `display: "standalone"`, `orientation: "portrait"`
-  - Nombre: `AtaraxiaDive`, short_name: `AtaraxiaDive`
-  - Iconos placeholder (192x192 y 512x512)
+### 3. Configuración vite.config.ts
+- [x] Proxy: `/api → VITE_API_URL`, `/health → VITE_API_URL`
+- [x] Plugin PWA: manifest (standalone + portrait + iconos 192/512) + Workbox NetworkFirst /api/** timeout 3s
+- [x] Plugin Tailwind v4 (`@tailwindcss/vite`)
 
-### 4. Estructura de directorios D-01 (10 min)
-- [ ] Crear directorios vacíos con `.gitkeep`:
-  - `frontend/src/pages/juez/`
-  - `frontend/src/pages/organizador/`
-  - `frontend/src/pages/atleta/`
-  - `frontend/src/hooks/`
-  - `frontend/src/stores/`
-  - `frontend/src/api/`
-  - `frontend/src/components/`
-- [ ] Limpiar archivos de ejemplo de Vite: `App.css`, `assets/react.svg`, `vite.svg` (2 min)
+### 4. Estructura de directorios D-01
+- [x] `frontend/src/pages/juez/` `.gitkeep`
+- [x] `frontend/src/pages/organizador/` `.gitkeep`
+- [x] `frontend/src/pages/atleta/` `.gitkeep`
+- [x] `frontend/src/hooks/` `.gitkeep`
+- [x] `frontend/src/stores/` (con `useConnectionStore.ts`)
+- [x] `frontend/src/api/` (con `health.ts`)
+- [x] `frontend/src/components/` (con `HealthCheck.tsx`)
+- [x] Archivos de ejemplo de Vite eliminados (`App.css`, `assets/`)
 
-### 5. Configuración Tailwind (5 min)
-- [ ] `tailwind.config.js`: content paths apuntando a `./src/**/*.{ts,tsx}` (3 min)
-- [ ] `src/index.css`: directivas `@tailwind base/components/utilities` (2 min)
+### 5. Configuración Tailwind v4
+- [x] `src/index.css`: `@import "tailwindcss"` (directiva v4)
+- [x] Sin `tailwind.config.js` — v4 usa CSS-first, no requiere config file
 
-### 6. API client: `src/api/health.ts` (10 min)
-- [ ] Función `fetchHealth()` → `GET /api/health` (o `GET /health` directo)
-  - Retorna `{ status: "ok" }` o lanza error
-- [ ] Tipar respuesta: `interface HealthResponse { status: string }`
+### 6. API client: `src/api/health.ts`
+- [x] `fetchHealth()` → `GET /health`
+- [x] `interface HealthResponse { status: string }`
 
-### 7. Store: `src/stores/useConnectionStore.ts` (10 min)
-- [ ] Zustand store con `{ isOnline: boolean }` inicializado con `navigator.onLine`
-- [ ] `useEffect` que subscribe a eventos `online`/`offline` del window
+### 7. Store: `src/stores/useConnectionStore.ts`
+- [x] Zustand store `{ isOnline: boolean }`
+- [x] `useConnectionSync()` hook — suscripción a eventos `online`/`offline`
 
-### 8. Componente: `src/components/HealthCheck.tsx` (15 min)
-- [ ] Usa TanStack Query: `useQuery({ queryKey: ['health'], queryFn: fetchHealth, refetchInterval: 30_000 })`
-- [ ] Muestra indicador verde si `status === "ok"`, rojo si error/loading-failed
-- [ ] Texto: `"Backend: ✓ online"` / `"Backend: ✗ sin conexión"`
+### 8. Componente: `src/components/HealthCheck.tsx`
+- [x] `useQuery({ queryKey: ['health'], queryFn: fetchHealth, refetchInterval: 30_000 })`
+- [x] Indicador verde `"Backend: ✓ online"` / rojo `"Backend: ✗ sin conexión"`
 
-### 9. App.tsx y main.tsx (10 min)
-- [ ] `main.tsx`: wrappear con `QueryClientProvider` (TanStack Query)
-- [ ] `App.tsx`: renderizar `<HealthCheck />` en ruta `/` como placeholder inicial
-  - Routing se expande en US-4.2.2 — aquí solo ruta base
+### 9. App.tsx y main.tsx
+- [x] `main.tsx`: `QueryClientProvider` wrappea `<App />`
+- [x] `App.tsx`: `useConnectionSync()` + `<HealthCheck />` en ruta base
 
-### 10. Validación manual (checklist) (10 min)
-- [ ] `npm run dev` levanta sin errores en consola
-- [ ] `npm run build` termina con código 0 sin errores TypeScript
-- [ ] `HealthCheck` muestra verde con backend corriendo
-- [ ] `HealthCheck` muestra rojo con backend apagado
-- [ ] Manifest PWA válido: `display: standalone`, `orientation: portrait`
-- [ ] App aparece como instalable en Chrome/Safari mobile (o Chrome DevTools simula)
-- [ ] Estructura `frontend/src/` respeta D-01
-- [ ] `tsconfig.json` tiene `"strict": true`
-- [ ] `.env.example` con `VITE_API_URL=http://localhost:8000`
+### 10. Validación — `npm run build`
+- [x] `npm run build` → exitcode 0, sin errores TypeScript strict
+- [x] PWA generada: `dist/sw.js`, `dist/workbox-*.js`, `dist/manifest.webmanifest`
+- [ ] `npm run dev` — verificación manual pendiente (online/offline HealthCheck)
+- [ ] Manifest PWA verificado en Chrome DevTools
+- [ ] App aparece como instalable
 
 ---
 
 ## Integración con monorepo
 
-- [ ] Agregar `frontend/node_modules/` y `frontend/dist/` a `.gitignore` raíz (3 min)
-- [ ] Verificar que `src/app.py` tiene endpoint `GET /health` → `{"status": "ok"}` (ya existe desde SP1) (2 min)
+- [x] `.gitignore` raíz ya tenía `frontend/node_modules/`, `frontend/dist/`, patrón `.env`
+- [x] `GET /health` existe desde SP1
 
 ---
 
 ## Quality gates
 
-> US de infraestructura frontend — no aplican las métricas Python (Pylint, mypy, pytest).
-> Los quality gates son los criterios de aceptación del checklist de la spec.
-
-- [ ] `npm run build` sin errores TypeScript (strict) ← equivalente a mypy
-- [ ] Todos los ítems del checklist de la US aprobados manualmente
+- [x] `npm run build` sin errores TypeScript (strict) — ✅ exitcode 0
+- [ ] Checklist manual completo (pendiente verificación con backend corriendo)
 
 ---
 
-**Estado:** 0/10 secciones completadas
+**Estado:** 9/10 secciones completadas — verificación manual pendiente
 
 *Plan generado: 2026-04-11 — US-4.2.1 INC-4.2 SP4*
+*Implementado: 2026-04-11*

@@ -6,7 +6,7 @@
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
 | **Fecha** | 2026-04-09 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.11 — SP4 INC-4.1 completado |
+| **Estado** | ✅ v1.12 — SP4 INC-4.2 US-4.2.1 implementada |
 
 ---
 
@@ -284,7 +284,16 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
-## 13. Trazabilidad: Discrepancias → US → Documentos a actualizar
+## 13. US-IEDD SP4 INC-4.2 — Fundación Frontend
+
+| US | Inc. | RFs / Decisiones cubiertos | Contenido principal | Estado |
+|----|------|----------------------------|---------------------|--------|
+| US-4.2.1 | 4.2 | D-01..D-06 (decisiones-frontend.md) · ADR-003 | Scaffold Vite 6 + React 19 + TypeScript strict · Tailwind v4 · vite-plugin-pwa (manifest standalone+portrait, Workbox NetworkFirst) · HealthCheck (TanStack Query) · useConnectionStore (Zustand) · estructura D-01 · npm run build exitcode 0 | ✅ 2026-04-11 |
+| US-4.2.2 | 4.2 | D-02 (routing+guards) · D-03 (Zustand) | useAuthStore · LoginPage · RequireRole HOC · rutas /juez/* /organizador/* | ⏳ To Do |
+
+---
+
+## 15. Trazabilidad: Discrepancias → US → Documentos a actualizar
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -303,7 +312,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 14. Cobertura Total
+## 16. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -321,7 +330,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 15. US → Tests
+## 17. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -357,7 +366,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 16. US → ADR
+## 18. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -379,6 +388,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.5 — 2026-03-30: US-3.1.2 implementada — API REST Torneo completa*
 *v1.6 — 2026-04-02: SP3 completado a nivel US — §9 y tabla US→Tests actualizadas hasta US-3.5.3*
 *v1.10 — 2026-04-03: SP-ADJ-04 completado (§2, §11), US-ADJ-4.6 implementada, RF-IN-10 incorporado a cobertura total (§14)*
+*v1.12 — 2026-04-11: SP4 INC-4.2 §13 agregado · US-4.2.1 implementada (scaffold frontend) · §§ renumerados*
 *v1.11 — 2026-04-09: SP4 INC-4.1 agregado (§12 nuevo) · RF-GT-02 y RF-PR-05 actualizados · §13-§16 renumerados · US-4.1.x en §15 y §16*
 *Fuentes: 05-requerimientos_funcionales.md · Context Map v1.1 · estrategia-desarrollo-bc.md · ES Competencia*
 *Mantenido por: Claude Cowork + Victor Valotto*
