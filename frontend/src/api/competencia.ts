@@ -1,4 +1,5 @@
 import useAuthStore from '../stores/useAuthStore'
+import type { EstadoPerformance } from '../types/auth'
 
 export class ApiError extends Error {
   status: number
@@ -31,7 +32,7 @@ export interface GrillaAtletaDto {
   ot_programado: string
   ap_declarado: string
   unidad: string
-  estado: string
+  estado: EstadoPerformance
 }
 
 export interface PerformanceActualDto {
@@ -41,7 +42,12 @@ export interface PerformanceActualDto {
   unidad: string
   unidad_esperada: string
   andarivel: number
-  estado: string
+  estado: EstadoPerformance
+}
+
+export interface PenalizacionPayload {
+  tipo: string
+  deduccion: string
 }
 
 function buildHeaders() {
@@ -157,13 +163,31 @@ export async function registrarResultado(payload: {
   await parseResponse<void>(response)
 }
 
+export async function registrarDns(payload: {
+  competenciaId: string
+  participanteId: string
+  disciplina: string
+}): Promise<void> {
+  const response = await fetch(`/competencia/${payload.competenciaId}/registrar-dns`, {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      participante_id: payload.participanteId,
+      disciplina: payload.disciplina,
+    }),
+  })
+
+  await parseResponse<void>(response)
+}
+
 export async function asignarTarjeta(payload: {
   competenciaId: string
   participanteId: string
   disciplina: string
-  tarjeta: 'Blanca' | 'Roja'
+  tarjeta: 'Blanca' | 'Roja' | 'BlancaConPenalizaciones'
   motivoDq?: string
   distanciaBlackout?: string
+  penalizaciones?: PenalizacionPayload[]
 }): Promise<void> {
   const response = await fetch(`/competencia/${payload.competenciaId}/asignar-tarjeta`, {
     method: 'POST',
@@ -174,6 +198,7 @@ export async function asignarTarjeta(payload: {
       tarjeta: payload.tarjeta,
       motivo_dq: payload.motivoDq ?? null,
       distancia_blackout: payload.distanciaBlackout ?? null,
+      penalizaciones: payload.penalizaciones ?? [],
     }),
   })
 

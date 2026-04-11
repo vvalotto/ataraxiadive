@@ -1,0 +1,61 @@
+{
+  "metadata": {
+    "us_id": "US-4.3.3",
+    "us_title": "Casos alternativos — DNS, BKO y penalizaciones",
+    "us_points": 5,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-11T21:17:28.617411+00:00",
+    "completed_at": null,
+    "total_elapsed_seconds": 548,
+    "effective_seconds": 548,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-11T21:18:15.638467+00:00",
+      "completed_at": null,
+      "elapsed_seconds": 0,
+      "status": "in_progress",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-04-11T21:19:06.286905+00:00",
+      "completed_at": null,
+      "elapsed_seconds": 0,
+      "status": "in_progress",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-04-11T21:20:15.569280+00:00",
+      "completed_at": "2026-04-11T21:26:36.993553+00:00",
+      "elapsed_seconds": 381,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 0,
+    "completed_tasks": 0,
+    "total_phases": 3,
+    "estimated_total_minutes": 0,
+    "actual_total_minutes": 0,
+    "variance_minutes": 0,
+    "variance_percent": 0.0
+  }
+}
