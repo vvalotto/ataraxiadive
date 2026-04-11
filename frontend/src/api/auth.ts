@@ -7,6 +7,7 @@ interface LoginResponse {
 
 interface JwtPayload {
   sub: string
+  email: string
   rol: RolUsuario
   [key: string]: unknown
 }

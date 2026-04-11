@@ -17,9 +17,9 @@ Este skill utiliza las siguientes variables definidas en `config.json` y persona
 | `{ARCHITECTURE_PATTERN}` | Patrón arquitectónico del proyecto | `hexagonal-ddd-bc` |
 | `{COMPONENT_TYPE}` | Tipo de componente DDD | `AggregateRoot`, `ValueObject`, `DomainEvent`, `Port`, `CommandHandler`, `QueryHandler`, `Repository`, `ApiRouter` |
 | `{COMPONENT_PATH}` | Ruta base por tipo de componente | `src/{bc}/domain/aggregates/`, `src/{bc}/domain/value_objects/`, etc. (ver `hexagonal-ddd-bc.json`) |
-| `{TEST_FRAMEWORK}` | Framework de testing | `pytest + httpx + pytest-bdd` |
-| `{PROJECT_ROOT}` | Raíz del código fuente | `src/` |
-| `{PRODUCT}` | Bounded Context activo | `competencia`, `torneo`, `registro`, `resultados`, `identidad`, `notificaciones` |
+| `{TEST_FRAMEWORK}` | Framework de testing | `pytest + httpx + pytest-bdd` · frontend: `npm build` + validación manual UI |
+| `{PROJECT_ROOT}` | Raíz del código fuente | `src/` · frontend: `frontend/src/` |
+| `{PRODUCT}` | Bounded Context o producto activo | `competencia`, `torneo`, `registro`, `resultados`, `identidad`, `notificaciones`, `frontend` |
 
 **Perfil activo:** `hexagonal-ddd-bc`
 **Customización proyecto:** `.claude/skills/implement-us/customizations/hexagonal-ddd-bc.json`
@@ -50,6 +50,7 @@ El skill es **framework-agnostic** y se adapta automáticamente según el perfil
 - **PyQt/MVC:** Implementación de componentes UI con arquitectura MVC
 - **FastAPI:** Implementación de endpoints REST con arquitectura en capas
 - **Django:** Implementación MVT siguiendo convenciones Django
+- **React/Vite frontend:** Implementación de páginas, componentes, stores y API clients
 - **Generic Python:** Implementación de módulos Python genéricos
 
 ---

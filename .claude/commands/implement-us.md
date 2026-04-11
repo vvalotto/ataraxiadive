@@ -14,8 +14,17 @@ El argumento `$ARGUMENTS` contiene el identificador de la US (ej: `US-1.1.1`).
 
 1. Leer `.claude/skills/implement-us/skill.md` para entender el flujo completo.
 2. Leer `.claude/skills/implement-us/config.json` para obtener la configuración del perfil activo.
-3. Leer `docs/plans/$ARGUMENTS.md` para obtener la definición de la US-IEDD.
+3. Leer `docs/specs/spX/$ARGUMENTS.md` para obtener la definición de la US-IEDD.
 4. Ejecutar las 10 fases en orden, leyendo cada agente desde `.claude/skills/implement-us/phases/phase-N-*.md`.
 5. Respetar los puntos de STOP bloqueantes en Fase 2 (aprobación del plan) y Fase 9 (reporte en disco).
+
+## Ajuste local AtaraxiaDive
+
+Si la US pertenece al producto `frontend`:
+
+- usar `frontend/src/` como raíz de implementación;
+- generar artefactos físicos igualmente en `tests/features/`, `docs/plans/spX/` y `docs/reports/`;
+- sustituir quality gates Python por `npm run build` y, si aplica, `npm run lint`;
+- tratar la validación BDD/UI como manual si el repo no tiene harness automatizado para browser.
 
 **US a implementar:** $ARGUMENTS

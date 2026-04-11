@@ -67,6 +67,14 @@ export default defineConfig(({ mode }) => {
           target: apiUrl,
           changeOrigin: true,
         },
+        '/torneos': {
+          target: apiUrl,
+          changeOrigin: true,
+        },
+        '/competencia': {
+          target: apiUrl,
+          changeOrigin: true,
+        },
       },
     },
   }
