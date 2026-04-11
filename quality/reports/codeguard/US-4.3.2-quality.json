@@ -1,0 +1,37 @@
+{
+  "us_id": "US-4.3.2",
+  "fecha": "2026-04-11",
+  "producto": "frontend+backend",
+  "tipo_validacion": "full-stack-judge-flow",
+  "build": {
+    "estado": "APROBADO",
+    "comando": "npm run build",
+    "working_directory": "frontend"
+  },
+  "lint": {
+    "estado": "APROBADO",
+    "comando": "npm run lint",
+    "working_directory": "frontend"
+  },
+  "python_compile": {
+    "estado": "APROBADO",
+    "comando": "./.venv/bin/python -m compileall src",
+    "working_directory": "."
+  },
+  "smoke_backend": {
+    "estado": "APROBADO",
+    "comando": "IDENTIDAD_JWT_SECRET=dev ./.venv/bin/python - <<'PY' ... TestClient judge flow ... PY",
+    "working_directory": "."
+  },
+  "bdd_manual": {
+    "estado": "APROBADO",
+    "feature": "tests/features/US-4.3.2-flujo-performance.feature"
+  },
+  "estado_final": "APROBADO",
+  "observaciones": [
+    "Se agregaron los POST /llamar, /registrar-resultado y /asignar-tarjeta al router de competencia.",
+    "La grilla ahora expone nombre sintetico, AP, unidad y estado derivado del stream de performance.",
+    "Se agrego fixture local para resetear la performance de prueba a estado AnunciadaAP.",
+    "La validacion manual del flujo juez fue confirmada tras la implementacion."
+  ]
+}

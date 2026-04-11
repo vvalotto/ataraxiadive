@@ -1,15 +1,92 @@
-import { Link } from 'react-router-dom'
+import { useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { Link, useNavigate } from 'react-router-dom'
+import {
+  fetchGrillaCompetencia,
+  fetchPerformanceActual,
+  type GrillaAtletaDto,
+} from '../../api/competencia'
 import { JuezLayout } from '../../components/juez/JuezLayout'
 import useCompetenciaStore from '../../stores/useCompetenciaStore'
 
+type RowStatus = 'SIGUIENTE' | 'PENDIENTE' | 'EN_CURSO' | 'FINALIZADA'
+
+function resolveRowStatus(
+  atleta: GrillaAtletaDto,
+  currentPerformanceId: string | null,
+  firstPendingPerformanceId: string | null,
+): RowStatus {
+  if (atleta.performance_id === currentPerformanceId) {
+    return 'EN_CURSO'
+  }
+
+  if (atleta.estado === 'Ejecutada' || atleta.estado === 'DNS') {
+    return 'FINALIZADA'
+  }
+
+  if (atleta.estado === 'Llamada' || atleta.estado === 'ResultadoRegistrado') {
+    return 'EN_CURSO'
+  }
+
+  if (atleta.performance_id === firstPendingPerformanceId) {
+    return 'SIGUIENTE'
+  }
+
+  return 'PENDIENTE'
+}
+
+function statusClasses(status: RowStatus) {
+  if (status === 'EN_CURSO') {
+    return 'border-cyan-300/60 bg-cyan-400/10'
+  }
+  if (status === 'SIGUIENTE') {
+    return 'border-emerald-300/50 bg-emerald-400/10'
+  }
+  if (status === 'FINALIZADA') {
+    return 'border-slate-800 bg-slate-900/40 opacity-50'
+  }
+  return 'border-slate-800 bg-slate-900/75'
+}
+
 export function GrillaPage() {
+  const navigate = useNavigate()
   const disciplinaActiva = useCompetenciaStore((s) => s.disciplinaActiva)
   const competenciaId = useCompetenciaStore((s) => s.competenciaId)
+  const seleccionarAtleta = useCompetenciaStore((s) => s.seleccionarAtleta)
+
+  const grillaQuery = useQuery({
+    queryKey: ['grilla', competenciaId, disciplinaActiva],
+    queryFn: () => fetchGrillaCompetencia(competenciaId!, disciplinaActiva!),
+    enabled: Boolean(competenciaId && disciplinaActiva),
+  })
+
+  const performanceActualQuery = useQuery({
+    queryKey: ['performance-actual', competenciaId],
+    queryFn: () => fetchPerformanceActual(competenciaId!),
+    enabled: Boolean(competenciaId),
+    refetchInterval: 5000,
+  })
+
+  const firstPendingPerformanceId = useMemo(() => {
+    const grilla = grillaQuery.data ?? []
+    const first = grilla.find((atleta) => atleta.estado === 'AnunciadaAP')
+    return first?.performance_id ?? null
+  }, [grillaQuery.data])
+
+  if (!competenciaId || !disciplinaActiva) {
+    return (
+      <JuezLayout title="Grilla" subtitle="Sin competencia seleccionada">
+        <section className="rounded-3xl border border-slate-800 bg-slate-900/70 p-5 text-sm text-slate-300">
+          No hay competencia seleccionada.
+        </section>
+      </JuezLayout>
+    )
+  }
 
   return (
     <JuezLayout
       title="Grilla"
-      subtitle={disciplinaActiva ? `${disciplinaActiva} · ${competenciaId}` : 'Sin competencia seleccionada'}
+      subtitle={`${disciplinaActiva} · ${competenciaId}`}
       actions={
         <Link
           to="/juez/disciplinas"
@@ -19,10 +96,72 @@ export function GrillaPage() {
         </Link>
       }
     >
-      <section className="rounded-3xl border border-slate-800 bg-slate-900/70 p-5 text-sm text-slate-300">
-        Stub de grilla para US-4.3.1. La selección de disciplina y competencia activa ya quedó persistida en
-        el store.
-      </section>
+      {grillaQuery.isLoading ? (
+        <section className="rounded-3xl border border-slate-800 bg-slate-900/70 p-5 text-sm text-slate-300">
+          Cargando grilla...
+        </section>
+      ) : null}
+
+      {grillaQuery.isError ? (
+        <section className="rounded-3xl border border-red-500/30 bg-red-500/10 p-5 text-sm text-red-100">
+          No se pudo cargar la grilla.
+        </section>
+      ) : null}
+
+      {grillaQuery.data?.map((atleta) => {
+        const status = resolveRowStatus(
+          atleta,
+          performanceActualQuery.data?.performance_id ?? null,
+          firstPendingPerformanceId,
+        )
+        const disabled = status === 'FINALIZADA'
+
+        return (
+          <button
+            key={atleta.performance_id}
+            type="button"
+            disabled={disabled}
+            onClick={() => {
+              seleccionarAtleta({
+                performanceId: atleta.performance_id,
+                atletaId: atleta.atleta_id,
+                nombreAtleta: atleta.nombre_atleta,
+                posicion: atleta.posicion,
+                andarivel: atleta.andarivel,
+                otProgramado: atleta.ot_programado,
+                apDeclarado: atleta.ap_declarado,
+                unidad: atleta.unidad,
+                estado: atleta.estado,
+              })
+              void navigate('/juez/performance')
+            }}
+            className={`block w-full rounded-[2rem] border p-5 text-left transition ${statusClasses(status)}`}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                  #{atleta.posicion} · andarivel {atleta.andarivel}
+                </p>
+                <h2 className="mt-2 text-lg font-semibold text-slate-50">{atleta.nombre_atleta}</h2>
+                <p className="mt-2 text-sm text-slate-400">
+                  AP {atleta.ap_declarado} {atleta.unidad}
+                </p>
+              </div>
+              <span
+                className={[
+                  'rounded-full px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.18em]',
+                  status === 'EN_CURSO' ? 'bg-cyan-400/15 text-cyan-200' : '',
+                  status === 'SIGUIENTE' ? 'bg-emerald-400/15 text-emerald-200' : '',
+                  status === 'PENDIENTE' ? 'bg-slate-800 text-slate-300' : '',
+                  status === 'FINALIZADA' ? 'bg-slate-950 text-slate-500' : '',
+                ].join(' ')}
+              >
+                {status}
+              </span>
+            </div>
+          </button>
+        )
+      })}
     </JuezLayout>
   )
 }

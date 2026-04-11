@@ -1,3 +1,14 @@
+import useAuthStore from '../stores/useAuthStore'
+
+export class ApiError extends Error {
+  status: number
+
+  constructor(status: number, message: string) {
+    super(message)
+    this.status = status
+  }
+}
+
 export interface CompetenciaResumenDto {
   competencia_id: string
   disciplina: string
@@ -11,16 +22,68 @@ export interface EstadoCompetenciaDto {
   torneo_id: string | null
 }
 
+export interface GrillaAtletaDto {
+  performance_id: string
+  atleta_id: string
+  nombre_atleta: string
+  posicion: number
+  andarivel: number
+  ot_programado: string
+  ap_declarado: string
+  unidad: string
+  estado: string
+}
+
+export interface PerformanceActualDto {
+  performance_id: string
+  nombre_atleta: string
+  ap_declarado: string
+  unidad: string
+  unidad_esperada: string
+  andarivel: number
+  estado: string
+}
+
+function buildHeaders() {
+  const token = useAuthStore.getState().token
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  }
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`
+  }
+
+  return headers
+}
+
+async function parseResponse<T>(response: Response): Promise<T> {
+  if (response.ok) {
+    if (response.status === 204) {
+      return undefined as T
+    }
+    return response.json() as Promise<T>
+  }
+
+  let detail = `Error de API: ${response.status}`
+
+  try {
+    const payload = (await response.json()) as { detail?: string }
+    if (payload.detail) {
+      detail = payload.detail
+    }
+  } catch {
+    // sin body JSON util
+  }
+
+  throw new ApiError(response.status, detail)
+}
+
 export async function fetchCompetenciasPorTorneo(
   torneoId: string,
 ): Promise<CompetenciaResumenDto[]> {
   const response = await fetch(`/competencia?torneo_id=${torneoId}`)
-
-  if (!response.ok) {
-    throw new Error(`Error al obtener competencias: ${response.status}`)
-  }
-
-  return response.json() as Promise<CompetenciaResumenDto[]>
+  return parseResponse<CompetenciaResumenDto[]>(response)
 }
 
 export async function fetchEstadoCompetencia(
@@ -30,10 +93,89 @@ export async function fetchEstadoCompetencia(
   const response = await fetch(
     `/competencia/${competenciaId}/estado?disciplina=${encodeURIComponent(disciplina)}`,
   )
+  return parseResponse<EstadoCompetenciaDto>(response)
+}
 
-  if (!response.ok) {
-    throw new Error(`Error al obtener estado de competencia: ${response.status}`)
-  }
+export async function fetchGrillaCompetencia(
+  competenciaId: string,
+  disciplina: string,
+): Promise<GrillaAtletaDto[]> {
+  const response = await fetch(
+    `/competencia/${competenciaId}/grilla?disciplina=${encodeURIComponent(disciplina)}`,
+  )
+  return parseResponse<GrillaAtletaDto[]>(response)
+}
 
-  return response.json() as Promise<EstadoCompetenciaDto>
+export async function fetchPerformanceActual(
+  competenciaId: string,
+): Promise<PerformanceActualDto | null> {
+  const response = await fetch(`/competencia/${competenciaId}/performance/actual`)
+  return parseResponse<PerformanceActualDto | null>(response)
+}
+
+export async function llamarAtleta(payload: {
+  competenciaId: string
+  participanteId: string
+  disciplina: string
+  otProgramado: string
+  posicionGrilla: number
+  andarivel: number
+}): Promise<void> {
+  const response = await fetch(`/competencia/${payload.competenciaId}/llamar`, {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      participante_id: payload.participanteId,
+      disciplina: payload.disciplina,
+      ot_programado: payload.otProgramado,
+      posicion_grilla: payload.posicionGrilla,
+      andarivel: payload.andarivel,
+    }),
+  })
+
+  await parseResponse<void>(response)
+}
+
+export async function registrarResultado(payload: {
+  competenciaId: string
+  participanteId: string
+  disciplina: string
+  valorRp: string
+  unidad: string
+}): Promise<void> {
+  const response = await fetch(`/competencia/${payload.competenciaId}/registrar-resultado`, {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      participante_id: payload.participanteId,
+      disciplina: payload.disciplina,
+      valor_rp: payload.valorRp,
+      unidad: payload.unidad,
+    }),
+  })
+
+  await parseResponse<void>(response)
+}
+
+export async function asignarTarjeta(payload: {
+  competenciaId: string
+  participanteId: string
+  disciplina: string
+  tarjeta: 'Blanca' | 'Roja'
+  motivoDq?: string
+  distanciaBlackout?: string
+}): Promise<void> {
+  const response = await fetch(`/competencia/${payload.competenciaId}/asignar-tarjeta`, {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      participante_id: payload.participanteId,
+      disciplina: payload.disciplina,
+      tarjeta: payload.tarjeta,
+      motivo_dq: payload.motivoDq ?? null,
+      distancia_blackout: payload.distanciaBlackout ?? null,
+    }),
+  })
+
+  await parseResponse<void>(response)
 }
