@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { decodeJwtPayload } from '../api/auth'
-import type { AuthState } from '../types/auth'
+import type { AuthState, RolUsuario } from '../types/auth'
 
 const useAuthStore = create<AuthState>((set) => ({
   token: null,
@@ -9,7 +9,7 @@ const useAuthStore = create<AuthState>((set) => ({
 
   login: (token: string) => {
     const payload = decodeJwtPayload(token)
-    set({ token, email: payload.sub, rol: payload.rol })
+    set({ token, email: payload.email as string, rol: (payload.rol as string).toLowerCase() as RolUsuario })
   },
 
   logout: () => {
