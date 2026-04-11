@@ -4,14 +4,15 @@
   "profile_metadata": {
     "name": "hexagonal-ddd-bc",
     "display_name": "AtaraxiaDive — Hexagonal DDD BC-First",
-    "version": "1.0.0",
-    "target_stack": "FastAPI + Python 3.14 + uv",
+    "version": "1.1.0",
+    "target_stack": "FastAPI + Python 3.14 + uv + React/Vite frontend",
     "context_document": "docs/contexto/ATARAXIADIVE-CONTEXT.md"
   },
 
   "variables": {
     "project_root": {
       "bounded_contexts": ["competencia", "torneo", "registro", "resultados", "identidad", "notificaciones"],
+      "frontend": "frontend/src/",
       "shared": "src/shared/domain/",
       "app_entry": "src/app.py"
     }
@@ -21,6 +22,12 @@
     "codeguard": {
       "command": "codeguard src/{bc}/ --format json > quality/reports/codeguard/{US_ID}-codeguard.json",
       "designreviewer_command": "designreviewer src/ --config pyproject.toml"
+    },
+    "frontend": {
+      "build_command": "npm run build",
+      "lint_command": "npm run lint",
+      "working_directory": "frontend",
+      "validation_mode": "manual-ui"
     },
     "coverage": { "min_percent": 90.0 }
   },

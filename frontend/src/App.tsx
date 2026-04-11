@@ -4,6 +4,7 @@ import useAuthStore from './stores/useAuthStore'
 import { LoginPage } from './pages/LoginPage'
 import { RequireRole } from './components/RequireRole'
 import { DisciplinasPage } from './pages/juez/DisciplinasPage'
+import { GrillaPage } from './pages/juez/GrillaPage'
 import { DashboardPage } from './pages/organizador/DashboardPage'
 import { HealthCheck } from './components/HealthCheck'
 
@@ -30,6 +31,14 @@ function App() {
           element={
             <RequireRole role="juez">
               <DisciplinasPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/juez/grilla"
+          element={
+            <RequireRole role="juez">
+              <GrillaPage />
             </RequireRole>
           }
         />

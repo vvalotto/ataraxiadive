@@ -16,6 +16,7 @@ Uso en phase files:
 
 import sys
 import json
+import os
 from pathlib import Path
 
 # Agregar el directorio padre al path para importar time_tracker
@@ -32,6 +33,12 @@ def _find_active_us_id() -> str:
     Raises:
         SystemExit: Si no hay tracking activo
     """
+    forced_us_id = os.environ.get("TRACKER_US_ID")
+    if forced_us_id:
+        forced_path = Path(f".claude/tracking/{forced_us_id}-tracking.json")
+        if forced_path.exists():
+            return forced_us_id
+
     tracking_dir = Path(".claude/tracking")
     for json_file in tracking_dir.glob("US-*-tracking.json"):
         try:

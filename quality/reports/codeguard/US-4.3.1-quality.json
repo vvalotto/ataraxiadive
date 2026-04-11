@@ -1,0 +1,26 @@
+{
+  "us_id": "US-4.3.1",
+  "fecha": "2026-04-11",
+  "producto": "frontend",
+  "tipo_validacion": "frontend-react",
+  "build": {
+    "estado": "APROBADO",
+    "comando": "npm run build",
+    "working_directory": "frontend"
+  },
+  "lint": {
+    "estado": "APROBADO",
+    "comando": "npm run lint",
+    "working_directory": "frontend"
+  },
+  "bdd_manual": {
+    "estado": "PENDIENTE",
+    "feature": "tests/features/US-4.3.1-mis-disciplinas.feature"
+  },
+  "estado_final": "APROBADO_TECNICO",
+  "observaciones": [
+    "El repo no tiene harness automatizado de unit/integration tests para frontend.",
+    "La validacion funcional de browser queda pendiente con backend corriendo.",
+    "Se agrego proxy Vite para /torneos y /competencia requerido por esta US."
+  ]
+}

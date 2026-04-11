@@ -299,6 +299,14 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
+## 14. US-IEDD SP4 INC-4.3 — Interfaz del Juez
+
+| US | Inc. | RFs / Decisiones cubiertos | Contenido principal | Estado |
+|----|------|----------------------------|---------------------|--------|
+| US-4.3.1 | 4.3 | D-02, D-03 · wireframes-juez S-01 | MisDisciplinas real en React · `api/torneo.ts` + `api/competencia.ts` · `useCompetenciaStore` · `DisciplinaCard` · `JuezLayout` · ruta `/juez/grilla` stub · `npm run build` y `npm run lint` OK · validación manual pendiente | 🟡 2026-04-11 |
+
+---
+
 ## 15. Trazabilidad: Discrepancias → US → Documentos a actualizar
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
