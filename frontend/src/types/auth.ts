@@ -1,5 +1,12 @@
 export type RolUsuario = 'juez' | 'organizador'
 
+export type EstadoPerformance =
+  | 'AnunciadaAP'
+  | 'Llamada'
+  | 'ResultadoRegistrado'
+  | 'Ejecutada'
+  | 'DNS'
+
 export interface AuthState {
   token: string | null
   userId: string | null

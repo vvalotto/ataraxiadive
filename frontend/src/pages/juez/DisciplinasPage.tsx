@@ -14,11 +14,7 @@ interface DisciplinaViewModel {
   competenciaId: string
 }
 
-function esTorneoActivo(estado: string) {
-  return estado === 'EJECUCION' || estado === 'EnEjecucion'
-}
-
-function esCompetenciaActiva(estado: string) {
+function esEnEjecucion(estado: string) {
   return estado === 'EJECUCION' || estado === 'EnEjecucion'
 }
 
@@ -32,7 +28,7 @@ export function DisciplinasPage() {
   const torneoActivoQuery = useQuery({
     queryKey: ['torneos'],
     queryFn: fetchTorneos,
-    select: (torneos) => torneos.find((torneo) => esTorneoActivo(torneo.estado)) ?? null,
+    select: (torneos) => torneos.find((torneo) => esEnEjecucion(torneo.estado)) ?? null,
   })
 
   const disciplinasQuery = useQuery({
@@ -62,7 +58,7 @@ export function DisciplinasPage() {
           return {
             disciplina,
             competenciaId: competencia.competencia_id,
-            estado: esCompetenciaActiva(estado.estado) ? 'ACTIVA' : 'PENDIENTE',
+            estado: esEnEjecucion(estado.estado) ? 'ACTIVA' : 'PENDIENTE',
           } satisfies DisciplinaViewModel
         }),
       )
