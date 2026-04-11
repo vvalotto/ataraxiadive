@@ -6,7 +6,7 @@
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
 | **Fecha** | 2026-04-09 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.13 — SP4 INC-4.2 completo (US-4.2.1 + US-4.2.2 implementadas) |
+| **Estado** | ✅ v1.13 — SP4 INC-4.2 implementado y consolidado técnicamente; validación manual pendiente |
 
 ---
 
@@ -286,10 +286,24 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ## 13. US-IEDD SP4 INC-4.2 — Fundación Frontend
 
+> Estado del incremento al 2026-04-11: ambas US están mergeadas a `develop` y el
+> `DesignReviewer` manual consolidado dio `0 CRITICAL · 142 WARNING`
+> (`quality/reports/designreviewer/INC-4.2-report.txt`). Queda pendiente la
+> validación manual en browser con backend corriendo para considerar el cierre
+> funcional completo del incremento.
+
 | US | Inc. | RFs / Decisiones cubiertos | Contenido principal | Estado |
 |----|------|----------------------------|---------------------|--------|
 | US-4.2.1 | 4.2 | D-01..D-06 (decisiones-frontend.md) · ADR-003 | Scaffold Vite 6 + React 19 + TypeScript strict · Tailwind v4 · vite-plugin-pwa (manifest standalone+portrait, Workbox NetworkFirst) · HealthCheck (TanStack Query) · useConnectionStore (Zustand) · estructura D-01 · npm run build exitcode 0 | ✅ 2026-04-11 |
 | US-4.2.2 | 4.2 | D-02 (routing+guards) · D-03 (Zustand) | useAuthStore (Zustand, sin persistencia) · loginApi() POST /auth/login · decodeJwtPayload() atob() · LoginPage (TanStack Query mutation, error inline) · RequireRole HOC · BrowserRouter + rutas /login /juez/disciplinas /organizador/dashboard · npm run build exitcode 0 | ✅ 2026-04-11 |
+
+---
+
+## 14. US-IEDD SP4 INC-4.3 — Interfaz del Juez
+
+| US | Inc. | RFs / Decisiones cubiertos | Contenido principal | Estado |
+|----|------|----------------------------|---------------------|--------|
+| US-4.3.1 | 4.3 | D-02, D-03 · wireframes-juez S-01 | MisDisciplinas real en React · `api/torneo.ts` + `api/competencia.ts` · `useCompetenciaStore` · `DisciplinaCard` · `JuezLayout` · ruta `/juez/grilla` stub · `npm run build` y `npm run lint` OK · validación manual pendiente | 🟡 2026-04-11 |
 
 ---
 
@@ -388,7 +402,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.5 — 2026-03-30: US-3.1.2 implementada — API REST Torneo completa*
 *v1.6 — 2026-04-02: SP3 completado a nivel US — §9 y tabla US→Tests actualizadas hasta US-3.5.3*
 *v1.10 — 2026-04-03: SP-ADJ-04 completado (§2, §11), US-ADJ-4.6 implementada, RF-IN-10 incorporado a cobertura total (§14)*
-*v1.13 — 2026-04-11: US-4.2.2 implementada — INC-4.2 completo*
+*v1.13 — 2026-04-11: US-4.2.2 implementada y mergeada · DesignReviewer consolidado INC-4.2 OK · validación manual pendiente*
 *v1.12 — 2026-04-11: SP4 INC-4.2 §13 agregado · US-4.2.1 implementada (scaffold frontend) · §§ renumerados*
 *v1.11 — 2026-04-09: SP4 INC-4.1 agregado (§12 nuevo) · RF-GT-02 y RF-PR-05 actualizados · §13-§16 renumerados · US-4.1.x en §15 y §16*
 *Fuentes: 05-requerimientos_funcionales.md · Context Map v1.1 · estrategia-desarrollo-bc.md · ES Competencia*
