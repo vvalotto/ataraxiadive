@@ -1,0 +1,36 @@
+{
+  "us_id": "US-4.3.3",
+  "fecha": "2026-04-11",
+  "producto": "frontend+backend",
+  "tipo_validacion": "full-stack-alternative-performance-flows",
+  "build": {
+    "estado": "APROBADO",
+    "comando": "npm run build",
+    "working_directory": "frontend"
+  },
+  "lint": {
+    "estado": "APROBADO",
+    "comando": "npm run lint",
+    "working_directory": "frontend"
+  },
+  "python_compile": {
+    "estado": "APROBADO",
+    "comando": "./.venv/bin/python -m compileall src scripts/setup_us_4_3_3_fixture.py",
+    "working_directory": "."
+  },
+  "smoke_backend": {
+    "estado": "APROBADO",
+    "comando": "IDENTIDAD_JWT_SECRET=dev ./.venv/bin/python - <<'PY' ... TestClient DNS/BKO/penalizaciones ... PY",
+    "working_directory": "."
+  },
+  "bdd_manual": {
+    "estado": "PENDIENTE",
+    "feature": "tests/features/US-4.3.3-casos-alternativos-performance.feature"
+  },
+  "estado_final": "APROBADO_TECNICO",
+  "observaciones": [
+    "Se agrego POST /competencia/{id}/registrar-dns.",
+    "La UI mapea penalizaciones a BlancaConPenalizaciones segun el contrato real del backend.",
+    "MotivoDQ y disciplinas con penalizaciones quedaron alineados al dominio vigente."
+  ]
+}

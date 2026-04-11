@@ -5,10 +5,14 @@ import {
   ApiError,
   asignarTarjeta,
   llamarAtleta,
+  registrarDns,
   registrarResultado,
+  type PenalizacionPayload,
 } from '../../api/competencia'
 import { AtletaCard } from '../../components/juez/AtletaCard'
 import { JuezLayout } from '../../components/juez/JuezLayout'
+import { MotivoDqSelector } from '../../components/juez/MotivoDqSelector'
+import { PenalizacionesSelector } from '../../components/juez/PenalizacionesSelector'
 import { RpSelector } from '../../components/juez/RpSelector'
 import { StepIndicator } from '../../components/juez/StepIndicator'
 import useCompetenciaStore from '../../stores/useCompetenciaStore'
@@ -22,8 +26,34 @@ const dqReasons = [
   'SALIDA_EN_FALSO',
 ] as const
 
+const bkoReasons = ['BKO_SUPERFICIE', 'BKO_SUBACUATICO'] as const
+const penaltyTypes = [
+  'SIN_CONTACTO_PARED',
+  'FUERA_DE_CARRIL',
+  'ASISTENTE_EN_ZONA',
+  'PATADA_DELFIN_BIALETAS',
+] as const
+
+type TarjetaSeleccionada = 'Blanca' | 'Roja' | 'BlancaConPenalizaciones' | null
+type ResultadoFinal = 'BLANCA' | 'BLANCA_CON_PENALIZACIONES' | 'ROJA' | 'DNS' | null
+
 function buildRpValue(metros: number, centimetros: string) {
   return `${metros}.${centimetros.padEnd(2, '0')}`
+}
+
+function formatMarca(value: string, unidad: string) {
+  return `${value} ${unidad === 'Segundos' ? 's' : 'm'}`
+}
+
+function admitePenalizaciones(disciplina: string) {
+  return disciplina === 'DNF' || disciplina === 'DYN' || disciplina === 'DBF'
+}
+
+function buildPenalizaciones(count: number): PenalizacionPayload[] {
+  return Array.from({ length: count }, (_, index) => ({
+    tipo: penaltyTypes[index % penaltyTypes.length],
+    deduccion: '3',
+  }))
 }
 
 export function PerformanceFlowPage() {
@@ -35,24 +65,47 @@ export function PerformanceFlowPage() {
   const seleccionarAtleta = useCompetenciaStore((s) => s.seleccionarAtleta)
   const limpiarAtleta = useCompetenciaStore((s) => s.limpiarAtleta)
 
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(() => {
+    const estado = atletaActivo?.estado
+    if (estado === 'Llamada') return 2
+    if (estado === 'ResultadoRegistrado') return 6
+    return 1
+  })
   const [inlineError, setInlineError] = useState<string | null>(null)
   const [metros, setMetros] = useState(0)
   const [centimetros, setCentimetros] = useState('')
   const [chronoStarted, setChronoStarted] = useState(false)
-  const [selectedCard, setSelectedCard] = useState<'Blanca' | 'Roja' | null>(null)
-  const [motivoDq, setMotivoDq] = useState<(typeof dqReasons)[number] | ''>('')
+  const [selectedCard, setSelectedCard] = useState<TarjetaSeleccionada>(null)
+  const [motivoDq, setMotivoDq] = useState('')
   const [distanciaBlackout, setDistanciaBlackout] = useState('')
+  const [penaltyCount, setPenaltyCount] = useState(0)
+  const [isBkoMode, setIsBkoMode] = useState(false)
   const [completed, setCompleted] = useState(false)
+  const [resultKind, setResultKind] = useState<ResultadoFinal>(null)
 
   const rpConfirmDisabled = metros === 0 && centimetros.length === 0
   const needsBlackoutDistance = motivoDq === 'BKO_SUPERFICIE' || motivoDq === 'BKO_SUBACUATICO'
+  const isSTA = atletaActivo?.unidad === 'Segundos'
+  const disciplinaPermitePenalizaciones = disciplinaActiva
+    ? admitePenalizaciones(disciplinaActiva)
+    : false
 
   const refreshCompetencia = async () => {
     await Promise.all([
       queryClient.invalidateQueries({ queryKey: ['grilla', competenciaId, disciplinaActiva] }),
       queryClient.invalidateQueries({ queryKey: ['performance-actual', competenciaId] }),
     ])
+  }
+
+  const finalizeResult = async (
+    kind: ResultadoFinal,
+    nextState: 'Ejecutada' | 'DNS',
+  ) => {
+    setInlineError(null)
+    await refreshCompetencia()
+    seleccionarAtleta({ ...atletaActivo!, estado: nextState })
+    setResultKind(kind)
+    setCompleted(true)
   }
 
   const llamarMutation = useMutation({
@@ -81,6 +134,22 @@ export function PerformanceFlowPage() {
     },
   })
 
+  const dnsMutation = useMutation({
+    mutationFn: async () => {
+      await registrarDns({
+        competenciaId: competenciaId!,
+        participanteId: atletaActivo!.atletaId,
+        disciplina: disciplinaActiva!,
+      })
+    },
+    onSuccess: async () => {
+      await finalizeResult('DNS', 'DNS')
+    },
+    onError: (error) => {
+      setInlineError(error instanceof Error ? error.message : 'No se pudo registrar DNS')
+    },
+  })
+
   const resultadoMutation = useMutation({
     mutationFn: async () => {
       await registrarResultado({
@@ -104,6 +173,8 @@ export function PerformanceFlowPage() {
 
   const tarjetaMutation = useMutation({
     mutationFn: async () => {
+      const penalizaciones =
+        selectedCard === 'BlancaConPenalizaciones' ? buildPenalizaciones(penaltyCount) : []
       await asignarTarjeta({
         competenciaId: competenciaId!,
         participanteId: atletaActivo!.atletaId,
@@ -112,16 +183,47 @@ export function PerformanceFlowPage() {
         motivoDq: selectedCard === 'Roja' ? motivoDq : undefined,
         distanciaBlackout:
           selectedCard === 'Roja' && needsBlackoutDistance ? distanciaBlackout : undefined,
+        penalizaciones,
       })
     },
     onSuccess: async () => {
-      setInlineError(null)
-      await refreshCompetencia()
-      seleccionarAtleta({ ...atletaActivo!, estado: 'Ejecutada' })
-      setCompleted(true)
+      const kind =
+        selectedCard === 'Roja'
+          ? 'ROJA'
+          : selectedCard === 'BlancaConPenalizaciones'
+            ? 'BLANCA_CON_PENALIZACIONES'
+            : 'BLANCA'
+      await finalizeResult(kind, 'Ejecutada')
     },
     onError: (error) => {
       setInlineError(error instanceof Error ? error.message : 'No se pudo asignar la tarjeta')
+    },
+  })
+
+  const bkoMutation = useMutation({
+    mutationFn: async () => {
+      const valorRp = isSTA ? '0' : buildRpValue(metros, centimetros)
+      await registrarResultado({
+        competenciaId: competenciaId!,
+        participanteId: atletaActivo!.atletaId,
+        disciplina: disciplinaActiva!,
+        valorRp,
+        unidad: atletaActivo!.unidad || 'Metros',
+      })
+      await asignarTarjeta({
+        competenciaId: competenciaId!,
+        participanteId: atletaActivo!.atletaId,
+        disciplina: disciplinaActiva!,
+        tarjeta: 'Roja',
+        motivoDq,
+        distanciaBlackout: isSTA ? undefined : distanciaBlackout,
+      })
+    },
+    onSuccess: async () => {
+      await finalizeResult('ROJA', 'Ejecutada')
+    },
+    onError: (error) => {
+      setInlineError(error instanceof Error ? error.message : 'No se pudo registrar BKO')
     },
   })
 
@@ -137,6 +239,36 @@ export function PerformanceFlowPage() {
     }
     return true
   }, [selectedCard, motivoDq, needsBlackoutDistance, distanciaBlackout])
+
+  const canSubmitBko = isSTA
+    ? motivoDq.length > 0
+    : !rpConfirmDisabled && motivoDq.length > 0 && !needsBlackoutDistance
+      ? true
+      : !rpConfirmDisabled && motivoDq.length > 0 && distanciaBlackout.trim().length > 0
+
+  const completionTitle = useMemo(() => {
+    if (resultKind === 'DNS') {
+      return 'DNS REGISTRADO'
+    }
+    if (resultKind === 'ROJA') {
+      return 'TARJETA ROJA'
+    }
+    if (resultKind === 'BLANCA_CON_PENALIZACIONES') {
+      return 'TARJETA BLANCA CON PENALIZACIONES'
+    }
+    return 'TARJETA BLANCA'
+  }, [resultKind])
+
+  const completionSubtitle = useMemo(() => {
+    if (resultKind === 'DNS') {
+      return 'No se presentó'
+    }
+    const marca = formatMarca(buildRpValue(metros, centimetros), atletaActivo?.unidad ?? 'Metros')
+    if (resultKind === 'BLANCA_CON_PENALIZACIONES') {
+      return `${marca} · ${penaltyCount} penalizaciones`
+    }
+    return marca
+  }, [resultKind, metros, centimetros, atletaActivo?.unidad, penaltyCount])
 
   if (!competenciaId || !disciplinaActiva || !atletaActivo) {
     return <Navigate to="/juez/grilla" replace />
@@ -177,7 +309,9 @@ export function PerformanceFlowPage() {
       {!completed && step === 1 ? (
         <section className="space-y-4 rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5">
           <h3 className="text-xl font-semibold text-white">Paso 1 · Llamada</h3>
-          <p className="text-sm text-slate-300">Confirma la llamada del atleta para habilitar la performance.</p>
+          <p className="text-sm text-slate-300">
+            Confirma la llamada del atleta para habilitar la performance.
+          </p>
           <button
             type="button"
             onClick={() => llamarMutation.mutate()}
@@ -192,21 +326,39 @@ export function PerformanceFlowPage() {
       {!completed && step === 2 ? (
         <section className="space-y-4 rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5">
           <h3 className="text-xl font-semibold text-white">Paso 2 · Confirmar presencia</h3>
-          <p className="text-sm text-slate-300">Confirmado que el atleta está en cámara y listo para iniciar.</p>
-          <button
-            type="button"
-            onClick={() => setStep(3)}
-            className="w-full rounded-2xl bg-emerald-400 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950"
-          >
-            CONTINUAR
-          </button>
+          <p className="text-sm text-slate-300">
+            Confirmado que el atleta está en cámara y listo para iniciar.
+          </p>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => setStep(3)}
+              className="w-full rounded-2xl bg-emerald-400 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950"
+            >
+              CONTINUAR
+            </button>
+            <button
+              type="button"
+              onClick={() => dnsMutation.mutate()}
+              disabled={dnsMutation.isPending}
+              className="w-full rounded-2xl border border-red-300/30 bg-red-500/10 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-red-100 disabled:opacity-60"
+            >
+              DNS — NO SE PRESENTA
+            </button>
+          </div>
         </section>
       ) : null}
 
       {!completed && step === 3 ? (
         <section className="space-y-4 rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5">
           <h3 className="text-xl font-semibold text-white">Paso 3 · OT</h3>
-          <p className="text-sm text-slate-300">OT programado: {new Date(atletaActivo.otProgramado).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+          <p className="text-sm text-slate-300">
+            OT programado:{' '}
+            {new Date(atletaActivo.otProgramado).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </p>
           <button
             type="button"
             onClick={() => setStep(4)}
@@ -217,7 +369,7 @@ export function PerformanceFlowPage() {
         </section>
       ) : null}
 
-      {!completed && step === 4 ? (
+      {!completed && step === 4 && !isBkoMode ? (
         <section className="space-y-4 rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5">
           <h3 className="text-xl font-semibold text-white">Paso 4 · Performance</h3>
           <p className="text-sm text-slate-300">
@@ -242,6 +394,64 @@ export function PerformanceFlowPage() {
               FINALIZAR PERFORMANCE
             </button>
           )}
+          <button
+            type="button"
+            onClick={() => {
+              setIsBkoMode(true)
+              setSelectedCard('Roja')
+              setMotivoDq('BKO_SUBACUATICO')
+            }}
+            className="w-full rounded-2xl border border-red-300/30 bg-red-500/10 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-red-100"
+          >
+            BKO — BLACK-OUT
+          </button>
+        </section>
+      ) : null}
+
+      {!completed && step === 4 && isBkoMode ? (
+        <section className="space-y-4 rounded-[2rem] border border-red-300/20 bg-red-500/8 p-5">
+          <h3 className="text-xl font-semibold text-white">BKO</h3>
+          <p className="text-sm text-slate-300">
+            Registra la distancia alcanzada y el motivo de descalificación.
+          </p>
+          {!isSTA ? (
+            <>
+              <RpSelector
+                metros={metros}
+                centimetros={centimetros}
+                onMetrosChange={setMetros}
+                onCentimetrosChange={setCentimetros}
+              />
+              <input
+                value={distanciaBlackout}
+                onChange={(event) => setDistanciaBlackout(event.target.value)}
+                placeholder="Distancia blackout"
+                className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white"
+              />
+            </>
+          ) : null}
+          <MotivoDqSelector value={motivoDq} options={bkoReasons} onChange={setMotivoDq} />
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => {
+                setIsBkoMode(false)
+                setMotivoDq('')
+                setDistanciaBlackout('')
+              }}
+              className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-100"
+            >
+              CANCELAR
+            </button>
+            <button
+              type="button"
+              disabled={!canSubmitBko || bkoMutation.isPending}
+              onClick={() => bkoMutation.mutate()}
+              className="w-full rounded-2xl bg-red-300 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950 disabled:opacity-50"
+            >
+              CONFIRMAR BKO — TARJETA ROJA
+            </button>
+          </div>
         </section>
       ) : null}
 
@@ -268,41 +478,36 @@ export function PerformanceFlowPage() {
         <section className="space-y-4 rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5">
           <h3 className="text-xl font-semibold text-white">Paso 6 · Tarjeta</h3>
           <div className="grid grid-cols-2 gap-3">
-            {(['Blanca', 'Roja'] as const).map((card) => (
+            {([
+              ['Blanca', 'Tarjeta Blanca'],
+              ['Roja', 'Tarjeta Roja'],
+            ] as const).map(([card, label]) => (
               <button
                 key={card}
                 type="button"
-                onClick={() => setSelectedCard(card)}
+                onClick={() => {
+                  setSelectedCard(card)
+                  if (card === 'Blanca') {
+                    setMotivoDq('')
+                    setDistanciaBlackout('')
+                  }
+                }}
                 className={[
                   'rounded-2xl border px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] transition',
-                  selectedCard === card
+                  (selectedCard === card ||
+                    (card === 'Blanca' && selectedCard === 'BlancaConPenalizaciones'))
                     ? 'border-cyan-300 bg-cyan-400/15 text-cyan-100'
                     : 'border-slate-700 bg-slate-950/70 text-slate-200',
                 ].join(' ')}
               >
-                Tarjeta {card}
+                {label}
               </button>
             ))}
           </div>
 
           {selectedCard === 'Roja' ? (
-            <div className="space-y-3 rounded-2xl bg-slate-950/70 p-4">
-              <label className="block text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Motivo DQ
-              </label>
-              <select
-                value={motivoDq}
-                onChange={(event) => setMotivoDq(event.target.value as (typeof dqReasons)[number] | '')}
-                className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white"
-              >
-                <option value="">Seleccionar</option>
-                {dqReasons.map((reason) => (
-                  <option key={reason} value={reason}>
-                    {reason}
-                  </option>
-                ))}
-              </select>
-
+            <>
+              <MotivoDqSelector value={motivoDq} options={dqReasons} onChange={setMotivoDq} />
               {needsBlackoutDistance ? (
                 <input
                   value={distanciaBlackout}
@@ -311,12 +516,29 @@ export function PerformanceFlowPage() {
                   className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white"
                 />
               ) : null}
-            </div>
+            </>
+          ) : null}
+
+          {(selectedCard === 'Blanca' || selectedCard === 'BlancaConPenalizaciones') ? (
+            <PenalizacionesSelector
+              disciplina={disciplinaActiva}
+              count={penaltyCount}
+              onChange={(next) => {
+                setPenaltyCount(next)
+                setSelectedCard(next > 0 ? 'BlancaConPenalizaciones' : 'Blanca')
+              }}
+            />
           ) : null}
 
           <button
             type="button"
-            disabled={!selectedCard || !canSubmitRedCard || tarjetaMutation.isPending}
+            disabled={
+              !selectedCard ||
+              !canSubmitRedCard ||
+              (selectedCard === 'BlancaConPenalizaciones' &&
+                (!disciplinaPermitePenalizaciones || penaltyCount === 0)) ||
+              tarjetaMutation.isPending
+            }
             onClick={() => tarjetaMutation.mutate()}
             className="w-full rounded-2xl bg-cyan-400 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950 disabled:opacity-50"
           >
@@ -328,11 +550,10 @@ export function PerformanceFlowPage() {
       {completed ? (
         <section className="space-y-4 rounded-[2rem] border border-emerald-300/30 bg-emerald-400/10 p-5">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-300">
-            Performance completada
+            {resultKind === 'DNS' ? 'DNS registrado' : 'Performance completada'}
           </p>
-          <h3 className="text-2xl font-semibold text-white">
-            TARJETA {selectedCard?.toUpperCase()} · {buildRpValue(metros, centimetros)} m
-          </h3>
+          <h3 className="text-2xl font-semibold text-white">{completionTitle}</h3>
+          <p className="text-sm text-slate-200">{completionSubtitle}</p>
           <button
             type="button"
             onClick={() => {

@@ -42,6 +42,11 @@ from competencia.application.commands.registrar_resultado import (
     PerformanceNoEncontrada as PerformanceNoEncontradaRegistrarResultado,
     UnidadIncompatible,
 )
+from competencia.application.commands.registrar_dns import (
+    RegistrarDNSCommand,
+    RegistrarDNSHandler,
+    PerformanceNoEncontrada as PerformanceNoEncontradaRegistrarDns,
+)
 from competencia.application.queries.obtener_competencias_por_torneo import (
     ObtenerCompetenciasPorTorneoHandler,
     ObtenerCompetenciasPorTorneoQuery,
@@ -172,6 +177,13 @@ class RegistrarResultadoBody(BaseModel):
     unidad: UnidadMedida
 
 
+class RegistrarDNSBody(BaseModel):
+    """Body del endpoint POST /competencia/{id}/registrar-dns."""
+
+    participante_id: UUID
+    disciplina: Disciplina
+
+
 class PenalizacionTecnicaBody(BaseModel):
     """Payload de una penalización técnica individual."""
 
@@ -264,6 +276,14 @@ def get_asignar_tarjeta_handler(
     return AsignarTarjetaHandler(event_store, performances_estado)
 
 
+def get_registrar_dns_handler(
+    event_store: EventStoreDep,
+    performances_estado: PerformancesEstadoAdapterDep,
+) -> RegistrarDNSHandler:
+    """Dependency: handler para registrar DNS."""
+    return RegistrarDNSHandler(event_store, performances_estado)
+
+
 EventStoreDep = Annotated[EventStorePort, Depends(get_event_store)]
 DisciplinaDescriptorDep = Annotated[DisciplinaDescriptorAdapter, Depends(get_disciplina_descriptor)]
 CompetenciasPorTorneoProjectionDep = Annotated[
@@ -281,6 +301,9 @@ RegistrarResultadoHandlerDep = Annotated[
 ]
 AsignarTarjetaHandlerDep = Annotated[
     AsignarTarjetaHandler, Depends(get_asignar_tarjeta_handler)
+]
+RegistrarDNSHandlerDep = Annotated[
+    RegistrarDNSHandler, Depends(get_registrar_dns_handler)
 ]
 
 
@@ -633,6 +656,30 @@ async def post_registrar_resultado(
     except UnidadIncompatible as exc:
         return JSONResponse(status_code=422, content={"detail": str(exc)})
     except PerformanceNoEncontradaRegistrarResultado as exc:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
+    except DomainError as exc:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+    return JSONResponse(content=None, status_code=204)
+
+
+@router.post("/{competencia_id}/registrar-dns", response_class=JSONResponse)
+async def post_registrar_dns(
+    competencia_id: UUID,
+    body: RegistrarDNSBody,
+    handler: RegistrarDNSHandlerDep,
+    user: JuezDep,
+) -> JSONResponse:
+    """Registra que el atleta no se presentó."""
+    try:
+        await handler.handle(
+            RegistrarDNSCommand(
+                competencia_id=competencia_id,
+                participante_id=body.participante_id,
+                disciplina=body.disciplina,
+                registrado_por=user["email"],
+            )
+        )
+    except PerformanceNoEncontradaRegistrarDns as exc:
         return JSONResponse(status_code=404, content={"detail": str(exc)})
     except DomainError as exc:
         return JSONResponse(status_code=409, content={"detail": str(exc)})

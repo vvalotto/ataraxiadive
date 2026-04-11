@@ -305,6 +305,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 |----|------|----------------------------|---------------------|--------|
 | US-4.3.1 | 4.3 | D-02, D-03 · wireframes-juez S-01 | MisDisciplinas real en React · `api/torneo.ts` + `api/competencia.ts` · `useCompetenciaStore` · `DisciplinaCard` · `JuezLayout` · ruta `/juez/grilla` stub · `npm run build` y `npm run lint` OK · validación manual pendiente | 🟡 2026-04-11 |
 | US-4.3.2 | 4.3 | RF-EJ-05, RF-EJ-06 · wireframes-juez S-02 a S-09 | router `competencia` con `POST /llamar`, `POST /registrar-resultado`, `POST /asignar-tarjeta` · grilla enriquecida con estado/AP · `GrillaPage` operativa · wizard móvil `/juez/performance` · `StepIndicator`, `AtletaCard`, `RpSelector` · `npm run build`, `npm run lint`, `compileall` y smoke test `TestClient` OK · validación manual UI confirmada | ✅ 2026-04-11 |
+| US-4.3.3 | 4.3 | RF-EJ-07, RF-EJ-08 · wireframes-juez S-12 a S-14 | router `competencia` con `POST /registrar-dns` · wizard extendido con DNS, BKO, roja con `MotivoDQ` y `BlancaConPenalizaciones` · `MotivoDqSelector` · `PenalizacionesSelector` · fixture `STA` + `DNF` · `npm run build`, `npm run lint`, `compileall` y smoke test `TestClient` OK · validación manual pendiente | 🟡 2026-04-11 |
 
 ---
 

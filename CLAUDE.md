@@ -347,7 +347,7 @@ Resumen operativo (ver WORKFLOW-DESARROLLO.md para el detalle completo):
 git config core.hooksPath .githooks   # activa el pre-push hook de DesignReviewer
 
 # Entorno de desarrollo (sin Docker — ADR-010)
-uv run fastapi dev src/app.py
+uv run uvicorn src.app:app --reload --env-file .env
 
 # Tests
 pytest tests/unit/

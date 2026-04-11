@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import type { EstadoPerformance } from '../types/auth'
 
 export interface AtletaActivo {
   performanceId: string
@@ -9,7 +10,7 @@ export interface AtletaActivo {
   otProgramado: string
   apDeclarado: string
   unidad: string
-  estado: string
+  estado: EstadoPerformance
 }
 
 interface CompetenciaState {
