@@ -63,6 +63,10 @@ export default defineConfig(({ mode }) => {
           target: apiUrl,
           changeOrigin: true,
         },
+        '/auth': {
+          target: apiUrl,
+          changeOrigin: true,
+        },
       },
     },
   }
