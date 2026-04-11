@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import os
+from datetime import datetime
+from decimal import Decimal
 from typing import Annotated
 from uuid import UUID
 
@@ -10,6 +12,11 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
+from competencia.application.commands.asignar_tarjeta import (
+    AsignarTarjetaCommand,
+    AsignarTarjetaHandler,
+    PerformanceNoEncontrada as PerformanceNoEncontradaAsignarTarjeta,
+)
 from competencia.application.commands.ajustar_grilla import (
     AjustarGrillaCommand,
     AjustarGrillaHandler,
@@ -21,6 +28,19 @@ from competencia.application.commands.confirmar_grilla import (
 from competencia.application.commands.configurar_intervalo_ot import (
     ConfigurarIntervaloOTCommand,
     ConfigurarIntervaloOTHandler,
+)
+from competencia.application.commands.llamar_atleta import (
+    AndarivelesConflicto,
+    CompetenciaNoEnEjecucion,
+    LlamarAtletaCommand,
+    LlamarAtletaHandler,
+    PerformanceNoEncontrada as PerformanceNoEncontradaLlamar,
+)
+from competencia.application.commands.registrar_resultado import (
+    RegistrarResultadoCommand,
+    RegistrarResultadoHandler,
+    PerformanceNoEncontrada as PerformanceNoEncontradaRegistrarResultado,
+    UnidadIncompatible,
 )
 from competencia.application.queries.obtener_competencias_por_torneo import (
     ObtenerCompetenciasPorTorneoHandler,
@@ -63,9 +83,17 @@ from competencia.application.queries.obtener_progreso import (
 )
 from competencia.domain.value_objects.cambio_grilla import CambioGrilla
 from competencia.domain.value_objects.disciplina import Disciplina
+from competencia.domain.value_objects.motivo_dq import MotivoDQ
+from competencia.domain.value_objects.penalizacion_tecnica import PenalizacionTecnica
+from competencia.domain.value_objects.tipo_penalizacion import TipoPenalizacion
+from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
+from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.domain.ports.competencias_por_torneo_port import CompetenciasPorTorneoPort
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
+from competencia.infrastructure.repositories.competencia_estado_adapter import (
+    CompetenciaEstadoAdapter,
+)
 from competencia.infrastructure.repositories.andariveles_activos_adapter import (
     AndarivelesActivosAdapter,
 )
@@ -78,7 +106,8 @@ from competencia.infrastructure.repositories.performances_estado_adapter import 
 from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
     SQLiteCompetenciasPorTorneo,
 )
-from shared.api.dependencies import OrganizadorDep
+from competencia.domain.exceptions import DomainError
+from shared.api.dependencies import JuezDep, OrganizadorDep
 
 router = APIRouter(prefix="/competencia", tags=["competencia"])
 
@@ -124,6 +153,49 @@ class ConfigurarOTBody(BaseModel):
     torneo_id: UUID | None = None
 
 
+class LlamarAtletaBody(BaseModel):
+    """Body del endpoint POST /competencia/{id}/llamar."""
+
+    participante_id: UUID
+    disciplina: Disciplina
+    ot_programado: datetime
+    posicion_grilla: int
+    andarivel: int = 1
+
+
+class RegistrarResultadoBody(BaseModel):
+    """Body del endpoint POST /competencia/{id}/registrar-resultado."""
+
+    participante_id: UUID
+    disciplina: Disciplina
+    valor_rp: Decimal
+    unidad: UnidadMedida
+
+
+class PenalizacionTecnicaBody(BaseModel):
+    """Payload de una penalización técnica individual."""
+
+    tipo: TipoPenalizacion
+    deduccion: Decimal
+
+
+class AsignarTarjetaBody(BaseModel):
+    """Body del endpoint POST /competencia/{id}/asignar-tarjeta."""
+
+    participante_id: UUID
+    disciplina: Disciplina
+    tipo: TipoTarjeta | None = None
+    tarjeta: TipoTarjeta | None = None
+    motivo_dq: MotivoDQ | None = None
+    motivo_texto: str | None = None
+    distancia_blackout: Decimal | None = None
+    penalizaciones: list[PenalizacionTecnicaBody] = []
+
+    def resolve_tipo(self) -> TipoTarjeta:
+        """Compatibilidad con spec: acepta `tipo` o `tarjeta`."""
+        return self.tipo or self.tarjeta or TipoTarjeta.Blanca
+
+
 # ── Dependency providers ──────────────────────────────────────────────────────
 
 
@@ -165,6 +237,33 @@ def get_obtener_andariveles_activos_handler(
     return ObtenerAndarivelesActivosHandler(AndarivelesActivosAdapter(event_store))
 
 
+def get_llamar_atleta_handler(
+    event_store: EventStoreDep,
+) -> LlamarAtletaHandler:
+    """Dependency: handler para llamar al atleta."""
+    return LlamarAtletaHandler(
+        event_store,
+        CompetenciaEstadoAdapter(event_store),
+        AndarivelesActivosAdapter(event_store),
+    )
+
+
+def get_registrar_resultado_handler(
+    event_store: EventStoreDep,
+    disciplina_descriptor: DisciplinaDescriptorDep,
+) -> RegistrarResultadoHandler:
+    """Dependency: handler para registrar resultado."""
+    return RegistrarResultadoHandler(event_store, disciplina_descriptor)
+
+
+def get_asignar_tarjeta_handler(
+    event_store: EventStoreDep,
+    performances_estado: PerformancesEstadoAdapterDep,
+) -> AsignarTarjetaHandler:
+    """Dependency: handler para asignar tarjeta."""
+    return AsignarTarjetaHandler(event_store, performances_estado)
+
+
 EventStoreDep = Annotated[EventStorePort, Depends(get_event_store)]
 DisciplinaDescriptorDep = Annotated[DisciplinaDescriptorAdapter, Depends(get_disciplina_descriptor)]
 CompetenciasPorTorneoProjectionDep = Annotated[
@@ -175,6 +274,13 @@ ObtenerAndarivelesActivosHandlerDep = Annotated[
 ]
 PerformancesEstadoAdapterDep = Annotated[
     PerformancesEstadoAdapter, Depends(get_performances_estado_adapter)
+]
+LlamarAtletaHandlerDep = Annotated[LlamarAtletaHandler, Depends(get_llamar_atleta_handler)]
+RegistrarResultadoHandlerDep = Annotated[
+    RegistrarResultadoHandler, Depends(get_registrar_resultado_handler)
+]
+AsignarTarjetaHandlerDep = Annotated[
+    AsignarTarjetaHandler, Depends(get_asignar_tarjeta_handler)
 ]
 
 
@@ -474,6 +580,99 @@ async def post_ajustar_grilla(
     return JSONResponse(content=None, status_code=204)
 
 
+@router.post("/{competencia_id}/llamar", response_class=JSONResponse)
+async def post_llamar_atleta(
+    competencia_id: UUID,
+    body: LlamarAtletaBody,
+    handler: LlamarAtletaHandlerDep,
+    user: JuezDep,
+) -> JSONResponse:
+    """Llama al atleta seleccionado para iniciar el flujo de performance."""
+    try:
+        await handler.handle(
+            LlamarAtletaCommand(
+                competencia_id=competencia_id,
+                participante_id=body.participante_id,
+                disciplina=body.disciplina,
+                ot_programado=body.ot_programado,
+                posicion_grilla=body.posicion_grilla,
+                andarivel=body.andarivel,
+            )
+        )
+    except (
+        CompetenciaNoEnEjecucion,
+        AndarivelesConflicto,
+    ) as exc:
+        return JSONResponse(status_code=409, content={"detail": str(exc), "actor": user["email"]})
+    except PerformanceNoEncontradaLlamar as exc:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
+    except DomainError as exc:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+    return JSONResponse(content=None, status_code=204)
+
+
+@router.post("/{competencia_id}/registrar-resultado", response_class=JSONResponse)
+async def post_registrar_resultado(
+    competencia_id: UUID,
+    body: RegistrarResultadoBody,
+    handler: RegistrarResultadoHandlerDep,
+    user: JuezDep,
+) -> JSONResponse:
+    """Registra el RP de la performance activa."""
+    try:
+        await handler.handle(
+            RegistrarResultadoCommand(
+                competencia_id=competencia_id,
+                participante_id=body.participante_id,
+                disciplina=body.disciplina,
+                valor_rp=body.valor_rp,
+                unidad=body.unidad,
+                registrado_por=user["email"],
+            )
+        )
+    except UnidadIncompatible as exc:
+        return JSONResponse(status_code=422, content={"detail": str(exc)})
+    except PerformanceNoEncontradaRegistrarResultado as exc:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
+    except DomainError as exc:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+    return JSONResponse(content=None, status_code=204)
+
+
+@router.post("/{competencia_id}/asignar-tarjeta", response_class=JSONResponse)
+async def post_asignar_tarjeta(
+    competencia_id: UUID,
+    body: AsignarTarjetaBody,
+    handler: AsignarTarjetaHandlerDep,
+    user: JuezDep,
+) -> JSONResponse:
+    """Asigna la tarjeta final de la performance."""
+    try:
+        await handler.handle(
+            AsignarTarjetaCommand(
+                competencia_id=competencia_id,
+                participante_id=body.participante_id,
+                disciplina=body.disciplina,
+                tipo=body.resolve_tipo(),
+                asignada_por=user["email"],
+                motivo_dq=body.motivo_dq,
+                motivo_texto=body.motivo_texto,
+                distancia_blackout=body.distancia_blackout,
+                penalizaciones=tuple(
+                    PenalizacionTecnica(tipo=p.tipo, deduccion=p.deduccion)
+                    for p in body.penalizaciones
+                ),
+            )
+        )
+    except ValueError as exc:
+        return JSONResponse(status_code=422, content={"detail": str(exc)})
+    except PerformanceNoEncontradaAsignarTarjeta as exc:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
+    except DomainError as exc:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+    return JSONResponse(content=None, status_code=204)
+
+
 @router.post("/{competencia_id}/confirmar-grilla", response_class=JSONResponse)
 async def post_confirmar_grilla(
     competencia_id: UUID,
@@ -537,9 +736,13 @@ async def get_grilla(
             {
                 "performance_id": e.performance_id,
                 "atleta_id": e.atleta_id,
+                "nombre_atleta": e.nombre_atleta,
                 "posicion": e.posicion,
                 "andarivel": e.andarivel,
                 "ot_programado": e.ot_programado,
+                "ap_declarado": e.ap_declarado,
+                "unidad": e.unidad,
+                "estado": e.estado,
             }
             for e in entradas
         ],

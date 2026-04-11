@@ -18,6 +18,10 @@ function esTorneoActivo(estado: string) {
   return estado === 'EJECUCION' || estado === 'EnEjecucion'
 }
 
+function esCompetenciaActiva(estado: string) {
+  return estado === 'EJECUCION' || estado === 'EnEjecucion'
+}
+
 export function DisciplinasPage() {
   const navigate = useNavigate()
   const logout = useAuthStore((s) => s.logout)
@@ -58,7 +62,7 @@ export function DisciplinasPage() {
           return {
             disciplina,
             competenciaId: competencia.competencia_id,
-            estado: estado.estado === 'EnEjecucion' ? 'ACTIVA' : 'PENDIENTE',
+            estado: esCompetenciaActiva(estado.estado) ? 'ACTIVA' : 'PENDIENTE',
           } satisfies DisciplinaViewModel
         }),
       )
