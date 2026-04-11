@@ -77,17 +77,22 @@
 
 ## Cierre INC-4.2
 
-Con US-4.2.2 implementada, **INC-4.2 — Fundación Frontend** está completo a nivel de código:
+Con US-4.2.2 implementada y mergeada, **INC-4.2 — Fundación Frontend** quedó
+completo a nivel de código e integración en `develop`:
 
 | US | Descripción | Estado |
 |----|-------------|--------|
 | US-4.2.1 | Scaffold Vite + React + PWA | ✅ mergeada a develop |
-| US-4.2.2 | Autenticación JWT + rutas protegidas | ✅ lista para PR |
+| US-4.2.2 | Autenticación JWT + rutas protegidas | ✅ mergeada a `develop` |
 
-**Pendiente del cierre del incremento (según WORKFLOW-DESARROLLO.md §6):**
+**Estado consolidado del incremento al 2026-04-11:**
+- [x] PR US-4.2.2 → merge a `develop`
+- [x] `DesignReviewer` manual consolidado del incremento (`0 CRITICAL · 142 WARNING`)
 - [ ] Verificación manual de criterios de aceptación (ambas US)
-- [ ] PR US-4.2.2 → merge a develop
-- [ ] DesignReviewer manual consolidado del incremento
+- [ ] Registro en BL-004 activa
+
+**Pendiente para el cierre funcional completo del incremento:**
+- [ ] Verificación manual de criterios de aceptación (ambas US)
 - [ ] Registro en BL-004 activa
 
 ---
