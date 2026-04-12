@@ -184,8 +184,9 @@ export async function asignarTarjeta(payload: {
   competenciaId: string
   participanteId: string
   disciplina: string
-  tarjeta: 'Blanca' | 'Roja' | 'BlancaConPenalizaciones'
+  tarjeta: 'Blanca' | 'Roja' | 'BlancaConPenalizaciones' | 'Amarilla'
   motivoDq?: string
+  motivoTexto?: string
   distanciaBlackout?: string
   penalizaciones?: PenalizacionPayload[]
 }): Promise<void> {
@@ -197,8 +198,31 @@ export async function asignarTarjeta(payload: {
       disciplina: payload.disciplina,
       tarjeta: payload.tarjeta,
       motivo_dq: payload.motivoDq ?? null,
+      motivo_texto: payload.motivoTexto ?? null,
       distancia_blackout: payload.distanciaBlackout ?? null,
       penalizaciones: payload.penalizaciones ?? [],
+    }),
+  })
+
+  await parseResponse<void>(response)
+}
+
+export async function resolverRevision(payload: {
+  competenciaId: string
+  participanteId: string
+  disciplina: string
+  resolucion: 'Blanca' | 'Roja'
+  motivoDq?: string
+}): Promise<void> {
+  const response = await fetch(`/competencia/${payload.competenciaId}/resolver-revision`, {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      participante_id: payload.participanteId,
+      disciplina: payload.disciplina,
+      resolucion: payload.resolucion,
+      motivo_dq: payload.motivoDq ?? null,
+      penalizaciones: [],
     }),
   })
 

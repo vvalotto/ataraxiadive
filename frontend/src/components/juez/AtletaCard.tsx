@@ -22,13 +22,21 @@ export function AtletaCard({
   otProgramado,
   estado,
 }: AtletaCardProps) {
+  const showEstado = estado !== 'AnunciadaAP'
+
   return (
     <section className="rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5 shadow-[0_24px_80px_-50px_rgba(34,211,238,0.7)]">
-      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">{estado}</p>
+      {showEstado ? (
+        <p className="text-center text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">
+          {estado}
+        </p>
+      ) : null}
       <h2 className="mt-3 text-2xl font-semibold text-white">{nombreAtleta}</h2>
       <div className="mt-4 grid grid-cols-3 gap-3 text-sm text-slate-300">
         <div className="rounded-2xl bg-slate-950/70 p-3">
-          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">AP</p>
+          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+            Performance anunciada
+          </p>
           <p className="mt-2 text-lg font-semibold text-slate-50">
             {apDeclarado} {unidad}
           </p>

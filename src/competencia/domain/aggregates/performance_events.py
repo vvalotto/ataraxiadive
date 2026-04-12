@@ -11,6 +11,7 @@ from competencia.domain.events.atleta_llamado import AtletaLlamado
 from competencia.domain.events.dns_registrado import DNSRegistrado
 from competencia.domain.events.resultado_corregido import ResultadoCorregido
 from competencia.domain.events.resultado_registrado import ResultadoRegistrado
+from competencia.domain.events.revision_resuelta import RevisionResuelta
 from competencia.domain.events.tarjeta_asignada import TarjetaAsignada
 from competencia.domain.value_objects.ap import AP
 from competencia.domain.value_objects.disciplina import Disciplina
@@ -155,6 +156,29 @@ def crear_tarjeta_asignada(
         disciplina=disciplina.value,
         **resolucion.to_event_payload(
             asignada_por=asignada_por,
+            asignada_en=now.isoformat(),
+        ),
+    )
+
+
+def crear_revision_resuelta(
+    *,
+    performance_id: UUID,
+    participante_id: UUID,
+    disciplina: Disciplina,
+    resolucion: ResolucionTarjeta,
+    resuelta_por: str,
+) -> RevisionResuelta:
+    now = RevisionResuelta.now()
+    return RevisionResuelta(
+        event_type="RevisionResuelta",
+        aggregate_id=str(performance_id),
+        occurred_at=now,
+        performance_id=str(performance_id),
+        participante_id=str(participante_id),
+        disciplina=disciplina.value,
+        **resolucion.to_event_payload(
+            asignada_por=resuelta_por,
             asignada_en=now.isoformat(),
         ),
     )

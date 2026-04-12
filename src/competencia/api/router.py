@@ -47,6 +47,11 @@ from competencia.application.commands.registrar_dns import (
     RegistrarDNSHandler,
     PerformanceNoEncontrada as PerformanceNoEncontradaRegistrarDns,
 )
+from competencia.application.commands.resolver_revision import (
+    ResolverRevisionCommand,
+    ResolverRevisionHandler,
+    PerformanceNoEncontrada as PerformanceNoEncontradaResolverRevision,
+)
 from competencia.application.queries.obtener_competencias_por_torneo import (
     ObtenerCompetenciasPorTorneoHandler,
     ObtenerCompetenciasPorTorneoQuery,
@@ -208,6 +213,21 @@ class AsignarTarjetaBody(BaseModel):
         return self.tipo or self.tarjeta or TipoTarjeta.Blanca
 
 
+class ResolverRevisionBody(BaseModel):
+    """Body del endpoint POST /competencia/{id}/resolver-revision."""
+
+    participante_id: UUID
+    disciplina: Disciplina
+    tipo: TipoTarjeta | None = None
+    resolucion: TipoTarjeta | None = None
+    motivo_dq: MotivoDQ | None = None
+    penalizaciones: list[PenalizacionTecnicaBody] = []
+
+    def resolve_tipo(self) -> TipoTarjeta:
+        """Compatibilidad con spec: acepta `tipo` o `resolucion`."""
+        return self.tipo or self.resolucion or TipoTarjeta.Blanca
+
+
 # ── Dependency providers ──────────────────────────────────────────────────────
 
 
@@ -284,6 +304,14 @@ def get_registrar_dns_handler(
     return RegistrarDNSHandler(event_store, performances_estado)
 
 
+def get_resolver_revision_handler(
+    event_store: EventStoreDep,
+    performances_estado: PerformancesEstadoAdapterDep,
+) -> ResolverRevisionHandler:
+    """Dependency: handler para resolver una revision pendiente."""
+    return ResolverRevisionHandler(event_store, performances_estado)
+
+
 EventStoreDep = Annotated[EventStorePort, Depends(get_event_store)]
 DisciplinaDescriptorDep = Annotated[DisciplinaDescriptorAdapter, Depends(get_disciplina_descriptor)]
 CompetenciasPorTorneoProjectionDep = Annotated[
@@ -304,6 +332,9 @@ AsignarTarjetaHandlerDep = Annotated[
 ]
 RegistrarDNSHandlerDep = Annotated[
     RegistrarDNSHandler, Depends(get_registrar_dns_handler)
+]
+ResolverRevisionHandlerDep = Annotated[
+    ResolverRevisionHandler, Depends(get_resolver_revision_handler)
 ]
 
 
@@ -714,6 +745,38 @@ async def post_asignar_tarjeta(
     except ValueError as exc:
         return JSONResponse(status_code=422, content={"detail": str(exc)})
     except PerformanceNoEncontradaAsignarTarjeta as exc:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
+    except DomainError as exc:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+    return JSONResponse(content=None, status_code=204)
+
+
+@router.post("/{competencia_id}/resolver-revision", response_class=JSONResponse)
+async def post_resolver_revision(
+    competencia_id: UUID,
+    body: ResolverRevisionBody,
+    handler: ResolverRevisionHandlerDep,
+    user: JuezDep,
+) -> JSONResponse:
+    """Resuelve la tarjeta definitiva de una performance en revisión."""
+    try:
+        await handler.handle(
+            ResolverRevisionCommand(
+                competencia_id=competencia_id,
+                participante_id=body.participante_id,
+                disciplina=body.disciplina,
+                tipo=body.resolve_tipo(),
+                resuelta_por=user["email"],
+                motivo_dq=body.motivo_dq,
+                penalizaciones=tuple(
+                    PenalizacionTecnica(tipo=p.tipo, deduccion=p.deduccion)
+                    for p in body.penalizaciones
+                ),
+            )
+        )
+    except ValueError as exc:
+        return JSONResponse(status_code=422, content={"detail": str(exc)})
+    except PerformanceNoEncontradaResolverRevision as exc:
         return JSONResponse(status_code=404, content={"detail": str(exc)})
     except DomainError as exc:
         return JSONResponse(status_code=409, content={"detail": str(exc)})

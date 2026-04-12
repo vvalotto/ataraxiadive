@@ -54,6 +54,7 @@ def apply_stored(performance: "Performance", event: dict[str, Any]) -> None:
         "ResultadoRegistrado": apply_resultado_registrado,
         "DNSRegistrado": apply_dns_registrado,
         "TarjetaAsignada": apply_tarjeta_asignada,
+        "RevisionResuelta": apply_revision_resuelta,
         "ResultadoCorregido": apply_resultado_corregido,
     }
     handler = handlers.get(event["event_type"])
@@ -86,6 +87,20 @@ def apply_dns_registrado(performance: "Performance", _payload: dict[str, Any]) -
 
 
 def apply_tarjeta_asignada(performance: "Performance", payload: dict[str, Any]) -> None:
+    resolucion = ResolucionTarjeta.desde_payload(payload)
+    if payload.get("tipo") == "Amarilla":
+        performance._tarjeta = resolucion.tipo
+        performance._motivo_dq = resolucion.motivo_dq
+        performance._motivo_texto = resolucion.motivo_texto
+        performance._distancia_blackout = resolucion.distancia_blackout
+        performance._penalizaciones = resolucion.penalizaciones
+        performance._estado = EstadoPerformance.EnRevision
+        performance._aplicar_rp_final(resolucion.rp_final)
+        return
+    performance._aplicar_resolucion_tarjeta(resolucion)
+
+
+def apply_revision_resuelta(performance: "Performance", payload: dict[str, Any]) -> None:
     performance._aplicar_resolucion_tarjeta(ResolucionTarjeta.desde_payload(payload))
 
 

@@ -9,7 +9,7 @@ import {
 import { JuezLayout } from '../../components/juez/JuezLayout'
 import useCompetenciaStore from '../../stores/useCompetenciaStore'
 
-type RowStatus = 'SIGUIENTE' | 'PENDIENTE' | 'EN_CURSO' | 'FINALIZADA'
+type RowStatus = 'SIGUIENTE' | 'PENDIENTE' | 'EN_CURSO' | 'REVISION' | 'FINALIZADA'
 
 function resolveRowStatus(
   atleta: GrillaAtletaDto,
@@ -22,6 +22,10 @@ function resolveRowStatus(
 
   if (atleta.estado === 'Ejecutada' || atleta.estado === 'DNS') {
     return 'FINALIZADA'
+  }
+
+  if (atleta.estado === 'EnRevision') {
+    return 'REVISION'
   }
 
   if (atleta.estado === 'Llamada' || atleta.estado === 'ResultadoRegistrado') {
@@ -41,6 +45,9 @@ function statusClasses(status: RowStatus) {
   }
   if (status === 'SIGUIENTE') {
     return 'border-emerald-300/50 bg-emerald-400/10'
+  }
+  if (status === 'REVISION') {
+    return 'border-amber-300/60 bg-amber-400/10'
   }
   if (status === 'FINALIZADA') {
     return 'border-slate-800 bg-slate-900/40 opacity-50'
@@ -152,6 +159,7 @@ export function GrillaPage() {
                   'rounded-full px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.18em]',
                   status === 'EN_CURSO' ? 'bg-cyan-400/15 text-cyan-200' : '',
                   status === 'SIGUIENTE' ? 'bg-emerald-400/15 text-emerald-200' : '',
+                  status === 'REVISION' ? 'bg-amber-300/15 text-amber-100' : '',
                   status === 'PENDIENTE' ? 'bg-slate-800 text-slate-300' : '',
                   status === 'FINALIZADA' ? 'bg-slate-950 text-slate-500' : '',
                 ].join(' ')}
