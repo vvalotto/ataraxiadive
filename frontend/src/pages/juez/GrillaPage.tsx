@@ -6,6 +6,7 @@ import {
   fetchPerformanceActual,
   type GrillaAtletaDto,
 } from '../../api/competencia'
+import { formatMarca } from '../../hooks/usePerformanceFlow'
 import { JuezLayout } from '../../components/juez/JuezLayout'
 import useCompetenciaStore from '../../stores/useCompetenciaStore'
 
@@ -176,7 +177,7 @@ export function GrillaPage() {
                 </p>
                 <h2 className="mt-2 text-lg font-semibold text-slate-50">{atleta.nombre_atleta}</h2>
                 <p className="mt-2 text-sm text-slate-400">
-                  AP {atleta.ap_declarado} {atleta.unidad}
+                  AP {formatMarca(atleta.ap_declarado, atleta.unidad)}
                 </p>
               </div>
               <span

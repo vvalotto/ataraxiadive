@@ -1,3 +1,5 @@
+import { formatMarca } from '../../hooks/usePerformanceFlow'
+
 interface AtletaCardProps {
   nombreAtleta: string
   apDeclarado: string
@@ -38,7 +40,7 @@ export function AtletaCard({
             Performance anunciada
           </p>
           <p className="mt-2 text-lg font-semibold text-slate-50">
-            {apDeclarado} {unidad}
+            {formatMarca(apDeclarado, unidad)}
           </p>
         </div>
         <div className="rounded-2xl bg-slate-950/70 p-3">
