@@ -32,7 +32,7 @@ export function PerformanceFlowPage() {
         <StepIndicator currentStep={flow.completed ? 6 : flow.step} />
       </section>
 
-      {flow.step !== 5 && flow.step !== 6 && !(flow.step === 4 && flow.isBkoMode) ? (
+      {flow.step !== 5 && flow.step !== 6 && flow.step !== 7 && !(flow.step === 4 && flow.isBkoMode) ? (
         <AtletaCard
           nombreAtleta={flow.atletaActivo.nombreAtleta}
           apDeclarado={flow.atletaActivo.apDeclarado}
