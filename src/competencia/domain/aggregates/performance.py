@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from decimal import Decimal
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from uuid import UUID
 
 from shared.domain.base.aggregate_root import AggregateRoot
@@ -14,6 +14,7 @@ from competencia.domain.aggregates.performance_events import (
     crear_dns_registrado,
     crear_resultado_corregido,
     crear_resultado_registrado,
+    crear_revision_resuelta,
     crear_tarjeta_asignada,
 )
 from competencia.domain.aggregates.performance_state import reconstituir_performance
@@ -26,6 +27,7 @@ from competencia.domain.exceptions import (
     EstadoInvalidoParaLlamar,
     EstadoInvalidoParaRegistrarDNS,
     EstadoInvalidoParaRegistrarResultado,
+    EstadoInvalidoParaResolverRevision,
     MotivoDQObligatorio,  # noqa: F401 - re-export por compatibilidad
     MotivoObligatorio,
     PenalizacionesObligatorias,  # noqa: F401 - re-export por compatibilidad
@@ -401,6 +403,46 @@ class Performance(AggregateRoot):
             disciplina=self._disciplina,
             resolucion=resolucion,
             asignada_por=asignada_por,
+        )
+        if tipo == TipoTarjeta.Amarilla:
+            self._tarjeta = tipo
+            self._motivo_dq = None
+            self._motivo_texto = motivo_texto
+            self._distancia_blackout = None
+            self._penalizaciones = ()
+            self._estado = EstadoPerformance.EnRevision
+        else:
+            self._aplicar_resolucion_tarjeta(resolucion)
+        self._record(event)
+
+    def resolver_revision(
+        self,
+        tipo: TipoTarjeta,
+        resuelta_por: str,
+        motivo_dq: MotivoDQ | None = None,
+        penalizaciones: tuple[PenalizacionTecnica, ...] = (),
+    ) -> None:
+        """Resuelve una performance que quedó en revisión tras tarjeta amarilla."""
+        if self._estado != EstadoPerformance.EnRevision:
+            raise EstadoInvalidoParaResolverRevision(
+                f"Performance {self._performance_id} en estado {self._estado} "
+                "— solo se puede resolver revision desde EnRevision"
+            )
+
+        tarjeta_asignacion = TarjetaAsignacion(
+            tipo=tipo,
+            motivo_dq=motivo_dq,
+            motivo_texto=None,
+            distancia_blackout=None,
+            penalizaciones=penalizaciones,
+        )
+        resolucion = ResolucionTarjeta.desde_asignacion(tarjeta_asignacion, self._rp_medido)
+        event = crear_revision_resuelta(
+            performance_id=self._performance_id,
+            participante_id=self._participante_id,
+            disciplina=self._disciplina,
+            resolucion=resolucion,
+            resuelta_por=resuelta_por,
         )
         self._aplicar_resolucion_tarjeta(resolucion)
         self._record(event)

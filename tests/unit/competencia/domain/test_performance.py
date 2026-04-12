@@ -18,6 +18,7 @@ from competencia.domain.exceptions import (
     EstadoInvalidoParaLlamar,
     EstadoInvalidoParaRegistrarDNS,
     EstadoInvalidoParaRegistrarResultado,
+    EstadoInvalidoParaResolverRevision,
     MotivoDQObligatorio,
     MotivoObligatorio,
 )
@@ -196,6 +197,61 @@ def test_llamar_payload_contiene_datos_correctos(performance_anunciada: Performa
     payload = events[0].to_payload()
     assert payload["posicion_grilla"] == 5
     assert payload["ot_programado"] == OT.isoformat()
+
+
+def test_asignar_amarilla_deja_performance_en_revision(performance_anunciada: Performance) -> None:
+    """US-4.3.4: amarilla ya no cierra la performance."""
+    performance_anunciada.llamar(OT, posicion_grilla=1)
+    performance_anunciada.pull_events()
+    performance_anunciada.registrar_resultado(Decimal("55.5"), UnidadMedida.Metros, "juez-001")
+    performance_anunciada.pull_events()
+
+    performance_anunciada.asignar_tarjeta(
+        TipoTarjeta.Amarilla,
+        "juez-001",
+        motivo_texto="Revision de superficie",
+    )
+
+    events = performance_anunciada.pull_events()
+    assert events[0].event_type == "TarjetaAsignada"
+    assert performance_anunciada.estado == EstadoPerformance.EnRevision
+    assert performance_anunciada.tarjeta == TipoTarjeta.Amarilla
+
+
+def test_resolver_revision_emite_evento_y_cierra_performance(
+    performance_anunciada: Performance,
+) -> None:
+    """US-4.3.4: la revision pendiente se resuelve con evento dedicado."""
+    performance_anunciada.llamar(OT, posicion_grilla=1)
+    performance_anunciada.pull_events()
+    performance_anunciada.registrar_resultado(Decimal("55.5"), UnidadMedida.Metros, "juez-001")
+    performance_anunciada.pull_events()
+    performance_anunciada.asignar_tarjeta(
+        TipoTarjeta.Amarilla,
+        "juez-001",
+        motivo_texto="Revision de superficie",
+    )
+    performance_anunciada.pull_events()
+
+    performance_anunciada.resolver_revision(TipoTarjeta.Blanca, "juez-001")
+
+    events = performance_anunciada.pull_events()
+    assert events[0].event_type == "RevisionResuelta"
+    assert performance_anunciada.estado == EstadoPerformance.Ejecutada
+    assert performance_anunciada.tarjeta == TipoTarjeta.Blanca
+
+
+def test_resolver_revision_solo_permitida_desde_en_revision(
+    performance_anunciada: Performance,
+) -> None:
+    """US-4.3.4: no se puede resolver revision sin una amarilla previa."""
+    performance_anunciada.llamar(OT, posicion_grilla=1)
+    performance_anunciada.pull_events()
+    performance_anunciada.registrar_resultado(Decimal("55.5"), UnidadMedida.Metros, "juez-001")
+    performance_anunciada.pull_events()
+
+    with pytest.raises(EstadoInvalidoParaResolverRevision):
+        performance_anunciada.resolver_revision(TipoTarjeta.Blanca, "juez-001")
 
 
 # ── llamar() — invariantes ────────────────────────────────────────────────────
@@ -465,7 +521,7 @@ def test_asignar_tarjeta_amarilla_con_motivo(performance_con_resultado: Performa
     assert payload["tipo"] == "Amarilla"
     assert payload["motivo_texto"] == "superficie sin protocolo"
     assert payload["motivo_dq_codigo"] is None
-    assert performance_con_resultado.estado == EstadoPerformance.Ejecutada
+    assert performance_con_resultado.estado == EstadoPerformance.EnRevision
 
 
 def test_asignar_tarjeta_roja_con_motivo_dq(performance_con_resultado: Performance) -> None:
@@ -1038,7 +1094,7 @@ def test_blanca_con_penalizaciones_clampa_rp_a_cero() -> None:
         participante_id=uuid4(),
         disciplina=Disciplina.DYN,
     )
-    p.registrarAP(Decimal("4"), UnidadMedida.Metros)
+    p.registrar_ap(Decimal("4"), UnidadMedida.Metros)
     p.pull_events()
     p.llamar(OT, posicion_grilla=1)
     p.pull_events()

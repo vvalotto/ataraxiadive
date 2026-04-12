@@ -7,6 +7,7 @@ import {
   llamarAtleta,
   registrarDns,
   registrarResultado,
+  resolverRevision,
   type PenalizacionPayload,
 } from '../../api/competencia'
 import { AtletaCard } from '../../components/juez/AtletaCard'
@@ -34,8 +35,14 @@ const penaltyTypes = [
   'PATADA_DELFIN_BIALETAS',
 ] as const
 
-type TarjetaSeleccionada = 'Blanca' | 'Roja' | 'BlancaConPenalizaciones' | null
-type ResultadoFinal = 'BLANCA' | 'BLANCA_CON_PENALIZACIONES' | 'ROJA' | 'DNS' | null
+type TarjetaSeleccionada = 'Blanca' | 'Roja' | 'BlancaConPenalizaciones' | 'Amarilla' | null
+type ResultadoFinal =
+  | 'BLANCA'
+  | 'BLANCA_CON_PENALIZACIONES'
+  | 'ROJA'
+  | 'AMARILLA'
+  | 'DNS'
+  | null
 
 function buildRpValue(metros: number, centimetros: string) {
   return `${metros}.${centimetros.padEnd(2, '0')}`
@@ -69,6 +76,7 @@ export function PerformanceFlowPage() {
     const estado = atletaActivo?.estado
     if (estado === 'Llamada') return 2
     if (estado === 'ResultadoRegistrado') return 6
+    if (estado === 'EnRevision') return 7
     return 1
   })
   const [inlineError, setInlineError] = useState<string | null>(null)
@@ -99,13 +107,13 @@ export function PerformanceFlowPage() {
 
   const finalizeResult = async (
     kind: ResultadoFinal,
-    nextState: 'Ejecutada' | 'DNS',
+    nextState: 'Ejecutada' | 'DNS' | 'EnRevision',
   ) => {
     setInlineError(null)
     await refreshCompetencia()
     seleccionarAtleta({ ...atletaActivo!, estado: nextState })
     setResultKind(kind)
-    setCompleted(true)
+    setCompleted(nextState !== 'EnRevision')
   }
 
   const llamarMutation = useMutation({
@@ -180,6 +188,7 @@ export function PerformanceFlowPage() {
         participanteId: atletaActivo!.atletaId,
         disciplina: disciplinaActiva!,
         tarjeta: selectedCard!,
+        motivoTexto: selectedCard === 'Amarilla' ? 'Revision pendiente del juez' : undefined,
         motivoDq: selectedCard === 'Roja' ? motivoDq : undefined,
         distanciaBlackout:
           selectedCard === 'Roja' && needsBlackoutDistance ? distanciaBlackout : undefined,
@@ -187,6 +196,11 @@ export function PerformanceFlowPage() {
       })
     },
     onSuccess: async () => {
+      if (selectedCard === 'Amarilla') {
+        await finalizeResult('AMARILLA', 'EnRevision')
+        setStep(7)
+        return
+      }
       const kind =
         selectedCard === 'Roja'
           ? 'ROJA'
@@ -197,6 +211,25 @@ export function PerformanceFlowPage() {
     },
     onError: (error) => {
       setInlineError(error instanceof Error ? error.message : 'No se pudo asignar la tarjeta')
+    },
+  })
+
+  const resolverRevisionMutation = useMutation({
+    mutationFn: async () => {
+      await resolverRevision({
+        competenciaId: competenciaId!,
+        participanteId: atletaActivo!.atletaId,
+        disciplina: disciplinaActiva!,
+        resolucion: selectedCard === 'Roja' ? 'Roja' : 'Blanca',
+        motivoDq: selectedCard === 'Roja' ? motivoDq : undefined,
+      })
+    },
+    onSuccess: async () => {
+      const kind = selectedCard === 'Roja' ? 'ROJA' : 'BLANCA'
+      await finalizeResult(kind, 'Ejecutada')
+    },
+    onError: (error) => {
+      setInlineError(error instanceof Error ? error.message : 'No se pudo resolver la revision')
     },
   })
 
@@ -250,6 +283,9 @@ export function PerformanceFlowPage() {
     if (resultKind === 'DNS') {
       return 'DNS REGISTRADO'
     }
+    if (resultKind === 'AMARILLA') {
+      return 'TARJETA AMARILLA'
+    }
     if (resultKind === 'ROJA') {
       return 'TARJETA ROJA'
     }
@@ -262,6 +298,9 @@ export function PerformanceFlowPage() {
   const completionSubtitle = useMemo(() => {
     if (resultKind === 'DNS') {
       return 'No se presentó'
+    }
+    if (resultKind === 'AMARILLA') {
+      return 'La performance queda en revision hasta definir tarjeta final'
     }
     const marca = formatMarca(buildRpValue(metros, centimetros), atletaActivo?.unidad ?? 'Metros')
     if (resultKind === 'BLANCA_CON_PENALIZACIONES') {
@@ -383,7 +422,7 @@ export function PerformanceFlowPage() {
               onClick={() => setChronoStarted(true)}
               className="w-full rounded-2xl bg-fuchsia-300 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950"
             >
-              INICIAR CRONO
+              INICIAR PERFORMANCE
             </button>
           ) : (
             <button
@@ -477,10 +516,11 @@ export function PerformanceFlowPage() {
       {!completed && step === 6 ? (
         <section className="space-y-4 rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5">
           <h3 className="text-xl font-semibold text-white">Paso 6 · Tarjeta</h3>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             {([
               ['Blanca', 'Tarjeta Blanca'],
               ['Roja', 'Tarjeta Roja'],
+              ['Amarilla', 'Tarjeta Amarilla'],
             ] as const).map(([card, label]) => (
               <button
                 key={card}
@@ -491,16 +531,31 @@ export function PerformanceFlowPage() {
                     setMotivoDq('')
                     setDistanciaBlackout('')
                   }
+                  if (card === 'Amarilla') {
+                    setMotivoDq('')
+                    setDistanciaBlackout('')
+                    setPenaltyCount(0)
+                  }
                 }}
                 className={[
-                  'rounded-2xl border px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] transition',
+                  'rounded-2xl border px-4 py-4 text-center text-sm font-semibold uppercase tracking-[0.18em] transition',
                   (selectedCard === card ||
                     (card === 'Blanca' && selectedCard === 'BlancaConPenalizaciones'))
-                    ? 'border-cyan-300 bg-cyan-400/15 text-cyan-100'
+                    ? card === 'Blanca'
+                      ? 'border-emerald-300 bg-emerald-400/15 text-emerald-100'
+                      : card === 'Roja'
+                        ? 'border-red-300 bg-red-400/15 text-red-100'
+                        : 'border-amber-300 bg-amber-400/15 text-amber-100'
                     : 'border-slate-700 bg-slate-950/70 text-slate-200',
                 ].join(' ')}
               >
-                {label}
+                <span className="block text-[11px] tracking-[0.24em] text-slate-400">Tarjeta</span>
+                <span className="mt-2 block">
+                  {card === 'Blanca' ? 'VERDE' : card === 'Roja' ? 'ROJA' : 'AMARILLA'}
+                </span>
+                <span className="mt-2 block text-[11px] normal-case tracking-normal text-current/80">
+                  {label}
+                </span>
               </button>
             ))}
           </div>
@@ -544,6 +599,73 @@ export function PerformanceFlowPage() {
           >
             CONFIRMAR TARJETA
           </button>
+        </section>
+      ) : null}
+
+      {!completed && step === 7 ? (
+        <section className="space-y-4 rounded-[2rem] border border-amber-300/30 bg-amber-400/10 p-5">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-200">
+            Revision pendiente
+          </p>
+          <h3 className="text-2xl font-semibold text-white">TARJETA AMARILLA</h3>
+          <p className="text-sm text-slate-200">
+            La performance quedo en revision. Podes resolverla ahora o volver a la grilla.
+          </p>
+          <div className="rounded-2xl border border-amber-300/20 bg-slate-950/40 p-4 text-sm text-slate-200">
+            Timer informativo: hasta 3 minutos de deliberacion.
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedCard('Blanca')
+                setMotivoDq('')
+              }}
+              className={[
+                'rounded-2xl border px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em]',
+                selectedCard === 'Blanca'
+                  ? 'border-cyan-300 bg-cyan-400/15 text-cyan-100'
+                  : 'border-slate-700 bg-slate-950/70 text-slate-200',
+              ].join(' ')}
+            >
+              RESOLVER -&gt; BLANCA
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedCard('Roja')}
+              className={[
+                'rounded-2xl border px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em]',
+                selectedCard === 'Roja'
+                  ? 'border-red-300 bg-red-400/15 text-red-100'
+                  : 'border-slate-700 bg-slate-950/70 text-slate-200',
+              ].join(' ')}
+            >
+              RESOLVER -&gt; ROJA
+            </button>
+          </div>
+          {selectedCard === 'Roja' ? (
+            <MotivoDqSelector value={motivoDq} options={dqReasons} onChange={setMotivoDq} />
+          ) : null}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => {
+                limpiarAtleta()
+                void navigate('/juez/grilla')
+              }}
+              className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-100"
+            >
+              Volver a la grilla
+            </button>
+            <button
+              type="button"
+              disabled={!selectedCard || !canSubmitRedCard || resolverRevisionMutation.isPending}
+              onClick={() => resolverRevisionMutation.mutate()}
+              className="w-full rounded-2xl bg-amber-300 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950 disabled:opacity-50"
+            >
+              Confirmar resolucion
+            </button>
+          </div>
         </section>
       ) : null}
 

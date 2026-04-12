@@ -7,6 +7,7 @@ from competencia.domain.events.grilla_de_salida_generada import GrillaDeSalidaGe
 from competencia.domain.events.intervalo_ot_configurado import IntervaloOTConfigurado
 from competencia.domain.events.resultado_corregido import ResultadoCorregido
 from competencia.domain.events.resultado_registrado import ResultadoRegistrado
+from competencia.domain.events.revision_resuelta import RevisionResuelta
 from competencia.domain.events.tarjeta_asignada import TarjetaAsignada
 
 __all__ = [
@@ -17,5 +18,6 @@ __all__ = [
     "IntervaloOTConfigurado",
     "ResultadoCorregido",
     "ResultadoRegistrado",
+    "RevisionResuelta",
     "TarjetaAsignada",
 ]

@@ -4,6 +4,7 @@ export type EstadoPerformance =
   | 'AnunciadaAP'
   | 'Llamada'
   | 'ResultadoRegistrado'
+  | 'EnRevision'
   | 'Ejecutada'
   | 'DNS'
 
