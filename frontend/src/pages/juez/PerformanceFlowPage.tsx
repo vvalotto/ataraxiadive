@@ -178,15 +178,16 @@ export function PerformanceFlowPage() {
           metros={flow.metros}
           centimetros={flow.centimetros}
           unidad={flow.atletaActivo.unidad}
-          distanciaBlackout={flow.distanciaBlackout}
           motivoDq={flow.motivoDq}
           canSubmitBko={flow.canSubmitBko}
           isPending={flow.bkoMutation.isPending}
           onMetrosChange={flow.setMetros}
           onCentimetrosChange={flow.setCentimetros}
-          onDistanciaChange={flow.setDistanciaBlackout}
           onMotivoDqChange={flow.setMotivoDq}
-          onConfirm={() => flow.bkoMutation.mutate()}
+          onConfirm={() => {
+            flow.setDistanciaBlackout(String(flow.metros))
+            flow.bkoMutation.mutate()
+          }}
           onCancel={() => {
             flow.setIsBkoMode(false)
             flow.setMotivoDq('')
