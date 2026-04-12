@@ -60,25 +60,32 @@ export function StepTarjeta({
     <section className="space-y-4 rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5">
       <h3 className="text-xl font-semibold text-white">Paso 6 · Tarjeta</h3>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        {(['Blanca', 'Roja', 'Amarilla'] as const).map((card) => (
-          <button
-            key={card}
-            type="button"
-            aria-label={`Tarjeta ${card}`}
-            onClick={() => handleCardClick(card)}
-            className={[
-              'h-20 rounded-2xl border transition',
-              selectedCard === card ||
-              (card === 'Blanca' && selectedCard === 'BlancaConPenalizaciones')
-                ? card === 'Blanca'
-                  ? 'border-emerald-300 bg-emerald-400/15 text-emerald-100'
-                  : card === 'Roja'
-                    ? 'border-red-300 bg-red-400/15 text-red-100'
-                    : 'border-amber-300 bg-amber-400/15 text-amber-100'
-                : 'border-slate-700 bg-slate-950/70 text-slate-200',
-            ].join(' ')}
-          />
-        ))}
+        {(['Blanca', 'Roja', 'Amarilla'] as const).map((card) => {
+          const isSelected =
+            selectedCard === card ||
+            (card === 'Blanca' && selectedCard === 'BlancaConPenalizaciones')
+          const colorClasses =
+            card === 'Blanca'
+              ? isSelected
+                ? 'border-white bg-white/20 ring-2 ring-white/40'
+                : 'border-white/30 bg-white/5'
+              : card === 'Roja'
+                ? isSelected
+                  ? 'border-red-300 bg-red-500/25 ring-2 ring-red-300/40'
+                  : 'border-red-300/40 bg-red-500/8'
+                : isSelected
+                  ? 'border-amber-300 bg-amber-400/25 ring-2 ring-amber-300/40'
+                  : 'border-amber-300/40 bg-amber-400/8'
+          return (
+            <button
+              key={card}
+              type="button"
+              aria-label={`Tarjeta ${card}`}
+              onClick={() => handleCardClick(card)}
+              className={`h-20 rounded-2xl border transition ${colorClasses}`}
+            />
+          )
+        })}
       </div>
 
       {selectedCard === 'Roja' ? (
