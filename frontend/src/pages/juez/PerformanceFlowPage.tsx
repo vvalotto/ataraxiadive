@@ -32,7 +32,7 @@ export function PerformanceFlowPage() {
         <StepIndicator currentStep={flow.completed ? 6 : flow.step} />
       </section>
 
-      {flow.step !== 5 && flow.step !== 6 && flow.step !== 7 && !(flow.step === 4 && flow.isBkoMode) ? (
+      {flow.step !== 4 && flow.step !== 5 && flow.step !== 6 && flow.step !== 7 ? (
         <AtletaCard
           nombreAtleta={flow.atletaActivo.nombreAtleta}
           apDeclarado={flow.atletaActivo.apDeclarado}
@@ -144,6 +144,9 @@ export function PerformanceFlowPage() {
       ) : null}
 
       {/* Paso 4 — Performance en curso */}
+      {!flow.completed && flow.step === 4 && !flow.isBkoMode ? (
+        <p className="px-1 text-lg font-semibold text-white">{flow.atletaActivo.nombreAtleta}</p>
+      ) : null}
       {!flow.completed && flow.step === 4 && !flow.isBkoMode ? (
         <section className="space-y-4 rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5">
           <h3 className="text-xl font-semibold text-white">Paso 4 · Performance</h3>
