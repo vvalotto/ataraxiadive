@@ -32,7 +32,7 @@ export function AtletaCard({
         </p>
       ) : null}
       <h2 className="mt-3 text-2xl font-semibold text-white">{nombreAtleta}</h2>
-      <div className="mt-4 grid grid-cols-3 gap-3 text-sm text-slate-300">
+      <div className="mt-4 space-y-3 text-sm text-slate-300">
         <div className="rounded-2xl bg-slate-950/70 p-3">
           <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
             Performance anunciada
