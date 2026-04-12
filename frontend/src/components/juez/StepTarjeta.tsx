@@ -14,28 +14,22 @@ interface PenalizacionesConfig {
 interface StepTarjetaProps {
   selectedCard: TarjetaSeleccionada
   motivoDq: string
-  distanciaBlackout: string
-  needsBlackoutDistance: boolean
   canSubmitRedCard: boolean
   isPending: boolean
   penalizaciones: PenalizacionesConfig
   onSelectCard: (card: TarjetaSeleccionada) => void
   onMotivoDqChange: (value: string) => void
-  onDistanciaChange: (value: string) => void
   onConfirm: () => void
 }
 
 export function StepTarjeta({
   selectedCard,
   motivoDq,
-  distanciaBlackout,
-  needsBlackoutDistance,
   canSubmitRedCard,
   isPending,
   penalizaciones,
   onSelectCard,
   onMotivoDqChange,
-  onDistanciaChange,
   onConfirm,
 }: StepTarjetaProps) {
   function handleCardClick(card: 'Blanca' | 'Roja' | 'Amarilla') {
@@ -60,39 +54,36 @@ export function StepTarjeta({
     <section className="space-y-4 rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5">
       <h3 className="text-xl font-semibold text-white">Paso 6 · Tarjeta</h3>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        {(['Blanca', 'Roja', 'Amarilla'] as const).map((card) => (
-          <button
-            key={card}
-            type="button"
-            aria-label={`Tarjeta ${card}`}
-            onClick={() => handleCardClick(card)}
-            className={[
-              'h-20 rounded-2xl border transition',
-              selectedCard === card ||
-              (card === 'Blanca' && selectedCard === 'BlancaConPenalizaciones')
-                ? card === 'Blanca'
-                  ? 'border-emerald-300 bg-emerald-400/15 text-emerald-100'
-                  : card === 'Roja'
-                    ? 'border-red-300 bg-red-400/15 text-red-100'
-                    : 'border-amber-300 bg-amber-400/15 text-amber-100'
-                : 'border-slate-700 bg-slate-950/70 text-slate-200',
-            ].join(' ')}
-          />
-        ))}
+        {(['Blanca', 'Roja', 'Amarilla'] as const).map((card) => {
+          const isSelected =
+            selectedCard === card ||
+            (card === 'Blanca' && selectedCard === 'BlancaConPenalizaciones')
+          const colorClasses =
+            card === 'Blanca'
+              ? isSelected
+                ? 'border-white bg-white ring-4 ring-white/50'
+                : 'border-white bg-white opacity-60'
+              : card === 'Roja'
+                ? isSelected
+                  ? 'border-red-500 bg-red-500 ring-4 ring-red-400/50'
+                  : 'border-red-500 bg-red-500 opacity-60'
+                : isSelected
+                  ? 'border-amber-400 bg-amber-400 ring-4 ring-amber-300/50'
+                  : 'border-amber-400 bg-amber-400 opacity-60'
+          return (
+            <button
+              key={card}
+              type="button"
+              aria-label={`Tarjeta ${card}`}
+              onClick={() => handleCardClick(card)}
+              className={`h-40 rounded-2xl border transition ${colorClasses}`}
+            />
+          )
+        })}
       </div>
 
       {selectedCard === 'Roja' ? (
-        <>
-          <MotivoDqSelector value={motivoDq} options={DQ_REASONS} onChange={onMotivoDqChange} />
-          {needsBlackoutDistance ? (
-            <input
-              value={distanciaBlackout}
-              onChange={(event) => onDistanciaChange(event.target.value)}
-              placeholder="Distancia blackout"
-              className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white"
-            />
-          ) : null}
-        </>
+        <MotivoDqSelector value={motivoDq} options={DQ_REASONS} onChange={onMotivoDqChange} />
       ) : null}
 
       {selectedCard === 'Blanca' || selectedCard === 'BlancaConPenalizaciones' ? (

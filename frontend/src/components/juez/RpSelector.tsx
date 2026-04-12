@@ -49,12 +49,12 @@ export function RpSelector({
   }
 
   return (
-    <section className="space-y-4 rounded-[2rem] border border-slate-800 bg-slate-900/80 p-4">
+    <section className="space-y-3 rounded-[2rem] border border-slate-800 bg-slate-900/80 p-3">
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
           {isSecondsMode ? 'Tiempo' : 'Marca'}
         </p>
-        <p className="mt-2 text-3xl font-semibold text-white sm:text-4xl">
+        <p className="mt-1 text-3xl font-semibold text-white sm:text-4xl">
           {isSecondsMode ? (
             <>
               {metros}
@@ -72,7 +72,7 @@ export function RpSelector({
         </p>
       </div>
 
-      <div className="grid grid-cols-5 gap-1.5">
+      <div className="grid grid-cols-5 gap-1">
         {presets.map((preset) => (
           <button
             key={preset}
@@ -85,7 +85,7 @@ export function RpSelector({
               onMetrosChange(preset)
             }}
             className={[
-              'rounded-xl border px-2 py-2.5 text-xs font-semibold transition sm:text-sm',
+              'rounded-xl border px-2 py-2 text-xs font-semibold transition',
               (isSecondsMode ? totalSeconds === preset : metros === preset)
                 ? 'border-cyan-300 bg-cyan-400/20 text-cyan-100'
                 : 'border-slate-700 bg-slate-950/70 text-slate-200',
@@ -98,7 +98,7 @@ export function RpSelector({
         ))}
       </div>
 
-      <div className="grid grid-cols-4 gap-1.5 text-xs font-semibold sm:text-sm">
+      <div className="grid grid-cols-4 gap-1 text-xs font-semibold">
         {adjustments.map(([label, delta]) => (
           <button
             key={label}
@@ -110,7 +110,7 @@ export function RpSelector({
               }
               onMetrosChange(Math.max(0, metros + Number(delta)))
             }}
-            className="rounded-xl border border-slate-700 bg-slate-950/70 px-2 py-2.5 text-slate-100"
+            className="rounded-xl border border-slate-700 bg-slate-950/70 px-2 py-2 text-slate-100"
           >
             {label}
           </button>
@@ -121,13 +121,13 @@ export function RpSelector({
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
           {isSecondsMode ? 'Segundos' : 'Centimetros'}
         </p>
-        <div className="mt-3 grid grid-cols-3 gap-1.5">
+        <div className="mt-2 grid grid-cols-3 gap-1">
           {keypad.slice(0, 9).map((digit) => (
             <button
               key={digit}
               type="button"
               onClick={() => pushDigit(digit)}
-              className="rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-3 text-base font-semibold text-white sm:py-4 sm:text-lg"
+              className="rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-2.5 text-base font-semibold text-white"
             >
               {digit}
             </button>
@@ -135,21 +135,21 @@ export function RpSelector({
           <button
             type="button"
             onClick={() => onCentimetrosChange('')}
-            className="rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-3 text-xs font-semibold text-slate-200 sm:py-4 sm:text-sm"
+            className="rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-2.5 text-xs font-semibold text-slate-200"
           >
             CLR
           </button>
           <button
             type="button"
             onClick={() => pushDigit('0')}
-            className="rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-3 text-base font-semibold text-white sm:py-4 sm:text-lg"
+            className="rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-2.5 text-base font-semibold text-white"
           >
             0
           </button>
           <button
             type="button"
             onClick={() => onCentimetrosChange(centimetros.slice(0, -1))}
-            className="rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-3 text-xs font-semibold text-slate-200 sm:py-4 sm:text-sm"
+            className="rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-2.5 text-xs font-semibold text-slate-200"
           >
             DEL
           </button>

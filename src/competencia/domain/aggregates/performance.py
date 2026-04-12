@@ -394,6 +394,7 @@ class Performance(AggregateRoot):
             motivo_texto=motivo_texto,
             distancia_blackout=distancia_blackout,
             penalizaciones=penalizaciones,
+            es_disciplina_tiempo=self._disciplina.es_tiempo(),
         )
         resolucion = ResolucionTarjeta.desde_asignacion(tarjeta_asignacion, self._rp_medido)
 
@@ -429,12 +430,18 @@ class Performance(AggregateRoot):
                 "— solo se puede resolver revision desde EnRevision"
             )
 
+        distancia_blackout_revision = (
+            self._rp_medido
+            if motivo_dq is not None and motivo_dq.requiere_distancia_blackout()
+            else None
+        )
         tarjeta_asignacion = TarjetaAsignacion(
             tipo=tipo,
             motivo_dq=motivo_dq,
             motivo_texto=None,
-            distancia_blackout=None,
+            distancia_blackout=distancia_blackout_revision,
             penalizaciones=penalizaciones,
+            es_disciplina_tiempo=self._disciplina.es_tiempo(),
         )
         resolucion = ResolucionTarjeta.desde_asignacion(tarjeta_asignacion, self._rp_medido)
         event = crear_revision_resuelta(

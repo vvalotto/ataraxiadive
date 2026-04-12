@@ -78,15 +78,12 @@ export function usePerformanceFlow() {
   const canSubmitRedCard = useMemo(() => {
     if (selectedCard !== 'Roja') return true
     if (!motivoDq) return false
-    if (needsBlackoutDistance && !distanciaBlackout.trim()) return false
     return true
-  }, [selectedCard, motivoDq, needsBlackoutDistance, distanciaBlackout])
+  }, [selectedCard, motivoDq])
 
   const canSubmitBko = isSTA
     ? motivoDq.length > 0
-    : !rpConfirmDisabled && motivoDq.length > 0 && !needsBlackoutDistance
-      ? true
-      : !rpConfirmDisabled && motivoDq.length > 0 && distanciaBlackout.trim().length > 0
+    : !rpConfirmDisabled && motivoDq.length > 0
 
   const completionTitle = useMemo(() => {
     if (resultKind === 'DNS') return 'DNS REGISTRADO'
@@ -205,7 +202,9 @@ export function usePerformanceFlow() {
         motivoTexto: selectedCard === 'Amarilla' ? 'Revision pendiente del juez' : undefined,
         motivoDq: selectedCard === 'Roja' ? motivoDq : undefined,
         distanciaBlackout:
-          selectedCard === 'Roja' && needsBlackoutDistance ? distanciaBlackout : undefined,
+          selectedCard === 'Roja' && needsBlackoutDistance
+            ? buildRpValue(metros, centimetros)
+            : undefined,
         penalizaciones: selectedCard === 'BlancaConPenalizaciones' ? penalizaciones : [],
       })
     },
@@ -263,7 +262,7 @@ export function usePerformanceFlow() {
         disciplina: disciplinaActiva!,
         tarjeta: 'Roja',
         motivoDq,
-        distanciaBlackout: isSTA ? undefined : distanciaBlackout,
+        distanciaBlackout: isSTA ? undefined : buildRpValue(metros, centimetros),
       })
     },
     onSuccess: async () => finalizeResult('ROJA', 'Ejecutada'),

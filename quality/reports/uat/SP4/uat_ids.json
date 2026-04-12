@@ -1,0 +1,21 @@
+{
+  "torneo_id": "2c682bb8-0200-4efa-ab55-3f95d27f7a97",
+  "competencia_dnf_id": "4846916a-65f9-4d33-af02-8c46e08c6248",
+  "competencia_sta_id": "d053f12d-4f44-48e6-b63e-cb411afc7b99",
+  "juez_id": "b38263ad-dc94-4824-9a33-f6ccba37319a",
+  "juez_email": "juez@uat-sp4.test",
+  "juez_password": "juezsp4uat2025",
+  "atleta_e01": "6dd0dabd-e766-4093-bbad-a2ae1eaacb1d",
+  "atleta_e02": "c06a5ae5-11be-405a-9f6d-9ef4349492a9",
+  "atleta_e03": "765035a8-fa24-40a4-b50a-d5a1311c910d",
+  "atleta_e04": "32c62771-533b-4f01-b81a-3d7c4298ec2f",
+  "atleta_e05": "1464f994-88a1-456e-83fe-ff690ac838e2",
+  "atleta_e06": "964d61c7-2ac9-4526-9482-88a6747081e6",
+  "atleta_e07": "c5cb905d-c2cf-45cd-8bae-61099d519002",
+  "atleta_e08": "11a96748-5fb1-40ac-9610-8342bfce11b7",
+  "atleta_r01": "97a4749e-86ef-45c2-bab1-b5bc97de6154",
+  "atleta_r02": "d2e7b119-7670-4796-b826-037ec3b3c8f9",
+  "atleta_t01": "8b8587b4-4010-48fd-bb2b-3196636bcef4",
+  "atleta_t02": "66711212-3ce8-41a1-a04c-776e819a645b",
+  "atleta_t03": "2318363c-a928-48ba-b0b3-7be60f9cb5e8"
+}

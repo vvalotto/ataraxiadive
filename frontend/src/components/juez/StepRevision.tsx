@@ -3,6 +3,7 @@ import type { TarjetaSeleccionada } from '../../hooks/usePerformanceFlow'
 import { MotivoDqSelector } from './MotivoDqSelector'
 
 interface StepRevisionProps {
+  nombreAtleta: string
   selectedCard: TarjetaSeleccionada
   motivoDq: string
   canSubmitRedCard: boolean
@@ -14,6 +15,7 @@ interface StepRevisionProps {
 }
 
 export function StepRevision({
+  nombreAtleta,
   selectedCard,
   motivoDq,
   canSubmitRedCard,
@@ -25,55 +27,48 @@ export function StepRevision({
 }: StepRevisionProps) {
   return (
     <section className="space-y-4 rounded-[2rem] border border-amber-300/30 bg-amber-400/10 p-5">
-      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-200">
-        Revision pendiente
-      </p>
-      <h3 className="text-2xl font-semibold text-white">TARJETA AMARILLA</h3>
-      <p className="text-sm text-slate-200">
-        La performance quedo en revision. Podes resolverla ahora o volver a la grilla.
-      </p>
-      <div className="rounded-2xl border border-amber-300/20 bg-slate-950/40 p-4 text-sm text-slate-200">
-        Timer informativo: hasta 3 minutos de deliberacion.
+      <span className="inline-block rounded-full bg-amber-400/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-amber-200">
+        EN REVISIÓN
+      </span>
+      <p className="text-xl font-semibold text-white">{nombreAtleta}</p>
+
+      <div className="grid grid-cols-2 gap-3">
+        {(['Blanca', 'Roja'] as const).map((card) => {
+          const isSelected = selectedCard === card
+          const colorClasses =
+            card === 'Blanca'
+              ? isSelected
+                ? 'border-white bg-white ring-4 ring-white/50'
+                : 'border-white bg-white opacity-60'
+              : isSelected
+                ? 'border-red-500 bg-red-500 ring-4 ring-red-400/50'
+                : 'border-red-500 bg-red-500 opacity-60'
+          return (
+            <button
+              key={card}
+              type="button"
+              aria-label={`Resolver como ${card}`}
+              onClick={() => {
+                onSelectCard(card)
+                if (card === 'Blanca') onMotivoDqChange('')
+              }}
+              className={`h-40 w-full rounded-2xl border transition ${colorClasses}`}
+            />
+          )
+        })}
       </div>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <button
-          type="button"
-          onClick={() => {
-            onSelectCard('Blanca')
-            onMotivoDqChange('')
-          }}
-          className={[
-            'rounded-2xl border px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em]',
-            selectedCard === 'Blanca'
-              ? 'border-cyan-300 bg-cyan-400/15 text-cyan-100'
-              : 'border-slate-700 bg-slate-950/70 text-slate-200',
-          ].join(' ')}
-        >
-          RESOLVER -&gt; BLANCA
-        </button>
-        <button
-          type="button"
-          onClick={() => onSelectCard('Roja')}
-          className={[
-            'rounded-2xl border px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em]',
-            selectedCard === 'Roja'
-              ? 'border-red-300 bg-red-400/15 text-red-100'
-              : 'border-slate-700 bg-slate-950/70 text-slate-200',
-          ].join(' ')}
-        >
-          RESOLVER -&gt; ROJA
-        </button>
-      </div>
+
       {selectedCard === 'Roja' ? (
         <MotivoDqSelector value={motivoDq} options={DQ_REASONS} onChange={onMotivoDqChange} />
       ) : null}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+
+      <div className="grid grid-cols-2 gap-3">
         <button
           type="button"
           onClick={onVolver}
           className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-100"
         >
-          Volver a la grilla
+          VOLVER
         </button>
         <button
           type="button"
@@ -81,7 +76,7 @@ export function StepRevision({
           onClick={onConfirm}
           className="w-full rounded-2xl bg-amber-300 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950 disabled:opacity-50"
         >
-          Confirmar resolucion
+          CONFIRMAR
         </button>
       </div>
     </section>

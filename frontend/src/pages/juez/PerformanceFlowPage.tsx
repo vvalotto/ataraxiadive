@@ -32,14 +32,16 @@ export function PerformanceFlowPage() {
         <StepIndicator currentStep={flow.completed ? 6 : flow.step} />
       </section>
 
-      <AtletaCard
-        nombreAtleta={flow.atletaActivo.nombreAtleta}
-        apDeclarado={flow.atletaActivo.apDeclarado}
-        unidad={flow.atletaActivo.unidad}
-        andarivel={flow.atletaActivo.andarivel}
-        otProgramado={flow.atletaActivo.otProgramado}
-        estado={flow.completed ? 'COMPLETADA' : flow.atletaActivo.estado}
-      />
+      {flow.step !== 4 && flow.step !== 5 && flow.step !== 6 && flow.step !== 7 ? (
+        <AtletaCard
+          nombreAtleta={flow.atletaActivo.nombreAtleta}
+          apDeclarado={flow.atletaActivo.apDeclarado}
+          unidad={flow.atletaActivo.unidad}
+          andarivel={flow.atletaActivo.andarivel}
+          otProgramado={flow.atletaActivo.otProgramado}
+          estado={flow.completed ? 'COMPLETADA' : flow.atletaActivo.estado}
+        />
+      ) : null}
 
       {flow.inlineError ? (
         <section className="rounded-3xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-100">
@@ -143,6 +145,9 @@ export function PerformanceFlowPage() {
 
       {/* Paso 4 — Performance en curso */}
       {!flow.completed && flow.step === 4 && !flow.isBkoMode ? (
+        <p className="px-1 text-lg font-semibold text-white">{flow.atletaActivo.nombreAtleta}</p>
+      ) : null}
+      {!flow.completed && flow.step === 4 && !flow.isBkoMode ? (
         <section className="space-y-4 rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5">
           <h3 className="text-xl font-semibold text-white">Paso 4 · Performance</h3>
           <p className="text-sm text-slate-300">
@@ -173,18 +178,19 @@ export function PerformanceFlowPage() {
 
       {/* Paso 4 — BKO mode */}
       {!flow.completed && flow.step === 4 && flow.isBkoMode ? (
+        <p className="px-1 text-lg font-semibold text-white">{flow.atletaActivo.nombreAtleta}</p>
+      ) : null}
+      {!flow.completed && flow.step === 4 && flow.isBkoMode ? (
         <StepBKO
           isSTA={flow.isSTA}
           metros={flow.metros}
           centimetros={flow.centimetros}
           unidad={flow.atletaActivo.unidad}
-          distanciaBlackout={flow.distanciaBlackout}
           motivoDq={flow.motivoDq}
           canSubmitBko={flow.canSubmitBko}
           isPending={flow.bkoMutation.isPending}
           onMetrosChange={flow.setMetros}
           onCentimetrosChange={flow.setCentimetros}
-          onDistanciaChange={flow.setDistanciaBlackout}
           onMotivoDqChange={flow.setMotivoDq}
           onConfirm={() => flow.bkoMutation.mutate()}
           onCancel={() => {
@@ -197,7 +203,8 @@ export function PerformanceFlowPage() {
 
       {/* Paso 5 — Registrar RP */}
       {!flow.completed && flow.step === 5 ? (
-        <section className="space-y-4">
+        <section className="space-y-3">
+          <p className="px-1 text-lg font-semibold text-white">{flow.atletaActivo.nombreAtleta}</p>
           <RpSelector
             metros={flow.metros}
             centimetros={flow.centimetros}
@@ -218,11 +225,12 @@ export function PerformanceFlowPage() {
 
       {/* Paso 6 — Asignar tarjeta */}
       {!flow.completed && flow.step === 6 ? (
+        <p className="px-1 text-lg font-semibold text-white">{flow.atletaActivo.nombreAtleta}</p>
+      ) : null}
+      {!flow.completed && flow.step === 6 ? (
         <StepTarjeta
           selectedCard={flow.selectedCard}
           motivoDq={flow.motivoDq}
-          distanciaBlackout={flow.distanciaBlackout}
-          needsBlackoutDistance={flow.needsBlackoutDistance}
           canSubmitRedCard={flow.canSubmitRedCard}
           isPending={flow.tarjetaMutation.isPending}
           penalizaciones={{
@@ -233,7 +241,6 @@ export function PerformanceFlowPage() {
           }}
           onSelectCard={flow.setSelectedCard}
           onMotivoDqChange={flow.setMotivoDq}
-          onDistanciaChange={flow.setDistanciaBlackout}
           onConfirm={() => flow.tarjetaMutation.mutate()}
         />
       ) : null}
@@ -241,6 +248,7 @@ export function PerformanceFlowPage() {
       {/* Paso 7 — Resolver revisión */}
       {!flow.completed && flow.step === 7 ? (
         <StepRevision
+          nombreAtleta={flow.atletaActivo.nombreAtleta}
           selectedCard={flow.selectedCard}
           motivoDq={flow.motivoDq}
           canSubmitRedCard={flow.canSubmitRedCard}
@@ -257,8 +265,30 @@ export function PerformanceFlowPage() {
 
       {/* Completada */}
       {flow.completed ? (
-        <section className="space-y-4 rounded-[2rem] border border-emerald-300/30 bg-emerald-400/10 p-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-300">
+        <section
+          className={[
+            'space-y-4 rounded-[2rem] border p-5',
+            flow.resultKind === 'ROJA'
+              ? 'border-red-300/30 bg-red-500/10'
+              : flow.resultKind === 'DNS'
+                ? 'border-slate-600/40 bg-slate-800/40'
+                : flow.resultKind === 'AMARILLA'
+                  ? 'border-amber-300/30 bg-amber-400/10'
+                  : 'border-emerald-300/30 bg-emerald-400/10',
+          ].join(' ')}
+        >
+          <p
+            className={[
+              'text-xs font-semibold uppercase tracking-[0.24em]',
+              flow.resultKind === 'ROJA'
+                ? 'text-red-300'
+                : flow.resultKind === 'DNS'
+                  ? 'text-slate-400'
+                  : flow.resultKind === 'AMARILLA'
+                    ? 'text-amber-300'
+                    : 'text-emerald-300',
+            ].join(' ')}
+          >
             {flow.resultKind === 'DNS' ? 'DNS registrado' : 'Performance completada'}
           </p>
           <h3 className="text-2xl font-semibold text-white">{flow.completionTitle}</h3>
