@@ -1,54 +1,77 @@
+import type { PenalizacionPayload } from '../../api/competencia'
+import { PENALTY_LABELS, PENALTY_TYPES } from '../../constants/tarjeta'
+import { admitePenalizaciones } from '../../utils/disciplina'
+
 interface PenalizacionesSelectorProps {
   disciplina: string
-  count: number
-  onChange: (next: number) => void
-}
-
-function admitePenalizaciones(disciplina: string) {
-  return disciplina === 'DNF' || disciplina === 'DYN' || disciplina === 'DBF'
+  penalizaciones: PenalizacionPayload[]
+  onChange: (next: PenalizacionPayload[]) => void
 }
 
 export function PenalizacionesSelector({
   disciplina,
-  count,
+  penalizaciones,
   onChange,
 }: PenalizacionesSelectorProps) {
   const enabled = admitePenalizaciones(disciplina)
 
+  function countForType(tipo: string) {
+    return penalizaciones.filter((p) => p.tipo === tipo).length
+  }
+
+  function addType(tipo: string) {
+    onChange([...penalizaciones, { tipo, deduccion: '3' }])
+  }
+
+  function removeType(tipo: string) {
+    const idx = penalizaciones.findLastIndex((p) => p.tipo === tipo)
+    if (idx === -1) return
+    onChange([...penalizaciones.slice(0, idx), ...penalizaciones.slice(idx + 1)])
+  }
+
   return (
     <div className="space-y-3 rounded-2xl bg-slate-950/70 p-4">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-            Penalizaciones
-          </p>
-          <p className="mt-1 text-sm text-slate-300">
-            {enabled ? 'Cada penalizacion descuenta 3m del RP medido.' : `${disciplina} no admite penalizaciones`}
-          </p>
-        </div>
-        <span className="rounded-full bg-slate-900 px-3 py-2 text-sm font-semibold text-white">
-          {count}
-        </span>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        <button
-          type="button"
-          disabled={!enabled || count === 0}
-          onClick={() => onChange(Math.max(0, count - 1))}
-          className="rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm font-semibold text-white disabled:opacity-40"
-        >
-          −
-        </button>
-        <button
-          type="button"
-          disabled={!enabled}
-          onClick={() => onChange(count + 1)}
-          className="rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm font-semibold text-white disabled:opacity-40"
-        >
-          +
-        </button>
-      </div>
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+        Penalizaciones
+      </p>
+      {!enabled ? (
+        <p className="text-sm text-slate-300">{disciplina} no admite penalizaciones</p>
+      ) : (
+        <>
+          {PENALTY_TYPES.map((tipo) => {
+            const count = countForType(tipo)
+            return (
+              <div key={tipo} className="flex items-center justify-between gap-3">
+                <p className="flex-1 text-sm text-slate-300">{PENALTY_LABELS[tipo]}</p>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    disabled={count === 0}
+                    onClick={() => removeType(tipo)}
+                    className="rounded-xl border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-40"
+                  >
+                    −
+                  </button>
+                  <span className="w-5 text-center text-sm font-semibold text-white">{count}</span>
+                  <button
+                    type="button"
+                    onClick={() => addType(tipo)}
+                    className="rounded-xl border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm font-semibold text-white"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            )
+          })}
+          {penalizaciones.length > 0 ? (
+            <p className="text-xs text-slate-400">
+              {penalizaciones.length} penalización{penalizaciones.length > 1 ? 'es' : ''} ·{' '}
+              −{penalizaciones.length * 3}m
+            </p>
+          ) : null}
+        </>
+      )}
     </div>
   )
 }

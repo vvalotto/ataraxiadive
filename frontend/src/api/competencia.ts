@@ -1,5 +1,5 @@
-import useAuthStore from '../stores/useAuthStore'
 import type { EstadoPerformance } from '../types/auth'
+import { getToken } from './tokenProvider'
 
 export class ApiError extends Error {
   status: number
@@ -51,7 +51,7 @@ export interface PenalizacionPayload {
 }
 
 function buildHeaders() {
-  const token = useAuthStore.getState().token
+  const token = getToken()
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   }

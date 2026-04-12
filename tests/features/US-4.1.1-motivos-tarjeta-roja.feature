@@ -35,6 +35,6 @@ Feature: US-4.1.1 - Motivos de tarjeta roja con catalogo formal
 
   Scenario: tarjeta amarilla mantiene motivo texto libre
     When asigna tarjeta Amarilla con motivo texto "duda sobre protocolo"
-    Then la Performance pasa a estado Ejecutada
+    Then la Performance pasa a estado EnRevision
     And el evento TarjetaAsignada registra motivo_texto "duda sobre protocolo"
     And el evento TarjetaAsignada no registra motivo_dq_codigo

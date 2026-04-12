@@ -82,10 +82,15 @@ def _tarjeta_event(performance_id: Any, participante_id: Any) -> dict[str, Any]:
             "participante_id": str(participante_id),
             "disciplina": Disciplina.STA.value,
             "tipo": "Blanca",
-            "motivo": None,
+            "motivo_dq_codigo": None,
+            "motivo_texto": None,
             "asignada_por": "juez-001",
             "asignada_en": datetime(2026, 3, 23, 10, 36, 0).isoformat(),
             "occurred_at": datetime(2026, 3, 23, 10, 36, 0).isoformat(),
+            "rp_medido": "89.5",
+            "rp_penalizado": None,
+            "distancia_blackout": None,
+            "penalizaciones": [],
         },
     }
 

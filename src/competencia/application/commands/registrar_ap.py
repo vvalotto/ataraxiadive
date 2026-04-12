@@ -114,7 +114,7 @@ class RegistrarAPHandler:
             participante_id=command.participante_id,
             disciplina=command.disciplina,
         )
-        performance.registrarAP(command.valor_ap, command.unidad)
+        performance.registrar_ap(command.valor_ap, command.unidad)
         await persistir_eventos_pendientes(
             event_store=self._event_store,
             stream_id=stream_id,

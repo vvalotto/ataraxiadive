@@ -4,6 +4,10 @@ import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './index.css'
 import App from './App.tsx'
+import { setTokenProvider } from './api/tokenProvider'
+import useAuthStore from './stores/useAuthStore'
+
+setTokenProvider(() => useAuthStore.getState().token)
 
 const queryClient = new QueryClient()
 

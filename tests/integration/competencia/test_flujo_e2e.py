@@ -39,6 +39,7 @@ from competencia.application.commands.registrar_resultado import (
     RegistrarResultadoHandler,
 )
 from competencia.domain.value_objects.disciplina import Disciplina
+from competencia.domain.value_objects.motivo_dq import MotivoDQ
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
@@ -143,7 +144,7 @@ async def _tarjeta_amarilla(store: SQLiteEventStore, cid: UUID, pid: UUID) -> No
             disciplina=_DISCIPLINA,
             tipo=TipoTarjeta.Amarilla,
             asignada_por=_JUEZ,
-            motivo="sin superficie",
+            motivo_texto="sin superficie",
         )
     )
 
@@ -156,7 +157,7 @@ async def _tarjeta_blackout(store: SQLiteEventStore, cid: UUID, pid: UUID, dista
             disciplina=_DISCIPLINA,
             tipo=TipoTarjeta.Roja,
             asignada_por=_JUEZ,
-            motivo="black-out",
+            motivo_dq=MotivoDQ.BKO_SUPERFICIE,
             distancia_blackout=Decimal(distancia),
         )
     )
@@ -301,9 +302,9 @@ async def test_progreso_consistente_con_event_store(
     progreso = r_progreso.json()
 
     assert progreso["total"] == 5
-    assert progreso["ejecutadas"] == 4  # A, C, D, E (B es DNS)
+    assert progreso["ejecutadas"] == 3  # A, D, E — C queda EnRevision (amarilla sin resolver)
     assert progreso["dns_count"] == 1
-    assert progreso["completadas"] == 5
+    assert progreso["completadas"] == 4
 
 
 @pytest.mark.asyncio
@@ -318,7 +319,7 @@ async def test_blackout_con_distancia_en_event_store(
     blackout_events = [
         e
         for e in events
-        if e["event_type"] == "TarjetaAsignada" and e["data"].get("motivo") == "black-out"
+        if e["event_type"] == "TarjetaAsignada" and e["data"].get("motivo_dq_codigo") == "BKO_SUPERFICIE"
     ]
     # stream_id = "performance-{competencia_id}-{participante_id}-{disciplina}"
     # performance_id en el DTO es "{participante_id}-{disciplina}" (sufijo post-prefijo)

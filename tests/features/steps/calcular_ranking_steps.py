@@ -33,6 +33,7 @@ from competencia.application.commands.registrar_resultado import (
     RegistrarResultadoHandler,
 )
 from competencia.domain.value_objects.disciplina import Disciplina
+from competencia.domain.value_objects.motivo_dq import MotivoDQ
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
@@ -133,6 +134,12 @@ async def _performance_ejecutada(
             registrado_por="juez-001",
         )
     )
+    _MOTIVO_DQ_MAP: dict[str, MotivoDQ] = {
+        "BO": MotivoDQ.PROTOCOLO_SUPERFICIE,
+        "black-out": MotivoDQ.BKO_SUPERFICIE,
+    }
+    motivo_dq = _MOTIVO_DQ_MAP.get(motivo or "", MotivoDQ.PROTOCOLO_SUPERFICIE) if tarjeta == TipoTarjeta.Roja else None
+    motivo_texto = motivo if tarjeta == TipoTarjeta.Amarilla else None
     await AsignarTarjetaHandler(event_store=store).handle(
         AsignarTarjetaCommand(
             competencia_id=cid,
@@ -140,7 +147,8 @@ async def _performance_ejecutada(
             disciplina=disciplina,
             tipo=tarjeta,
             asignada_por="juez-001",
-            motivo=motivo,
+            motivo_dq=motivo_dq,
+            motivo_texto=motivo_texto,
         )
     )
 

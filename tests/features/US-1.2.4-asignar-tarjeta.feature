@@ -18,7 +18,7 @@ Feature: Asignar Tarjeta
 
   Scenario: Juez asigna tarjeta amarilla con motivo obligatorio
     When el juez asigna tarjeta amarilla con motivo="superficie sin protocolo" asignada_por="juez-001"
-    Then la performance pasa al estado "Ejecutada"
+    Then la performance pasa al estado "EnRevision"
     And el evento TarjetaAsignada persiste en el event stream
     And el evento contiene tipo="Amarilla", motivo_texto="superficie sin protocolo" y asignadaPor="juez-001"
 

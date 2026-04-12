@@ -261,6 +261,13 @@ def then_performance_ejecutada(ctx):
     assert performance.estado == EstadoPerformance.Ejecutada
 
 
+@then("la Performance pasa a estado EnRevision")
+def then_performance_en_revision(ctx):
+    assert ctx["error"] is None
+    performance = Performance.reconstitute(_load_events(ctx))
+    assert performance.estado == EstadoPerformance.EnRevision
+
+
 @then(parsers.parse('el evento TarjetaAsignada registra motivo_dq_codigo "{codigo}"'))
 def then_evento_motivo_dq(ctx, codigo: str):
     events = _load_events(ctx)
