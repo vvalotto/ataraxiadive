@@ -258,8 +258,30 @@ export function PerformanceFlowPage() {
 
       {/* Completada */}
       {flow.completed ? (
-        <section className="space-y-4 rounded-[2rem] border border-emerald-300/30 bg-emerald-400/10 p-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-300">
+        <section
+          className={[
+            'space-y-4 rounded-[2rem] border p-5',
+            flow.resultKind === 'ROJA'
+              ? 'border-red-300/30 bg-red-500/10'
+              : flow.resultKind === 'DNS'
+                ? 'border-slate-600/40 bg-slate-800/40'
+                : flow.resultKind === 'AMARILLA'
+                  ? 'border-amber-300/30 bg-amber-400/10'
+                  : 'border-emerald-300/30 bg-emerald-400/10',
+          ].join(' ')}
+        >
+          <p
+            className={[
+              'text-xs font-semibold uppercase tracking-[0.24em]',
+              flow.resultKind === 'ROJA'
+                ? 'text-red-300'
+                : flow.resultKind === 'DNS'
+                  ? 'text-slate-400'
+                  : flow.resultKind === 'AMARILLA'
+                    ? 'text-amber-300'
+                    : 'text-emerald-300',
+            ].join(' ')}
+          >
             {flow.resultKind === 'DNS' ? 'DNS registrado' : 'Performance completada'}
           </p>
           <h3 className="text-2xl font-semibold text-white">{flow.completionTitle}</h3>
