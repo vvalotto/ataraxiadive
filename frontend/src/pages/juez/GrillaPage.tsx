@@ -39,6 +39,14 @@ function resolveRowStatus(
   return 'PENDIENTE'
 }
 
+const STATUS_ORDER: Record<RowStatus, number> = {
+  SIGUIENTE: 0,
+  EN_CURSO: 1,
+  REVISION: 2,
+  PENDIENTE: 3,
+  FINALIZADA: 4,
+}
+
 function statusClasses(status: RowStatus) {
   if (status === 'EN_CURSO') {
     return 'border-cyan-300/60 bg-cyan-400/10'
@@ -80,6 +88,23 @@ export function GrillaPage() {
     return first?.performance_id ?? null
   }, [grillaQuery.data])
 
+  const grillaOrdenada = useMemo(() => {
+    const grilla = grillaQuery.data ?? []
+    return [...grilla].sort((a, b) => {
+      const statusA = resolveRowStatus(
+        a,
+        performanceActualQuery.data?.performance_id ?? null,
+        firstPendingPerformanceId,
+      )
+      const statusB = resolveRowStatus(
+        b,
+        performanceActualQuery.data?.performance_id ?? null,
+        firstPendingPerformanceId,
+      )
+      return STATUS_ORDER[statusA] - STATUS_ORDER[statusB]
+    })
+  }, [grillaQuery.data, performanceActualQuery.data, firstPendingPerformanceId])
+
   if (!competenciaId || !disciplinaActiva) {
     return (
       <JuezLayout title="Grilla" subtitle="Sin competencia seleccionada">
@@ -115,7 +140,7 @@ export function GrillaPage() {
         </section>
       ) : null}
 
-      {grillaQuery.data?.map((atleta) => {
+      {grillaOrdenada.map((atleta) => {
         const status = resolveRowStatus(
           atleta,
           performanceActualQuery.data?.performance_id ?? null,
