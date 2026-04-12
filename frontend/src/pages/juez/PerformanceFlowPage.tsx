@@ -48,8 +48,21 @@ function buildRpValue(metros: number, centimetros: string) {
   return `${metros}.${centimetros.padEnd(2, '0')}`
 }
 
+function buildResultadoValue(metros: number, centimetros: string, unidad: string) {
+  if (unidad === 'Segundos') {
+    return String(metros * 60 + Number(centimetros || '0'))
+  }
+  return buildRpValue(metros, centimetros)
+}
+
 function formatMarca(value: string, unidad: string) {
-  return `${value} ${unidad === 'Segundos' ? 's' : 'm'}`
+  if (unidad === 'Segundos') {
+    const totalSeconds = Number(value || '0')
+    const minutos = Math.floor(totalSeconds / 60)
+    const segundos = totalSeconds % 60
+    return `${minutos}:${String(segundos).padStart(2, '0')} min`
+  }
+  return `${value} m`
 }
 
 function admitePenalizaciones(disciplina: string) {
@@ -82,6 +95,7 @@ export function PerformanceFlowPage() {
   const [inlineError, setInlineError] = useState<string | null>(null)
   const [metros, setMetros] = useState(0)
   const [centimetros, setCentimetros] = useState('')
+  const [otWindowActive, setOtWindowActive] = useState(false)
   const [chronoStarted, setChronoStarted] = useState(false)
   const [selectedCard, setSelectedCard] = useState<TarjetaSeleccionada>(null)
   const [motivoDq, setMotivoDq] = useState('')
@@ -164,7 +178,7 @@ export function PerformanceFlowPage() {
         competenciaId: competenciaId!,
         participanteId: atletaActivo!.atletaId,
         disciplina: disciplinaActiva!,
-        valorRp: buildRpValue(metros, centimetros),
+        valorRp: buildResultadoValue(metros, centimetros, atletaActivo!.unidad || 'Metros'),
         unidad: atletaActivo!.unidad || 'Metros',
       })
     },
@@ -302,7 +316,10 @@ export function PerformanceFlowPage() {
     if (resultKind === 'AMARILLA') {
       return 'La performance queda en revision hasta definir tarjeta final'
     }
-    const marca = formatMarca(buildRpValue(metros, centimetros), atletaActivo?.unidad ?? 'Metros')
+    const marca = formatMarca(
+      buildResultadoValue(metros, centimetros, atletaActivo?.unidad ?? 'Metros'),
+      atletaActivo?.unidad ?? 'Metros',
+    )
     if (resultKind === 'BLANCA_CON_PENALIZACIONES') {
       return `${marca} · ${penaltyCount} penalizaciones`
     }
@@ -315,8 +332,7 @@ export function PerformanceFlowPage() {
 
   return (
     <JuezLayout
-      title="Performance"
-      subtitle={`${disciplinaActiva} · ${atletaActivo.nombreAtleta}`}
+      title={disciplinaActiva}
       actions={
         <Link
           to="/juez/grilla"
@@ -371,7 +387,10 @@ export function PerformanceFlowPage() {
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <button
               type="button"
-              onClick={() => setStep(3)}
+              onClick={() => {
+                setOtWindowActive(false)
+                setStep(3)
+              }}
               className="w-full rounded-2xl bg-emerald-400 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950"
             >
               CONTINUAR
@@ -398,13 +417,38 @@ export function PerformanceFlowPage() {
               minute: '2-digit',
             })}
           </p>
-          <button
-            type="button"
-            onClick={() => setStep(4)}
-            className="w-full rounded-2xl bg-amber-300 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950"
-          >
-            INICIAR VENTANA OT
-          </button>
+          {!otWindowActive ? (
+            <button
+              type="button"
+              onClick={() => setOtWindowActive(true)}
+              className="w-full rounded-2xl bg-amber-300 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950"
+            >
+              INICIAR VENTANA OT
+            </button>
+          ) : (
+            <>
+              <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
+                  Ventana OT activa
+                </p>
+                <p className="mt-2 text-sm text-slate-100">
+                  {isSTA
+                    ? 'Las vias respiratorias del atleta entran en contacto con el agua.'
+                    : 'El atleta comienza su performance dentro de la ventana oficial.'}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setChronoStarted(true)
+                  setStep(4)
+                }}
+                className="w-full rounded-2xl bg-emerald-400 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950"
+              >
+                {isSTA ? 'VIAS RESPIRATORIAS EN AGUA' : 'ATLETA INICIA'}
+              </button>
+            </>
+          )}
         </section>
       ) : null}
 
@@ -413,26 +457,16 @@ export function PerformanceFlowPage() {
           <h3 className="text-xl font-semibold text-white">Paso 4 · Performance</h3>
           <p className="text-sm text-slate-300">
             {chronoStarted
-              ? 'La performance está en curso. Finaliza cuando el atleta complete su intento.'
-              : 'Inicia el cronómetro local cuando comience la performance.'}
+              ? 'La performance esta en curso. Finaliza cuando el atleta complete su intento.'
+              : 'La performance ya fue iniciada desde la ventana OT.'}
           </p>
-          {!chronoStarted ? (
-            <button
-              type="button"
-              onClick={() => setChronoStarted(true)}
-              className="w-full rounded-2xl bg-fuchsia-300 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950"
-            >
-              INICIAR PERFORMANCE
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setStep(5)}
-              className="w-full rounded-2xl bg-orange-300 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950"
-            >
-              FINALIZAR PERFORMANCE
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={() => setStep(5)}
+            className="w-full rounded-2xl bg-orange-300 px-4 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950"
+          >
+            FINALIZAR PERFORMANCE
+          </button>
           <button
             type="button"
             onClick={() => {
@@ -458,6 +492,7 @@ export function PerformanceFlowPage() {
               <RpSelector
                 metros={metros}
                 centimetros={centimetros}
+                unidad={atletaActivo.unidad}
                 onMetrosChange={setMetros}
                 onCentimetrosChange={setCentimetros}
               />
@@ -499,6 +534,7 @@ export function PerformanceFlowPage() {
           <RpSelector
             metros={metros}
             centimetros={centimetros}
+            unidad={atletaActivo.unidad}
             onMetrosChange={setMetros}
             onCentimetrosChange={setCentimetros}
           />
@@ -517,14 +553,11 @@ export function PerformanceFlowPage() {
         <section className="space-y-4 rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5">
           <h3 className="text-xl font-semibold text-white">Paso 6 · Tarjeta</h3>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            {([
-              ['Blanca', 'Tarjeta Blanca'],
-              ['Roja', 'Tarjeta Roja'],
-              ['Amarilla', 'Tarjeta Amarilla'],
-            ] as const).map(([card, label]) => (
+            {(['Blanca', 'Roja', 'Amarilla'] as const).map((card) => (
               <button
                 key={card}
                 type="button"
+                aria-label={`Tarjeta ${card}`}
                 onClick={() => {
                   setSelectedCard(card)
                   if (card === 'Blanca') {
@@ -538,7 +571,7 @@ export function PerformanceFlowPage() {
                   }
                 }}
                 className={[
-                  'rounded-2xl border px-4 py-4 text-center text-sm font-semibold uppercase tracking-[0.18em] transition',
+                  'h-20 rounded-2xl border transition',
                   (selectedCard === card ||
                     (card === 'Blanca' && selectedCard === 'BlancaConPenalizaciones'))
                     ? card === 'Blanca'
@@ -548,15 +581,7 @@ export function PerformanceFlowPage() {
                         : 'border-amber-300 bg-amber-400/15 text-amber-100'
                     : 'border-slate-700 bg-slate-950/70 text-slate-200',
                 ].join(' ')}
-              >
-                <span className="block text-[11px] tracking-[0.24em] text-slate-400">Tarjeta</span>
-                <span className="mt-2 block">
-                  {card === 'Blanca' ? 'VERDE' : card === 'Roja' ? 'ROJA' : 'AMARILLA'}
-                </span>
-                <span className="mt-2 block text-[11px] normal-case tracking-normal text-current/80">
-                  {label}
-                </span>
-              </button>
+              />
             ))}
           </div>
 

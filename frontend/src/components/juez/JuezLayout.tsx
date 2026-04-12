@@ -14,10 +14,9 @@ export function JuezLayout({ title, subtitle, actions, children }: JuezLayoutPro
         <header className="mb-6 rounded-3xl border border-slate-800 bg-slate-900/80 p-4 shadow-lg shadow-slate-950/40">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-400">
-                AtaraxiaDive
-              </p>
-              <h1 className="mt-2 text-2xl font-semibold text-slate-50">{title}</h1>
+              <h1 className="text-2xl font-semibold uppercase tracking-[0.18em] text-slate-50">
+                {title}
+              </h1>
               {subtitle ? <p className="mt-2 text-sm text-slate-400">{subtitle}</p> : null}
             </div>
             {actions}
