@@ -116,6 +116,7 @@ from competencia.infrastructure.repositories.performances_estado_adapter import 
 from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
     SQLiteCompetenciasPorTorneo,
 )
+from competencia.infrastructure.repositories.atleta_nombre_adapter import AtletaNombreAdapter
 from competencia.domain.exceptions import DomainError
 from shared.api.dependencies import JuezDep, OrganizadorDep
 
@@ -327,12 +328,8 @@ LlamarAtletaHandlerDep = Annotated[LlamarAtletaHandler, Depends(get_llamar_atlet
 RegistrarResultadoHandlerDep = Annotated[
     RegistrarResultadoHandler, Depends(get_registrar_resultado_handler)
 ]
-AsignarTarjetaHandlerDep = Annotated[
-    AsignarTarjetaHandler, Depends(get_asignar_tarjeta_handler)
-]
-RegistrarDNSHandlerDep = Annotated[
-    RegistrarDNSHandler, Depends(get_registrar_dns_handler)
-]
+AsignarTarjetaHandlerDep = Annotated[AsignarTarjetaHandler, Depends(get_asignar_tarjeta_handler)]
+RegistrarDNSHandlerDep = Annotated[RegistrarDNSHandler, Depends(get_registrar_dns_handler)]
 ResolverRevisionHandlerDep = Annotated[
     ResolverRevisionHandler, Depends(get_resolver_revision_handler)
 ]
@@ -415,7 +412,7 @@ def get_iniciar_competencia_handler(event_store: EventStoreDep) -> IniciarCompet
 
 def get_obtener_grilla_handler(event_store: EventStoreDep) -> ObtenerGrillaHandler:
     """Dependency: handler de consulta de la grilla."""
-    return ObtenerGrillaHandler(event_store)
+    return ObtenerGrillaHandler(event_store, AtletaNombreAdapter())
 
 
 def get_obtener_estado_competencia_handler(
