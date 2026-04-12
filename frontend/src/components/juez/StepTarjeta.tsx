@@ -76,7 +76,7 @@ export function StepTarjeta({
               type="button"
               aria-label={`Tarjeta ${card}`}
               onClick={() => handleCardClick(card)}
-              className={`h-20 rounded-2xl border transition ${colorClasses}`}
+              className={`h-40 rounded-2xl border transition ${colorClasses}`}
             />
           )
         })}

@@ -32,7 +32,7 @@ export function StepRevision({
       </span>
       <p className="text-xl font-semibold text-white">{nombreAtleta}</p>
 
-      <div className="flex flex-col gap-3">
+      <div className="grid grid-cols-2 gap-3">
         {(['Blanca', 'Roja'] as const).map((card) => {
           const isSelected = selectedCard === card
           const colorClasses =
