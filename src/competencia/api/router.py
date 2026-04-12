@@ -9,7 +9,7 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel
 
 from competencia.application.commands.asignar_tarjeta import (
@@ -631,7 +631,7 @@ async def post_ajustar_grilla(
             cambios=cambios,
         )
     )
-    return JSONResponse(content=None, status_code=204)
+    return Response(status_code=204)
 
 
 @router.post("/{competencia_id}/llamar", response_class=JSONResponse)
@@ -662,7 +662,7 @@ async def post_llamar_atleta(
         return JSONResponse(status_code=404, content={"detail": str(exc)})
     except DomainError as exc:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
-    return JSONResponse(content=None, status_code=204)
+    return Response(status_code=204)
 
 
 @router.post("/{competencia_id}/registrar-resultado", response_class=JSONResponse)
@@ -690,7 +690,7 @@ async def post_registrar_resultado(
         return JSONResponse(status_code=404, content={"detail": str(exc)})
     except DomainError as exc:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
-    return JSONResponse(content=None, status_code=204)
+    return Response(status_code=204)
 
 
 @router.post("/{competencia_id}/registrar-dns", response_class=JSONResponse)
@@ -714,7 +714,7 @@ async def post_registrar_dns(
         return JSONResponse(status_code=404, content={"detail": str(exc)})
     except DomainError as exc:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
-    return JSONResponse(content=None, status_code=204)
+    return Response(status_code=204)
 
 
 @router.post("/{competencia_id}/asignar-tarjeta", response_class=JSONResponse)
@@ -748,7 +748,7 @@ async def post_asignar_tarjeta(
         return JSONResponse(status_code=404, content={"detail": str(exc)})
     except DomainError as exc:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
-    return JSONResponse(content=None, status_code=204)
+    return Response(status_code=204)
 
 
 @router.post("/{competencia_id}/resolver-revision", response_class=JSONResponse)
@@ -780,7 +780,7 @@ async def post_resolver_revision(
         return JSONResponse(status_code=404, content={"detail": str(exc)})
     except DomainError as exc:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
-    return JSONResponse(content=None, status_code=204)
+    return Response(status_code=204)
 
 
 @router.post("/{competencia_id}/confirmar-grilla", response_class=JSONResponse)
@@ -801,7 +801,7 @@ async def post_confirmar_grilla(
             disciplina=body.disciplina,
         )
     )
-    return JSONResponse(content=None, status_code=204)
+    return Response(status_code=204)
 
 
 @router.post("/{competencia_id}/iniciar", response_class=JSONResponse)
@@ -823,7 +823,7 @@ async def post_iniciar_competencia(
             juez_id=body.juez_id,
         )
     )
-    return JSONResponse(content=None, status_code=204)
+    return Response(status_code=204)
 
 
 @router.get("/{competencia_id}/grilla", response_class=JSONResponse)
