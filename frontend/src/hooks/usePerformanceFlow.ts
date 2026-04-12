@@ -84,9 +84,7 @@ export function usePerformanceFlow() {
 
   const canSubmitBko = isSTA
     ? motivoDq.length > 0
-    : !rpConfirmDisabled && motivoDq.length > 0 && !needsBlackoutDistance
-      ? true
-      : !rpConfirmDisabled && motivoDq.length > 0 && distanciaBlackout.trim().length > 0
+    : !rpConfirmDisabled && motivoDq.length > 0
 
   const completionTitle = useMemo(() => {
     if (resultKind === 'DNS') return 'DNS REGISTRADO'
@@ -263,7 +261,7 @@ export function usePerformanceFlow() {
         disciplina: disciplinaActiva!,
         tarjeta: 'Roja',
         motivoDq,
-        distanciaBlackout: isSTA ? undefined : distanciaBlackout,
+        distanciaBlackout: isSTA ? undefined : buildRpValue(metros, centimetros),
       })
     },
     onSuccess: async () => finalizeResult('ROJA', 'Ejecutada'),

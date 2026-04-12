@@ -184,10 +184,7 @@ export function PerformanceFlowPage() {
           onMetrosChange={flow.setMetros}
           onCentimetrosChange={flow.setCentimetros}
           onMotivoDqChange={flow.setMotivoDq}
-          onConfirm={() => {
-            flow.setDistanciaBlackout(String(flow.metros))
-            flow.bkoMutation.mutate()
-          }}
+          onConfirm={() => flow.bkoMutation.mutate()}
           onCancel={() => {
             flow.setIsBkoMode(false)
             flow.setMotivoDq('')
