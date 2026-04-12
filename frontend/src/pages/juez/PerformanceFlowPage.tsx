@@ -242,6 +242,7 @@ export function PerformanceFlowPage() {
       {/* Paso 7 — Resolver revisión */}
       {!flow.completed && flow.step === 7 ? (
         <StepRevision
+          nombreAtleta={flow.atletaActivo.nombreAtleta}
           selectedCard={flow.selectedCard}
           motivoDq={flow.motivoDq}
           canSubmitRedCard={flow.canSubmitRedCard}
