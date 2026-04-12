@@ -394,6 +394,7 @@ class Performance(AggregateRoot):
             motivo_texto=motivo_texto,
             distancia_blackout=distancia_blackout,
             penalizaciones=penalizaciones,
+            es_disciplina_tiempo=self._disciplina.es_tiempo(),
         )
         resolucion = ResolucionTarjeta.desde_asignacion(tarjeta_asignacion, self._rp_medido)
 

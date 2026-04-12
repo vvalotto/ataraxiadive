@@ -27,6 +27,7 @@ class TarjetaAsignacion:
     motivo_texto: str | None
     distancia_blackout: Decimal | None
     penalizaciones: tuple[PenalizacionTecnica, ...] = ()
+    es_disciplina_tiempo: bool = False
 
     def __post_init__(self) -> None:
         self._validar_penalizaciones()
@@ -59,10 +60,12 @@ class TarjetaAsignacion:
 
     def _validar_distancia_blackout(self) -> None:
         if self.motivo_dq is not None and self.motivo_dq.requiere_distancia_blackout():
-            if self.distancia_blackout is None or self.distancia_blackout <= 0:
-                raise DistanciaBlackoutObligatoria(
-                    "Tarjeta roja por blackout requiere distancia_blackout > 0 (INV-DQ-01)"
-                )
+            # En disciplinas de tiempo (STA) no hay desplazamiento: distancia_blackout no aplica
+            if not self.es_disciplina_tiempo:
+                if self.distancia_blackout is None or self.distancia_blackout <= 0:
+                    raise DistanciaBlackoutObligatoria(
+                        "Tarjeta roja por blackout requiere distancia_blackout > 0 (INV-DQ-01)"
+                    )
             return
         if self.distancia_blackout is not None:
             raise DistanciaBlackoutNoAplica(
