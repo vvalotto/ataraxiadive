@@ -52,7 +52,7 @@ export function StepRevision({
                 onSelectCard(card)
                 if (card === 'Blanca') onMotivoDqChange('')
               }}
-              className={`h-16 w-full rounded-2xl border transition ${colorClasses}`}
+              className={`h-40 w-full rounded-2xl border transition ${colorClasses}`}
             />
           )
         })}
