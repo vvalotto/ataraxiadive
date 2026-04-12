@@ -61,15 +61,15 @@ export function StepTarjeta({
           const colorClasses =
             card === 'Blanca'
               ? isSelected
-                ? 'border-white bg-white/20 ring-2 ring-white/40'
-                : 'border-white/30 bg-white/5'
+                ? 'border-white bg-white ring-4 ring-white/50'
+                : 'border-white bg-white opacity-60'
               : card === 'Roja'
                 ? isSelected
-                  ? 'border-red-300 bg-red-500/25 ring-2 ring-red-300/40'
-                  : 'border-red-300/40 bg-red-500/8'
+                  ? 'border-red-500 bg-red-500 ring-4 ring-red-400/50'
+                  : 'border-red-500 bg-red-500 opacity-60'
                 : isSelected
-                  ? 'border-amber-300 bg-amber-400/25 ring-2 ring-amber-300/40'
-                  : 'border-amber-300/40 bg-amber-400/8'
+                  ? 'border-amber-400 bg-amber-400 ring-4 ring-amber-300/50'
+                  : 'border-amber-400 bg-amber-400 opacity-60'
           return (
             <button
               key={card}
