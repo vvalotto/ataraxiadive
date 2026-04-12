@@ -1,0 +1,204 @@
+{
+  "UAT-1.1_health": 
+  {
+    "status": "ok"
+  }
+,
+  "UAT-1.2_login_juez": 
+  {"http_status": 200, "esperado": 200, "token_presente": true}
+,
+  "UAT-1.3_torneos": 
+  {"torneo_id": "94432cdd-98c2-49d7-9c5a-fefc972c36ad", "estado": "EJECUCION", "esperado": "EJECUCION"}
+,
+  "UAT-1.4_competencias_del_torneo": 
+  [
+    {
+      "competencia_id": "2952bc4f-476e-4c9d-9ca7-49182b484819",
+      "disciplina": "DNF",
+      "torneo_id": "94432cdd-98c2-49d7-9c5a-fefc972c36ad"
+    },
+    {
+      "competencia_id": "a312165b-2e9b-47b2-a419-9b6b1e91509c",
+      "disciplina": "STA",
+      "torneo_id": "94432cdd-98c2-49d7-9c5a-fefc972c36ad"
+    }
+  ]
+,
+  "UAT-1.5_estado_dnf": 
+  {
+    "estado": "EnEjecucion",
+    "intervalo_minutos": 7,
+    "grilla_confirmada": true,
+    "torneo_id": "94432cdd-98c2-49d7-9c5a-fefc972c36ad"
+  }
+,
+  "UAT-1.6_estado_sta": 
+  {
+    "estado": "EnEjecucion",
+    "intervalo_minutos": 7,
+    "grilla_confirmada": true,
+    "torneo_id": "94432cdd-98c2-49d7-9c5a-fefc972c36ad"
+  }
+,
+  "UAT-1.7_grilla_dnf": 
+  [
+    {
+      "performance_id": "46b60f23-0dfa-46a7-bb94-6072dc2bf3e5",
+      "atleta_id": "b13f9f6b-5004-4b7b-84eb-91599e4277eb",
+      "nombre_atleta": "Diego Vega",
+      "posicion": 1,
+      "andarivel": 1,
+      "ot_programado": "2026-04-12T19:06:00+00:00",
+      "ap_declarado": "40",
+      "unidad": "Metros",
+      "estado": "AnunciadaAP"
+    },
+    {
+      "performance_id": "8e181a5a-cf5d-4267-9bef-cf60f5075c83",
+      "atleta_id": "44447034-92f2-4d23-a9a0-5aec2dfe8b72",
+      "nombre_atleta": "Laura Romero",
+      "posicion": 2,
+      "andarivel": 1,
+      "ot_programado": "2026-04-12T19:13:00+00:00",
+      "ap_declarado": "50",
+      "unidad": "Metros",
+      "estado": "AnunciadaAP"
+    },
+    {
+      "performance_id": "ff5e0ad8-a759-43b8-8b90-a35ced3bb720",
+      "atleta_id": "201cc118-33cb-487b-be10-05491be507f1",
+      "nombre_atleta": "Carlos Iba\u00f1ez",
+      "posicion": 3,
+      "andarivel": 1,
+      "ot_programado": "2026-04-12T19:20:00+00:00",
+      "ap_declarado": "60",
+      "unidad": "Metros",
+      "estado": "AnunciadaAP"
+    },
+    {
+      "performance_id": "cf1d4229-c1d8-4c3c-a85c-1a86303a58ff",
+      "atleta_id": "8e8c5bc1-f5a7-4970-bd2c-42dce9b44daa",
+      "nombre_atleta": "Ana Flores",
+      "posicion": 4,
+      "andarivel": 1,
+      "ot_programado": "2026-04-12T19:27:00+00:00",
+      "ap_declarado": "70",
+      "unidad": "Metros",
+      "estado": "AnunciadaAP"
+    },
+    {
+      "performance_id": "4cc64ee0-c36a-4912-b1c0-10961627da4a",
+      "atleta_id": "882e54c2-93f2-4322-ae30-9038446d281d",
+      "nombre_atleta": "Roberto Chen",
+      "posicion": 5,
+      "andarivel": 1,
+      "ot_programado": "2026-04-12T19:34:00+00:00",
+      "ap_declarado": "80",
+      "unidad": "Metros",
+      "estado": "AnunciadaAP"
+    },
+    {
+      "performance_id": "c3e536b1-a8a2-4205-aaf3-8c02c7a0acb0",
+      "atleta_id": "f6a2a5d5-3c52-4063-a9ad-b4873c88e404",
+      "nombre_atleta": "Patricia Ruiz",
+      "posicion": 6,
+      "andarivel": 1,
+      "ot_programado": "2026-04-12T19:41:00+00:00",
+      "ap_declarado": "90",
+      "unidad": "Metros",
+      "estado": "AnunciadaAP"
+    },
+    {
+      "performance_id": "5f3bf954-f44b-4efd-8c26-8bfebc7a0e4b",
+      "atleta_id": "329acaf8-f19b-4df4-b97f-10c959401ede",
+      "nombre_atleta": "Martin Acosta",
+      "posicion": 7,
+      "andarivel": 1,
+      "ot_programado": "2026-04-12T19:48:00+00:00",
+      "ap_declarado": "100",
+      "unidad": "Metros",
+      "estado": "EnRevision"
+    },
+    {
+      "performance_id": "e317ed45-6769-4f98-be9d-aa4b4962cba4",
+      "atleta_id": "e722d63e-0d7d-438b-bc48-51ee9b17e83d",
+      "nombre_atleta": "Silvia Casas",
+      "posicion": 8,
+      "andarivel": 1,
+      "ot_programado": "2026-04-12T19:55:00+00:00",
+      "ap_declarado": "110",
+      "unidad": "Metros",
+      "estado": "EnRevision"
+    },
+    {
+      "performance_id": "2da36171-f6ce-4999-92bc-f2bcc8f5d7b2",
+      "atleta_id": "5f8acf33-cd39-4452-b589-883d095ac541",
+      "nombre_atleta": "Jorge Mendez",
+      "posicion": 9,
+      "andarivel": 1,
+      "ot_programado": "2026-04-12T20:02:00+00:00",
+      "ap_declarado": "120",
+      "unidad": "Metros",
+      "estado": "Llamada"
+    },
+    {
+      "performance_id": "ea51b94b-9733-4276-8cbe-6eac63c6b47e",
+      "atleta_id": "65779ee5-cc22-49ef-b06e-cb6c82d6bbe6",
+      "nombre_atleta": "Claudia Rios",
+      "posicion": 10,
+      "andarivel": 1,
+      "ot_programado": "2026-04-12T20:09:00+00:00",
+      "ap_declarado": "130",
+      "unidad": "Metros",
+      "estado": "ResultadoRegistrado"
+    }
+  ]
+,
+  "UAT-1.8_grilla_sta": 
+  [
+    {
+      "performance_id": "c5fd3432-1e32-4cdc-ae4a-a6762638d200",
+      "atleta_id": "8e73c365-f7db-4a5f-a3ad-cbcb7a85c76b",
+      "nombre_atleta": "Javier Herrera",
+      "posicion": 1,
+      "andarivel": 1,
+      "ot_programado": "2026-04-12T22:06:00+00:00",
+      "ap_declarado": "120",
+      "unidad": "Segundos",
+      "estado": "AnunciadaAP"
+    },
+    {
+      "performance_id": "dd3baa83-0f92-4dd7-b2c8-f17f920dd094",
+      "atleta_id": "a30ff67d-0c02-4772-8124-a3203b992724",
+      "nombre_atleta": "Carolina Espinoza",
+      "posicion": 2,
+      "andarivel": 1,
+      "ot_programado": "2026-04-12T22:13:00+00:00",
+      "ap_declarado": "180",
+      "unidad": "Segundos",
+      "estado": "AnunciadaAP"
+    },
+    {
+      "performance_id": "e9400747-4064-4e0a-b8eb-bed65ff635f2",
+      "atleta_id": "d614deee-8641-4e94-9f22-5d2e6745d09e",
+      "nombre_atleta": "Fernando Bravo",
+      "posicion": 3,
+      "andarivel": 1,
+      "ot_programado": "2026-04-12T22:20:00+00:00",
+      "ap_declarado": "240",
+      "unidad": "Segundos",
+      "estado": "AnunciadaAP"
+    }
+  ]
+,
+  "UAT-1.9_performance_actual_dnf": 
+  {"performance_id":"2da36171-f6ce-4999-92bc-f2bcc8f5d7b2","nombre_atleta":"Atleta-5f8acf33","ap_declarado":"120","unidad":"Metros","unidad_esperada":"Metros","andarivel":2,"estado":"Llamada"}
+,
+  "UAT-1.10_progreso_dnf": 
+  {
+    "total": 10,
+    "ejecutadas": 0,
+    "dns_count": 0,
+    "completadas": 0
+  }
+}
