@@ -32,14 +32,16 @@ export function PerformanceFlowPage() {
         <StepIndicator currentStep={flow.completed ? 6 : flow.step} />
       </section>
 
-      <AtletaCard
-        nombreAtleta={flow.atletaActivo.nombreAtleta}
-        apDeclarado={flow.atletaActivo.apDeclarado}
-        unidad={flow.atletaActivo.unidad}
-        andarivel={flow.atletaActivo.andarivel}
-        otProgramado={flow.atletaActivo.otProgramado}
-        estado={flow.completed ? 'COMPLETADA' : flow.atletaActivo.estado}
-      />
+      {flow.step !== 5 ? (
+        <AtletaCard
+          nombreAtleta={flow.atletaActivo.nombreAtleta}
+          apDeclarado={flow.atletaActivo.apDeclarado}
+          unidad={flow.atletaActivo.unidad}
+          andarivel={flow.atletaActivo.andarivel}
+          otProgramado={flow.atletaActivo.otProgramado}
+          estado={flow.completed ? 'COMPLETADA' : flow.atletaActivo.estado}
+        />
+      ) : null}
 
       {flow.inlineError ? (
         <section className="rounded-3xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-100">
@@ -195,7 +197,8 @@ export function PerformanceFlowPage() {
 
       {/* Paso 5 — Registrar RP */}
       {!flow.completed && flow.step === 5 ? (
-        <section className="space-y-4">
+        <section className="space-y-3">
+          <p className="px-1 text-lg font-semibold text-white">{flow.atletaActivo.nombreAtleta}</p>
           <RpSelector
             metros={flow.metros}
             centimetros={flow.centimetros}
