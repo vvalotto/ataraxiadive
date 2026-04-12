@@ -14,28 +14,22 @@ interface PenalizacionesConfig {
 interface StepTarjetaProps {
   selectedCard: TarjetaSeleccionada
   motivoDq: string
-  distanciaBlackout: string
-  needsBlackoutDistance: boolean
   canSubmitRedCard: boolean
   isPending: boolean
   penalizaciones: PenalizacionesConfig
   onSelectCard: (card: TarjetaSeleccionada) => void
   onMotivoDqChange: (value: string) => void
-  onDistanciaChange: (value: string) => void
   onConfirm: () => void
 }
 
 export function StepTarjeta({
   selectedCard,
   motivoDq,
-  distanciaBlackout,
-  needsBlackoutDistance,
   canSubmitRedCard,
   isPending,
   penalizaciones,
   onSelectCard,
   onMotivoDqChange,
-  onDistanciaChange,
   onConfirm,
 }: StepTarjetaProps) {
   function handleCardClick(card: 'Blanca' | 'Roja' | 'Amarilla') {
@@ -89,17 +83,7 @@ export function StepTarjeta({
       </div>
 
       {selectedCard === 'Roja' ? (
-        <>
-          <MotivoDqSelector value={motivoDq} options={DQ_REASONS} onChange={onMotivoDqChange} />
-          {needsBlackoutDistance ? (
-            <input
-              value={distanciaBlackout}
-              onChange={(event) => onDistanciaChange(event.target.value)}
-              placeholder="Distancia blackout"
-              className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white"
-            />
-          ) : null}
-        </>
+        <MotivoDqSelector value={motivoDq} options={DQ_REASONS} onChange={onMotivoDqChange} />
       ) : null}
 
       {selectedCard === 'Blanca' || selectedCard === 'BlancaConPenalizaciones' ? (

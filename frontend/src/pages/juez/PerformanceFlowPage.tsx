@@ -32,7 +32,7 @@ export function PerformanceFlowPage() {
         <StepIndicator currentStep={flow.completed ? 6 : flow.step} />
       </section>
 
-      {flow.step !== 5 ? (
+      {flow.step !== 5 && flow.step !== 6 ? (
         <AtletaCard
           nombreAtleta={flow.atletaActivo.nombreAtleta}
           apDeclarado={flow.atletaActivo.apDeclarado}
@@ -219,11 +219,12 @@ export function PerformanceFlowPage() {
 
       {/* Paso 6 — Asignar tarjeta */}
       {!flow.completed && flow.step === 6 ? (
+        <p className="px-1 text-lg font-semibold text-white">{flow.atletaActivo.nombreAtleta}</p>
+      ) : null}
+      {!flow.completed && flow.step === 6 ? (
         <StepTarjeta
           selectedCard={flow.selectedCard}
           motivoDq={flow.motivoDq}
-          distanciaBlackout={flow.distanciaBlackout}
-          needsBlackoutDistance={flow.needsBlackoutDistance}
           canSubmitRedCard={flow.canSubmitRedCard}
           isPending={flow.tarjetaMutation.isPending}
           penalizaciones={{
@@ -234,7 +235,6 @@ export function PerformanceFlowPage() {
           }}
           onSelectCard={flow.setSelectedCard}
           onMotivoDqChange={flow.setMotivoDq}
-          onDistanciaChange={flow.setDistanciaBlackout}
           onConfirm={() => flow.tarjetaMutation.mutate()}
         />
       ) : null}
