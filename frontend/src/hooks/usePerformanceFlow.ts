@@ -12,6 +12,7 @@ import {
 } from '../api/competencia'
 import { admitePenalizaciones } from '../utils/disciplina'
 import useCompetenciaStore from '../stores/useCompetenciaStore'
+import { useComandoQueue } from './useComandoQueue'
 
 export type TarjetaSeleccionada = 'Blanca' | 'Roja' | 'BlancaConPenalizaciones' | 'Amarilla' | null
 export type ResultadoFinal = 'BLANCA' | 'BLANCA_CON_PENALIZACIONES' | 'ROJA' | 'AMARILLA' | 'DNS' | null
@@ -45,6 +46,7 @@ export function usePerformanceFlow() {
   const atletaActivo = useCompetenciaStore((s) => s.atletaActivo)
   const seleccionarAtleta = useCompetenciaStore((s) => s.seleccionarAtleta)
   const limpiarAtleta = useCompetenciaStore((s) => s.limpiarAtleta)
+  const { ejecutar } = useComandoQueue()
 
   const [step, setStep] = useState(() => {
     const estado = atletaActivo?.estado
@@ -108,7 +110,7 @@ export function usePerformanceFlow() {
 
   const refreshCompetencia = async () => {
     await Promise.all([
-      queryClient.invalidateQueries({ queryKey: ['grilla', competenciaId, disciplinaActiva] }),
+      queryClient.invalidateQueries({ queryKey: ['precarga', competenciaId, disciplinaActiva] }),
       queryClient.invalidateQueries({ queryKey: ['performance-actual', competenciaId] }),
     ])
   }
@@ -133,18 +135,32 @@ export function usePerformanceFlow() {
 
   const llamarMutation = useMutation({
     mutationFn: async () => {
-      await llamarAtleta({
-        competenciaId: competenciaId!,
-        participanteId: atletaActivo!.atletaId,
-        disciplina: disciplinaActiva!,
-        otProgramado: atletaActivo!.otProgramado,
-        posicionGrilla: atletaActivo!.posicion,
-        andarivel: atletaActivo!.andarivel,
-      })
+      return ejecutar(
+        'llamar',
+        competenciaId!,
+        {
+          participante_id: atletaActivo!.atletaId,
+          disciplina: disciplinaActiva!,
+          ot_programado: atletaActivo!.otProgramado,
+          posicion_grilla: atletaActivo!.posicion,
+          andarivel: atletaActivo!.andarivel,
+        },
+        () =>
+          llamarAtleta({
+            competenciaId: competenciaId!,
+            participanteId: atletaActivo!.atletaId,
+            disciplina: disciplinaActiva!,
+            otProgramado: atletaActivo!.otProgramado,
+            posicionGrilla: atletaActivo!.posicion,
+            andarivel: atletaActivo!.andarivel,
+          }),
+      )
     },
-    onSuccess: async () => {
+    onSuccess: async (result) => {
       setInlineError(null)
-      await refreshCompetencia()
+      if (!result.encolado) {
+        await refreshCompetencia()
+      }
       seleccionarAtleta({ ...atletaActivo!, estado: 'Llamada' })
       setStep(2)
     },
@@ -159,13 +175,31 @@ export function usePerformanceFlow() {
 
   const dnsMutation = useMutation({
     mutationFn: async () => {
-      await registrarDns({
-        competenciaId: competenciaId!,
-        participanteId: atletaActivo!.atletaId,
-        disciplina: disciplinaActiva!,
-      })
+      return ejecutar(
+        'dns',
+        competenciaId!,
+        {
+          participante_id: atletaActivo!.atletaId,
+          disciplina: disciplinaActiva!,
+        },
+        () =>
+          registrarDns({
+            competenciaId: competenciaId!,
+            participanteId: atletaActivo!.atletaId,
+            disciplina: disciplinaActiva!,
+          }),
+      )
     },
-    onSuccess: async () => finalizeResult('DNS', 'DNS'),
+    onSuccess: async (result) => {
+      if (!result.encolado) {
+        await finalizeResult('DNS', 'DNS')
+        return
+      }
+      setInlineError(null)
+      seleccionarAtleta({ ...atletaActivo!, estado: 'DNS' })
+      setResultKind('DNS')
+      setCompleted(true)
+    },
     onError: (error) => {
       setInlineError(error instanceof Error ? error.message : 'No se pudo registrar DNS')
     },
@@ -173,17 +207,30 @@ export function usePerformanceFlow() {
 
   const resultadoMutation = useMutation({
     mutationFn: async () => {
-      await registrarResultado({
-        competenciaId: competenciaId!,
-        participanteId: atletaActivo!.atletaId,
-        disciplina: disciplinaActiva!,
-        valorRp: buildResultadoValue(metros, centimetros, atletaActivo!.unidad || 'Metros'),
-        unidad: atletaActivo!.unidad || 'Metros',
-      })
+      return ejecutar(
+        'resultado',
+        competenciaId!,
+        {
+          participante_id: atletaActivo!.atletaId,
+          disciplina: disciplinaActiva!,
+          valor_rp: buildResultadoValue(metros, centimetros, atletaActivo!.unidad || 'Metros'),
+          unidad: atletaActivo!.unidad || 'Metros',
+        },
+        () =>
+          registrarResultado({
+            competenciaId: competenciaId!,
+            participanteId: atletaActivo!.atletaId,
+            disciplina: disciplinaActiva!,
+            valorRp: buildResultadoValue(metros, centimetros, atletaActivo!.unidad || 'Metros'),
+            unidad: atletaActivo!.unidad || 'Metros',
+          }),
+      )
     },
-    onSuccess: async () => {
+    onSuccess: async (result) => {
       setInlineError(null)
-      await refreshCompetencia()
+      if (!result.encolado) {
+        await refreshCompetencia()
+      }
       seleccionarAtleta({ ...atletaActivo!, estado: 'ResultadoRegistrado' })
       setStep(6)
     },
@@ -194,21 +241,58 @@ export function usePerformanceFlow() {
 
   const tarjetaMutation = useMutation({
     mutationFn: async () => {
-      await asignarTarjeta({
-        competenciaId: competenciaId!,
-        participanteId: atletaActivo!.atletaId,
-        disciplina: disciplinaActiva!,
-        tarjeta: selectedCard!,
-        motivoTexto: selectedCard === 'Amarilla' ? 'Revision pendiente del juez' : undefined,
-        motivoDq: selectedCard === 'Roja' ? motivoDq : undefined,
-        distanciaBlackout:
-          selectedCard === 'Roja' && needsBlackoutDistance
-            ? buildRpValue(metros, centimetros)
-            : undefined,
-        penalizaciones: selectedCard === 'BlancaConPenalizaciones' ? penalizaciones : [],
-      })
+      return ejecutar(
+        'tarjeta',
+        competenciaId!,
+        {
+          participante_id: atletaActivo!.atletaId,
+          disciplina: disciplinaActiva!,
+          tarjeta: selectedCard!,
+          motivo_texto: selectedCard === 'Amarilla' ? 'Revision pendiente del juez' : undefined,
+          motivo_dq: selectedCard === 'Roja' ? motivoDq : undefined,
+          distancia_blackout:
+            selectedCard === 'Roja' && needsBlackoutDistance
+              ? buildRpValue(metros, centimetros)
+              : undefined,
+          penalizaciones: selectedCard === 'BlancaConPenalizaciones' ? penalizaciones : [],
+        },
+        () =>
+          asignarTarjeta({
+            competenciaId: competenciaId!,
+            participanteId: atletaActivo!.atletaId,
+            disciplina: disciplinaActiva!,
+            tarjeta: selectedCard!,
+            motivoTexto: selectedCard === 'Amarilla' ? 'Revision pendiente del juez' : undefined,
+            motivoDq: selectedCard === 'Roja' ? motivoDq : undefined,
+            distanciaBlackout:
+              selectedCard === 'Roja' && needsBlackoutDistance
+                ? buildRpValue(metros, centimetros)
+                : undefined,
+            penalizaciones: selectedCard === 'BlancaConPenalizaciones' ? penalizaciones : [],
+          }),
+      )
     },
-    onSuccess: async () => {
+    onSuccess: async (result) => {
+      if (result.encolado) {
+        setInlineError(null)
+        if (selectedCard === 'Amarilla') {
+          seleccionarAtleta({ ...atletaActivo!, estado: 'EnRevision' })
+          setResultKind('AMARILLA')
+          setCompleted(false)
+          setStep(7)
+          return
+        }
+        seleccionarAtleta({ ...atletaActivo!, estado: 'Ejecutada' })
+        setResultKind(
+          selectedCard === 'Roja'
+            ? 'ROJA'
+            : selectedCard === 'BlancaConPenalizaciones'
+              ? 'BLANCA_CON_PENALIZACIONES'
+              : 'BLANCA',
+        )
+        setCompleted(true)
+        return
+      }
       if (selectedCard === 'Amarilla') {
         await finalizeResult('AMARILLA', 'EnRevision')
         setStep(7)
@@ -229,15 +313,33 @@ export function usePerformanceFlow() {
 
   const resolverRevisionMutation = useMutation({
     mutationFn: async () => {
-      await resolverRevision({
-        competenciaId: competenciaId!,
-        participanteId: atletaActivo!.atletaId,
-        disciplina: disciplinaActiva!,
-        resolucion: selectedCard === 'Roja' ? 'Roja' : 'Blanca',
-        motivoDq: selectedCard === 'Roja' ? motivoDq : undefined,
-      })
+      return ejecutar(
+        'resolver_revision',
+        competenciaId!,
+        {
+          participante_id: atletaActivo!.atletaId,
+          disciplina: disciplinaActiva!,
+          resolucion: selectedCard === 'Roja' ? 'Roja' : 'Blanca',
+          motivo_dq: selectedCard === 'Roja' ? motivoDq : undefined,
+        },
+        () =>
+          resolverRevision({
+            competenciaId: competenciaId!,
+            participanteId: atletaActivo!.atletaId,
+            disciplina: disciplinaActiva!,
+            resolucion: selectedCard === 'Roja' ? 'Roja' : 'Blanca',
+            motivoDq: selectedCard === 'Roja' ? motivoDq : undefined,
+          }),
+      )
     },
-    onSuccess: async () => {
+    onSuccess: async (result) => {
+      if (result.encolado) {
+        setInlineError(null)
+        seleccionarAtleta({ ...atletaActivo!, estado: 'Ejecutada' })
+        setResultKind(selectedCard === 'Roja' ? 'ROJA' : 'BLANCA')
+        setCompleted(true)
+        return
+      }
       const kind = selectedCard === 'Roja' ? 'ROJA' : 'BLANCA'
       await finalizeResult(kind, 'Ejecutada')
     },
@@ -249,23 +351,56 @@ export function usePerformanceFlow() {
   const bkoMutation = useMutation({
     mutationFn: async () => {
       const valorRp = isSTA ? '0' : buildRpValue(metros, centimetros)
-      await registrarResultado({
-        competenciaId: competenciaId!,
-        participanteId: atletaActivo!.atletaId,
-        disciplina: disciplinaActiva!,
-        valorRp,
-        unidad: atletaActivo!.unidad || 'Metros',
-      })
-      await asignarTarjeta({
-        competenciaId: competenciaId!,
-        participanteId: atletaActivo!.atletaId,
-        disciplina: disciplinaActiva!,
-        tarjeta: 'Roja',
-        motivoDq,
-        distanciaBlackout: isSTA ? undefined : buildRpValue(metros, centimetros),
-      })
+      const resultado = await ejecutar(
+        'resultado',
+        competenciaId!,
+        {
+          participante_id: atletaActivo!.atletaId,
+          disciplina: disciplinaActiva!,
+          valor_rp: valorRp,
+          unidad: atletaActivo!.unidad || 'Metros',
+        },
+        () =>
+          registrarResultado({
+            competenciaId: competenciaId!,
+            participanteId: atletaActivo!.atletaId,
+            disciplina: disciplinaActiva!,
+            valorRp,
+            unidad: atletaActivo!.unidad || 'Metros',
+          }),
+      )
+      const tarjeta = await ejecutar(
+        'tarjeta',
+        competenciaId!,
+        {
+          participante_id: atletaActivo!.atletaId,
+          disciplina: disciplinaActiva!,
+          tarjeta: 'Roja',
+          motivo_dq: motivoDq,
+          distancia_blackout: isSTA ? undefined : buildRpValue(metros, centimetros),
+        },
+        () =>
+          asignarTarjeta({
+            competenciaId: competenciaId!,
+            participanteId: atletaActivo!.atletaId,
+            disciplina: disciplinaActiva!,
+            tarjeta: 'Roja',
+            motivoDq,
+            distanciaBlackout: isSTA ? undefined : buildRpValue(metros, centimetros),
+          }),
+      )
+      return { encolado: resultado.encolado || tarjeta.encolado }
     },
-    onSuccess: async () => finalizeResult('ROJA', 'Ejecutada'),
+    onSuccess: async (result) => {
+      if (result.encolado) {
+        setInlineError(null)
+        seleccionarAtleta({ ...atletaActivo!, estado: 'Ejecutada' })
+        setResultKind('ROJA')
+        setCompleted(true)
+        return
+      }
+      await finalizeResult('ROJA', 'Ejecutada')
+    },
     onError: (error) => {
       setInlineError(error instanceof Error ? error.message : 'No se pudo registrar BKO')
     },

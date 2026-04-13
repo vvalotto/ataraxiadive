@@ -1,6 +1,6 @@
 import { db } from './index'
 import type { EstadoCompetenciaDto, GrillaAtletaDto } from '../api/competencia'
-import type { GrillaCacheRecord } from './schema'
+import type { ComandoQueueRecord, GrillaCacheRecord } from './schema'
 
 interface GrillaCacheKey {
   competenciaId: string
@@ -38,4 +38,57 @@ export async function setGrillaCache(
 
   await db.grilla_cache.put(nextRecord)
   return nextRecord
+}
+
+export async function enqueueCommand(
+  payload: Omit<ComandoQueueRecord, 'id' | 'estado' | 'creado_at' | 'intentos'>,
+): Promise<number | undefined> {
+  return db.comando_queue.add({
+    tipo: payload.tipo,
+    competencia_id: payload.competencia_id,
+    payload: payload.payload,
+    estado: 'pendiente',
+    creado_at: Date.now(),
+    intentos: 0,
+  })
+}
+
+export async function getPendingCount(): Promise<number> {
+  return db.comando_queue.where('estado').equals('pendiente').count()
+}
+
+export async function getCommandsByCompetencia(competenciaId: string): Promise<ComandoQueueRecord[]> {
+  return db.comando_queue
+    .where('competencia_id')
+    .equals(competenciaId)
+    .sortBy('id')
+}
+
+export async function applyOptimisticEstadoToCache(input: {
+  competenciaId: string
+  disciplina: string
+  participanteId: string
+  nextEstado: GrillaAtletaDto['estado']
+}): Promise<void> {
+  const cached = await getGrillaCache({
+    competenciaId: input.competenciaId,
+    disciplina: input.disciplina,
+  })
+  if (!cached) return
+
+  const nextGrilla = cached.grilla.map((atleta) =>
+    atleta.atleta_id === input.participanteId ? { ...atleta, estado: input.nextEstado } : atleta,
+  )
+
+  await setGrillaCache(
+    {
+      competenciaId: input.competenciaId,
+      disciplina: input.disciplina,
+    },
+    {
+      grilla: nextGrilla,
+      estado: cached.estado,
+      cachedAt: cached.cached_at,
+    },
+  )
 }

@@ -10,6 +10,8 @@ import { usePrecarga } from '../../hooks/usePrecarga'
 import { JuezLayout } from '../../components/juez/JuezLayout'
 import useCompetenciaStore from '../../stores/useCompetenciaStore'
 import useConnectionStore from '../../stores/useConnectionStore'
+import { getCommandsByCompetencia } from '../../db/queries'
+import type { ComandoQueueRecord } from '../../db/schema'
 
 type RowStatus = 'SIGUIENTE' | 'PENDIENTE' | 'EN_CURSO' | 'REVISION' | 'FINALIZADA'
 
@@ -49,6 +51,25 @@ const STATUS_ORDER: Record<RowStatus, number> = {
   FINALIZADA: 4,
 }
 
+function parsePayload(payload: string): Record<string, unknown> {
+  try {
+    return JSON.parse(payload) as Record<string, unknown>
+  } catch {
+    return {}
+  }
+}
+
+function projectedEstado(tipo: ComandoQueueRecord['tipo'], payload: Record<string, unknown>): GrillaAtletaDto['estado'] {
+  if (tipo === 'llamar') return 'Llamada'
+  if (tipo === 'resultado') return 'ResultadoRegistrado'
+  if (tipo === 'dns') return 'DNS'
+  if (tipo === 'resolver_revision') return 'Ejecutada'
+  if (tipo === 'tarjeta') {
+    return payload.tarjeta === 'Amarilla' ? 'EnRevision' : 'Ejecutada'
+  }
+  return 'AnunciadaAP'
+}
+
 function statusClasses(status: RowStatus) {
   if (status === 'EN_CURSO') {
     return 'border-cyan-300/60 bg-cyan-400/10'
@@ -71,6 +92,7 @@ export function GrillaPage() {
   const competenciaId = useCompetenciaStore((s) => s.competenciaId)
   const seleccionarAtleta = useCompetenciaStore((s) => s.seleccionarAtleta)
   const isOnline = useConnectionStore((s) => s.isOnline)
+  const pendingCount = useConnectionStore((s) => s.pendingCount)
 
   const precargaQuery = usePrecarga({
     competenciaId,
@@ -85,15 +107,49 @@ export function GrillaPage() {
     refetchInterval: 5000,
   })
 
+  const queueQuery = useQuery({
+    queryKey: ['comando-queue', competenciaId],
+    enabled: Boolean(competenciaId),
+    queryFn: () => getCommandsByCompetencia(competenciaId!),
+    refetchInterval: 1000,
+  })
+
   const firstPendingPerformanceId = useMemo(() => {
-    const grilla = precargaQuery.payload?.grilla ?? []
+    const grillaBase = precargaQuery.payload?.grilla ?? []
+    const queue = queueQuery.data ?? []
+    const grillaMap = new Map(grillaBase.map((atleta) => [atleta.atleta_id, { ...atleta }]))
+
+    for (const cmd of queue) {
+      const payload = parsePayload(cmd.payload)
+      const participanteId = String(payload.participante_id ?? '')
+      if (!participanteId) continue
+      const atleta = grillaMap.get(participanteId)
+      if (!atleta) continue
+      atleta.estado = projectedEstado(cmd.tipo, payload)
+      grillaMap.set(participanteId, atleta)
+    }
+
+    const grilla = Array.from(grillaMap.values())
     const first = grilla.find((atleta) => atleta.estado === 'AnunciadaAP')
     return first?.performance_id ?? null
-  }, [precargaQuery.payload?.grilla])
+  }, [precargaQuery.payload?.grilla, queueQuery.data])
 
   const grillaOrdenada = useMemo(() => {
-    const grilla = precargaQuery.payload?.grilla ?? []
-    return [...grilla].sort((a, b) => {
+    const grillaBase = precargaQuery.payload?.grilla ?? []
+    const queue = queueQuery.data ?? []
+    const grillaMap = new Map(grillaBase.map((atleta) => [atleta.atleta_id, { ...atleta }]))
+
+    for (const cmd of queue) {
+      const payload = parsePayload(cmd.payload)
+      const participanteId = String(payload.participante_id ?? '')
+      if (!participanteId) continue
+      const atleta = grillaMap.get(participanteId)
+      if (!atleta) continue
+      atleta.estado = projectedEstado(cmd.tipo, payload)
+      grillaMap.set(participanteId, atleta)
+    }
+
+    return Array.from(grillaMap.values()).sort((a, b) => {
       const statusA = resolveRowStatus(
         a,
         performanceActualQuery.data?.performance_id ?? null,
@@ -106,7 +162,19 @@ export function GrillaPage() {
       )
       return STATUS_ORDER[statusA] - STATUS_ORDER[statusB]
     })
-  }, [precargaQuery.payload?.grilla, performanceActualQuery.data, firstPendingPerformanceId])
+  }, [precargaQuery.payload?.grilla, queueQuery.data, performanceActualQuery.data, firstPendingPerformanceId])
+
+  const pendingByAtleta = useMemo(() => {
+    const queue = queueQuery.data ?? []
+    const map = new Map<string, number>()
+    for (const cmd of queue) {
+      const payload = parsePayload(cmd.payload)
+      const participanteId = String(payload.participante_id ?? '')
+      if (!participanteId) continue
+      map.set(participanteId, (map.get(participanteId) ?? 0) + 1)
+    }
+    return map
+  }, [queueQuery.data])
 
   if (!competenciaId || !disciplinaActiva) {
     return (
@@ -121,7 +189,7 @@ export function GrillaPage() {
   return (
     <JuezLayout
       title="Grilla"
-      subtitle={`${disciplinaActiva} · ${competenciaId}`}
+      subtitle={`${disciplinaActiva} · ${competenciaId}${pendingCount > 0 ? ` · ${pendingCount} pendientes` : ''}`}
       actions={
         <Link
           to="/juez/disciplinas"
@@ -168,6 +236,7 @@ export function GrillaPage() {
           firstPendingPerformanceId,
         )
         const disabled = status === 'FINALIZADA'
+        const pendientes = pendingByAtleta.get(atleta.atleta_id) ?? 0
 
         return (
           <button
@@ -211,6 +280,7 @@ export function GrillaPage() {
                 ].join(' ')}
               >
                 {status}
+                {pendientes > 0 ? ` ⏳ ${pendientes}` : ''}
               </span>
             </div>
           </button>
