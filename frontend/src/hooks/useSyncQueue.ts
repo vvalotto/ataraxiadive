@@ -8,7 +8,6 @@ import {
   getPendingCommands,
   getPendingCount,
   markCommandError,
-  markCommandPending,
   markCommandSending,
   removeCommand,
   setGrillaCache,
@@ -155,6 +154,15 @@ export function useSyncQueue() {
     await queryClient.invalidateQueries({ queryKey: ['comando-queue', competenciaId] })
   }, [competenciaId, disciplinaActiva, isOnline, queryClient])
 
+  const failCommand = useCallback(
+    async (id: number, message: string, intentos: number) => {
+      await markCommandError(id, message, intentos)
+      await refreshCounters()
+      setSyncError(message)
+    },
+    [refreshCounters, setSyncError],
+  )
+
   const syncQueue = useCallback(async () => {
     if (syncInProgress.current) return
     syncInProgress.current = true
@@ -172,50 +180,34 @@ export function useSyncQueue() {
         const request = commandToRequest(next.tipo, next.competencia_id, payload)
         await markCommandSending(next.id)
 
-        let success = false
+        let succeeded = false
         for (let attempt = 0; attempt < 3; attempt += 1) {
           try {
             const response = await postCommand(request.path, request.body)
             if (response.ok) {
               await removeCommand(next.id)
-              success = true
+              succeeded = true
               break
             }
 
-            if (isHttpClientError(response.status)) {
+            if (isHttpClientError(response.status) || attempt === 2) {
               const message = await readErrorMessage(response)
-              await markCommandError(next.id, message, next.intentos + attempt + 1)
-              await refreshCounters()
-              setSyncError(message)
+              await failCommand(next.id, message, next.intentos + attempt + 1)
               return
             }
 
-            if (attempt < 2) {
-              await sleep(1000 * 2 ** attempt)
-            } else {
-              const message = await readErrorMessage(response)
-              await markCommandError(next.id, message, next.intentos + attempt + 1)
-              await refreshCounters()
-              setSyncError(message)
-              return
-            }
+            await sleep(1000 * 2 ** attempt)
           } catch (error) {
-            if (attempt < 2) {
-              await sleep(1000 * 2 ** attempt)
-            } else {
+            if (attempt === 2) {
               const msg = error instanceof Error ? error.message : 'Error de red'
-              await markCommandError(next.id, msg, next.intentos + attempt + 1)
-              await refreshCounters()
-              setSyncError(msg)
+              await failCommand(next.id, msg, next.intentos + attempt + 1)
               return
             }
+            await sleep(1000 * 2 ** attempt)
           }
         }
 
-        if (!success) {
-          await markCommandPending(next.id, next.intentos + 1)
-          break
-        }
+        if (!succeeded) break
       }
 
       await refreshCounters()
@@ -232,7 +224,7 @@ export function useSyncQueue() {
       setSyncing(false)
       syncInProgress.current = false
     }
-  }, [refetchGrilla, refreshCounters, setSyncError, setSyncOkVisible, setSyncing])
+  }, [failCommand, refetchGrilla, refreshCounters, setSyncError, setSyncOkVisible, setSyncing])
 
   useEffect(() => {
     void refreshCounters()
