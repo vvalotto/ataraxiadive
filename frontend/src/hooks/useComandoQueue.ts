@@ -6,7 +6,6 @@ import {
   getErrorCount,
   getPendingCount,
 } from '../db/queries'
-import { ApiError } from '../api/competencia'
 
 type ComandoTipo = 'llamar' | 'resultado' | 'tarjeta' | 'dns' | 'resolver_revision'
 
