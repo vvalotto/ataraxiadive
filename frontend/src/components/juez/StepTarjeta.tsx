@@ -36,7 +36,6 @@ export function StepTarjeta({
     onSelectCard(card)
     if (card === 'Blanca' || card === 'Amarilla') {
       onMotivoDqChange('')
-      onDistanciaChange('')
     }
     if (card === 'Amarilla') {
       penalizaciones.onChange([])

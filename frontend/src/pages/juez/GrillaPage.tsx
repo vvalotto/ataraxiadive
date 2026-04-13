@@ -2,13 +2,14 @@ import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
 import {
-  fetchGrillaCompetencia,
   fetchPerformanceActual,
   type GrillaAtletaDto,
 } from '../../api/competencia'
 import { formatMarca } from '../../hooks/usePerformanceFlow'
+import { usePrecarga } from '../../hooks/usePrecarga'
 import { JuezLayout } from '../../components/juez/JuezLayout'
 import useCompetenciaStore from '../../stores/useCompetenciaStore'
+import useConnectionStore from '../../stores/useConnectionStore'
 
 type RowStatus = 'SIGUIENTE' | 'PENDIENTE' | 'EN_CURSO' | 'REVISION' | 'FINALIZADA'
 
@@ -69,28 +70,29 @@ export function GrillaPage() {
   const disciplinaActiva = useCompetenciaStore((s) => s.disciplinaActiva)
   const competenciaId = useCompetenciaStore((s) => s.competenciaId)
   const seleccionarAtleta = useCompetenciaStore((s) => s.seleccionarAtleta)
+  const isOnline = useConnectionStore((s) => s.isOnline)
 
-  const grillaQuery = useQuery({
-    queryKey: ['grilla', competenciaId, disciplinaActiva],
-    queryFn: () => fetchGrillaCompetencia(competenciaId!, disciplinaActiva!),
-    enabled: Boolean(competenciaId && disciplinaActiva),
+  const precargaQuery = usePrecarga({
+    competenciaId,
+    disciplina: disciplinaActiva,
+    isOnline,
   })
 
   const performanceActualQuery = useQuery({
     queryKey: ['performance-actual', competenciaId],
     queryFn: () => fetchPerformanceActual(competenciaId!),
-    enabled: Boolean(competenciaId),
+    enabled: Boolean(competenciaId && isOnline),
     refetchInterval: 5000,
   })
 
   const firstPendingPerformanceId = useMemo(() => {
-    const grilla = grillaQuery.data ?? []
+    const grilla = precargaQuery.payload?.grilla ?? []
     const first = grilla.find((atleta) => atleta.estado === 'AnunciadaAP')
     return first?.performance_id ?? null
-  }, [grillaQuery.data])
+  }, [precargaQuery.payload?.grilla])
 
   const grillaOrdenada = useMemo(() => {
-    const grilla = grillaQuery.data ?? []
+    const grilla = precargaQuery.payload?.grilla ?? []
     return [...grilla].sort((a, b) => {
       const statusA = resolveRowStatus(
         a,
@@ -104,7 +106,7 @@ export function GrillaPage() {
       )
       return STATUS_ORDER[statusA] - STATUS_ORDER[statusB]
     })
-  }, [grillaQuery.data, performanceActualQuery.data, firstPendingPerformanceId])
+  }, [precargaQuery.payload?.grilla, performanceActualQuery.data, firstPendingPerformanceId])
 
   if (!competenciaId || !disciplinaActiva) {
     return (
@@ -129,15 +131,33 @@ export function GrillaPage() {
         </Link>
       }
     >
-      {grillaQuery.isLoading ? (
+      {precargaQuery.isLoading ? (
         <section className="rounded-3xl border border-slate-800 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando grilla...
         </section>
       ) : null}
 
-      {grillaQuery.isError ? (
+      {precargaQuery.errorCode === 'NO_CACHE_OFFLINE' ? (
         <section className="rounded-3xl border border-red-500/30 bg-red-500/10 p-5 text-sm text-red-100">
-          No se pudo cargar la grilla.
+          Sin datos disponibles. Conectate a internet para cargar la disciplina por primera vez.
+        </section>
+      ) : null}
+
+      {precargaQuery.isError && precargaQuery.errorCode !== 'NO_CACHE_OFFLINE' ? (
+        <section className="rounded-3xl border border-red-500/30 bg-red-500/10 p-5 text-sm text-red-100">
+          No se pudo cargar la grilla ni recuperar cache local.
+        </section>
+      ) : null}
+
+      {precargaQuery.payload && !isOnline ? (
+        <section className="rounded-3xl border border-amber-300/30 bg-amber-400/10 p-4 text-sm text-amber-100">
+          Modo offline. {precargaQuery.cacheAgeLabel}
+        </section>
+      ) : null}
+
+      {precargaQuery.payload && precargaQuery.isCacheExpired ? (
+        <section className="rounded-3xl border border-amber-300/30 bg-amber-400/10 p-4 text-sm text-amber-100">
+          El cache tiene mas de 24 horas. Los datos pueden estar desactualizados.
         </section>
       ) : null}
 
