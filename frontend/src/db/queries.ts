@@ -59,8 +59,7 @@ export async function getPendingCount(): Promise<number> {
 
 export async function getCommandsByCompetencia(competenciaId: string): Promise<ComandoQueueRecord[]> {
   return db.comando_queue
-    .where('competencia_id')
-    .equals(competenciaId)
+    .filter((cmd) => cmd.competencia_id === competenciaId)
     .sortBy('id')
 }
 

@@ -9,7 +9,12 @@ import useAuthStore from './stores/useAuthStore'
 
 setTokenProvider(() => useAuthStore.getState().token)
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { networkMode: 'always' },
+    mutations: { networkMode: 'always' },
+  },
+})
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
