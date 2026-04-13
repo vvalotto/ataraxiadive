@@ -6,7 +6,7 @@
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
 | **Fecha** | 2026-04-13 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.14 — SP4 INC-4.3 completado (5/5 US + UAT con datos reales BA 2025); INC-4.4..4.6 pendientes |
+| **Estado** | ✅ v1.15 — SP4 INC-4.4 especificado (3 US · Dexie.js + Background Sync + SyncStatusBadge); INC-4.3 ✅ |
 
 ---
 
@@ -33,7 +33,9 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP3 | Torneo + Registro + Identidad + Resultados | RF-GT-01..07, RF-IN-01..06/08/09, RF-US-01..05, RF-PM-01/02/05/06 |
 | SP-ADJ-04 | Ajustes de Shared + Registro + Resultados + Competencia | RF-GT-02, RF-IN-10, RF-PR-05, RF-PM-05 |
 | SP4 INC-4.1 | Competencia + Torneo + Resultados (correcciones CMAS/FAAS) | RF-GT-02 (variantes SPE), RF-PR-05 (orden SPE), brechas reglamento (ver §3) |
-| SP4 (resto) | Notificaciones + Frontend | RF-EJ-03/06, RF-IN-05/06, RF-NT-01..04 |
+| SP4 INC-4.2/4.3 | Frontend (scaffold + juez) | RF-EJ-01..10 (UI juez completa) |
+| SP4 INC-4.4 | Frontend (offline-first) | RF-EJ-03 (tarjetas), RF-EJ-06 (corrección con ventana) — operación sin red |
+| SP4 INC-4.5/4.6 | Notificaciones + Auditoría + Exportación | RF-NT-01..04, RF-EJ-06 |
 | SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
 
 ---
@@ -315,7 +317,17 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
-## 15. Trazabilidad: Discrepancias → US → Documentos a actualizar
+## 15. US-IEDD SP4 INC-4.4 — Offline-first
+
+| US | Inc. | RFs / Decisiones cubiertos | Contenido principal | Estado |
+|----|------|----------------------------|---------------------|--------|
+| US-4.4.1 | 4.4 | PLAN-SP4 §INC-4.4 · ADR-015 (Dexie.js) | Instalar Dexie.js · `AtaraxiaDiveDB` schema (`grilla_cache`, `comando_queue`) · hook `usePrecarga` · `GrillaPage` con lectura offline · expiración 24h · label de antigüedad | ⬜ To Do |
+| US-4.4.2 | 4.4 | PLAN-SP4 §INC-4.4 | Hook `useComandoQueue` · `PerformanceFlowPage` intercepta comandos (envía directo si online, encola si offline) · estado optimista en grilla (badge ⏳) · `useConnectionStore.pendingCount` | ⬜ To Do |
+| US-4.4.3 | 4.4 | PLAN-SP4 §INC-4.4 | Migración SW a `injectManifest` · `sw.ts` con precache + NetworkFirst + Background Sync · hook `useSyncQueue` (FIFO, backoff, fallback online event) · `SyncStatusBadge` en `JuezLayout` | ⬜ To Do |
+
+---
+
+## 16. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §15 -->
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -334,7 +346,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 16. Cobertura Total
+## 17. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -352,7 +364,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 17. US → Tests
+## 18. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -393,7 +405,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 18. US → ADR
+## 19. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -415,7 +427,8 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.5 — 2026-03-30: US-3.1.2 implementada — API REST Torneo completa*
 *v1.6 — 2026-04-02: SP3 completado a nivel US — §9 y tabla US→Tests actualizadas hasta US-3.5.3*
 *v1.10 — 2026-04-03: SP-ADJ-04 completado (§2, §11), US-ADJ-4.6 implementada, RF-IN-10 incorporado a cobertura total (§14)*
-*v1.14 — 2026-04-13: INC-4.3 completado (§14 — 5/5 US ✅, UAT BA 2025) · RF-NT §3.7 INC corregido (4.2→4.5) · US-4.3.x en §17*
+*v1.15 — 2026-04-13: INC-4.4 especificado (§15 nuevo — 3 US offline-first) · §§ renumerados 16..19 · §2 cobertura actualizada*
+*v1.14 — 2026-04-13: INC-4.3 completado (§14 — 5/5 US ✅, UAT BA 2025) · RF-NT §3.7 INC corregido (4.2→4.5) · US-4.3.x en §18*
 *v1.13 — 2026-04-11: US-4.2.2 implementada y mergeada · DesignReviewer consolidado INC-4.2 OK · validación manual pendiente*
 *v1.12 — 2026-04-11: SP4 INC-4.2 §13 agregado · US-4.2.1 implementada (scaffold frontend) · §§ renumerados*
 *v1.11 — 2026-04-09: SP4 INC-4.1 agregado (§12 nuevo) · RF-GT-02 y RF-PR-05 actualizados · §13-§16 renumerados · US-4.1.x en §15 y §16*
