@@ -57,10 +57,38 @@ export async function getPendingCount(): Promise<number> {
   return db.comando_queue.where('estado').equals('pendiente').count()
 }
 
+export async function getErrorCount(): Promise<number> {
+  return db.comando_queue.where('estado').equals('error').count()
+}
+
 export async function getCommandsByCompetencia(competenciaId: string): Promise<ComandoQueueRecord[]> {
   return db.comando_queue
     .filter((cmd) => cmd.competencia_id === competenciaId)
     .sortBy('id')
+}
+
+export async function getPendingCommands(): Promise<ComandoQueueRecord[]> {
+  return db.comando_queue.where('estado').equals('pendiente').sortBy('id')
+}
+
+export async function markCommandSending(id: number): Promise<void> {
+  await db.comando_queue.update(id, { estado: 'enviando' })
+}
+
+export async function markCommandPending(id: number, intentos: number): Promise<void> {
+  await db.comando_queue.update(id, { estado: 'pendiente', intentos })
+}
+
+export async function markCommandError(id: number, errorMensaje: string, intentos: number): Promise<void> {
+  await db.comando_queue.update(id, {
+    estado: 'error',
+    error_mensaje: errorMensaje,
+    intentos,
+  })
+}
+
+export async function removeCommand(id: number): Promise<void> {
+  await db.comando_queue.delete(id)
 }
 
 export async function applyOptimisticEstadoToCache(input: {

@@ -3,6 +3,7 @@ import useConnectionStore from '../stores/useConnectionStore'
 import {
   applyOptimisticEstadoToCache,
   enqueueCommand,
+  getErrorCount,
   getPendingCount,
 } from '../db/queries'
 import { ApiError } from '../api/competencia'
@@ -34,10 +35,14 @@ export function useComandoQueue() {
   const isOnline = useConnectionStore((s) => s.isOnline)
   const pendingCount = useConnectionStore((s) => s.pendingCount)
   const setPendingCount = useConnectionStore((s) => s.setPendingCount)
+  const setErrorCount = useConnectionStore((s) => s.setErrorCount)
+  const setSyncError = useConnectionStore((s) => s.setSyncError)
+  const setSyncOkVisible = useConnectionStore((s) => s.setSyncOkVisible)
 
   const refreshPendingCount = async () => {
-    const count = await getPendingCount()
-    setPendingCount(count)
+    const [pending, errors] = await Promise.all([getPendingCount(), getErrorCount()])
+    setPendingCount(pending)
+    setErrorCount(errors)
   }
 
   async function ejecutar<T>(
@@ -53,6 +58,8 @@ export function useComandoQueue() {
         competencia_id: competenciaId,
         payload: JSON.stringify(payload),
       })
+      setSyncError(null)
+      setSyncOkVisible(false)
       await applyOptimisticEstadoToCache({
         competenciaId,
         disciplina: payload.disciplina,

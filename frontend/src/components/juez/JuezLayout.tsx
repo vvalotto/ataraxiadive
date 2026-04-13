@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { SyncStatusBadge } from './SyncStatusBadge'
 
 interface JuezLayoutProps {
   title: string
@@ -18,6 +19,9 @@ export function JuezLayout({ title, subtitle, actions, children }: JuezLayoutPro
                 {title}
               </h1>
               {subtitle ? <p className="mt-2 text-sm text-slate-400">{subtitle}</p> : null}
+              <div className="mt-2">
+                <SyncStatusBadge />
+              </div>
             </div>
             {actions}
           </div>

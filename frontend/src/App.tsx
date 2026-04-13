@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useConnectionSync } from './stores/useConnectionStore'
+import { useSyncQueue } from './hooks/useSyncQueue'
 import useAuthStore from './stores/useAuthStore'
 import { LoginPage } from './pages/LoginPage'
 import { RequireRole } from './components/RequireRole'
@@ -18,6 +19,7 @@ function RootRedirect() {
 
 function App() {
   useConnectionSync()
+  useSyncQueue()
 
   return (
     <>
