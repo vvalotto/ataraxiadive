@@ -4,9 +4,9 @@
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-04-09 |
+| **Fecha** | 2026-04-13 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.13 — SP4 INC-4.2 implementado y consolidado técnicamente; validación manual pendiente |
+| **Estado** | ✅ v1.14 — SP4 INC-4.3 completado (5/5 US + UAT con datos reales BA 2025); INC-4.4..4.6 pendientes |
 
 ---
 
@@ -132,10 +132,10 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-NT-01 | Notificaciones por email y push | Notificaciones | SP4 | 4.2 | US-4.2.x | ✅ definido |
-| RF-NT-02 | Recordatorio al atleta cuando se acerca el plazo de AP | Notificaciones | SP4 | 4.2 | US-4.2.x | ✅ definido |
+| RF-NT-01 | Notificaciones por email y push | Notificaciones | SP4 | 4.5 | US-4.5.x | ✅ definido |
+| RF-NT-02 | Recordatorio al atleta cuando se acerca el plazo de AP | Notificaciones | SP4 | 4.5 | US-4.5.x | ✅ definido |
 | RF-NT-03 | Notificaciones a juez u organizador durante ejecución | Notificaciones | — | — | — | ⏳ pendiente |
-| RF-NT-04 | Notificar a atletas cuando se publican resultados finales | Notificaciones | SP4 | 4.2 | US-4.2.x | ✅ definido |
+| RF-NT-04 | Notificar a atletas cuando se publican resultados finales | Notificaciones | SP4 | 4.5 | US-4.5.x | ✅ definido |
 
 ---
 
@@ -301,11 +301,17 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ## 14. US-IEDD SP4 INC-4.3 — Interfaz del Juez
 
+> UAT completado 2026-04-12 con datos reales BA 2025. 5/5 US implementadas. DesignReviewer post-merge: 0 CRITICAL, 158 WARNING.
+> PR #75 (fix UX INC-4.3): 8 issues UX (MUX-01..08) + BUG-01 (INV-DQ-01 condicionado por `es_disciplina_tiempo` en STA).
+> Deuda UX residual: `docs/design/ux/mejoras-ux.md`. HITO-20: invariantes de dominio que no cubren todas las variantes.
+
 | US | Inc. | RFs / Decisiones cubiertos | Contenido principal | Estado |
 |----|------|----------------------------|---------------------|--------|
-| US-4.3.1 | 4.3 | D-02, D-03 · wireframes-juez S-01 | MisDisciplinas real en React · `api/torneo.ts` + `api/competencia.ts` · `useCompetenciaStore` · `DisciplinaCard` · `JuezLayout` · ruta `/juez/grilla` stub · `npm run build` y `npm run lint` OK · validación manual pendiente | 🟡 2026-04-11 |
-| US-4.3.2 | 4.3 | RF-EJ-05, RF-EJ-06 · wireframes-juez S-02 a S-09 | router `competencia` con `POST /llamar`, `POST /registrar-resultado`, `POST /asignar-tarjeta` · grilla enriquecida con estado/AP · `GrillaPage` operativa · wizard móvil `/juez/performance` · `StepIndicator`, `AtletaCard`, `RpSelector` · `npm run build`, `npm run lint`, `compileall` y smoke test `TestClient` OK · validación manual UI confirmada | ✅ 2026-04-11 |
-| US-4.3.3 | 4.3 | RF-EJ-07, RF-EJ-08 · wireframes-juez S-12 a S-14 | router `competencia` con `POST /registrar-dns` · wizard extendido con DNS, BKO, roja con `MotivoDQ` y `BlancaConPenalizaciones` · `MotivoDqSelector` · `PenalizacionesSelector` · fixture `STA` + `DNF` · `npm run build`, `npm run lint`, `compileall` y smoke test `TestClient` OK · validación manual pendiente | 🟡 2026-04-11 |
+| US-4.3.1 | 4.3 | D-02, D-03 · wireframes-juez S-01 | MisDisciplinas real en React · `api/torneo.ts` + `api/competencia.ts` · `useCompetenciaStore` · `DisciplinaCard` · `JuezLayout` · ruta `/juez/grilla` stub · `npm run build` y `npm run lint` OK | ✅ 2026-04-12 |
+| US-4.3.2 | 4.3 | RF-EJ-05, RF-EJ-06 · wireframes-juez S-02 a S-09 | router `competencia` con `POST /llamar`, `POST /registrar-resultado`, `POST /asignar-tarjeta` · grilla enriquecida con estado/AP · `GrillaPage` operativa · wizard móvil `/juez/performance` · `StepIndicator`, `AtletaCard`, `RpSelector` · `npm run build`, `npm run lint`, `compileall` y smoke test `TestClient` OK | ✅ 2026-04-11 |
+| US-4.3.3 | 4.3 | RF-EJ-07, RF-EJ-08 · wireframes-juez S-12 a S-14 | router `competencia` con `POST /registrar-dns` · wizard extendido con DNS, BKO, roja con `MotivoDQ` y `BlancaConPenalizaciones` · `MotivoDqSelector` · `PenalizacionesSelector` · fixture `STA` + `DNF` · `npm run build`, `npm run lint`, `compileall` y smoke test `TestClient` OK | ✅ 2026-04-12 |
+| US-4.3.4 | 4.3 | wireframes-juez S-10, S-15 | nuevo estado `EnRevision` en `Performance` · `ResolverRevisionCommand` + `ResolverRevisionHandler` · evento `RevisionResuelta` · `POST /competencia/{id}/resolver-revision` · `ResultadoAmarilla` (S-10) + `RevisionDesdeGrilla` (S-15) + `AlertaRevision` · timer informativo 3 min · BUG-01: `es_disciplina_tiempo` condiciona `INV-DQ-01` en `TarjetaAsignacion` | ✅ 2026-04-12 |
+| US-4.3.5 | 4.3 | wireframes-juez STA · RF-EJ-02 | Paso 3 del wizard adaptado para STA — botón "Vías respiratorias en agua" en lugar de "Atleta inicia" · BKO en STA registra `valor_rp=0` automáticamente · UI móvil ajustada | ✅ 2026-04-12 |
 
 ---
 
@@ -379,6 +385,11 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-4.1.6 | unit/competencia/application | ✅ 36 passed (BDD waiver — refactoring handlers) |
 | US-4.1.7 | unit/competencia/domain + unit/resultados/domain | ✅ 32 passed (BDD waiver — refactoring estructural) |
 | US-4.1.8 | unit/torneo/domain + unit/competencia/domain + unit/competencia/infrastructure | ✅ 91 passed (BDD waiver — refactoring estructural) |
+| US-4.3.1 | frontend (build + lint) · validación manual navegador | ✅ UAT INC-4.3 2026-04-12 |
+| US-4.3.2 | integration/competencia (smoke TestClient) · frontend (build + lint) · validación manual navegador | ✅ UAT INC-4.3 2026-04-12 |
+| US-4.3.3 | integration/competencia (smoke TestClient) · frontend (build + lint) · validación manual navegador | ✅ UAT INC-4.3 2026-04-12 |
+| US-4.3.4 | unit/competencia/domain (EnRevision + ResolverRevision) · integration/competencia · frontend (build + lint) · validación manual navegador | ✅ UAT INC-4.3 2026-04-12 |
+| US-4.3.5 | frontend (build + lint) · validación manual navegador (BDD waiver — frontend solo) | ✅ UAT INC-4.3 2026-04-12 |
 
 ---
 
@@ -404,6 +415,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.5 — 2026-03-30: US-3.1.2 implementada — API REST Torneo completa*
 *v1.6 — 2026-04-02: SP3 completado a nivel US — §9 y tabla US→Tests actualizadas hasta US-3.5.3*
 *v1.10 — 2026-04-03: SP-ADJ-04 completado (§2, §11), US-ADJ-4.6 implementada, RF-IN-10 incorporado a cobertura total (§14)*
+*v1.14 — 2026-04-13: INC-4.3 completado (§14 — 5/5 US ✅, UAT BA 2025) · RF-NT §3.7 INC corregido (4.2→4.5) · US-4.3.x en §17*
 *v1.13 — 2026-04-11: US-4.2.2 implementada y mergeada · DesignReviewer consolidado INC-4.2 OK · validación manual pendiente*
 *v1.12 — 2026-04-11: SP4 INC-4.2 §13 agregado · US-4.2.1 implementada (scaffold frontend) · §§ renumerados*
 *v1.11 — 2026-04-09: SP4 INC-4.1 agregado (§12 nuevo) · RF-GT-02 y RF-PR-05 actualizados · §13-§16 renumerados · US-4.1.x en §15 y §16*
