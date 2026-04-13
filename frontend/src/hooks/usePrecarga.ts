@@ -42,6 +42,9 @@ export function usePrecarga({ competenciaId, disciplina, isOnline }: UsePrecarga
   const query = useQuery({
     queryKey: ['precarga', competenciaId, disciplina, isOnline],
     enabled: Boolean(competenciaId && disciplina),
+    retry: false,
+    // Mantiene la última grilla visible mientras cambia el estado de conexión.
+    placeholderData: (previousData) => previousData,
     queryFn: async (): Promise<PrecargaPayload> => {
       const key = {
         competenciaId: competenciaId!,
@@ -89,8 +92,8 @@ export function usePrecarga({ competenciaId, disciplina, isOnline }: UsePrecarga
         const cached = await getGrillaCache(key)
         if (!cached) {
           throw createPrecargaError(
-            'PRECARGA_FAILED',
-            'No se pudo cargar la grilla ni recuperar cache local.',
+            'NO_CACHE_OFFLINE',
+            'Sin datos disponibles. Conectate a internet para cargar la disciplina por primera vez.',
           )
         }
 

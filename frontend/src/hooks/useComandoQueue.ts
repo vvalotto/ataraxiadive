@@ -5,8 +5,10 @@ import {
   enqueueCommand,
   getPendingCount,
 } from '../db/queries'
+import { ApiError } from '../api/competencia'
 
 type ComandoTipo = 'llamar' | 'resultado' | 'tarjeta' | 'dns' | 'resolver_revision'
+const ONLINE_CALL_TIMEOUT_MS = 2500
 
 interface BasePayload {
   participante_id: string
@@ -44,14 +46,8 @@ export function useComandoQueue() {
     payload: BasePayload,
     apiFn: () => Promise<T>,
   ): Promise<{ encolado: boolean }> {
-    const mustQueue = !isOnline || pendingCount > 0
-
-    if (!mustQueue) {
-      await apiFn()
-      return { encolado: false }
-    }
-
-    try {
+    const persistedPending = await getPendingCount()
+    const enqueueWithOptimisticState = async (): Promise<{ encolado: boolean }> => {
       await enqueueCommand({
         tipo,
         competencia_id: competenciaId,
@@ -65,8 +61,41 @@ export function useComandoQueue() {
       })
       await refreshPendingCount()
       return { encolado: true }
-    } catch {
-      throw new Error('No se pudo guardar localmente — dispositivo sin espacio')
+    }
+
+    const mustQueue = !isOnline || pendingCount > 0 || persistedPending > 0
+
+    if (mustQueue) {
+      try {
+        return await enqueueWithOptimisticState()
+      } catch {
+        throw new Error('No se pudo guardar localmente — dispositivo sin espacio')
+      }
+    }
+
+    try {
+      await Promise.race([
+        apiFn(),
+        new Promise<never>((_, reject) => {
+          setTimeout(() => reject(new Error('Timeout online, fallback a cola local')), ONLINE_CALL_TIMEOUT_MS)
+        }),
+      ])
+      await applyOptimisticEstadoToCache({
+        competenciaId,
+        disciplina: payload.disciplina,
+        participanteId: payload.participante_id,
+        nextEstado: resolveOptimisticEstado(tipo, payload),
+      })
+      return { encolado: false }
+    } catch (error) {
+      if (error instanceof ApiError) {
+        throw error
+      }
+      try {
+        return await enqueueWithOptimisticState()
+      } catch {
+        throw new Error('No se pudo guardar localmente — dispositivo sin espacio')
+      }
     }
   }
 
