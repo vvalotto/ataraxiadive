@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import useConnectionStore from '../stores/useConnectionStore'
+import useCompetenciaStore from '../stores/useCompetenciaStore'
+import { fetchEstadoCompetencia, fetchGrillaCompetencia } from '../api/competencia'
 import {
   getErrorCount,
   getPendingCommands,
@@ -8,6 +11,7 @@ import {
   markCommandPending,
   markCommandSending,
   removeCommand,
+  setGrillaCache,
 } from '../db/queries'
 import { getToken } from '../api/tokenProvider'
 
@@ -94,7 +98,11 @@ export function useSyncQueue() {
   const setSyncing = useConnectionStore((s) => s.setSyncing)
   const setSyncError = useConnectionStore((s) => s.setSyncError)
   const setSyncOkVisible = useConnectionStore((s) => s.setSyncOkVisible)
+  const competenciaId = useCompetenciaStore((s) => s.competenciaId)
+  const disciplinaActiva = useCompetenciaStore((s) => s.disciplinaActiva)
+  const queryClient = useQueryClient()
   const syncInProgress = useRef(false)
+  const successTimeoutRef = useRef<number | null>(null)
 
   const refreshCounters = useCallback(async () => {
     const [pending, errors] = await Promise.all([getPendingCount(), getErrorCount()])
@@ -116,6 +124,36 @@ export function useSyncQueue() {
       // fallback por evento online desde la app
     }
   }, [])
+
+  const refetchGrilla = useCallback(async () => {
+    if (!competenciaId || !disciplinaActiva || !isOnline) return
+
+    const [grilla, estado] = await Promise.all([
+      fetchGrillaCompetencia(competenciaId, disciplinaActiva),
+      fetchEstadoCompetencia(competenciaId, disciplinaActiva),
+    ])
+
+    await setGrillaCache(
+      { competenciaId, disciplina: disciplinaActiva },
+      { grilla, estado, cachedAt: Date.now() },
+    )
+
+    queryClient.setQueryData(
+      ['precarga', competenciaId, disciplinaActiva, isOnline],
+      {
+        grilla,
+        estado,
+        cachedAt: Date.now(),
+        source: 'server',
+        cacheAgeMinutes: 0,
+        isCacheExpired: false,
+        errorCode: null,
+      },
+    )
+    await queryClient.invalidateQueries({ queryKey: ['precarga', competenciaId, disciplinaActiva] })
+    await queryClient.invalidateQueries({ queryKey: ['performance-actual', competenciaId] })
+    await queryClient.invalidateQueries({ queryKey: ['comando-queue', competenciaId] })
+  }, [competenciaId, disciplinaActiva, isOnline, queryClient])
 
   const syncQueue = useCallback(async () => {
     if (syncInProgress.current) return
@@ -183,14 +221,18 @@ export function useSyncQueue() {
       await refreshCounters()
       const remaining = await getPendingCount()
       if (remaining === 0) {
+        await refetchGrilla()
         setSyncOkVisible(true)
-        setTimeout(() => setSyncOkVisible(false), 3000)
+        if (successTimeoutRef.current !== null) {
+          window.clearTimeout(successTimeoutRef.current)
+        }
+        successTimeoutRef.current = window.setTimeout(() => setSyncOkVisible(false), 3000)
       }
     } finally {
       setSyncing(false)
       syncInProgress.current = false
     }
-  }, [refreshCounters, setSyncError, setSyncOkVisible, setSyncing])
+  }, [refetchGrilla, refreshCounters, setSyncError, setSyncOkVisible, setSyncing])
 
   useEffect(() => {
     void refreshCounters()
@@ -218,6 +260,14 @@ export function useSyncQueue() {
     navigator.serviceWorker.addEventListener('message', onMessage)
     return () => navigator.serviceWorker.removeEventListener('message', onMessage)
   }, [syncQueue])
+
+  useEffect(() => {
+    return () => {
+      if (successTimeoutRef.current !== null) {
+        window.clearTimeout(successTimeoutRef.current)
+      }
+    }
+  }, [])
 
   return { syncQueue, refreshCounters }
 }

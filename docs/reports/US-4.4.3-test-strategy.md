@@ -9,5 +9,8 @@ Cobertura aplicada:
 - `npm run lint`
 - `npm run build`
 - contrato BDD en `.feature`
-- smoke manual de reconexión y estados del badge.
-
+- smoke manual de reconexión y estados del badge:
+  - cola pendiente se procesa en FIFO al volver online;
+  - error 4xx pausa la cola y expone detalle en el badge;
+  - error transitorio reintenta y continúa si se recupera;
+  - al vaciar la cola la grilla se refresca desde servidor y el badge muestra `✓` por 3s.

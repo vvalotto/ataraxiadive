@@ -54,7 +54,9 @@ export async function enqueueCommand(
 }
 
 export async function getPendingCount(): Promise<number> {
-  return db.comando_queue.where('estado').equals('pendiente').count()
+  return db.comando_queue
+    .filter((command) => command.estado === 'pendiente' || command.estado === 'enviando')
+    .count()
 }
 
 export async function getErrorCount(): Promise<number> {
@@ -68,7 +70,10 @@ export async function getCommandsByCompetencia(competenciaId: string): Promise<C
 }
 
 export async function getPendingCommands(): Promise<ComandoQueueRecord[]> {
-  return db.comando_queue.where('estado').equals('pendiente').sortBy('id')
+  const commands = await db.comando_queue
+    .filter((command) => command.estado === 'pendiente' || command.estado === 'enviando')
+    .toArray()
+  return commands.sort((left, right) => (left.id ?? 0) - (right.id ?? 0))
 }
 
 export async function markCommandSending(id: number): Promise<void> {
