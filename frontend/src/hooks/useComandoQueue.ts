@@ -3,12 +3,11 @@ import useConnectionStore from '../stores/useConnectionStore'
 import {
   applyOptimisticEstadoToCache,
   enqueueCommand,
+  getErrorCount,
   getPendingCount,
 } from '../db/queries'
-import { ApiError } from '../api/competencia'
 
 type ComandoTipo = 'llamar' | 'resultado' | 'tarjeta' | 'dns' | 'resolver_revision'
-const ONLINE_CALL_TIMEOUT_MS = 2500
 
 interface BasePayload {
   participante_id: string
@@ -33,11 +32,16 @@ function resolveOptimisticEstado(
 export function useComandoQueue() {
   const isOnline = useConnectionStore((s) => s.isOnline)
   const pendingCount = useConnectionStore((s) => s.pendingCount)
+  const errorCount = useConnectionStore((s) => s.errorCount)
   const setPendingCount = useConnectionStore((s) => s.setPendingCount)
+  const setErrorCount = useConnectionStore((s) => s.setErrorCount)
+  const setSyncError = useConnectionStore((s) => s.setSyncError)
+  const setSyncOkVisible = useConnectionStore((s) => s.setSyncOkVisible)
 
   const refreshPendingCount = async () => {
-    const count = await getPendingCount()
-    setPendingCount(count)
+    const [pending, errors] = await Promise.all([getPendingCount(), getErrorCount()])
+    setPendingCount(pending)
+    setErrorCount(errors)
   }
 
   async function ejecutar<T>(
@@ -47,12 +51,27 @@ export function useComandoQueue() {
     apiFn: () => Promise<T>,
   ): Promise<{ encolado: boolean }> {
     const persistedPending = await getPendingCount()
-    const enqueueWithOptimisticState = async (): Promise<{ encolado: boolean }> => {
+    const persistedErrors = await getErrorCount()
+    const mustQueue =
+      !isOnline ||
+      pendingCount > 0 ||
+      errorCount > 0 ||
+      persistedPending > 0 ||
+      persistedErrors > 0
+
+    if (!mustQueue) {
+      await apiFn()
+      return { encolado: false }
+    }
+
+    try {
       await enqueueCommand({
         tipo,
         competencia_id: competenciaId,
         payload: JSON.stringify(payload),
       })
+      setSyncError(null)
+      setSyncOkVisible(false)
       await applyOptimisticEstadoToCache({
         competenciaId,
         disciplina: payload.disciplina,
@@ -61,41 +80,8 @@ export function useComandoQueue() {
       })
       await refreshPendingCount()
       return { encolado: true }
-    }
-
-    const mustQueue = !isOnline || pendingCount > 0 || persistedPending > 0
-
-    if (mustQueue) {
-      try {
-        return await enqueueWithOptimisticState()
-      } catch {
-        throw new Error('No se pudo guardar localmente — dispositivo sin espacio')
-      }
-    }
-
-    try {
-      await Promise.race([
-        apiFn(),
-        new Promise<never>((_, reject) => {
-          setTimeout(() => reject(new Error('Timeout online, fallback a cola local')), ONLINE_CALL_TIMEOUT_MS)
-        }),
-      ])
-      await applyOptimisticEstadoToCache({
-        competenciaId,
-        disciplina: payload.disciplina,
-        participanteId: payload.participante_id,
-        nextEstado: resolveOptimisticEstado(tipo, payload),
-      })
-      return { encolado: false }
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw error
-      }
-      try {
-        return await enqueueWithOptimisticState()
-      } catch {
-        throw new Error('No se pudo guardar localmente — dispositivo sin espacio')
-      }
+    } catch {
+      throw new Error('No se pudo guardar localmente — dispositivo sin espacio')
     }
   }
 
