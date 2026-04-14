@@ -31,7 +31,7 @@ C4Context
     Rel(organizador, ataraxia, "Crea torneos, configura\ncompetencias, gestiona grilla", "HTTPS")
     Rel(juez, ataraxia, "Registra resultados\ny asigna tarjetas", "HTTPS")
     Rel(atleta, ataraxia, "Se inscribe, declara AP\ny consulta resultados", "HTTPS")
-    Rel(ataraxia, email, "Envía notificaciones", "SMTP/TLS")
+    Rel(ataraxia, email, "Envía notificaciones", "HTTPS API")
     Rel(ataraxia, push, "Envía push notifications", "FCM API / HTTPS")
 
     UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")
@@ -55,7 +55,7 @@ C4Context
 | Uso | Organizador → AtaraxiaDive | El organizador opera el sistema para crear y gestionar torneos y competencias. |
 | Uso | Juez → AtaraxiaDive | El juez opera el sistema durante la ejecución de competencias. |
 | Uso | Atleta → AtaraxiaDive | El atleta accede para inscribirse, declarar su AP y consultar resultados. |
-| Integración | AtaraxiaDive → Servicio Email | El sistema delega el envío de correos a un servicio externo vía SMTP/TLS. |
+| Integración | AtaraxiaDive → Servicio Email | El sistema delega el envío de correos a un servicio externo vía API HTTPS. |
 | Integración | AtaraxiaDive → Servicio Push | El sistema delega el envío de notificaciones push a FCM vía HTTPS. |
 
 ---
@@ -87,7 +87,7 @@ C4Container
     Rel(spa, api, "API calls", "REST / HTTPS / JSON")
     Rel(api, sqlite_crud, "Lee y escribe", "SQL / aiosqlite")
     Rel(api, sqlite_es, "Append / lee streams\ny actualiza read model", "SQL / aiosqlite")
-    Rel(api, email, "Envía", "SMTP/TLS")
+    Rel(api, email, "Envía", "HTTPS API")
     Rel(api, push, "Envía", "HTTPS")
 
     UpdateLayoutConfig($c4ShapeInRow="2", $c4BoundaryInRow="1")
@@ -117,7 +117,7 @@ C4Container
 | Llamada API | React PWA → Backend API | El frontend realiza llamadas REST/JSON sobre HTTPS para todas las operaciones. |
 | Persistencia | Backend API → SQLite CRUD BCs | El backend lee y escribe el estado de los BCs CRUD mediante SQL/aiosqlite. |
 | Event Sourcing | Backend API → SQLite ES BCs | El backend hace append de eventos, lee streams para reconstruir aggregates con ES, y actualiza el read model síncronamente en el mismo comando. |
-| Notificación | Backend API → Servicio Email | El backend delega el envío de emails al servicio externo mediante SMTP/TLS. |
+| Notificación | Backend API → Servicio Email | El backend delega el envío de emails al servicio externo mediante API HTTPS. |
 | Notificación | Backend API → Servicio Push | El backend delega el envío de push notifications a FCM mediante HTTPS. |
 
 ---
@@ -379,13 +379,13 @@ graph TB
     end
 
     subgraph EXT["Servicios Externos"]
-        SMTP["SMTP\n(ej: SendGrid)"]
+        SMTP["Proveedor Email HTTP\n(ej: Resend / SendGrid / SES)"]
         FCM["FCM\nPush Notifications"]
     end
 
     GHA -->|"build + push imagen"| GAR
     GAR -->|"deploy"| CR
-    APP -->|"SMTP/TLS"| SMTP
+    APP -->|"HTTPS API"| SMTP
     APP -->|"HTTPS"| FCM
 ```
 

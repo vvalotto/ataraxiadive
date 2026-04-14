@@ -409,6 +409,13 @@ classDiagram
 |--------|-----------------|
 | `NotificacionRepository` | Persistir y rehidratar streams; consultar si ya existe `NotificacionEnviada` por `evento_fuente_id` |
 
+### Puerto y adaptador de email
+
+| Elemento | Responsabilidad |
+|----------|-----------------|
+| `EmailPort` | Contrato de envío para el canal email; recibe `Destinatario` y `ContenidoEmail`, retorna `provider_id` |
+| `ResendEmailAdapter` | Adaptador HTTP concreto actual del BC; implementa `POST /emails` contra proveedor gestionado |
+
 ---
 
 ## 8. Repositorios (Puertos)

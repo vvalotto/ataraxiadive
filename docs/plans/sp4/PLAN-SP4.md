@@ -230,7 +230,8 @@ Impacto en el dominio existente:
 
 Usa el mismo patrón que BC Competencia: tabla `notificaciones_events` en SQLite propio
 (`notificaciones.db`). La idempotencia se implementa con una query:
-`SELECT 1 FROM notificaciones_events WHERE tipo = 'NotificacionEnviada' AND evento_fuente_id = ?`
+`SELECT 1 FROM notificaciones_events WHERE event_type = 'NotificacionEnviada'
+AND json_extract(payload, '$.evento_fuente_id') = ?`
 antes de enviar.
 
 ### Offline — estrategia de sincronización

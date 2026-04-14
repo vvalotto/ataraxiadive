@@ -1,0 +1,138 @@
+{
+  "metadata": {
+    "us_id": "US-4.5.2",
+    "us_title": "Adaptador email con servicio gestionado",
+    "us_points": 2,
+    "producto": "notificaciones",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-14T13:55:00+00:00",
+    "completed_at": "2026-04-14T14:29:52+00:00",
+    "total_elapsed_seconds": 2092,
+    "effective_seconds": 2092,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validacion de Contexto",
+      "started_at": "2026-04-14T13:55:00+00:00",
+      "completed_at": "2026-04-14T14:03:00+00:00",
+      "elapsed_seconds": 480,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generacion de Escenarios BDD",
+      "started_at": "2026-04-14T14:03:00+00:00",
+      "completed_at": "2026-04-14T14:13:00+00:00",
+      "elapsed_seconds": 600,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generacion del Plan de Implementacion",
+      "started_at": "2026-04-14T14:13:00+00:00",
+      "completed_at": "2026-04-14T14:25:00+00:00",
+      "elapsed_seconds": 720,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementacion",
+      "started_at": "2026-04-14T14:25:00+00:00",
+      "completed_at": "2026-04-14T14:26:00+00:00",
+      "elapsed_seconds": 60,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-14T14:26:00+00:00",
+      "completed_at": "2026-04-14T14:27:00+00:00",
+      "elapsed_seconds": 60,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integracion",
+      "started_at": "2026-04-14T14:27:00+00:00",
+      "completed_at": "2026-04-14T14:27:30+00:00",
+      "elapsed_seconds": 30,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validacion BDD",
+      "started_at": "2026-04-14T14:27:30+00:00",
+      "completed_at": "2026-04-14T14:28:00+00:00",
+      "elapsed_seconds": 30,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-14T14:28:00+00:00",
+      "completed_at": "2026-04-14T14:28:20+00:00",
+      "elapsed_seconds": 20,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentacion",
+      "started_at": "2026-04-14T14:28:20+00:00",
+      "completed_at": "2026-04-14T14:29:20+00:00",
+      "elapsed_seconds": 60,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-04-14T14:29:20+00:00",
+      "completed_at": "2026-04-14T14:29:52+00:00",
+      "elapsed_seconds": 32,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 0,
+    "completed_tasks": 0,
+    "total_phases": 10,
+    "estimated_total_minutes": 150,
+    "actual_total_minutes": 35,
+    "variance_minutes": -115,
+    "variance_percent": -76.67
+  }
+}
