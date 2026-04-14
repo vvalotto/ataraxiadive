@@ -134,10 +134,10 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-NT-01 | Notificaciones por email y push | Notificaciones | SP4 | 4.5 | US-4.5.x | ✅ definido |
-| RF-NT-02 | Recordatorio al atleta cuando se acerca el plazo de AP | Notificaciones | SP4 | 4.5 | US-4.5.x | ✅ definido |
+| RF-NT-01 | Notificaciones por email y push | Notificaciones | SP4 | 4.5 | US-4.5.x | 🟡 definido · implementación parcial (`US-4.5.1`/`US-4.5.2`: email sí, push pendiente) |
+| RF-NT-02 | Recordatorio al atleta cuando se acerca el plazo de AP | Notificaciones | SP4 | 4.5 | US-4.5.x | ✅ definido · pendiente de implementación |
 | RF-NT-03 | Notificaciones a juez u organizador durante ejecución | Notificaciones | — | — | — | ⏳ pendiente |
-| RF-NT-04 | Notificar a atletas cuando se publican resultados finales | Notificaciones | SP4 | 4.5 | US-4.5.x | ✅ definido |
+| RF-NT-04 | Notificar a atletas cuando se publican resultados finales | Notificaciones | SP4 | 4.5 | US-4.5.x | ✅ definido · pendiente de implementación (`US-4.5.4`) |
 
 ---
 
@@ -160,7 +160,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 |----|-------------|---------|-------------------|
 | RF-IN-07 | ¿Qué pasa si los datos del atleta difieren de la BD FAAS? | SP5 inc. 5.1 | SP5 |
 | RF-EJ-04 | Códigos de penalización (AIDA/CMAS u otra federación) | SP4 inc. 4.4 | SP4 |
-| RF-NT-03 | ¿Juez u organizador reciben notificaciones durante ejecución? | SP4 inc. 4.2 | SP4 |
+| RF-NT-03 | ¿Juez u organizador reciben notificaciones durante ejecución? | SP4 inc. 4.5 | SP4 |
 | RF-IG-01..04 | Integración completa con BD FAAS / exportación a rankings | SP5 inc. 5.1 | SP5 |
 
 ---

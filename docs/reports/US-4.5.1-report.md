@@ -142,8 +142,10 @@ Resultado:
 
 ## Riesgos y próximos pasos
 
-- `US-4.5.2` debe introducir el handler de aplicación para orquestar rehidratación,
-  llamada a `EmailPort` y persistencia de `NotificacionEnviada/Fallida`.
+- `US-4.5.2` debe introducir el adaptador concreto de `EmailPort` para habilitar
+  envío real a un proveedor gestionado.
+- `US-4.5.3` debe introducir el handler/política de aplicación para orquestar
+  rehidratación, llamada a `EmailPort` y persistencia de `NotificacionEnviada/Fallida`.
 - `US-4.5.3` y `US-4.5.4` siguen bloqueadas por la ausencia de sus eventos fuente reales
   (`InscripcionConfirmada`, `ResultadosPublicados`) en los BC productores.
 - Si en el futuro más BCs requieren índices por payload en sus event stores, convendrá
