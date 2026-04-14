@@ -1,11 +1,12 @@
 # Plan de Pruebas UAT — INC-4.4 Offline-first
 
-**Versión:** 2.0 (post-fix networkMode + refactor calidad)  
-**Fecha:** 2026-04-13  
-**Entorno:** local  
-**Frontend:** `http://localhost:5173`  
-**Backend:** `http://localhost:8000`  
-**Usuario juez:** `juez@uat-sp4.test` / `juezsp4uat2025`
+**Versión:** 3.0 (adaptado para iPhone — sin DevTools embebidos)  
+**Fecha:** 2026-04-14  
+**Entorno:** local (WiFi local)  
+**Frontend:** `http://192.168.0.28:5173`  
+**Backend:** `http://192.168.0.28:8000`  
+**Usuario juez:** `juez@uat-sp4.test` / `juezsp4uat2025`  
+**Dispositivo:** iPhone (Safari iOS)
 
 ---
 
@@ -35,35 +36,58 @@ INC-4.4 implementa operación offline-first para el juez. Las tres US tienen dep
 
 ---
 
+## Cómo verificar el estado en iPhone
+
+En lugar de DevTools, toda la verificación es **por comportamiento observable en la UI**:
+
+| Lo que querías ver en DevTools | Cómo verificarlo en iPhone |
+|-------------------------------|---------------------------|
+| IndexedDB `grilla_cache` tiene datos | Grilla visible en modo offline sin pantalla vacía |
+| `cached_at` reciente | Aviso de la app "Datos actualizados hace X min" |
+| `comando_queue` tiene N registros | Badge ⏳ N en el header de la app |
+| Comando con `estado: 'error'` | Badge ⚠ Error (1) en el header |
+| Cola vacía tras sync | Badge ✓ Sincronizado → desaparece |
+| `navigator.onLine` = false | Banner offline de la app + WiFi desactivado en Configuración |
+
+### Cómo simular offline en iPhone
+
+**Método principal — WiFi:**
+1. `Configuración` → `WiFi` → apagar el switch
+2. Para volver: `Configuración` → `WiFi` → encender
+
+**Método alternativo — Modo Avión:**
+1. Centro de Control → tap en el ícono de avión  
+2. Para volver: mismo tap para desactivar
+
+> **Nota:** Modo Avión también corta Bluetooth. Si el backend está en la misma red WiFi, cualquier método funciona. Lo que importa es que el iPhone no pueda llegar a `192.168.0.28`.
+
+### Remote Web Inspector (opcional — verificación avanzada)
+
+Si querés inspeccionar IndexedDB directamente:
+1. iPhone: `Configuración` → `Safari` → `Avanzado` → activar `Inspector Web`
+2. Conectar iPhone al Mac por USB
+3. Mac: `Safari` → `Desarrollar` → `[nombre del iPhone]` → `http://192.168.0.28:5173`
+4. Pestaña `Almacenamiento` → `IndexedDB` → `AtaraxiaDiveDB`
+
+---
+
 ## Preparación del entorno
 
-### Arranque
+### Verificación inicial (desde iPhone)
 
-```bash
-# Terminal 1 — backend
-uv run uvicorn src.app:app --reload --env-file .env
+1. Abrir Safari → `http://192.168.0.28:5173` → página de login visible
+2. Login con `juez@uat-sp4.test` / `juezsp4uat2025`
+3. Verificar que aparecen disciplinas **DNF** y **STA** en "Mis disciplinas"
+4. Confirmar que no hay badge ⏳ ni ⚠ en el header (no hay cola residual)
 
-# Terminal 2 — frontend
-cd frontend && npm run dev
-```
-
-### Verificación inicial
-
-1. `GET http://localhost:8000/health` → `{"status": "ok"}`
-2. Abrir `http://localhost:5173` → página de login visible
-3. Login con `juez@uat-sp4.test` / `juezsp4uat2025`
-4. Verificar que aparecen disciplinas **DNF** y **STA** en "Mis disciplinas"
-5. Abrir DevTools → Application → IndexedDB → confirmar que `AtaraxiaDiveDB` no tiene datos (o limpiarla si tiene residuos de sesiones anteriores)
+> Si hay badge residual de una sesión anterior: usar Remote Web Inspector para limpiar `AtaraxiaDiveDB`, o pedir al tester desktop que limpie la IndexedDB.
 
 **Resultado preparación:** `PASS / FAIL`
 
-### Cómo simular offline en Chrome
+### Datos de prueba disponibles
 
-- **DevTools → Network → throttling** → seleccionar `Offline`
-- Para volver online: seleccionar `No throttling`
-- **Alternativa:** DevTools → Application → Service Workers → marcar `Offline`
-
-> **Nota:** el badge de conexión del browser NO es suficiente. Usar `navigator.onLine` en consola para confirmar.
+- **DNF:** atletas `e02`, `e03`, `e04`, `e05`, `e06` → estado `AnunciadaAP`
+- **STA:** atletas `t01`, `t02`, `t03` → estado `AnunciadaAP`
 
 ---
 
@@ -71,49 +95,48 @@ cd frontend && npm run dev
 
 ### Caso 1.1 — Precarga online (happy path)
 
-**Precondición:** dispositivo online, sin cache previo en IndexedDB.
+**Precondición:** iPhone online (WiFi conectado al mismo router que `192.168.0.28`). Sin cache previo.
 
 1. Tocar **DNF** en Mis disciplinas → abrir GrillaPage.
-2. Verificar que la grilla carga desde el servidor.
-3. Ir a DevTools → Application → IndexedDB → `AtaraxiaDiveDB` → `grilla_cache`.
-4. Confirmar que existe un registro para `(competencia_dnf_id, DNF)` con `cached_at` reciente.
+2. Verificar que la grilla carga con atletas visibles.
+3. Salir de GrillaPage (volver a Mis disciplinas).
 
 **Esperado:**
-- Grilla visible con atletas.
-- Registro en `grilla_cache` con `cached_at` de hace menos de 1 minuto.
+- Grilla visible con atletas (carga desde servidor).
 - Sin aviso de modo offline ni de cache expirado.
+- Sin badge ⏳ en el header.
 
-**Resultado:** `PASS / FAIL`  
-**Evidencia:**
+**Resultado:** `PASS`  
+**Evidencia:** OkP
 
 ---
 
 ### Caso 1.2 — Lectura offline con cache válido
 
-**Precondición:** Caso 1.1 ejecutado (grilla cacheada). **No limpiar datos.**
+**Precondición:** Caso 1.1 ejecutado. **No reiniciar Safari.**
 
-1. En DevTools → Network → seleccionar **Offline**.
-2. Recargar la página o navegar fuera y volver a GrillaPage DNF.
+1. `Configuración` → `WiFi` → **apagar**.
+2. Volver a Safari → Mis disciplinas → tocar **DNF**.
 3. Observar la grilla y el aviso de estado.
 
 **Esperado:**
-- Grilla visible (datos del cache, no del servidor).
-- Aviso visible: **"Modo offline. Datos actualizados hace X min"** (INV-4.4.1-01).
-- No hay error de red visible.
+- Grilla visible (datos del cache local, no del servidor).
+- Banner o aviso: **"Modo offline. Datos actualizados hace X min"** (INV-4.4.1-01).
+- No hay pantalla vacía ni error de red.
 
 **Resultado:** `PASS / FAIL`  
 **Evidencia:**
 
 ---
 
-### Caso 1.3 — Offline sin cache previo *(antes FAIL, ahora fix aplicado)*
+### Caso 1.3 — Offline sin cache previo
 
-**Precondición:** limpiar IndexedDB (`AtaraxiaDiveDB` → click derecho → Delete database), mantener offline.
+**Precondición:** WiFi ya apagado. Limpiar la cache de la app (Remote Web Inspector → borrar `AtaraxiaDiveDB`) O usar STA (disciplina no visitada antes → sin cache).
 
-1. Con dispositivo **offline**, navegar a Mis disciplinas → tocar **STA**.
+1. Con WiFi **apagado**, en Mis disciplinas → tocar **STA**.
 
 **Esperado:**
-- GrillaPage muestra el mensaje: **"Sin datos disponibles. Conectate a internet para cargar la disciplina por primera vez."** (INV-4.4.1-02).
+- GrillaPage muestra: **"Sin datos disponibles. Conectate a internet para cargar la disciplina por primera vez."** (INV-4.4.1-02).
 - No queda bloqueado en "Cargando grilla...".
 - No pantalla vacía.
 
@@ -124,47 +147,50 @@ cd frontend && npm run dev
 
 ### Caso 1.4 — Cache antiguo (> 24h) con red disponible
 
-**Precondición:** modificar manualmente el `cached_at` del registro de grilla_cache en DevTools → Application → IndexedDB → editar el valor a `Date.now() - 25*3600*1000` (25 horas atrás). Volver a online.
+**Precondición:** Remote Web Inspector disponible (para editar `cached_at` en IndexedDB).  
 
-1. Con dispositivo **online**, abrir GrillaPage DNF.
+> **Si no tenés Remote Web Inspector:** saltar este caso o marcarlo como N/A. El comportamiento se puede verificar en próximas sesiones desde desktop.
+
+1. En Remote Web Inspector → `AtaraxiaDiveDB` → `grilla_cache` → editar `cached_at` a `Date.now() - 25*3600*1000`.
+2. `Configuración` → `WiFi` → **encender**.
+3. Volver a GrillaPage DNF.
 
 **Esperado:**
 - Grilla se actualiza desde el servidor (INV-4.4.1-03).
-- El `cached_at` en IndexedDB se actualiza al timestamp actual.
-- **No** aparece aviso de expiración (el cache se refrescó).
+- No aparece aviso de expiración (cache se refrescó).
 
-> **Variante con red cortada:** si se mantiene offline con cache de 25h, debe aparecer aviso de antigüedad pero mostrar la grilla igualmente.
+> **Variante sin editar cache:** mantener offline con cache de 25h → debe aparecer aviso de antigüedad pero mostrar la grilla igualmente.
 
-**Resultado:** `PASS / FAIL`  
+**Resultado:** `PASS / FAIL / N/A`  
 **Evidencia:**
 
 ---
 
 ## US-4.4.2 — Flujo offline con cola local
 
-> **Preparación:** volver a **online**, abrir GrillaPage DNF para asegurar cache actualizado. Luego poner **offline**.
+> **Preparación:** volver a **online** (WiFi encendido). Abrir GrillaPage DNF para asegurar cache actualizado. Luego apagar WiFi.
 
-### Caso 2.1 — Flujo completo offline *(antes FAIL, ahora fix aplicado)*
+### Caso 2.1 — Flujo completo offline
 
-**Precondición:** dispositivo **offline**, DNF precargado, atleta `e01` en estado `AnunciadaAP`.
+**Precondición:** WiFi **apagado**, DNF precargado (Caso 1.1 ejecutado), atleta `e02` en estado `AnunciadaAP`.
 
-1. En GrillaPage DNF, tocar atleta `e01`.
+1. En GrillaPage DNF, tocar atleta `e02`.
 2. **Paso 1:** tocar **LLAMAR ATLETA**.
-   - Verificar: UI avanza a Paso 2.
-   - Verificar en DevTools → IndexedDB → `comando_queue`: 1 registro `{tipo: 'llamar', estado: 'pendiente'}`.
+   - Verificar: UI avanza al Paso 2.
+   - Verificar: badge ⏳ aparece en el header (≥ 1).
 3. **Paso 2:** tocar **CONTINUAR**.
 4. **Paso 3:** tocar **INICIAR VENTANA OT** → tocar **ATLETA INICIA**.
 5. **Paso 4:** tocar **FINALIZAR PERFORMANCE**.
 6. **Paso 5:** ingresar RP (ej: metros=72, cm=00) → tocar **CONFIRMAR MARCA**.
-   - Verificar: IndexedDB → 2 registros (`llamar` + `resultado`).
+   - Verificar: badge muestra ⏳ 2.
 7. **Paso 6:** seleccionar **Tarjeta Blanca** → tocar confirmar.
-   - Verificar: IndexedDB → 3 registros (`llamar`, `resultado`, `tarjeta`).
+   - Verificar: badge muestra ⏳ 3.
 8. Tocar **SIGUIENTE ATLETA** → volver a GrillaPage.
 
 **Esperado:**
 - UI avanza por todos los pasos sin error (INV-4.4.2-01).
-- 3 comandos en `comando_queue` con `estado: 'pendiente'`.
-- Atleta `e01` aparece en grilla con estado `FINALIZADA` y badge **⏳ 3** (INV-4.4.2-03).
+- Badge muestra **⏳ 3** al finalizar (3 comandos: llamar + resultado + tarjeta).
+- Atleta `e02` aparece en grilla con estado **FINALIZADA** (INV-4.4.2-03).
 - `pendingCount` en el badge del header refleja 3.
 
 **Resultado:** `PASS / FAIL`  
@@ -174,17 +200,17 @@ cd frontend && npm run dev
 
 ### Caso 2.2 — DNS offline
 
-**Precondición:** dispositivo **offline**, atleta `e02` en `AnunciadaAP`.
+**Precondición:** WiFi **apagado**, atleta `e03` en `AnunciadaAP`.
 
-1. En GrillaPage DNF, tocar atleta `e02`.
+1. En GrillaPage DNF, tocar atleta `e03`.
 2. **Paso 1:** tocar **LLAMAR ATLETA**.
 3. **Paso 2:** tocar **DNS — NO SE PRESENTA**.
 4. Volver a GrillaPage.
 
 **Esperado:**
 - UI muestra confirmación de DNS y botón "SIGUIENTE ATLETA".
-- IndexedDB → `comando_queue`: registros `llamar` + `dns` para `e02`.
-- Atleta `e02` aparece como **FINALIZADA** con badge ⏳ en grilla.
+- Badge aumenta en 2 (llamar + dns para `e03`).
+- Atleta `e03` aparece como **FINALIZADA** con badge ⏳ en grilla.
 
 **Resultado:** `PASS / FAIL`  
 **Evidencia:**
@@ -193,15 +219,16 @@ cd frontend && npm run dev
 
 ### Caso 2.3 — Badge ⏳ acumulativo y FIFO
 
-**Precondición:** tras Casos 2.1 y 2.2, la cola tiene ≥ 5 comandos. Dispositivo **offline**.
+**Precondición:** tras Casos 2.1 y 2.2, la cola tiene ≥ 5 comandos. WiFi **apagado**.
 
-1. Verificar en `comando_queue`: los comandos están ordenados por `id` ascendente.
-2. Verificar que el primer comando es `{tipo: 'llamar'}` para `e01` (el primero encolado).
-3. Confirmar que el badge del header muestra el total acumulado de pendientes.
+1. Observar el badge en el header: debe mostrar el total acumulado (⏳ 5 o más).
+2. Navegar a GrillaPage y volver a Mis disciplinas → el badge se mantiene en todas las pantallas.
+3. (Opcional con Remote Web Inspector): verificar que `comando_queue` está ordenada por `id` ascendente, y el primero es `tipo: 'llamar'` de `e02`.
 
 **Esperado:**
-- Orden FIFO en IndexedDB (INV-4.4.2-02).
-- Badge muestra `⏳ N` con el total correcto.
+- Badge muestra **⏳ N** con el total correcto (INV-4.4.2-02).
+- Badge visible en todas las pantallas del juez.
+- (Opcional) Orden FIFO confirmado en IndexedDB.
 
 **Resultado:** `PASS / FAIL`  
 **Evidencia:**
@@ -210,19 +237,19 @@ cd frontend && npm run dev
 
 ## US-4.4.3 — Sincronización automática al reconectar
 
-> **Precondición de toda la sección:** ejecutar Casos 2.1 y 2.2 para tener ≥ 5 comandos encolados.
+> **Precondición de toda la sección:** Casos 2.1 y 2.2 ejecutados — ≥ 5 comandos encolados, badge muestra ⏳ N.
 
 ### Caso 3.1 — Sincronización exitosa al reconectar
 
 1. Verificar que el badge muestra **⏳ N pendientes**.
-2. En DevTools → Network → cambiar a **No throttling** (volver a online).
-3. Observar el header durante los siguientes 5 segundos.
+2. `Configuración` → `WiFi` → **encender**.
+3. Volver rápidamente a Safari y observar el header durante los siguientes 5 segundos.
 
 **Esperado:**
 - En ≤ 2s aparece **↻ Sincronizando** (INV-4.4.3-01).
 - Badge transiciona a **✓ Sincronizado** cuando la cola queda en 0.
 - Badge desaparece después de ~3 segundos.
-- `comando_queue` en IndexedDB queda vacía.
+- No queda badge ⏳ ni ⚠.
 
 **Resultado:** `PASS / FAIL`  
 **Evidencia:**
@@ -234,14 +261,13 @@ cd frontend && npm run dev
 **Precondición:** Caso 3.1 ejecutado exitosamente.
 
 1. Navegar a GrillaPage DNF.
-2. Observar el estado de `e01` y `e02`.
-3. Verificar contra el servidor: `GET /competencia/{dnf_id}/grilla?disciplina=DNF`.
+2. Observar el estado de `e02` y `e03`.
 
 **Esperado:**
-- `e01` en estado **FINALIZADA** (tarjeta blanca asignada) en la grilla.
-- `e02` en estado **FINALIZADA** (DNS) en la grilla.
-- Los estados coinciden con la respuesta del servidor (INV-4.4.3-06).
+- `e02` en estado **FINALIZADA** (tarjeta blanca asignada).
+- `e03` en estado **FINALIZADA** (DNS).
 - No hay badge de pendientes.
+- Los estados coinciden con lo que se registró offline (INV-4.4.3-06).
 
 **Resultado:** `PASS / FAIL`  
 **Evidencia:**
@@ -250,34 +276,47 @@ cd frontend && npm run dev
 
 ### Caso 3.3 — Error 4xx en comando de cola
 
-**Preparación:** crear una situación de conflicto. Opción más simple: con el dispositivo **online**, ejecutar manualmente `POST /competencia/{dnf_id}/llamar` para `e03` desde Postman/curl para avanzar su estado. Luego poner **offline**, intentar llamar `e03` desde la UI (estado ya no es AnunciadaAP en el servidor pero sí en cache local), volver **online**.
+**Preparación — crear conflicto (dos opciones):**
 
-> **Alternativa práctica:** simplemente verificar este caso observando los logs del backend si el servidor rechaza un comando con 409.
+**Opción A (desde Mac, Postman/curl):**
+```bash
+# Obtener token
+curl -X POST http://localhost:8000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"juez@uat-sp4.test","password":"juezsp4uat2025"}'
 
-1. Con comandos que generen 409 al sincronizar, reconectar.
-2. Observar el badge.
+# Avanzar e04 directamente en el servidor
+curl -X POST http://localhost:8000/competencia/{dnf_id}/llamar \
+  -H "Authorization: Bearer {token}" \
+  -H "Content-Type: application/json" \
+  -d '{"participante_id":"e04","disciplina":"DNF"}'
+```
+
+**Opción B (más simple — solo observar):** si algún comando de la cola fue rechazado con 409 durante el sync del Caso 3.1, observar el badge ⚠.
+
+1. Con WiFi **apagado**, intentar llamar `e04` desde la UI (su estado en cache es `AnunciadaAP` pero en el servidor ya fue avanzado).
+2. Encender WiFi y observar la sincronización.
 
 **Esperado:**
 - Badge muestra **⚠ Error (1)** (INV-4.4.3-03).
 - Al tocar el badge, se muestra el mensaje de error del servidor.
 - Los comandos **siguientes** en la cola **no** se envían (cola pausada).
-- En IndexedDB → el comando en error tiene `estado: 'error'` y `error_mensaje` del servidor.
 
-**Resultado:** `PASS / FAIL`  
+**Resultado:** `PASS / FAIL / N/A`  
 **Evidencia:**
 
 ---
 
 ### Caso 3.4 — Badge visible en todas las pantallas del juez
 
-**Precondición:** tener ≥ 1 comando encolado.
+**Precondición:** tener ≥ 1 comando encolado (repetir inicio de Caso 2.1 si es necesario).
 
 1. Navegar entre: **Mis disciplinas** → **GrillaPage** → **PerformanceFlowPage** → volver.
-2. Verificar que el badge ⏳ / ↻ / ✓ es visible en el header en todas las pantallas (INV-4.4.3-05).
+2. Verificar que el badge ⏳ es visible en el header en todas las pantallas (INV-4.4.3-05).
 
 **Esperado:**
-- `SyncStatusBadge` visible en header en todas las rutas de `JuezLayout`.
-- El contador es consistente entre pantallas.
+- Badge visible y consistente en todas las rutas del juez.
+- El contador no se resetea al cambiar de pantalla.
 
 **Resultado:** `PASS / FAIL`  
 **Evidencia:**
@@ -290,18 +329,19 @@ cd frontend && npm run dev
 |----|------|-----------|---------------|
 | US-4.4.1 | 1.1 Precarga online | `PASS / FAIL` | |
 | US-4.4.1 | 1.2 Offline + cache válido | `PASS / FAIL` | |
-| US-4.4.1 | 1.3 Offline sin cache | `PASS / FAIL` | fix networkMode |
-| US-4.4.1 | 1.4 Cache > 24h | `PASS / FAIL` | |
-| US-4.4.2 | 2.1 Flujo completo offline | `PASS / FAIL` | fix networkMode |
+| US-4.4.1 | 1.3 Offline sin cache | `PASS / FAIL` | usar STA si no hay Remote Inspector |
+| US-4.4.1 | 1.4 Cache > 24h | `PASS / FAIL / N/A` | requiere Remote Inspector para editar cached_at |
+| US-4.4.2 | 2.1 Flujo completo offline | `PASS / FAIL` | |
 | US-4.4.2 | 2.2 DNS offline | `PASS / FAIL` | |
-| US-4.4.2 | 2.3 Badge acumulativo + FIFO | `PASS / FAIL` | |
-| US-4.4.3 | 3.1 Sync al reconectar | `PASS / FAIL` | |
+| US-4.4.2 | 2.3 Badge acumulativo + FIFO | `PASS / FAIL` | FIFO verificable solo con Remote Inspector |
+| US-4.4.3 | 3.1 Sync al reconectar | `PASS / FAIL` | encender WiFi y observar badge |
 | US-4.4.3 | 3.2 Estado final consistente | `PASS / FAIL` | |
-| US-4.4.3 | 3.3 Error 4xx en cola | `PASS / FAIL` | |
+| US-4.4.3 | 3.3 Error 4xx en cola | `PASS / FAIL / N/A` | requiere Opción A (curl desde Mac) |
 | US-4.4.3 | 3.4 Badge en todas las pantallas | `PASS / FAIL` | |
 
 **Conclusión general INC-4.4:** `PASS / FAIL`  
 **Bloqueantes detectados:**  
 **Acciones posteriores requeridas:**  
 **Fecha de ejecución:**  
-**Ejecutado por:** Victor Valotto
+**Ejecutado por:** Victor Valotto  
+**Dispositivo de prueba:** iPhone (Safari iOS)
