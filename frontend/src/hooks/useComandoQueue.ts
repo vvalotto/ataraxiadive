@@ -7,6 +7,18 @@ import {
   getPendingCount,
 } from '../db/queries'
 
+const API_TIMEOUT_MS = 5000
+
+function withTimeout<T>(fn: () => Promise<T>): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('Network timeout')), API_TIMEOUT_MS)
+    fn().then(
+      (v) => { clearTimeout(timer); resolve(v) },
+      (e) => { clearTimeout(timer); reject(e) },
+    )
+  })
+}
+
 type ComandoTipo = 'llamar' | 'resultado' | 'tarjeta' | 'dns' | 'resolver_revision'
 
 interface BasePayload {
@@ -60,8 +72,12 @@ export function useComandoQueue() {
       persistedErrors > 0
 
     if (!mustQueue) {
-      await apiFn()
-      return { encolado: false }
+      try {
+        await withTimeout(() => apiFn())
+        return { encolado: false }
+      } catch {
+        // Red inalcanzable o timeout — encolamos en lugar de bloquear la UI
+      }
     }
 
     try {

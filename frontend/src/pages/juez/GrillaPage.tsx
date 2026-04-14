@@ -189,7 +189,7 @@ export function GrillaPage() {
   return (
     <JuezLayout
       title="Grilla"
-      subtitle={`${disciplinaActiva} · ${competenciaId}${pendingCount > 0 ? ` · ${pendingCount} pendientes` : ''}`}
+      subtitle={`${disciplinaActiva}${pendingCount > 0 ? ` · ${pendingCount} pendientes` : ''}`}
       actions={
         <Link
           to="/juez/disciplinas"

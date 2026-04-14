@@ -9,6 +9,17 @@ import {
 import { getGrillaCache, setGrillaCache } from '../db/queries'
 
 const CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000
+const FETCH_TIMEOUT_MS = 5000
+
+function fetchWithTimeout<T>(fn: () => Promise<T>): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('Network timeout')), FETCH_TIMEOUT_MS)
+    fn().then(
+      (v) => { clearTimeout(timer); resolve(v) },
+      (e) => { clearTimeout(timer); reject(e) },
+    )
+  })
+}
 
 type PrecargaErrorCode = 'NO_CACHE_OFFLINE' | 'PRECARGA_FAILED'
 
@@ -40,11 +51,13 @@ interface UsePrecargaInput {
 
 export function usePrecarga({ competenciaId, disciplina, isOnline }: UsePrecargaInput) {
   const query = useQuery({
-    queryKey: ['precarga', competenciaId, disciplina, isOnline],
+    queryKey: ['precarga', competenciaId, disciplina],
     enabled: Boolean(competenciaId && disciplina),
     retry: false,
-    // Mantiene la última grilla visible mientras cambia el estado de conexión.
-    placeholderData: (previousData) => previousData,
+    // No incluir isOnline en el key: cuando cambia la conexión, React Query
+    // reutiliza el dato en memoria en lugar de volver a cargar desde cero.
+    // El queryFn recibe isOnline via closure para decidir IndexedDB vs servidor
+    // solo cuando no hay dato previo (primer acceso o recarga de página).
     queryFn: async (): Promise<PrecargaPayload> => {
       const key = {
         competenciaId: competenciaId!,
@@ -73,10 +86,12 @@ export function usePrecarga({ competenciaId, disciplina, isOnline }: UsePrecarga
       }
 
       try {
-        const [grilla, estado] = await Promise.all([
-          fetchGrillaCompetencia(competenciaId!, disciplina!),
-          fetchEstadoCompetencia(competenciaId!, disciplina!),
-        ])
+        const [grilla, estado] = await fetchWithTimeout(() =>
+          Promise.all([
+            fetchGrillaCompetencia(competenciaId!, disciplina!),
+            fetchEstadoCompetencia(competenciaId!, disciplina!),
+          ]),
+        )
         const cached = await setGrillaCache(key, { grilla, estado })
 
         return {

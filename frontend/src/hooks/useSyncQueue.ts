@@ -8,6 +8,7 @@ import {
   getPendingCommands,
   getPendingCount,
   markCommandError,
+  markCommandPending,
   markCommandSending,
   removeCommand,
   setGrillaCache,
@@ -24,6 +25,13 @@ function isHttpClientError(status: number): boolean {
   return status >= 400 && status < 500
 }
 
+function isNetworkError(error: unknown): boolean {
+  if (error instanceof DOMException && error.name === 'AbortError') return true
+  if (error instanceof TypeError && error.message.toLowerCase().includes('network')) return true
+  if (error instanceof Error && error.message === 'Network timeout') return true
+  return false
+}
+
 function buildHeaders(): Record<string, string> {
   const token = getToken()
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }
@@ -33,12 +41,21 @@ function buildHeaders(): Record<string, string> {
   return headers
 }
 
+const POST_TIMEOUT_MS = 5000
+
 async function postCommand(path: string, payload: object): Promise<Response> {
-  return fetch(path, {
-    method: 'POST',
-    headers: buildHeaders(),
-    body: JSON.stringify(payload),
-  })
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), POST_TIMEOUT_MS)
+  try {
+    return await fetch(path, {
+      method: 'POST',
+      headers: buildHeaders(),
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    })
+  } finally {
+    clearTimeout(timer)
+  }
 }
 
 function parsePayload(raw: string): Record<string, unknown> {
@@ -138,7 +155,7 @@ export function useSyncQueue() {
     )
 
     queryClient.setQueryData(
-      ['precarga', competenciaId, disciplinaActiva, isOnline],
+      ['precarga', competenciaId, disciplinaActiva],
       {
         grilla,
         estado,
@@ -199,6 +216,13 @@ export function useSyncQueue() {
             await sleep(1000 * 2 ** attempt)
           } catch (error) {
             if (attempt === 2) {
+              if (isNetworkError(error)) {
+                // Red inalcanzable (timeout, abort, sin ruta) — no es un error permanente.
+                // Volver a pendiente para reintentar cuando haya conexión real.
+                await markCommandPending(next.id, next.intentos + attempt + 1)
+                await refreshCounters()
+                return
+              }
               const msg = error instanceof Error ? error.message : 'Error de red'
               await failCommand(next.id, msg, next.intentos + attempt + 1)
               return
