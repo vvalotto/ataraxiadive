@@ -367,31 +367,47 @@ classDiagram
 
 ## 7. BC Notificaciones — Generic (Event Sourcing)
 
-> Modelo de referencia — implementación en SP4
+> `US-4.5.1` implementa el núcleo del aggregate y su event store propio.
+> Las políticas y el adaptador email real se completan en `US-4.5.2` a `US-4.5.4`.
 
 ### Aggregate
 
 | Aggregate | Tipo | Responsabilidad |
 |-----------|------|-----------------|
-| `Notificacion` | Aggregate root | Ciclo de vida de un intento de comunicación: Solicitada → Enviada / Fallida |
+| `Notificacion` | Aggregate root | Ciclo de vida de un intento de comunicación: `Solicitada -> Enviada | Fallida`; aplica idempotencia estructural por `evento_fuente_id` |
 
 ### Value Objects
 
 | Tipo | Descripción |
 |------|-------------|
-| `Destinatario` | userId + canal preferido (Email / Push) |
-| `PlantillaId` | Referencia a template de mensaje por tipo de evento |
-| `EventoFuenteId` | Id del evento de dominio que originó la notificación — clave de idempotencia |
+| `NotificacionId` | UUID inmutable del aggregate |
+| `EventoFuenteId` | Identificador del evento fuente que originó la notificación — clave de idempotencia |
+| `Destinatario` | Email válido + nombre opcional del receptor |
+| `ContenidoEmail` | Asunto no vacío + cuerpo de texto + HTML opcional |
+| `CanalEnvio` | Enum `Email | Push` (`SP4` implementa solo `Email`) |
 
 ### Eventos propios
 
 | Evento | Descripción |
 |--------|-------------|
-| `NotificacionSolicitada` | Intento registrado — incluye `eventoFuenteId` para idempotencia |
-| `NotificacionEnviada` | Canal externo confirmó entrega |
-| `NotificacionFallida` | Canal externo rechazó o timeout |
-| `NotificacionReintentada` | Reintento programado tras fallo |
-| `PreferenciasActualizadas` | Atleta cambió canal preferido |
+| `NotificacionSolicitada` | Primer evento del stream; captura destinatario, contenido, canal y `evento_fuente_id` |
+| `NotificacionEnviada` | Marca el stream como exitoso y terminal; puede persistir `proveedor_id` |
+| `NotificacionFallida` | Marca el stream como fallido y terminal; persiste `motivo` |
+
+### Event Store propio
+
+| Elemento | Decisión |
+|----------|----------|
+| Tabla | `notificaciones_events` |
+| Stream ID | `notificacion-{notificacion_id}` |
+| Índices | `stream_id` + `json_extract(payload, '$.evento_fuente_id')` |
+| Regla de idempotencia | si existe `NotificacionEnviada` para un `evento_fuente_id`, un nuevo `SolicitarEnvio` no emite eventos |
+
+### Puerto de repositorio
+
+| Puerto | Responsabilidad |
+|--------|-----------------|
+| `NotificacionRepository` | Persistir y rehidratar streams; consultar si ya existe `NotificacionEnviada` por `evento_fuente_id` |
 
 ---
 
