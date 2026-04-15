@@ -26,7 +26,10 @@ from notificaciones.application.commands.enviar_notificacion import (
     EnviarNotificacionHandler,
 )
 from notificaciones.application.commands.solicitar_envio import SolicitarEnvioHandler
-from notificaciones.application.policies.politica_p10 import PoliticaP10Handler
+from notificaciones.application.policies.politica_p10 import (
+    InscripcionConfirmada,
+    PoliticaP10Handler,
+)
 from notificaciones.application.policies.politica_p11 import PoliticaP11Handler
 from notificaciones.infrastructure.email.resend_email_adapter import ResendEmailAdapter
 from notificaciones.infrastructure.event_store.sqlite_notificacion_event_store import (
@@ -41,7 +44,12 @@ from notificaciones.infrastructure.templates.inscripcion_confirmada_template imp
 from notificaciones.infrastructure.templates.resultados_publicados_template import (
     ResultadosPublicadosTemplate,
 )
-from registro.api.router import router as registro_router
+from registro.api.router import (
+    configure_inscripcion_notificaciones,
+    router as registro_router,
+)
+from registro.domain.aggregates.inscripcion import Inscripcion
+from registro.infrastructure.repositories.sqlite_atleta_repository import SQLiteAtletaRepository
 from torneo.api.exception_handlers import register_torneo_exception_handlers
 from torneo.api.router import router as torneo_router
 from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTorneoRepository
@@ -94,6 +102,40 @@ def build_p10_handler() -> PoliticaP10Handler:
         ),
         template=InscripcionConfirmadaTemplate(),
     )
+
+
+def build_on_inscripcion_confirmada_callback(
+    p10_handler: PoliticaP10Handler | None = None,
+    atleta_repo: SQLiteAtletaRepository | None = None,
+    torneo_repo: SQLiteTorneoRepository | None = None,
+) -> Callable[[Inscripcion], Awaitable[None]]:
+    """Construye el callback que traduce Registro -> Notificaciones P-10."""
+    p10 = p10_handler or build_p10_handler()
+    atletas = atleta_repo or SQLiteAtletaRepository()
+    torneos = torneo_repo or SQLiteTorneoRepository()
+
+    async def _callback(inscripcion: Inscripcion) -> None:
+        atleta = await atletas.find_by_id(inscripcion.atleta_id)
+        torneo = await torneos.find_by_id(inscripcion.torneo_id)
+        if atleta is None or torneo is None:
+            return
+
+        evento = InscripcionConfirmada(
+            id=str(inscripcion.inscripcion_id),
+            atleta_id=str(inscripcion.atleta_id),
+            atleta_email=atleta.email,
+            atleta_nombre=f"{atleta.nombre} {atleta.apellido}".strip(),
+            torneo_nombre=torneo.nombre,
+            torneo_fecha=torneo.fecha_inicio,
+            torneo_sede=torneo.sede.nombre,
+            disciplinas=tuple(disciplina.value for disciplina in sorted(inscripcion.disciplinas)),
+        )
+        await p10.handle(evento)
+
+    return _callback
+
+
+configure_inscripcion_notificaciones(build_on_inscripcion_confirmada_callback())
 
 
 def build_p11_handler() -> PoliticaP11Handler:
@@ -188,9 +230,7 @@ async def _calcular_overall_si_corresponde(
     if torneo_id is None:
         return
 
-    if not await _verificar_todas_disciplinas_finalizadas(
-        torneo_id, competencia_event_store
-    ):
+    if not await _verificar_todas_disciplinas_finalizadas(torneo_id, competencia_event_store):
         return
 
     disciplinas = await _obtener_disciplinas_torneo(torneo_id, torneo_db_path)

@@ -209,6 +209,14 @@ recibe un DTO de aplicación `InscripcionConfirmada`, renderiza el contenido con
 directamente `NotificacionFallida` con motivo `destinatario_sin_email` sin
 interrumpir el flujo principal de inscripción.
 
+En `US-4.5.5`, P-10 queda cableada al endpoint HTTP de Registro. El router de
+`registro` recibe un callback async opcional sin importar tipos de
+`notificaciones`; `src/app.py` enriquece la `Inscripcion` con datos de
+`SQLiteAtletaRepository` y `SQLiteTorneoRepository`, construye
+`InscripcionConfirmada` y delega en `PoliticaP10Handler`. Si atleta o torneo no
+existen durante el enriquecimiento, el callback retorna sin interrumpir la
+inscripción. La clave de idempotencia es `str(inscripcion.inscripcion_id)`.
+
 En `US-4.5.4`, la política P-11 aplica el mismo patrón para resultados
 publicados: recibe un DTO `ResultadosPublicados`, genera una notificación por
 cada atleta notificable y usa `"{evento.id}:{atleta_id}"` como clave compuesta
