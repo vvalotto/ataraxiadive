@@ -46,10 +46,8 @@ El BC `notificaciones` ya cuenta con:
 - adaptador concreto `ResendEmailAdapter` en infraestructura para envío real por HTTP.
 - comandos de aplicación `SolicitarEnvioHandler` y `EnviarNotificacionHandler`;
 - política P-10 (`InscripcionConfirmada` -> email de confirmación al atleta);
-- template `InscripcionConfirmadaTemplate`.
-
-La política P-11 (`ResultadosPublicados` -> emails a atletas de la disciplina)
-queda pendiente para `US-4.5.4`.
+- política P-11 (`ResultadosPublicados` -> emails a atletas de la disciplina);
+- templates `InscripcionConfirmadaTemplate` y `ResultadosPublicadosTemplate`.
 
 ## Rol del bounded context
 
@@ -211,6 +209,12 @@ recibe un DTO de aplicación `InscripcionConfirmada`, renderiza el contenido con
 directamente `NotificacionFallida` con motivo `destinatario_sin_email` sin
 interrumpir el flujo principal de inscripción.
 
+En `US-4.5.4`, la política P-11 aplica el mismo patrón para resultados
+publicados: recibe un DTO `ResultadosPublicados`, genera una notificación por
+cada atleta notificable y usa `"{evento.id}:{atleta_id}"` como clave compuesta
+de idempotencia. Los atletas con `estado = "Retirado"` se omiten; los atletas
+con `estado = "DNS"` reciben email. Un fallo en un atleta no bloquea el resto.
+
 ### Domain Layer
 
 Contiene el modelo propio del BC.
@@ -285,7 +289,7 @@ Entre los disparadores ya definidos aparecen, por ejemplo:
 
 - `InscripcionConfirmada` desde `Registro` para P-10;
 - recordatorios vinculados a anuncios;
-- `ResultadosPublicados`;
+- `ResultadosPublicados` desde `Resultados` para P-11;
 - `TorneoCerrado`.
 
 ## Integraciones de salida
