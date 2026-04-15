@@ -96,6 +96,30 @@ class Notificacion(AggregateRoot):
         aggregate._record(event)
         return aggregate
 
+    @classmethod
+    def registrar_fallo_de_solicitud(
+        cls,
+        *,
+        evento_fuente_id: EventoFuenteId,
+        motivo: str,
+    ) -> "Notificacion":
+        if not motivo or not motivo.strip():
+            raise ValueError("motivo no puede ser vacío")
+
+        aggregate = cls(NotificacionId())
+        event = NotificacionFallida(
+            event_type="NotificacionFallida",
+            aggregate_id=str(aggregate.notificacion_id),
+            occurred_at=NotificacionFallida.now(),
+            notificacion_id=str(aggregate.notificacion_id),
+            evento_fuente_id=str(evento_fuente_id),
+            motivo=motivo,
+            fallida_en=NotificacionFallida.now().isoformat(),
+        )
+        aggregate._apply(event)
+        aggregate._record(event)
+        return aggregate
+
     def registrar_envio_exitoso(self, proveedor_id: str | None = None) -> None:
         self._assert_solicitada()
         if self._evento_fuente_id is None:
@@ -180,9 +204,11 @@ class Notificacion(AggregateRoot):
             self._estado = "Solicitada"
             return
         if isinstance(event, NotificacionEnviada):
+            self._evento_fuente_id = EventoFuenteId(event.evento_fuente_id)
             self._proveedor_id = event.proveedor_id
             self._estado = "Enviada"
             return
+        self._evento_fuente_id = EventoFuenteId(event.evento_fuente_id)
         self._motivo_fallo = event.motivo
         self._estado = "Fallida"
 
