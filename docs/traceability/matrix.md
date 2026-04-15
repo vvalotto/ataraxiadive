@@ -4,9 +4,9 @@
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-04-13 |
+| **Fecha** | 2026-04-15 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.15 — SP4 INC-4.4 especificado (3 US · Dexie.js + Background Sync + SyncStatusBadge); INC-4.3 ✅ |
+| **Estado** | ✅ v1.16 — INC-4.4 ✅ (3 US offline-first · PRs #77 + fix); INC-4.5 ✅ (4 US BC Notificaciones · PRs #79–82) |
 
 ---
 
@@ -321,13 +321,29 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 | US | Inc. | RFs / Decisiones cubiertos | Contenido principal | Estado |
 |----|------|----------------------------|---------------------|--------|
-| US-4.4.1 | 4.4 | PLAN-SP4 §INC-4.4 · ADR-015 (Dexie.js) | Instalar Dexie.js · `AtaraxiaDiveDB` schema (`grilla_cache`, `comando_queue`) · hook `usePrecarga` · `GrillaPage` con lectura offline · expiración 24h · label de antigüedad | ⬜ To Do |
-| US-4.4.2 | 4.4 | PLAN-SP4 §INC-4.4 | Hook `useComandoQueue` · `PerformanceFlowPage` intercepta comandos (envía directo si online, encola si offline) · estado optimista en grilla (badge ⏳) · `useConnectionStore.pendingCount` | ⬜ To Do |
-| US-4.4.3 | 4.4 | PLAN-SP4 §INC-4.4 | Migración SW a `injectManifest` · `sw.ts` con precache + NetworkFirst + Background Sync · hook `useSyncQueue` (FIFO, backoff, fallback online event) · `SyncStatusBadge` en `JuezLayout` | ⬜ To Do |
+| US-4.4.1 | 4.4 | PLAN-SP4 §INC-4.4 · ADR-015 (Dexie.js) | Instalar Dexie.js · `AtaraxiaDiveDB` schema (`grilla_cache`, `comando_queue`) · hook `usePrecarga` · `GrillaPage` con lectura offline · expiración 24h · label de antigüedad | ✅ Done (PR #77) |
+| US-4.4.2 | 4.4 | PLAN-SP4 §INC-4.4 | Hook `useComandoQueue` · `PerformanceFlowPage` intercepta comandos (envía directo si online, encola si offline) · estado optimista en grilla (badge ⏳) · `useConnectionStore.pendingCount` | ✅ Done (PR #77) |
+| US-4.4.3 | 4.4 | PLAN-SP4 §INC-4.4 | Migración SW a `injectManifest` · `sw.ts` con precache + NetworkFirst + Background Sync · hook `useSyncQueue` (FIFO, backoff, fallback online event) · `SyncStatusBadge` en `JuezLayout` | ✅ Done (PR #77) |
+
+> DesignReviewer post-INC-4.4: 0 CRITICAL, 158 WARNING. Fix robustez offline mergeado en `dfb6ec3` (timeout 5s fetchWithTimeout + AbortController en postCommand).
 
 ---
 
-## 16. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §15 -->
+## 16. US-IEDD SP4 INC-4.5 — BC Notificaciones
+
+| US | Inc. | RFs / Decisiones cubiertos | Contenido principal | Estado |
+|----|------|----------------------------|---------------------|--------|
+| US-4.5.1 | 4.5 | RF-NT-01 · PLAN-SP4 §INC-4.5 | Aggregate `Notificacion` · ciclo de vida (Solicitada → Enviada / Fallida) · event store SQLite · idempotencia exactly-once (`evento_fuente_id`) | ✅ Done (PR #79) |
+| US-4.5.2 | 4.5 | RF-NT-01 · ADR-016 (Resend) | Puerto `EmailPort` · adaptador `ResendEmailAdapter` · integración HTTP con Resend API | ✅ Done (PR #80) |
+| US-4.5.3 | 4.5 | RF-NT-01 · RF-NT-03 | Política P-10 — `InscripcionConfirmada` → `SolicitarNotificacion` → email al atleta · template `inscripcion_confirmada` | ✅ Done (PR #81) |
+| US-4.5.4 | 4.5 | RF-NT-04 | Política P-11 — `ResultadosPublicados` → email a todos los atletas de la disciplina · template `resultados_publicados` · `evento_fuente_id` compuesto `"{evento.id}:{atleta_id}"` | ✅ Done (PR #82) |
+
+> DesignReviewer post-INC-4.5: 0 CRITICAL, 174 WARNING (+16 vs INC-4.4 — patrones ES/hexagonal esperados en BC Notificaciones).
+> Reporte: `quality/reports/designreviewer/INC-4.5-report.txt`
+
+---
+
+## 17. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §16 -->
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -346,7 +362,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 17. Cobertura Total
+## 18. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -364,7 +380,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 18. US → Tests
+## 19. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -405,7 +421,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 19. US → ADR
+## 20. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -416,6 +432,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-1.1.1 | ADR-009 | Migraciones Alembic en `competencia/infrastructure/migrations/` |
 | US-1.2.x | ADR-005 | Event Sourcing en BC Competencia |
 | US-4.1.2 | ADR-014 | Penalizaciones acumulables — modelo de deducción N×3m en tarjeta blanca |
+| US-4.5.2 | ADR-016 | Resend como proveedor email — puerto `EmailPort` + adaptador `ResendEmailAdapter` |
 
 ---
 
@@ -427,6 +444,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.5 — 2026-03-30: US-3.1.2 implementada — API REST Torneo completa*
 *v1.6 — 2026-04-02: SP3 completado a nivel US — §9 y tabla US→Tests actualizadas hasta US-3.5.3*
 *v1.10 — 2026-04-03: SP-ADJ-04 completado (§2, §11), US-ADJ-4.6 implementada, RF-IN-10 incorporado a cobertura total (§14)*
+*v1.16 — 2026-04-15: INC-4.4 ✅ (US-4.4.1..3 Done · fix robustez) · INC-4.5 ✅ §16 agregado (4 US · PRs #79–82) · §§ renumerados 17..20 · US→ADR ADR-016*
 *v1.15 — 2026-04-13: INC-4.4 especificado (§15 nuevo — 3 US offline-first) · §§ renumerados 16..19 · §2 cobertura actualizada*
 *v1.14 — 2026-04-13: INC-4.3 completado (§14 — 5/5 US ✅, UAT BA 2025) · RF-NT §3.7 INC corregido (4.2→4.5) · US-4.3.x en §18*
 *v1.13 — 2026-04-11: US-4.2.2 implementada y mergeada · DesignReviewer consolidado INC-4.2 OK · validación manual pendiente*
