@@ -370,7 +370,7 @@ classDiagram
 > `US-4.5.1` implementa el núcleo del aggregate y su event store propio.
 > `US-4.5.2` implementa el adaptador email con Resend.
 > `US-4.5.3` implementa P-10: `InscripcionConfirmada` -> email de confirmación.
-> P-11 (`ResultadosPublicados`) queda para `US-4.5.4`.
+> `US-4.5.4` implementa P-11: `ResultadosPublicados` -> email individual a atletas.
 
 ### Aggregate
 
@@ -418,13 +418,16 @@ classDiagram
 | `SolicitarEnvioHandler` | Crea `NotificacionSolicitada` si no existe un envío exitoso previo para el `evento_fuente_id` |
 | `EnviarNotificacionHandler` | Rehidrata la notificación, llama `EmailPort` y registra `NotificacionEnviada` o `NotificacionFallida` |
 | `PoliticaP10Handler` | Recibe `InscripcionConfirmada`, renderiza contenido y orquesta solicitud + envío de email al atleta |
+| `PoliticaP11Handler` | Recibe `ResultadosPublicados`, crea una notificación por atleta y aplica idempotencia con clave compuesta `{evento.id}:{atleta_id}` |
 
 ### Templates e integración
 
 | Componente | Responsabilidad |
 |------------|-----------------|
 | `InscripcionConfirmadaTemplate` | Genera asunto y cuerpo de email con atleta, torneo, fecha, sede y disciplinas |
+| `ResultadosPublicadosTemplate` | Genera email individual con posición, RP, tarjeta, podio y link al ranking |
 | `build_p10_handler` | Factory en `src/app.py` para componer P-10 con repositorio SQLite y `ResendEmailAdapter` |
+| `build_p11_handler` | Factory en `src/app.py` para componer P-11 con repositorio SQLite y `ResendEmailAdapter` |
 
 ### Puerto y adaptador de email
 

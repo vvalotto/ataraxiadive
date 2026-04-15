@@ -27,6 +27,7 @@ from notificaciones.application.commands.enviar_notificacion import (
 )
 from notificaciones.application.commands.solicitar_envio import SolicitarEnvioHandler
 from notificaciones.application.policies.politica_p10 import PoliticaP10Handler
+from notificaciones.application.policies.politica_p11 import PoliticaP11Handler
 from notificaciones.infrastructure.email.resend_email_adapter import ResendEmailAdapter
 from notificaciones.infrastructure.event_store.sqlite_notificacion_event_store import (
     SQLiteNotificacionEventStore,
@@ -36,6 +37,9 @@ from notificaciones.infrastructure.repositories.sqlite_notificacion_repository i
 )
 from notificaciones.infrastructure.templates.inscripcion_confirmada_template import (
     InscripcionConfirmadaTemplate,
+)
+from notificaciones.infrastructure.templates.resultados_publicados_template import (
+    ResultadosPublicadosTemplate,
 )
 from registro.api.router import router as registro_router
 from torneo.api.exception_handlers import register_torneo_exception_handlers
@@ -89,6 +93,21 @@ def build_p10_handler() -> PoliticaP10Handler:
             ResendEmailAdapter(),
         ),
         template=InscripcionConfirmadaTemplate(),
+    )
+
+
+def build_p11_handler() -> PoliticaP11Handler:
+    """Construye la política P-11 con adaptadores reales de Notificaciones."""
+    store = SQLiteNotificacionEventStore()
+    repository = SQLiteNotificacionRepository(store)
+    return PoliticaP11Handler(
+        repository=repository,
+        solicitar_envio_handler=SolicitarEnvioHandler(repository),
+        enviar_notificacion_handler=EnviarNotificacionHandler(
+            repository,
+            ResendEmailAdapter(),
+        ),
+        template=ResultadosPublicadosTemplate(),
     )
 
 
