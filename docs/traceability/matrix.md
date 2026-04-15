@@ -134,7 +134,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-NT-01 | Notificaciones por email y push | Notificaciones | SP4 | 4.5 | US-4.5.x | 🟡 email implementado para P-10/P-11 (`US-4.5.1`..`US-4.5.4`); push pendiente |
+| RF-NT-01 | Notificaciones por email y push | Notificaciones | SP4 | 4.5 | US-4.5.x | 🟡 email implementado y cableado para P-10/P-11 (`US-4.5.1`..`US-4.5.5`); push pendiente |
 | RF-NT-02 | Recordatorio al atleta cuando se acerca el plazo de AP | Notificaciones | SP4 | 4.5 | US-4.5.x | ✅ definido · pendiente de implementación |
 | RF-NT-03 | Notificaciones a juez u organizador durante ejecución | Notificaciones | — | — | — | ⏳ pendiente |
 | RF-NT-04 | Notificar a atletas cuando se publican resultados finales | Notificaciones | SP4 | 4.5 | US-4.5.x | ✅ implementado (`US-4.5.4`) |
@@ -337,6 +337,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 | US-4.5.2 | 4.5 | RF-NT-01 · ADR-016 (Resend) | Puerto `EmailPort` · adaptador `ResendEmailAdapter` · integración HTTP con Resend API | ✅ Done (PR #80) |
 | US-4.5.3 | 4.5 | RF-NT-01 · RF-NT-03 | Política P-10 — `InscripcionConfirmada` → `SolicitarNotificacion` → email al atleta · template `inscripcion_confirmada` | ✅ Done (PR #81) |
 | US-4.5.4 | 4.5 | RF-NT-04 | Política P-11 — `ResultadosPublicados` → email a todos los atletas de la disciplina · template `resultados_publicados` · `evento_fuente_id` compuesto `"{evento.id}:{atleta_id}"` | ✅ Done (PR #82) |
+| US-4.5.5 | 4.5 | RF-NT-01 | Cableado P-10 al endpoint `POST /registro/inscripciones` · enrichment `Inscripcion` → `InscripcionConfirmada` en `src/app.py` · idempotencia por `inscripcion_id` | 🔵 In progress |
 
 > DesignReviewer post-INC-4.5: 0 CRITICAL, 174 WARNING (+16 vs INC-4.4 — patrones ES/hexagonal esperados en BC Notificaciones).
 > Reporte: `quality/reports/designreviewer/INC-4.5-report.txt`

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Awaitable, Callable
 from datetime import date, datetime
 from uuid import UUID
 
@@ -22,6 +23,7 @@ from registro.application.commands.registrar_atleta import (
 )
 from registro.application.queries.listar_inscriptos import ListarInscriptosHandler
 from registro.application.queries.obtener_atleta import ObtenerAtletaHandler
+from registro.domain.aggregates.inscripcion import Inscripcion
 from registro.domain.exceptions import (
     AtletaNoEncontrado,
     AtletaYaInscripto,
@@ -42,6 +44,15 @@ from shared.api.dependencies import AtletaDep, OrganizadorDep
 from shared.domain.value_objects.disciplina import Disciplina
 
 router = APIRouter(prefix="/registro", tags=["registro"])
+
+_on_inscripcion_confirmada_callback: Callable[[Inscripcion], Awaitable[None]] | None = None
+
+
+def configure_inscripcion_notificaciones(
+    callback: Callable[[Inscripcion], Awaitable[None]] | None,
+) -> None:
+    global _on_inscripcion_confirmada_callback
+    _on_inscripcion_confirmada_callback = callback
 
 
 # ── Schemas ───────────────────────────────────────────────────────────────────
@@ -163,7 +174,11 @@ async def obtener_atleta(atleta_id: UUID) -> JSONResponse:
 
 @router.post("/inscripciones", status_code=201)
 async def inscribir_atleta(body: InscribirAtletaRequest, _: AtletaDep) -> JSONResponse:
-    handler = InscribirAtletaHandler(_inscripcion_repo(), _torneo_consulta())
+    handler = InscribirAtletaHandler(
+        _inscripcion_repo(),
+        _torneo_consulta(),
+        on_inscripcion_confirmada=_on_inscripcion_confirmada_callback,
+    )
     cmd = InscribirAtletaCommand(
         atleta_id=body.atleta_id,
         torneo_id=body.torneo_id,

@@ -371,6 +371,7 @@ classDiagram
 > `US-4.5.2` implementa el adaptador email con Resend.
 > `US-4.5.3` implementa P-10: `InscripcionConfirmada` -> email de confirmación.
 > `US-4.5.4` implementa P-11: `ResultadosPublicados` -> email individual a atletas.
+> `US-4.5.5` cablea P-10 al endpoint HTTP de inscripción desde `src/app.py`.
 
 ### Aggregate
 
@@ -427,6 +428,7 @@ classDiagram
 | `InscripcionConfirmadaTemplate` | Genera asunto y cuerpo de email con atleta, torneo, fecha, sede y disciplinas |
 | `ResultadosPublicadosTemplate` | Genera email individual con posición, RP, tarjeta, podio y link al ranking |
 | `build_p10_handler` | Factory en `src/app.py` para componer P-10 con repositorio SQLite y `ResendEmailAdapter` |
+| `build_on_inscripcion_confirmada_callback` | Adapter en `src/app.py` que enriquece `Inscripcion` con datos de Registro/Torneo y llama P-10 |
 | `build_p11_handler` | Factory en `src/app.py` para componer P-11 con repositorio SQLite y `ResendEmailAdapter` |
 
 ### Puerto y adaptador de email

@@ -1,0 +1,250 @@
+{
+  "metadata": {
+    "us_id": "US-4.5.5",
+    "us_title": "Cablear P-10 al endpoint de inscripcion",
+    "us_points": 2,
+    "producto": "notificaciones",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-15T12:40:45.878530+00:00",
+    "completed_at": "2026-04-15T17:29:20.616189+00:00",
+    "total_elapsed_seconds": 17314,
+    "effective_seconds": 17314,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-04-15T12:40:51.357485+00:00",
+      "completed_at": "2026-04-15T12:41:07.275407+00:00",
+      "elapsed_seconds": 15,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-15T12:41:13.142551+00:00",
+      "completed_at": "2026-04-15T12:41:33.401687+00:00",
+      "elapsed_seconds": 20,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-04-15T17:03:49.302739+00:00",
+      "completed_at": "2026-04-15T17:07:34.299932+00:00",
+      "elapsed_seconds": 224,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_2_1",
+          "task_name": "Crear plan de implementación US-4.5.5",
+          "task_type": "documentation",
+          "estimated_minutes": 25.0,
+          "started_at": "2026-04-15T17:05:21.078804+00:00",
+          "completed_at": "2026-04-15T17:07:27.074274+00:00",
+          "elapsed_seconds": 125,
+          "actual_minutes": 2.08,
+          "variance_minutes": -22.92,
+          "file_created": "docs/plans/sp4/US-4.5.5-plan.md",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-04-15T17:08:24.601261+00:00",
+      "completed_at": "2026-04-15T17:17:28.384819+00:00",
+      "elapsed_seconds": 543,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_3_1",
+          "task_name": "Cablear callback P-10 en Registro y app",
+          "task_type": "implementation",
+          "estimated_minutes": 60.0,
+          "started_at": "2026-04-15T17:08:31.023123+00:00",
+          "completed_at": "2026-04-15T17:15:50.795689+00:00",
+          "elapsed_seconds": 439,
+          "actual_minutes": 7.32,
+          "variance_minutes": -52.68,
+          "file_created": "src/app.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-15T17:18:54.112383+00:00",
+      "completed_at": "2026-04-15T17:21:45.793351+00:00",
+      "elapsed_seconds": 171,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_4_1",
+          "task_name": "Ejecutar tests unitarios focalizados",
+          "task_type": "testing",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-04-15T17:20:14.525627+00:00",
+          "completed_at": "2026-04-15T17:21:28.948768+00:00",
+          "elapsed_seconds": 74,
+          "actual_minutes": 1.23,
+          "variance_minutes": -8.77,
+          "file_created": "tests/unit/test_app_p10_wiring.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-04-15T17:21:54.110543+00:00",
+      "completed_at": "2026-04-15T17:22:21.872725+00:00",
+      "elapsed_seconds": 27,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_5_1",
+          "task_name": "Ejecutar integración HTTP P-10",
+          "task_type": "testing",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-04-15T17:21:59.503098+00:00",
+          "completed_at": "2026-04-15T17:22:14.124674+00:00",
+          "elapsed_seconds": 14,
+          "actual_minutes": 0.23,
+          "variance_minutes": -9.77,
+          "file_created": "tests/integration/registro/test_p10_endpoint_wiring.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-04-15T17:22:28.457303+00:00",
+      "completed_at": "2026-04-15T17:22:53.975086+00:00",
+      "elapsed_seconds": 25,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_6_1",
+          "task_name": "Ejecutar BDD US-4.5.5",
+          "task_type": "testing",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-04-15T17:22:34.359587+00:00",
+          "completed_at": "2026-04-15T17:22:48.612020+00:00",
+          "elapsed_seconds": 14,
+          "actual_minutes": 0.23,
+          "variance_minutes": -9.77,
+          "file_created": "tests/features/steps/cablear_p10_inscripcion_steps.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-15T17:24:31.588285+00:00",
+      "completed_at": "2026-04-15T17:25:24.602846+00:00",
+      "elapsed_seconds": 53,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_7_1",
+          "task_name": "Ejecutar regresión P-10 y CodeGuard",
+          "task_type": "quality",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-04-15T17:24:38.008018+00:00",
+          "completed_at": "2026-04-15T17:25:16.758083+00:00",
+          "elapsed_seconds": 38,
+          "actual_minutes": 0.63,
+          "variance_minutes": -14.37,
+          "file_created": "quality/reports/codeguard/US-4.5.5-quality.json",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-04-15T17:25:32.536737+00:00",
+      "completed_at": "2026-04-15T17:27:16.605927+00:00",
+      "elapsed_seconds": 104,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_8_1",
+          "task_name": "Actualizar documentación US-4.5.5",
+          "task_type": "documentation",
+          "estimated_minutes": 20.0,
+          "started_at": "2026-04-15T17:25:39.174007+00:00",
+          "completed_at": "2026-04-15T17:27:10.679136+00:00",
+          "elapsed_seconds": 91,
+          "actual_minutes": 1.52,
+          "variance_minutes": -18.48,
+          "file_created": "docs/architecture/15-bc-notificaciones.md",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-04-15T17:28:10.451599+00:00",
+      "completed_at": "2026-04-15T17:29:15.490667+00:00",
+      "elapsed_seconds": 65,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_9_1",
+          "task_name": "Crear reporte final US-4.5.5",
+          "task_type": "documentation",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-04-15T17:28:16.657859+00:00",
+          "completed_at": "2026-04-15T17:29:10.178515+00:00",
+          "elapsed_seconds": 53,
+          "actual_minutes": 0.88,
+          "variance_minutes": -14.12,
+          "file_created": "docs/reports/US-4.5.5-report.md",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 8,
+    "completed_tasks": 8,
+    "total_phases": 10,
+    "estimated_total_minutes": 165.0,
+    "actual_total_minutes": 14.13,
+    "variance_minutes": -150.87,
+    "variance_percent": -91.43
+  }
+}
