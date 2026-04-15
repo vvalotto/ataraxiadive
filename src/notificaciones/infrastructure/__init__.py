@@ -1,5 +1,6 @@
 """Infraestructura del BC Notificaciones."""
 
 from notificaciones.infrastructure.email import ResendEmailAdapter
+from notificaciones.infrastructure.templates import InscripcionConfirmadaTemplate
 
-__all__ = ["ResendEmailAdapter"]
+__all__ = ["InscripcionConfirmadaTemplate", "ResendEmailAdapter"]

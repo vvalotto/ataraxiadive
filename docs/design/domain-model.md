@@ -368,7 +368,9 @@ classDiagram
 ## 7. BC Notificaciones — Generic (Event Sourcing)
 
 > `US-4.5.1` implementa el núcleo del aggregate y su event store propio.
-> Las políticas y el adaptador email real se completan en `US-4.5.2` a `US-4.5.4`.
+> `US-4.5.2` implementa el adaptador email con Resend.
+> `US-4.5.3` implementa P-10: `InscripcionConfirmada` -> email de confirmación.
+> P-11 (`ResultadosPublicados`) queda para `US-4.5.4`.
 
 ### Aggregate
 
@@ -408,6 +410,21 @@ classDiagram
 | Puerto | Responsabilidad |
 |--------|-----------------|
 | `NotificacionRepository` | Persistir y rehidratar streams; consultar si ya existe `NotificacionEnviada` por `evento_fuente_id` |
+
+### Application
+
+| Componente | Responsabilidad |
+|------------|-----------------|
+| `SolicitarEnvioHandler` | Crea `NotificacionSolicitada` si no existe un envío exitoso previo para el `evento_fuente_id` |
+| `EnviarNotificacionHandler` | Rehidrata la notificación, llama `EmailPort` y registra `NotificacionEnviada` o `NotificacionFallida` |
+| `PoliticaP10Handler` | Recibe `InscripcionConfirmada`, renderiza contenido y orquesta solicitud + envío de email al atleta |
+
+### Templates e integración
+
+| Componente | Responsabilidad |
+|------------|-----------------|
+| `InscripcionConfirmadaTemplate` | Genera asunto y cuerpo de email con atleta, torneo, fecha, sede y disciplinas |
+| `build_p10_handler` | Factory en `src/app.py` para componer P-10 con repositorio SQLite y `ResendEmailAdapter` |
 
 ### Puerto y adaptador de email
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Awaitable, Callable
 from uuid import UUID
 
 from registro.domain.aggregates.inscripcion import Inscripcion
@@ -26,9 +27,11 @@ class InscribirAtletaHandler:
         self,
         inscripcion_repo: InscripcionRepositoryPort,
         torneo_consulta: TorneoConsultaPort,
+        on_inscripcion_confirmada: Callable[[Inscripcion], Awaitable[None]] | None = None,
     ) -> None:
         self._inscripcion_repo = inscripcion_repo
         self._torneo_consulta = torneo_consulta
+        self._on_inscripcion_confirmada = on_inscripcion_confirmada
 
     async def handle(self, cmd: InscribirAtletaCommand) -> UUID:
         if not cmd.disciplinas:
@@ -60,4 +63,9 @@ class InscribirAtletaHandler:
             disciplinas=cmd.disciplinas,
         )
         await self._inscripcion_repo.save(inscripcion)
+        if self._on_inscripcion_confirmada is not None:
+            try:
+                await self._on_inscripcion_confirmada(inscripcion)
+            except Exception:
+                pass
         return inscripcion.inscripcion_id

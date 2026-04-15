@@ -44,10 +44,12 @@ El BC `notificaciones` ya cuenta con:
 - tabla `notificaciones_events` e idempotencia por `evento_fuente_id`;
 - puerto `EmailPort`;
 - adaptador concreto `ResendEmailAdapter` en infraestructura para envío real por HTTP.
+- comandos de aplicación `SolicitarEnvioHandler` y `EnviarNotificacionHandler`;
+- política P-10 (`InscripcionConfirmada` -> email de confirmación al atleta);
+- template `InscripcionConfirmadaTemplate`.
 
-La capa `application/` permanece casi vacía: los casos de uso que conectan
-eventos de otros BCs con el envío real se implementan en `US-4.5.3` y
-`US-4.5.4`.
+La política P-11 (`ResultadosPublicados` -> emails a atletas de la disciplina)
+queda pendiente para `US-4.5.4`.
 
 ## Rol del bounded context
 
@@ -202,6 +204,13 @@ Sus responsabilidades son:
   `NotificacionFallida`;
 - coordinar políticas de reintento cuando corresponda.
 
+En `US-4.5.3`, la política P-10 se implementa como listener in-process:
+recibe un DTO de aplicación `InscripcionConfirmada`, renderiza el contenido con
+`InscripcionConfirmadaTemplate`, ejecuta `SolicitarEnvioHandler` y luego
+`EnviarNotificacionHandler`. Si el evento no trae email del atleta, registra
+directamente `NotificacionFallida` con motivo `destinatario_sin_email` sin
+interrumpir el flujo principal de inscripción.
+
 ### Domain Layer
 
 Contiene el modelo propio del BC.
@@ -267,13 +276,14 @@ Los value objects centrales son:
 La colaboración sigue estas reglas:
 
 - ningún BC funcional espera una respuesta síncrona de `Notificaciones`;
-- el BC consume eventos de dominio de manera asíncrona;
+- en SP4, el BC consume eventos mediante callbacks in-process registrados en el
+  composition root;
 - la semántica del evento recibido se traduce al lenguaje ubicuo propio del BC;
 - el evento fuente se conserva como clave de idempotencia.
 
 Entre los disparadores ya definidos aparecen, por ejemplo:
 
-- confirmaciones o cambios relevantes de inscripción;
+- `InscripcionConfirmada` desde `Registro` para P-10;
 - recordatorios vinculados a anuncios;
 - `ResultadosPublicados`;
 - `TorneoCerrado`.

@@ -22,6 +22,21 @@ from identidad.api.dependencies import configure_identity_dependencies
 from identidad.api.router import router as identidad_router
 from identidad.infrastructure.bcrypt_password_hasher import BcryptPasswordHasher
 from identidad.infrastructure.jwt_service import JWTService
+from notificaciones.application.commands.enviar_notificacion import (
+    EnviarNotificacionHandler,
+)
+from notificaciones.application.commands.solicitar_envio import SolicitarEnvioHandler
+from notificaciones.application.policies.politica_p10 import PoliticaP10Handler
+from notificaciones.infrastructure.email.resend_email_adapter import ResendEmailAdapter
+from notificaciones.infrastructure.event_store.sqlite_notificacion_event_store import (
+    SQLiteNotificacionEventStore,
+)
+from notificaciones.infrastructure.repositories.sqlite_notificacion_repository import (
+    SQLiteNotificacionRepository,
+)
+from notificaciones.infrastructure.templates.inscripcion_confirmada_template import (
+    InscripcionConfirmadaTemplate,
+)
 from registro.api.router import router as registro_router
 from torneo.api.exception_handlers import register_torneo_exception_handlers
 from torneo.api.router import router as torneo_router
@@ -60,6 +75,21 @@ app.include_router(resultados_router)
 app.include_router(torneo_router)
 register_exception_handlers(app)
 register_torneo_exception_handlers(app)
+
+
+def build_p10_handler() -> PoliticaP10Handler:
+    """Construye la política P-10 con adaptadores reales de Notificaciones."""
+    store = SQLiteNotificacionEventStore()
+    repository = SQLiteNotificacionRepository(store)
+    return PoliticaP10Handler(
+        repository=repository,
+        solicitar_envio_handler=SolicitarEnvioHandler(repository),
+        enviar_notificacion_handler=EnviarNotificacionHandler(
+            repository,
+            ResendEmailAdapter(),
+        ),
+        template=InscripcionConfirmadaTemplate(),
+    )
 
 
 # ── Política P-08: CompetenciaFinalizada → CalcularRanking ────────────────────
