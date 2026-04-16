@@ -54,7 +54,12 @@ def test_finalizar_emite_evento() -> None:
     """Finalizar cuando todas las performances terminaron emite CompetenciaFinalizada."""
     competencia = _competencia_en_ejecucion()
 
-    competencia.finalizar(total_performances=3, ejecutadas=2, dns_count=1)
+    competencia.finalizar(
+        total_performances=3,
+        ejecutadas=2,
+        dns_count=1,
+        hash_sha256="a" * 64,
+    )
 
     eventos = competencia.pull_events()
     assert len(eventos) == 1
@@ -64,7 +69,12 @@ def test_finalizar_emite_evento() -> None:
 def test_finalizar_transiciona_a_finalizada() -> None:
     """Estado pasa a Finalizada tras finalizar()."""
     competencia = _competencia_en_ejecucion()
-    competencia.finalizar(total_performances=3, ejecutadas=3, dns_count=0)
+    competencia.finalizar(
+        total_performances=3,
+        ejecutadas=3,
+        dns_count=0,
+        hash_sha256="b" * 64,
+    )
 
     assert competencia.estado == EstadoCompetencia.Finalizada
 
@@ -72,13 +82,19 @@ def test_finalizar_transiciona_a_finalizada() -> None:
 def test_finalizar_payload_correcto() -> None:
     """El payload de CompetenciaFinalizada contiene los contadores correctos."""
     competencia = _competencia_en_ejecucion()
-    competencia.finalizar(total_performances=4, ejecutadas=3, dns_count=1)
+    competencia.finalizar(
+        total_performances=4,
+        ejecutadas=3,
+        dns_count=1,
+        hash_sha256="c" * 64,
+    )
 
     evento = competencia.pull_events()[0]
     assert isinstance(evento, CompetenciaFinalizada)
     assert evento.total_performances == 4
     assert evento.ejecutadas == 3
     assert evento.dns_count == 1
+    assert evento.hash_sha256 == "c" * 64
     assert evento.competencia_id == str(_CID)
     assert evento.disciplina == _DISC.value
 
@@ -88,7 +104,12 @@ def test_finalizar_rechaza_si_quedan_pendientes() -> None:
     competencia = _competencia_en_ejecucion()
 
     with pytest.raises(CompetenciaNoFinalizable):
-        competencia.finalizar(total_performances=3, ejecutadas=1, dns_count=1)
+        competencia.finalizar(
+            total_performances=3,
+            ejecutadas=1,
+            dns_count=1,
+            hash_sha256="d" * 64,
+        )
 
 
 def test_finalizar_rechaza_con_mensaje_descriptivo() -> None:
@@ -96,7 +117,12 @@ def test_finalizar_rechaza_con_mensaje_descriptivo() -> None:
     competencia = _competencia_en_ejecucion()
 
     with pytest.raises(CompetenciaNoFinalizable, match="1 performance"):
-        competencia.finalizar(total_performances=3, ejecutadas=2, dns_count=0)
+        competencia.finalizar(
+            total_performances=3,
+            ejecutadas=2,
+            dns_count=0,
+            hash_sha256="e" * 64,
+        )
 
 
 def test_reconstitute_aplica_competencia_finalizada() -> None:
@@ -130,6 +156,7 @@ def test_reconstitute_aplica_competencia_finalizada() -> None:
                 "ejecutadas": 1,
                 "dns_count": 1,
                 "finalizada_en": datetime(2026, 3, 22, 12, 0, 0).isoformat(),
+                "hash_sha256": "f" * 64,
                 "occurred_at": datetime(2026, 3, 22, 12, 0, 0).isoformat(),
             },
         },
@@ -137,3 +164,20 @@ def test_reconstitute_aplica_competencia_finalizada() -> None:
     competencia = Competencia.reconstitute(competencia_id=_CID, disciplina=_DISC, events=events)
 
     assert competencia.estado == EstadoCompetencia.Finalizada
+
+
+def test_finalizar_acepta_hash_del_conjunto_vacio() -> None:
+    """Disciplina sin performances usa el SHA-256 conocido de cadena vacía."""
+    competencia = _competencia_en_ejecucion()
+    hash_vacio = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+    competencia.finalizar(
+        total_performances=0,
+        ejecutadas=0,
+        dns_count=0,
+        hash_sha256=hash_vacio,
+    )
+
+    evento = competencia.pull_events()[0]
+    assert isinstance(evento, CompetenciaFinalizada)
+    assert evento.hash_sha256 == hash_vacio
