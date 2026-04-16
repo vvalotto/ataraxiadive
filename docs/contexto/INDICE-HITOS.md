@@ -28,6 +28,7 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | HITO-21 | SP4 Inc 4.6 | 2026-04-16 | Tracker secuencial como política | ¿La secuencialidad del método incluye también al mecanismo que registra sus fases? | [HITO-21](./HITO-21-TRACKER-SECUENCIALIDAD-COMO-POLITICA.md) |
 | HITO-22 | SP4 Inc 4.6 | 2026-04-16 | Event Sourcing como base de integridad criptográfica | ¿La misma traza de eventos puede sostener auditoría legible e integridad verificable sin persistencia adicional? | [HITO-22](./HITO-22-EVENT-SOURCING-INTEGRIDAD-CRIPTOGRAFICA.md) |
 | HITO-23 | SP4 Inc 4.6 | 2026-04-16 | Auditoría UI como composición operable de read models | ¿La evidencia del Event Sourcing se vuelve útil recién cuando puede recorrerse desde la UI sin conocer el event store? | [HITO-23](./HITO-23-AUDITORIA-UI-COMPOSICION-QUERIES.md) |
+| HITO-24 | SP4 Inc 4.6 | 2026-04-16 | Exportación como read model transversal portable | ¿La evidencia del dominio puede salir del sistema como artefacto portable sin persistencia paralela y sin romper bounded contexts? | [HITO-24](./HITO-24-EXPORTACION-COMO-READ-MODEL-TRANSVERSAL.md) |
 
 ---
 
@@ -39,7 +40,7 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | SP1 (La Performance) | 3, 4, 5, 6, 7, 8, 9 | Primer ciclo IEDD completo, fricción del ecosistema, BDD + ES |
 | SP2 (La Competencia) | 10, 11, 12, 13 | Patrones DDD avanzados, quality gates, deuda técnica formal |
 | SP3 (El Torneo) | 15, 16 | Proyecciones CQRS emergentes, secuencialidad del pipeline y gobierno del proceso |
-| SP4 (La Plataforma) | 17, 18, 19, 21, 22, 23 | Datos reales como oráculo, validación UX, captura formal de hallazgos estructurales, gobierno secuencial del tracker, integridad criptográfica sobre el event store y auditoría navegable por composición de read models |
+| SP4 (La Plataforma) | 17, 18, 19, 21, 22, 23, 24 | Datos reales como oráculo, validación UX, captura formal de hallazgos estructurales, gobierno secuencial del tracker, integridad criptográfica sobre el event store, auditoría navegable por composición de read models y exportación portable como evidencia transversal |
 
 ---
 
@@ -56,6 +57,7 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | La secuencialidad del método incluye también al tracker y su evidencia | HITO-21 | ✅ Confirmada |
 | El Event Sourcing puede sostener auditoría e integridad criptográfica con la misma traza | HITO-22 | ✅ Evidencia inicial |
 | La evidencia del Event Sourcing solo se vuelve operable cuando puede navegarse desde read models y UI | HITO-23 | ✅ Evidencia inicial |
+| La evidencia del dominio puede exportarse como read model portable sin persistencia paralela | HITO-24 | ✅ Evidencia inicial |
 | El incremento es la unidad correcta para leer deuda estructural acumulada | HITO-19 | ✅ Evidencia inicial |
 
 ---
