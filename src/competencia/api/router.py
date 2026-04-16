@@ -927,6 +927,7 @@ async def get_estado_competencia(
             "intervalo_minutos": dto.intervalo_minutos,
             "grilla_confirmada": dto.grilla_confirmada,
             "torneo_id": str(dto.torneo_id) if dto.torneo_id else None,
+            "hash_sha256": dto.hash_sha256,
         },
         status_code=200,
     )

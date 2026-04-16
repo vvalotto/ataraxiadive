@@ -8,6 +8,9 @@ import { DisciplinasPage } from './pages/juez/DisciplinasPage'
 import { GrillaPage } from './pages/juez/GrillaPage'
 import { PerformanceFlowPage } from './pages/juez/PerformanceFlowPage'
 import { DashboardPage } from './pages/organizador/DashboardPage'
+import { TorneoCompetenciasPage } from './pages/organizador/TorneoCompetenciasPage'
+import { AuditoriaCompetenciaPage } from './pages/organizador/AuditoriaCompetenciaPage'
+import { AuditoriaPerformancePage } from './pages/organizador/AuditoriaPerformancePage'
 import { HealthCheck } from './components/HealthCheck'
 
 function RootRedirect() {
@@ -58,6 +61,30 @@ function App() {
           element={
             <RequireRole role="organizador">
               <DashboardPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/organizador/torneos/:torneoId/competencias"
+          element={
+            <RequireRole role="organizador">
+              <TorneoCompetenciasPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/organizador/competencias/:competenciaId/auditoria"
+          element={
+            <RequireRole role="organizador">
+              <AuditoriaCompetenciaPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/organizador/competencias/:competenciaId/auditoria/:atletaId"
+          element={
+            <RequireRole role="organizador">
+              <AuditoriaPerformancePage />
             </RequireRole>
           }
         />

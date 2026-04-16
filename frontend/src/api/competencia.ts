@@ -21,6 +21,7 @@ export interface EstadoCompetenciaDto {
   intervalo_minutos: number | null
   grilla_confirmada: boolean
   torneo_id: string | null
+  hash_sha256: string | null
 }
 
 export interface GrillaAtletaDto {
@@ -48,6 +49,21 @@ export interface PerformanceActualDto {
 export interface PenalizacionPayload {
   tipo: string
   deduccion: string
+}
+
+export interface AuditLogEventoDto {
+  sequence: number
+  tipo: string
+  timestamp: string
+  datos: Record<string, unknown>
+}
+
+export interface AuditLogDto {
+  competencia_id: string
+  atleta_id: string
+  atleta_nombre: string
+  disciplina: string
+  eventos: AuditLogEventoDto[]
 }
 
 function buildHeaders() {
@@ -100,6 +116,19 @@ export async function fetchEstadoCompetencia(
     `/competencia/${competenciaId}/estado?disciplina=${encodeURIComponent(disciplina)}`,
   )
   return parseResponse<EstadoCompetenciaDto>(response)
+}
+
+export async function fetchAuditLog(
+  competenciaId: string,
+  atletaId: string,
+): Promise<AuditLogDto> {
+  const response = await fetch(
+    `/competencia/${competenciaId}/performances/${atletaId}/audit-log`,
+    {
+      headers: buildHeaders(),
+    },
+  )
+  return parseResponse<AuditLogDto>(response)
 }
 
 export async function fetchGrillaCompetencia(
