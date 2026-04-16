@@ -86,6 +86,11 @@ from competencia.application.queries.obtener_andariveles_activos import (
     ObtenerAndarivelesActivosHandler,
     ObtenerAndarivelesActivosQuery,
 )
+from competencia.application.queries.obtener_audit_log import (
+    ObtenerAuditLogHandler,
+    ObtenerAuditLogQuery,
+    PerformanceNoEncontrada as PerformanceNoEncontradaAuditLog,
+)
 from competencia.application.queries.obtener_progreso import (
     ObtenerProgresoHandler,
     ObtenerProgresoQuery,
@@ -270,6 +275,13 @@ def get_obtener_andariveles_activos_handler(
     return ObtenerAndarivelesActivosHandler(AndarivelesActivosAdapter(event_store))
 
 
+def get_obtener_audit_log_handler(
+    event_store: EventStoreDep,
+) -> ObtenerAuditLogHandler:
+    """Dependency: handler de consulta de audit log."""
+    return ObtenerAuditLogHandler(event_store, AtletaNombreAdapter())
+
+
 def get_llamar_atleta_handler(
     event_store: EventStoreDep,
 ) -> LlamarAtletaHandler:
@@ -320,6 +332,9 @@ CompetenciasPorTorneoProjectionDep = Annotated[
 ]
 ObtenerAndarivelesActivosHandlerDep = Annotated[
     ObtenerAndarivelesActivosHandler, Depends(get_obtener_andariveles_activos_handler)
+]
+ObtenerAuditLogHandlerDep = Annotated[
+    ObtenerAuditLogHandler, Depends(get_obtener_audit_log_handler)
 ]
 PerformancesEstadoAdapterDep = Annotated[
     PerformancesEstadoAdapter, Depends(get_performances_estado_adapter)
@@ -517,6 +532,41 @@ async def get_eventos(
                     "data": dto.data,
                 }
                 for dto in eventos
+            ],
+        },
+        status_code=200,
+    )
+
+
+@router.get("/{competencia_id}/performances/{atleta_id}/audit-log", response_class=JSONResponse)
+async def get_audit_log(
+    competencia_id: UUID,
+    atleta_id: UUID,
+    handler: ObtenerAuditLogHandlerDep,
+    _: OrganizadorDep,
+) -> JSONResponse:
+    """Retorna el audit log de una performance puntual para auditoria."""
+    try:
+        audit_log = await handler.handle(
+            ObtenerAuditLogQuery(competencia_id=competencia_id, atleta_id=atleta_id)
+        )
+    except PerformanceNoEncontradaAuditLog as exc:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
+
+    return JSONResponse(
+        content={
+            "competencia_id": audit_log.competencia_id,
+            "atleta_id": audit_log.atleta_id,
+            "atleta_nombre": audit_log.atleta_nombre,
+            "disciplina": audit_log.disciplina,
+            "eventos": [
+                {
+                    "sequence": evento.sequence,
+                    "tipo": evento.tipo,
+                    "timestamp": evento.timestamp,
+                    "datos": evento.datos,
+                }
+                for evento in audit_log.eventos
             ],
         },
         status_code=200,

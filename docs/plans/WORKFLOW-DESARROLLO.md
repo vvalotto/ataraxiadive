@@ -120,6 +120,13 @@ main          ← baselines etiquetadas (v0.1.0, v0.2.0...)
 > distinto a `US-` (ej: `INC-2.0`) no son encontrados por las operaciones de fase.
 > Mientras no esté corregido, usar prefijo `US-` para todos los IDs de tracking.
 
+> **Política operativa de tracking:** todas las operaciones sobre `tracker_cli.py`
+> (`init`, `start-phase`, `end-phase`, `start-task`, `end-task`, `end`) deben
+> ejecutarse **estrictamente en secuencia, una por vez**. No correr llamadas en
+> paralelo ni agrupar escrituras concurrentes sobre el mismo
+> `.claude/tracking/US-*.json`: el tracker no garantiza concurrencia y puede
+> corromper el JSON persistido.
+
 ### Ejecución de fases
 
 ```
@@ -129,6 +136,7 @@ main          ← baselines etiquetadas (v0.1.0, v0.2.0...)
    → Fase 8 (documentación): auto_approved=False — ídem
    → Fases 8 y 9 deben ejecutarse ANTES del commit final, no después
    → El skill no está completo hasta que docs/reports/{US_ID}-report.md exista en disco
+   → El tracking se opera automáticamente, pero siempre con llamadas secuenciales
 6. [AUTO] CodeGuard corre en cada commit (pre-commit hook, ~5s, solo advierte)
 7. Commits atómicos con referencia: feat(domain): ... [US-X.Y.Z]
 8. Abrir PR hacia develop con /pr → DesignReviewer corre en pre-push (bloquea si CRITICAL)
