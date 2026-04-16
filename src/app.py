@@ -31,6 +31,7 @@ from notificaciones.application.policies.politica_p10 import (
     PoliticaP10Handler,
 )
 from notificaciones.application.policies.politica_p11 import PoliticaP11Handler
+from notificaciones.infrastructure.email.logging_email_adapter import LoggingEmailAdapter
 from notificaciones.infrastructure.email.resend_email_adapter import ResendEmailAdapter
 from notificaciones.infrastructure.event_store.sqlite_notificacion_event_store import (
     SQLiteNotificacionEventStore,
@@ -90,15 +91,24 @@ register_torneo_exception_handlers(app)
 
 
 def build_p10_handler() -> PoliticaP10Handler:
-    """Construye la política P-10 con adaptadores reales de Notificaciones."""
+    """Construye la política P-10.
+
+    Usa ResendEmailAdapter si RESEND_API_KEY está configurado,
+    LoggingEmailAdapter como fallback para desarrollo/smoke-test.
+    """
     store = SQLiteNotificacionEventStore()
     repository = SQLiteNotificacionRepository(store)
+    email_adapter = (
+        ResendEmailAdapter()
+        if os.getenv("RESEND_API_KEY")
+        else LoggingEmailAdapter()
+    )
     return PoliticaP10Handler(
         repository=repository,
         solicitar_envio_handler=SolicitarEnvioHandler(repository),
         enviar_notificacion_handler=EnviarNotificacionHandler(
             repository,
-            ResendEmailAdapter(),
+            email_adapter,
         ),
         template=InscripcionConfirmadaTemplate(),
     )
