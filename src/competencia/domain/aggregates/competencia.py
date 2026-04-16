@@ -61,6 +61,7 @@ class Competencia(AggregateRoot):
         self._estado: EstadoCompetencia = EstadoCompetencia.Preparacion
         self._intervalo: IntervaloDisciplina | None = None
         self._grilla_confirmada: bool = False
+        self._hash_sha256: str | None = None
         self._grilla = GrillaDeSalida()
 
     # ── Propiedades ───────────────────────────────────────────────────────────
@@ -99,6 +100,11 @@ class Competencia(AggregateRoot):
     def grilla_confirmada(self) -> bool:
         """True si la grilla fue confirmada de forma irreversible."""
         return self._grilla_confirmada
+
+    @property
+    def hash_sha256(self) -> str | None:
+        """Hash SHA-256 persistido al cierre, o None si la competencia no finalizó."""
+        return self._hash_sha256
 
     # ── Comandos de dominio ───────────────────────────────────────────────────
 
@@ -367,6 +373,7 @@ class Competencia(AggregateRoot):
             hash_sha256=hash_sha256,
         )
         self._estado = EstadoCompetencia.Finalizada
+        self._hash_sha256 = hash_sha256
         self._record(event)
 
     # ── Reconstitución desde eventos ──────────────────────────────────────────
@@ -430,8 +437,9 @@ class Competencia(AggregateRoot):
     def _apply_competencia_iniciada(self, payload: dict[str, Any]) -> None:  # noqa: ARG002
         self._estado = EstadoCompetencia.EnEjecucion
 
-    def _apply_competencia_finalizada(self, payload: dict[str, Any]) -> None:  # noqa: ARG002
+    def _apply_competencia_finalizada(self, payload: dict[str, Any]) -> None:
         self._estado = EstadoCompetencia.Finalizada
+        self._hash_sha256 = payload.get("hash_sha256")
 
     @staticmethod
     def _parse_payload(payload: Any) -> dict[str, Any]:

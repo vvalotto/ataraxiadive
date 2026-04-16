@@ -27,6 +27,7 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | HITO-19 | SP4 cierre INC-4.1 | 2026-04-08 | Cierre de incremento como captura formal de deuda de diseño | ¿El incremento es la unidad correcta para agrupar hallazgos estructurales y planificar ajustes? | [HITO-19](./HITO-19-INC-4-1-HALLAZGOS-DISENO-CIERRE.md) |
 | HITO-21 | SP4 Inc 4.6 | 2026-04-16 | Tracker secuencial como política | ¿La secuencialidad del método incluye también al mecanismo que registra sus fases? | [HITO-21](./HITO-21-TRACKER-SECUENCIALIDAD-COMO-POLITICA.md) |
 | HITO-22 | SP4 Inc 4.6 | 2026-04-16 | Event Sourcing como base de integridad criptográfica | ¿La misma traza de eventos puede sostener auditoría legible e integridad verificable sin persistencia adicional? | [HITO-22](./HITO-22-EVENT-SOURCING-INTEGRIDAD-CRIPTOGRAFICA.md) |
+| HITO-23 | SP4 Inc 4.6 | 2026-04-16 | Auditoría UI como composición operable de read models | ¿La evidencia del Event Sourcing se vuelve útil recién cuando puede recorrerse desde la UI sin conocer el event store? | [HITO-23](./HITO-23-AUDITORIA-UI-COMPOSICION-QUERIES.md) |
 
 ---
 
@@ -38,7 +39,7 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | SP1 (La Performance) | 3, 4, 5, 6, 7, 8, 9 | Primer ciclo IEDD completo, fricción del ecosistema, BDD + ES |
 | SP2 (La Competencia) | 10, 11, 12, 13 | Patrones DDD avanzados, quality gates, deuda técnica formal |
 | SP3 (El Torneo) | 15, 16 | Proyecciones CQRS emergentes, secuencialidad del pipeline y gobierno del proceso |
-| SP4 (La Plataforma) | 17, 18, 19, 21, 22 | Datos reales como oráculo, validación UX, captura formal de hallazgos estructurales, gobierno secuencial del tracker e integridad criptográfica sobre el event store |
+| SP4 (La Plataforma) | 17, 18, 19, 21, 22, 23 | Datos reales como oráculo, validación UX, captura formal de hallazgos estructurales, gobierno secuencial del tracker, integridad criptográfica sobre el event store y auditoría navegable por composición de read models |
 
 ---
 
@@ -54,6 +55,7 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | La secuencialidad del pipeline es parte del método | HITO-16 | ✅ Confirmada |
 | La secuencialidad del método incluye también al tracker y su evidencia | HITO-21 | ✅ Confirmada |
 | El Event Sourcing puede sostener auditoría e integridad criptográfica con la misma traza | HITO-22 | ✅ Evidencia inicial |
+| La evidencia del Event Sourcing solo se vuelve operable cuando puede navegarse desde read models y UI | HITO-23 | ✅ Evidencia inicial |
 | El incremento es la unidad correcta para leer deuda estructural acumulada | HITO-19 | ✅ Evidencia inicial |
 
 ---
