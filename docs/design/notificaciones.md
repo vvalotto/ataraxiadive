@@ -16,7 +16,7 @@ En el Context Map (ADR-005), Notificaciones es un consumidor downstream:
 ```mermaid
 graph LR
     R[BC Registro] -- InscripcionConfirmada --> P10[Política P-10]
-    C[BC Competencia] -- TarjetaAsignada roja --> P11[Política P-11]
+    RES[BC Resultados] -- ResultadosPublicados --> P11[Política P-11]
     P10 --> N[BC Notificaciones]
     P11 --> N
     N --> E[EmailPort]
@@ -84,7 +84,7 @@ graph TD
 | Política | Evento disparador | Destinatario | Plantilla |
 |----------|-------------------|-------------|-----------|
 | **P-10** | `InscripcionConfirmada` (BC Registro) | Atleta | `InscripcionConfirmadaTemplate` |
-| **P-11** | `TarjetaAsignada` con tarjeta roja (BC Competencia) | Atleta | `ResultadosPublicadosTemplate` |
+| **P-11** | `ResultadosPublicados` (BC Resultados) | Todos los atletas de la disciplina (uno por atleta) | `ResultadosPublicadosTemplate` |
 
 ### Cómo agregar una nueva política
 
