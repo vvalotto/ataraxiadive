@@ -337,7 +337,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 | US-4.5.2 | 4.5 | RF-NT-01 · ADR-016 (Resend) | Puerto `EmailPort` · adaptador `ResendEmailAdapter` · integración HTTP con Resend API | ✅ Done (PR #80) |
 | US-4.5.3 | 4.5 | RF-NT-01 · RF-NT-03 | Política P-10 — `InscripcionConfirmada` → `SolicitarNotificacion` → email al atleta · template `inscripcion_confirmada` | ✅ Done (PR #81) |
 | US-4.5.4 | 4.5 | RF-NT-04 | Política P-11 — `ResultadosPublicados` → email a todos los atletas de la disciplina · template `resultados_publicados` · `evento_fuente_id` compuesto `"{evento.id}:{atleta_id}"` | ✅ Done (PR #82) |
-| US-4.5.5 | 4.5 | RF-NT-01 | Cableado P-10 al endpoint `POST /registro/inscripciones` · enrichment `Inscripcion` → `InscripcionConfirmada` en `src/app.py` · idempotencia por `inscripcion_id` | 🔵 In progress |
+| US-4.5.5 | 4.5 | RF-NT-01 | Cableado P-10 al endpoint `POST /registro/inscripciones` · enrichment `Inscripcion` → `InscripcionConfirmada` en `src/app.py` · idempotencia por `inscripcion_id` | ✅ Done (PR #83) |
 
 > DesignReviewer post-INC-4.5: 0 CRITICAL, 174 WARNING (+16 vs INC-4.4 — patrones ES/hexagonal esperados en BC Notificaciones).
 > Reporte: `quality/reports/designreviewer/INC-4.5-report.txt`
