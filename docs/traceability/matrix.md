@@ -351,6 +351,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 | US-4.6.1 | 4.6 | PLAN-SP4 §INC-4.6 · ADR-001 · ADR-008 | Query `ObtenerAuditLog` por performance · endpoint `GET /competencia/{competencia_id}/performances/{atleta_id}/audit-log` · respuesta cronológica con `sequence`, `tipo`, `timestamp`, `datos` · acceso restringido a `organizador/admin` | ✅ Done |
 | US-4.6.2 | 4.6 | PLAN-SP4 §INC-4.6 · ADR-001 · ADR-008 | Servicio `CalculadorHashCompetencia` · `CompetenciaFinalizada.hash_sha256` persistido en event store · cálculo canónico en política `P-08` antes del cierre · hash vacío conocido para disciplina sin performances | ✅ Done |
 | US-4.6.3 | 4.6 | PLAN-SP4 §INC-4.6 · US-4.6.1 · US-4.6.2 | Rutas y pantallas de organizador para auditoría · lista de atletas por competencia · timeline puntual por performance · visibilidad y copia de `hash_sha256` cuando la disciplina está finalizada | ✅ Done |
+| US-4.6.4 | 4.6 | PLAN-SP4 §INC-4.6 · US-4.6.2 · US-4.6.3 | Query `ExportarResultados` consolidada · endpoint `GET /resultados/{torneo_id}/export` · descarga `csv`/`json` con `Content-Disposition` · ACLs a Torneo, Registro y Competencia para torneo, atletas, estado e integridad | ✅ Done |
 
 ---
 
