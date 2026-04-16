@@ -44,7 +44,8 @@ class Competencia(AggregateRoot):
         INV-C-01: intervaloDisciplina debe estar configurado antes de GenerarGrilla.
         INV-CT-01: torneo_id es opcional — None para competencias standalone (SP1/SP2).
         INV-CT-02: si torneo_id se provee, se persiste en el payload de IntervaloOTConfigurado.
-        INV-CT-03: streams existentes sin torneo_id se reconstituyen correctamente (backward compat).
+        INV-CT-03: streams existentes sin torneo_id se reconstituyen
+        correctamente (backward compat).
     """
 
     def __init__(
@@ -325,7 +326,13 @@ class Competencia(AggregateRoot):
         self._estado = EstadoCompetencia.EnEjecucion
         self._record(event)
 
-    def finalizar(self, total_performances: int, ejecutadas: int, dns_count: int) -> None:
+    def finalizar(
+        self,
+        total_performances: int,
+        ejecutadas: int,
+        dns_count: int,
+        hash_sha256: str,
+    ) -> None:
         """Finaliza la Competencia cuando todas las performances están completas (INV-C-04).
 
         Emite CompetenciaFinalizada y transiciona el estado a Finalizada.
@@ -334,6 +341,7 @@ class Competencia(AggregateRoot):
             total_performances: Total de performances de la disciplina.
             ejecutadas: Cantidad en estado Ejecutada.
             dns_count: Cantidad en estado DNS.
+            hash_sha256: Hash SHA-256 de la secuencia canónica de eventos de la disciplina.
 
         Raises:
             CompetenciaNoFinalizable: INV-C-04 — quedan performances en AnunciadaAP o Llamada.
@@ -356,6 +364,7 @@ class Competencia(AggregateRoot):
             ejecutadas=ejecutadas,
             dns_count=dns_count,
             finalizada_en=now.isoformat(),
+            hash_sha256=hash_sha256,
         )
         self._estado = EstadoCompetencia.Finalizada
         self._record(event)

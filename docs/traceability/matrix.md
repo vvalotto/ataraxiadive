@@ -349,6 +349,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 | US | Inc. | RFs / Decisiones cubiertos | Contenido principal | Estado |
 |----|------|----------------------------|---------------------|--------|
 | US-4.6.1 | 4.6 | PLAN-SP4 §INC-4.6 · ADR-001 · ADR-008 | Query `ObtenerAuditLog` por performance · endpoint `GET /competencia/{competencia_id}/performances/{atleta_id}/audit-log` · respuesta cronológica con `sequence`, `tipo`, `timestamp`, `datos` · acceso restringido a `organizador/admin` | ✅ Done |
+| US-4.6.2 | 4.6 | PLAN-SP4 §INC-4.6 · ADR-001 · ADR-008 | Servicio `CalculadorHashCompetencia` · `CompetenciaFinalizada.hash_sha256` persistido en event store · cálculo canónico en política `P-08` antes del cierre · hash vacío conocido para disciplina sin performances | ✅ Done |
 
 ---
 

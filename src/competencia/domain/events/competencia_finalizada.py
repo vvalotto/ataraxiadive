@@ -36,6 +36,7 @@ class CompetenciaFinalizada(DomainEvent):
     ejecutadas: int
     dns_count: int
     finalizada_en: str
+    hash_sha256: str | None = None
 
     def to_payload(self) -> dict[str, Any]:
         """Serializa el evento a payload JSON-serializable para el Event Store."""
@@ -46,6 +47,7 @@ class CompetenciaFinalizada(DomainEvent):
             "ejecutadas": self.ejecutadas,
             "dns_count": self.dns_count,
             "finalizada_en": self.finalizada_en,
+            "hash_sha256": self.hash_sha256,
             "occurred_at": self.occurred_at.isoformat(),
         }
 
@@ -62,4 +64,5 @@ class CompetenciaFinalizada(DomainEvent):
             ejecutadas=payload["ejecutadas"],
             dns_count=payload["dns_count"],
             finalizada_en=payload["finalizada_en"],
+            hash_sha256=payload.get("hash_sha256"),
         )

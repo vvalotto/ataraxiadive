@@ -216,6 +216,44 @@ async def test_asignar_con_port_finalizado_carga_competencia(
     assert any(f"competencia-{competencia_id}" in c for c in load_calls)
 
 
+@pytest.mark.asyncio
+async def test_asignar_con_port_finalizado_persiste_hash_sha256(
+    competencia_id: Any, participante_id: Any, mock_estado_finalizado: AsyncMock
+) -> None:
+    """P-08 persiste CompetenciaFinalizada con hash SHA-256 al cerrar."""
+    store = _make_store_con_resultado(competencia_id, participante_id)
+    store.load_all_events_ordered = AsyncMock(
+        return_value=[
+            {
+                "sequence": 1,
+                "stream_id": f"performance-{competencia_id}-{participante_id}-{Disciplina.STA.value}",
+                "event_type": "APRegistrado",
+                "payload": {"valor_ap": "300"},
+                "occurred_at": "2026-03-22T09:00:00",
+            }
+        ]
+    )
+    handler = AsignarTarjetaHandler(store, mock_estado_finalizado)
+
+    await handler.handle(
+        AsignarTarjetaCommand(
+            competencia_id=competencia_id,
+            participante_id=participante_id,
+            disciplina=Disciplina.STA,
+            tipo=TipoTarjeta.Blanca,
+            asignada_por="juez",
+        )
+    )
+
+    competencia_finalizada = next(
+        call.kwargs["payload"]
+        for call in store.append.call_args_list
+        if call.kwargs["event_type"] == "CompetenciaFinalizada"
+    )
+    assert "hash_sha256" in competencia_finalizada
+    assert len(competencia_finalizada["hash_sha256"]) == 64
+
+
 # ── Tests RegistrarDNSHandler + P-08 ──────────────────────────────────────────
 
 

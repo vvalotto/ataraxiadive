@@ -322,7 +322,12 @@ def given_competencia_c_anunciada(ctx):
 @when("el sistema intenta finalizar la competencia directamente")
 def when_intenta_finalizar(ctx):
     try:
-        ctx["competencia"].finalizar(total_performances=3, ejecutadas=1, dns_count=0)
+        ctx["competencia"].finalizar(
+            total_performances=3,
+            ejecutadas=1,
+            dns_count=0,
+            hash_sha256="0" * 64,
+        )
     except CompetenciaNoFinalizable as exc:
         ctx["exception"] = exc
 

@@ -7,6 +7,7 @@ from typing import Awaitable, Callable
 from uuid import UUID
 
 from competencia.domain.aggregates.competencia import Competencia
+from competencia.domain.services.calculador_hash_competencia import CalculadorHashCompetencia
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.ports.performances_estado_port import PerformancesEstadoPort
 from competencia.domain.value_objects.disciplina import Disciplina
@@ -38,6 +39,14 @@ async def trigger_finalizacion_si_corresponde(
     if not estado.todas_finalizadas:
         return
 
+    performance_events = await event_store.load_all_events_ordered(f"performance-{competencia_id}-")
+    eventos_disciplina = [
+        event
+        for event in performance_events
+        if event["stream_id"].endswith(f"-{disciplina.value}")
+    ]
+    hash_sha256 = CalculadorHashCompetencia.calcular(eventos_disciplina)
+
     comp_stream_id = f"competencia-{competencia_id}"
     comp_events = await event_store.load(comp_stream_id)
     competencia = Competencia.reconstitute(
@@ -50,6 +59,7 @@ async def trigger_finalizacion_si_corresponde(
         total_performances=estado.total,
         ejecutadas=estado.ejecutadas,
         dns_count=estado.dns_count,
+        hash_sha256=hash_sha256,
     )
 
     for event in competencia.pull_events():
