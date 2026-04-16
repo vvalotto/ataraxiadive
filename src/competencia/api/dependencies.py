@@ -13,6 +13,7 @@ from competencia.application.commands.iniciar_competencia import IniciarCompeten
 from competencia.application.queries.obtener_andariveles_activos import (
     ObtenerAndarivelesActivosHandler,
 )
+from competencia.application.queries.obtener_audit_log import ObtenerAuditLogHandler
 from competencia.application.queries.obtener_estado_competencia import (
     ObtenerEstadoCompetenciaHandler,
 )
@@ -30,6 +31,7 @@ from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEven
 from competencia.infrastructure.repositories.andariveles_activos_adapter import (
     AndarivelesActivosAdapter,
 )
+from competencia.infrastructure.repositories.atleta_nombre_adapter import AtletaNombreAdapter
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
@@ -74,8 +76,18 @@ def get_obtener_andariveles_activos_handler(
     return ObtenerAndarivelesActivosHandler(AndarivelesActivosAdapter(event_store))
 
 
+def get_obtener_audit_log_handler(
+    event_store: EventStoreDep,
+) -> ObtenerAuditLogHandler:
+    """Dependency: handler de consulta de audit log."""
+    return ObtenerAuditLogHandler(event_store, AtletaNombreAdapter())
+
+
 ObtenerAndarivelesActivosHandlerDep = Annotated[
     ObtenerAndarivelesActivosHandler, Depends(get_obtener_andariveles_activos_handler)
+]
+ObtenerAuditLogHandlerDep = Annotated[
+    ObtenerAuditLogHandler, Depends(get_obtener_audit_log_handler)
 ]
 PerformancesEstadoAdapterDep = Annotated[
     PerformancesEstadoAdapter, Depends(get_performances_estado_adapter)

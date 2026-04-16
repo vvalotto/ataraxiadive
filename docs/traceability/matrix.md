@@ -344,7 +344,15 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
-## 17. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §16 -->
+## 17. US-IEDD SP4 INC-4.6 — Auditoría y Exportación
+
+| US | Inc. | RFs / Decisiones cubiertos | Contenido principal | Estado |
+|----|------|----------------------------|---------------------|--------|
+| US-4.6.1 | 4.6 | PLAN-SP4 §INC-4.6 · ADR-001 · ADR-008 | Query `ObtenerAuditLog` por performance · endpoint `GET /competencia/{competencia_id}/performances/{atleta_id}/audit-log` · respuesta cronológica con `sequence`, `tipo`, `timestamp`, `datos` · acceso restringido a `organizador/admin` | ✅ Done |
+
+---
+
+## 18. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §16 -->
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -363,7 +371,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 18. Cobertura Total
+## 19. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
