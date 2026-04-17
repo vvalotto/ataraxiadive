@@ -56,7 +56,7 @@ finales. No depender de terceros para ninguna de estas acciones.
 
 - **Gestión del ciclo de vida del torneo:** apertura, inscripción, preparación,
   ejecución, premiación, cierre.
-- **Inscripción de atletas** con integración opcional a la BD externa de la FAZ
+- **Inscripción de atletas** con integración opcional a la BD externa de la FAAS
   (solo lectura, pendiente de definición de protocolo). La entidad es la
   FAAS — Federación Argentina de Actividades Subacuáticas.
 - **Anuncios (AP):** registro, inmutabilidad post-cierre, descalificación por no anuncio.

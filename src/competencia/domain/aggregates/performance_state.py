@@ -6,10 +6,8 @@ import json
 from datetime import datetime
 from decimal import Decimal
 from typing import TYPE_CHECKING, Any
-from uuid import UUID
 
 from competencia.domain.value_objects.ap import AP
-from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from competencia.domain.value_objects.resolucion_tarjeta import ResolucionTarjeta
 from competencia.domain.value_objects.rp_final import RPFinal
@@ -17,32 +15,6 @@ from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
 if TYPE_CHECKING:
     from competencia.domain.aggregates.performance import Performance
-
-
-def reconstituir_performance(events: list[dict[str, Any]]) -> "Performance":
-    """Reconstruye Performance desde su stream de eventos."""
-    if not events:
-        raise ValueError("No se puede reconstituir Performance sin eventos")
-
-    first_payload = parse_payload(events[0]["payload"])
-    if events[0]["event_type"] != "APRegistrado":
-        raise ValueError(
-            f"El primer evento debe ser APRegistrado, recibido: {events[0]['event_type']}"
-        )
-
-    from competencia.domain.aggregates.performance import Performance
-
-    performance = Performance(
-        performance_id=UUID(first_payload["performance_id"]),
-        competencia_id=UUID(first_payload["competencia_id"]),
-        participante_id=UUID(first_payload["participante_id"]),
-        disciplina=Disciplina(first_payload["disciplina"]),
-    )
-
-    for event in events:
-        apply_stored(performance, event)
-
-    return performance
 
 
 def apply_stored(performance: "Performance", event: dict[str, Any]) -> None:

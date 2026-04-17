@@ -170,7 +170,7 @@ resueltos antes de este incremento.
 
 | Inc. | Nombre | BCs y componentes |
 |------|--------|-------------------|
-| 5.1 | El mundo externo | **Registro:** integración FAZ o importación CSV de atletas |
+| 5.1 | El mundo externo | **Registro:** integración FAAS o importación CSV de atletas |
 | 5.2 | Prueba de fuego simulada | Todos los BCs — simulacro con usuarios reales de la federación |
 | 5.3 | Ajustes del mundo real | Correcciones según feedback del simulacro |
 | 5.4 | El primer torneo | Primer torneo real — todos los BCs en producción |

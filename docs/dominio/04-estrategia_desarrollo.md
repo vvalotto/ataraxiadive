@@ -281,7 +281,7 @@ Este subproyecto es la transición de \"software que funciona\" a \"software que
 +=============================================================================================================================================================================================================================================================+
 | **Definición de Terminado:**                                                                                                                                                                                                                                |
 |                                                                                                                                                                                                                                                             |
-| Se implementa la integración con la base de datos de la FAZ (si el protocolo está definido, RF-IG-01). Si no está disponible, se implementa una importación manual de atletas desde CSV como alternativa. Se migran datos de atletas existentes al sistema. |
+| Se implementa la integración con la base de datos de la FAAS (si el protocolo está definido, RF-IG-01). Si no está disponible, se implementa una importación manual de atletas desde CSV como alternativa. Se migran datos de atletas existentes al sistema. |
 +-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -339,7 +339,7 @@ La tabla siguiente muestra la estructura completa. Cada fila es un incremento ve
   **4.3**    Configuración sin código         Panel admin + JSONB             Disciplina nueva creada desde el panel
   **4.4**    Tarjetas y penalizaciones        Reglas configurables            Tarjeta amarilla con código de penalización
   **4.5**    Confianza y auditoría            Log + hash + exportación        Traza completa de una performance + CSV
-  **5.1**    El mundo externo                 Integración FAZ o CSV           Atletas importados al sistema
+  **5.1**    El mundo externo                 Integración FAAS o CSV           Atletas importados al sistema
   **5.2**    Prueba de fuego simulada         Simulacro con usuarios reales   Lista de ajustes del simulacro
   **5.3**    Ajustes del mundo real           Correcciones de UX y flujo      Problemas del simulacro resueltos
   **5.4**    El primer torneo                 Uso en producción               Torneo real completado con resultados publicados

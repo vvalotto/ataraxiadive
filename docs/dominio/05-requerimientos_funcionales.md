@@ -89,7 +89,7 @@ Este cuestionario tiene como objetivo profundizar y completar la comprensión de
   RF-PM-01   ¿Los resultados se calculan por puntos (según tablas de la federación) o por marca absoluta en cada disciplina?          Pendiente, es una regla de negocio
   RF-PM-02   ¿Existe un ranking general del torneo que combine resultados de múltiples disciplinas, o solo rankings por disciplina?   Si, se denomina Overall
   RF-PM-03   ¿Cómo se resuelven los empates en una disciplina?                                                                        Ocupan el mismo puesto, y los mismo puntos
-  RF-PM-04   ¿Los certificados/diplomas deben incluir información específica (logo de la FAZ, de la federación, firmas)?              Esto no es importante por ahora
+  RF-PM-04   ¿Los certificados/diplomas deben incluir información específica (logo de la FAAS, de la federación, firmas)?              Esto no es importante por ahora
   RF-PM-05   ¿Se deben generar rankings separados por categoría y género dentro de cada disciplina?                                   si
   RF-PM-06   ¿Los resultados deben ser publicados de alguna forma (web pública, PDF descargable)?                                     Se publican en la plataforma, puede descargase
 
@@ -125,7 +125,7 @@ Este cuestionario tiene como objetivo profundizar y completar la comprensión de
 
   **ID**     **Pregunta**                                                                                                                                          **Respuesta**
   ---------- ----------------------------------------------------------------------------------------------------------------------------------------------------- ---------------
-  RF-IG-01   ¿La base de datos externa de atletas es de la FAZ (Federación Argentina de Actividades Subacuáticas)? ¿Qué formato/protocolo se usa para accederla?   Pendiente
+  RF-IG-01   ¿La base de datos externa de atletas es de la FAAS (Federación Argentina de Actividades Subacuáticas)? ¿Qué formato/protocolo se usa para accederla?   Pendiente
   RF-IG-02   ¿La consulta a la base de datos externa es solo de lectura, o el sistema también debe actualizar datos en ella?                                       Pendiente
   RF-IG-03   ¿Qué sucede si la base de datos externa no está disponible al momento de inscribirse un atleta?                                                       Pendiente
   RF-IG-04   ¿Se deben exportar resultados a algún sistema externo de rankings (AIDA, CMAS)?                                                                       Pendiente
