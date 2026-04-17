@@ -11,31 +11,15 @@ import {
   type PenalizacionPayload,
 } from '../api/competencia'
 import { admitePenalizaciones } from '../utils/disciplina'
+import { buildResultadoValue, formatMarca } from '../utils/marca'
 import useCompetenciaStore from '../stores/useCompetenciaStore'
 import { useComandoQueue } from './useComandoQueue'
 
 export type TarjetaSeleccionada = 'Blanca' | 'Roja' | 'BlancaConPenalizaciones' | 'Amarilla' | null
 export type ResultadoFinal = 'BLANCA' | 'BLANCA_CON_PENALIZACIONES' | 'ROJA' | 'AMARILLA' | 'DNS' | null
 
-function buildRpValue(metros: number, centimetros: string) {
+function buildRpValue(metros: number, centimetros: string): string {
   return `${metros}.${centimetros.padEnd(2, '0')}`
-}
-
-export function buildResultadoValue(metros: number, centimetros: string, unidad: string) {
-  if (unidad === 'Segundos') {
-    return String(metros * 60 + Number(centimetros || '0'))
-  }
-  return buildRpValue(metros, centimetros)
-}
-
-export function formatMarca(value: string, unidad: string) {
-  if (unidad === 'Segundos') {
-    const totalSeconds = Number(value || '0')
-    const minutos = Math.floor(totalSeconds / 60)
-    const segundos = totalSeconds % 60
-    return `${minutos}:${String(segundos).padStart(2, '0')} min`
-  }
-  return `${value} m`
 }
 
 export function usePerformanceFlow() {

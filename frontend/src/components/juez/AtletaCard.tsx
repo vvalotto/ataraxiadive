@@ -1,4 +1,4 @@
-import { formatMarca } from '../../hooks/usePerformanceFlow'
+import { formatMarca } from '../../utils/marca'
 
 interface AtletaCardProps {
   nombreAtleta: string
