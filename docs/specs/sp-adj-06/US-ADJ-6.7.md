@@ -1,8 +1,10 @@
-# US-4.6.5: UAT SP4 — Validación integral de la plataforma
+# US-ADJ-6.7: UAT SP4 — Validación integral de la plataforma
 
-**Estado**: `Movida` → ver `docs/specs/sp-adj-06/US-ADJ-6.7.md`
-**Sprint original**: SP4 — INC-4.6
-**Razón del movimiento**: el UAT es el gate de cierre de SP-ADJ-06 (pre-BL-004)
+**Estado**: `Pendiente`
+**Iteración / Sprint**: SP-ADJ-06
+**Tipo**: UAT (User Acceptance Testing) — no genera código de implementación
+**Capas afectadas**: validación end-to-end de INC-4.4, INC-4.5, INC-4.6
+**Prerrequisito**: US-ADJ-6.1 a US-ADJ-6.6 completadas
 
 ---
 
