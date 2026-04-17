@@ -9,12 +9,9 @@ from decimal import Decimal
 import json
 from uuid import UUID
 
-from competencia.domain.aggregates.competencia import Competencia
-from competencia.domain.value_objects.disciplina import Disciplina as CompetenciaDisciplina
 from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
     SQLiteCompetenciasPorTorneo,
 )
-from registro.domain.value_objects.categoria import Categoria
 from resultados.application.queries.obtener_overall import (
     ObtenerOverallHandler,
     ObtenerOverallQuery,
@@ -103,7 +100,6 @@ class _PerformanceExportData:
     penalizaciones: int
     es_dns: bool
     finalizada: bool
-    categoria: Categoria | None = None
     unidad: str | None = None
 
 
@@ -297,12 +293,19 @@ async def _obtener_estado_y_hash(
     if not events:
         return ("Preparacion", None)
 
-    competencia = Competencia.reconstitute(
-        competencia_id=competencia_id,
-        disciplina=CompetenciaDisciplina(disciplina.value),
-        events=events,
-    )
-    return competencia.estado.value, competencia.hash_sha256
+    estado = "Preparacion"
+    hash_sha256 = None
+    for event in events:
+        event_type = event["event_type"]
+        if event_type == "GrillaConfirmada":
+            estado = "Confirmada"
+        elif event_type == "CompetenciaIniciada":
+            estado = "EnEjecucion"
+        elif event_type == "CompetenciaFinalizada":
+            payload = _parse_payload(event["payload"])
+            estado = "Finalizada"
+            hash_sha256 = payload.get("hash_sha256")
+    return estado, hash_sha256
 
 
 async def _obtener_performances_exportables(
