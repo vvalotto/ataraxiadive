@@ -17,7 +17,7 @@ from competencia.domain.aggregates.performance_events import (
     crear_revision_resuelta,
     crear_tarjeta_asignada,
 )
-from competencia.domain.aggregates.performance_state import reconstituir_performance
+from competencia.domain.aggregates import performance_state
 from competencia.domain.exceptions import (
     DisciplinaNoAdmitePenalizaciones,  # noqa: F401 - re-export por compatibilidad
     DistanciaBlackoutObligatoria,  # noqa: F401 - re-export por compatibilidad
@@ -470,7 +470,22 @@ class Performance(AggregateRoot):
             ValueError: Si la lista de eventos está vacía o el primer evento
                 no es APRegistrado.
         """
-        return reconstituir_performance(events)
+        if not events:
+            raise ValueError("No se puede reconstituir Performance sin eventos")
+        if events[0]["event_type"] != "APRegistrado":
+            raise ValueError(
+                f"El primer evento debe ser APRegistrado, recibido: {events[0]['event_type']}"
+            )
+        first_payload = performance_state.parse_payload(events[0]["payload"])
+        performance = cls(
+            performance_id=UUID(first_payload["performance_id"]),
+            competencia_id=UUID(first_payload["competencia_id"]),
+            participante_id=UUID(first_payload["participante_id"]),
+            disciplina=Disciplina(first_payload["disciplina"]),
+        )
+        for event in events:
+            performance_state.apply_stored(performance, event)
+        return performance
 
     def _aplicar_resolucion_tarjeta(self, resolucion: ResolucionTarjeta) -> None:
         self._tarjeta = resolucion.tipo
