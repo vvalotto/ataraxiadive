@@ -257,7 +257,7 @@ Al ejecutar `CerrarCompetencia`, el command handler:
 | RF-EJ-04 — códigos de penalización configurables | Pendiente de definición por parte de la federación |
 | Panel admin de configuración (disciplinas, categorías) | Requiere UX separada; SP5 |
 | Notificaciones push (FCM) | Email primero; push cuando esté probado el canal base |
-| Integración FAZ (RF-IG-01) | Protocolo pendiente |
+| Integración FAAS (RF-IG-01) | Protocolo pendiente |
 | Fórmula de puntos RF-PM-01 | Pendiente de definición |
 
 ---
