@@ -10,13 +10,11 @@ from notificaciones.application.commands.enviar_notificacion import (
 from notificaciones.application.commands.solicitar_envio import (
     SolicitarEnvioCommand,
     SolicitarEnvioHandler,
-    persistir_eventos_pendientes,
 )
-from notificaciones.domain.aggregates.notificacion import Notificacion
+from notificaciones.application.policies._helpers import registrar_fallo_sin_email
 from notificaciones.domain.ports.notificacion_repository import NotificacionRepository
 from notificaciones.domain.value_objects.contenido_email import ContenidoEmail
 from notificaciones.domain.value_objects.destinatario import Destinatario
-from notificaciones.domain.value_objects.evento_fuente_id import EventoFuenteId
 
 
 @dataclass(frozen=True)
@@ -83,7 +81,7 @@ class PoliticaP11Handler:
     ) -> None:
         evento_fuente_id = self._evento_fuente_id(evento, resultado)
         if not resultado.atleta_email or not resultado.atleta_email.strip():
-            await self._registrar_fallo_sin_email(evento_fuente_id)
+            await registrar_fallo_sin_email(evento_fuente_id, self._repository)
             return
 
         contenido = self._template.render(evento=evento, resultado=resultado)
@@ -103,17 +101,8 @@ class PoliticaP11Handler:
             EnviarNotificacionCommand(notificacion_id=notificacion_id)
         )
 
-    async def _registrar_fallo_sin_email(self, evento_fuente_id: str) -> None:
-        if await self._repository.exists_success_by_evento_fuente_id(evento_fuente_id):
-            return
-        aggregate = Notificacion.registrar_fallo_de_solicitud(
-            evento_fuente_id=EventoFuenteId(evento_fuente_id),
-            motivo="destinatario_sin_email",
-        )
-        await persistir_eventos_pendientes(self._repository, aggregate)
-
+    @staticmethod
     def _evento_fuente_id(
-        self,
         evento: ResultadosPublicados,
         resultado: ResultadoPublicadoAtleta,
     ) -> str:
