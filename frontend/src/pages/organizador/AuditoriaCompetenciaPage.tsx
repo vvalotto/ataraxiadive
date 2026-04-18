@@ -31,6 +31,11 @@ function formatResultadoFinal(
   return formatEstado(atleta.estado) || 'Pendiente'
 }
 
+function borderClasePorResultado(atleta: GrillaAtletaDto): string {
+  if (atleta.estado === 'DNS') return 'border-violet-400 bg-violet-50/60'
+  return 'border-stone-300/80 bg-white/85'
+}
+
 function truncateHash(value: string) {
   if (value.length <= 16) return value
   return `${value.slice(0, 16)}...`
@@ -173,7 +178,7 @@ export function AuditoriaCompetenciaPage() {
             <Link
               key={atleta.performance_id}
               to={`/organizador/competencias/${competenciaId}/auditoria/${atleta.atleta_id}?disciplina=${encodeURIComponent(disciplina)}&torneo_id=${encodeURIComponent(torneoId ?? '')}`}
-              className="block rounded-[2rem] border border-stone-300/80 bg-white/85 p-5 shadow-[0_20px_60px_rgba(120,93,54,0.08)] transition hover:-translate-y-0.5 hover:border-stone-400"
+              className={`block rounded-[2rem] border p-5 shadow-[0_20px_60px_rgba(120,93,54,0.08)] transition hover:-translate-y-0.5 ${borderClasePorResultado(atleta)}`}
             >
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
