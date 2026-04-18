@@ -17,15 +17,39 @@ function formatTimestamp(value: string) {
   })
 }
 
+const TIPO_EVENTO_LABELS: Record<string, string> = {
+  APRegistrado: 'AP declarado',
+  AtletaLlamado: 'Atleta en llamada',
+  ResultadoRegistrado: 'Resultado registrado',
+  TarjetaAsignada: 'Tarjeta asignada',
+  DNSRegistrado: 'DNS registrado',
+  TarjetaEnRevision: 'Tarjeta en revisión',
+  RevisionResuelta: 'Revisión resuelta',
+  IntervaloOTConfigurado: 'Intervalo OT configurado',
+  GrillaGenerada: 'Grilla generada',
+  GrillaConfirmada: 'Grilla confirmada',
+  CompetenciaIniciada: 'Competencia iniciada',
+  CompetenciaFinalizada: 'Competencia finalizada',
+}
+
+function formatTipoEvento(tipo: string): string {
+  return TIPO_EVENTO_LABELS[tipo] ?? tipo
+}
+
 function formatDatos(evento: AuditLogEventoDto) {
   const datos = evento.datos
-  if ('valor_ap' in datos) return `AP: ${String(datos.valor_ap)}`
-  if ('valor_rp' in datos) return `RP: ${String(datos.valor_rp)}`
+  if ('ot_programado' in datos) {
+    const ot = formatTimestamp(String(datos.ot_programado))
+    const andarivel = 'andarivel' in datos ? ` · Andarivel ${String(datos.andarivel)}` : ''
+    return `OT: ${ot}${andarivel}`
+  }
+  if ('valor_ap' in datos) return `AP declarado: ${String(datos.valor_ap)}`
+  if ('valor_rp' in datos) return `RP registrado: ${String(datos.valor_rp)}`
   if ('tipo' in datos) return `Tarjeta: ${String(datos.tipo)}`
-  if ('resolucion' in datos) return `Resolucion: ${String(datos.resolucion)}`
+  if ('resolucion' in datos) return `Resolución: ${String(datos.resolucion)}`
   if ('penalizaciones' in datos) return `Penalizaciones: ${JSON.stringify(datos.penalizaciones)}`
   if ('motivo_dq' in datos && datos.motivo_dq) return `Motivo DQ: ${String(datos.motivo_dq)}`
-  return JSON.stringify(datos)
+  return ''
 }
 
 export function AuditoriaPerformancePage() {
@@ -74,7 +98,7 @@ export function AuditoriaPerformancePage() {
               {auditLogQuery.data.atleta_nombre}
             </h2>
             <p className="mt-2 text-sm text-stone-600">
-              Competencia {auditLogQuery.data.competencia_id} · Atleta {auditLogQuery.data.atleta_id}
+              {auditLogQuery.data.disciplina}
             </p>
           </section>
 
@@ -88,7 +112,7 @@ export function AuditoriaPerformancePage() {
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
                     Evento #{evento.sequence}
                   </p>
-                  <h3 className="mt-2 text-xl font-semibold text-stone-900">{evento.tipo}</h3>
+                  <h3 className="mt-2 text-xl font-semibold text-stone-900">{formatTipoEvento(evento.tipo)}</h3>
                 </div>
                 <p className="text-sm text-stone-600">{formatTimestamp(evento.timestamp)}</p>
               </div>

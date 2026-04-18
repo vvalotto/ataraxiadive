@@ -83,7 +83,7 @@ export function AuditoriaCompetenciaPage() {
   return (
     <OrganizadorLayout
       title={`Auditoria - ${disciplina}`}
-      subtitle={`Competencia ${competenciaId}`}
+      subtitle={`Disciplina ${disciplina}`}
       actions={
         <>
           <Link
@@ -189,7 +189,7 @@ export function AuditoriaCompetenciaPage() {
                   <p className="mt-2 text-lg font-semibold text-stone-900">
                     {formatResultadoFinal(atleta, rankingMap)}
                   </p>
-                  <p className="mt-2 text-sm text-stone-600">Estado {atleta.estado}</p>
+                  <p className="mt-2 text-sm text-stone-600">{formatEstado(atleta.estado)}</p>
                 </div>
               </div>
             </Link>
