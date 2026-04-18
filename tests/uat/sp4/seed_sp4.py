@@ -1,570 +1,327 @@
-"""Seed UAT SP4 — siembra el flujo de performance completo para la prueba de UI.
-
-Crea un torneo con dos competencias (DNF y STA) y 13 atletas, cubriendo los
-12 escenarios del flujo de performance del juez más los 3 casos de resume.
-
-  uv run python tests/uat/sp4/seed_sp4.py
-
-DBs utilizadas (se crean automáticamente):
-    data/torneo.db       — BC Torneo
-    data/registro.db     — BC Registro
-    data/competencia.db  — BC Competencia (event store)
-    data/identidad.db    — BC Identidad (usuario juez)
-
-Estado final tras el seed:
-    Competencia DNF — 10 atletas
-      E01 Diego Vega (40m)     → AnunciadaAP   [E-01: DNS en UI]
-      E02 Laura Romero (50m)   → AnunciadaAP   [E-02: BKO mid, paso 4]
-      E03 Carlos Ibañez (60m)  → AnunciadaAP   [E-03: Blanca simple]
-      E04 Ana Flores (70m)     → AnunciadaAP   [E-04: Blanca + penalizaciones]
-      E05 Roberto Chen (80m)   → AnunciadaAP   [E-05: Roja DQ estándar]
-      E06 Patricia Ruiz (90m)  → AnunciadaAP   [E-06: Roja BKO post]
-      E07 Martin Acosta (100m) → EnRevision    [E-07: resolver → Blanca, paso 7]
-      E08 Silvia Casas (110m)  → EnRevision    [E-08: resolver → Roja, paso 7]
-      R01 Jorge Mendez (120m)  → Llamada       [R-01: resume paso 2]
-      R02 Claudia Rios (130m)  → ResultadoRegistrado  [R-02: resume paso 6]
-
-    Competencia STA — 3 atletas
-      T01 Javier Herrera (120s)    → AnunciadaAP   [T-01: DNS STA]
-      T02 Carolina Espinoza (180s) → AnunciadaAP   [T-02: BKO STA mid]
-      T03 Fernando Bravo (240s)    → AnunciadaAP   [T-03: Blanca STA]
-
-    Usuario juez:  juez@uat-sp4.test / juezsp4uat2025
 """
+Seed UAT SP4 — datos de prueba para el UAT de cierre de BL-004.
 
+Estrategia:
+  - HTTP para: usuarios, torneo, atletas, inscripciones (ciclo de vida torneo)
+  - Python application layer para: competencia (RegistrarAP + GenerarGrilla +
+    ConfirmarGrilla + IniciarCompetencia) — no tienen endpoints HTTP.
+
+Crea:
+  - 1 torneo en estado EJECUCION
+  - 5 atletas DNF (e02-e06) + 3 atletas STA (t01-t03)
+  - 1 juez asignado a ambas disciplinas
+  - 2 competencias DNF y STA en estado EJECUCION con grilla confirmada
+  - Guarda IDs en quality/reports/uat/SP4/uat_ids.json
+
+Uso:  uv run python tests/uat/sp4/seed_sp4.py
+"""
 from __future__ import annotations
 
 import asyncio
+import base64
 import json
+import os
 import sys
-from datetime import date, datetime, timedelta, timezone
+import uuid
+from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
-from uuid import UUID, uuid4
+from uuid import UUID
 
-ROOT = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(ROOT / "src"))
+import httpx
 
-from competencia.application.commands.asignar_tarjeta import (
-    AsignarTarjetaCommand,
-    AsignarTarjetaHandler,
-)
-from competencia.application.commands.confirmar_grilla import (
-    ConfirmarGrillaCommand,
-    ConfirmarGrillaHandler,
-)
-from competencia.application.commands.configurar_intervalo_ot import (
-    ConfigurarIntervaloOTCommand,
-    ConfigurarIntervaloOTHandler,
-)
-from competencia.application.commands.generar_grilla import (
-    GenerarGrillaCommand,
-    GenerarGrillaHandler,
-)
-from competencia.application.commands.iniciar_competencia import (
-    IniciarCompetenciaCommand,
-    IniciarCompetenciaHandler,
-)
-from competencia.application.commands.llamar_atleta import (
-    LlamarAtletaCommand,
-    LlamarAtletaHandler,
-)
-from competencia.application.commands.registrar_ap import (
-    RegistrarAPCommand,
-    RegistrarAPHandler,
-)
-from competencia.application.commands.registrar_resultado import (
-    RegistrarResultadoCommand,
-    RegistrarResultadoHandler,
-)
-from competencia.application.queries.obtener_grilla import (
-    ObtenerGrillaHandler,
-    ObtenerGrillaQuery,
-)
-from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
-from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
-from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.competencia_estado_adapter import (
-    CompetenciaEstadoAdapter,
-)
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
-    DisciplinaDescriptorAdapter,
-)
-from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
-from competencia.infrastructure.repositories.performances_estado_adapter import (
-    PerformancesEstadoAdapter,
-)
-from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
-    SQLiteCompetenciasPorTorneo,
-)
-from identidad.application.commands.registrar_usuario import (
-    RegistrarUsuarioCommand,
-    RegistrarUsuarioHandler,
-)
-from identidad.domain.value_objects.rol import Rol
-from identidad.infrastructure.bcrypt_password_hasher import BcryptPasswordHasher
-from identidad.infrastructure.repositories.sqlite_usuario_repository import (
-    SQLiteUsuarioRepository,
-)
-from registro.application.commands.inscribir_atleta import (
-    InscribirAtletaCommand,
-    InscribirAtletaHandler,
-)
-from registro.application.commands.registrar_atleta import (
-    RegistrarAtletaCommand,
-    RegistrarAtletaHandler,
-)
-from registro.domain.value_objects.categoria import Categoria
-from registro.infrastructure.acl.sqlite_torneo_consulta import SQLiteTorneoConsulta
-from registro.infrastructure.repositories.sqlite_atleta_repository import SQLiteAtletaRepository
-from registro.infrastructure.repositories.sqlite_inscripcion_repository import (
-    SQLiteInscripcionRepository,
-)
-from shared.domain.value_objects.disciplina import Disciplina
-from shared.domain.value_objects.unidad_medida import UnidadMedida
-from torneo.application.commands.asignar_disciplinas import (
-    AsignarDisciplinasCommand,
-    AsignarDisciplinasHandler,
-)
-from torneo.application.commands.crear_torneo import CrearTorneoCommand, CrearTorneoHandler
-from torneo.application.commands.asignar_juez import AsignarJuezCommand, AsignarJuezHandler
-from torneo.application.commands.transicionar_torneo import (
-    AbrirInscripcionHandler,
-    CerrarInscripcionHandler,
-    IniciarEjecucionHandler,
-    TransicionarTorneoCommand,
-)
-from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTorneoRepository
+BASE = "http://localhost:8000"
+IDS_PATH = Path("quality/reports/uat/SP4/uat_ids.json")
 
-# ── Paths ──────────────────────────────────────────────────────────────────────
+JUEZ_EMAIL = "juez@uat-sp4.test"
+JUEZ_PASSWORD = "juezsp4uat2025"
+ORG_EMAIL = "organizador@uat-sp4.test"
+ORG_PASSWORD = "orgsp4uat2025"
+ADMIN_EMAIL = "admin@uat-sp4.test"
+ADMIN_PASSWORD = "adminsp4uat2025"
 
-_TORNEO_DB = str(ROOT / "data" / "torneo.db")
-_REGISTRO_DB = str(ROOT / "data" / "registro.db")
-_COMPETENCIA_DB = str(ROOT / "data" / "competencia.db")
-_IDENTIDAD_DB = str(ROOT / "data" / "identidad.db")
-_IDS_PATH = ROOT / "quality" / "reports" / "uat" / "SP4" / "uat_ids.json"
+COMPETENCIA_DB = os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db")
 
-# ── DDL ────────────────────────────────────────────────────────────────────────
 
-_CREATE_EVENTS_TABLE = """
-    CREATE TABLE IF NOT EXISTS events (
-        id          INTEGER PRIMARY KEY AUTOINCREMENT,
-        stream_id   TEXT    NOT NULL,
-        event_type  TEXT    NOT NULL,
-        payload     TEXT    NOT NULL,
-        version     INTEGER NOT NULL,
-        occurred_at TEXT    NOT NULL
-            DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-        UNIQUE (stream_id, version)
+def log(msg: str) -> None:
+    print(f"  {msg}")
+
+
+def assert_ok(resp: httpx.Response, context: str) -> dict:
+    if resp.status_code not in (200, 201):
+        print(f"\n✗ ERROR en {context}: {resp.status_code}")
+        print(resp.text[:500])
+        sys.exit(1)
+    return resp.json()
+
+
+def get_or_create_usuario(client: httpx.Client, email: str, password: str, rol: str) -> str:
+    resp = client.post("/auth/login", json={"email": email, "password": password})
+    if resp.status_code == 200:
+        log(f"usuario existente: {email}")
+        return resp.json()["access_token"]
+    resp = client.post("/auth/registro", json={"email": email, "password": password, "rol": rol})
+    assert_ok(resp, f"registro {email}")
+    resp = client.post("/auth/login", json={"email": email, "password": password})
+    log(f"usuario creado: {email}")
+    return assert_ok(resp, f"login {email}")["access_token"]
+
+
+def decode_sub(token: str) -> str:
+    payload = token.split(".")[1]
+    payload += "==" * ((4 - len(payload) % 4) % 4)
+    return json.loads(base64.b64decode(payload))["sub"]
+
+
+async def setup_competencia(
+    competencia_id: UUID,
+    disciplina_str: str,
+    intervalo_minutos: int,
+    juez_id: str,
+    torneo_id: str,
+    atletas: list[tuple[str, int]],  # (atleta_id, ap_valor)
+    unidad_str: str,  # "metros" | "segundos"
+) -> None:
+    """Configura una competencia completa via application layer."""
+    from competencia.application.commands.configurar_intervalo_ot import (
+        ConfigurarIntervaloOTCommand,
+        ConfigurarIntervaloOTHandler,
     )
-"""
-
-# ── Constantes ─────────────────────────────────────────────────────────────────
-
-_INTERVALO_MINUTOS = 7
-_OT_BASE = datetime.now(timezone.utc).replace(second=0, microsecond=0) + timedelta(hours=1)
-_JUEZ_ID = "juez-uat-sp4"
-_JUEZ_EMAIL = "juez@uat-sp4.test"
-_JUEZ_PASS = "juezsp4uat2025"
-
-# Atletas DNF: (label, nombre, apellido, cat, ap_metros)
-_ATLETAS_DNF = [
-    ("E01", "Diego",   "Vega",    Categoria.SENIOR_MASCULINO, 40),
-    ("E02", "Laura",   "Romero",  Categoria.SENIOR_FEMENINO,  50),
-    ("E03", "Carlos",  "Ibañez",  Categoria.MASTER_MASCULINO, 60),
-    ("E04", "Ana",     "Flores",  Categoria.MASTER_FEMENINO,  70),
-    ("E05", "Roberto", "Chen",    Categoria.SENIOR_MASCULINO, 80),
-    ("E06", "Patricia","Ruiz",    Categoria.SENIOR_FEMENINO,  90),
-    ("E07", "Martin",  "Acosta",  Categoria.MASTER_MASCULINO, 100),
-    ("E08", "Silvia",  "Casas",   Categoria.MASTER_FEMENINO,  110),
-    ("R01", "Jorge",   "Mendez",  Categoria.SENIOR_MASCULINO, 120),
-    ("R02", "Claudia", "Rios",    Categoria.SENIOR_FEMENINO,  130),
-]
-
-# Atletas STA: (label, nombre, apellido, cat, ap_segundos)
-_ATLETAS_STA = [
-    ("T01", "Javier",   "Herrera",  Categoria.MASTER_MASCULINO, 120),
-    ("T02", "Carolina", "Espinoza", Categoria.MASTER_FEMENINO,  180),
-    ("T03", "Fernando", "Bravo",    Categoria.SENIOR_MASCULINO, 240),
-]
-
-
-# ── Helpers ────────────────────────────────────────────────────────────────────
-
-def _ok(msg: str) -> None:
-    print(f"  ✓ {msg}")
-
-
-async def _registrar_atleta_e_inscribir(
-    label: str,
-    nombre: str,
-    apellido: str,
-    categoria: Categoria,
-    disciplina: Disciplina,
-    torneo_id: UUID,
-    atleta_repo: SQLiteAtletaRepository,
-    inscripcion_repo: SQLiteInscripcionRepository,
-    torneo_consulta: SQLiteTorneoConsulta,
-) -> UUID:
-    aid = uuid4()
-    email = f"uat.{label.lower()}@uat-sp4.test"
-    await RegistrarAtletaHandler(atleta_repo).handle(
-        RegistrarAtletaCommand(
-            atleta_id=aid,
-            nombre=nombre,
-            apellido=apellido,
-            email=email,
-            fecha_nacimiento=date(1990, 6, 15),
-            categoria=categoria,
-            club="UAT SP4",
-        )
+    from competencia.application.commands.confirmar_grilla import (
+        ConfirmarGrillaCommand,
+        ConfirmarGrillaHandler,
     )
-    await InscribirAtletaHandler(inscripcion_repo, torneo_consulta).handle(
-        InscribirAtletaCommand(
-            atleta_id=aid,
-            torneo_id=torneo_id,
-            disciplinas=frozenset({disciplina}),
-        )
+    from competencia.application.commands.generar_grilla import (
+        GenerarGrillaCommand,
+        GenerarGrillaHandler,
     )
-    _ok(f"{label} {nombre} {apellido} ({disciplina.value}, {categoria.value})")
-    return aid
+    from competencia.application.commands.iniciar_competencia import (
+        IniciarCompetenciaCommand,
+        IniciarCompetenciaHandler,
+    )
+    from competencia.application.commands.registrar_ap import (
+        RegistrarAPCommand,
+        RegistrarAPHandler,
+    )
+    from competencia.domain.value_objects.disciplina import Disciplina
+    from competencia.domain.value_objects.unidad_medida import UnidadMedida
+    from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
+    from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
+    from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
+        DisciplinaDescriptorAdapter,
+    )
+    from competencia.infrastructure.repositories.performances_ap_adapter import (
+        PerformancesAPAdapter,
+    )
 
-
-async def seed() -> None:
-    print()
-    print("=" * 65)
-    print("  UAT SP4 — Seed: Flujo de Performance (DNF + STA)")
-    print("=" * 65)
-    print()
-
-    # ── Inicializar event store ───────────────────────────────────────────────
-    import aiosqlite
-
-    Path(_COMPETENCIA_DB).parent.mkdir(parents=True, exist_ok=True)
-    async with aiosqlite.connect(_COMPETENCIA_DB) as db:
-        await db.execute(_CREATE_EVENTS_TABLE)
-        await db.commit()
-
-    # ── Repos ─────────────────────────────────────────────────────────────────
-    torneo_repo = SQLiteTorneoRepository(_TORNEO_DB)
-    atleta_repo = SQLiteAtletaRepository(_REGISTRO_DB)
-    inscripcion_repo = SQLiteInscripcionRepository(_REGISTRO_DB)
-    torneo_consulta = SQLiteTorneoConsulta(_TORNEO_DB)
-    store = SQLiteEventStore(_COMPETENCIA_DB)
-    stub = StubCompetenciaEstadoAdapter()
+    store = SQLiteEventStore(COMPETENCIA_DB)
+    disciplina = Disciplina(disciplina_str)
+    unidad = UnidadMedida.Metros if unidad_str == "metros" else UnidadMedida.Segundos
     descriptor = DisciplinaDescriptorAdapter()
+    stub = StubCompetenciaEstadoAdapter()
 
-    # ── BC Torneo ─────────────────────────────────────────────────────────────
-    print("[Torneo]")
-    torneo_id = await CrearTorneoHandler(torneo_repo).handle(
-        CrearTorneoCommand(
-            nombre="UAT SP4 — Flujo de Performance",
-            descripcion="Torneo de prueba para UAT SP4",
-            fecha_inicio=date(2025, 12, 1),
-            fecha_fin=date(2025, 12, 1),
-            sede_nombre="Pileta UAT",
-            sede_ciudad="Buenos Aires",
-            sede_pais="Argentina",
-            entidad_nombre="AIDA Argentina",
-            entidad_tipo="Federación",
-        )
-    )
-    _ok(f"Torneo creado: {torneo_id}")
-
-    await AsignarDisciplinasHandler(torneo_repo).handle(
-        AsignarDisciplinasCommand(
-            torneo_id=torneo_id,
-            disciplinas=frozenset({Disciplina.DNF, Disciplina.STA}),
-        )
-    )
-    _ok("Disciplinas asignadas: DNF, STA")
-
-    await AbrirInscripcionHandler(torneo_repo).handle(
-        TransicionarTorneoCommand(torneo_id=torneo_id)
-    )
-    _ok("Inscripción abierta")
-    print()
-
-    # ── BC Registro ───────────────────────────────────────────────────────────
-    print("[Registro]")
-    atleta_ids: dict[str, UUID] = {}
-    for label, nombre, apellido, cat, _ in _ATLETAS_DNF:
-        atleta_ids[label] = await _registrar_atleta_e_inscribir(
-            label, nombre, apellido, cat, Disciplina.DNF,
-            torneo_id, atleta_repo, inscripcion_repo, torneo_consulta,
-        )
-    for label, nombre, apellido, cat, _ in _ATLETAS_STA:
-        atleta_ids[label] = await _registrar_atleta_e_inscribir(
-            label, nombre, apellido, cat, Disciplina.STA,
-            torneo_id, atleta_repo, inscripcion_repo, torneo_consulta,
-        )
-    print()
-
-    # ── BC Competencia: DNF ───────────────────────────────────────────────────
-    print("[Competencia DNF]")
-    cid_dnf = uuid4()
     await ConfigurarIntervaloOTHandler(store).handle(
         ConfigurarIntervaloOTCommand(
-            competencia_id=cid_dnf,
-            disciplina=Disciplina.DNF,
-            intervalo_minutos=_INTERVALO_MINUTOS,
-            configurado_por="organizador-uat",
-            torneo_id=torneo_id,
+            competencia_id=competencia_id,
+            disciplina=disciplina,
+            intervalo_minutos=intervalo_minutos,
+            configurado_por=juez_id,
+            torneo_id=UUID(torneo_id),
         )
     )
-    _ok(f"DNF configurada: {cid_dnf} (intervalo={_INTERVALO_MINUTOS}min)")
+    log("  OT configurado")
 
-    ap_handler = RegistrarAPHandler(store, stub, descriptor)
-    for label, _, _, _, ap_m in _ATLETAS_DNF:
-        await ap_handler.handle(
+    for atleta_id_str, ap_valor in atletas:
+        await RegistrarAPHandler(store, stub, descriptor).handle(
             RegistrarAPCommand(
-                competencia_id=cid_dnf,
-                participante_id=atleta_ids[label],
-                disciplina=Disciplina.DNF,
-                valor_ap=Decimal(str(ap_m)),
-                unidad=UnidadMedida.Metros,
+                competencia_id=competencia_id,
+                participante_id=UUID(atleta_id_str),
+                disciplina=disciplina,
+                valor_ap=Decimal(ap_valor),
+                unidad=unidad,
             )
         )
-    _ok("APs DNF registrados (10/10): " + " ".join(
-        f"{l}={ap}m" for l, _, _, _, ap in _ATLETAS_DNF
-    ))
+    log(f"  {len(atletas)} APs registradas")
 
+    ot_inicio = datetime(2025, 12, 1, 9, 0, 0, tzinfo=timezone.utc)
     ap_adapter = PerformancesAPAdapter(store)
     await GenerarGrillaHandler(store, ap_adapter, descriptor).handle(
         GenerarGrillaCommand(
-            competencia_id=cid_dnf,
-            disciplina=Disciplina.DNF,
-            ot_inicio=_OT_BASE,
-            andariveles=1,
+            competencia_id=competencia_id,
+            disciplina=disciplina,
+            ot_inicio=ot_inicio,
         )
     )
-    _ok("Grilla DNF generada (ascendente por AP)")
+    log("  Grilla generada")
 
     await ConfirmarGrillaHandler(store).handle(
-        ConfirmarGrillaCommand(competencia_id=cid_dnf, disciplina=Disciplina.DNF)
-    )
-    _ok("Grilla DNF confirmada")
-    print()
-
-    # ── BC Competencia: STA ───────────────────────────────────────────────────
-    print("[Competencia STA]")
-    cid_sta = uuid4()
-    await ConfigurarIntervaloOTHandler(store).handle(
-        ConfigurarIntervaloOTCommand(
-            competencia_id=cid_sta,
-            disciplina=Disciplina.STA,
-            intervalo_minutos=_INTERVALO_MINUTOS,
-            configurado_por="organizador-uat",
-            torneo_id=torneo_id,
+        ConfirmarGrillaCommand(
+            competencia_id=competencia_id,
+            disciplina=disciplina,
         )
     )
-    _ok(f"STA configurada: {cid_sta} (intervalo={_INTERVALO_MINUTOS}min)")
+    log("  Grilla confirmada")
 
-    sta_ot_base = _OT_BASE + timedelta(hours=3)
-    for label, _, _, _, ap_s in _ATLETAS_STA:
-        await ap_handler.handle(
-            RegistrarAPCommand(
-                competencia_id=cid_sta,
-                participante_id=atleta_ids[label],
-                disciplina=Disciplina.STA,
-                valor_ap=Decimal(str(ap_s)),
-                unidad=UnidadMedida.Segundos,
-            )
+    await IniciarCompetenciaHandler(store).handle(
+        IniciarCompetenciaCommand(
+            competencia_id=competencia_id,
+            disciplina=disciplina,
+            juez_id=juez_id,
         )
-    _ok("APs STA registrados (3/3): " + " ".join(
-        f"{l}={ap}s" for l, _, _, _, ap in _ATLETAS_STA
+    )
+    log("  Competencia iniciada")
+
+
+def main() -> None:
+    print("\n=== Seed UAT SP4 ===\n")
+
+    with httpx.Client(base_url=BASE, timeout=15) as client:
+
+        # ── Usuarios ──────────────────────────────────────────────────────────
+        print("▸ Usuarios")
+        juez_token = get_or_create_usuario(client, JUEZ_EMAIL, JUEZ_PASSWORD, "JUEZ")
+        juez_id = decode_sub(juez_token)
+        log(f"juez_id: {juez_id}")
+
+        org_token = get_or_create_usuario(client, ORG_EMAIL, ORG_PASSWORD, "ORGANIZADOR")
+        log(f"org_id:  {decode_sub(org_token)}")
+
+        admin_token = get_or_create_usuario(client, ADMIN_EMAIL, ADMIN_PASSWORD, "ADMIN")
+        log(f"admin_id: {decode_sub(admin_token)}")
+
+        org_h = {"Authorization": f"Bearer {org_token}"}
+        admin_h = {"Authorization": f"Bearer {admin_token}"}
+
+        # ── Torneo ────────────────────────────────────────────────────────────
+        print("▸ Torneo")
+        resp = client.post("/torneos", json={
+            "nombre": "UAT SP4 — Flujo de Performance",
+            "descripcion": "Torneo de prueba para UAT SP4",
+            "fecha_inicio": "2025-12-01",
+            "fecha_fin": "2025-12-01",
+            "sede": {"nombre": "Pileta UAT", "ciudad": "Buenos Aires", "pais": "Argentina"},
+            "entidad_organizadora": {"nombre": "AIDA Argentina", "tipo": "Federación"},
+        }, headers=org_h)
+        torneo_id = assert_ok(resp, "crear torneo")["torneo_id"]
+        log(f"torneo_id: {torneo_id}")
+
+        # ── Disciplinas y juez ────────────────────────────────────────────────
+        print("▸ Disciplinas")
+        assert_ok(client.put(f"/torneos/{torneo_id}/disciplinas",
+                             json={"disciplinas": ["DNF", "STA"]}, headers=org_h),
+                  "agregar disciplinas")
+        assert_ok(client.put(f"/torneos/{torneo_id}/disciplinas/DNF/juez",
+                             json={"juez_id": juez_id}, headers=org_h), "asignar juez DNF")
+        assert_ok(client.put(f"/torneos/{torneo_id}/disciplinas/STA/juez",
+                             json={"juez_id": juez_id}, headers=org_h), "asignar juez STA")
+        log("DNF + STA asignadas al juez")
+
+        assert_ok(client.put(f"/torneos/{torneo_id}/abrir-inscripcion", headers=org_h),
+                  "abrir inscripcion")
+
+        # ── Atletas DNF ───────────────────────────────────────────────────────
+        print("▸ Atletas DNF (e02-e06)")
+        atletas_dnf_def = [
+            ("e02", "Elena",    "Marino",   "SENIOR_FEMENINO",  "e02@uat.test",  72),
+            ("e03", "Tomás",    "Buceo",    "SENIOR_MASCULINO", "e03@uat.test",  68),
+            ("e04", "Sofía",    "Oceano",   "SENIOR_FEMENINO",  "e04@uat.test",  65),
+            ("e05", "Rodrigo",  "Profundo", "MASTER_MASCULINO", "e05@uat.test",  60),
+            ("e06", "Camila",   "Abismo",   "SENIOR_FEMENINO",  "e06@uat.test",  55),
+        ]
+        atleta_ids: dict[str, str] = {}
+        atleta_ap_dnf: list[tuple[str, int]] = []
+        for codigo, nombre, apellido, cat, email, ap in atletas_dnf_def:
+            aid = str(uuid.uuid4())
+            resp = client.post("/registro/atletas", json={
+                "atleta_id": aid, "nombre": nombre, "apellido": apellido,
+                "email": email, "fecha_nacimiento": "1990-01-01",
+                "categoria": cat, "club": "Club UAT",
+            }, headers=admin_h)
+            data = assert_ok(resp, f"registrar atleta {codigo}")
+            atleta_ids[codigo] = data.get("atleta_id", aid)
+            atleta_ap_dnf.append((atleta_ids[codigo], ap))
+            log(f"  {codigo}: {atleta_ids[codigo]}")
+
+        print("▸ Atletas STA (t01-t03)")
+        atletas_sta_def = [
+            ("t01", "Lucía",     "Apnea",    "SENIOR_FEMENINO",  "t01@uat.test", 300),
+            ("t02", "Marcos",    "Silencio",  "SENIOR_MASCULINO", "t02@uat.test", 270),
+            ("t03", "Valentina", "Fondo",    "SENIOR_FEMENINO",  "t03@uat.test", 240),
+        ]
+        atleta_ap_sta: list[tuple[str, int]] = []
+        for codigo, nombre, apellido, cat, email, ap in atletas_sta_def:
+            aid = str(uuid.uuid4())
+            resp = client.post("/registro/atletas", json={
+                "atleta_id": aid, "nombre": nombre, "apellido": apellido,
+                "email": email, "fecha_nacimiento": "1992-01-01",
+                "categoria": cat, "club": "Club UAT",
+            }, headers=admin_h)
+            data = assert_ok(resp, f"registrar atleta {codigo}")
+            atleta_ids[codigo] = data.get("atleta_id", aid)
+            atleta_ap_sta.append((atleta_ids[codigo], ap))
+            log(f"  {codigo}: {atleta_ids[codigo]}")
+
+        # ── Inscripciones ─────────────────────────────────────────────────────
+        print("▸ Inscripciones")
+        for codigo in ["e02", "e03", "e04", "e05", "e06"]:
+            assert_ok(client.post("/registro/inscripciones", json={
+                "atleta_id": atleta_ids[codigo], "torneo_id": torneo_id, "disciplinas": ["DNF"],
+            }, headers=admin_h), f"inscribir {codigo}")
+            log(f"  {codigo} → DNF")
+        for codigo in ["t01", "t02", "t03"]:
+            assert_ok(client.post("/registro/inscripciones", json={
+                "atleta_id": atleta_ids[codigo], "torneo_id": torneo_id, "disciplinas": ["STA"],
+            }, headers=admin_h), f"inscribir {codigo}")
+            log(f"  {codigo} → STA")
+
+        # ── Ciclo torneo → EJECUCION ──────────────────────────────────────────
+        print("▸ Torneo → EJECUCION")
+        assert_ok(client.put(f"/torneos/{torneo_id}/cerrar-inscripcion", headers=org_h),
+                  "cerrar inscripcion")
+        assert_ok(client.put(f"/torneos/{torneo_id}/iniciar-ejecucion", headers=org_h),
+                  "iniciar ejecucion")
+        log("estado: EJECUCION")
+
+    # ── Competencias (application layer) ─────────────────────────────────────
+    cid_dnf = uuid.uuid4()
+    cid_sta = uuid.uuid4()
+
+    print("▸ Competencia DNF (application layer)")
+    asyncio.run(setup_competencia(
+        competencia_id=cid_dnf,
+        disciplina_str="DNF",
+        intervalo_minutos=7,
+        juez_id=juez_id,
+        torneo_id=torneo_id,
+        atletas=atleta_ap_dnf,
+        unidad_str="metros",
     ))
 
-    await GenerarGrillaHandler(store, ap_adapter, descriptor).handle(
-        GenerarGrillaCommand(
-            competencia_id=cid_sta,
-            disciplina=Disciplina.STA,
-            ot_inicio=sta_ot_base,
-            andariveles=1,
-        )
-    )
-    _ok("Grilla STA generada (ascendente por AP)")
-
-    await ConfirmarGrillaHandler(store).handle(
-        ConfirmarGrillaCommand(competencia_id=cid_sta, disciplina=Disciplina.STA)
-    )
-    _ok("Grilla STA confirmada")
-    print()
-
-    # ── BC Identidad: crear usuario juez (antes de cerrar inscripción) ──────────
-    print("[Identidad: crear usuario juez]")
-    juez_repo = SQLiteUsuarioRepository(_IDENTIDAD_DB)
-    juez_id_uuid = await RegistrarUsuarioHandler(juez_repo, BcryptPasswordHasher()).handle(
-        RegistrarUsuarioCommand(email=_JUEZ_EMAIL, password=_JUEZ_PASS, rol=Rol.JUEZ)
-    )
-    _ok(f"Usuario juez creado: {_JUEZ_EMAIL} (id={juez_id_uuid})")
-
-    # Asignar juez a disciplinas ANTES de cerrar inscripción (restricción de dominio)
-    juez_handler = AsignarJuezHandler(torneo_repo)
-    for disc in [Disciplina.DNF, Disciplina.STA]:
-        await juez_handler.handle(
-            AsignarJuezCommand(torneo_id=torneo_id, disciplina=disc, juez_id=juez_id_uuid)
-        )
-        _ok(f"Juez asignado a {disc.value}")
-    print()
-
-    # ── Torneo: cerrar inscripción + iniciar ejecución ────────────────────────
-    print("[Torneo — transición a EJECUCION]")
-    await CerrarInscripcionHandler(torneo_repo).handle(
-        TransicionarTorneoCommand(torneo_id=torneo_id)
-    )
-    _ok("Inscripción cerrada")
-
-    await IniciarEjecucionHandler(torneo_repo).handle(
-        TransicionarTorneoCommand(torneo_id=torneo_id)
-    )
-    _ok("Torneo en EJECUCION — visible en frontend")
-    print()
-
-    # ── Iniciar competencias + registrar en proyección por torneo ────────────
-    print("[Iniciar competencias]")
-    comp_por_torneo = SQLiteCompetenciasPorTorneo(_COMPETENCIA_DB)
-
-    await IniciarCompetenciaHandler(store).handle(
-        IniciarCompetenciaCommand(
-            competencia_id=cid_dnf,
-            disciplina=Disciplina.DNF,
-            juez_id=_JUEZ_ID,
-        )
-    )
-    await comp_por_torneo.guardar(cid_dnf, Disciplina.DNF.value, torneo_id)
-    _ok("DNF iniciada → estado EnEjecucion + índice por torneo")
-
-    await IniciarCompetenciaHandler(store).handle(
-        IniciarCompetenciaCommand(
-            competencia_id=cid_sta,
-            disciplina=Disciplina.STA,
-            juez_id=_JUEZ_ID,
-        )
-    )
-    await comp_por_torneo.guardar(cid_sta, Disciplina.STA.value, torneo_id)
-    _ok("STA iniciada → estado EnEjecucion + índice por torneo")
-    print()
-
-    # ── Pre-avanzar atletas (E07, E08, R01, R02) ──────────────────────────────
-    print("[Pre-advance: leer grilla DNF]")
-    grilla_dnf = await ObtenerGrillaHandler(store).handle(
-        ObtenerGrillaQuery(competencia_id=cid_dnf, disciplina=Disciplina.DNF)
-    )
-    grilla_dnf_map = {UUID(e.atleta_id): e for e in grilla_dnf}
-    for e in sorted(grilla_dnf, key=lambda x: x.posicion):
-        print(f"    pos.{e.posicion:02d} | {e.atleta_id[:8]}... | OT={e.ot_programado[11:16]}")
-    print()
-
-    # Handlers sin chequeo de andarivel (seed secuencial)
-    estado_adapter = CompetenciaEstadoAdapter(store)
-    llamar = LlamarAtletaHandler(store, estado_adapter, andariveles_activos=None)
-    resultado_handler = RegistrarResultadoHandler(store, descriptor)
-    tarjeta_handler = AsignarTarjetaHandler(store, PerformancesEstadoAdapter(store), None)
-
-    async def _llamar(label: str, andarivel: int = 1) -> None:
-        aid = atleta_ids[label]
-        entrada = grilla_dnf_map[aid]
-        await llamar.handle(
-            LlamarAtletaCommand(
-                competencia_id=cid_dnf,
-                participante_id=aid,
-                disciplina=Disciplina.DNF,
-                ot_programado=datetime.fromisoformat(entrada.ot_programado),
-                posicion_grilla=entrada.posicion,
-                andarivel=andarivel,
-            )
-        )
-
-    async def _resultado_dnf(label: str, metros: int) -> None:
-        await resultado_handler.handle(
-            RegistrarResultadoCommand(
-                competencia_id=cid_dnf,
-                participante_id=atleta_ids[label],
-                disciplina=Disciplina.DNF,
-                valor_rp=Decimal(str(metros)),
-                unidad=UnidadMedida.Metros,
-                registrado_por=_JUEZ_ID,
-            )
-        )
-
-    async def _amarilla(label: str) -> None:
-        await tarjeta_handler.handle(
-            AsignarTarjetaCommand(
-                competencia_id=cid_dnf,
-                participante_id=atleta_ids[label],
-                disciplina=Disciplina.DNF,
-                tipo=TipoTarjeta.Amarilla,
-                motivo_texto="Revision pendiente del juez",
-                asignada_por=_JUEZ_ID,
-            )
-        )
-
-    print("[Pre-advance: E07 Martin Acosta → EnRevision (Amarilla)]")
-    await _llamar("E07")
-    await _resultado_dnf("E07", 95)
-    await _amarilla("E07")
-    _ok("E07 Martin Acosta → EnRevision (RP=95m, Amarilla asignada)")
-
-    print()
-    print("[Pre-advance: E08 Silvia Casas → EnRevision (Amarilla)]")
-    await _llamar("E08")
-    await _resultado_dnf("E08", 108)
-    await _amarilla("E08")
-    _ok("E08 Silvia Casas → EnRevision (RP=108m, Amarilla asignada)")
-
-    print()
-    print("[Pre-advance: R02 Claudia Rios → ResultadoRegistrado]")
-    await _llamar("R02")
-    await _resultado_dnf("R02", 125)
-    _ok("R02 Claudia Rios → ResultadoRegistrado (RP=125m, sin tarjeta)")
-
-    print()
-    print("[Pre-advance: R01 Jorge Mendez → Llamada]")
-    await _llamar("R01", andarivel=2)  # andarivel 2 → no bloquea andarivel 1 para el UAT
-    _ok("R01 Jorge Mendez → Llamada (sin resultado, andarivel=2)")
-    print()
+    print("▸ Competencia STA (application layer)")
+    asyncio.run(setup_competencia(
+        competencia_id=cid_sta,
+        disciplina_str="STA",
+        intervalo_minutos=20,
+        juez_id=juez_id,
+        torneo_id=torneo_id,
+        atletas=atleta_ap_sta,
+        unidad_str="segundos",
+    ))
 
     # ── Guardar IDs ───────────────────────────────────────────────────────────
     ids = {
-        "torneo_id": str(torneo_id),
+        "torneo_id": torneo_id,
         "competencia_dnf_id": str(cid_dnf),
         "competencia_sta_id": str(cid_sta),
-        "juez_id": str(juez_id_uuid),
-        "juez_email": _JUEZ_EMAIL,
-        "juez_password": _JUEZ_PASS,
+        "juez_id": juez_id,
+        **{f"atleta_{k}": v for k, v in atleta_ids.items()},
     }
-    for label, nombre, apellido, _, _ in _ATLETAS_DNF + _ATLETAS_STA:
-        ids[f"atleta_{label.lower()}"] = str(atleta_ids[label])
+    IDS_PATH.write_text(json.dumps(ids, indent=2))
 
-    _IDS_PATH.parent.mkdir(parents=True, exist_ok=True)
-    _IDS_PATH.write_text(json.dumps(ids, indent=2))
-    _ok(f"IDs guardados: {_IDS_PATH.relative_to(ROOT)}")
-    print()
-
-    # ── Resumen ───────────────────────────────────────────────────────────────
-    print("=" * 65)
-    print("  Seed completado exitosamente")
-    print("=" * 65)
-    print()
-    print("  Competencia DNF")
-    print(f"    ID  : {cid_dnf}")
-    print(f"    URL : /juez/grilla (seleccionar DNF desde /juez/disciplinas)")
-    print()
-    print("  Competencia STA")
-    print(f"    ID  : {cid_sta}")
-    print(f"    URL : /juez/grilla (seleccionar STA desde /juez/disciplinas)")
-    print()
-    print("  Login juez")
-    print(f"    email    : {_JUEZ_EMAIL}")
-    print(f"    password : {_JUEZ_PASS}")
-    print()
-    print("  Próximos pasos:")
-    print("    1. Levantá el backend : uv run fastapi dev src/app.py")
-    print("    2. Levantá el frontend: cd frontend && npm run dev")
-    print("    3. Abrí el browser en : http://localhost:5173")
-    print("    4. Ejecutá run_uat.sh para checks HTTP + checklist")
+    print(f"\n✓ IDs guardados en {IDS_PATH}")
+    print(json.dumps(ids, indent=2))
+    print("\n=== Seed completado ===\n")
 
 
 if __name__ == "__main__":
-    asyncio.run(seed())
+    main()

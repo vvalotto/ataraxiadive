@@ -1,12 +1,13 @@
 # Plan de Pruebas UAT — INC-4.4 Offline-first
 
-**Versión:** 3.0 (adaptado para iPhone — sin DevTools embebidos)  
-**Fecha:** 2026-04-14  
+**Versión:** 4.0 (iPhone como juez + iPad como Remote Web Inspector)  
+**Fecha:** 2026-04-18  
 **Entorno:** local (WiFi local)  
 **Frontend:** `http://192.168.0.28:5173`  
 **Backend:** `http://192.168.0.28:8000`  
 **Usuario juez:** `juez@uat-sp4.test` / `juezsp4uat2025`  
-**Dispositivo:** iPhone (Safari iOS)
+**Dispositivo principal:** iPhone (Safari iOS) — rol juez  
+**Dispositivo secundario:** iPad (Safari iPadOS, conectado al Mac por USB) — Remote Web Inspector para casos 1.4, 2.3 y 3.3
 
 ---
 
@@ -36,9 +37,10 @@ INC-4.4 implementa operación offline-first para el juez. Las tres US tienen dep
 
 ---
 
-## Cómo verificar el estado en iPhone
+## Cómo verificar el estado — iPhone y iPad
 
-En lugar de DevTools, toda la verificación es **por comportamiento observable en la UI**:
+**iPhone (juez):** toda la verificación es **por comportamiento observable en la UI**:  
+**iPad (Remote Web Inspector):** permite inspeccionar IndexedDB directamente desde Mac — úsalo para los casos 1.4, 2.3 y 3.3.
 
 | Lo que querías ver en DevTools | Cómo verificarlo en iPhone |
 |-------------------------------|---------------------------|
@@ -61,19 +63,25 @@ En lugar de DevTools, toda la verificación es **por comportamiento observable e
 
 > **Nota:** Modo Avión también corta Bluetooth. Si el backend está en la misma red WiFi, cualquier método funciona. Lo que importa es que el iPhone no pueda llegar a `192.168.0.28`.
 
-### Remote Web Inspector (opcional — verificación avanzada)
+### Remote Web Inspector — con iPad (recomendado para casos avanzados)
 
-Si querés inspeccionar IndexedDB directamente:
-1. iPhone: `Configuración` → `Safari` → `Avanzado` → activar `Inspector Web`
-2. Conectar iPhone al Mac por USB
-3. Mac: `Safari` → `Desarrollar` → `[nombre del iPhone]` → `http://192.168.0.28:5173`
+Usar el iPad (conectado al Mac por USB) para los casos 1.4, 2.3 y 3.3 que requieren editar o inspeccionar IndexedDB.
+
+**Setup (una sola vez):**
+1. iPad: `Configuración` → `Safari` → `Avanzado` → activar `Inspector Web`
+2. Conectar iPad al Mac por USB
+3. Mac: `Safari` → menú `Desarrollar` → `[nombre del iPad]` → `http://192.168.0.28:5173`
 4. Pestaña `Almacenamiento` → `IndexedDB` → `AtaraxiaDiveDB`
+
+> **¿Por qué iPad y no iPhone?** El iPad tiene pantalla más grande — más cómodo para inspeccionar IndexedDB mientras el iPhone ejecuta el flujo del juez. Ambos tienen el mismo procedimiento de conexión.
+
+**Si solo tenés el iPhone disponible:** mismos pasos con iPhone en lugar de iPad.
 
 ---
 
 ## Preparación del entorno
 
-### Verificación inicial (desde iPhone)
+### Verificación inicial (desde iPhone — rol juez)
 
 1. Abrir Safari → `http://192.168.0.28:5173` → página de login visible
 2. Login con `juez@uat-sp4.test` / `juezsp4uat2025`
@@ -147,11 +155,12 @@ Si querés inspeccionar IndexedDB directamente:
 
 ### Caso 1.4 — Cache antiguo (> 24h) con red disponible
 
-**Precondición:** Remote Web Inspector disponible (para editar `cached_at` en IndexedDB).  
+**Precondición:** iPad conectado al Mac con Remote Web Inspector habilitado (ver setup arriba).
 
-> **Si no tenés Remote Web Inspector:** saltar este caso o marcarlo como N/A. El comportamiento se puede verificar en próximas sesiones desde desktop.
+> **Si no tenés iPad disponible:** saltar este caso o marcarlo como N/A.
 
-1. En Remote Web Inspector → `AtaraxiaDiveDB` → `grilla_cache` → editar `cached_at` a `Date.now() - 25*3600*1000`.
+1. En Remote Web Inspector del iPad → `AtaraxiaDiveDB` → `grilla_cache` → editar `cached_at` a `Date.now() - 25*3600*1000`.
+   > El iPad debe estar abriendo la misma URL `http://192.168.0.28:5173` en Safari para que aparezca en el menú Desarrollar del Mac.
 2. `Configuración` → `WiFi` → **encender**.
 3. Volver a GrillaPage DNF.
 
@@ -223,7 +232,7 @@ Si querés inspeccionar IndexedDB directamente:
 
 1. Observar el badge en el header: debe mostrar el total acumulado (⏳ 5 o más).
 2. Navegar a GrillaPage y volver a Mis disciplinas → el badge se mantiene en todas las pantallas.
-3. (Opcional con Remote Web Inspector): verificar que `comando_queue` está ordenada por `id` ascendente, y el primero es `tipo: 'llamar'` de `e02`.
+3. (Con iPad + Remote Web Inspector): verificar que `comando_queue` está ordenada por `id` ascendente, y el primero es `tipo: 'llamar'` de `e02`.
 
 **Esperado:**
 - Badge muestra **⏳ N** con el total correcto (INV-4.4.2-02).
@@ -330,13 +339,13 @@ curl -X POST http://localhost:8000/competencia/{dnf_id}/llamar \
 | US-4.4.1 | 1.1 Precarga online | `PASS / FAIL` | |
 | US-4.4.1 | 1.2 Offline + cache válido | `PASS / FAIL` | |
 | US-4.4.1 | 1.3 Offline sin cache | `PASS / FAIL` | usar STA si no hay Remote Inspector |
-| US-4.4.1 | 1.4 Cache > 24h | `PASS / FAIL / N/A` | requiere Remote Inspector para editar cached_at |
-| US-4.4.2 | 2.1 Flujo completo offline | `PASS / FAIL` | |
-| US-4.4.2 | 2.2 DNS offline | `PASS / FAIL` | |
-| US-4.4.2 | 2.3 Badge acumulativo + FIFO | `PASS / FAIL` | FIFO verificable solo con Remote Inspector |
-| US-4.4.3 | 3.1 Sync al reconectar | `PASS / FAIL` | encender WiFi y observar badge |
-| US-4.4.3 | 3.2 Estado final consistente | `PASS / FAIL` | |
-| US-4.4.3 | 3.3 Error 4xx en cola | `PASS / FAIL / N/A` | requiere Opción A (curl desde Mac) |
+| US-4.4.1 | 1.4 Cache > 24h | `PASS / FAIL / N/A` | iPad + Remote Web Inspector para editar cached_at |
+| US-4.4.2 | 2.1 Flujo completo offline | `PASS / FAIL` | iPhone |
+| US-4.4.2 | 2.2 DNS offline | `PASS / FAIL` | iPhone |
+| US-4.4.2 | 2.3 Badge acumulativo + FIFO | `PASS / FAIL` | FIFO verificable con iPad + Remote Web Inspector |
+| US-4.4.3 | 3.1 Sync al reconectar | `PASS / FAIL` | iPhone — encender WiFi y observar badge |
+| US-4.4.3 | 3.2 Estado final consistente | `PASS / FAIL` | iPhone |
+| US-4.4.3 | 3.3 Error 4xx en cola | `PASS / FAIL / N/A` | Opción A (curl desde Mac) + observar en iPhone |
 | US-4.4.3 | 3.4 Badge en todas las pantallas | `PASS / FAIL` | |
 
 **Conclusión general INC-4.4:** `PASS / FAIL`  
@@ -344,4 +353,5 @@ curl -X POST http://localhost:8000/competencia/{dnf_id}/llamar \
 **Acciones posteriores requeridas:**  
 **Fecha de ejecución:**  
 **Ejecutado por:** Victor Valotto  
-**Dispositivo de prueba:** iPhone (Safari iOS)
+**Dispositivo principal (juez):** iPhone (Safari iOS)  
+**Dispositivo secundario (Remote Web Inspector):** iPad (Safari iPadOS)
