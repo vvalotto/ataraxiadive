@@ -4,11 +4,22 @@ import type { GrillaAtletaDto } from '../../api/competencia'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
 import { useAuditoriaCompetencia } from '../../hooks/useAuditoriaCompetencia'
 
+const ESTADO_LABELS: Record<string, string> = {
+  // Estado de competencia
+  EnEjecucion: 'En ejecución',
+  Finalizada: 'Finalizada',
+  Confirmada: 'Grilla confirmada',
+  // Estado de atleta en grilla
+  AnunciadaAP: 'AP declarado',
+  Llamada: 'En llamada',
+  ResultadoRegistrado: 'Resultado registrado',
+  Ejecutada: 'Ejecutada',
+  EnRevision: 'En revisión',
+  DNS: 'DNS',
+}
+
 function formatEstado(estado: string) {
-  if (estado === 'EnEjecucion') return 'En ejecucion'
-  if (estado === 'Finalizada') return 'Finalizada'
-  if (estado === 'Confirmada') return 'Confirmada'
-  return estado
+  return ESTADO_LABELS[estado] ?? estado
 }
 
 function formatResultadoFinal(
@@ -17,12 +28,7 @@ function formatResultadoFinal(
 ) {
   const ranking = rankingMap.get(atleta.atleta_id)
   if (ranking) return ranking
-  if (atleta.estado === 'DNS') return 'DNS'
-  if (atleta.estado === 'Ejecutada') return 'Ejecutada'
-  if (atleta.estado === 'EnRevision') return 'Revision'
-  if (atleta.estado === 'ResultadoRegistrado') return 'Resultado'
-  if (atleta.estado === 'Llamada') return 'Llamada'
-  return 'Pendiente'
+  return formatEstado(atleta.estado) || 'Pendiente'
 }
 
 function truncateHash(value: string) {

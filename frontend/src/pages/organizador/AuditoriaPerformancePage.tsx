@@ -36,6 +36,13 @@ function formatTipoEvento(tipo: string): string {
   return TIPO_EVENTO_LABELS[tipo] ?? tipo
 }
 
+function formatUnidad(datos: Record<string, unknown>): string {
+  const unidad = String(datos.unidad ?? '')
+  if (unidad === 'Metros') return ' m'
+  if (unidad === 'Segundos') return ' s'
+  return ''
+}
+
 function formatDatos(evento: AuditLogEventoDto) {
   const datos = evento.datos
   if ('ot_programado' in datos) {
@@ -43,8 +50,8 @@ function formatDatos(evento: AuditLogEventoDto) {
     const andarivel = 'andarivel' in datos ? ` · Andarivel ${String(datos.andarivel)}` : ''
     return `OT: ${ot}${andarivel}`
   }
-  if ('valor_ap' in datos) return `AP declarado: ${String(datos.valor_ap)}`
-  if ('valor_rp' in datos) return `RP registrado: ${String(datos.valor_rp)}`
+  if ('valor_ap' in datos) return `AP declarado: ${String(datos.valor_ap)}${formatUnidad(datos)}`
+  if ('valor_rp' in datos) return `RP registrado: ${String(datos.valor_rp)}${formatUnidad(datos)}`
   if ('tipo' in datos) return `Tarjeta: ${String(datos.tipo)}`
   if ('resolucion' in datos) return `Resolución: ${String(datos.resolucion)}`
   if ('penalizaciones' in datos) return `Penalizaciones: ${JSON.stringify(datos.penalizaciones)}`
