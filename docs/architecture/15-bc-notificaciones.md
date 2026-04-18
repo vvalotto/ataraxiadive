@@ -38,12 +38,16 @@ ni una matriz exhaustiva de plantillas por evento.
 
 ## Estado actual
 
-La carpeta `src/notificaciones/` ya existe con estructura BC-first, pero al
-momento de este documento no contiene todavía la implementación funcional del
-aggregate, sus handlers ni los adaptadores de entrega.
+El BC `notificaciones` ya cuenta con:
 
-Por lo tanto, esta especificación describe la **arquitectura objetivo vigente**
-del BC, consistente con los ADRs y el diseño estratégico ya definidos.
+- aggregate `Notificacion` con Event Sourcing propio;
+- tabla `notificaciones_events` e idempotencia por `evento_fuente_id`;
+- puerto `EmailPort`;
+- adaptador concreto `ResendEmailAdapter` en infraestructura para envío real por HTTP.
+- comandos de aplicación `SolicitarEnvioHandler` y `EnviarNotificacionHandler`;
+- política P-10 (`InscripcionConfirmada` -> email de confirmación al atleta);
+- política P-11 (`ResultadosPublicados` -> emails a atletas de la disciplina);
+- templates `InscripcionConfirmadaTemplate` y `ResultadosPublicadosTemplate`.
 
 ## Rol del bounded context
 
@@ -77,7 +81,6 @@ Cada stream representa el ciclo de vida completo de una comunicación:
 - `NotificacionSolicitada`
 - `NotificacionEnviada`
 - `NotificacionFallida`
-- `NotificacionReintentada`
 
 ## Estructura interna
 
@@ -125,8 +128,8 @@ flowchart TB
             destinatario_vo["VO Destinatario
             userId · canal"]
 
-            plantilla_vo["VO PlantillaId
-            tipo de mensaje"]
+            contenido_vo["VO ContenidoEmail
+            asunto + cuerpo"]
 
             evento_fuente_vo["VO EventoFuenteId
             clave de idempotencia"]
@@ -135,7 +138,7 @@ flowchart TB
             NotificacionRepository"]
 
             channel_port["Port
-            NotificationChannelPort"]
+            EmailPort"]
         end
 
         subgraph infrastructure["Infrastructure Layer"]
@@ -143,8 +146,8 @@ flowchart TB
             notif_db["notificaciones.db
             SQLite · events"]
             bus_sub["Bus Subscriber / Outbox Consumer"]
-            email_adapter["Email Adapter
-            SMTP / SendGrid / SES"]
+            email_adapter["ResendEmailAdapter
+            HTTP /emails"]
             push_adapter["Push Adapter
             Servicio Push"]
         end
@@ -179,7 +182,7 @@ flowchart TB
     push_adapter --> channel_port
 
     notif_agg --> destinatario_vo
-    notif_agg --> plantilla_vo
+    notif_agg --> contenido_vo
     notif_agg --> evento_fuente_vo
 ```
 
@@ -199,6 +202,27 @@ Sus responsabilidades son:
   `NotificacionFallida`;
 - coordinar políticas de reintento cuando corresponda.
 
+En `US-4.5.3`, la política P-10 se implementa como listener in-process:
+recibe un DTO de aplicación `InscripcionConfirmada`, renderiza el contenido con
+`InscripcionConfirmadaTemplate`, ejecuta `SolicitarEnvioHandler` y luego
+`EnviarNotificacionHandler`. Si el evento no trae email del atleta, registra
+directamente `NotificacionFallida` con motivo `destinatario_sin_email` sin
+interrumpir el flujo principal de inscripción.
+
+En `US-4.5.5`, P-10 queda cableada al endpoint HTTP de Registro. El router de
+`registro` recibe un callback async opcional sin importar tipos de
+`notificaciones`; `src/app.py` enriquece la `Inscripcion` con datos de
+`SQLiteAtletaRepository` y `SQLiteTorneoRepository`, construye
+`InscripcionConfirmada` y delega en `PoliticaP10Handler`. Si atleta o torneo no
+existen durante el enriquecimiento, el callback retorna sin interrumpir la
+inscripción. La clave de idempotencia es `str(inscripcion.inscripcion_id)`.
+
+En `US-4.5.4`, la política P-11 aplica el mismo patrón para resultados
+publicados: recibe un DTO `ResultadosPublicados`, genera una notificación por
+cada atleta notificable y usa `"{evento.id}:{atleta_id}"` como clave compuesta
+de idempotencia. Los atletas con `estado = "Retirado"` se omiten; los atletas
+con `estado = "DNS"` reciben email. Un fallo en un atleta no bloquea el resto.
+
 ### Domain Layer
 
 Contiene el modelo propio del BC.
@@ -206,7 +230,7 @@ Contiene el modelo propio del BC.
 Sus elementos centrales son:
 
 - `Notificacion` como aggregate root;
-- `Destinatario`, `PlantillaId` y `EventoFuenteId` como value objects
+- `Destinatario`, `ContenidoEmail` y `EventoFuenteId` como value objects
   relevantes;
 - eventos de dominio que representan el ciclo de vida del envío;
 - puertos para persistencia y entrega por canal.
@@ -222,6 +246,9 @@ Sus responsabilidades son:
 - delegar envío a proveedores de email y push;
 - encapsular detalles de transporte, timeouts y errores técnicos.
 
+En el estado actual, el adaptador implementado es `ResendEmailAdapter`. El
+soporte de push permanece sólo a nivel de diseño.
+
 ## Aggregate, eventos y value objects principales
 
 ### Notificacion
@@ -231,7 +258,7 @@ Aggregate root que modela una comunicación originada por un evento de dominio.
 Responsable de:
 
 - preservar unicidad lógica por `eventoFuenteId`;
-- registrar solicitud, envío, falla y reintento;
+- registrar solicitud, envío y falla;
 - mantener el estado actual del intento;
 - impedir duplicados observables para el mismo evento fuente.
 
@@ -242,7 +269,6 @@ Los eventos principales del aggregate son:
 - `NotificacionSolicitada`;
 - `NotificacionEnviada`;
 - `NotificacionFallida`;
-- `NotificacionReintentada`;
 - `PreferenciasActualizadas` cuando el cambio de canal preferido forme parte del
   BC.
 
@@ -251,7 +277,7 @@ Los eventos principales del aggregate son:
 Los value objects centrales son:
 
 - `Destinatario`: identidad del receptor y canal preferido;
-- `PlantillaId`: referencia a la plantilla del mensaje;
+- `ContenidoEmail`: asunto no vacío, texto y HTML opcional;
 - `EventoFuenteId`: identificador del evento que origina la notificación.
 
 ## Integraciones de entrada
@@ -262,15 +288,16 @@ Los value objects centrales son:
 La colaboración sigue estas reglas:
 
 - ningún BC funcional espera una respuesta síncrona de `Notificaciones`;
-- el BC consume eventos de dominio de manera asíncrona;
+- en SP4, el BC consume eventos mediante callbacks in-process registrados en el
+  composition root;
 - la semántica del evento recibido se traduce al lenguaje ubicuo propio del BC;
 - el evento fuente se conserva como clave de idempotencia.
 
 Entre los disparadores ya definidos aparecen, por ejemplo:
 
-- confirmaciones o cambios relevantes de inscripción;
+- `InscripcionConfirmada` desde `Registro` para P-10;
 - recordatorios vinculados a anuncios;
-- `ResultadosPublicados`;
+- `ResultadosPublicados` desde `Resultados` para P-11;
 - `TorneoCerrado`.
 
 ## Integraciones de salida
@@ -297,6 +324,6 @@ La política base es:
 4. si no existe, registrar `NotificacionSolicitada`;
 5. intentar entrega por el canal configurado;
 6. registrar `NotificacionEnviada` o `NotificacionFallida`;
-7. si aplica, programar `NotificacionReintentada`.
+7. si en una US futura se implementa reintento explícito, programar el evento correspondiente.
 
 Esta secuencia justifica el uso de Event Sourcing en este BC.

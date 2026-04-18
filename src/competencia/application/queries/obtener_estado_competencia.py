@@ -18,6 +18,7 @@ class EstadoCompetenciaDTO:
     intervalo_minutos: int | None
     grilla_confirmada: bool
     torneo_id: UUID | None = None
+    hash_sha256: str | None = None
 
 
 @dataclass(frozen=True)  # pylint: disable=too-few-public-methods
@@ -54,4 +55,5 @@ class ObtenerEstadoCompetenciaHandler:
             ),
             grilla_confirmada=competencia.grilla_confirmada,
             torneo_id=competencia.torneo_id,
+            hash_sha256=competencia.hash_sha256,
         )

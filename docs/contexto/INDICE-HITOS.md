@@ -24,6 +24,11 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | HITO-12 | SP2 Inc 2.2 | 2026-03-26 | Gates de texto vs constraints de herramienta | ¿Las instrucciones procedurales en lenguaje natural son barreras reales para LLMs? | [HITO-12](./HITO-12-GATES-TEXTO-VS-HERRAMIENTA.md) |
 | HITO-13 | SP2 cierre | 2026-03-28 | SP-ADJ como etapa formal del ciclo IEDD | ¿La deuda técnica post-SP merece un sub-sprint formal propio en lugar de backlog? | [HITO-13](./HITO-13-SP-ADJ-DEUDA-TECNICA-COMO-ETAPA-FORMAL.md) |
 | HITO-16 | SP3 Inc 3.5 | 2026-04-02 | Secuencialidad prescriptiva del pipeline | ¿La linealidad de `/implement-us` es una preferencia operativa o parte del método? | [HITO-16](./HITO-16-SECUENCIALIDAD-PRESCRIPTIVA-PIPELINE.md) |
+| HITO-19 | SP4 cierre INC-4.1 | 2026-04-08 | Cierre de incremento como captura formal de deuda de diseño | ¿El incremento es la unidad correcta para agrupar hallazgos estructurales y planificar ajustes? | [HITO-19](./HITO-19-INC-4-1-HALLAZGOS-DISENO-CIERRE.md) |
+| HITO-21 | SP4 Inc 4.6 | 2026-04-16 | Tracker secuencial como política | ¿La secuencialidad del método incluye también al mecanismo que registra sus fases? | [HITO-21](./HITO-21-TRACKER-SECUENCIALIDAD-COMO-POLITICA.md) |
+| HITO-22 | SP4 Inc 4.6 | 2026-04-16 | Event Sourcing como base de integridad criptográfica | ¿La misma traza de eventos puede sostener auditoría legible e integridad verificable sin persistencia adicional? | [HITO-22](./HITO-22-EVENT-SOURCING-INTEGRIDAD-CRIPTOGRAFICA.md) |
+| HITO-23 | SP4 Inc 4.6 | 2026-04-16 | Auditoría UI como composición operable de read models | ¿La evidencia del Event Sourcing se vuelve útil recién cuando puede recorrerse desde la UI sin conocer el event store? | [HITO-23](./HITO-23-AUDITORIA-UI-COMPOSICION-QUERIES.md) |
+| HITO-24 | SP4 Inc 4.6 | 2026-04-16 | Exportación como read model transversal portable | ¿La evidencia del dominio puede salir del sistema como artefacto portable sin persistencia paralela y sin romper bounded contexts? | [HITO-24](./HITO-24-EXPORTACION-COMO-READ-MODEL-TRANSVERSAL.md) |
 
 ---
 
@@ -35,6 +40,7 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | SP1 (La Performance) | 3, 4, 5, 6, 7, 8, 9 | Primer ciclo IEDD completo, fricción del ecosistema, BDD + ES |
 | SP2 (La Competencia) | 10, 11, 12, 13 | Patrones DDD avanzados, quality gates, deuda técnica formal |
 | SP3 (El Torneo) | 15, 16 | Proyecciones CQRS emergentes, secuencialidad del pipeline y gobierno del proceso |
+| SP4 (La Plataforma) | 17, 18, 19, 21, 22, 23, 24 | Datos reales como oráculo, validación UX, captura formal de hallazgos estructurales, gobierno secuencial del tracker, integridad criptográfica sobre el event store, auditoría navegable por composición de read models y exportación portable como evidencia transversal |
 
 ---
 
@@ -48,6 +54,11 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | SP-ADJ como etapa necesaria | HITO-13 | ✅ Confirmada |
 | Gates de texto no son barreras para LLMs | HITO-12 | ✅ Confirmada |
 | La secuencialidad del pipeline es parte del método | HITO-16 | ✅ Confirmada |
+| La secuencialidad del método incluye también al tracker y su evidencia | HITO-21 | ✅ Confirmada |
+| El Event Sourcing puede sostener auditoría e integridad criptográfica con la misma traza | HITO-22 | ✅ Evidencia inicial |
+| La evidencia del Event Sourcing solo se vuelve operable cuando puede navegarse desde read models y UI | HITO-23 | ✅ Evidencia inicial |
+| La evidencia del dominio puede exportarse como read model portable sin persistencia paralela | HITO-24 | ✅ Evidencia inicial |
+| El incremento es la unidad correcta para leer deuda estructural acumulada | HITO-19 | ✅ Evidencia inicial |
 
 ---
 

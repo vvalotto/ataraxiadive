@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AtaraxiaDive — Portal del Atleta (Prototipo INC-4.0)</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0f172a;
+  --surface:  #1e293b;
+  --surface2: #334155;
+  --border:   #475569;
+  --text:     #f8fafc;
+  --muted:    #94a3b8;
+  --accent:   #38bdf8;
+  --blanca:   #22c55e;
+  --amarilla: #eab308;
+  --roja:     #ef4444;
+  --r: 12px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+}
+
+/* ── Screens ── */
+.screen { display: none; min-height: 100vh; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* ── Mobile shell (max 430px centrado) ── */
+.shell {
+  flex: 1; display: flex; flex-direction: column;
+  max-width: 430px; width: 100%; margin: 0 auto;
+}
+
+/* ── Top header móvil ── */
+.header {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 0 16px; display: flex; align-items: center;
+  height: 52px; gap: 10px; position: sticky; top: 0; z-index: 100;
+}
+.header-brand { font-size: 17px; font-weight: 900; color: var(--accent); letter-spacing: -.5px; }
+.header-back  { font-size: 22px; cursor: pointer; color: var(--muted); padding: 4px; }
+.header-title { flex: 1; font-size: 16px; font-weight: 700; }
+.header-right { margin-left: auto; }
+
+/* ── Bottom tab bar ── */
+.tabbar {
+  background: var(--surface); border-top: 1px solid var(--border);
+  display: flex; height: 56px; position: sticky; bottom: 0; z-index: 100;
+}
+.tab-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 3px; cursor: pointer;
+  font-size: 10px; font-weight: 600; color: var(--muted);
+  border: none; background: none; transition: color .15s;
+}
+.tab-item.active { color: var(--accent); }
+.tab-icon { font-size: 20px; }
+
+/* ── Scroll content ── */
+.scroll { flex: 1; overflow-y: auto; padding: 16px; }
+.scroll-nopad { flex: 1; overflow-y: auto; }
+
+/* ── Seccion titulo ── */
+.sec-title {
+  font-size: 12px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px;
+}
+
+/* ── Hero card (dashboard) ── */
+.hero-card {
+  background: linear-gradient(135deg, rgba(56,189,248,.15) 0%, rgba(56,189,248,.05) 100%);
+  border: 1px solid rgba(56,189,248,.25);
+  border-radius: var(--r); padding: 20px; margin-bottom: 16px;
+}
+.hero-nombre { font-size: 20px; font-weight: 900; }
+.hero-sub    { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+/* ── Cards genéricas ── */
+.card {
+  background: var(--surface); border-radius: var(--r);
+  border: 1px solid var(--border); padding: 16px;
+  margin-bottom: 10px;
+}
+.card-title   { font-size: 15px; font-weight: 800; }
+.card-meta    { font-size: 13px; color: var(--muted); margin-top: 3px; }
+.card.tappable { cursor: pointer; transition: border-color .15s; }
+.card.tappable:hover { border-color: var(--accent); }
+
+/* ── Torneo card ── */
+.torneo-card {
+  background: var(--surface); border-radius: var(--r);
+  border: 1px solid var(--border); padding: 16px;
+  margin-bottom: 10px; cursor: pointer; transition: border-color .15s;
+}
+.torneo-card:hover { border-color: var(--accent); }
+.torneo-nombre { font-size: 16px; font-weight: 800; }
+.torneo-meta   { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+
+/* ── Disciplina row ── */
+.disc-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 0; border-top: 1px solid var(--border);
+}
+.disc-icon { font-size: 24px; min-width: 30px; }
+.disc-info { flex: 1; }
+.disc-name { font-size: 14px; font-weight: 700; }
+.disc-sub  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* ── Checkbox disc select ── */
+.disc-checkbox {
+  width: 22px; height: 22px; border-radius: 6px;
+  border: 2px solid var(--border); background: var(--surface2);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; transition: background .15s, border-color .15s;
+}
+.disc-checkbox.checked { background: var(--accent); border-color: var(--accent); color: #0f172a; }
+
+/* ── AP input grande ── */
+.ap-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 0; border-top: 1px solid var(--border);
+}
+.ap-label { flex: 1; font-size: 14px; font-weight: 700; }
+.ap-field {
+  display: flex; align-items: center; gap: 6px;
+}
+.ap-input-big {
+  width: 80px; background: var(--surface2); border: 2px solid var(--border);
+  border-radius: 8px; color: var(--accent); font-size: 18px; font-weight: 800;
+  padding: 8px 10px; text-align: center; outline: none;
+}
+.ap-input-big:focus { border-color: var(--accent); }
+.ap-unit { font-size: 14px; color: var(--muted); font-weight: 600; }
+
+/* ── OT display ── */
+.ot-hero {
+  text-align: center; padding: 24px 16px;
+  background: rgba(56,189,248,.06);
+  border: 1px solid rgba(56,189,248,.2);
+  border-radius: var(--r); margin-bottom: 12px;
+}
+.ot-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+.ot-time  { font-size: 52px; font-weight: 900; color: var(--accent);
+            font-variant-numeric: tabular-nums; line-height: 1; margin: 6px 0; }
+.ot-sub   { font-size: 13px; color: var(--muted); }
+
+/* ── Grilla lista ── */
+.grilla-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+}
+.grilla-row.yo { background: rgba(56,189,248,.06); border-left: 3px solid var(--accent); }
+.grilla-row.done { opacity: .5; }
+.g-pos  { font-size: 16px; font-weight: 900; color: var(--muted); min-width: 24px; }
+.g-name { flex: 1; font-size: 14px; }
+.g-name .yo-label { font-size: 10px; color: var(--accent); font-weight: 700;
+                    background: rgba(56,189,248,.15); border-radius: 4px;
+                    padding: 1px 5px; margin-left: 5px; }
+.g-ot   { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* ── Resultado hero ── */
+.result-hero {
+  border-radius: var(--r); padding: 24px; text-align: center; margin-bottom: 12px;
+}
+.result-hero.blanca  { background: rgba(34,197,94,.08); border: 1px solid rgba(34,197,94,.3); }
+.result-hero.amarilla{ background: rgba(234,179,8,.08); border: 1px solid rgba(234,179,8,.3); }
+.result-hero.roja    { background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.3); }
+.result-tarjeta { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+.result-dist    { font-size: 56px; font-weight: 900; line-height: 1; }
+.result-unit    { font-size: 20px; font-weight: 700; color: var(--muted); }
+.result-pos     { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+/* ── Ranking list ── */
+.rank-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 16px; border-bottom: 1px solid var(--border);
+}
+.rank-row.yo { background: rgba(56,189,248,.06); border-left: 3px solid var(--accent); }
+.r-pos  { font-size: 18px; font-weight: 900; color: var(--muted); min-width: 28px; }
+.r-pos.gold   { color: #fbbf24; }
+.r-pos.silver { color: #94a3b8; }
+.r-pos.bronze { color: #b45309; }
+.r-name { flex: 1; font-size: 14px; font-weight: 600; }
+.r-dist { font-size: 15px; font-weight: 800; color: var(--accent); }
+
+/* ── Chips ── */
+.chip { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.chip-ok    { background: rgba(34,197,94,.15); color: #4ade80; }
+.chip-pend  { background: var(--surface2); color: var(--muted); }
+.chip-warn  { background: rgba(234,179,8,.15); color: #facc15; }
+.chip-roja  { background: rgba(239,68,68,.15); color: #fca5a5; }
+.chip-open  { background: rgba(56,189,248,.15); color: var(--accent); }
+.chip-lock  { background: var(--surface2); color: var(--muted); }
+
+/* ── Badge estado torneo ── */
+.badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.badge-abierto   { background: rgba(56,189,248,.15); color: var(--accent); }
+.badge-ejecucion { background: rgba(34,197,94,.15); color: #4ade80; }
+.badge-publicado { background: rgba(139,92,246,.2); color: #c4b5fd; }
+
+/* ── Botones ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 0 18px; height: 44px; border-radius: 10px;
+  border: none; cursor: pointer; font-weight: 700; font-size: 15px;
+  transition: filter .12s; width: 100%;
+}
+.btn:hover   { filter: brightness(1.1); }
+.btn:active  { filter: brightness(.88); transform: scale(.98); }
+.btn-primary { background: var(--accent); color: #0f172a; }
+.btn-outline { background: transparent; color: var(--text); border: 2px solid var(--border); }
+.btn-ghost   { background: var(--surface2); color: var(--muted); }
+.btn-roja    { background: var(--roja); color: #fff; }
+.btn-sm { height: 34px; font-size: 13px; padding: 0 14px; width: auto; border-radius: 8px; }
+
+/* ── Form ── */
+.field { margin-bottom: 14px; }
+.field label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 4px;
+               text-transform: uppercase; letter-spacing: .3px; }
+.input {
+  width: 100%; background: var(--surface2); border: 2px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 15px;
+  padding: 11px 13px; outline: none;
+}
+.input:focus { border-color: var(--accent); }
+select.input { cursor: pointer; }
+
+/* ── Divider ── */
+.divider { height: 1px; background: var(--border); margin: 12px 0; }
+
+/* ── Info box ── */
+.info-box { border-radius: 8px; padding: 11px 13px; font-size: 13px; margin-bottom: 12px; }
+.info-muted    { background: var(--surface2); color: var(--muted); }
+.info-accent   { background: rgba(56,189,248,.06); border: 1px solid rgba(56,189,248,.2); color: var(--accent); }
+.info-amarilla { background: rgba(234,179,8,.06); border: 1px solid rgba(234,179,8,.2); color: #fde047; }
+.info-ok       { background: rgba(34,197,94,.06); border: 1px solid rgba(34,197,94,.2); color: #4ade80; }
+
+/* ── Step bar (inscripción en pasos) ── */
+.step-bar { display: flex; align-items: flex-start; margin-bottom: 20px; }
+.step-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; position: relative; }
+.step-item:not(:last-child)::after {
+  content: ''; position: absolute; top: 13px; left: 58%; right: -42%;
+  height: 2px; background: var(--border); z-index: 0;
+}
+.step-item.done::after { background: var(--blanca); }
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--surface2); border: 2px solid var(--border);
+  font-size: 12px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; z-index: 1;
+}
+.step-item.active .step-num { background: var(--accent); border-color: var(--accent); color: #0f172a; }
+.step-item.done .step-num { background: var(--blanca); border-color: var(--blanca); color: #0f172a; }
+.step-label { font-size: 10px; color: var(--muted); font-weight: 600; text-align: center; }
+.step-item.active .step-label { color: var(--accent); }
+
+/* ── Upload area ── */
+.upload-area {
+  border: 2px dashed var(--border); border-radius: 8px; padding: 16px;
+  text-align: center; cursor: pointer; transition: border-color .15s; margin-bottom: 6px;
+}
+.upload-area:hover { border-color: var(--accent); }
+.upload-area .upload-icon { font-size: 24px; margin-bottom: 6px; }
+.upload-area .upload-text { font-size: 13px; color: var(--muted); }
+.upload-area.uploaded { border-color: var(--blanca); background: rgba(34,197,94,.05); }
+.upload-area.uploaded .upload-text { color: #4ade80; }
+
+/* ── Form tab panels ── */
+.form-tab { display: none; }
+.form-tab.active { display: block; }
+
+/* ── Radio item ── */
+.radio-group { display: flex; flex-direction: column; gap: 8px; }
+.radio-item {
+  display: flex; align-items: center; gap: 12px; padding: 12px;
+  background: var(--surface2); border-radius: 8px; border: 2px solid transparent;
+  cursor: pointer; transition: border-color .15s, background .15s;
+}
+.radio-item.selected { border-color: var(--accent); background: rgba(56,189,248,.06); }
+.radio-dot {
+  width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.radio-item.selected .radio-dot { border-color: var(--accent); background: var(--accent); }
+.radio-item.selected .radio-dot::after {
+  content: ''; display: block; width: 7px; height: 7px;
+  border-radius: 50%; background: #0f172a;
+}
+.radio-text { font-size: 14px; font-weight: 600; }
+.radio-sub  { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+/* ── Login ── */
+.login-wrap {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 32px 20px;
+}
+.login-box {
+  width: 100%; max-width: 360px; background: var(--surface);
+  border-radius: 14px; border: 1px solid var(--border); padding: 28px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.login-logo { font-size: 26px; font-weight: 900; color: var(--accent); text-align: center; }
+.login-sub  { font-size: 13px; color: var(--muted); text-align: center; margin-top: -6px; }
+
+/* ── Estado inscripcion ── */
+.insc-estado {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 0; border-top: 1px solid var(--border);
+}
+.insc-disc { font-size: 14px; font-weight: 700; }
+.insc-sub  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* ── Deadline countdown ── */
+.deadline {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(234,179,8,.08); border: 1px solid rgba(234,179,8,.25);
+  border-radius: 8px; padding: 10px 13px; font-size: 13px; color: #fde047;
+  margin-bottom: 12px;
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     S-00  LOGIN
+══════════════════════════════════════════ -->
+<div class="screen active" id="s-login">
+  <div class="login-wrap">
+    <div class="login-box">
+      <div class="login-logo">AtaraxiaDive</div>
+      <div class="login-sub">Portal del Atleta</div>
+      <div class="field">
+        <label>Email</label>
+        <input class="input" type="email" value="sofia.ramirez@correo.com">
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label>Contraseña</label>
+        <input class="input" type="password" value="••••••••">
+      </div>
+      <button class="btn btn-primary" onclick="go('s-portal')">INGRESAR</button>
+      <div style="text-align:center;font-size:13px;color:var(--muted)">
+        Rol activo: <strong style="color:var(--accent)">Atleta</strong>
+      </div>
+      <div style="text-align:center;font-size:13px;color:var(--muted)">
+        ¿No tenés cuenta? <span style="color:var(--accent);cursor:pointer">Registrate</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-01  PORTAL / DASHBOARD
+══════════════════════════════════════════ -->
+<div class="screen" id="s-portal">
+  <div class="shell">
+    <div class="header">
+      <span class="header-brand">AtaraxiaDive</span>
+      <div class="header-right">
+        <span style="font-size:13px;color:var(--muted)">Sofía R.</span>
+      </div>
+    </div>
+    <div class="scroll">
+
+      <!-- Hero -->
+      <div class="hero-card">
+        <div class="hero-nombre">Hola, Sofía 👋</div>
+        <div class="hero-sub">Atleta · Senior F · Club Náutico BA</div>
+      </div>
+
+      <!-- Próximo OT -->
+      <div class="sec-title">Tu próximo OT</div>
+      <div class="card tappable" onclick="go('s-mi-grilla')">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <span style="font-size:13px;color:var(--muted)">Copa Litoral 2026 · DNF</span>
+          <span class="badge badge-ejecucion">HOY</span>
+        </div>
+        <div style="font-size:36px;font-weight:900;color:var(--accent);font-variant-numeric:tabular-nums">
+          10:18
+        </div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">
+          Andarivel A · Posición #3 de 5 · AP declarado: 58.0 m
+        </div>
+        <div style="margin-top:10px">
+          <span style="font-size:12px;color:var(--accent);font-weight:600">Ver grilla completa →</span>
+        </div>
+      </div>
+
+      <!-- Mis inscripciones activas -->
+      <div class="sec-title" style="margin-top:16px">Mis inscripciones activas</div>
+
+      <div class="card tappable" onclick="go('s-mis-inscripciones')">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between">
+          <div>
+            <div class="card-title">Copa Litoral 2026</div>
+            <div class="card-meta">12–13 jun · Club Rowing Paraná</div>
+          </div>
+          <span class="badge badge-ejecucion">EN EJECUCIÓN</span>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
+          <span class="chip chip-ok">DNF ✓ AP</span>
+          <span class="chip chip-ok">STA ✓ AP</span>
+        </div>
+      </div>
+
+      <div class="card tappable" onclick="go('s-mis-inscripciones')">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between">
+          <div>
+            <div class="card-title">Open Litoral 2026</div>
+            <div class="card-meta">20 jul · Club Náutico Paraná</div>
+          </div>
+          <span class="badge badge-abierto">INSCRIPCIONES</span>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:6px">
+          <span class="chip chip-warn">DNF ⚠ Sin AP</span>
+        </div>
+      </div>
+
+      <!-- Explorar torneos -->
+      <div style="margin-top:16px">
+        <button class="btn btn-outline" onclick="go('s-torneos')">
+          🔍 Explorar torneos disponibles
+        </button>
+      </div>
+
+    </div>
+    <div class="tabbar">
+      <button class="tab-item active" onclick="go('s-portal')">
+        <span class="tab-icon">🏠</span>Inicio
+      </button>
+      <button class="tab-item" onclick="go('s-torneos')">
+        <span class="tab-icon">🏆</span>Torneos
+      </button>
+      <button class="tab-item" onclick="go('s-mis-inscripciones')">
+        <span class="tab-icon">📋</span>Mis inscr.
+      </button>
+      <button class="tab-item" onclick="go('s-mis-resultados')">
+        <span class="tab-icon">📊</span>Resultados
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-02  TORNEOS DISPONIBLES
+══════════════════════════════════════════ -->
+<div class="screen" id="s-torneos">
+  <div class="shell">
+    <div class="header">
+      <span class="header-back" onclick="go('s-portal')">←</span>
+      <span class="header-title">Torneos</span>
+    </div>
+    <div class="scroll">
+
+      <div class="sec-title">Inscripciones abiertas</div>
+
+      <div class="torneo-card" onclick="go('s-detalle-torneo')">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">
+          <span class="torneo-nombre">Open Litoral 2026</span>
+          <span class="badge badge-abierto">ABIERTO</span>
+        </div>
+        <div class="torneo-meta">
+          20 julio · Club Náutico Paraná<br>
+          DNF · STA · 3 disciplinas · Reglamento CMAS
+        </div>
+        <div style="margin-top:10px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:12px;color:var(--muted)">Cierre: 15 julio</span>
+          <span style="font-size:12px;color:var(--accent);font-weight:600">Ver detalle →</span>
+        </div>
+      </div>
+
+      <div class="torneo-card" onclick="go('s-detalle-torneo')">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">
+          <span class="torneo-nombre">Campeonato Regional NEA 2026</span>
+          <span class="badge badge-abierto">ABIERTO</span>
+        </div>
+        <div class="torneo-meta">
+          15–16 agosto · Club Náutico Corrientes<br>
+          DNF · STA · DYNB · Reglamento CMAS
+        </div>
+        <div style="margin-top:10px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:12px;color:var(--muted)">Cierre: 10 agosto</span>
+          <span style="font-size:12px;color:var(--accent);font-weight:600">Ver detalle →</span>
+        </div>
+      </div>
+
+      <div class="sec-title" style="margin-top:16px">Próximos (inscripciones no abiertas)</div>
+
+      <div class="torneo-card" style="opacity:.6;cursor:default">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">
+          <span class="torneo-nombre">Copa Litoral 2026 — 2da edición</span>
+          <span class="badge" style="background:var(--surface2);color:var(--muted)">PRÓXIMO</span>
+        </div>
+        <div class="torneo-meta">Diciembre 2026 · Fecha por confirmar</div>
+      </div>
+
+    </div>
+    <div class="tabbar">
+      <button class="tab-item" onclick="go('s-portal')">
+        <span class="tab-icon">🏠</span>Inicio
+      </button>
+      <button class="tab-item active" onclick="go('s-torneos')">
+        <span class="tab-icon">🏆</span>Torneos
+      </button>
+      <button class="tab-item" onclick="go('s-mis-inscripciones')">
+        <span class="tab-icon">📋</span>Mis inscr.
+      </button>
+      <button class="tab-item" onclick="go('s-mis-resultados')">
+        <span class="tab-icon">📊</span>Resultados
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-03  DETALLE DEL TORNEO
+══════════════════════════════════════════ -->
+<div class="screen" id="s-detalle-torneo">
+  <div class="shell">
+    <div class="header">
+      <span class="header-back" onclick="go('s-torneos')">←</span>
+      <span class="header-title">Open Litoral 2026</span>
+    </div>
+    <div class="scroll">
+
+      <div class="card" style="margin-bottom:12px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+          <div>
+            <div class="card-title" style="font-size:17px">Open Litoral 2026</div>
+            <div class="card-meta">20 julio · Club Náutico Paraná · Paraná, Entre Ríos</div>
+          </div>
+          <span class="badge badge-abierto">ABIERTO</span>
+        </div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">
+          Reglamento CMAS Apnea Indoor v2022/01 · Cierre de inscripciones: <strong style="color:var(--text)">15 julio</strong>
+        </div>
+      </div>
+
+      <div class="sec-title">Disciplinas disponibles</div>
+
+      <div class="card">
+        <div class="disc-row" style="border-top:none;padding-top:0">
+          <div class="disc-icon">🤽</div>
+          <div class="disc-info">
+            <div class="disc-name">DNF — Dinámica sin aletas</div>
+            <div class="disc-sub">20 jul · 10:00 hs · Andariveles A/B · Intervalo 9 min</div>
+            <div class="disc-sub">Categorías: Senior M/F · Junior M/F · Master M</div>
+          </div>
+        </div>
+        <div class="disc-row">
+          <div class="disc-icon">🧘</div>
+          <div class="disc-info">
+            <div class="disc-name">STA — Apnea estática</div>
+            <div class="disc-sub">20 jul · 15:00 hs · Andarivel A · Intervalo 5 min</div>
+            <div class="disc-sub">Categorías: Senior M/F · Master M</div>
+          </div>
+        </div>
+        <div class="disc-row">
+          <div class="disc-icon">🐬</div>
+          <div class="disc-info">
+            <div class="disc-name">DYNB — Dinámica con bialetas</div>
+            <div class="disc-sub">21 jul · 10:00 hs · Andariveles A/B · Intervalo 9 min</div>
+            <div class="disc-sub">Categorías: Senior M/F · Junior M/F</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:8px">
+        <button class="btn btn-primary" onclick="go('s-inscribirse')">
+          Inscribirme en este torneo
+        </button>
+      </div>
+
+    </div>
+    <div class="tabbar">
+      <button class="tab-item" onclick="go('s-portal')"><span class="tab-icon">🏠</span>Inicio</button>
+      <button class="tab-item active" onclick="go('s-torneos')"><span class="tab-icon">🏆</span>Torneos</button>
+      <button class="tab-item" onclick="go('s-mis-inscripciones')"><span class="tab-icon">📋</span>Mis inscr.</button>
+      <button class="tab-item" onclick="go('s-mis-resultados')"><span class="tab-icon">📊</span>Resultados</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-04  INSCRIBIRSE — 3 PESTAÑAS
+══════════════════════════════════════════ -->
+<div class="screen" id="s-inscribirse">
+  <div class="shell">
+    <div class="header">
+      <span class="header-back" onclick="go('s-detalle-torneo')">←</span>
+      <span class="header-title">Inscribirme</span>
+    </div>
+    <div class="scroll">
+
+      <!-- Step bar -->
+      <div class="step-bar">
+        <div class="step-item active" id="step-1">
+          <div class="step-num">1</div>
+          <div class="step-label">Personales</div>
+        </div>
+        <div class="step-item" id="step-2">
+          <div class="step-num">2</div>
+          <div class="step-label">Competencia</div>
+        </div>
+        <div class="step-item" id="step-3">
+          <div class="step-num">3</div>
+          <div class="step-label">Requisitos</div>
+        </div>
+      </div>
+
+      <!-- ─── PESTAÑA 1: Datos Personales ─── -->
+      <div class="form-tab active" id="tab-1">
+
+        <div class="info-accent info-box">
+          Verificá tus datos. Están pre-cargados de tu perfil y figurarán en la grilla oficial.
+        </div>
+
+        <div class="field">
+          <label>Correo</label>
+          <input class="input" type="email" value="sofia.ramirez@correo.com" readonly style="opacity:.6">
+        </div>
+        <div class="field">
+          <label>Nombre y Apellido *</label>
+          <input class="input" type="text" value="Sofía Ramírez">
+        </div>
+        <div class="field">
+          <label>Fecha de Nacimiento *</label>
+          <input class="input" type="date" value="1998-03-15">
+        </div>
+        <div class="field">
+          <label>Género *</label>
+          <div class="radio-group">
+            <div class="radio-item selected" onclick="selectRadio(this,'genero')">
+              <div class="radio-dot"></div>
+              <div><div class="radio-text">Mujer</div></div>
+            </div>
+            <div class="radio-item" onclick="selectRadio(this,'genero')">
+              <div class="radio-dot"></div>
+              <div><div class="radio-text">Hombre</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Documento (Tipo: Número) *</label>
+          <div style="display:flex;gap:8px">
+            <select class="input" style="flex:0 0 100px">
+              <option selected>DNI</option>
+              <option>PASAPORTE</option>
+              <option>CI</option>
+            </select>
+            <input class="input" type="text" value="38.742.910" style="flex:1">
+          </div>
+        </div>
+        <div class="field">
+          <label>Teléfono *</label>
+          <input class="input" type="tel" value="+54 9 343 4870001">
+        </div>
+
+        <div style="margin-top:4px">
+          <button class="btn btn-primary" onclick="goTab(2)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- ─── PESTAÑA 2: Datos de la Competencia ─── -->
+      <div class="form-tab" id="tab-2">
+
+        <div class="sec-title">Open Litoral 2026 · 20–21 jul</div>
+
+        <div class="field">
+          <label>Disciplinas en las que participaré *</label>
+          <div style="display:flex;flex-direction:column;gap:8px">
+
+            <div class="radio-item selected" id="disc-dnf" onclick="toggleDiscInsc('dnf')">
+              <div class="disc-checkbox checked" style="width:22px;height:22px;border-radius:6px;border:2px solid var(--accent);background:var(--accent);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:#0f172a">✓</div>
+              <div>
+                <div class="radio-text">🤽 DNF — Dinámica sin aletas</div>
+                <div class="radio-sub">20 jul · 10:00 hs · And. A/B</div>
+              </div>
+            </div>
+
+            <div class="radio-item" id="disc-sta" onclick="toggleDiscInsc('sta')">
+              <div class="disc-checkbox" style="width:22px;height:22px;border-radius:6px;border:2px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px"></div>
+              <div>
+                <div class="radio-text">🧘 STA — Apnea estática</div>
+                <div class="radio-sub">20 jul · 15:00 hs · And. A</div>
+              </div>
+            </div>
+
+            <div class="radio-item" id="disc-dynb" onclick="toggleDiscInsc('dynb')">
+              <div class="disc-checkbox" style="width:22px;height:22px;border-radius:6px;border:2px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px"></div>
+              <div>
+                <div class="radio-text">🐬 DYNB — Dinámica con bialetas</div>
+                <div class="radio-sub">21 jul · 10:00 hs · And. A/B</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Categoría *</label>
+          <div class="info-muted info-box" style="margin-bottom:8px;font-size:12px">
+            📅 Calculada automáticamente desde tu fecha de nacimiento. Revisá antes de enviar.
+          </div>
+          <div class="radio-group">
+            <div class="radio-item" onclick="selectRadio(this,'cat')">
+              <div class="radio-dot"></div>
+              <div><div class="radio-text">Junior</div><div class="radio-sub">Hasta 17 años</div></div>
+            </div>
+            <div class="radio-item selected" onclick="selectRadio(this,'cat')">
+              <div class="radio-dot"></div>
+              <div><div class="radio-text">Senior</div><div class="radio-sub">Desde 18 hasta 49 años</div></div>
+            </div>
+            <div class="radio-item" onclick="selectRadio(this,'cat')">
+              <div class="radio-dot"></div>
+              <div><div class="radio-text">Master</div><div class="radio-sub">Desde 50 años</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Nº Brevet FAAS <span style="color:var(--muted);text-transform:none;letter-spacing:0;font-weight:400">(opcional)</span></label>
+          <input class="input" type="text" placeholder="Ej: AR-2024-0412">
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="btn btn-ghost" onclick="goTab(1)" style="flex:1">← Anterior</button>
+          <button class="btn btn-primary" onclick="goTab(3)" style="flex:2">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- ─── PESTAÑA 3: Requisitos ─── -->
+      <div class="form-tab" id="tab-3">
+
+        <div class="info-amarilla info-box">
+          ⚠️ Ambos documentos son obligatorios. Tu inscripción quedará <strong>pendiente de verificación</strong> hasta que el organizador los apruebe.
+        </div>
+
+        <!-- Certificado médico -->
+        <div class="sec-title">Certificado Médico *</div>
+        <div class="card" style="margin-bottom:14px">
+          <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px">
+            Completar el formulario médico oficial y adjuntarlo firmado. Podés descargar el formulario desde el sitio del torneo.
+          </div>
+          <div class="upload-area uploaded" onclick="alert('Simulación: selector de archivo')">
+            <div class="upload-icon">✅</div>
+            <div class="upload-text">certificado_medico_sofia.pdf · 128 KB</div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Formatos: PDF, JPG, PNG · Máx. 5 MB</div>
+        </div>
+
+        <!-- Comprobante de pago -->
+        <div class="sec-title">Comprobante de Pago *</div>
+        <div class="card" style="margin-bottom:14px">
+          <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px">
+            Transferir a:<br>
+            <strong style="color:var(--text)">CVU:</strong> 0000003100002674543142<br>
+            <strong style="color:var(--text)">Referencia:</strong> nombre completo + torneo
+            <div style="margin-top:8px;padding:10px;background:var(--surface2);border-radius:8px;font-size:12px;line-height:1.8">
+              💰 Hasta el <strong style="color:var(--text)">13 jul</strong> → <span style="color:var(--blanca);font-weight:700">$80.000</span><br>
+              💰 Del 14 al 18 jul → <span style="color:var(--amarilla);font-weight:700">$95.000</span>
+            </div>
+          </div>
+          <div class="upload-area" onclick="alert('Simulación: selector de archivo')">
+            <div class="upload-icon">📎</div>
+            <div class="upload-text">Adjuntar comprobante de transferencia</div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Formatos: PDF, JPG, PNG · Máx. 5 MB</div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="btn btn-ghost" onclick="goTab(2)" style="flex:1">← Anterior</button>
+          <button class="btn btn-primary" onclick="go('s-mis-inscripciones')" style="flex:2">Enviar inscripción</button>
+        </div>
+        <div style="margin-top:8px">
+          <button class="btn btn-ghost" onclick="go('s-detalle-torneo')">Cancelar</button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-05  MIS INSCRIPCIONES
+══════════════════════════════════════════ -->
+<div class="screen" id="s-mis-inscripciones">
+  <div class="shell">
+    <div class="header">
+      <span class="header-back" onclick="go('s-portal')">←</span>
+      <span class="header-title">Mis inscripciones</span>
+    </div>
+    <div class="scroll">
+
+      <!-- Copa Litoral — en ejecución hoy -->
+      <div class="sec-title">En ejecución</div>
+      <div class="card" style="margin-bottom:10px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+          <div>
+            <div class="card-title">Copa Litoral 2026</div>
+            <div class="card-meta">12–13 jun · Club Rowing Paraná</div>
+          </div>
+          <span class="badge badge-ejecucion">HOY</span>
+        </div>
+
+        <div class="insc-estado">
+          <div>
+            <div class="insc-disc">🤽 DNF</div>
+            <div class="insc-sub">AP: 58.0 m · OT: 10:18 · And. A</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+            <span class="chip chip-lock">AP cerrado</span>
+            <button class="btn btn-sm btn-outline" onclick="go('s-mi-grilla')">Ver grilla</button>
+          </div>
+        </div>
+
+        <div class="insc-estado">
+          <div>
+            <div class="insc-disc">🧘 STA</div>
+            <div class="insc-sub">AP: 3:45 · OT: 10:00 · And. A · 13 jun</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+            <span class="chip chip-lock">AP cerrado</span>
+            <button class="btn btn-sm btn-outline" onclick="go('s-mi-grilla')">Ver grilla</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Open Litoral — inscripciones abiertas -->
+      <div class="sec-title" style="margin-top:8px">Inscripciones abiertas</div>
+      <div class="card" style="margin-bottom:10px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+          <div>
+            <div class="card-title">Open Litoral 2026</div>
+            <div class="card-meta">20 jul · Club Náutico Paraná</div>
+          </div>
+          <span class="badge badge-abierto">ABIERTO</span>
+        </div>
+
+        <div class="insc-estado">
+          <div>
+            <div class="insc-disc">🤽 DNF</div>
+            <div class="insc-sub" style="color:var(--amarilla)">⚠ Sin AP declarado</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+            <span class="chip chip-warn">AP pendiente</span>
+            <button class="btn btn-sm btn-primary" onclick="go('s-anunciar-ap')">Declarar AP</button>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+          <div class="deadline">
+            ⏰ Cierre de anuncios: <strong style="margin-left:4px">15 julio · 23:59</strong>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="tabbar">
+      <button class="tab-item" onclick="go('s-portal')"><span class="tab-icon">🏠</span>Inicio</button>
+      <button class="tab-item" onclick="go('s-torneos')"><span class="tab-icon">🏆</span>Torneos</button>
+      <button class="tab-item active" onclick="go('s-mis-inscripciones')"><span class="tab-icon">📋</span>Mis inscr.</button>
+      <button class="tab-item" onclick="go('s-mis-resultados')"><span class="tab-icon">📊</span>Resultados</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-06  DECLARAR / MODIFICAR AP
+══════════════════════════════════════════ -->
+<div class="screen" id="s-anunciar-ap">
+  <div class="shell">
+    <div class="header">
+      <span class="header-back" onclick="go('s-mis-inscripciones')">←</span>
+      <span class="header-title">Declarar AP</span>
+    </div>
+    <div class="scroll">
+
+      <div class="info-accent info-box">
+        Declarás tu <strong>Announced Performance</strong> antes de competir.
+        Podés modificarlo hasta el cierre de anuncios.
+      </div>
+
+      <div class="card" style="margin-bottom:10px">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:12px">
+          Open Litoral 2026 · DNF · 20 jul · 10:00 hs
+        </div>
+
+        <div class="field">
+          <label>AP — Distancia anunciada *</label>
+          <div class="ap-field" style="gap:10px">
+            <input class="ap-input-big" style="width:100px;font-size:28px;height:60px"
+                   value="" placeholder="—" id="ap-metros">
+            <span class="ap-unit" style="font-size:16px">metros</span>
+          </div>
+        </div>
+
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-top:4px">
+          El AP es la distancia que declarás alcanzar. Si realizás exactamente tu AP o más, obtenés tarjeta blanca. Si realizás menos, puede resultar en tarjeta amarilla según el reglamento.
+        </div>
+      </div>
+
+      <div class="deadline">
+        ⏰ Cierre de anuncios: <strong style="margin-left:4px">15 julio · 23:59</strong>
+      </div>
+
+      <button class="btn btn-primary" onclick="go('s-mis-inscripciones')">
+        Guardar AP
+      </button>
+      <div style="margin-top:8px">
+        <button class="btn btn-ghost" onclick="go('s-mis-inscripciones')">Cancelar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-07  MI GRILLA (posición en la competencia)
+══════════════════════════════════════════ -->
+<div class="screen" id="s-mi-grilla">
+  <div class="shell">
+    <div class="header">
+      <span class="header-back" onclick="go('s-portal')">←</span>
+      <span class="header-title">Mi grilla — DNF</span>
+    </div>
+    <div class="scroll-nopad">
+
+      <!-- Mi OT destacado -->
+      <div style="padding:16px">
+        <div class="ot-hero">
+          <div class="ot-label">Tu Tiempo Oficial</div>
+          <div class="ot-time">10:18</div>
+          <div class="ot-sub">Andarivel A · Posición #3 · Copa Litoral 2026</div>
+          <div style="margin-top:10px;display:flex;gap:8px;justify-content:center">
+            <span class="chip chip-ok">AP: 58.0 m</span>
+            <span class="chip chip-open">Pendiente</span>
+          </div>
+        </div>
+
+        <div class="info-accent info-box">
+          Tenés una ventana de <strong>30 segundos</strong> desde tu OT para iniciar.
+          Comenzá entre las 10:18:00 y las 10:18:30.
+        </div>
+      </div>
+
+      <!-- Lista grilla completa -->
+      <div style="padding:0 16px 6px">
+        <div class="sec-title">Grilla completa — DNF · 12 jun</div>
+      </div>
+
+      <div class="grilla-row done">
+        <div class="g-pos">1</div>
+        <div class="g-name">Ramírez, Sofía <span style="font-size:10px;color:var(--blanca);font-weight:700;background:rgba(34,197,94,.15);border-radius:4px;padding:1px 5px;margin-left:4px">TÚ</span></div>
+        <div style="flex:1"></div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+          <span class="g-ot">10:00 · A</span>
+          <span class="chip chip-ok" style="font-size:10px">BLANCA · 56m</span>
+        </div>
+      </div>
+
+      <div style="padding:8px 16px;background:rgba(34,197,94,.04);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+        <div style="font-size:11px;color:var(--blanca);font-weight:700;text-align:center">
+          ✓ Ya competiste · Ver resultado →
+        </div>
+      </div>
+
+      <div class="grilla-row done">
+        <div class="g-pos">1</div>
+        <div class="g-name">Ramírez, Sofía</div>
+        <div style="flex:1"></div>
+        <div class="g-ot">10:00 · A</div>
+      </div>
+      <div class="grilla-row done">
+        <div class="g-pos">2</div>
+        <div class="g-name">Vega, Claudia</div>
+        <div style="flex:1"></div>
+        <div class="g-ot">10:09 · B</div>
+      </div>
+      <div class="grilla-row yo">
+        <div class="g-pos" style="color:var(--accent)">3</div>
+        <div class="g-name">
+          Ramírez, Sofía
+          <span class="yo-label">TÚ</span>
+        </div>
+        <div style="flex:1"></div>
+        <div style="text-align:right">
+          <div class="g-ot" style="color:var(--accent);font-weight:800">10:18 · A</div>
+          <div style="font-size:11px;color:var(--muted)">AP 58.0 m</div>
+        </div>
+      </div>
+      <div class="grilla-row">
+        <div class="g-pos">4</div>
+        <div class="g-name">Torres, Iván</div>
+        <div style="flex:1"></div>
+        <div class="g-ot">10:27 · B</div>
+      </div>
+      <div class="grilla-row">
+        <div class="g-pos">5</div>
+        <div class="g-name">Gómez, Federico</div>
+        <div style="flex:1"></div>
+        <div class="g-ot">10:36 · A</div>
+      </div>
+
+      <div style="padding:16px;margin-top:4px">
+        <button class="btn btn-outline btn-sm" style="width:100%" onclick="go('s-mis-resultados')">
+          Ver mis resultados →
+        </button>
+      </div>
+
+    </div>
+    <div class="tabbar">
+      <button class="tab-item" onclick="go('s-portal')"><span class="tab-icon">🏠</span>Inicio</button>
+      <button class="tab-item" onclick="go('s-torneos')"><span class="tab-icon">🏆</span>Torneos</button>
+      <button class="tab-item active" onclick="go('s-mis-inscripciones')"><span class="tab-icon">📋</span>Mis inscr.</button>
+      <button class="tab-item" onclick="go('s-mis-resultados')"><span class="tab-icon">📊</span>Resultados</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S-08  MIS RESULTADOS
+══════════════════════════════════════════ -->
+<div class="screen" id="s-mis-resultados">
+  <div class="shell">
+    <div class="header">
+      <span class="header-back" onclick="go('s-portal')">←</span>
+      <span class="header-title">Mis resultados</span>
+    </div>
+    <div class="scroll">
+
+      <!-- Torneo activo -->
+      <div class="sec-title">Copa Litoral 2026</div>
+
+      <!-- DNF — resultado publicado -->
+      <div class="result-hero blanca" style="margin-bottom:10px">
+        <div class="result-tarjeta" style="color:#4ade80">⬜ TARJETA BLANCA · DNF</div>
+        <div class="result-dist" style="color:#4ade80">56<span class="result-unit">m</span></div>
+        <div class="result-pos">AP declarado: 58.0 m · Diferencia: −2.0 m</div>
+        <div style="margin-top:8px">
+          <span class="chip chip-ok">✓ Performance válida</span>
+        </div>
+      </div>
+
+      <!-- Ranking DNF -->
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:16px">
+        <div style="padding:12px 16px;background:var(--surface2)">
+          <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px">
+            Ranking DNF — Junior F
+          </div>
+        </div>
+        <div class="rank-row">
+          <div class="r-pos gold">1</div>
+          <div class="r-name">Morales, Lucía</div>
+          <div class="r-dist">62.0 m</div>
+          <span class="chip chip-ok" style="font-size:10px">BLANCA</span>
+        </div>
+        <div class="rank-row yo">
+          <div class="r-pos silver">2</div>
+          <div class="r-name">
+            Ramírez, Sofía
+            <span style="font-size:10px;color:var(--accent);font-weight:700;
+                         background:rgba(56,189,248,.15);border-radius:4px;
+                         padding:1px 5px;margin-left:4px">TÚ</span>
+          </div>
+          <div class="r-dist">56.0 m</div>
+          <span class="chip chip-ok" style="font-size:10px">BLANCA</span>
+        </div>
+        <div class="rank-row">
+          <div class="r-pos bronze">3</div>
+          <div class="r-name">Vega, Claudia</div>
+          <div class="r-dist">54.5 m</div>
+          <span class="chip chip-ok" style="font-size:10px">BLANCA</span>
+        </div>
+        <div style="padding:10px 16px;font-size:12px;color:var(--muted);border-top:1px solid var(--border)">
+          Ranking parcial · 2 de 5 atletas completados
+        </div>
+      </div>
+
+      <!-- STA — pendiente -->
+      <div class="card" style="margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="font-size:28px">🧘</div>
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:800">STA — 13 jun</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:2px">OT: 10:00 · AP: 3:45 · And. A</div>
+          </div>
+          <span class="chip chip-pend">Pendiente</span>
+        </div>
+        <div class="info-muted info-box" style="margin-top:12px;margin-bottom:0">
+          Tu resultado estará disponible después de competir el 13 de junio.
+        </div>
+      </div>
+
+      <!-- Overall -->
+      <div class="sec-title">Ranking general (Overall)</div>
+      <div class="card">
+        <div class="empty" style="padding:24px 0">
+          <div style="font-size:28px;margin-bottom:8px">🏆</div>
+          <div style="font-size:14px;color:var(--muted)">
+            Disponible al finalizar todas las disciplinas del torneo
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="tabbar">
+      <button class="tab-item" onclick="go('s-portal')"><span class="tab-icon">🏠</span>Inicio</button>
+      <button class="tab-item" onclick="go('s-torneos')"><span class="tab-icon">🏆</span>Torneos</button>
+      <button class="tab-item" onclick="go('s-mis-inscripciones')"><span class="tab-icon">📋</span>Mis inscr.</button>
+      <button class="tab-item active" onclick="go('s-mis-resultados')"><span class="tab-icon">📊</span>Resultados</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const t = document.getElementById(id);
+  if (t) { t.classList.add('active'); window.scrollTo(0, 0); }
+}
+
+/* Navegar entre pestañas del formulario de inscripción */
+function goTab(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('tab-' + i).classList.toggle('active', i === n);
+    const si = document.getElementById('step-' + i);
+    si.classList.remove('active', 'done');
+    if (i === n) si.classList.add('active');
+    else if (i < n) si.classList.add('done');
+  });
+  window.scrollTo(0, 0);
+}
+
+/* Toggle selección de disciplina en formulario de inscripción */
+function toggleDiscInsc(disc) {
+  const el = document.getElementById('disc-' + disc);
+  const cb = el.querySelector('.disc-checkbox');
+  const isChecked = cb.classList.contains('checked');
+  if (isChecked) {
+    cb.classList.remove('checked');
+    cb.textContent = '';
+    cb.style.border = '2px solid var(--border)';
+    cb.style.background = 'var(--surface)';
+    cb.style.color = '';
+    el.classList.remove('selected');
+  } else {
+    cb.classList.add('checked');
+    cb.textContent = '✓';
+    cb.style.border = '2px solid var(--accent)';
+    cb.style.background = 'var(--accent)';
+    cb.style.color = '#0f172a';
+    el.classList.add('selected');
+  }
+}
+
+/* Selección de radio (género, categoría) */
+function selectRadio(el, name) {
+  el.closest('.radio-group').querySelectorAll('.radio-item').forEach(r => r.classList.remove('selected'));
+  el.classList.add('selected');
+}
+</script>
+</body>
+</html>

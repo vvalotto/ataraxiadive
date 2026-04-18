@@ -44,4 +44,4 @@ Feature: US-1.4.2 — Flujo Completo E2E: AP → Tarjeta
   Scenario: Read Models consistentes con el Event Store al final del flujo
     Given el flujo completo de las 5 performances fue ejecutado
     When el juez consulta GET /competencia/comp-e2e-test/progreso
-    Then ejecutadas es 4 y total es 5 y dns es 1
+    Then ejecutadas es 3 y total es 5 y dns es 1

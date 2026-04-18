@@ -242,10 +242,13 @@ duros y el Event Sourcing principal. Todo lo demás sirve a Competencia.
 | RP | Realized Performance — marca efectivamente lograda |
 | OT | Official Top — momento de inicio de la performance |
 | DNS | Did Not Start — atleta no se presentó al OT |
-| Tarjeta blanca | Performance válida |
-| Tarjeta amarilla | Penalización parcial (con deducción) |
-| Tarjeta roja | Descalificación |
-| Black-out | Pérdida de conciencia → tarjeta roja automática |
+| Tarjeta blanca | Performance válida sin infracciones |
+| Tarjeta Blanca con Penalizaciones | Performance válida con infracciones técnicas; RP final = RP medido − Σ deducciones (N × 3m); penalizaciones acumulables (ADR-014) |
+| Tarjeta amarilla | Estado de revisión pendiente → se cierra como Blanca, Blanca con Penalizaciones o Roja |
+| Tarjeta roja | Descalificación — requiere `MotivoDQ` obligatorio (INV-P-11) |
+| MotivoDQ | Catálogo formal de causas de descalificación: BKO_SUPERFICIE, BKO_SUBACUATICO, NO_PROTOCOLO, INFRACCION_TECNICA, NO_INICIO_VENTANA, SALIDA_FALSO |
+| Black-out | Pérdida de conciencia → tarjeta roja automática con `MotivoDQ.BKO_SUPERFICIE` o `BKO_SUBACUATICO` |
+| Variante SPE | Una de las cuatro variantes de sincronizado: SPE_2X50, SPE_4X50, SPE_8X50, SPE_16X50 — cada una genera grilla y ranking independientes; orden de grilla: AP descendente (mayor primero) |
 | DoD | Definition of Done — criterio binario de cierre de incremento |
 | US-IEDD | User Story con precondición, postcondición e invariantes formales |
 
@@ -344,7 +347,7 @@ Resumen operativo (ver WORKFLOW-DESARROLLO.md para el detalle completo):
 git config core.hooksPath .githooks   # activa el pre-push hook de DesignReviewer
 
 # Entorno de desarrollo (sin Docker — ADR-010)
-uv run fastapi dev src/app.py
+uv run uvicorn src.app:app --reload --env-file .env
 
 # Tests
 pytest tests/unit/
@@ -415,7 +418,7 @@ Ver `docs/plans/sp-adj-02-code/PLAN-SP-ADJ-02-code.md` y `.work/revision-consist
 
 ---
 
-**SP3 — El Torneo — quality gates completados (2026-04-04) — pendiente merge/tag**
+**SP3 — El Torneo — ✅ COMPLETO (2026-04-04) — tag `v0.4.0`**
 
 | Artefacto | Estado | Detalle |
 |-----------|--------|---------|
@@ -438,7 +441,30 @@ Ver `docs/plans/sp-adj-02-code/PLAN-SP-ADJ-02-code.md` y `.work/revision-consist
 - `identidad`/`shared` D↓ (mejorando): esperado, BCs CRUD estables por diseño
 - `registro` D=0.56 — (estable): sin cambios previstos en SP4
 
-**Próximo subproyecto:** SP-ADJ-05 (ajuste documental/metodológico) → SP4 (La Plataforma)
+**SP-ADJ-05 — Ajuste Documental/Metodológico Post-BL-003 — ⏳ Diferido**
+
+Plan: `docs/plans/sp-adj-05/PLAN-SP-ADJ-05.md` — 5 US de poda metodológica (HITO-14).
+Diferido: SP4 se inició directamente después del tag `v0.4.0`. Se ejecutará como SP-ADJ-06 post-BL-004 si el scope sigue siendo relevante.
+
+---
+
+**SP4 — La Plataforma — ⏳ En progreso (BL-004 pendiente)**
+
+| Incremento | Descripción | Estado |
+|-----------|-------------|--------|
+| INC-4.0 — UX Design | Artefactos de diseño — flujos, wireframes, prototipos (juez, organizador, atleta), decisiones frontend | ✅ 2026-04-08 — PR #64 |
+| INC-4.1 — Correcciones dominio CMAS/FAAS | 8 US: motivos DQ, tarjeta blanca con penalizaciones, subdisciplinas SPE, orden grilla + 4 US técnicas (DesignReviewer) | ✅ 2026-04-08 — PR #65 |
+| INC-4.2 — Fundación Frontend | Vite 6 + React 19 + TypeScript strict + Tailwind v4 + PWA · autenticación JWT + rutas por rol | ✅ 2026-04-11 — PRs #67, #68 · DesignReviewer 0 CRITICAL, 142 WARNING |
+| INC-4.3 — Interfaz del Juez | 5 US: grilla de disciplinas, flujo 6 pasos, casos alternativos, tarjeta amarilla, adaptación STA · UAT con datos reales BA 2025 | ✅ 2026-04-12 — PRs #69–#75 · DesignReviewer 0 CRITICAL, 158 WARNING |
+| INC-4.4 — Offline-first | Service Worker + IndexedDB + Background Sync | ⏳ Pendiente |
+| INC-4.5 — BC Notificaciones | Aggregate Notificacion + email real + políticas P-10/P-11 | ⏳ Pendiente |
+| INC-4.6 — Auditoría y Exportación | Audit log UI + hash SHA-256 + exportación CSV/JSON | ⏳ Pendiente |
+
+| HITO | Descripción | Estado |
+|------|-------------|--------|
+| HITO-18 | UX design como incremento formal del SP — INC-4.0 | ✅ `docs/contexto/HITO-18-*.md` |
+| HITO-19 | Ajustes técnicos del DesignReviewer como US-IEDD dentro del INC (no como SP-ADJ) | ✅ `docs/contexto/HITO-19-*.md` |
+| HITO-20 | Invariantes de dominio que no cubren todas las variantes del deporte (STA, SPE) | ✅ `docs/contexto/HITO-20-*.md` |
 
 ---
 
@@ -506,6 +532,7 @@ Los dos no son excluyentes: un aprendizaje puede vivir en ambos si tiene valor a
 
 ---
 
-*Última actualización: 2026-03-29 — §12 WORKFLOW-DESARROLLO.md como fuente autoritativa del workflow; §11 UAT post-SP agregado a quality gates*
+*Última actualización: 2026-04-13 — §14 actualizado: SP3 ✅ cerrado v0.4.0; SP-ADJ-05 diferido; SP4 en progreso (INC-4.0..4.3 ✅, HITOs 18–20)*
+*2026-03-29 — §12 WORKFLOW-DESARROLLO.md como fuente autoritativa del workflow; §11 UAT post-SP agregado a quality gates*
 *2026-03-28 — SP-ADJ-02-doc: §14 actualizado (SP1+SP2+ADJ), §9 patrón SP-ADJ, §5 HITOs*
 *Mantenido por: Claude Cowork (decisiones estratégicas) + Claude Code (implementación)*

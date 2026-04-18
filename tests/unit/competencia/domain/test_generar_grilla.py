@@ -25,6 +25,8 @@ OT_INICIO = datetime(2026, 1, 1, 10, 0, 0, tzinfo=timezone.utc)
 
 _DESC_STA = DisciplinaDescriptor.para(Disciplina.STA)
 _DESC_DNF = DisciplinaDescriptor.para(Disciplina.DNF)
+_DESC_SPE_4X50 = DisciplinaDescriptor.para(Disciplina.SPE_4X50)
+_DESC_SPE_2X50 = DisciplinaDescriptor.para(Disciplina.SPE_2X50)
 
 
 def _make_competencia(disciplina: Disciplina = Disciplina.STA) -> Competencia:
@@ -49,6 +51,10 @@ def _sta(atleta_id: str, segundos: str) -> PerformancesAPData:
 
 def _dnf(atleta_id: str, metros: str) -> PerformancesAPData:
     return _perf(atleta_id, metros, UnidadMedida.Metros)
+
+
+def _spe(atleta_id: str, segundos: str) -> PerformancesAPData:
+    return _perf(atleta_id, segundos, UnidadMedida.Segundos)
 
 
 A001 = "00000000-0000-0000-0000-000000000011"
@@ -150,6 +156,30 @@ class TestOrdenamientoDNF:
         c.generar_grilla(OT_INICIO, performances, _DESC_DNF)
         atletas_orden = [str(e.atleta_id) for e in c.grilla]
         assert atletas_orden == [A002, A001, A003]
+
+
+class TestOrdenamientoSPE:
+    def test_spe_4x50_orden_mayor_a_menor_por_ap(self) -> None:
+        c = _make_competencia(Disciplina.SPE_4X50)
+        performances = [
+            _spe(A001, "180"),
+            _spe(A002, "210"),
+            _spe(A003, "195"),
+        ]
+        c.generar_grilla(OT_INICIO, performances, _DESC_SPE_4X50)
+        atletas_orden = [str(e.atleta_id) for e in c.grilla]
+        assert atletas_orden == [A002, A003, A001]
+
+    def test_spe_2x50_orden_mayor_a_menor_por_ap(self) -> None:
+        c = _make_competencia(Disciplina.SPE_2X50)
+        performances = [
+            _spe(A001, "70"),
+            _spe(A002, "90"),
+            _spe(A003, "80"),
+        ]
+        c.generar_grilla(OT_INICIO, performances, _DESC_SPE_2X50)
+        atletas_orden = [str(e.atleta_id) for e in c.grilla]
+        assert atletas_orden == [A002, A003, A001]
 
 
 # ── Evento generado ───────────────────────────────────────────────────────────

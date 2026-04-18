@@ -21,11 +21,14 @@ from competencia.application.commands.registrar_resultado import (
 )
 from competencia.domain.aggregates.performance import Performance
 from competencia.domain.exceptions import (
+    DistanciaBlackoutNoAplica,
     EstadoInvalidoParaAsignarTarjeta,
+    MotivoDQObligatorio,
     MotivoObligatorio,
 )
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
+from competencia.domain.value_objects.motivo_dq import MotivoDQ
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
@@ -178,7 +181,7 @@ async def test_tarjeta_asignada_payload_correcto(
     tarjeta_handler: AsignarTarjetaHandler,
     event_store: SQLiteEventStore,
 ) -> None:
-    """El payload de TarjetaAsignada contiene tipo, motivo y asignadaPor correctos."""
+    """El payload de TarjetaAsignada contiene tipo, motivo_dq y asignadaPor correctos."""
     cid = uuid4()
     pid = uuid4()
 
@@ -193,7 +196,7 @@ async def test_tarjeta_asignada_payload_correcto(
             disciplina=Disciplina.DNF,
             tipo=TipoTarjeta.Roja,
             asignada_por="juez-007",
-            motivo="tiempo excedido",
+            motivo_dq=MotivoDQ.PROTOCOLO_SUPERFICIE,
         )
     )
 
@@ -201,7 +204,8 @@ async def test_tarjeta_asignada_payload_correcto(
     events = await event_store.load(stream_id)
     payload = events[3]["payload"]
     assert payload["tipo"] == "Roja"
-    assert payload["motivo"] == "tiempo excedido"
+    assert payload["motivo_dq_codigo"] == MotivoDQ.PROTOCOLO_SUPERFICIE.value
+    assert payload["motivo_texto"] is None
     assert payload["asignada_por"] == "juez-007"
 
 
@@ -257,7 +261,7 @@ async def test_tarjeta_amarilla_sin_motivo_lanza_error(
     resultado_handler: RegistrarResultadoHandler,
     tarjeta_handler: AsignarTarjetaHandler,
 ) -> None:
-    """INV-P-11: MotivoObligatorio si tarjeta Amarilla sin motivo."""
+    """INV-P-11b: MotivoObligatorio si tarjeta Amarilla sin motivo."""
     cid = uuid4()
     pid = uuid4()
 
@@ -281,16 +285,14 @@ async def test_tarjeta_amarilla_sin_motivo_lanza_error(
 
 
 @pytest.mark.asyncio
-async def test_blackout_persiste_y_reconstitye_distancia(
+async def test_bko_persiste_y_reconstituye_distancia(
     registrar_ap_handler: RegistrarAPHandler,
     llamar_handler: LlamarAtletaHandler,
     resultado_handler: RegistrarResultadoHandler,
     tarjeta_handler: AsignarTarjetaHandler,
     event_store: SQLiteEventStore,
 ) -> None:
-    """Black-out con distancia se persiste en SQLite y se reconstituye correctamente."""
-    from competencia.domain.aggregates.performance import DistanciaBlackoutObligatoria
-
+    """BKO con distancia se persiste en SQLite y se reconstituye correctamente."""
     cid = uuid4()
     pid = uuid4()
 
@@ -304,7 +306,7 @@ async def test_blackout_persiste_y_reconstitye_distancia(
             disciplina=Disciplina.DNF,
             tipo=TipoTarjeta.Roja,
             asignada_por="juez-001",
-            motivo="black-out",
+            motivo_dq=MotivoDQ.BKO_SUPERFICIE,
             distancia_blackout=Decimal("45.5"),
         )
     )
@@ -316,6 +318,7 @@ async def test_blackout_persiste_y_reconstitye_distancia(
     assert performance.estado == EstadoPerformance.Ejecutada
     assert performance.distancia_blackout == Decimal("45.5")
     assert performance.tarjeta == TipoTarjeta.Roja
+    assert performance.motivo_dq == MotivoDQ.BKO_SUPERFICIE
 
 
 @pytest.mark.asyncio
@@ -325,7 +328,7 @@ async def test_blackout_sin_distancia_rechazado_en_integracion(
     resultado_handler: RegistrarResultadoHandler,
     tarjeta_handler: AsignarTarjetaHandler,
 ) -> None:
-    """Black-out sin distancia es rechazado — no persiste ningún evento extra."""
+    """BKO sin distancia es rechazado — no persiste ningún evento extra."""
     from competencia.domain.aggregates.performance import DistanciaBlackoutObligatoria
 
     cid = uuid4()
@@ -343,6 +346,62 @@ async def test_blackout_sin_distancia_rechazado_en_integracion(
                 disciplina=Disciplina.DNF,
                 tipo=TipoTarjeta.Roja,
                 asignada_por="juez-001",
-                motivo="black-out",
+                motivo_dq=MotivoDQ.BKO_SUPERFICIE,
+            )
+        )
+
+
+@pytest.mark.asyncio
+async def test_roja_sin_motivo_dq_lanza_error(
+    registrar_ap_handler: RegistrarAPHandler,
+    llamar_handler: LlamarAtletaHandler,
+    resultado_handler: RegistrarResultadoHandler,
+    tarjeta_handler: AsignarTarjetaHandler,
+) -> None:
+    """INV-P-11: tarjeta Roja sin MotivoDQ es rechazada."""
+    cid = uuid4()
+    pid = uuid4()
+
+    await _setup_performance_con_resultado(
+        registrar_ap_handler, llamar_handler, resultado_handler, cid, pid
+    )
+
+    with pytest.raises(MotivoDQObligatorio):
+        await tarjeta_handler.handle(
+            AsignarTarjetaCommand(
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=Disciplina.DNF,
+                tipo=TipoTarjeta.Roja,
+                asignada_por="juez-001",
+            )
+        )
+
+
+@pytest.mark.asyncio
+async def test_motivo_no_bko_con_distancia_lanza_error(
+    registrar_ap_handler: RegistrarAPHandler,
+    llamar_handler: LlamarAtletaHandler,
+    resultado_handler: RegistrarResultadoHandler,
+    tarjeta_handler: AsignarTarjetaHandler,
+) -> None:
+    """INV-DQ-02: distancia_blackout no aplica a motivos sin blackout."""
+    cid = uuid4()
+    pid = uuid4()
+
+    await _setup_performance_con_resultado(
+        registrar_ap_handler, llamar_handler, resultado_handler, cid, pid
+    )
+
+    with pytest.raises(DistanciaBlackoutNoAplica):
+        await tarjeta_handler.handle(
+            AsignarTarjetaCommand(
+                competencia_id=cid,
+                participante_id=pid,
+                disciplina=Disciplina.DNF,
+                tipo=TipoTarjeta.Roja,
+                asignada_por="juez-001",
+                motivo_dq=MotivoDQ.SALIDA_EN_FALSO,
+                distancia_blackout=Decimal("20"),
             )
         )

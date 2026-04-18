@@ -1,0 +1,1147 @@
+/<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AtaraxiaDive — Registro y Roles (Prototipo INC-4.0)</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0f172a;
+  --surface:  #1e293b;
+  --surface2: #334155;
+  --border:   #475569;
+  --text:     #f8fafc;
+  --muted:    #94a3b8;
+  --accent:   #38bdf8;
+  --blanca:   #22c55e;
+  --amarilla: #eab308;
+  --roja:     #ef4444;
+  --r: 12px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+}
+
+/* ── Screens ── */
+.screen { display: none; min-height: 100vh; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* ── Mobile shell ── */
+.shell {
+  flex: 1; display: flex; flex-direction: column;
+  max-width: 430px; width: 100%; margin: 0 auto;
+}
+
+/* ── Top header ── */
+.header {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 0 16px; display: flex; align-items: center;
+  height: 52px; gap: 10px; position: sticky; top: 0; z-index: 100;
+}
+.header-brand { font-size: 17px; font-weight: 900; color: var(--accent); letter-spacing: -.5px; }
+.header-back  { font-size: 22px; cursor: pointer; color: var(--muted); padding: 4px; }
+.header-title { flex: 1; font-size: 16px; font-weight: 700; }
+.header-right { margin-left: auto; font-size: 13px; color: var(--accent); cursor: pointer; }
+
+/* ── Bottom tab bar ── */
+.tabbar {
+  background: var(--surface); border-top: 1px solid var(--border);
+  display: flex; height: 56px; position: sticky; bottom: 0; z-index: 100;
+}
+.tab-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 3px; cursor: pointer;
+  font-size: 10px; font-weight: 600; color: var(--muted);
+  border: none; background: none; transition: color .15s;
+}
+.tab-item.active { color: var(--accent); }
+.tab-icon { font-size: 20px; }
+
+/* ── Scroll content ── */
+.scroll { flex: 1; overflow-y: auto; padding: 16px; }
+
+/* ── Section title ── */
+.sec-title {
+  font-size: 11px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; margin-top: 20px;
+}
+.sec-title:first-child { margin-top: 0; }
+
+/* ── Cards ── */
+.card {
+  background: var(--surface); border-radius: var(--r);
+  border: 1px solid var(--border); padding: 16px;
+  margin-bottom: 10px;
+}
+.card.tappable { cursor: pointer; transition: border-color .15s; }
+.card.tappable:hover { border-color: var(--accent); }
+.card-title   { font-size: 15px; font-weight: 800; }
+.card-meta    { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+
+/* ── Forms ── */
+.form-group { margin-bottom: 14px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; display: block; }
+.form-input {
+  width: 100%; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 12px 14px; color: var(--text); font-size: 15px;
+  outline: none; transition: border-color .15s;
+}
+.form-input:focus { border-color: var(--accent); }
+.form-input::placeholder { color: var(--muted); }
+.form-select {
+  width: 100%; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 12px 14px; color: var(--text); font-size: 15px;
+  outline: none; appearance: none; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.form-hint { font-size: 11px; color: var(--muted); margin-top: 5px; }
+
+/* ── Buttons ── */
+.btn {
+  width: 100%; padding: 14px; border-radius: 10px; font-size: 16px;
+  font-weight: 700; border: none; cursor: pointer; transition: opacity .15s;
+}
+.btn:hover { opacity: .9; }
+.btn-primary { background: var(--accent); color: #0f172a; }
+.btn-secondary {
+  background: transparent; color: var(--accent);
+  border: 1.5px solid var(--accent); margin-top: 10px;
+}
+.btn-ghost { background: var(--surface2); color: var(--text); margin-top: 10px; }
+.btn-danger { background: var(--roja); color: #fff; margin-top: 10px; }
+.btn-sm {
+  padding: 8px 16px; font-size: 13px; border-radius: 8px; border: none;
+  cursor: pointer; font-weight: 700; transition: opacity .15s;
+}
+.btn-sm:hover { opacity: .85; }
+.btn-sm.accept { background: var(--blanca); color: #0f172a; }
+.btn-sm.reject { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+
+/* ── Brand splash ── */
+.brand-splash {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 48px 32px 24px;
+}
+.brand-logo { font-size: 38px; font-weight: 900; color: var(--accent); letter-spacing: -1px; }
+.brand-sub { font-size: 14px; color: var(--muted); margin-top: 6px; text-align: center; }
+.brand-divider { width: 40px; height: 3px; background: var(--accent); border-radius: 2px; margin: 20px auto; }
+
+/* ── Progress steps ── */
+.progress-steps {
+  display: flex; align-items: center; gap: 0; padding: 16px 20px; margin-bottom: 4px;
+}
+.step-dot {
+  width: 28px; height: 28px; border-radius: 50%; font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface2); border: 2px solid var(--border); color: var(--muted);
+  flex-shrink: 0;
+}
+.step-dot.active { background: var(--accent); border-color: var(--accent); color: #0f172a; }
+.step-dot.done   { background: var(--blanca); border-color: var(--blanca); color: #0f172a; }
+.step-line { flex: 1; height: 2px; background: var(--border); }
+.step-line.done { background: var(--blanca); }
+
+/* ── Role badge ── */
+.role-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
+}
+.role-badge.org  { background: rgba(56,189,248,.15); color: var(--accent); border: 1px solid rgba(56,189,248,.3); }
+.role-badge.juez { background: rgba(234,179,8,.15); color: var(--amarilla); border: 1px solid rgba(234,179,8,.3); }
+.role-badge.atleta { background: rgba(34,197,94,.15); color: var(--blanca); border: 1px solid rgba(34,197,94,.3); }
+
+/* ── Torneo row con roles ── */
+.torneo-row {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 14px 0; border-bottom: 1px solid var(--border);
+}
+.torneo-row:last-child { border-bottom: none; }
+.torneo-nombre { font-size: 15px; font-weight: 700; }
+.torneo-meta   { font-size: 12px; color: var(--muted); }
+.torneo-roles  { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* ── Perfil avatar ── */
+.avatar-section {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 24px 0 16px;
+}
+.avatar {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #818cf8);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; font-weight: 900; color: #0f172a;
+}
+.avatar-name { font-size: 20px; font-weight: 800; margin-top: 10px; }
+.avatar-email { font-size: 13px; color: var(--muted); }
+
+/* ── Info row ── */
+.info-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+}
+.info-row:last-child { border-bottom: none; }
+.info-label { font-size: 13px; color: var(--muted); }
+.info-value { font-size: 13px; font-weight: 600; }
+.info-edit  { font-size: 13px; color: var(--accent); cursor: pointer; }
+.info-empty { font-size: 13px; color: var(--muted); font-style: italic; }
+
+/* ── Cert card ── */
+.cert-card {
+  background: var(--surface2); border-radius: 10px;
+  border: 1px solid var(--border); padding: 12px 14px;
+  margin-bottom: 8px; display: flex; align-items: center; gap: 12px;
+}
+.cert-org  { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: .5px; }
+.cert-level { font-size: 14px; font-weight: 800; }
+.cert-num  { font-size: 11px; color: var(--muted); }
+.cert-stars { font-size: 16px; }
+
+/* ── Notificación card ── */
+.notif-card {
+  background: var(--surface); border-radius: var(--r);
+  border: 1px solid var(--border); padding: 14px;
+  margin-bottom: 10px; cursor: pointer; transition: border-color .15s;
+}
+.notif-card.unread { border-left: 3px solid var(--accent); }
+.notif-card:hover { border-color: var(--accent); }
+.notif-header { display: flex; align-items: flex-start; gap: 10px; }
+.notif-icon { font-size: 22px; min-width: 28px; }
+.notif-body { flex: 1; }
+.notif-title { font-size: 14px; font-weight: 700; line-height: 1.3; }
+.notif-sub   { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.notif-time  { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.notif-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+/* ── Invitación detalle ── */
+.inv-hero {
+  background: linear-gradient(135deg, rgba(234,179,8,.12) 0%, rgba(234,179,8,.04) 100%);
+  border: 1px solid rgba(234,179,8,.25); border-radius: var(--r);
+  padding: 20px; margin-bottom: 16px; text-align: center;
+}
+.inv-emoji { font-size: 36px; }
+.inv-title { font-size: 18px; font-weight: 900; margin-top: 8px; }
+.inv-sub   { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+/* ── Empty state ── */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 40px 20px; text-align: center; gap: 8px;
+}
+.empty-icon  { font-size: 48px; }
+.empty-title { font-size: 18px; font-weight: 800; }
+.empty-sub   { font-size: 14px; color: var(--muted); line-height: 1.5; }
+
+/* ── Caminos card (primer acceso) ── */
+.path-card {
+  background: var(--surface); border-radius: var(--r);
+  border: 1px solid var(--border); padding: 18px;
+  margin-bottom: 10px; cursor: pointer; transition: border-color .15s;
+  display: flex; align-items: center; gap: 14px;
+}
+.path-card:hover { border-color: var(--accent); }
+.path-icon { font-size: 30px; min-width: 36px; }
+.path-text {}
+.path-title { font-size: 15px; font-weight: 800; }
+.path-sub   { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+.path-arrow { margin-left: auto; font-size: 18px; color: var(--muted); }
+
+/* ── Link text ── */
+.link-text { color: var(--accent); cursor: pointer; font-weight: 600; }
+.center    { text-align: center; }
+.mt-16     { margin-top: 16px; }
+.mt-8      { margin-top: 8px; }
+.text-sm   { font-size: 13px; color: var(--muted); }
+
+/* ── Checkbox ── */
+.check-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin-bottom: 14px;
+}
+.check-box {
+  width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0; margin-top: 1px;
+  border: 2px solid var(--border); background: var(--surface2);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; transition: background .15s, border-color .15s;
+}
+.check-box.checked { background: var(--accent); border-color: var(--accent); color: #0f172a; }
+.check-label { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* ── Pill selector (género) ── */
+.pill-group { display: flex; gap: 8px; }
+.pill {
+  flex: 1; padding: 10px; border-radius: 8px; border: 1.5px solid var(--border);
+  background: var(--surface2); color: var(--muted); font-size: 14px; font-weight: 600;
+  cursor: pointer; text-align: center; transition: all .15s;
+}
+.pill.selected { border-color: var(--accent); background: rgba(56,189,248,.12); color: var(--accent); }
+
+/* ── Summary resumen roles ── */
+.roles-summary {
+  display: flex; gap: 16px; padding: 14px 0; flex-wrap: wrap;
+}
+.roles-count { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.roles-count-num { font-size: 24px; font-weight: 900; }
+.roles-count-label { font-size: 11px; color: var(--muted); font-weight: 600; }
+
+/* ── Selección nivel cert ── */
+.level-options { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.level-opt {
+  padding: 12px 14px; border-radius: 10px; border: 1.5px solid var(--border);
+  background: var(--surface2); cursor: pointer; display: flex; align-items: center;
+  gap: 10px; transition: all .15s;
+}
+.level-opt.selected { border-color: var(--accent); background: rgba(56,189,248,.1); }
+.level-opt-stars { font-size: 16px; }
+.level-opt-text  { font-size: 14px; font-weight: 700; }
+.level-opt-sub   { font-size: 11px; color: var(--muted); }
+.level-opt-radio {
+  margin-left: auto; width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid var(--border); display: flex; align-items: center; justify-content: center;
+}
+.level-opt.selected .level-opt-radio { border-color: var(--accent); }
+.level-opt.selected .level-opt-radio::after {
+  content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+}
+
+/* ── Nav index (desktop helper) ── */
+.nav-index {
+  position: fixed; top: 16px; left: 16px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 12px; z-index: 999;
+  max-width: 200px;
+}
+.nav-index h4 { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+.nav-btn {
+  display: block; width: 100%; text-align: left;
+  padding: 6px 8px; font-size: 12px; border-radius: 6px;
+  background: none; border: none; color: var(--muted); cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.nav-btn:hover { background: var(--surface2); color: var(--text); }
+.nav-btn.active-screen { color: var(--accent); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- NAV INDEX (helper de navegación) -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="nav-index">
+  <h4>Pantallas</h4>
+  <button class="nav-btn" onclick="show('s-login')">1. Login</button>
+  <button class="nav-btn" onclick="show('s-register')">2. Registro</button>
+  <button class="nav-btn" onclick="show('s-verify')">3. Verificar email</button>
+  <button class="nav-btn" onclick="show('s-dashboard-empty')">4. Dashboard vacío</button>
+  <button class="nav-btn" onclick="show('s-dashboard-roles')">5. Dashboard con roles</button>
+  <button class="nav-btn" onclick="show('s-perfil')">6. Mi Perfil</button>
+  <button class="nav-btn" onclick="show('s-notificaciones')">7. Notificaciones</button>
+  <button class="nav-btn" onclick="show('s-invitacion')">8. Invitación juez</button>
+  <button class="nav-btn" onclick="show('s-agregar-cert')">9. Agregar certificación</button>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- S-1: LOGIN -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="screen active" id="s-login">
+  <div class="shell">
+    <div class="brand-splash">
+      <div class="brand-logo">AtaraxiaDive</div>
+      <div class="brand-sub">Gestión de torneos de apnea</div>
+      <div class="brand-divider"></div>
+    </div>
+    <div class="scroll" style="padding-top:0">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" placeholder="tu@email.com" value="carlos.mendez@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" placeholder="••••••••" value="••••••••">
+      </div>
+      <div class="center mt-8 mb-4" style="margin-bottom:16px">
+        <span class="link-text" style="font-size:13px">Olvidé mi contraseña</span>
+      </div>
+      <button class="btn btn-primary" onclick="show('s-dashboard-roles')">Iniciar sesión</button>
+      <div class="center mt-16">
+        <span class="text-sm">¿No tenés cuenta? </span>
+        <span class="link-text" onclick="show('s-register')">Crear cuenta</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- S-2: REGISTRO -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="screen" id="s-register">
+  <div class="shell">
+    <div class="header">
+      <span class="header-back" onclick="show('s-login')">‹</span>
+      <span class="header-title">Crear cuenta</span>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-steps">
+      <div class="step-dot active">1</div>
+      <div class="step-line"></div>
+      <div class="step-dot">2</div>
+      <div class="step-line"></div>
+      <div class="step-dot">3</div>
+    </div>
+
+    <div class="scroll">
+      <p class="text-sm" style="margin-bottom:20px">Paso 1 de 3 — <strong style="color:var(--text)">Datos personales</strong></p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nombre</label>
+          <input class="form-input" type="text" placeholder="Carlos">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Apellido</label>
+          <input class="form-input" type="text" placeholder="Méndez">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" placeholder="tu@email.com">
+        <p class="form-hint">Necesitarás confirmar este email.</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Fecha de nacimiento</label>
+        <input class="form-input" type="date" value="1990-07-15">
+        <p class="form-hint">Necesaria para determinar tu categoría de competición.</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Género</label>
+        <div class="pill-group">
+          <div class="pill selected" onclick="selectPill(this)">Masculino</div>
+          <div class="pill" onclick="selectPill(this)">Femenino</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="show('s-register-2')">Siguiente →</button>
+      <div class="center mt-16">
+        <span class="text-sm">¿Ya tenés cuenta? </span>
+        <span class="link-text" onclick="show('s-login')">Iniciar sesión</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- S-2b: REGISTRO PASO 2 -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="screen" id="s-register-2">
+  <div class="shell">
+    <div class="header">
+      <span class="header-back" onclick="show('s-register')">‹</span>
+      <span class="header-title">Crear cuenta</span>
+    </div>
+
+    <div class="progress-steps">
+      <div class="step-dot done">✓</div>
+      <div class="step-line done"></div>
+      <div class="step-dot active">2</div>
+      <div class="step-line"></div>
+      <div class="step-dot">3</div>
+    </div>
+
+    <div class="scroll">
+      <p class="text-sm" style="margin-bottom:20px">Paso 2 de 3 — <strong style="color:var(--text)">Acceso</strong></p>
+
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" placeholder="Mínimo 8 caracteres">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirmar contraseña</label>
+        <input class="form-input" type="password" placeholder="Repetir contraseña">
+      </div>
+
+      <div style="background:var(--surface2); border-radius:8px; padding:12px; margin-bottom:16px;">
+        <p style="font-size:12px; color:var(--muted); line-height:1.5;">
+          La contraseña debe tener al menos 8 caracteres, incluir una mayúscula y un número.
+        </p>
+      </div>
+
+      <button class="btn btn-primary" onclick="show('s-register-3')">Siguiente →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- S-2c: REGISTRO PASO 3 -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="screen" id="s-register-3">
+  <div class="shell">
+    <div class="header">
+      <span class="header-back" onclick="show('s-register-2')">‹</span>
+      <span class="header-title">Crear cuenta</span>
+    </div>
+
+    <div class="progress-steps">
+      <div class="step-dot done">✓</div>
+      <div class="step-line done"></div>
+      <div class="step-dot done">✓</div>
+      <div class="step-line done"></div>
+      <div class="step-dot active">3</div>
+    </div>
+
+    <div class="scroll">
+      <p class="text-sm" style="margin-bottom:20px">Paso 3 de 3 — <strong style="color:var(--text)">Confirmación</strong></p>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div class="info-row">
+          <span class="info-label">Nombre</span>
+          <span class="info-value">Carlos Méndez</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Email</span>
+          <span class="info-value">carlos.mendez@email.com</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Fecha de nac.</span>
+          <span class="info-value">15/07/1990</span>
+        </div>
+        <div class="info-row" style="border-bottom:none">
+          <span class="info-label">Género</span>
+          <span class="info-value">Masculino</span>
+        </div>
+      </div>
+
+      <div class="check-row">
+        <div class="check-box checked" onclick="toggleCheck(this)">✓</div>
+        <span class="check-label">Acepto los <span class="link-text">Términos de uso</span> y la <span class="link-text">Política de privacidad</span>.</span>
+      </div>
+
+      <div class="check-row">
+        <div class="check-box" onclick="toggleCheck(this)"></div>
+        <span class="check-label">Quiero recibir notificaciones sobre torneos y novedades (opcional).</span>
+      </div>
+
+      <button class="btn btn-primary" onclick="show('s-verify')">Crear mi cuenta</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- S-3: VERIFICAR EMAIL -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="screen" id="s-verify">
+  <div class="shell">
+    <div class="header">
+      <div class="header-brand">AtaraxiaDive</div>
+    </div>
+    <div class="scroll" style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:80vh; text-align:center;">
+      <div style="font-size:64px; margin-bottom:20px;">📧</div>
+      <h2 style="font-size:22px; font-weight:900; margin-bottom:8px;">Revisá tu email</h2>
+      <p style="font-size:14px; color:var(--muted); line-height:1.6; max-width:280px; margin-bottom:28px;">
+        Te enviamos un email a <strong style="color:var(--text)">carlos.mendez@email.com</strong>. Hacé clic en el enlace para confirmar tu cuenta.
+      </p>
+      <button class="btn btn-primary" style="max-width:280px" onclick="show('s-dashboard-empty')">Ya confirmé mi email</button>
+      <p class="text-sm mt-16">¿No llegó? <span class="link-text">Reenviar email</span></p>
+      <p class="text-sm mt-8">¿Email incorrecto? <span class="link-text" onclick="show('s-register')">Volver</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- S-4: DASHBOARD VACÍO (primer acceso) -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="screen" id="s-dashboard-empty">
+  <div class="shell">
+    <div class="header">
+      <div class="header-brand">AtaraxiaDive</div>
+      <div class="header-right" onclick="show('s-notificaciones')">🔔</div>
+    </div>
+
+    <div class="scroll">
+      <!-- Bienvenida -->
+      <div style="padding: 20px 0 16px; border-bottom: 1px solid var(--border); margin-bottom:20px;">
+        <div style="font-size:13px; color:var(--muted)">Bienvenido,</div>
+        <div style="font-size:22px; font-weight:900; margin-top:2px;">Carlos Méndez</div>
+        <div style="font-size:13px; color:var(--muted); margin-top:4px;">Todavía no tenés ningún torneo activo.</div>
+      </div>
+
+      <div class="sec-title">¿Cómo querés empezar?</div>
+
+      <div class="path-card" onclick="alert('→ Flujo crear torneo (prototipo-organizador.html)')">
+        <div class="path-icon">🏆</div>
+        <div class="path-text">
+          <div class="path-title">Crear un torneo</div>
+          <div class="path-sub">Organizás el evento. Configurás disciplinas, grilla y jueces.</div>
+        </div>
+        <div class="path-arrow">›</div>
+      </div>
+
+      <div class="path-card" onclick="alert('→ Flujo inscripción atleta (prototipo-atleta.html)')">
+        <div class="path-icon">🤿</div>
+        <div class="path-text">
+          <div class="path-title">Inscribirme a un torneo</div>
+          <div class="path-sub">Buscá un torneo abierto y declarás tus APs por disciplina.</div>
+        </div>
+        <div class="path-arrow">›</div>
+      </div>
+
+      <div class="path-card" style="opacity:.65; cursor:default;">
+        <div class="path-icon">⚖️</div>
+        <div class="path-text">
+          <div class="path-title">Soy juez</div>
+          <div class="path-sub">Un organizador debe invitarte. Recibirás una notificación cuando te asignen a un torneo.</div>
+        </div>
+      </div>
+
+      <div style="background:var(--surface2); border-radius:10px; padding:14px; margin-top:8px;">
+        <p style="font-size:12px; color:var(--muted); line-height:1.5;">
+          💡 Una misma persona puede organizar torneos, juzgar y competir. Tus roles son independientes por torneo.
+        </p>
+      </div>
+    </div>
+
+    <div class="tabbar">
+      <button class="tab-item active" onclick="show('s-dashboard-empty')">
+        <span class="tab-icon">🏠</span>Inicio
+      </button>
+      <button class="tab-item" onclick="show('s-dashboard-roles')">
+        <span class="tab-icon">🏆</span>Torneos
+      </button>
+      <button class="tab-item" onclick="show('s-notificaciones')">
+        <span class="tab-icon">🔔</span>Alertas
+      </button>
+      <button class="tab-item" onclick="show('s-perfil')">
+        <span class="tab-icon">👤</span>Perfil
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- S-5: DASHBOARD CON ROLES ACTIVOS -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="screen" id="s-dashboard-roles">
+  <div class="shell">
+    <div class="header">
+      <div class="header-brand">AtaraxiaDive</div>
+      <div class="header-right" onclick="show('s-notificaciones')">🔔 <span style="background:var(--roja);border-radius:50%;width:8px;height:8px;display:inline-block;margin-left:-4px;vertical-align:top;"></span></div>
+    </div>
+
+    <div class="scroll">
+      <!-- Resumen de roles -->
+      <div style="padding: 16px 0 12px; border-bottom: 1px solid var(--border); margin-bottom:16px;">
+        <div style="font-size:13px; color:var(--muted)">Hola de nuevo,</div>
+        <div style="font-size:20px; font-weight:900; margin-top:2px;">Carlos Méndez</div>
+        <div class="roles-summary" style="margin-top:14px;">
+          <div class="roles-count">
+            <span class="roles-count-num" style="color:var(--accent)">2</span>
+            <span class="roles-count-label">Organizando</span>
+          </div>
+          <div style="width:1px; background:var(--border);"></div>
+          <div class="roles-count">
+            <span class="roles-count-num" style="color:var(--amarilla)">1</span>
+            <span class="roles-count-label">Juzgando</span>
+          </div>
+          <div style="width:1px; background:var(--border);"></div>
+          <div class="roles-count">
+            <span class="roles-count-num" style="color:var(--blanca)">2</span>
+            <span class="roles-count-label">Compitiendo</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Torneos activos -->
+      <div class="sec-title">Próximos torneos</div>
+      <div class="card">
+
+        <!-- Torneo 1: org + atleta -->
+        <div class="torneo-row">
+          <div>
+            <div class="torneo-nombre">Nacional de Apnea Buenos Aires 2026</div>
+            <div class="torneo-meta">28–30 Ago · Club Náutico Tigre</div>
+          </div>
+          <div class="torneo-roles">
+            <span class="role-badge org">🏆 Organizador</span>
+          </div>
+        </div>
+
+        <!-- Torneo 2: juez + atleta -->
+        <div class="torneo-row">
+          <div>
+            <div class="torneo-nombre">Copa Mar del Plata 2026</div>
+            <div class="torneo-meta">12 Oct · Club de Pesca MDP</div>
+          </div>
+          <div class="torneo-roles">
+            <span class="role-badge juez">⚖️ Juez</span>
+            <span class="role-badge atleta">🤿 Atleta</span>
+          </div>
+        </div>
+
+        <!-- Torneo 3: atleta -->
+        <div class="torneo-row">
+          <div>
+            <div class="torneo-nombre">Interclub Patagonia 2026</div>
+            <div class="torneo-meta">3 Nov · Bariloche</div>
+          </div>
+          <div class="torneo-roles">
+            <span class="role-badge atleta">🤿 Atleta</span>
+          </div>
+        </div>
+
+        <!-- Torneo 4: org -->
+        <div class="torneo-row">
+          <div>
+            <div class="torneo-nombre">Selectivo FAAS 2026</div>
+            <div class="torneo-meta">Nov 2026 · Córdoba (en organización)</div>
+          </div>
+          <div class="torneo-roles">
+            <span class="role-badge org">🏆 Organizador</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <button class="btn btn-secondary" style="margin-top:4px">+ Inscribirme a otro torneo</button>
+    </div>
+
+    <div class="tabbar">
+      <button class="tab-item active">
+        <span class="tab-icon">🏠</span>Inicio
+      </button>
+      <button class="tab-item">
+        <span class="tab-icon">🏆</span>Torneos
+      </button>
+      <button class="tab-item" onclick="show('s-notificaciones')">
+        <span class="tab-icon">🔔</span>Alertas
+      </button>
+      <button class="tab-item" onclick="show('s-perfil')">
+        <span class="tab-icon">👤</span>Perfil
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- S-6: MI PERFIL -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="screen" id="s-perfil">
+  <div class="shell">
+    <div class="header">
+      <div class="header-brand">AtaraxiaDive</div>
+      <div class="header-right">Editar</div>
+    </div>
+
+    <div class="scroll">
+      <!-- Avatar -->
+      <div class="avatar-section">
+        <div class="avatar">CM</div>
+        <div class="avatar-name">Carlos Méndez</div>
+        <div class="avatar-email">carlos.mendez@email.com</div>
+      </div>
+
+      <!-- Datos de cuenta -->
+      <div class="sec-title">Datos de cuenta</div>
+      <div class="card">
+        <div class="info-row">
+          <span class="info-label">Nombre</span>
+          <span class="info-value">Carlos Méndez</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Email</span>
+          <span class="info-value">carlos.mendez@email.com</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Fecha de nac.</span>
+          <span class="info-value">15/07/1990</span>
+        </div>
+        <div class="info-row" style="border-bottom:none">
+          <span class="info-label">Género</span>
+          <span class="info-value">Masculino</span>
+        </div>
+      </div>
+
+      <!-- Datos deportivos -->
+      <div class="sec-title">Datos deportivos</div>
+      <div style="background:rgba(56,189,248,.07); border:1px dashed rgba(56,189,248,.3); border-radius:var(--r); padding:12px 14px; margin-bottom:10px;">
+        <p style="font-size:12px; color:var(--muted); line-height:1.5;">
+          💡 Completar estos datos es opcional pero necesario para competir. El organizador puede pedirlos al inscribirte.
+        </p>
+      </div>
+      <div class="card">
+        <div class="info-row">
+          <span class="info-label">Club</span>
+          <span class="info-empty">No completado</span>
+          <span class="info-edit">+ Agregar</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Federación</span>
+          <span class="info-empty">No completado</span>
+          <span class="info-edit">+ Agregar</span>
+        </div>
+        <div class="info-row" style="border-bottom:none">
+          <span class="info-label">Nro. de licencia</span>
+          <span class="info-empty">No completado</span>
+          <span class="info-edit">+ Agregar</span>
+        </div>
+      </div>
+
+      <!-- Certificaciones de juez -->
+      <div class="sec-title">Certificaciones de juez</div>
+      <div style="background:rgba(234,179,8,.07); border:1px dashed rgba(234,179,8,.3); border-radius:var(--r); padding:12px 14px; margin-bottom:10px;">
+        <p style="font-size:12px; color:var(--muted); line-height:1.5;">
+          Si tenés habilitación para juzgar, registrá tu certificación. Los organizadores pueden consultarla al asignarte como juez.
+        </p>
+      </div>
+
+      <!-- Cert existente -->
+      <div class="cert-card">
+        <div>
+          <div class="cert-org">CMAS</div>
+          <div class="cert-level">Juez Nacional <span class="cert-stars">★★☆</span></div>
+          <div class="cert-num">Nro. AR-2019-047 · Vence 12/2026</div>
+        </div>
+      </div>
+
+      <button class="btn btn-secondary" onclick="show('s-agregar-cert')">+ Agregar otra certificación</button>
+
+      <!-- Seguridad -->
+      <div class="sec-title">Seguridad</div>
+      <div class="card">
+        <div class="info-row">
+          <span class="info-label">Contraseña</span>
+          <span class="info-edit">Cambiar</span>
+        </div>
+        <div class="info-row" style="border-bottom:none">
+          <span class="info-label">Sesiones activas</span>
+          <span class="info-edit">Ver</span>
+        </div>
+      </div>
+
+      <button class="btn btn-ghost" style="margin-top:8px; color:var(--roja);">Cerrar sesión</button>
+    </div>
+
+    <div class="tabbar">
+      <button class="tab-item" onclick="show('s-dashboard-roles')">
+        <span class="tab-icon">🏠</span>Inicio
+      </button>
+      <button class="tab-item">
+        <span class="tab-icon">🏆</span>Torneos
+      </button>
+      <button class="tab-item" onclick="show('s-notificaciones')">
+        <span class="tab-icon">🔔</span>Alertas
+      </button>
+      <button class="tab-item active">
+        <span class="tab-icon">👤</span>Perfil
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- S-7: NOTIFICACIONES -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="screen" id="s-notificaciones">
+  <div class="shell">
+    <div class="header">
+      <span class="header-back" onclick="show('s-dashboard-roles')">‹</span>
+      <span class="header-title">Notificaciones</span>
+    </div>
+
+    <div class="scroll">
+      <div class="sec-title">Nuevas</div>
+
+      <!-- Invitación juez -->
+      <div class="notif-card unread" onclick="show('s-invitacion')">
+        <div class="notif-header">
+          <div class="notif-icon">⚖️</div>
+          <div class="notif-body">
+            <div class="notif-title">Te invitaron como juez</div>
+            <div class="notif-sub">Ana Rodríguez te invitó a juzgar en <strong>Copa Mar del Plata 2026</strong>.</div>
+          </div>
+          <div class="notif-time">hace 2h</div>
+        </div>
+        <div class="notif-actions">
+          <button class="btn-sm accept" onclick="event.stopPropagation(); acceptInvitation()">Aceptar</button>
+          <button class="btn-sm reject">Rechazar</button>
+        </div>
+      </div>
+
+      <!-- Inscripción confirmada -->
+      <div class="notif-card unread">
+        <div class="notif-header">
+          <div class="notif-icon">✅</div>
+          <div class="notif-body">
+            <div class="notif-title">Inscripción confirmada</div>
+            <div class="notif-sub">Tu inscripción a <strong>Interclub Patagonia 2026</strong> fue aprobada.</div>
+          </div>
+          <div class="notif-time">ayer</div>
+        </div>
+      </div>
+
+      <div class="sec-title">Anteriores</div>
+
+      <!-- Torneo publicado -->
+      <div class="notif-card">
+        <div class="notif-header">
+          <div class="notif-icon">🏆</div>
+          <div class="notif-body">
+            <div class="notif-title">Torneo publicado</div>
+            <div class="notif-sub"><strong>Nacional BA 2026</strong> está visible públicamente. Las inscripciones están abiertas.</div>
+          </div>
+          <div class="notif-time">3 días</div>
+        </div>
+      </div>
+
+      <!-- Ranking publicado -->
+      <div class="notif-card">
+        <div class="notif-header">
+          <div class="notif-icon">🥉</div>
+          <div class="notif-body">
+            <div class="notif-title">Resultados disponibles</div>
+            <div class="notif-sub">Copa Litoral 2025 — Quedaste 3º en STA Masculino.</div>
+          </div>
+          <div class="notif-time">hace 5 días</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabbar">
+      <button class="tab-item" onclick="show('s-dashboard-roles')">
+        <span class="tab-icon">🏠</span>Inicio
+      </button>
+      <button class="tab-item">
+        <span class="tab-icon">🏆</span>Torneos
+      </button>
+      <button class="tab-item active">
+        <span class="tab-icon">🔔</span>Alertas
+      </button>
+      <button class="tab-item" onclick="show('s-perfil')">
+        <span class="tab-icon">👤</span>Perfil
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- S-8: INVITACIÓN DETALLE -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="screen" id="s-invitacion">
+  <div class="shell">
+    <div class="header">
+      <span class="header-back" onclick="show('s-notificaciones')">‹</span>
+      <span class="header-title">Invitación de juez</span>
+    </div>
+
+    <div class="scroll">
+      <!-- Hero -->
+      <div class="inv-hero">
+        <div class="inv-emoji">⚖️</div>
+        <div class="inv-title">Copa Mar del Plata 2026</div>
+        <div class="inv-sub">Ana Rodríguez te invita a juzgar este torneo</div>
+      </div>
+
+      <!-- Detalles del torneo -->
+      <div class="sec-title">Torneo</div>
+      <div class="card">
+        <div class="info-row">
+          <span class="info-label">Fecha</span>
+          <span class="info-value">12 octubre 2026</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Sede</span>
+          <span class="info-value">Club de Pesca MDP</span>
+        </div>
+        <div class="info-row" style="border-bottom:none">
+          <span class="info-label">Organizador</span>
+          <span class="info-value">Ana Rodríguez</span>
+        </div>
+      </div>
+
+      <!-- Tu rol -->
+      <div class="sec-title">Tu rol</div>
+      <div class="card">
+        <div class="info-row">
+          <span class="info-label">Función</span>
+          <span class="role-badge juez">⚖️ Juez</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Disciplinas</span>
+          <span class="info-value">STA, DYN, DNF</span>
+        </div>
+        <div class="info-row" style="border-bottom:none">
+          <span class="info-label">Andarivel asignado</span>
+          <span class="info-value">A determinar</span>
+        </div>
+      </div>
+
+      <!-- Compatibilidad -->
+      <div class="sec-title">Compatibilidad de roles</div>
+      <div style="background:rgba(34,197,94,.08); border:1px solid rgba(34,197,94,.25); border-radius:var(--r); padding:14px; margin-bottom:16px;">
+        <div style="display:flex; align-items:flex-start; gap:10px;">
+          <span style="font-size:18px;">✅</span>
+          <div>
+            <div style="font-size:14px; font-weight:700; color:var(--blanca);">Podés juzgar y competir en este torneo</div>
+            <div style="font-size:12px; color:var(--muted); margin-top:4px; line-height:1.5;">
+              Tu inscripción como atleta en STA no colisiona con tu función de juez en STA — judgarás andariveles en los que no compitas. El organizador confirmará el detalle.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cert detectada -->
+      <div class="sec-title">Tu certificación</div>
+      <div class="cert-card" style="border-color: rgba(234,179,8,.4);">
+        <div>
+          <div class="cert-org">CMAS</div>
+          <div class="cert-level">Juez Nacional <span class="cert-stars">★★☆</span></div>
+          <div class="cert-num">Nro. AR-2019-047 · Vence 12/2026</div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <button class="btn btn-primary" onclick="acceptInvitation()">Aceptar invitación</button>
+      <button class="btn btn-ghost" onclick="show('s-notificaciones')">Rechazar</button>
+
+      <p class="text-sm center mt-16">Si aceptás, Ana Rodríguez recibirá una confirmación. Podrás retirarte antes del inicio del torneo.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- S-9: AGREGAR CERTIFICACIÓN -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="screen" id="s-agregar-cert">
+  <div class="shell">
+    <div class="header">
+      <span class="header-back" onclick="show('s-perfil')">‹</span>
+      <span class="header-title">Agregar certificación</span>
+    </div>
+
+    <div class="scroll">
+      <div class="sec-title">Organización</div>
+      <div class="form-group">
+        <select class="form-select" onchange="updateLevels(this)">
+          <option value="">Seleccionar organización…</option>
+          <option value="cmas">CMAS</option>
+          <option value="aida">AIDA</option>
+          <option value="faas">FAAS</option>
+        </select>
+      </div>
+
+      <div class="sec-title">Nivel</div>
+      <div class="level-options">
+        <div class="level-opt" onclick="selectLevel(this)">
+          <span class="level-opt-stars">★☆☆</span>
+          <div>
+            <div class="level-opt-text">Juez Nacional — 1 estrella</div>
+            <div class="level-opt-sub">Torneos locales y nacionales</div>
+          </div>
+          <div class="level-opt-radio"></div>
+        </div>
+        <div class="level-opt selected" onclick="selectLevel(this)">
+          <span class="level-opt-stars">★★☆</span>
+          <div>
+            <div class="level-opt-text">Juez Continental — 2 estrellas</div>
+            <div class="level-opt-sub">Torneos continentales</div>
+          </div>
+          <div class="level-opt-radio"></div>
+        </div>
+        <div class="level-opt" onclick="selectLevel(this)">
+          <span class="level-opt-stars">★★★</span>
+          <div>
+            <div class="level-opt-text">Juez Internacional — 3 estrellas</div>
+            <div class="level-opt-sub">Campeonatos mundiales y continentales CMAS</div>
+          </div>
+          <div class="level-opt-radio"></div>
+        </div>
+      </div>
+
+      <div class="sec-title" style="margin-top:24px;">Datos del certificado</div>
+      <div class="form-group">
+        <label class="form-label">Número de certificación</label>
+        <input class="form-input" type="text" placeholder="Ej: AR-2019-047">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Fecha de emisión</label>
+          <input class="form-input" type="month" value="2019-05">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Vencimiento</label>
+          <input class="form-input" type="month" value="2026-12">
+        </div>
+      </div>
+
+      <div style="background:var(--surface2); border-radius:10px; padding:12px 14px; margin-bottom:16px;">
+        <p style="font-size:12px; color:var(--muted); line-height:1.5;">
+          Esta información es declarada por vos. El organizador es responsable de verificarla si su torneo lo requiere.
+        </p>
+      </div>
+
+      <button class="btn btn-primary" onclick="show('s-perfil')">Guardar certificación</button>
+      <button class="btn btn-ghost" onclick="show('s-perfil')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════ -->
+<script>
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  // Scroll to top
+  const scroll = document.getElementById(id).querySelector('.scroll');
+  if (scroll) scroll.scrollTop = 0;
+  // Update nav
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.toggle('active-screen', b.getAttribute('onclick')?.includes(id));
+  });
+}
+
+function selectPill(el) {
+  el.closest('.pill-group').querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+function selectLevel(el) {
+  el.closest('.level-options').querySelectorAll('.level-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function acceptInvitation() {
+  // Simular aceptación
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:9999;';
+  overlay.innerHTML = `
+    <div style="background:#1e293b;border-radius:16px;padding:32px 24px;text-align:center;max-width:280px;border:1px solid #475569;">
+      <div style="font-size:48px;margin-bottom:12px;">✅</div>
+      <div style="font-size:18px;font-weight:900;margin-bottom:8px;">Invitación aceptada</div>
+      <div style="font-size:13px;color:#94a3b8;line-height:1.5;margin-bottom:20px;">
+        Ana Rodríguez será notificada. Copa Mar del Plata 2026 aparecerá en tu dashboard como juez.
+      </div>
+      <button onclick="this.closest('div[style]').remove(); show('s-dashboard-roles')"
+        style="background:#38bdf8;color:#0f172a;border:none;border-radius:10px;padding:12px 24px;font-size:15px;font-weight:700;cursor:pointer;width:100%;">
+        Ver mis torneos
+      </button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+</script>
+</body>
+</html>

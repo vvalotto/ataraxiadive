@@ -49,6 +49,10 @@ class EstadoInvalidoParaAsignarTarjeta(DomainError):
     """Performance no está en estado ResultadoRegistrado — no se puede asignar tarjeta."""
 
 
+class EstadoInvalidoParaResolverRevision(DomainError):
+    """Performance no está en estado EnRevision — no se puede resolver la revisión."""
+
+
 class EstadoInvalidoParaCorregirResultado(DomainError):
     """Performance no está en estado Ejecutada — no se puede corregir el resultado (INV-P-12/13)."""
 
@@ -59,8 +63,24 @@ class MotivoObligatorio(DomainError):
     """
 
 
+class MotivoDQObligatorio(DomainError):
+    """Tarjeta roja requiere un motivo formal del catálogo MotivoDQ (INV-P-11)."""
+
+
 class DistanciaBlackoutObligatoria(DomainError):
     """Tarjeta roja con motivo black-out requiere distancia_blackout > 0 (RF-EJ-07)."""
+
+
+class DistanciaBlackoutNoAplica(DomainError):
+    """Solo los motivos BKO admiten distancia_blackout asociada."""
+
+
+class PenalizacionesObligatorias(DomainError):
+    """BlancaConPenalizaciones requiere al menos una penalización técnica."""
+
+
+class DisciplinaNoAdmitePenalizaciones(DomainError):
+    """La disciplina de la performance no admite BlancaConPenalizaciones."""
 
 
 # ── Competencia ───────────────────────────────────────────────────────────────

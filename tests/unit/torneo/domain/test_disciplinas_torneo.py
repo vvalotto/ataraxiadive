@@ -9,7 +9,7 @@ import pytest
 
 from shared.domain.value_objects.disciplina import Disciplina
 from torneo.domain.aggregates.torneo import Torneo
-from torneo.domain.exceptions import AsignacionNoPermitida, DisciplinaNoEnTorneo
+from torneo.domain.exceptions import AsignacionNoPermitida, DisciplinaNoEnTorneo, DisciplinaObsoleta
 from torneo.domain.value_objects.entidad_organizadora import EntidadOrganizadora
 from torneo.domain.value_objects.sede import Sede
 
@@ -117,6 +117,19 @@ class TestAsignarDisciplinas:
         t.asignar_disciplinas(frozenset({Disciplina.DBF}))
         assert len(t.disciplinas_torneo) == 1
         assert t.disciplinas_torneo[0].disciplina == Disciplina.DBF
+
+    def test_acepta_variantes_spe_en_torneo(self) -> None:
+        t = _torneo()
+        t.asignar_disciplinas(frozenset({Disciplina.SPE_4X50, Disciplina.SPE_8X50}))
+        assert {dt.disciplina for dt in t.disciplinas_torneo} == {
+            Disciplina.SPE_4X50,
+            Disciplina.SPE_8X50,
+        }
+
+    def test_spe_generica_es_obsoleta_para_torneo_nuevo(self) -> None:
+        t = _torneo()
+        with pytest.raises(DisciplinaObsoleta):
+            t.asignar_disciplinas(frozenset({Disciplina.SPE}))
 
 
 # ── asignar_juez ─────────────────────────────────────────────────────────────

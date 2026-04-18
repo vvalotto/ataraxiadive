@@ -142,7 +142,7 @@ Sin él, los aggregates flotan sin contexto y el Dev Kit no puede respetar front
 - Mapa visual de los 7 BCs identificados (diagrama de texto o Mermaid)
 - Por cada BC: nombre, tipo, responsabilidad, aggregates principales
 - Patrones de integración entre BCs (ACL, Customer/Supplier, OHS, etc.)
-- Integración con sistemas externos (BD FAZ, AIDA/CMAS) — aunque quede como pendiente
+- Integración con sistemas externos (BD FAAS, AIDA/CMAS) — aunque quede como pendiente
 - Justificación de por qué Competencia es el Core Domain
 
 **BCs identificados preliminarmente:**
@@ -151,7 +151,7 @@ Sin él, los aggregates flotan sin contexto y el Dev Kit no puede respetar front
 |----------------|------|---------------|
 | Competencia | Core Domain | Lógica no trivial, invariantes duros, Event Sourcing |
 | Gestión de Torneo | Supporting | Ciclo de vida del torneo, máquina de estados |
-| Registro | Supporting | Atleta, inscripción, anuncios, integra FAZ |
+| Registro | Supporting | Atleta, inscripción, anuncios, integra FAAS |
 | Resultados | Supporting | Rankings, podios, publicación |
 | Configuración | Generic | Disciplinas, categorías, reglas (datos, no lógica) |
 | Identidad | Generic | Usuarios, roles, autenticación |
@@ -276,7 +276,7 @@ en qué SP, en qué orden y por qué. Es el puente entre el diseño DDD y el bac
 | SP2 | La Competencia | Competencia (ampliado) | Flujo completo de disciplina |
 | SP3 | El Torneo | Gestión de Torneo + Registro | Ciclo de vida completo |
 | SP4 | La Plataforma | Configuración + Identidad + Notificaciones | Atributos de calidad |
-| SP5 | La Puesta en Marcha | Todos + Resultados | Integración total + FAZ |
+| SP5 | La Puesta en Marcha | Todos + Resultados | Integración total + FAAS |
 
 ---
 

@@ -134,6 +134,20 @@ class TestAsignarDisciplinasAPI:
         disciplinas = [d["disciplina"] for d in resp.json()]
         assert "STA" in disciplinas
 
+    def test_put_variantes_spe_200(self, app_client: TestClient) -> None:
+        tid = _crear_torneo(app_client)
+        resp = app_client.put(
+            f"/torneos/{tid}/disciplinas",
+            json={"disciplinas": ["SPE_4X50", "SPE_8X50"]},
+        )
+        assert resp.status_code == 200
+
+    def test_put_spe_generica_retorna_409(self, app_client: TestClient) -> None:
+        tid = _crear_torneo(app_client)
+        resp = app_client.put(f"/torneos/{tid}/disciplinas", json={"disciplinas": ["SPE"]})
+        assert resp.status_code == 409
+        assert "legacy" in resp.json()["detail"]
+
 
 class TestAsignarJuezAPI:
     def test_put_juez_200(self, app_client: TestClient) -> None:

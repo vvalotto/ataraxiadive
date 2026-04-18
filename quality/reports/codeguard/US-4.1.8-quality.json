@@ -1,0 +1,2956 @@
+{
+  "summary": {
+    "total_files": 12,
+    "checks_executed": 6,
+    "elapsed_seconds": 25.84,
+    "timestamp": "2026-04-08T16:13:04.258731",
+    "total_issues": 139,
+    "errors": 0,
+    "warnings": 10,
+    "infos": 129
+  },
+  "results": [
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/torneo/domain/aggregates/torneo.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "warning",
+      "message": "PEP8: E302 expected 2 blank lines, found 1",
+      "file": "src/torneo/domain/aggregates/torneo.py",
+      "line": 39
+    },
+    {
+      "check": "PEP8",
+      "severity": "warning",
+      "message": "PEP8: E501 line too long (111 > 100 characters)",
+      "file": "src/torneo/domain/aggregates/torneo.py",
+      "line": 82
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/torneo/domain/aggregates/torneo.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B110]: Try, Except, Pass detected.",
+      "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+      "line": 45
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/competencia/domain/value_objects/tarjeta_asignacion.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/competencia/domain/value_objects/tarjeta_asignacion.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/competencia/domain/value_objects/tarjeta_asignacion.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/shared/domain/value_objects/disciplina_descriptor.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/shared/domain/value_objects/disciplina_descriptor.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/shared/domain/value_objects/disciplina_descriptor.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": 67
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": 68
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": 69
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": 117
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": 123
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": 125
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": 127
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": 129
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": 131
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": 138
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": 162
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": 167
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": 172
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": 198
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": 199
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "tests/unit/torneo/domain/test_torneo.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 40
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 41
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 50
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 51
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 58
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 60
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 70
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 71
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 75
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 80
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 86
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 93
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 118
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 119
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 124
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 144
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 152
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 186
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 191
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 199
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": 200
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": 15
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": 19
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": 23
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": 38
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": 51
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": 55
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": 56
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": 59
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": 60
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": 61
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": 62
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": 79
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": 83
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": 87
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": 94
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": 95
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+      "line": 22
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+      "line": 28
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+      "line": 34
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+      "line": 40
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+      "line": 57
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+      "line": 58
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+      "line": 67
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+      "line": 84
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+      "line": 99
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "warning",
+      "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 32
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 41
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 42
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 43
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 44
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 45
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 46
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 47
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 48
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 49
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 55
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 61
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 70
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 80
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 81
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 89
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 90
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 91
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": 92
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+      "line": 36
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+      "line": 37
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+      "line": 48
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+      "line": 60
+    },
+    {
+      "check": "PEP8",
+      "severity": "warning",
+      "message": "PEP8: F401 'torneo.domain.TransicionEstadoInvalida' imported but unused",
+      "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+      "line": 12
+    },
+    {
+      "check": "PEP8",
+      "severity": "warning",
+      "message": "PEP8: F811 redefinition of unused 'TransicionEstadoInvalida' from line 12",
+      "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+      "line": 71
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "warning",
+      "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 22
+    },
+    {
+      "check": "Security",
+      "severity": "warning",
+      "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 42
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 61
+    },
+    {
+      "check": "Security",
+      "severity": "warning",
+      "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 78
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 103
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 113
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 119
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 121
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 122
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 127
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 135
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 143
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 148
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 149
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 161
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 162
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 171
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 179
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 188
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 199
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 200
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 206
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 207
+    },
+    {
+      "check": "PEP8",
+      "severity": "warning",
+      "message": "PEP8: F401 'shared.domain.value_objects.disciplina.Disciplina' imported but unused",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": 12
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/competencia/test_disciplina_descriptor_integration.py",
+      "line": 121
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/competencia/test_disciplina_descriptor_integration.py",
+      "line": 156
+    },
+    {
+      "check": "PEP8",
+      "severity": "warning",
+      "message": "PEP8: F401 'uuid.uuid4' imported but unused",
+      "file": "tests/integration/competencia/test_disciplina_descriptor_integration.py",
+      "line": 8
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "tests/integration/competencia/test_disciplina_descriptor_integration.py",
+      "line": null
+    }
+  ],
+  "by_severity": {
+    "errors": [],
+    "warnings": [
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: E302 expected 2 blank lines, found 1",
+        "file": "src/torneo/domain/aggregates/torneo.py",
+        "line": 39
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: E501 line too long (111 > 100 characters)",
+        "file": "src/torneo/domain/aggregates/torneo.py",
+        "line": 82
+      },
+      {
+        "check": "Security",
+        "severity": "warning",
+        "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 32
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F401 'torneo.domain.TransicionEstadoInvalida' imported but unused",
+        "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+        "line": 12
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F811 redefinition of unused 'TransicionEstadoInvalida' from line 12",
+        "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+        "line": 71
+      },
+      {
+        "check": "Security",
+        "severity": "warning",
+        "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 22
+      },
+      {
+        "check": "Security",
+        "severity": "warning",
+        "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 42
+      },
+      {
+        "check": "Security",
+        "severity": "warning",
+        "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 78
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F401 'shared.domain.value_objects.disciplina.Disciplina' imported but unused",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 12
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F401 'uuid.uuid4' imported but unused",
+        "file": "tests/integration/competencia/test_disciplina_descriptor_integration.py",
+        "line": 8
+      }
+    ],
+    "infos": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/torneo/domain/aggregates/torneo.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/torneo/domain/aggregates/torneo.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B110]: Try, Except, Pass detected.",
+        "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+        "line": 45
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/value_objects/tarjeta_asignacion.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/value_objects/tarjeta_asignacion.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/value_objects/tarjeta_asignacion.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/shared/domain/value_objects/disciplina_descriptor.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/shared/domain/value_objects/disciplina_descriptor.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/shared/domain/value_objects/disciplina_descriptor.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 67
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 68
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 69
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 117
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 123
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 125
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 127
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 129
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 131
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 138
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 162
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 167
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 172
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 198
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 199
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 40
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 41
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 50
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 51
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 58
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 60
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 70
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 71
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 75
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 80
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 86
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 93
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 118
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 119
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 124
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 144
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 152
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 186
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 191
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 199
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 200
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 15
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 19
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 23
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 38
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 51
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 55
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 56
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 59
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 60
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 61
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 62
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 79
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 83
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 87
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 94
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 95
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 22
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 28
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 34
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 40
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 57
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 58
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 67
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 84
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 99
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 41
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 42
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 43
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 44
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 45
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 46
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 47
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 48
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 49
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 55
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 61
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 70
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 80
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 81
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 89
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 90
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 91
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 92
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+        "line": 36
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+        "line": 37
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+        "line": 48
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+        "line": 60
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 61
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 103
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 113
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 119
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 121
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 122
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 127
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 135
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 143
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 148
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 149
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 161
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 162
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 171
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 179
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 188
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 199
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 200
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 206
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 207
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_disciplina_descriptor_integration.py",
+        "line": 121
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_disciplina_descriptor_integration.py",
+        "line": 156
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/integration/competencia/test_disciplina_descriptor_integration.py",
+        "line": null
+      }
+    ]
+  },
+  "by_package": {
+    "aggregates": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/torneo/domain/aggregates/torneo.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: E302 expected 2 blank lines, found 1",
+        "file": "src/torneo/domain/aggregates/torneo.py",
+        "line": 39
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: E501 line too long (111 > 100 characters)",
+        "file": "src/torneo/domain/aggregates/torneo.py",
+        "line": 82
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/torneo/domain/aggregates/torneo.py",
+        "line": null
+      }
+    ],
+    "competencia": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_disciplina_descriptor_integration.py",
+        "line": 121
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_disciplina_descriptor_integration.py",
+        "line": 156
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F401 'uuid.uuid4' imported but unused",
+        "file": "tests/integration/competencia/test_disciplina_descriptor_integration.py",
+        "line": 8
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/integration/competencia/test_disciplina_descriptor_integration.py",
+        "line": null
+      }
+    ],
+    "domain": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 67
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 68
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 69
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 117
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 123
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 125
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 127
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 129
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 131
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 138
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 162
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 167
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 172
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 198
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": 199
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/unit/torneo/domain/test_torneo.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 40
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 41
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 50
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 51
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 58
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 60
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 70
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 71
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 75
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 80
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 86
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 93
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 118
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 119
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 124
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 144
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 152
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 186
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 191
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 199
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": 200
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/unit/torneo/domain/test_disciplinas_torneo.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 15
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 19
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 23
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 38
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 51
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 55
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 56
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 59
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 60
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 61
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 62
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 79
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 83
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 87
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 94
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": 95
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/unit/competencia/domain/test_disciplina_descriptor.py",
+        "line": null
+      }
+    ],
+    "infrastructure": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 22
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 28
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 34
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 40
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 57
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 58
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 67
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 84
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": 99
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/unit/competencia/infrastructure/test_disciplina_descriptor_adapter.py",
+        "line": null
+      }
+    ],
+    "repositories": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B110]: Try, Except, Pass detected.",
+        "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+        "line": 45
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+        "line": null
+      }
+    ],
+    "torneo": [
+      {
+        "check": "Security",
+        "severity": "warning",
+        "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 32
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 41
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 42
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 43
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 44
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 45
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 46
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 47
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 48
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 49
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 55
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 61
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 70
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 80
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 81
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 89
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 90
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 91
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": 92
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/integration/torneo/test_sqlite_torneo_repository.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+        "line": 36
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+        "line": 37
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+        "line": 48
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+        "line": 60
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F401 'torneo.domain.TransicionEstadoInvalida' imported but unused",
+        "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+        "line": 12
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F811 redefinition of unused 'TransicionEstadoInvalida' from line 12",
+        "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+        "line": 71
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/integration/torneo/test_torneo_domain_integration.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "warning",
+        "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 22
+      },
+      {
+        "check": "Security",
+        "severity": "warning",
+        "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 42
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 61
+      },
+      {
+        "check": "Security",
+        "severity": "warning",
+        "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 78
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 103
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 113
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 119
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 121
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 122
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 127
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 135
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 143
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 148
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 149
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 161
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 162
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 171
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 179
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 188
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 199
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 200
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 206
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 207
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F401 'shared.domain.value_objects.disciplina.Disciplina' imported but unused",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": 12
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/integration/torneo/test_disciplinas_torneo_api.py",
+        "line": null
+      }
+    ],
+    "value_objects": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/value_objects/tarjeta_asignacion.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/value_objects/tarjeta_asignacion.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/value_objects/tarjeta_asignacion.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/shared/domain/value_objects/disciplina_descriptor.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/shared/domain/value_objects/disciplina_descriptor.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/shared/domain/value_objects/disciplina_descriptor.py",
+        "line": null
+      }
+    ]
+  }
+}

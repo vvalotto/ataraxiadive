@@ -206,7 +206,7 @@ La Arquitectura de Referencia menciona "Node.js o FastAPI". Esta decisión tiene
 
 ### 4.2 Los RFs pendientes no bloquean SP1 pero sí SP4
 
-Hay ~15 ítems marcados como "Pendiente" en el RF v1 (códigos de penalización RF-EJ-04, integración FAZ RF-IG-01..04, fórmula de puntos RF-PM-01). Ninguno afecta SP1 ni SP2. Afectan SP4 y SP5.
+Hay ~15 ítems marcados como "Pendiente" en el RF v1 (códigos de penalización RF-EJ-04, integración FAAS RF-IG-01..04, fórmula de puntos RF-PM-01). Ninguno afecta SP1 ni SP2. Afectan SP4 y SP5.
 
 El modelo de incrementos es antifrágil respecto a esto: se avanza con lo conocido y los "Pendiente" se resuelven cuando se llega a ese incremento. La configurabilidad de reglas como datos (AC-CF-XX) es la respuesta arquitectural a esta incertidumbre.
 

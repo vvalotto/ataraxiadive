@@ -95,9 +95,9 @@ user-stories.md  ─────────────────────
 Una decisión arquitectónica capturada en un ADR determina qué perfil usar:
 
 ```
-ADR-001: "Usamos FastAPI con arquitectura en capas"
-         → config del kit: perfil "fastapi-rest"
-         → CLAUDE.md referencia al ADR-001
+ADR-001 + ADR-005 + ADR-006: "FastAPI + hexagonal DDD BC-first"
+         → config del kit: perfil "hexagonal-ddd-bc"
+         → CLAUDE.md referencia a los ADRs
          → /implement-us respeta esa arquitectura automáticamente
 ```
 
@@ -237,8 +237,8 @@ Agregar una sección sobre el kit instalado:
 ## Claude Dev Kit (instalado)
 
 Este proyecto tiene Claude Dev Kit v1.3.0 instalado en `.claude/`.
-Perfil activo: [fastapi-rest | generic-python | etc.]
-ADR que justifica el perfil: ADR-NNN
+Perfil activo: hexagonal-ddd-bc
+ADRs que justifican el perfil: ADR-001, ADR-005, ADR-006
 
 Para implementar una US:
   /implement-us US-NNN

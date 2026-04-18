@@ -140,7 +140,20 @@
       "Bash(.venv/bin/codeguard src/competencia/domain/aggregates/competencia.py src/competencia/application/queries/obtener_competencias_por_torneo.py src/competencia/api/router.py)",
       "Bash(.venv/bin/codeguard src/competencia/api/router.py)",
       "Bash(isort tests/integration/e2e/test_flujo_torneo_competencia.py tests/features/steps/test_US_3_3_2_steps.py)",
-      "Bash(ls docs/contexto/HITO-14*)"
+      "Bash(ls docs/contexto/HITO-14*)",
+      "Bash(git rebase:*)",
+      "Bash(GIT_EDITOR=true git rebase:*)",
+      "Bash(npm run:*)",
+      "Bash(npx tsc:*)",
+      "Bash(ipconfig getifaddr:*)",
+      "Bash(ls:*)",
+      "Bash(echo \"Backend PID: $!\")",
+      "Bash(echo \"Frontend PID: $!\")",
+      "Bash(curl:*)",
+      "Bash(.venv/bin/python:*)",
+      "Bash(uv lock:*)",
+      "Bash(npx madge *)",
+      "Bash(sort -t'-' -k2 -n)"
     ]
   }
 }

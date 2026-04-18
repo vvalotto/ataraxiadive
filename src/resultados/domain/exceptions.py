@@ -13,3 +13,7 @@ class ResultadosIncompletos(DomainError):
 
 class RankingYaCalculado(DomainError):
     """El ranking ya fue calculado para esta competencia y disciplina."""
+
+
+class TorneoNoEncontrado(DomainError):
+    """El torneo solicitado no existe en la base de datos de Torneo."""

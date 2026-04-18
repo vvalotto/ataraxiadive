@@ -96,6 +96,27 @@ async def _seed_ap(store: SQLiteEventStore, atleta_id: UUID, valor: str) -> None
     )
 
 
+async def _seed_ap_disciplina(
+    store: SQLiteEventStore,
+    competencia_id: UUID,
+    disciplina: Disciplina,
+    atleta_id: UUID,
+    valor: str,
+    unidad: UnidadMedida,
+) -> None:
+    stub = StubCompetenciaEstadoAdapter()
+    handler = RegistrarAPHandler(store, stub, DisciplinaDescriptorAdapter())
+    await handler.handle(
+        RegistrarAPCommand(
+            competencia_id=competencia_id,
+            participante_id=atleta_id,
+            disciplina=disciplina,
+            valor_ap=Decimal(valor),
+            unidad=unidad,
+        )
+    )
+
+
 class TestGenerarGrillaIntegracion:
     @pytest.mark.asyncio
     async def test_grilla_generada_persiste_en_stream(self, event_store: SQLiteEventStore) -> None:
@@ -224,3 +245,77 @@ class TestGenerarGrillaIntegracion:
                     ot_inicio=OT_INICIO,
                 )
             )
+
+    @pytest.mark.asyncio
+    async def test_grilla_spe_4x50_usa_orden_descendente(self, event_store: SQLiteEventStore) -> None:
+        competencia_id = UUID("00000000-0000-0000-0000-000000000004")
+        disciplina = Disciplina.SPE_4X50
+        await ConfigurarIntervaloOTHandler(event_store).handle(
+            ConfigurarIntervaloOTCommand(
+                competencia_id=competencia_id,
+                disciplina=disciplina,
+                intervalo_minutos=9,
+                configurado_por="org",
+            )
+        )
+        await _seed_ap_disciplina(
+            event_store, competencia_id, disciplina, A001, "180", UnidadMedida.Segundos
+        )
+        await _seed_ap_disciplina(
+            event_store, competencia_id, disciplina, A002, "210", UnidadMedida.Segundos
+        )
+        await _seed_ap_disciplina(
+            event_store, competencia_id, disciplina, A003, "195", UnidadMedida.Segundos
+        )
+
+        adapter = PerformancesAPAdapter(event_store)
+        handler = GenerarGrillaHandler(event_store, adapter, DisciplinaDescriptorAdapter())
+        await handler.handle(
+            GenerarGrillaCommand(
+                competencia_id=competencia_id,
+                disciplina=disciplina,
+                ot_inicio=OT_INICIO,
+            )
+        )
+
+        events = await event_store.load(_build_stream_id(competencia_id))
+        grilla_event = next(e for e in events if e["event_type"] == "GrillaDeSalidaGenerada")
+        atletas_orden = [p["atleta_id"] for p in grilla_event["payload"]["performances"]]
+        assert atletas_orden == [str(A002), str(A003), str(A001)]
+
+    @pytest.mark.asyncio
+    async def test_grilla_spe_2x50_usa_orden_descendente(self, event_store: SQLiteEventStore) -> None:
+        competencia_id = UUID("00000000-0000-0000-0000-000000000005")
+        disciplina = Disciplina.SPE_2X50
+        await ConfigurarIntervaloOTHandler(event_store).handle(
+            ConfigurarIntervaloOTCommand(
+                competencia_id=competencia_id,
+                disciplina=disciplina,
+                intervalo_minutos=9,
+                configurado_por="org",
+            )
+        )
+        await _seed_ap_disciplina(
+            event_store, competencia_id, disciplina, A001, "70", UnidadMedida.Segundos
+        )
+        await _seed_ap_disciplina(
+            event_store, competencia_id, disciplina, A002, "90", UnidadMedida.Segundos
+        )
+        await _seed_ap_disciplina(
+            event_store, competencia_id, disciplina, A003, "80", UnidadMedida.Segundos
+        )
+
+        adapter = PerformancesAPAdapter(event_store)
+        handler = GenerarGrillaHandler(event_store, adapter, DisciplinaDescriptorAdapter())
+        await handler.handle(
+            GenerarGrillaCommand(
+                competencia_id=competencia_id,
+                disciplina=disciplina,
+                ot_inicio=OT_INICIO,
+            )
+        )
+
+        events = await event_store.load(_build_stream_id(competencia_id))
+        grilla_event = next(e for e in events if e["event_type"] == "GrillaDeSalidaGenerada")
+        atletas_orden = [p["atleta_id"] for p in grilla_event["payload"]["performances"]]
+        assert atletas_orden == [str(A002), str(A003), str(A001)]

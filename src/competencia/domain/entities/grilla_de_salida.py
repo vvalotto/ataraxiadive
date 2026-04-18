@@ -62,68 +62,17 @@ class GrillaDeSalida:
         hubo_cambio_posicion = False
 
         for cambio in cambios:
-            entrada = grilla_mutable[cambio.performance_id]
-            valor_anterior = entrada.posicion if cambio.campo == "posicion" else entrada.andarivel
-
             if cambio.campo == "posicion":
-                posicion_nueva = cambio.valor_nuevo
-                posicion_vieja = entrada.posicion
-                ocupante_id = next(
-                    (
-                        performance_id
-                        for performance_id, entrada_existente in grilla_mutable.items()
-                        if entrada_existente.posicion == posicion_nueva
-                        and performance_id != cambio.performance_id
-                    ),
-                    None,
-                )
-                if ocupante_id is not None:
-                    ocupante = grilla_mutable[ocupante_id]
-                    grilla_mutable[ocupante_id] = EntradaGrilla(
-                        performance_id=ocupante.performance_id,
-                        atleta_id=ocupante.atleta_id,
-                        posicion=posicion_vieja,
-                        andarivel=ocupante.andarivel,
-                        ot_programado=ocupante.ot_programado,
-                    )
-                    cambios_payload.append(
-                        {
-                            "performance_id": str(ocupante_id),
-                            "campo": "posicion",
-                            "valor_anterior": posicion_nueva,
-                            "valor_nuevo": posicion_vieja,
-                        }
-                    )
-
-                grilla_mutable[cambio.performance_id] = EntradaGrilla(
-                    performance_id=entrada.performance_id,
-                    atleta_id=entrada.atleta_id,
-                    posicion=posicion_nueva,
-                    andarivel=entrada.andarivel,
-                    ot_programado=entrada.ot_programado,
-                )
+                cambios_payload.extend(self._aplicar_cambio_posicion(grilla_mutable, cambio))
                 hubo_cambio_posicion = True
             else:
-                grilla_mutable[cambio.performance_id] = EntradaGrilla(
-                    performance_id=entrada.performance_id,
-                    atleta_id=entrada.atleta_id,
-                    posicion=entrada.posicion,
-                    andarivel=cambio.valor_nuevo,
-                    ot_programado=entrada.ot_programado,
-                )
+                cambios_payload.append(self._aplicar_cambio_andarivel(grilla_mutable, cambio))
 
-            cambios_payload.append(
-                {
-                    "performance_id": str(cambio.performance_id),
-                    "campo": cambio.campo,
-                    "valor_anterior": valor_anterior,
-                    "valor_nuevo": cambio.valor_nuevo,
-                }
-            )
-
-        nueva_grilla = sorted(grilla_mutable.values(), key=lambda entrada: entrada.posicion)
-        if hubo_cambio_posicion and intervalo is not None:
-            nueva_grilla = self._recalcular_ots(nueva_grilla, intervalo)
+        nueva_grilla = self._ordenar_y_recalcular(
+            list(grilla_mutable.values()),
+            intervalo,
+            hubo_cambio_posicion,
+        )
 
         self._entradas = nueva_grilla
         return self.entradas, cambios_payload
@@ -146,31 +95,147 @@ class GrillaDeSalida:
         intervalo: IntervaloDisciplina | None,
     ) -> None:
         grilla_mutable = {entrada.performance_id: entrada for entrada in self._entradas}
+        hubo_cambio_posicion = False
         for cambio in cambios:
-            performance_id = UUID(cambio["performance_id"])
-            entrada = grilla_mutable[performance_id]
-            if cambio["campo"] == "posicion":
-                grilla_mutable[performance_id] = EntradaGrilla(
-                    performance_id=entrada.performance_id,
-                    atleta_id=entrada.atleta_id,
-                    posicion=cambio["valor_nuevo"],
-                    andarivel=entrada.andarivel,
-                    ot_programado=entrada.ot_programado,
-                )
-            else:
-                grilla_mutable[performance_id] = EntradaGrilla(
-                    performance_id=entrada.performance_id,
-                    atleta_id=entrada.atleta_id,
-                    posicion=entrada.posicion,
-                    andarivel=cambio["valor_nuevo"],
-                    ot_programado=entrada.ot_programado,
-                )
+            self._aplicar_cambio_persistido(grilla_mutable, cambio)
+            hubo_cambio_posicion = hubo_cambio_posicion or cambio["campo"] == "posicion"
 
-        nueva_grilla = sorted(grilla_mutable.values(), key=lambda entrada: entrada.posicion)
-        if any(cambio["campo"] == "posicion" for cambio in cambios) and intervalo is not None:
-            nueva_grilla = self._recalcular_ots(nueva_grilla, intervalo)
+        nueva_grilla = self._ordenar_y_recalcular(
+            list(grilla_mutable.values()),
+            intervalo,
+            hubo_cambio_posicion,
+        )
 
         self._entradas = nueva_grilla
+
+    def _aplicar_cambio_posicion(
+        self,
+        grilla_mutable: dict[UUID, EntradaGrilla],
+        cambio: CambioGrilla,
+    ) -> list[dict[str, object]]:
+        entrada = grilla_mutable[cambio.performance_id]
+        posicion_nueva = cambio.valor_nuevo
+        posicion_vieja = entrada.posicion
+        cambios_payload: list[dict[str, object]] = []
+        ocupante_id = self._buscar_ocupante_posicion(
+            grilla_mutable,
+            posicion_nueva,
+            cambio.performance_id,
+        )
+
+        if ocupante_id is not None:
+            ocupante = grilla_mutable[ocupante_id]
+            grilla_mutable[ocupante_id] = self._reemplazar_entrada(
+                ocupante,
+                posicion=posicion_vieja,
+            )
+            cambios_payload.append(
+                self._crear_cambio_payload(ocupante_id, "posicion", posicion_nueva, posicion_vieja)
+            )
+
+        grilla_mutable[cambio.performance_id] = self._reemplazar_entrada(
+            entrada,
+            posicion=posicion_nueva,
+        )
+        cambios_payload.append(
+            self._crear_cambio_payload(
+                cambio.performance_id,
+                "posicion",
+                posicion_vieja,
+                posicion_nueva,
+            )
+        )
+        return cambios_payload
+
+    def _aplicar_cambio_andarivel(
+        self,
+        grilla_mutable: dict[UUID, EntradaGrilla],
+        cambio: CambioGrilla,
+    ) -> dict[str, object]:
+        entrada = grilla_mutable[cambio.performance_id]
+        grilla_mutable[cambio.performance_id] = self._reemplazar_entrada(
+            entrada,
+            andarivel=cambio.valor_nuevo,
+        )
+        return self._crear_cambio_payload(
+            cambio.performance_id,
+            "andarivel",
+            entrada.andarivel,
+            cambio.valor_nuevo,
+        )
+
+    def _aplicar_cambio_persistido(
+        self,
+        grilla_mutable: dict[UUID, EntradaGrilla],
+        cambio: dict[str, Any],
+    ) -> None:
+        performance_id = UUID(cambio["performance_id"])
+        entrada = grilla_mutable[performance_id]
+        if cambio["campo"] == "posicion":
+            grilla_mutable[performance_id] = self._reemplazar_entrada(
+                entrada,
+                posicion=cambio["valor_nuevo"],
+            )
+            return
+        grilla_mutable[performance_id] = self._reemplazar_entrada(
+            entrada,
+            andarivel=cambio["valor_nuevo"],
+        )
+
+    def _ordenar_y_recalcular(
+        self,
+        entradas: list[EntradaGrilla],
+        intervalo: IntervaloDisciplina | None,
+        hubo_cambio_posicion: bool,
+    ) -> list[EntradaGrilla]:
+        nueva_grilla = sorted(entradas, key=lambda entrada: entrada.posicion)
+        if hubo_cambio_posicion and intervalo is not None:
+            return self._recalcular_ots(nueva_grilla, intervalo)
+        return nueva_grilla
+
+    @staticmethod
+    def _buscar_ocupante_posicion(
+        grilla_mutable: dict[UUID, EntradaGrilla],
+        posicion: int,
+        performance_id_excluido: UUID,
+    ) -> UUID | None:
+        return next(
+            (
+                performance_id
+                for performance_id, entrada in grilla_mutable.items()
+                if entrada.posicion == posicion and performance_id != performance_id_excluido
+            ),
+            None,
+        )
+
+    @staticmethod
+    def _reemplazar_entrada(
+        entrada: EntradaGrilla,
+        *,
+        posicion: int | None = None,
+        andarivel: int | None = None,
+    ) -> EntradaGrilla:
+        return EntradaGrilla(
+            performance_id=entrada.performance_id,
+            atleta_id=entrada.atleta_id,
+            posicion=entrada.posicion if posicion is None else posicion,
+            andarivel=entrada.andarivel if andarivel is None else andarivel,
+            ot_programado=entrada.ot_programado,
+        )
+
+    @staticmethod
+    def _crear_cambio_payload(
+        performance_id: UUID,
+        campo: str,
+        valor_anterior: int,
+        valor_nuevo: int,
+    ) -> dict[str, object]:
+        return {
+            "performance_id": str(performance_id),
+            "campo": campo,
+            "valor_anterior": valor_anterior,
+            "valor_nuevo": valor_nuevo,
+        }
 
     def _recalcular_ots(
         self,

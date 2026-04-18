@@ -33,6 +33,7 @@ from competencia.application.commands.registrar_resultado import (
 from competencia.domain.aggregates.performance import Performance
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
+from competencia.domain.value_objects.motivo_dq import MotivoDQ
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
@@ -109,6 +110,11 @@ async def _resultado_async(store: SQLiteEventStore, cid: UUID, pid: UUID, valor:
     )
 
 
+_MOTIVO_LEGACY_DQ: dict[str, MotivoDQ] = {
+    "black-out": MotivoDQ.BKO_SUPERFICIE,
+}
+
+
 async def _tarjeta_async(
     store: SQLiteEventStore,
     cid: UUID,
@@ -117,6 +123,8 @@ async def _tarjeta_async(
     motivo: str | None = None,
     distancia_blackout: Decimal | None = None,
 ) -> None:
+    motivo_dq = _MOTIVO_LEGACY_DQ.get(motivo or "") if tipo == TipoTarjeta.Roja else None
+    motivo_texto = motivo if tipo == TipoTarjeta.Amarilla else None
     await AsignarTarjetaHandler(store).handle(
         AsignarTarjetaCommand(
             competencia_id=cid,
@@ -124,7 +132,8 @@ async def _tarjeta_async(
             disciplina=_DISCIPLINA,
             tipo=tipo,
             asignada_por=_JUEZ,
-            motivo=motivo,
+            motivo_dq=motivo_dq,
+            motivo_texto=motivo_texto,
             distancia_blackout=distancia_blackout,
         )
     )

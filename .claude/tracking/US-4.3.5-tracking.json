@@ -1,0 +1,83 @@
+{
+  "metadata": {
+    "us_id": "US-4.3.5",
+    "us_title": "Adaptacion STA en el Paso 3",
+    "us_points": 3,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-12T13:16:39.147170+00:00",
+    "completed_at": "2026-04-13T11:25:22.117146+00:00",
+    "total_elapsed_seconds": 79722,
+    "effective_seconds": 79722,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-04-12T13:16:54.545713+00:00",
+      "completed_at": "2026-04-12T13:16:58.846571+00:00",
+      "elapsed_seconds": 4,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-12T13:17:01.402283+00:00",
+      "completed_at": "2026-04-12T13:17:03.781151+00:00",
+      "elapsed_seconds": 2,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-04-12T13:17:06.520343+00:00",
+      "completed_at": "2026-04-12T13:17:08.818467+00:00",
+      "elapsed_seconds": 2,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-04-12T13:17:12.371892+00:00",
+      "completed_at": "2026-04-12T13:19:34.161923+00:00",
+      "elapsed_seconds": 141,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-04-12T13:21:07.035043+00:00",
+      "completed_at": null,
+      "elapsed_seconds": 0,
+      "status": "in_progress",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 0,
+    "completed_tasks": 0,
+    "total_phases": 5,
+    "estimated_total_minutes": 0,
+    "actual_total_minutes": 0,
+    "variance_minutes": 0,
+    "variance_percent": 0.0
+  }
+}

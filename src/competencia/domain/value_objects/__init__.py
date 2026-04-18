@@ -10,6 +10,11 @@ from competencia.domain.value_objects.intervalo_disciplina import (
     IntervaloDisciplina,
     IntervaloInvalido,
 )
+from competencia.domain.value_objects.motivo_dq import MotivoDQ
+from competencia.domain.value_objects.penalizacion_tecnica import PenalizacionTecnica
+from competencia.domain.value_objects.resolucion_tarjeta import ResolucionTarjeta
+from competencia.domain.value_objects.rp_final import RPFinal
+from competencia.domain.value_objects.tipo_penalizacion import TipoPenalizacion
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
 __all__ = [
@@ -21,6 +26,11 @@ __all__ = [
     "EstadoPerformance",
     "IntervaloDisciplina",
     "IntervaloInvalido",
+    "MotivoDQ",
+    "PenalizacionTecnica",
+    "ResolucionTarjeta",
+    "RPFinal",
+    "TipoPenalizacion",
     "UnidadMedida",
     "ValorAPInvalido",
 ]

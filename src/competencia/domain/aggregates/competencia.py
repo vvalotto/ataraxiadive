@@ -44,7 +44,8 @@ class Competencia(AggregateRoot):
         INV-C-01: intervaloDisciplina debe estar configurado antes de GenerarGrilla.
         INV-CT-01: torneo_id es opcional — None para competencias standalone (SP1/SP2).
         INV-CT-02: si torneo_id se provee, se persiste en el payload de IntervaloOTConfigurado.
-        INV-CT-03: streams existentes sin torneo_id se reconstituyen correctamente (backward compat).
+        INV-CT-03: streams existentes sin torneo_id se reconstituyen
+        correctamente (backward compat).
     """
 
     def __init__(
@@ -60,6 +61,7 @@ class Competencia(AggregateRoot):
         self._estado: EstadoCompetencia = EstadoCompetencia.Preparacion
         self._intervalo: IntervaloDisciplina | None = None
         self._grilla_confirmada: bool = False
+        self._hash_sha256: str | None = None
         self._grilla = GrillaDeSalida()
 
     # ── Propiedades ───────────────────────────────────────────────────────────
@@ -98,6 +100,11 @@ class Competencia(AggregateRoot):
     def grilla_confirmada(self) -> bool:
         """True si la grilla fue confirmada de forma irreversible."""
         return self._grilla_confirmada
+
+    @property
+    def hash_sha256(self) -> str | None:
+        """Hash SHA-256 persistido al cierre, o None si la competencia no finalizó."""
+        return self._hash_sha256
 
     # ── Comandos de dominio ───────────────────────────────────────────────────
 
@@ -325,7 +332,13 @@ class Competencia(AggregateRoot):
         self._estado = EstadoCompetencia.EnEjecucion
         self._record(event)
 
-    def finalizar(self, total_performances: int, ejecutadas: int, dns_count: int) -> None:
+    def finalizar(
+        self,
+        total_performances: int,
+        ejecutadas: int,
+        dns_count: int,
+        hash_sha256: str,
+    ) -> None:
         """Finaliza la Competencia cuando todas las performances están completas (INV-C-04).
 
         Emite CompetenciaFinalizada y transiciona el estado a Finalizada.
@@ -334,6 +347,7 @@ class Competencia(AggregateRoot):
             total_performances: Total de performances de la disciplina.
             ejecutadas: Cantidad en estado Ejecutada.
             dns_count: Cantidad en estado DNS.
+            hash_sha256: Hash SHA-256 de la secuencia canónica de eventos de la disciplina.
 
         Raises:
             CompetenciaNoFinalizable: INV-C-04 — quedan performances en AnunciadaAP o Llamada.
@@ -356,8 +370,10 @@ class Competencia(AggregateRoot):
             ejecutadas=ejecutadas,
             dns_count=dns_count,
             finalizada_en=now.isoformat(),
+            hash_sha256=hash_sha256,
         )
         self._estado = EstadoCompetencia.Finalizada
+        self._hash_sha256 = hash_sha256
         self._record(event)
 
     # ── Reconstitución desde eventos ──────────────────────────────────────────
@@ -421,8 +437,9 @@ class Competencia(AggregateRoot):
     def _apply_competencia_iniciada(self, payload: dict[str, Any]) -> None:  # noqa: ARG002
         self._estado = EstadoCompetencia.EnEjecucion
 
-    def _apply_competencia_finalizada(self, payload: dict[str, Any]) -> None:  # noqa: ARG002
+    def _apply_competencia_finalizada(self, payload: dict[str, Any]) -> None:
         self._estado = EstadoCompetencia.Finalizada
+        self._hash_sha256 = payload.get("hash_sha256")
 
     @staticmethod
     def _parse_payload(payload: Any) -> dict[str, Any]:

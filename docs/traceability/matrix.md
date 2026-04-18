@@ -4,9 +4,9 @@
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-04-03 |
+| **Fecha** | 2026-04-15 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.2 — SP-ADJ-04 completado |
+| **Estado** | ✅ v1.16 — INC-4.4 ✅ (3 US offline-first · PRs #77 + fix); INC-4.5 ✅ (4 US BC Notificaciones · PRs #79–82) |
 
 ---
 
@@ -32,7 +32,10 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP2 | Competencia (completo) + Resultados (núcleo) | RF-PR-04/05/06/07/08, RF-EJ-01, RF-PM-03 |
 | SP3 | Torneo + Registro + Identidad + Resultados | RF-GT-01..07, RF-IN-01..06/08/09, RF-US-01..05, RF-PM-01/02/05/06 |
 | SP-ADJ-04 | Ajustes de Shared + Registro + Resultados + Competencia | RF-GT-02, RF-IN-10, RF-PR-05, RF-PM-05 |
-| SP4 | Notificaciones + extensiones | RF-EJ-03/06, RF-IN-05/06, RF-NT-01..04 |
+| SP4 INC-4.1 | Competencia + Torneo + Resultados (correcciones CMAS/FAAS) | RF-GT-02 (variantes SPE), RF-PR-05 (orden SPE), brechas reglamento (ver §3) |
+| SP4 INC-4.2/4.3 | Frontend (scaffold + juez) | RF-EJ-01..10 (UI juez completa) |
+| SP4 INC-4.4 | Frontend (offline-first) | RF-EJ-03 (tarjetas), RF-EJ-06 (corrección con ventana) — operación sin red |
+| SP4 INC-4.5/4.6 | Notificaciones + Auditoría + Exportación | RF-NT-01..04, RF-EJ-06 |
 | SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
 
 ---
@@ -44,7 +47,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
 | RF-GT-01 | Un torneo tiene una sola sede | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
-| RF-GT-02 | Disciplinas configurables (STA, DNF, DBF, DYN, SPE) | Torneo | SP3/SP4 | 3.1 / 4.3 | US-3.1.x | ✅ definido — acrónimos corregidos en SP-ADJ-04 (US-ADJ-4.1) |
+| RF-GT-02 | Disciplinas configurables (STA, DNF, DBF, DYN, SPE y variantes) | Torneo | SP3/SP4 | 3.1 / 4.1 | US-3.1.x / US-4.1.3 | ✅ completado — acrónimos corregidos en SP-ADJ-04; variantes SPE_2X50/4X50/8X50/16X50 agregadas en INC-4.1 |
 | RF-GT-03 | Múltiples torneos activos simultáneamente | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
 | RF-GT-04 | Cancelar = estado Cancelado, datos preservados | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
 | RF-GT-05 | Restricciones de transición entre fases (con retroceso Ejecución → Preparación) | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
@@ -78,7 +81,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-PR-02 | AP > 0, sin negativos ni cero (INV-P-01) | Competencia | SP1 | 1.2 | US-P-01 | ✅ definido |
 | RF-PR-03 | AP no modificable una vez registrado (INV-P-02) | Competencia | SP1 | 1.2 | US-P-01 | ✅ definido |
 | RF-PR-04 | Atleta sin AP no compite — no aparece en grilla (P-05) | Competencia | SP2 | 2.1 | US-C-02 | ✅ definido |
-| RF-PR-05 | Orden de grilla: menor AP primero en todas las disciplinas (P-01 corregido) | Competencia | SP2 / SP-ADJ-04 | 2.1 / — | US-C-02 / US-ADJ-4.2 | ✅ corregido en SP-ADJ-04 — STA era descendente, debe ser ascendente |
+| RF-PR-05 | Orden de grilla: AP ascendente (DNF/DYN/DBF/STA) o descendente (SPE) | Competencia | SP2 / SP-ADJ-04 / SP4 | 2.1 / — / 4.1 | US-C-02 / US-ADJ-4.2 / US-4.1.4 | ✅ completado en INC-4.1 — SPE usa orden descendente (mayor AP primero) per reglamento CMAS/FAAS |
 | RF-PR-06 | Andariveles simultáneos — varios atletas compiten en paralelo | Competencia | SP2 | 2.3 | US-C-02 | ✅ definido |
 | RF-PR-07 | Organizador puede ajustar manualmente el orden de la grilla | Competencia | SP2 | 2.1 | US-C-03 | ✅ definido |
 | RF-PR-08 | Intervalo entre OTs configurable por competencia (P-02) | Competencia | SP2 | 2.1 | US-C-01 | ✅ definido |
@@ -131,10 +134,10 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-NT-01 | Notificaciones por email y push | Notificaciones | SP4 | 4.2 | US-4.2.x | ✅ definido |
-| RF-NT-02 | Recordatorio al atleta cuando se acerca el plazo de AP | Notificaciones | SP4 | 4.2 | US-4.2.x | ✅ definido |
+| RF-NT-01 | Notificaciones por email y push | Notificaciones | SP4 | 4.5 | US-4.5.x | 🟡 email implementado y cableado para P-10/P-11 (`US-4.5.1`..`US-4.5.5`); push pendiente |
+| RF-NT-02 | Recordatorio al atleta cuando se acerca el plazo de AP | Notificaciones | SP4 | 4.5 | US-4.5.x | ✅ definido · pendiente de implementación |
 | RF-NT-03 | Notificaciones a juez u organizador durante ejecución | Notificaciones | — | — | — | ⏳ pendiente |
-| RF-NT-04 | Notificar a atletas cuando se publican resultados finales | Notificaciones | SP4 | 4.2 | US-4.2.x | ✅ definido |
+| RF-NT-04 | Notificar a atletas cuando se publican resultados finales | Notificaciones | SP4 | 4.5 | US-4.5.x | ✅ implementado (`US-4.5.4`) |
 
 ---
 
@@ -157,7 +160,7 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 |----|-------------|---------|-------------------|
 | RF-IN-07 | ¿Qué pasa si los datos del atleta difieren de la BD FAAS? | SP5 inc. 5.1 | SP5 |
 | RF-EJ-04 | Códigos de penalización (AIDA/CMAS u otra federación) | SP4 inc. 4.4 | SP4 |
-| RF-NT-03 | ¿Juez u organizador reciben notificaciones durante ejecución? | SP4 inc. 4.2 | SP4 |
+| RF-NT-03 | ¿Juez u organizador reciben notificaciones durante ejecución? | SP4 inc. 4.5 | SP4 |
 | RF-IG-01..04 | Integración completa con BD FAAS / exportación a rankings | SP5 inc. 5.1 | SP5 |
 
 ---
@@ -265,7 +268,94 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
-## 12. Trazabilidad: Discrepancias → US → Documentos a actualizar
+## 12. US-IEDD SP4 INC-4.1 — Implementadas (correcciones de dominio CMAS/FAAS)
+
+| US | Inc. | RFs / Brechas cubiertos | Contenido principal | Estado |
+|----|------|-------------------------|---------------------|--------|
+| US-4.1.1 | 4.1 | Brecha CMAS #1 — motivos DQ | `MotivoDQ` StrEnum (BKO_SUPERFICIE, BKO_SUBACUATICO, NO_PROTOCOLO, INFRACCION_TECNICA, NO_INICIO_VENTANA, SALIDA_FALSO) · `TarjetaAsignacion` VO extendido · tests 102 passed | ✅ 2026-04-08 |
+| US-4.1.2 | 4.1 | Brecha CMAS #2 — tarjeta blanca con penalizaciones | `TipoTarjeta.BlancaConPenalizaciones` · `PenalizacionTecnica` VO · RP = medido − Σ deducciones · tests 107 passed | ✅ 2026-04-08 |
+| US-4.1.3 | 4.1 | RF-GT-02 — variantes SPE | Subdisciplinas `SPE_2X50`, `SPE_4X50`, `SPE_8X50`, `SPE_16X50` en `shared/domain/` · tests 73 passed | ✅ 2026-04-08 |
+| US-4.1.4 | 4.1 | RF-PR-05 — orden SPE descendente | `GrillaDeSalida.generar()` usa orden descendente para SPE (AP mayor→menor) · tests 68 passed | ✅ 2026-04-08 |
+| US-4.1.5 | 4.1 | — (refactoring técnico) | Descomponer aggregate `Performance` → `performance.py` + `performance_state.py` + `performance_events.py` + VOs `ResolucionTarjeta` y `RPFinal` · tests 82 passed | ✅ 2026-04-08 |
+| US-4.1.6 | 4.1 | — (refactoring técnico) | `_handler_utils.py` — helpers comunes; alivia `AsignarTarjetaHandler`, `GenerarGrillaHandler`, `LlamarAtletaHandler`, `RegistrarAPHandler` · tests 36 passed | ✅ 2026-04-08 |
+| US-4.1.7 | 4.1 | — (refactoring técnico) | `GrillaDeSalida.ajustar()` partido en submétodos · `RankingCompetencia` descompuesto · tests 32 passed | ✅ 2026-04-08 |
+| US-4.1.8 | 4.1 | — (refactoring técnico) | `Torneo` limpiado · `SQLiteTorneoRepository` simplificado · `DisciplinaDescriptor` y `TarjetaAsignacion` aliviados · tests 91 passed | ✅ 2026-04-08 |
+
+> **US-4.1.5 a US-4.1.8:** ajustes técnicos derivados del DesignReviewer al cierre del incremento funcional (HITO-19).
+> Patrón acordado: los quality gate issues del DesignReviewer se resuelven como US-IEDD dentro del mismo INC, no como SP-ADJ.
+
+---
+
+## 13. US-IEDD SP4 INC-4.2 — Fundación Frontend
+
+> Estado del incremento al 2026-04-11: ambas US están mergeadas a `develop` y el
+> `DesignReviewer` manual consolidado dio `0 CRITICAL · 142 WARNING`
+> (`quality/reports/designreviewer/INC-4.2-report.txt`). Queda pendiente la
+> validación manual en browser con backend corriendo para considerar el cierre
+> funcional completo del incremento.
+
+| US | Inc. | RFs / Decisiones cubiertos | Contenido principal | Estado |
+|----|------|----------------------------|---------------------|--------|
+| US-4.2.1 | 4.2 | D-01..D-06 (decisiones-frontend.md) · ADR-003 | Scaffold Vite 6 + React 19 + TypeScript strict · Tailwind v4 · vite-plugin-pwa (manifest standalone+portrait, Workbox NetworkFirst) · HealthCheck (TanStack Query) · useConnectionStore (Zustand) · estructura D-01 · npm run build exitcode 0 | ✅ 2026-04-11 |
+| US-4.2.2 | 4.2 | D-02 (routing+guards) · D-03 (Zustand) | useAuthStore (Zustand, sin persistencia) · loginApi() POST /auth/login · decodeJwtPayload() atob() · LoginPage (TanStack Query mutation, error inline) · RequireRole HOC · BrowserRouter + rutas /login /juez/disciplinas /organizador/dashboard · npm run build exitcode 0 | ✅ 2026-04-11 |
+
+---
+
+## 14. US-IEDD SP4 INC-4.3 — Interfaz del Juez
+
+> UAT completado 2026-04-12 con datos reales BA 2025. 5/5 US implementadas. DesignReviewer post-merge: 0 CRITICAL, 158 WARNING.
+> PR #75 (fix UX INC-4.3): 8 issues UX (MUX-01..08) + BUG-01 (INV-DQ-01 condicionado por `es_disciplina_tiempo` en STA).
+> Deuda UX residual: `docs/design/ux/mejoras-ux.md`. HITO-20: invariantes de dominio que no cubren todas las variantes.
+
+| US | Inc. | RFs / Decisiones cubiertos | Contenido principal | Estado |
+|----|------|----------------------------|---------------------|--------|
+| US-4.3.1 | 4.3 | D-02, D-03 · wireframes-juez S-01 | MisDisciplinas real en React · `api/torneo.ts` + `api/competencia.ts` · `useCompetenciaStore` · `DisciplinaCard` · `JuezLayout` · ruta `/juez/grilla` stub · `npm run build` y `npm run lint` OK | ✅ 2026-04-12 |
+| US-4.3.2 | 4.3 | RF-EJ-05, RF-EJ-06 · wireframes-juez S-02 a S-09 | router `competencia` con `POST /llamar`, `POST /registrar-resultado`, `POST /asignar-tarjeta` · grilla enriquecida con estado/AP · `GrillaPage` operativa · wizard móvil `/juez/performance` · `StepIndicator`, `AtletaCard`, `RpSelector` · `npm run build`, `npm run lint`, `compileall` y smoke test `TestClient` OK | ✅ 2026-04-11 |
+| US-4.3.3 | 4.3 | RF-EJ-07, RF-EJ-08 · wireframes-juez S-12 a S-14 | router `competencia` con `POST /registrar-dns` · wizard extendido con DNS, BKO, roja con `MotivoDQ` y `BlancaConPenalizaciones` · `MotivoDqSelector` · `PenalizacionesSelector` · fixture `STA` + `DNF` · `npm run build`, `npm run lint`, `compileall` y smoke test `TestClient` OK | ✅ 2026-04-12 |
+| US-4.3.4 | 4.3 | wireframes-juez S-10, S-15 | nuevo estado `EnRevision` en `Performance` · `ResolverRevisionCommand` + `ResolverRevisionHandler` · evento `RevisionResuelta` · `POST /competencia/{id}/resolver-revision` · `ResultadoAmarilla` (S-10) + `RevisionDesdeGrilla` (S-15) + `AlertaRevision` · timer informativo 3 min · BUG-01: `es_disciplina_tiempo` condiciona `INV-DQ-01` en `TarjetaAsignacion` | ✅ 2026-04-12 |
+| US-4.3.5 | 4.3 | wireframes-juez STA · RF-EJ-02 | Paso 3 del wizard adaptado para STA — botón "Vías respiratorias en agua" en lugar de "Atleta inicia" · BKO en STA registra `valor_rp=0` automáticamente · UI móvil ajustada | ✅ 2026-04-12 |
+
+---
+
+## 15. US-IEDD SP4 INC-4.4 — Offline-first
+
+| US | Inc. | RFs / Decisiones cubiertos | Contenido principal | Estado |
+|----|------|----------------------------|---------------------|--------|
+| US-4.4.1 | 4.4 | PLAN-SP4 §INC-4.4 · ADR-015 (Dexie.js) | Instalar Dexie.js · `AtaraxiaDiveDB` schema (`grilla_cache`, `comando_queue`) · hook `usePrecarga` · `GrillaPage` con lectura offline · expiración 24h · label de antigüedad | ✅ Done (PR #77) |
+| US-4.4.2 | 4.4 | PLAN-SP4 §INC-4.4 | Hook `useComandoQueue` · `PerformanceFlowPage` intercepta comandos (envía directo si online, encola si offline) · estado optimista en grilla (badge ⏳) · `useConnectionStore.pendingCount` | ✅ Done (PR #77) |
+| US-4.4.3 | 4.4 | PLAN-SP4 §INC-4.4 | Migración SW a `injectManifest` · `sw.ts` con precache + NetworkFirst + Background Sync · hook `useSyncQueue` (FIFO, backoff, fallback online event) · `SyncStatusBadge` en `JuezLayout` | ✅ Done (PR #77) |
+
+> DesignReviewer post-INC-4.4: 0 CRITICAL, 158 WARNING. Fix robustez offline mergeado en `dfb6ec3` (timeout 5s fetchWithTimeout + AbortController en postCommand).
+
+---
+
+## 16. US-IEDD SP4 INC-4.5 — BC Notificaciones
+
+| US | Inc. | RFs / Decisiones cubiertos | Contenido principal | Estado |
+|----|------|----------------------------|---------------------|--------|
+| US-4.5.1 | 4.5 | RF-NT-01 · PLAN-SP4 §INC-4.5 | Aggregate `Notificacion` · ciclo de vida (Solicitada → Enviada / Fallida) · event store SQLite · idempotencia exactly-once (`evento_fuente_id`) | ✅ Done (PR #79) |
+| US-4.5.2 | 4.5 | RF-NT-01 · ADR-016 (Resend) | Puerto `EmailPort` · adaptador `ResendEmailAdapter` · integración HTTP con Resend API | ✅ Done (PR #80) |
+| US-4.5.3 | 4.5 | RF-NT-01 · RF-NT-03 | Política P-10 — `InscripcionConfirmada` → `SolicitarNotificacion` → email al atleta · template `inscripcion_confirmada` | ✅ Done (PR #81) |
+| US-4.5.4 | 4.5 | RF-NT-04 | Política P-11 — `ResultadosPublicados` → email a todos los atletas de la disciplina · template `resultados_publicados` · `evento_fuente_id` compuesto `"{evento.id}:{atleta_id}"` | ✅ Done (PR #82) |
+| US-4.5.5 | 4.5 | RF-NT-01 | Cableado P-10 al endpoint `POST /registro/inscripciones` · enrichment `Inscripcion` → `InscripcionConfirmada` en `src/app.py` · idempotencia por `inscripcion_id` | ✅ Done (PR #83) |
+
+> DesignReviewer post-INC-4.5: 0 CRITICAL, 174 WARNING (+16 vs INC-4.4 — patrones ES/hexagonal esperados en BC Notificaciones).
+> Reporte: `quality/reports/designreviewer/INC-4.5-report.txt`
+
+---
+
+## 17. US-IEDD SP4 INC-4.6 — Auditoría y Exportación
+
+| US | Inc. | RFs / Decisiones cubiertos | Contenido principal | Estado |
+|----|------|----------------------------|---------------------|--------|
+| US-4.6.1 | 4.6 | PLAN-SP4 §INC-4.6 · ADR-001 · ADR-008 | Query `ObtenerAuditLog` por performance · endpoint `GET /competencia/{competencia_id}/performances/{atleta_id}/audit-log` · respuesta cronológica con `sequence`, `tipo`, `timestamp`, `datos` · acceso restringido a `organizador/admin` | ✅ Done |
+| US-4.6.2 | 4.6 | PLAN-SP4 §INC-4.6 · ADR-001 · ADR-008 | Servicio `CalculadorHashCompetencia` · `CompetenciaFinalizada.hash_sha256` persistido en event store · cálculo canónico en política `P-08` antes del cierre · hash vacío conocido para disciplina sin performances | ✅ Done |
+| US-4.6.3 | 4.6 | PLAN-SP4 §INC-4.6 · US-4.6.1 · US-4.6.2 | Rutas y pantallas de organizador para auditoría · lista de atletas por competencia · timeline puntual por performance · visibilidad y copia de `hash_sha256` cuando la disciplina está finalizada | ✅ Done |
+| US-4.6.4 | 4.6 | PLAN-SP4 §INC-4.6 · US-4.6.2 · US-4.6.3 | Query `ExportarResultados` consolidada · endpoint `GET /resultados/{torneo_id}/export` · descarga `csv`/`json` con `Content-Disposition` · ACLs a Torneo, Registro y Competencia para torneo, atletas, estado e integridad | ✅ Done |
+
+---
+
+## 18. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §16 -->
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -284,7 +374,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 13. Cobertura Total
+## 19. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -302,7 +392,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 14. US → Tests
+## 19. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -327,10 +417,23 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-3.5.1 | unit/resultados/domain + unit/resultados/application + integration/resultados + features/US-3.5.1-ranking-overall | ✅ implementada |
 | US-3.5.2 | unit/app + integration/p09 + features/US-3.5.2-politica-p09 | ✅ 17 tests |
 | US-3.5.3 | unit/resultados/application + unit/resultados/api + integration/resultados + features/US-3.5.3-api-overall | ✅ 10 tests focalizados |
+| US-4.1.1 | unit/competencia/domain + unit/competencia/application + integration/competencia + features/US-4.1.1 | ✅ 102 passed |
+| US-4.1.2 | unit/competencia/domain + unit/competencia/application + unit/resultados + integration/resultados + features/US-4.1.2 | ✅ 107 passed |
+| US-4.1.3 | unit/shared + unit/torneo + integration/torneo + features/US-4.1.3 | ✅ 73 passed |
+| US-4.1.4 | unit/competencia/domain + integration/competencia + features/US-4.1.4 | ✅ 68 passed |
+| US-4.1.5 | unit/competencia/domain + integration/competencia | ✅ 82 passed (BDD waiver — refactoring interno sin comportamiento nuevo) |
+| US-4.1.6 | unit/competencia/application | ✅ 36 passed (BDD waiver — refactoring handlers) |
+| US-4.1.7 | unit/competencia/domain + unit/resultados/domain | ✅ 32 passed (BDD waiver — refactoring estructural) |
+| US-4.1.8 | unit/torneo/domain + unit/competencia/domain + unit/competencia/infrastructure | ✅ 91 passed (BDD waiver — refactoring estructural) |
+| US-4.3.1 | frontend (build + lint) · validación manual navegador | ✅ UAT INC-4.3 2026-04-12 |
+| US-4.3.2 | integration/competencia (smoke TestClient) · frontend (build + lint) · validación manual navegador | ✅ UAT INC-4.3 2026-04-12 |
+| US-4.3.3 | integration/competencia (smoke TestClient) · frontend (build + lint) · validación manual navegador | ✅ UAT INC-4.3 2026-04-12 |
+| US-4.3.4 | unit/competencia/domain (EnRevision + ResolverRevision) · integration/competencia · frontend (build + lint) · validación manual navegador | ✅ UAT INC-4.3 2026-04-12 |
+| US-4.3.5 | frontend (build + lint) · validación manual navegador (BDD waiver — frontend solo) | ✅ UAT INC-4.3 2026-04-12 |
 
 ---
 
-## 15. US → ADR
+## 20. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -340,6 +443,8 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-1.1.1 | ADR-008 | Event Store como tabla `events` append-only en SQLite |
 | US-1.1.1 | ADR-009 | Migraciones Alembic en `competencia/infrastructure/migrations/` |
 | US-1.2.x | ADR-005 | Event Sourcing en BC Competencia |
+| US-4.1.2 | ADR-014 | Penalizaciones acumulables — modelo de deducción N×3m en tarjeta blanca |
+| US-4.5.2 | ADR-016 | Resend como proveedor email — puerto `EmailPort` + adaptador `ResendEmailAdapter` |
 
 ---
 
@@ -350,6 +455,12 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.4 — 2026-03-29: SP3 §9 agregado · US-3.1.1 implementada*
 *v1.5 — 2026-03-30: US-3.1.2 implementada — API REST Torneo completa*
 *v1.6 — 2026-04-02: SP3 completado a nivel US — §9 y tabla US→Tests actualizadas hasta US-3.5.3*
-*v1.10 — 2026-04-03: SP-ADJ-04 completado (§2, §11), US-ADJ-4.6 implementada, RF-IN-10 incorporado a cobertura total (§13)*
+*v1.10 — 2026-04-03: SP-ADJ-04 completado (§2, §11), US-ADJ-4.6 implementada, RF-IN-10 incorporado a cobertura total (§14)*
+*v1.16 — 2026-04-15: INC-4.4 ✅ (US-4.4.1..3 Done · fix robustez) · INC-4.5 ✅ §16 agregado (4 US · PRs #79–82) · §§ renumerados 17..20 · US→ADR ADR-016*
+*v1.15 — 2026-04-13: INC-4.4 especificado (§15 nuevo — 3 US offline-first) · §§ renumerados 16..19 · §2 cobertura actualizada*
+*v1.14 — 2026-04-13: INC-4.3 completado (§14 — 5/5 US ✅, UAT BA 2025) · RF-NT §3.7 INC corregido (4.2→4.5) · US-4.3.x en §18*
+*v1.13 — 2026-04-11: US-4.2.2 implementada y mergeada · DesignReviewer consolidado INC-4.2 OK · validación manual pendiente*
+*v1.12 — 2026-04-11: SP4 INC-4.2 §13 agregado · US-4.2.1 implementada (scaffold frontend) · §§ renumerados*
+*v1.11 — 2026-04-09: SP4 INC-4.1 agregado (§12 nuevo) · RF-GT-02 y RF-PR-05 actualizados · §13-§16 renumerados · US-4.1.x en §15 y §16*
 *Fuentes: 05-requerimientos_funcionales.md · Context Map v1.1 · estrategia-desarrollo-bc.md · ES Competencia*
 *Mantenido por: Claude Cowork + Victor Valotto*

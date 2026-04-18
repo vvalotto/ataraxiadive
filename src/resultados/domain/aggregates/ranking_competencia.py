@@ -17,7 +17,7 @@ from shared.domain.value_objects.disciplina import Disciplina
 from shared.domain.value_objects.disciplina_descriptor import DisciplinaDescriptor
 
 # Tarjetas que producen un resultado válido (se posicionan antes de DNS/Roja)
-_TARJETAS_VALIDAS = {"Blanca", "Amarilla"}
+_TARJETAS_VALIDAS = {"Blanca", "BlancaConPenalizaciones", "Amarilla"}
 _CATEGORIA_DEFAULT = Categoria.SENIOR_MASCULINO
 
 
@@ -30,7 +30,7 @@ class RankingCompetencia(AggregateRoot):
     Stream ID: "ranking-{competencia_id}-{disciplina}"
 
     Reglas de ordenamiento (RF-PM-03):
-        1. Performances válidas (Blanca/Amarilla): RP mayor → menor.
+        1. Performances válidas (Blanca/BlancaConPenalizaciones/Amarilla): RP mayor → menor.
         2. Empates: comparten posición; la siguiente posición se omite.
         3. DNS y tarjeta roja: al final, sin marca numérica.
         4. Podio: posiciones 1, 2 y 3 (incluyendo empates en esas posiciones).
@@ -124,13 +124,12 @@ class RankingCompetencia(AggregateRoot):
 
     def _apply_stored(self, event: dict[str, Any]) -> None:
         """Aplica un evento almacenado al estado interno."""
-        event_type = event["event_type"]
         payload = self._parse_payload(event["payload"])
-        if event_type == "ResultadosCalculados":
-            self._apply_resultados_calculados(payload)
+        if event["event_type"] == "ResultadosCalculados":
+            self._rehidratar_resultados_calculados(payload)
 
-    def _apply_resultados_calculados(self, payload: dict[str, Any]) -> None:
-        self._entries = [_dict_a_entrada(e) for e in payload["entries"]]
+    def _rehidratar_resultados_calculados(self, payload: dict[str, Any]) -> None:
+        self._entries = _deserializar_entries(payload["entries"])
         self._calculado = True
 
     @staticmethod
@@ -146,7 +145,7 @@ class RankingCompetencia(AggregateRoot):
 def _calcular_entries(resultados: list[ResultadoFinal]) -> list[EntradaRanking]:
     """Aplica reglas de ordenamiento y asignación de posiciones.
 
-    Válidas (Blanca/Amarilla): ordenadas por RP desc (mayor es mejor).
+    Válidas (Blanca/BlancaConPenalizaciones/Amarilla): ordenadas por RP desc (mayor es mejor).
     Inválidas (DNS/Roja): al final, en orden de aparición.
     Empates: comparten posición; la siguiente se omite.
     Podio: posiciones 1, 2 y 3.
@@ -157,6 +156,10 @@ def _calcular_entries(resultados: list[ResultadoFinal]) -> list[EntradaRanking]:
         entries.extend(_calcular_entries_categoria(categoria, grupos[categoria]))
 
     return entries
+
+
+def _deserializar_entries(entries: list[dict[str, Any]]) -> list[EntradaRanking]:
+    return [_dict_a_entrada(entry) for entry in entries]
 
 
 def _agrupar_por_categoria(
@@ -174,11 +177,7 @@ def _calcular_entries_categoria(
 ) -> list[EntradaRanking]:
     validas = [r for r in resultados if r.tarjeta in _TARJETAS_VALIDAS]
     invalidas = [r for r in resultados if r.tarjeta not in _TARJETAS_VALIDAS]
-    validas_ordenadas = sorted(
-        validas,
-        key=lambda r: r.rp if r.rp is not None else Decimal(0),
-        reverse=True,
-    )
+    validas_ordenadas = _ordenar_validas(validas)
 
     entries: list[EntradaRanking] = []
     posicion_actual = 1
@@ -192,6 +191,14 @@ def _calcular_entries_categoria(
         posicion_actual += 1
 
     return entries
+
+
+def _ordenar_validas(validas: list[ResultadoFinal]) -> list[ResultadoFinal]:
+    return sorted(
+        validas,
+        key=lambda r: r.rp if r.rp is not None else Decimal(0),
+        reverse=True,
+    )
 
 
 def _resolver_posicion_valida(

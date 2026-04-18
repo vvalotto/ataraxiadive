@@ -11,10 +11,12 @@ class EstadoPerformance(StrEnum):
     Transiciones válidas:
         AnunciadaAP → Llamada → ResultadoRegistrado → Ejecutada  (camino nominal)
         AnunciadaAP → Llamada → DNS                              (atleta no se presentó)
+        AnunciadaAP → Llamada → ResultadoRegistrado → EnRevision → Ejecutada
     """
 
     AnunciadaAP = "AnunciadaAP"  # AP registrado, esperando llamado
     Llamada = "Llamada"  # Atleta llamado al OT
     ResultadoRegistrado = "ResultadoRegistrado"  # RP registrado, esperando tarjeta
+    EnRevision = "EnRevision"  # Tarjeta amarilla pendiente de resolución final
     Ejecutada = "Ejecutada"  # Tarjeta asignada (estado final)
     DNS = "DNS"  # Did Not Start (estado final)

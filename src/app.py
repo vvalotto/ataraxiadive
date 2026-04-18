@@ -22,7 +22,35 @@ from identidad.api.dependencies import configure_identity_dependencies
 from identidad.api.router import router as identidad_router
 from identidad.infrastructure.bcrypt_password_hasher import BcryptPasswordHasher
 from identidad.infrastructure.jwt_service import JWTService
-from registro.api.router import router as registro_router
+from notificaciones.application.commands.enviar_notificacion import (
+    EnviarNotificacionHandler,
+)
+from notificaciones.application.commands.solicitar_envio import SolicitarEnvioHandler
+from notificaciones.application.policies.politica_p10 import (
+    InscripcionConfirmada,
+    PoliticaP10Handler,
+)
+from notificaciones.application.policies.politica_p11 import PoliticaP11Handler
+from notificaciones.infrastructure.email.logging_email_adapter import LoggingEmailAdapter
+from notificaciones.infrastructure.email.resend_email_adapter import ResendEmailAdapter
+from notificaciones.infrastructure.event_store.sqlite_notificacion_event_store import (
+    SQLiteNotificacionEventStore,
+)
+from notificaciones.infrastructure.repositories.sqlite_notificacion_repository import (
+    SQLiteNotificacionRepository,
+)
+from notificaciones.infrastructure.templates.inscripcion_confirmada_template import (
+    InscripcionConfirmadaTemplate,
+)
+from notificaciones.infrastructure.templates.resultados_publicados_template import (
+    ResultadosPublicadosTemplate,
+)
+from registro.api.router import (
+    configure_inscripcion_notificaciones,
+    router as registro_router,
+)
+from registro.domain.aggregates.inscripcion import Inscripcion
+from registro.infrastructure.repositories.sqlite_atleta_repository import SQLiteAtletaRepository
 from torneo.api.exception_handlers import register_torneo_exception_handlers
 from torneo.api.router import router as torneo_router
 from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTorneoRepository
@@ -60,6 +88,79 @@ app.include_router(resultados_router)
 app.include_router(torneo_router)
 register_exception_handlers(app)
 register_torneo_exception_handlers(app)
+
+
+def build_p10_handler() -> PoliticaP10Handler:
+    """Construye la política P-10.
+
+    Usa ResendEmailAdapter si RESEND_API_KEY está configurado,
+    LoggingEmailAdapter como fallback para desarrollo/smoke-test.
+    """
+    store = SQLiteNotificacionEventStore()
+    repository = SQLiteNotificacionRepository(store)
+    email_adapter = (
+        ResendEmailAdapter()
+        if os.getenv("RESEND_API_KEY")
+        else LoggingEmailAdapter()
+    )
+    return PoliticaP10Handler(
+        repository=repository,
+        solicitar_envio_handler=SolicitarEnvioHandler(repository),
+        enviar_notificacion_handler=EnviarNotificacionHandler(
+            repository,
+            email_adapter,
+        ),
+        template=InscripcionConfirmadaTemplate(),
+    )
+
+
+def build_on_inscripcion_confirmada_callback(
+    p10_handler: PoliticaP10Handler | None = None,
+    atleta_repo: SQLiteAtletaRepository | None = None,
+    torneo_repo: SQLiteTorneoRepository | None = None,
+) -> Callable[[Inscripcion], Awaitable[None]]:
+    """Construye el callback que traduce Registro -> Notificaciones P-10."""
+    p10 = p10_handler or build_p10_handler()
+    atletas = atleta_repo or SQLiteAtletaRepository()
+    torneos = torneo_repo or SQLiteTorneoRepository()
+
+    async def _callback(inscripcion: Inscripcion) -> None:
+        atleta = await atletas.find_by_id(inscripcion.atleta_id)
+        torneo = await torneos.find_by_id(inscripcion.torneo_id)
+        if atleta is None or torneo is None:
+            return
+
+        evento = InscripcionConfirmada(
+            id=str(inscripcion.inscripcion_id),
+            atleta_id=str(inscripcion.atleta_id),
+            atleta_email=atleta.email,
+            atleta_nombre=f"{atleta.nombre} {atleta.apellido}".strip(),
+            torneo_nombre=torneo.nombre,
+            torneo_fecha=torneo.fecha_inicio,
+            torneo_sede=torneo.sede.nombre,
+            disciplinas=tuple(disciplina.value for disciplina in sorted(inscripcion.disciplinas)),
+        )
+        await p10.handle(evento)
+
+    return _callback
+
+
+configure_inscripcion_notificaciones(build_on_inscripcion_confirmada_callback())
+
+
+def build_p11_handler() -> PoliticaP11Handler:
+    """Construye la política P-11 con adaptadores reales de Notificaciones."""
+    store = SQLiteNotificacionEventStore()
+    repository = SQLiteNotificacionRepository(store)
+    return PoliticaP11Handler(
+        repository=repository,
+        solicitar_envio_handler=SolicitarEnvioHandler(repository),
+        enviar_notificacion_handler=EnviarNotificacionHandler(
+            repository,
+            ResendEmailAdapter(),
+        ),
+        template=ResultadosPublicadosTemplate(),
+    )
 
 
 # ── Política P-08: CompetenciaFinalizada → CalcularRanking ────────────────────
@@ -139,9 +240,7 @@ async def _calcular_overall_si_corresponde(
     if torneo_id is None:
         return
 
-    if not await _verificar_todas_disciplinas_finalizadas(
-        torneo_id, competencia_event_store
-    ):
+    if not await _verificar_todas_disciplinas_finalizadas(torneo_id, competencia_event_store):
         return
 
     disciplinas = await _obtener_disciplinas_torneo(torneo_id, torneo_db_path)

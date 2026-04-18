@@ -4,6 +4,7 @@
 |-------|-------|
 | **Estado** | Aceptada |
 | **Fecha** | 2026-03-14 |
+| **Última modificación** | 2026-04-16 (agregadas secciones de implementación post-INC-4.4) |
 | **Autores** | Victor Valotto |
 | **Reemplaza** | — |
 
@@ -75,3 +76,42 @@ sequenceDiagram
 - El modo offline se activa en SP4 (Incremento 4.1). SP1, SP2, SP3 asumen conectividad.
   Mitigación: el diseño de la interfaz del juez desde SP1 debe ser compatible con el
   agregado posterior del Service Worker (sin acoplamiento a fetch directo)
+
+---
+
+## Notas de implementación — INC-4.4 (2026-04-13)
+
+La decisión fue implementada en INC-4.4. Los módulos producidos son:
+
+| Hook | Responsabilidad |
+|------|----------------|
+| `usePrecarga` | Fetch de grilla + estado desde servidor; caché en `grilla_cache` (IndexedDB); fallback automático al caché cuando offline |
+| `useComandoQueue` | Ejecución de comandos del juez; encola en `comando_queue` cuando offline o hay cola pendiente; aplica optimistic updates al caché |
+| `useSyncQueue` | Drena la `comando_queue` al reconectar; reintentos con backoff exponencial; registra Background Sync API; refresca grilla post-sync |
+| `GrillaPage` | Página principal del juez que orquesta los tres hooks anteriores |
+
+**Dexie.js** es la capa de acceso a IndexedDB (ver ADR-015). Las tablas utilizadas son
+`grilla_cache` y `comando_queue`, definidas en `frontend/src/db/schema.ts`.
+
+La sincronización se dispara por dos vías:
+1. **Reactiva (hook):** `useSyncQueue` observa `isOnline + pendingCount > 0` y ejecuta `syncQueue()` automáticamente.
+2. **Background Sync API:** cuando disponible, el Service Worker registra el tag `ataraxia-sync-queue` y envía `SYNC_QUEUE_REQUEST` al hook para disparar el drenado.
+
+**Comportamiento en iOS / Safari:** la Background Sync API no está disponible en Safari ≤ 17. Mitigación: el fallback reactivo del hook funciona igualmente cuando el juez reconecta. La sincronización no requiere acción manual del usuario en el flujo nominal.
+
+**Documentación detallada:** `docs/design/offline-first.md`
+
+---
+
+## Límites del diseño offline
+
+Solo la **interfaz del juez** opera offline. El resto del sistema requiere conexión permanente:
+
+- **Pantallas del organizador** — estado de la competencia en tiempo real
+- **Pantalla de auditoría** (INC-4.6) — audit log generado y almacenado en el backend
+- **Exportación CSV/JSON** (INC-4.6) — generada server-side
+- **Notificaciones email** (INC-4.5) — dispatch exclusivamente server-side (Resend)
+- **Login / autenticación** — validación JWT requiere conexión al backend
+
+El token JWT en memoria permite que la sesión del juez ya autenticado sobreviva una
+desconexión dentro de la misma pestaña del navegador.

@@ -65,6 +65,7 @@ def _llamado_stream(
                 "participante_id": participante_id,
                 "disciplina": "DNF",
                 "posicion_grilla": posicion_grilla,
+                "andarivel": posicion_grilla,
                 "ot_programado": _ts(),
                 "llamado_en": _ts(),
             },

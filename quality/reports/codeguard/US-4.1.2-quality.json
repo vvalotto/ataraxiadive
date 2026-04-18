@@ -1,0 +1,18 @@
+{
+  "us_id": "US-4.1.2",
+  "generated_at": "2026-04-08T11:35:00-03:00",
+  "status": "partial",
+  "designreviewer": {
+    "command": ".venv/bin/designreviewer src/competencia src/resultados --config pyproject.toml",
+    "result": {
+      "blocking": 1,
+      "warnings": 94,
+      "notes": "Se detecta deuda estructural preexistente, con blocking principal sobre Performance como God Object."
+    }
+  },
+  "codeguard": {
+    "command": ".venv/bin/codeguard -c pyproject.toml -f json src/competencia src/resultados",
+    "result": "inconclusive",
+    "notes": "La corrida no produjo una salida final util en este entorno antes de quedar colgada."
+  }
+}

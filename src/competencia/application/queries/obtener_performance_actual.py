@@ -88,5 +88,5 @@ class ObtenerPerformanceActualHandler:  # pylint: disable=too-few-public-methods
                 payload = event["payload"]
                 if isinstance(payload, str):
                     payload = json.loads(payload)
-                return int(payload.get("posicion_grilla", 0))
+                return int(payload.get("andarivel", 0))
         return 0

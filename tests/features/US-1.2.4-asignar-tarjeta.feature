@@ -14,19 +14,19 @@ Feature: Asignar Tarjeta
     When el juez asigna tarjeta blanca sin motivo asignada_por="juez-001"
     Then la performance pasa al estado "Ejecutada"
     And el evento TarjetaAsignada persiste en el event stream
-    And el evento contiene tipo="Blanca", motivo=null y asignadaPor="juez-001"
+    And el evento contiene tipo="Blanca", motivo_dq=null, motivo_texto=null y asignadaPor="juez-001"
 
   Scenario: Juez asigna tarjeta amarilla con motivo obligatorio
     When el juez asigna tarjeta amarilla con motivo="superficie sin protocolo" asignada_por="juez-001"
-    Then la performance pasa al estado "Ejecutada"
+    Then la performance pasa al estado "EnRevision"
     And el evento TarjetaAsignada persiste en el event stream
-    And el evento contiene tipo="Amarilla", motivo="superficie sin protocolo" y asignadaPor="juez-001"
+    And el evento contiene tipo="Amarilla", motivo_texto="superficie sin protocolo" y asignadaPor="juez-001"
 
-  Scenario: Juez asigna tarjeta roja con motivo obligatorio
-    When el juez asigna tarjeta roja con motivo="tiempo excedido" asignada_por="juez-001"
+  Scenario: Juez asigna tarjeta roja con motivo formal obligatorio
+    When el juez asigna tarjeta roja con motivo_dq="PROTOCOLO_SUPERFICIE" asignada_por="juez-001"
     Then la performance pasa al estado "Ejecutada"
     And el evento TarjetaAsignada persiste en el event stream
-    And el evento contiene tipo="Roja", motivo="tiempo excedido" y asignadaPor="juez-001"
+    And el evento contiene tipo="Roja", motivo_dq="PROTOCOLO_SUPERFICIE" y asignadaPor="juez-001"
 
   Scenario: Rechazo — tarjeta amarilla sin motivo (INV-P-11)
     When el juez intenta asignar tarjeta amarilla sin motivo asignada_por="juez-001"
@@ -35,7 +35,7 @@ Feature: Asignar Tarjeta
 
   Scenario: Rechazo — tarjeta roja sin motivo (INV-P-11)
     When el juez intenta asignar tarjeta roja sin motivo asignada_por="juez-001"
-    Then el sistema rechaza la operación con error "MotivoObligatorio"
+    Then el sistema rechaza la operación con error "MotivoDQObligatorio"
     And la performance permanece en estado "ResultadoRegistrado"
 
   Scenario: Rechazo — performance no está en ResultadoRegistrado (INV-P-07)

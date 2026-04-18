@@ -1,0 +1,1717 @@
+{
+  "summary": {
+    "total_files": 10,
+    "checks_executed": 6,
+    "elapsed_seconds": 10.05,
+    "timestamp": "2026-04-16T09:50:20.549211",
+    "total_issues": 80,
+    "errors": 0,
+    "warnings": 11,
+    "infos": 69
+  },
+  "results": [
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/competencia/domain/services/calculador_hash_competencia.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/competencia/domain/services/calculador_hash_competencia.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/competencia/domain/services/calculador_hash_competencia.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/competencia/domain/services/__init__.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/competencia/domain/services/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ No complex functions detected",
+      "file": "src/competencia/domain/services/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/competencia/domain/events/competencia_finalizada.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/competencia/domain/events/competencia_finalizada.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/competencia/domain/events/competencia_finalizada.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/competencia/domain/aggregates/competencia.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/competencia/domain/aggregates/competencia.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/competencia/domain/aggregates/competencia.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/competencia/application/_p08_finalizacion.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/competencia/application/_p08_finalizacion.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/competencia/application/_p08_finalizacion.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+      "line": 27
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+      "line": 28
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+      "line": 39
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+      "line": 45
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+      "line": 65
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+      "line": 66
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+      "line": 79
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+      "line": 93
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+      "line": 94
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+      "line": 95
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+      "line": 96
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+      "line": 97
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+      "line": 98
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+      "line": 99
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+      "line": 166
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+      "line": 182
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+      "line": 183
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+      "line": 193
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+      "line": 216
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+      "line": 253
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+      "line": 254
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+      "line": 298
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+      "line": 307
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+      "line": 313
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+      "line": 319
+    },
+    {
+      "check": "PEP8",
+      "severity": "warning",
+      "message": "PEP8: F401 'decimal.Decimal' imported but unused",
+      "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+      "line": 6
+    },
+    {
+      "check": "PEP8",
+      "severity": "warning",
+      "message": "PEP8: F401 'unittest.mock.MagicMock' imported but unused",
+      "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+      "line": 8
+    },
+    {
+      "check": "PEP8",
+      "severity": "warning",
+      "message": "PEP8: E501 line too long (102 > 100 characters)",
+      "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+      "line": 229
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+      "line": 217
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+      "line": 223
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+      "line": 248
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+      "line": 266
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+      "line": 294
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+      "line": 301
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+      "line": 302
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+      "line": 303
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+      "line": 304
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+      "line": 305
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+      "line": 306
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+      "line": 307
+    },
+    {
+      "check": "PEP8",
+      "severity": "warning",
+      "message": "PEP8: F401 'competencia.domain.exceptions.CompetenciaNoFinalizable' imported but unused",
+      "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+      "line": 23
+    },
+    {
+      "check": "PEP8",
+      "severity": "warning",
+      "message": "PEP8: F401 'competencia.domain.aggregates.competencia.Competencia' imported but unused",
+      "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+      "line": 36
+    },
+    {
+      "check": "PEP8",
+      "severity": "warning",
+      "message": "PEP8: F811 redefinition of unused 'Competencia' from line 36",
+      "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+      "line": 179
+    },
+    {
+      "check": "Complexity",
+      "severity": "warning",
+      "message": "Complexity: test_competencia_finalizada_payload_correcto has cyclomatic complexity 12 (grade C). Consider refactoring into smaller functions.",
+      "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+      "line": 272
+    },
+    {
+      "check": "Security",
+      "severity": "warning",
+      "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+      "file": "tests/features/steps/competencia_finalizada_steps.py",
+      "line": 168
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/features/steps/competencia_finalizada_steps.py",
+      "line": 220
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/features/steps/competencia_finalizada_steps.py",
+      "line": 226
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/features/steps/competencia_finalizada_steps.py",
+      "line": 239
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/features/steps/competencia_finalizada_steps.py",
+      "line": 253
+    },
+    {
+      "check": "Security",
+      "severity": "warning",
+      "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+      "file": "tests/features/steps/competencia_finalizada_steps.py",
+      "line": 261
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/features/steps/competencia_finalizada_steps.py",
+      "line": 298
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/features/steps/competencia_finalizada_steps.py",
+      "line": 304
+    },
+    {
+      "check": "Security",
+      "severity": "warning",
+      "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+      "file": "tests/features/steps/competencia_finalizada_steps.py",
+      "line": 312
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/features/steps/competencia_finalizada_steps.py",
+      "line": 337
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/features/steps/competencia_finalizada_steps.py",
+      "line": 352
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/features/steps/competencia_finalizada_steps.py",
+      "line": 364
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/features/steps/competencia_finalizada_steps.py",
+      "line": 365
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+      "file": "tests/features/steps/competencia_finalizada_steps.py",
+      "line": 366
+    },
+    {
+      "check": "PEP8",
+      "severity": "warning",
+      "message": "PEP8: F401 'pytest_bdd.parsers' imported but unused",
+      "file": "tests/features/steps/competencia_finalizada_steps.py",
+      "line": 20
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "tests/features/steps/competencia_finalizada_steps.py",
+      "line": null
+    }
+  ],
+  "by_severity": {
+    "errors": [],
+    "warnings": [
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F401 'decimal.Decimal' imported but unused",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 6
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F401 'unittest.mock.MagicMock' imported but unused",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 8
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: E501 line too long (102 > 100 characters)",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 229
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F401 'competencia.domain.exceptions.CompetenciaNoFinalizable' imported but unused",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 23
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F401 'competencia.domain.aggregates.competencia.Competencia' imported but unused",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 36
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F811 redefinition of unused 'Competencia' from line 36",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 179
+      },
+      {
+        "check": "Complexity",
+        "severity": "warning",
+        "message": "Complexity: test_competencia_finalizada_payload_correcto has cyclomatic complexity 12 (grade C). Consider refactoring into smaller functions.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 272
+      },
+      {
+        "check": "Security",
+        "severity": "warning",
+        "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 168
+      },
+      {
+        "check": "Security",
+        "severity": "warning",
+        "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 261
+      },
+      {
+        "check": "Security",
+        "severity": "warning",
+        "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 312
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F401 'pytest_bdd.parsers' imported but unused",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 20
+      }
+    ],
+    "infos": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/services/calculador_hash_competencia.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/services/calculador_hash_competencia.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/services/calculador_hash_competencia.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/services/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/services/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/competencia/domain/services/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/events/competencia_finalizada.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/events/competencia_finalizada.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/events/competencia_finalizada.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/aggregates/competencia.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/aggregates/competencia.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/aggregates/competencia.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/application/_p08_finalizacion.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/application/_p08_finalizacion.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/application/_p08_finalizacion.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+        "line": 27
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+        "line": 28
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+        "line": 39
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+        "line": 45
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 65
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 66
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 79
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 93
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 94
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 95
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 96
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 97
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 98
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 99
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 166
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 182
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 183
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 193
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 216
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 253
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 254
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 298
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 307
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 313
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 319
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 217
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 223
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 248
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 266
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 294
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 301
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 302
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 303
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 304
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 305
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 306
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 307
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 220
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 226
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 239
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 253
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 298
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 304
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 337
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 352
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 364
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 365
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 366
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": null
+      }
+    ]
+  },
+  "by_package": {
+    "aggregates": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/aggregates/competencia.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/aggregates/competencia.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/aggregates/competencia.py",
+        "line": null
+      }
+    ],
+    "application": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/application/_p08_finalizacion.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/application/_p08_finalizacion.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/application/_p08_finalizacion.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 193
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 216
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 253
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 254
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 298
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 307
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 313
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 319
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F401 'decimal.Decimal' imported but unused",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 6
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F401 'unittest.mock.MagicMock' imported but unused",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 8
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: E501 line too long (102 > 100 characters)",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": 229
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/unit/competencia/application/test_p08_finalizacion.py",
+        "line": null
+      }
+    ],
+    "competencia": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 217
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 223
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 248
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 266
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 294
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 301
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 302
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 303
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 304
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 305
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 306
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 307
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F401 'competencia.domain.exceptions.CompetenciaNoFinalizable' imported but unused",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 23
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F401 'competencia.domain.aggregates.competencia.Competencia' imported but unused",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 36
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F811 redefinition of unused 'Competencia' from line 36",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 179
+      },
+      {
+        "check": "Complexity",
+        "severity": "warning",
+        "message": "Complexity: test_competencia_finalizada_payload_correcto has cyclomatic complexity 12 (grade C). Consider refactoring into smaller functions.",
+        "file": "tests/integration/competencia/test_competencia_finalizada_integration.py",
+        "line": 272
+      }
+    ],
+    "domain": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+        "line": 27
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+        "line": 28
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+        "line": 39
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+        "line": 45
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/unit/competencia/domain/test_calculador_hash_competencia.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 65
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 66
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 79
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 93
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 94
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 95
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 96
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 97
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 98
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 99
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 166
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 182
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": 183
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/unit/competencia/domain/test_competencia_finalizar.py",
+        "line": null
+      }
+    ],
+    "events": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/events/competencia_finalizada.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/events/competencia_finalizada.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/events/competencia_finalizada.py",
+        "line": null
+      }
+    ],
+    "services": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/services/calculador_hash_competencia.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/services/calculador_hash_competencia.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/services/calculador_hash_competencia.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/services/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/services/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/competencia/domain/services/__init__.py",
+        "line": null
+      }
+    ],
+    "steps": [
+      {
+        "check": "Security",
+        "severity": "warning",
+        "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 168
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 220
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 226
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 239
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 253
+      },
+      {
+        "check": "Security",
+        "severity": "warning",
+        "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 261
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 298
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 304
+      },
+      {
+        "check": "Security",
+        "severity": "warning",
+        "message": "Security [B306]: Use of insecure and deprecated function (mktemp).",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 312
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 337
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 352
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 364
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 365
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B101]: Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 366
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: F401 'pytest_bdd.parsers' imported but unused",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": 20
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "tests/features/steps/competencia_finalizada_steps.py",
+        "line": null
+      }
+    ]
+  }
+}

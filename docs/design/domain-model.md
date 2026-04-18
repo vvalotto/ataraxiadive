@@ -123,6 +123,11 @@ classDiagram
 
 ### 2.2 Aggregate: Performance
 
+> **Estructura interna (US-4.1.5):** el aggregate fue descompuesto en tres módulos:
+> `performance.py` (aggregate root + comandos), `performance_state.py` (aplicación de eventos),
+> `performance_events.py` (builders de eventos). Los VOs `ResolucionTarjeta` y `RPFinal`
+> encapsulan la lógica de tarjeta y cálculo de RP penalizado.
+
 ```mermaid
 classDiagram
     class Performance {
@@ -131,16 +136,53 @@ classDiagram
         +ParticipanteId participanteId
         +Disciplina disciplina
         +AP apDeclarado
-        +RP rpRegistrado
-        +Tarjeta tarjeta
+        +RP rpMedido
         +EstadoPerformance estado
         --
+        +rp() RP
         +registrarAP(valor, unidad) APRegistrado
         +llamar(otProgramado) AtletaLlamado
         +registrarResultado(valor, juezId) ResultadoRegistrado
-        +asignarTarjeta(tipo, motivo, juezId) TarjetaAsignada
+        +asignarTarjeta(asignacion, juezId) TarjetaAsignada
         +registrarDNS(juezId) DNSRegistrado
         +corregirResultado(valor, motivo, juezId) ResultadoCorregido
+    }
+
+    class TarjetaAsignacion {
+        +TipoTarjeta tipo
+        +MotivoDQ motivoDQ
+        +String motivoTexto
+        +tuple~PenalizacionTecnica~ penalizaciones
+        +validar() void
+    }
+
+    class ResolucionTarjeta {
+        +TipoTarjeta tipo
+        +MotivoDQ motivoDQ
+        +tuple~PenalizacionTecnica~ penalizaciones
+        +RPFinal rpFinal
+        +desde_asignacion(asignacion, rpMedido) ResolucionTarjeta
+    }
+
+    class RPFinal {
+        +Decimal valor
+        +UnidadMedida unidad
+        +desde_medicion(rpMedido, penalizaciones) RPFinal
+    }
+
+    class PenalizacionTecnica {
+        +TipoPenalizacion tipo
+        +Decimal deduccion
+    }
+
+    class MotivoDQ {
+        <<enumeration>>
+        BKO_SUPERFICIE
+        BKO_SUBACUATICO
+        NO_PROTOCOLO
+        INFRACCION_TECNICA
+        NO_INICIO_VENTANA
+        SALIDA_FALSO
     }
 
     class AP {
@@ -149,22 +191,23 @@ classDiagram
         +validar() bool
     }
 
-    class RP {
-        +Decimal valor
-        +UnidadMedida unidad
-    }
-
-    class Tarjeta {
-        +TipoTarjeta tipo
-        +String motivo
-        +UserId juezId
-        +requiereMotivo() bool
-    }
-
     Performance "1" *-- "1" AP
-    Performance "1" *-- "0..1" RP
-    Performance "1" *-- "0..1" Tarjeta
+    Performance "1" *-- "0..1" ResolucionTarjeta
+    ResolucionTarjeta "1" *-- "0..1" RPFinal
+    ResolucionTarjeta "1" *-- "N" PenalizacionTecnica
+    ResolucionTarjeta "1" *-- "0..1" MotivoDQ
+    TarjetaAsignacion "1" *-- "0..1" MotivoDQ
+    TarjetaAsignacion "1" *-- "N" PenalizacionTecnica
 ```
+
+**Tipos de tarjeta (`TipoTarjeta`):**
+
+| Valor | Significado | Requiere |
+|-------|-------------|---------|
+| `Blanca` | Performance válida sin infracciones | — |
+| `BlancaConPenalizaciones` | Performance válida con infracciones técnicas; RP = medido − Σ deducciones | ≥1 `PenalizacionTecnica` |
+| `Amarilla` | En revisión — debe cerrarse como Blanca, BlancaConPenalizaciones o Roja | — |
+| `Roja` | Descalificación | `MotivoDQ` obligatorio |
 
 **Eventos de dominio:**
 
@@ -173,11 +216,16 @@ classDiagram
 | `APRegistrado` | `registrarAP()` |
 | `AtletaLlamado` | `llamar()` |
 | `ResultadoRegistrado` | `registrarResultado()` |
-| `TarjetaAsignada` | `asignarTarjeta()` |
+| `TarjetaAsignada` | `asignarTarjeta()` — payload incluye `resolucion` con tipo, motivo, penalizaciones y rp_final |
 | `DNSRegistrado` | `registrarDNS()` |
 | `ResultadoCorregido` | `corregirResultado()` |
 
 **Invariantes:** INV-P-01 a INV-P-14 (ver `event-storming-competencia.md`)
+
+**Nota US-4.1.3:** la familia SPE queda desagregada en `SPE_2X50`, `SPE_4X50`,
+`SPE_8X50` y `SPE_16X50` para torneos nuevos. Estas variantes usan segundos y
+generan competencias/rankings independientes. `SPE` genérica se mantiene solo
+como valor legacy para compatibilidad histórica.
 
 ---
 
@@ -215,10 +263,10 @@ classDiagram
 
 | Tipo | Valores / Descripción |
 |------|-----------------------|
-| `Disciplina` | STA, DNF, DYN, DBF, SPE, CNF, CWT, FIM, VWT |
+| `Disciplina` | STA, DNF, DYN, DBF, SPE, SPE_2X50, SPE_4X50, SPE_8X50, SPE_16X50, CNF, CWT, FIM, VWT |
 | `EstadoCompetencia` | Preparacion, Confirmada, EnEjecucion, Finalizada |
 | `EstadoPerformance` | AnunciadaAP, Llamada, Ejecutada, DNS |
-| `TipoTarjeta` | Blanca, Amarilla, Roja |
+| `TipoTarjeta` | Blanca, BlancaConPenalizaciones, Amarilla, Roja |
 | `UnidadMedida` | Metros, Segundos |
 | `OT` | DateTime con precisión de segundos |
 
@@ -319,31 +367,76 @@ classDiagram
 
 ## 7. BC Notificaciones — Generic (Event Sourcing)
 
-> Modelo de referencia — implementación en SP4
+> `US-4.5.1` implementa el núcleo del aggregate y su event store propio.
+> `US-4.5.2` implementa el adaptador email con Resend.
+> `US-4.5.3` implementa P-10: `InscripcionConfirmada` -> email de confirmación.
+> `US-4.5.4` implementa P-11: `ResultadosPublicados` -> email individual a atletas.
+> `US-4.5.5` cablea P-10 al endpoint HTTP de inscripción desde `src/app.py`.
 
 ### Aggregate
 
 | Aggregate | Tipo | Responsabilidad |
 |-----------|------|-----------------|
-| `Notificacion` | Aggregate root | Ciclo de vida de un intento de comunicación: Solicitada → Enviada / Fallida |
+| `Notificacion` | Aggregate root | Ciclo de vida de un intento de comunicación: `Solicitada -> Enviada | Fallida`; aplica idempotencia estructural por `evento_fuente_id` |
 
 ### Value Objects
 
 | Tipo | Descripción |
 |------|-------------|
-| `Destinatario` | userId + canal preferido (Email / Push) |
-| `PlantillaId` | Referencia a template de mensaje por tipo de evento |
-| `EventoFuenteId` | Id del evento de dominio que originó la notificación — clave de idempotencia |
+| `NotificacionId` | UUID inmutable del aggregate |
+| `EventoFuenteId` | Identificador del evento fuente que originó la notificación — clave de idempotencia |
+| `Destinatario` | Email válido + nombre opcional del receptor |
+| `ContenidoEmail` | Asunto no vacío + cuerpo de texto + HTML opcional |
+| `CanalEnvio` | Enum `Email | Push` (`SP4` implementa solo `Email`) |
 
 ### Eventos propios
 
 | Evento | Descripción |
 |--------|-------------|
-| `NotificacionSolicitada` | Intento registrado — incluye `eventoFuenteId` para idempotencia |
-| `NotificacionEnviada` | Canal externo confirmó entrega |
-| `NotificacionFallida` | Canal externo rechazó o timeout |
-| `NotificacionReintentada` | Reintento programado tras fallo |
-| `PreferenciasActualizadas` | Atleta cambió canal preferido |
+| `NotificacionSolicitada` | Primer evento del stream; captura destinatario, contenido, canal y `evento_fuente_id` |
+| `NotificacionEnviada` | Marca el stream como exitoso y terminal; puede persistir `proveedor_id` |
+| `NotificacionFallida` | Marca el stream como fallido y terminal; persiste `motivo` |
+
+### Event Store propio
+
+| Elemento | Decisión |
+|----------|----------|
+| Tabla | `notificaciones_events` |
+| Stream ID | `notificacion-{notificacion_id}` |
+| Índices | `stream_id` + `json_extract(payload, '$.evento_fuente_id')` |
+| Regla de idempotencia | si existe `NotificacionEnviada` para un `evento_fuente_id`, un nuevo `SolicitarEnvio` no emite eventos |
+
+### Puerto de repositorio
+
+| Puerto | Responsabilidad |
+|--------|-----------------|
+| `NotificacionRepository` | Persistir y rehidratar streams; consultar si ya existe `NotificacionEnviada` por `evento_fuente_id` |
+
+### Application
+
+| Componente | Responsabilidad |
+|------------|-----------------|
+| `SolicitarEnvioHandler` | Crea `NotificacionSolicitada` si no existe un envío exitoso previo para el `evento_fuente_id` |
+| `EnviarNotificacionHandler` | Rehidrata la notificación, llama `EmailPort` y registra `NotificacionEnviada` o `NotificacionFallida` |
+| `PoliticaP10Handler` | Recibe `InscripcionConfirmada`, renderiza contenido y orquesta solicitud + envío de email al atleta |
+| `PoliticaP11Handler` | Recibe `ResultadosPublicados`, crea una notificación por atleta y aplica idempotencia con clave compuesta `{evento.id}:{atleta_id}` |
+
+### Templates e integración
+
+| Componente | Responsabilidad |
+|------------|-----------------|
+| `InscripcionConfirmadaTemplate` | Genera asunto y cuerpo de email con atleta, torneo, fecha, sede y disciplinas |
+| `ResultadosPublicadosTemplate` | Genera email individual con posición, RP, tarjeta, podio y link al ranking |
+| `build_p10_handler` | Factory en `src/app.py` para componer P-10 con repositorio SQLite y `ResendEmailAdapter` |
+| `build_on_inscripcion_confirmada_callback` | Adapter en `src/app.py` que enriquece `Inscripcion` con datos de Registro/Torneo y llama P-10 |
+| `build_p11_handler` | Factory en `src/app.py` para componer P-11 con repositorio SQLite y `ResendEmailAdapter` |
+
+### Puerto y adaptador de email
+
+| Elemento | Responsabilidad |
+|----------|-----------------|
+| `EmailPort` | Contrato de envío para el canal email; recibe `Destinatario` y `ContenidoEmail`, retorna `provider_id` |
+| `ResendEmailAdapter` | Adaptador HTTP concreto actual del BC; implementa `POST /emails` contra proveedor gestionado |
 
 ---
 

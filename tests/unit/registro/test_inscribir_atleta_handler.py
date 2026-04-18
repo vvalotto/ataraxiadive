@@ -15,7 +15,7 @@ from registro.domain.value_objects.estado_inscripcion import EstadoInscripcion
 from shared.domain.value_objects.disciplina import Disciplina
 
 
-def _handler(abierto: bool = True, disciplinas_torneo=None, existente=None):
+def _handler(abierto: bool = True, disciplinas_torneo=None, existente=None, callback=None):
     if disciplinas_torneo is None:
         disciplinas_torneo = frozenset({Disciplina.STA, Disciplina.DNF})
     repo = AsyncMock()
@@ -23,7 +23,7 @@ def _handler(abierto: bool = True, disciplinas_torneo=None, existente=None):
     consulta = AsyncMock()
     consulta.esta_abierto_para_inscripcion.return_value = abierto
     consulta.obtener_disciplinas.return_value = disciplinas_torneo
-    return InscribirAtletaHandler(repo, consulta), repo
+    return InscribirAtletaHandler(repo, consulta, on_inscripcion_confirmada=callback), repo
 
 
 @pytest.mark.asyncio
@@ -93,3 +93,37 @@ async def test_inscripcion_guardada_con_estado_activa():
     await handler.handle(cmd)
     inscripcion_guardada = repo.save.call_args[0][0]
     assert inscripcion_guardada.estado == EstadoInscripcion.ACTIVA
+
+
+@pytest.mark.asyncio
+async def test_inscribir_atleta_invoca_callback_con_inscripcion_guardada():
+    callback = AsyncMock()
+    handler, repo = _handler(callback=callback)
+    cmd = InscribirAtletaCommand(
+        atleta_id=uuid4(),
+        torneo_id=uuid4(),
+        disciplinas=frozenset({Disciplina.STA}),
+    )
+
+    await handler.handle(cmd)
+
+    inscripcion_guardada = repo.save.call_args[0][0]
+    callback.assert_awaited_once_with(inscripcion_guardada)
+
+
+@pytest.mark.asyncio
+async def test_inscribir_atleta_no_revierte_si_callback_falla():
+    async def callback_fallido(_inscripcion):
+        raise RuntimeError("notificaciones_no_disponibles")
+
+    handler, repo = _handler(callback=callback_fallido)
+    cmd = InscribirAtletaCommand(
+        atleta_id=uuid4(),
+        torneo_id=uuid4(),
+        disciplinas=frozenset({Disciplina.STA}),
+    )
+
+    inscripcion_id = await handler.handle(cmd)
+
+    assert inscripcion_id is not None
+    repo.save.assert_called_once()

@@ -35,7 +35,7 @@ from torneo.application.queries.obtener_torneo import (
     ObtenerTorneoQuery,
 )
 from torneo.domain.aggregates.torneo import Torneo
-from torneo.domain.exceptions import AsignacionNoPermitida, DisciplinaNoEnTorneo
+from torneo.domain.exceptions import AsignacionNoPermitida, DisciplinaNoEnTorneo, DisciplinaObsoleta
 from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTorneoRepository
 
 router = APIRouter(prefix="/torneos", tags=["torneos"])
@@ -218,6 +218,8 @@ async def asignar_disciplinas(
             AsignarDisciplinasCommand(torneo_id=torneo_id, disciplinas=disciplinas)
         )
     except AsignacionNoPermitida as exc:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+    except DisciplinaObsoleta as exc:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
     return JSONResponse(status_code=200, content={"ok": True})
 

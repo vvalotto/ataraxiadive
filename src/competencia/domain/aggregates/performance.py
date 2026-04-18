@@ -2,36 +2,57 @@
 
 from __future__ import annotations
 
-import json
 from datetime import datetime
 from decimal import Decimal
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from uuid import UUID
 
 from shared.domain.base.aggregate_root import AggregateRoot
-from competencia.domain.events.ap_registrado import APRegistrado
-from competencia.domain.events.atleta_llamado import AtletaLlamado
-from competencia.domain.events.dns_registrado import DNSRegistrado
-from competencia.domain.events.resultado_corregido import ResultadoCorregido
-from competencia.domain.events.resultado_registrado import ResultadoRegistrado
-from competencia.domain.events.tarjeta_asignada import TarjetaAsignada
+from competencia.domain.aggregates.performance_events import (
+    crear_ap_registrado,
+    crear_atleta_llamado,
+    crear_dns_registrado,
+    crear_resultado_corregido,
+    crear_resultado_registrado,
+    crear_revision_resuelta,
+    crear_tarjeta_asignada,
+)
+from competencia.domain.aggregates import performance_state
 from competencia.domain.exceptions import (
+    DisciplinaNoAdmitePenalizaciones,  # noqa: F401 - re-export por compatibilidad
     DistanciaBlackoutObligatoria,  # noqa: F401 - re-export por compatibilidad
+    DistanciaBlackoutNoAplica,  # noqa: F401 - re-export por compatibilidad
     EstadoInvalidoParaAsignarTarjeta,
     EstadoInvalidoParaCorregirResultado,
     EstadoInvalidoParaLlamar,
     EstadoInvalidoParaRegistrarDNS,
     EstadoInvalidoParaRegistrarResultado,
+    EstadoInvalidoParaResolverRevision,
+    MotivoDQObligatorio,  # noqa: F401 - re-export por compatibilidad
     MotivoObligatorio,
+    PenalizacionesObligatorias,  # noqa: F401 - re-export por compatibilidad
 )
 from competencia.domain.value_objects.ap import AP
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
+from competencia.domain.value_objects.resolucion_tarjeta import ResolucionTarjeta
+from competencia.domain.value_objects.rp_final import RPFinal
 from competencia.domain.value_objects.tarjeta_asignacion import TarjetaAsignacion
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
-__all__ = ["Performance", "DistanciaBlackoutObligatoria"]
+if TYPE_CHECKING:
+    from competencia.domain.value_objects.motivo_dq import MotivoDQ
+    from competencia.domain.value_objects.penalizacion_tecnica import PenalizacionTecnica
+
+__all__ = [
+    "Performance",
+    "DisciplinaNoAdmitePenalizaciones",
+    "DistanciaBlackoutObligatoria",
+    "DistanciaBlackoutNoAplica",
+    "MotivoDQObligatorio",
+    "PenalizacionesObligatorias",
+]
 
 
 class Performance(AggregateRoot):
@@ -62,20 +83,17 @@ class Performance(AggregateRoot):
         self._disciplina = disciplina
         self._ap: AP | None = None
         self._rp: Decimal | None = None
+        self._rp_medido: Decimal | None = None
+        self._rp_penalizado: Decimal | None = None
         self._tarjeta: TipoTarjeta | None = None
+        self._motivo_dq: MotivoDQ | None = None
+        self._motivo_texto: str | None = None
+        self._penalizaciones: tuple[PenalizacionTecnica, ...] = ()
         self._estado: EstadoPerformance | None = None
         self._ot_programado: datetime | None = None
         self._posicion_grilla: int | None = None
         self._andarivel: int | None = None
         self._distancia_blackout: Decimal | None = None
-        self._event_handlers: dict[str, Any] = {
-            "APRegistrado": self._apply_ap_registrado,
-            "AtletaLlamado": self._apply_atleta_llamado,
-            "ResultadoRegistrado": self._apply_resultado_registrado,
-            "DNSRegistrado": self._apply_dns_registrado,
-            "TarjetaAsignada": self._apply_tarjeta_asignada,
-            "ResultadoCorregido": self._apply_resultado_corregido,
-        }
 
     # ── Propiedades ───────────────────────────────────────────────────────────
 
@@ -101,8 +119,18 @@ class Performance(AggregateRoot):
 
     @property
     def rp(self) -> Decimal | None:
-        """RP registrado, o None si aún no fue registrado."""
-        return self._rp
+        """RP efectivo para ranking: penalizado si existe, medido en caso contrario."""
+        return self._rp_penalizado if self._rp_penalizado is not None else self._rp_medido
+
+    @property
+    def rp_medido(self) -> Decimal | None:
+        """RP medido antes de aplicar penalizaciones."""
+        return self._rp_medido
+
+    @property
+    def rp_penalizado(self) -> Decimal | None:
+        """RP final luego de aplicar penalizaciones."""
+        return self._rp_penalizado
 
     @property
     def tarjeta(self) -> TipoTarjeta | None:
@@ -113,6 +141,21 @@ class Performance(AggregateRoot):
     def disciplina(self) -> Disciplina:
         """Disciplina de esta Performance."""
         return self._disciplina
+
+    @property
+    def motivo_dq(self) -> MotivoDQ | None:
+        """Motivo formal de DQ asociado a la tarjeta roja."""
+        return self._motivo_dq
+
+    @property
+    def motivo_texto(self) -> str | None:
+        """Motivo textual libre asociado a la tarjeta."""
+        return self._motivo_texto
+
+    @property
+    def penalizaciones(self) -> tuple[PenalizacionTecnica, ...]:
+        """Penalizaciones técnicas acumuladas de la performance."""
+        return self._penalizaciones
 
     @property
     def posicion_grilla(self) -> int | None:
@@ -154,16 +197,12 @@ class Performance(AggregateRoot):
         """
         ap = AP(valor=valor, unidad=unidad)  # valida INV-P-01
 
-        event = APRegistrado(
-            event_type="APRegistrado",
-            aggregate_id=str(self._performance_id),
-            occurred_at=APRegistrado.now(),
-            performance_id=str(self._performance_id),
-            competencia_id=str(self._competencia_id),
-            participante_id=str(self._participante_id),
-            disciplina=self._disciplina.value,
-            valor_ap=str(ap.valor),
-            unidad=ap.unidad.value,
+        event = crear_ap_registrado(
+            performance_id=self._performance_id,
+            competencia_id=self._competencia_id,
+            participante_id=self._participante_id,
+            disciplina=self._disciplina,
+            ap=ap,
         )
         self._ap = ap
         self._estado = EstadoPerformance.AnunciadaAP
@@ -190,17 +229,12 @@ class Performance(AggregateRoot):
                 "— solo se puede llamar desde AnunciadaAP"
             )
 
-        now = AtletaLlamado.now()
-        event = AtletaLlamado(
-            event_type="AtletaLlamado",
-            aggregate_id=str(self._performance_id),
-            occurred_at=now,
-            performance_id=str(self._performance_id),
-            participante_id=str(self._participante_id),
-            disciplina=self._disciplina.value,
+        event = crear_atleta_llamado(
+            performance_id=self._performance_id,
+            participante_id=self._participante_id,
+            disciplina=self._disciplina,
+            ot_programado=ot_programado,
             posicion_grilla=posicion_grilla,
-            ot_programado=ot_programado.isoformat(),
-            llamado_en=now.isoformat(),
             andarivel=andarivel,
         )
         self._estado = EstadoPerformance.Llamada
@@ -229,20 +263,17 @@ class Performance(AggregateRoot):
                 "— solo se puede registrar resultado desde Llamada"
             )
 
-        now = ResultadoRegistrado.now()
-        event = ResultadoRegistrado(
-            event_type="ResultadoRegistrado",
-            aggregate_id=str(self._performance_id),
-            occurred_at=now,
-            performance_id=str(self._performance_id),
-            participante_id=str(self._participante_id),
-            disciplina=self._disciplina.value,
-            valor_rp=str(valor_rp),
-            unidad=unidad.value,
+        event = crear_resultado_registrado(
+            performance_id=self._performance_id,
+            participante_id=self._participante_id,
+            disciplina=self._disciplina,
+            valor_rp=valor_rp,
+            unidad=unidad,
             registrado_por=registrado_por,
-            registrado_en=now.isoformat(),
         )
         self._rp = valor_rp
+        self._rp_medido = valor_rp
+        self._rp_penalizado = None
         self._estado = EstadoPerformance.ResultadoRegistrado
         self._record(event)
 
@@ -265,17 +296,12 @@ class Performance(AggregateRoot):
                 "— solo se puede registrar DNS desde Llamada"
             )
 
-        now = DNSRegistrado.now()
-        event = DNSRegistrado(
-            event_type="DNSRegistrado",
-            aggregate_id=str(self._performance_id),
-            occurred_at=now,
-            performance_id=str(self._performance_id),
-            participante_id=str(self._participante_id),
-            disciplina=self._disciplina.value,
-            ot_programado=self._ot_programado.isoformat() if self._ot_programado else "",
+        event = crear_dns_registrado(
+            performance_id=self._performance_id,
+            participante_id=self._participante_id,
+            disciplina=self._disciplina,
+            ot_programado=self._ot_programado,
             registrado_por=registrado_por,
-            registrado_en=now.isoformat(),
         )
         self._estado = EstadoPerformance.DNS
         self._record(event)
@@ -311,48 +337,50 @@ class Performance(AggregateRoot):
                 "La corrección de resultado requiere motivo obligatorio (INV-P-12)"
             )
 
-        now = ResultadoCorregido.now()
-        event = ResultadoCorregido(
-            event_type="ResultadoCorregido",
-            aggregate_id=str(self._performance_id),
-            occurred_at=now,
-            performance_id=str(self._performance_id),
-            participante_id=str(self._participante_id),
-            disciplina=self._disciplina.value,
-            valor_rp_anterior=str(self._rp) if self._rp is not None else "",
-            valor_rp_nuevo=str(valor_rp),
-            unidad=unidad.value,
+        event = crear_resultado_corregido(
+            performance_id=self._performance_id,
+            participante_id=self._participante_id,
+            disciplina=self._disciplina,
+            valor_rp_anterior=self._rp,
+            valor_rp_nuevo=valor_rp,
+            unidad=unidad,
             motivo=motivo,
             registrado_por=registrado_por,
-            corregido_en=now.isoformat(),
         )
-        self._rp = valor_rp
+        self._aplicar_rp_final(RPFinal.desde_medicion(valor_rp, self._penalizaciones))
         self._record(event)
 
     def asignar_tarjeta(
         self,
         tipo: TipoTarjeta,
         asignada_por: str,
-        motivo: str | None = None,
+        motivo_dq: MotivoDQ | None = None,
+        motivo_texto: str | None = None,
         distancia_blackout: Decimal | None = None,
+        penalizaciones: tuple[PenalizacionTecnica, ...] = (),
     ) -> None:
         """Asigna la tarjeta al atleta tras registrar el resultado.
 
         Verifica que la Performance esté en estado ResultadoRegistrado (INV-P-07).
-        Exige motivo si la tarjeta es Amarilla o Roja (INV-P-11).
-        Exige distancia_blackout > 0 si motivo == "black-out" (RF-EJ-07).
+        Exige `motivo_texto` si la tarjeta es Amarilla (INV-P-11b).
+        Exige `motivo_dq` si la tarjeta es Roja (INV-P-11).
+        Exige distancia_blackout > 0 solo para motivos de blackout.
 
         Args:
             tipo: Tipo de tarjeta — Blanca, Amarilla o Roja.
             asignada_por: Identificador del juez que asigna la tarjeta.
-            motivo: Motivo obligatorio para Amarilla y Roja (INV-P-11).
-            distancia_blackout: Distancia alcanzada — obligatoria si motivo == "black-out".
+            motivo_dq: Motivo reglamentario obligatorio para Roja.
+            motivo_texto: Motivo libre obligatorio para Amarilla.
+            distancia_blackout: Distancia alcanzada — obligatoria para motivos BKO.
+            penalizaciones: Penalizaciones técnicas para BlancaConPenalizaciones.
 
         Raises:
             EstadoInvalidoParaAsignarTarjeta:
                 Performance no en ResultadoRegistrado (INV-P-07).
-            MotivoObligatorio: tarjeta Amarilla o Roja sin motivo (INV-P-11).
-            DistanciaBlackoutObligatoria: motivo "black-out" sin distancia o distancia <= 0.
+            MotivoObligatorio: tarjeta Amarilla sin motivo libre.
+            MotivoDQObligatorio: tarjeta Roja sin motivo reglamentario.
+            DistanciaBlackoutObligatoria: blackout sin distancia o distancia <= 0.
+            DistanciaBlackoutNoAplica: distancia informada para motivo sin blackout.
         """
         if self._estado != EstadoPerformance.ResultadoRegistrado:
             raise EstadoInvalidoParaAsignarTarjeta(
@@ -362,31 +390,68 @@ class Performance(AggregateRoot):
 
         tarjeta_asignacion = TarjetaAsignacion(
             tipo=tipo,
-            motivo=motivo,
+            motivo_dq=motivo_dq,
+            motivo_texto=motivo_texto,
             distancia_blackout=distancia_blackout,
+            penalizaciones=penalizaciones,
+            es_disciplina_tiempo=self._disciplina.es_tiempo(),
         )
+        resolucion = ResolucionTarjeta.desde_asignacion(tarjeta_asignacion, self._rp_medido)
 
-        now = TarjetaAsignada.now()
-        event = TarjetaAsignada(
-            event_type="TarjetaAsignada",
-            aggregate_id=str(self._performance_id),
-            occurred_at=now,
-            performance_id=str(self._performance_id),
-            participante_id=str(self._participante_id),
-            disciplina=self._disciplina.value,
-            tipo=tarjeta_asignacion.tipo.value,
-            motivo=tarjeta_asignacion.motivo,
+        event = crear_tarjeta_asignada(
+            performance_id=self._performance_id,
+            participante_id=self._participante_id,
+            disciplina=self._disciplina,
+            resolucion=resolucion,
             asignada_por=asignada_por,
-            asignada_en=now.isoformat(),
-            distancia_blackout=(
-                str(tarjeta_asignacion.distancia_blackout)
-                if tarjeta_asignacion.distancia_blackout
-                else None
-            ),
         )
-        self._tarjeta = tarjeta_asignacion.tipo
-        self._distancia_blackout = tarjeta_asignacion.distancia_blackout
-        self._estado = EstadoPerformance.Ejecutada
+        if tipo == TipoTarjeta.Amarilla:
+            self._tarjeta = tipo
+            self._motivo_dq = None
+            self._motivo_texto = motivo_texto
+            self._distancia_blackout = None
+            self._penalizaciones = ()
+            self._estado = EstadoPerformance.EnRevision
+        else:
+            self._aplicar_resolucion_tarjeta(resolucion)
+        self._record(event)
+
+    def resolver_revision(
+        self,
+        tipo: TipoTarjeta,
+        resuelta_por: str,
+        motivo_dq: MotivoDQ | None = None,
+        penalizaciones: tuple[PenalizacionTecnica, ...] = (),
+    ) -> None:
+        """Resuelve una performance que quedó en revisión tras tarjeta amarilla."""
+        if self._estado != EstadoPerformance.EnRevision:
+            raise EstadoInvalidoParaResolverRevision(
+                f"Performance {self._performance_id} en estado {self._estado} "
+                "— solo se puede resolver revision desde EnRevision"
+            )
+
+        distancia_blackout_revision = (
+            self._rp_medido
+            if motivo_dq is not None and motivo_dq.requiere_distancia_blackout()
+            else None
+        )
+        tarjeta_asignacion = TarjetaAsignacion(
+            tipo=tipo,
+            motivo_dq=motivo_dq,
+            motivo_texto=None,
+            distancia_blackout=distancia_blackout_revision,
+            penalizaciones=penalizaciones,
+            es_disciplina_tiempo=self._disciplina.es_tiempo(),
+        )
+        resolucion = ResolucionTarjeta.desde_asignacion(tarjeta_asignacion, self._rp_medido)
+        event = crear_revision_resuelta(
+            performance_id=self._performance_id,
+            participante_id=self._participante_id,
+            disciplina=self._disciplina,
+            resolucion=resolucion,
+            resuelta_por=resuelta_por,
+        )
+        self._aplicar_resolucion_tarjeta(resolucion)
         self._record(event)
 
     # ── Reconstitución desde eventos ──────────────────────────────────────────
@@ -407,70 +472,31 @@ class Performance(AggregateRoot):
         """
         if not events:
             raise ValueError("No se puede reconstituir Performance sin eventos")
-
-        first = events[0]
-        if first["event_type"] != "APRegistrado":
+        if events[0]["event_type"] != "APRegistrado":
             raise ValueError(
-                f"El primer evento debe ser APRegistrado, recibido: {first['event_type']}"
+                f"El primer evento debe ser APRegistrado, recibido: {events[0]['event_type']}"
             )
-
-        payload = cls._parse_payload(first["payload"])
+        first_payload = performance_state.parse_payload(events[0]["payload"])
         performance = cls(
-            performance_id=UUID(payload["performance_id"]),
-            competencia_id=UUID(payload["competencia_id"]),
-            participante_id=UUID(payload["participante_id"]),
-            disciplina=Disciplina(payload["disciplina"]),
+            performance_id=UUID(first_payload["performance_id"]),
+            competencia_id=UUID(first_payload["competencia_id"]),
+            participante_id=UUID(first_payload["participante_id"]),
+            disciplina=Disciplina(first_payload["disciplina"]),
         )
-
         for event in events:
-            performance._apply_stored(event)
-
+            performance_state.apply_stored(performance, event)
         return performance
 
-    def _apply_stored(self, event: dict[str, Any]) -> None:
-        """Aplica un evento almacenado al estado interno del aggregate.
-
-        Usa dispatch por tipo de evento (OCP: agregar un tipo nuevo no requiere
-        modificar este método, solo registrar el handler en _event_handlers).
-        """
-        event_type = event["event_type"]
-        payload = self._parse_payload(event["payload"])
-        handler = self._event_handlers.get(event_type)
-        if handler is not None:
-            handler(payload)
-
-    def _apply_ap_registrado(self, payload: dict[str, Any]) -> None:
-        self._ap = AP(
-            valor=Decimal(payload["valor_ap"]),
-            unidad=UnidadMedida(payload["unidad"]),
-        )
-        self._estado = EstadoPerformance.AnunciadaAP
-
-    def _apply_atleta_llamado(self, payload: dict[str, Any]) -> None:
-        self._estado = EstadoPerformance.Llamada
-        self._ot_programado = datetime.fromisoformat(payload["ot_programado"])
-        self._posicion_grilla = payload["posicion_grilla"]
-        self._andarivel = payload.get("andarivel", 1)
-
-    def _apply_resultado_registrado(self, payload: dict[str, Any]) -> None:
-        self._rp = Decimal(payload["valor_rp"])
-        self._estado = EstadoPerformance.ResultadoRegistrado
-
-    def _apply_dns_registrado(self, payload: dict[str, Any]) -> None:  # noqa: ARG002
-        self._estado = EstadoPerformance.DNS
-
-    def _apply_tarjeta_asignada(self, payload: dict[str, Any]) -> None:
-        self._tarjeta = TipoTarjeta(payload["tipo"])
+    def _aplicar_resolucion_tarjeta(self, resolucion: ResolucionTarjeta) -> None:
+        self._tarjeta = resolucion.tipo
+        self._motivo_dq = resolucion.motivo_dq
+        self._motivo_texto = resolucion.motivo_texto
+        self._distancia_blackout = resolucion.distancia_blackout
+        self._penalizaciones = resolucion.penalizaciones
         self._estado = EstadoPerformance.Ejecutada
-        if payload.get("distancia_blackout"):
-            self._distancia_blackout = Decimal(payload["distancia_blackout"])
+        self._aplicar_rp_final(resolucion.rp_final)
 
-    def _apply_resultado_corregido(self, payload: dict[str, Any]) -> None:
-        self._rp = Decimal(payload["valor_rp_nuevo"])
-
-    @staticmethod
-    def _parse_payload(payload: Any) -> dict[str, Any]:
-        """Parsea el payload del Event Store (puede ser str JSON o dict)."""
-        if isinstance(payload, str):
-            return json.loads(payload)  # type: ignore[no-any-return]
-        return payload  # type: ignore[return-value]
+    def _aplicar_rp_final(self, rp_final: RPFinal) -> None:
+        self._rp_medido = rp_final.medido
+        self._rp_penalizado = rp_final.penalizado
+        self._rp = rp_final.observable
