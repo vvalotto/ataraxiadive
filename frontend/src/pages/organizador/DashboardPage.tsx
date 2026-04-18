@@ -4,6 +4,19 @@ import { fetchTorneos } from '../../api/torneo'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
 import useAuthStore from '../../stores/useAuthStore'
 
+const ESTADO_TORNEO_LABELS: Record<string, string> = {
+  BORRADOR: 'Borrador',
+  INSCRIPCION_ABIERTA: 'Inscripción abierta',
+  INSCRIPCION_CERRADA: 'Inscripción cerrada',
+  EJECUCION: 'En ejecución',
+  FINALIZADO: 'Finalizado',
+  CANCELADO: 'Cancelado',
+}
+
+function formatEstadoTorneo(estado: string): string {
+  return ESTADO_TORNEO_LABELS[estado] ?? estado
+}
+
 export function DashboardPage() {
   const logout = useAuthStore((s) => s.logout)
   const email = useAuthStore((s) => s.email)
@@ -57,7 +70,7 @@ export function DashboardPage() {
                   </p>
                   <h2 className="mt-2 text-xl font-semibold text-stone-900">{torneo.nombre}</h2>
                   <p className="mt-2 text-sm text-stone-600">
-                    {torneo.sede.nombre}, {torneo.sede.ciudad} · {torneo.estado}
+                    {torneo.sede.nombre}, {torneo.sede.ciudad} · {formatEstadoTorneo(torneo.estado)}
                   </p>
                 </div>
                 <Link

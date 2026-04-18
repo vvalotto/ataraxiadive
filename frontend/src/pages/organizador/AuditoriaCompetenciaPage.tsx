@@ -4,11 +4,22 @@ import type { GrillaAtletaDto } from '../../api/competencia'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
 import { useAuditoriaCompetencia } from '../../hooks/useAuditoriaCompetencia'
 
+const ESTADO_LABELS: Record<string, string> = {
+  // Estado de competencia
+  EnEjecucion: 'En ejecución',
+  Finalizada: 'Finalizada',
+  Confirmada: 'Grilla confirmada',
+  // Estado de atleta en grilla
+  AnunciadaAP: 'AP declarado',
+  Llamada: 'En llamada',
+  ResultadoRegistrado: 'Resultado registrado',
+  Ejecutada: 'Ejecutada',
+  EnRevision: 'En revisión',
+  DNS: 'DNS',
+}
+
 function formatEstado(estado: string) {
-  if (estado === 'EnEjecucion') return 'En ejecucion'
-  if (estado === 'Finalizada') return 'Finalizada'
-  if (estado === 'Confirmada') return 'Confirmada'
-  return estado
+  return ESTADO_LABELS[estado] ?? estado
 }
 
 function formatResultadoFinal(
@@ -17,12 +28,12 @@ function formatResultadoFinal(
 ) {
   const ranking = rankingMap.get(atleta.atleta_id)
   if (ranking) return ranking
-  if (atleta.estado === 'DNS') return 'DNS'
-  if (atleta.estado === 'Ejecutada') return 'Ejecutada'
-  if (atleta.estado === 'EnRevision') return 'Revision'
-  if (atleta.estado === 'ResultadoRegistrado') return 'Resultado'
-  if (atleta.estado === 'Llamada') return 'Llamada'
-  return 'Pendiente'
+  return formatEstado(atleta.estado) || 'Pendiente'
+}
+
+function borderClasePorResultado(atleta: GrillaAtletaDto): string {
+  if (atleta.estado === 'DNS') return 'border-violet-400 bg-violet-50/60'
+  return 'border-stone-300/80 bg-white/85'
 }
 
 function truncateHash(value: string) {
@@ -83,7 +94,7 @@ export function AuditoriaCompetenciaPage() {
   return (
     <OrganizadorLayout
       title={`Auditoria - ${disciplina}`}
-      subtitle={`Competencia ${competenciaId}`}
+      subtitle={`Disciplina ${disciplina}`}
       actions={
         <>
           <Link
@@ -167,7 +178,7 @@ export function AuditoriaCompetenciaPage() {
             <Link
               key={atleta.performance_id}
               to={`/organizador/competencias/${competenciaId}/auditoria/${atleta.atleta_id}?disciplina=${encodeURIComponent(disciplina)}&torneo_id=${encodeURIComponent(torneoId ?? '')}`}
-              className="block rounded-[2rem] border border-stone-300/80 bg-white/85 p-5 shadow-[0_20px_60px_rgba(120,93,54,0.08)] transition hover:-translate-y-0.5 hover:border-stone-400"
+              className={`block rounded-[2rem] border p-5 shadow-[0_20px_60px_rgba(120,93,54,0.08)] transition hover:-translate-y-0.5 ${borderClasePorResultado(atleta)}`}
             >
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
@@ -189,7 +200,7 @@ export function AuditoriaCompetenciaPage() {
                   <p className="mt-2 text-lg font-semibold text-stone-900">
                     {formatResultadoFinal(atleta, rankingMap)}
                   </p>
-                  <p className="mt-2 text-sm text-stone-600">Estado {atleta.estado}</p>
+                  <p className="mt-2 text-sm text-stone-600">{formatEstado(atleta.estado)}</p>
                 </div>
               </div>
             </Link>

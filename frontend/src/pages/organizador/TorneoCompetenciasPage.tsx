@@ -70,9 +70,6 @@ export function TorneoCompetenciasPage() {
                   <h2 className="mt-2 text-xl font-semibold text-stone-900">
                     {competencia.disciplina}
                   </h2>
-                  <p className="mt-2 text-sm text-stone-600">
-                    ID {competencia.competencia_id}
-                  </p>
                 </div>
                 <Link
                   to={`/organizador/competencias/${competencia.competencia_id}/auditoria?disciplina=${encodeURIComponent(competencia.disciplina)}&torneo_id=${encodeURIComponent(competencia.torneo_id)}`}

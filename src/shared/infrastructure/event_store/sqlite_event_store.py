@@ -9,6 +9,19 @@ import aiosqlite
 
 from shared.domain.ports.event_store_port import EventStorePort
 
+_CREATE_TABLE = """
+CREATE TABLE IF NOT EXISTS events (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    stream_id   TEXT    NOT NULL,
+    event_type  TEXT    NOT NULL,
+    payload     TEXT    NOT NULL,
+    version     INTEGER NOT NULL,
+    occurred_at TEXT    NOT NULL
+        DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    UNIQUE (stream_id, version)
+)
+"""
+
 
 class ConcurrencyError(Exception):
     """Se lanza cuando la versión esperada no coincide con la versión actual del stream."""
@@ -24,6 +37,10 @@ class SQLiteEventStore(EventStorePort):
     def __init__(self, db_path: str) -> None:
         self._db_path = db_path
 
+    async def _ensure_table(self, db: aiosqlite.Connection) -> None:
+        await db.execute(_CREATE_TABLE)
+        await db.commit()
+
     async def append(
         self,
         stream_id: str,
@@ -32,6 +49,7 @@ class SQLiteEventStore(EventStorePort):
         expected_version: int | None = None,
     ) -> None:
         async with aiosqlite.connect(self._db_path) as db:
+            await self._ensure_table(db)
             if expected_version is not None:
                 cursor = await db.execute(
                     "SELECT COUNT(*) FROM events WHERE stream_id = ?", (stream_id,)
@@ -57,6 +75,7 @@ class SQLiteEventStore(EventStorePort):
 
     async def load(self, stream_id: str) -> list[dict[str, Any]]:
         async with aiosqlite.connect(self._db_path) as db:
+            await self._ensure_table(db)
             db.row_factory = aiosqlite.Row
             cursor = await db.execute(
                 """
@@ -80,6 +99,7 @@ class SQLiteEventStore(EventStorePort):
 
     async def load_all_streams_with_prefix(self, prefix: str) -> list[list[dict[str, Any]]]:
         async with aiosqlite.connect(self._db_path) as db:
+            await self._ensure_table(db)
             db.row_factory = aiosqlite.Row
             cursor = await db.execute(
                 """
@@ -109,6 +129,7 @@ class SQLiteEventStore(EventStorePort):
 
     async def load_all_events_ordered(self, prefix: str) -> list[dict[str, Any]]:
         async with aiosqlite.connect(self._db_path) as db:
+            await self._ensure_table(db)
             db.row_factory = aiosqlite.Row
             cursor = await db.execute(
                 """
@@ -133,6 +154,7 @@ class SQLiteEventStore(EventStorePort):
 
     async def load_from(self, stream_id: str, from_version: int) -> list[dict[str, Any]]:
         async with aiosqlite.connect(self._db_path) as db:
+            await self._ensure_table(db)
             db.row_factory = aiosqlite.Row
             cursor = await db.execute(
                 """
