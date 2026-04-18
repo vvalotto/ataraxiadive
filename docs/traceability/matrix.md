@@ -4,9 +4,9 @@
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-04-15 |
+| **Fecha** | 2026-04-18 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.16 — INC-4.4 ✅ (3 US offline-first · PRs #77 + fix); INC-4.5 ✅ (4 US BC Notificaciones · PRs #79–82) |
+| **Estado** | ✅ v1.17 — SP4 ✅ cerrado (INC-4.0..4.6 Done · SP-ADJ-06 · UAT PASS · tag v0.5.0 · BL-004) |
 
 ---
 
@@ -36,6 +36,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP4 INC-4.2/4.3 | Frontend (scaffold + juez) | RF-EJ-01..10 (UI juez completa) |
 | SP4 INC-4.4 | Frontend (offline-first) | RF-EJ-03 (tarjetas), RF-EJ-06 (corrección con ventana) — operación sin red |
 | SP4 INC-4.5/4.6 | Notificaciones + Auditoría + Exportación | RF-NT-01..04, RF-EJ-06 |
+| SP-ADJ-06 | FAZ→FAAS (código + docs) + refactoring técnico + UAT SP4 | — (deuda técnica + validación) |
 | SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
 
 ---
@@ -355,7 +356,21 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
-## 18. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §16 -->
+## 18. US-IEDD SP-ADJ-06 — Ajuste técnico y documental post-SP4 (pre-BL-004)
+
+| US | Issues | Área | Descripción | Estado |
+|----|--------|------|-------------|--------|
+| US-ADJ-6.1 | FAZ→FAAS | `shared/`, `notificaciones/`, `competencia/` código | Renombrar acrónimo FAZ → FAAS en código (enum `Disciplina`, eventos, handlers, ports) | ✅ 2026-04-18 |
+| US-ADJ-6.2 | FAZ→FAAS | `tests/` | Renombrar FAZ → FAAS en todos los tests y fixtures | ✅ 2026-04-18 |
+| US-ADJ-6.3 | SOLID | `competencia/application/` | Eliminar `inspect.signature`; callback `on_finalizada` unificado en composition root | ✅ 2026-04-18 |
+| US-ADJ-6.4 | DRY | `notificaciones/application/` | Eliminar duplicación P-10/P-11 y `@staticmethod` innecesario | ✅ 2026-04-18 |
+| US-ADJ-6.5 | Arq. capas | `frontend/` | Corregir violaciones de capa en `GrillaPage` (imports directos API → hooks) | ✅ 2026-04-18 |
+| US-ADJ-6.6 | FAZ→FAAS | `docs/` | Corrección acrónimo en 8 archivos de documentación (ubiquitous language) | ✅ 2026-04-18 (PR #90) |
+| US-ADJ-6.7 | UAT | `tests/uat/`, `src/shared/`, `frontend/` | UAT SP4 (INC-4.4/4.5/4.6) · BUG-SP4-001/002 resueltos · UX fixes organizador | ✅ 2026-04-18 (PR #91) |
+
+---
+
+## 19. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §16 -->
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -374,7 +389,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 19. Cobertura Total
+## 20. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -392,7 +407,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 19. US → Tests
+## 21. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -430,10 +445,22 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-4.3.3 | integration/competencia (smoke TestClient) · frontend (build + lint) · validación manual navegador | ✅ UAT INC-4.3 2026-04-12 |
 | US-4.3.4 | unit/competencia/domain (EnRevision + ResolverRevision) · integration/competencia · frontend (build + lint) · validación manual navegador | ✅ UAT INC-4.3 2026-04-12 |
 | US-4.3.5 | frontend (build + lint) · validación manual navegador (BDD waiver — frontend solo) | ✅ UAT INC-4.3 2026-04-12 |
+| US-4.4.1 | frontend (build + lint) · UAT INC-4.4 iPhone (BDD waiver — frontend offline-first) | ✅ UAT SP4 2026-04-18 |
+| US-4.4.2 | frontend (build + lint) · UAT INC-4.4 iPhone | ✅ UAT SP4 2026-04-18 |
+| US-4.4.3 | frontend (build + lint) · UAT INC-4.4 iPhone (Background Sync) | ✅ UAT SP4 2026-04-18 |
+| US-4.5.1 | unit/notificaciones/domain + integration/notificaciones | ✅ Done (PR #79) |
+| US-4.5.2 | unit/notificaciones/infrastructure (ResendEmailAdapter) | ✅ Done (PR #80) |
+| US-4.5.3 | unit/notificaciones/application (P-10) + UAT SP4 email real | ✅ UAT SP4 2026-04-18 |
+| US-4.5.4 | unit/notificaciones/application (P-11) | ✅ Done (PR #82) |
+| US-4.5.5 | integration (cableado P-10 en composition root) | ✅ Done (PR #83) |
+| US-4.6.1 | unit/competencia/application (ObtenerAuditLog) + integration/competencia | ✅ Done |
+| US-4.6.2 | unit/competencia/domain (CalculadorHashCompetencia) + integration/competencia | ✅ Done |
+| US-4.6.3 | frontend (build + lint) · UAT INC-4.6 iPad organizador | ✅ UAT SP4 2026-04-18 |
+| US-4.6.4 | unit/resultados/application (ExportarResultados) + integration/resultados · UAT INC-4.6 | ✅ UAT SP4 2026-04-18 |
 
 ---
 
-## 20. US → ADR
+## 22. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -457,6 +484,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.6 — 2026-04-02: SP3 completado a nivel US — §9 y tabla US→Tests actualizadas hasta US-3.5.3*
 *v1.10 — 2026-04-03: SP-ADJ-04 completado (§2, §11), US-ADJ-4.6 implementada, RF-IN-10 incorporado a cobertura total (§14)*
 *v1.16 — 2026-04-15: INC-4.4 ✅ (US-4.4.1..3 Done · fix robustez) · INC-4.5 ✅ §16 agregado (4 US · PRs #79–82) · §§ renumerados 17..20 · US→ADR ADR-016*
+*v1.17 — 2026-04-18: SP4 cerrado (v0.5.0 · BL-004) · SP-ADJ-06 §18 agregado (7 US) · US→Tests completado (INC-4.4/4.5/4.6) · §§ renumerados 18..22 · §2 cobertura actualizada*
 *v1.15 — 2026-04-13: INC-4.4 especificado (§15 nuevo — 3 US offline-first) · §§ renumerados 16..19 · §2 cobertura actualizada*
 *v1.14 — 2026-04-13: INC-4.3 completado (§14 — 5/5 US ✅, UAT BA 2025) · RF-NT §3.7 INC corregido (4.2→4.5) · US-4.3.x en §18*
 *v1.13 — 2026-04-11: US-4.2.2 implementada y mergeada · DesignReviewer consolidado INC-4.2 OK · validación manual pendiente*
