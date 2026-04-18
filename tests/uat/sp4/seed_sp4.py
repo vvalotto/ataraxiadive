@@ -113,14 +113,18 @@ async def setup_competencia(
     from competencia.infrastructure.repositories.performances_ap_adapter import (
         PerformancesAPAdapter,
     )
+    from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
+        SQLiteCompetenciasPorTorneo,
+    )
 
     store = SQLiteEventStore(COMPETENCIA_DB)
     disciplina = Disciplina(disciplina_str)
     unidad = UnidadMedida.Metros if unidad_str == "metros" else UnidadMedida.Segundos
     descriptor = DisciplinaDescriptorAdapter()
     stub = StubCompetenciaEstadoAdapter()
+    proyeccion = SQLiteCompetenciasPorTorneo(COMPETENCIA_DB)
 
-    await ConfigurarIntervaloOTHandler(store).handle(
+    await ConfigurarIntervaloOTHandler(store, proyeccion).handle(
         ConfigurarIntervaloOTCommand(
             competencia_id=competencia_id,
             disciplina=disciplina,
