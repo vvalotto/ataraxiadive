@@ -28,6 +28,7 @@ def apply_stored(performance: "Performance", event: dict[str, Any]) -> None:
         "TarjetaAsignada": apply_tarjeta_asignada,
         "RevisionResuelta": apply_revision_resuelta,
         "ResultadoCorregido": apply_resultado_corregido,
+        "ResultadoCorregidoTrasDNS": apply_resultado_corregido_tras_dns,
     }
     handler = handlers.get(event["event_type"])
     if handler is not None:
@@ -80,6 +81,11 @@ def apply_resultado_corregido(performance: "Performance", payload: dict[str, Any
     performance._aplicar_rp_final(
         RPFinal.desde_medicion(Decimal(payload["valor_rp_nuevo"]), performance._penalizaciones)
     )
+
+
+def apply_resultado_corregido_tras_dns(performance: "Performance", payload: dict[str, Any]) -> None:
+    performance._aplicar_rp_final(RPFinal.desde_medicion(Decimal(payload["valor_rp"])))
+    performance._estado = EstadoPerformance.ResultadoRegistrado
 
 
 def parse_payload(payload: Any) -> dict[str, Any]:

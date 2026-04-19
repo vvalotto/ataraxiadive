@@ -10,6 +10,10 @@ Versionado: [Semantic Versioning](https://semver.org/lang/es/)
 ## [Unreleased]
 
 ### Added
+- [US-ADJ-7.1] Comando `CorregirResultadoTrasDNS` para corregir DNS registrado por error
+  - Nuevo evento `ResultadoCorregidoTrasDNS` y transición `DNS -> ResultadoRegistrado`
+  - Endpoint `POST /competencia/{competencia_id}/performances/{performance_id}/corregir-resultado-tras-dns`
+  - Tests unitarios, integración y BDD para corrección, rechazos y flujo hasta tarjeta blanca
 - [US-2.2.1] DisciplinaDescriptor VO + Port + Adapter — encapsula reglas de disciplina (política P-01) y desacopla el ordering de grilla del enum Disciplina
   - `DisciplinaDescriptor` frozen dataclass con `unidad_esperada` y `orden_ascendente`
   - `DisciplinaDescriptorPort` ABC + `DisciplinaDescriptorAdapter` sin I/O

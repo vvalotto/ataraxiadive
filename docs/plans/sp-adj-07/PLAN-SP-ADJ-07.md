@@ -96,7 +96,7 @@ merge develop→main no aplica aquí — BL-005 se cierra al final de SP5
 
 ## Criterio de cierre de SP-ADJ-07
 
-- [ ] US-ADJ-7.1 — `CorregirResultadoTrasDNS` implementado · tests pasan · endpoint verificado
+- [x] US-ADJ-7.1 — `CorregirResultadoTrasDNS` implementado · tests pasan · endpoint verificado
 - [x] US-ADJ-7.2 — `/grilla` incluye `tarjeta_asignada` · auditoría muestra colores por tarjeta
 - [ ] US-ADJ-7.3 — P-11 se dispara al cerrar una disciplina · email real recibido en prueba
 - [ ] DesignReviewer 0 CRITICAL post-SP-ADJ-07

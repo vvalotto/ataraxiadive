@@ -25,6 +25,11 @@ from competencia.application.commands.confirmar_grilla import (
     ConfirmarGrillaCommand,
     ConfirmarGrillaHandler,
 )
+from competencia.application.commands.corregir_resultado_tras_dns import (
+    CorregirResultadoTrasDNSCommand,
+    CorregirResultadoTrasDNSHandler,
+    PerformanceNoEncontrada as PerformanceNoEncontradaCorregirTrasDns,
+)
 from competencia.application.commands.configurar_intervalo_ot import (
     ConfigurarIntervaloOTCommand,
     ConfigurarIntervaloOTHandler,
@@ -195,6 +200,26 @@ class RegistrarDNSBody(BaseModel):
     disciplina: Disciplina
 
 
+class CorregirResultadoTrasDNSBody(BaseModel):
+    """Body del endpoint para corregir un DNS registrado por error."""
+
+    participante_id: UUID | None = None
+    atleta_id: UUID | None = None
+    disciplina: Disciplina
+    valor_rp: Decimal
+    unidad: UnidadMedida
+    registrado_por: str | None = None
+    motivo_correccion: str
+
+    def resolve_participante_id(self) -> UUID:
+        """Compatibilidad: acepta participante_id o atleta_id."""
+        if self.participante_id is not None:
+            return self.participante_id
+        if self.atleta_id is not None:
+            return self.atleta_id
+        raise ValueError("participante_id o atleta_id es obligatorio")
+
+
 class PenalizacionTecnicaBody(BaseModel):
     """Payload de una penalización técnica individual."""
 
@@ -317,6 +342,13 @@ def get_registrar_dns_handler(
     return RegistrarDNSHandler(event_store, performances_estado)
 
 
+def get_corregir_resultado_tras_dns_handler(
+    event_store: EventStoreDep,
+) -> CorregirResultadoTrasDNSHandler:
+    """Dependency: handler para corregir resultado tras DNS."""
+    return CorregirResultadoTrasDNSHandler(event_store)
+
+
 def get_resolver_revision_handler(
     event_store: EventStoreDep,
     performances_estado: PerformancesEstadoAdapterDep,
@@ -345,6 +377,10 @@ RegistrarResultadoHandlerDep = Annotated[
 ]
 AsignarTarjetaHandlerDep = Annotated[AsignarTarjetaHandler, Depends(get_asignar_tarjeta_handler)]
 RegistrarDNSHandlerDep = Annotated[RegistrarDNSHandler, Depends(get_registrar_dns_handler)]
+CorregirResultadoTrasDNSHandlerDep = Annotated[
+    CorregirResultadoTrasDNSHandler,
+    Depends(get_corregir_resultado_tras_dns_handler),
+]
 ResolverRevisionHandlerDep = Annotated[
     ResolverRevisionHandler, Depends(get_resolver_revision_handler)
 ]
@@ -758,6 +794,40 @@ async def post_registrar_dns(
             )
         )
     except PerformanceNoEncontradaRegistrarDns as exc:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
+    except DomainError as exc:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+    return Response(status_code=204)
+
+
+@router.post(
+    "/{competencia_id}/performances/{performance_id}/corregir-resultado-tras-dns",
+    response_class=JSONResponse,
+)
+async def post_corregir_resultado_tras_dns(
+    competencia_id: UUID,
+    performance_id: UUID,
+    body: CorregirResultadoTrasDNSBody,
+    handler: CorregirResultadoTrasDNSHandlerDep,
+    user: JuezDep,
+) -> JSONResponse:
+    """Corrige un DNS registrado por error y deja la performance lista para tarjeta."""
+    del performance_id
+    try:
+        await handler.handle(
+            CorregirResultadoTrasDNSCommand(
+                competencia_id=competencia_id,
+                participante_id=body.resolve_participante_id(),
+                disciplina=body.disciplina,
+                valor_rp=body.valor_rp,
+                unidad=body.unidad,
+                registrado_por=body.registrado_por or user["email"],
+                motivo_correccion=body.motivo_correccion,
+            )
+        )
+    except ValueError as exc:
+        return JSONResponse(status_code=422, content={"detail": str(exc)})
+    except PerformanceNoEncontradaCorregirTrasDns as exc:
         return JSONResponse(status_code=404, content={"detail": str(exc)})
     except DomainError as exc:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
