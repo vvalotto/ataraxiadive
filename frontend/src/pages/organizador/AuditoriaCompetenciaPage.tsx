@@ -32,6 +32,16 @@ function formatResultadoFinal(
 }
 
 function borderClasePorResultado(atleta: GrillaAtletaDto): string {
+  switch (atleta.tarjeta_asignada) {
+    case 'Blanca':
+      return 'border-emerald-300 bg-emerald-50/70'
+    case 'BlancaConPenalizaciones':
+      return 'border-amber-300 bg-amber-50/75'
+    case 'Roja':
+      return 'border-red-300 bg-red-50/70'
+    default:
+      break
+  }
   if (atleta.estado === 'DNS') return 'border-violet-400 bg-violet-50/60'
   return 'border-stone-300/80 bg-white/85'
 }

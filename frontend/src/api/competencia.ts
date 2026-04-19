@@ -34,6 +34,7 @@ export interface GrillaAtletaDto {
   ap_declarado: string
   unidad: string
   estado: EstadoPerformance
+  tarjeta_asignada: string | null
 }
 
 export interface PerformanceActualDto {
