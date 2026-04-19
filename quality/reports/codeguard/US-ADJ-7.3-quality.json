@@ -1,0 +1,34 @@
+{
+  "us_id": "US-ADJ-7.3",
+  "componentes_evaluados": [
+    "src/app.py"
+  ],
+  "estado": "PASS",
+  "codeguard": {
+    "archivo": "quality/reports/codeguard/US-ADJ-7.3-codeguard-raw.json",
+    "total_files": 1,
+    "checks_executed": 6,
+    "errors": 0,
+    "warnings": 0,
+    "infos": 3,
+    "resultado": "PASS"
+  },
+  "coverage": {
+    "archivo": "quality/reports/codeguard/US-ADJ-7.3-coverage.json",
+    "target": "src/app.py",
+    "covered_lines": 151,
+    "num_statements": 157,
+    "percent_covered": 96.18,
+    "resultado": "PASS"
+  },
+  "tests": {
+    "resultado": "PASS",
+    "total": 18,
+    "warnings": 5,
+    "comando": ".venv/bin/pytest tests/unit/test_app_p10_wiring.py tests/unit/test_app_p09.py tests/unit/test_app_p11_wiring.py tests/integration/test_p11_callback_integration.py tests/features/steps/p11_competencia_finalizada_steps.py --cov=app --cov-config=/tmp/ataraxiadive-empty-coveragerc --cov-report=term-missing --cov-report=json:quality/reports/codeguard/US-ADJ-7.3-coverage.json -q"
+  },
+  "observaciones": [
+    "CodeGuard se ejecuto de forma acotada sobre el componente modificado por la US.",
+    "Los warnings de pytest corresponden a deprecations externas/markers BDD y no bloquean la US."
+  ]
+}

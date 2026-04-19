@@ -6,7 +6,7 @@
 | **Contexto** | Resolución de deuda funcional identificada en SP4 antes de arrancar SP5 |
 | **Fuentes** | BUG-SP4-003 · BUG-SP4-004 · SCOPE-SP4-001 — registrados en CLAUDE.md §14 al cerrar BL-004 |
 | **Branch base** | `develop` |
-| **Estado** | ⏳ Planificado |
+| **Estado** | Cerrado |
 
 ---
 
@@ -98,8 +98,15 @@ merge develop→main no aplica aquí — BL-005 se cierra al final de SP5
 
 - [x] US-ADJ-7.1 — `CorregirResultadoTrasDNS` implementado · tests pasan · endpoint verificado
 - [x] US-ADJ-7.2 — `/grilla` incluye `tarjeta_asignada` · auditoría muestra colores por tarjeta
-- [ ] US-ADJ-7.3 — P-11 se dispara al cerrar una disciplina · email real recibido en prueba
-- [ ] DesignReviewer 0 CRITICAL post-SP-ADJ-07
+- [x] US-ADJ-7.3 — P-11 se dispara al cerrar una disciplina · emails registrados en prueba automatizada
+- [x] DesignReviewer 0 CRITICAL post-SP-ADJ-07
+
+### Validación de cierre
+
+- CodeGuard US-ADJ-7.3 acotado a `src/app.py`: 0 errores, 0 warnings.
+- Cobertura focalizada `src/app.py`: 96%.
+- Tests P-09/P-10/P-11 de composition root: 18 passed.
+- DesignReviewer post-SP-ADJ-07: 0 blocking issues, 208 warnings no bloqueantes.
 
 ---
 

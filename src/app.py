@@ -1,5 +1,6 @@
 """AtaraxiaDive — FastAPI application entry point (composition root)."""
 
+import logging
 import os
 from typing import Awaitable, Callable
 from uuid import UUID
@@ -31,6 +32,11 @@ from notificaciones.application.policies.politica_p10 import (
     PoliticaP10Handler,
 )
 from notificaciones.application.policies.politica_p11 import PoliticaP11Handler
+from notificaciones.application.policies.politica_p11 import (
+    PodioPublicado,
+    ResultadoPublicadoAtleta,
+    ResultadosPublicados,
+)
 from notificaciones.infrastructure.email.logging_email_adapter import LoggingEmailAdapter
 from notificaciones.infrastructure.email.resend_email_adapter import ResendEmailAdapter
 from notificaciones.infrastructure.event_store.sqlite_notificacion_event_store import (
@@ -58,6 +64,10 @@ from resultados.application.commands.calcular_ranking import (
     CalcularRankingCommand,
     CalcularRankingHandler,
 )
+from resultados.application.queries.obtener_ranking import (
+    ObtenerRankingHandler,
+    ObtenerRankingQuery,
+)
 from resultados.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
@@ -74,6 +84,7 @@ from shared.domain.value_objects.disciplina import Disciplina
 from shared.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 
 app = FastAPI(title="AtaraxiaDive", version="0.1.0")
+logger = logging.getLogger(__name__)
 
 if os.getenv("IDENTIDAD_JWT_SECRET"):
     configure_identity_dependencies(
@@ -98,11 +109,7 @@ def build_p10_handler() -> PoliticaP10Handler:
     """
     store = SQLiteNotificacionEventStore()
     repository = SQLiteNotificacionRepository(store)
-    email_adapter = (
-        ResendEmailAdapter()
-        if os.getenv("RESEND_API_KEY")
-        else LoggingEmailAdapter()
-    )
+    email_adapter = ResendEmailAdapter() if os.getenv("RESEND_API_KEY") else LoggingEmailAdapter()
     return PoliticaP10Handler(
         repository=repository,
         solicitar_envio_handler=SolicitarEnvioHandler(repository),
@@ -152,12 +159,13 @@ def build_p11_handler() -> PoliticaP11Handler:
     """Construye la política P-11 con adaptadores reales de Notificaciones."""
     store = SQLiteNotificacionEventStore()
     repository = SQLiteNotificacionRepository(store)
+    email_adapter = ResendEmailAdapter() if os.getenv("RESEND_API_KEY") else LoggingEmailAdapter()
     return PoliticaP11Handler(
         repository=repository,
         solicitar_envio_handler=SolicitarEnvioHandler(repository),
         enviar_notificacion_handler=EnviarNotificacionHandler(
             repository,
-            ResendEmailAdapter(),
+            email_adapter,
         ),
         template=ResultadosPublicadosTemplate(),
     )
@@ -182,6 +190,7 @@ def build_on_finalizada_callback(
         Callable async (competencia_id, disciplina, torneo_id) → None.
     """
     ranking_db_path = os.getenv("RESULTADOS_DB_PATH", "data/resultados.db")
+    registro_db_path = os.getenv("REGISTRO_DB_PATH", "data/registro.db")
     torneo_db_path = os.getenv("TORNEO_DB_PATH", "data/torneo.db")
 
     async def _on_finalizada(
@@ -202,8 +211,113 @@ def build_on_finalizada_callback(
             torneo_db_path,
             torneo_id,
         )
+        try:
+            await _notificar_resultados_p11(
+                ranking_store=ranking_store,
+                competencia_id=competencia_id,
+                disciplina=disciplina,
+                torneo_id=torneo_id,
+                registro_db_path=registro_db_path,
+                torneo_db_path=torneo_db_path,
+            )
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("P-11 no pudo notificar resultados: %s", exc)
 
     return _on_finalizada
+
+
+async def _notificar_resultados_p11(
+    *,
+    ranking_store: SQLiteEventStore,
+    competencia_id: UUID,
+    disciplina: Disciplina,
+    torneo_id: UUID | None,
+    registro_db_path: str,
+    torneo_db_path: str,
+    p11_handler: PoliticaP11Handler | None = None,
+    atleta_repo: SQLiteAtletaRepository | None = None,
+    torneo_repo: SQLiteTorneoRepository | None = None,
+) -> None:
+    """Ejecuta P-11: notificar resultados publicados al finalizar disciplina."""
+    categorias = await ObtenerRankingHandler(ranking_store).handle(
+        ObtenerRankingQuery(competencia_id=competencia_id, disciplina=disciplina)
+    )
+    entradas = [entrada for categoria in categorias for entrada in categoria.entradas]
+    if not entradas:
+        return
+
+    atletas = atleta_repo or SQLiteAtletaRepository(registro_db_path)
+    torneo_nombre = await _obtener_nombre_torneo(torneo_id, torneo_db_path, torneo_repo)
+
+    resultados: list[ResultadoPublicadoAtleta] = []
+    podio: list[PodioPublicado] = []
+    for entrada in entradas:
+        atleta_nombre, atleta_email = await _obtener_datos_atleta_p11(atletas, entrada.atleta_id)
+        rp = _rp_publicado(entrada.rp)
+        resultados.append(
+            ResultadoPublicadoAtleta(
+                atleta_id=entrada.atleta_id,
+                atleta_email=atleta_email,
+                atleta_nombre=atleta_nombre,
+                posicion=entrada.posicion,
+                rp=rp,
+                tarjeta=entrada.tarjeta,
+                estado="DNS" if entrada.es_dns else "Clasificado",
+            )
+        )
+        if entrada.en_podio:
+            podio.append(_crear_podio_publicado(entrada.posicion, atleta_nombre, rp))
+
+    evento = ResultadosPublicados(
+        id=str(competencia_id),
+        torneo_id=str(torneo_id) if torneo_id else None,
+        torneo_nombre=torneo_nombre,
+        disciplina=disciplina.value,
+        resultados=tuple(resultados),
+        podio=tuple(podio),
+    )
+    await (p11_handler or build_p11_handler()).handle(evento)
+
+
+async def _obtener_datos_atleta_p11(
+    atletas: SQLiteAtletaRepository,
+    atleta_id: str,
+) -> tuple[str, str | None]:
+    """Obtiene nombre/email para P-11; si Registro falla, permite registrar fallo sin email."""
+    try:
+        atleta = await atletas.find_by_id(UUID(atleta_id))
+    except Exception:  # noqa: BLE001
+        atleta = None
+    if atleta is None:
+        return atleta_id, None
+    return f"{atleta.nombre} {atleta.apellido}".strip(), atleta.email
+
+
+def _rp_publicado(rp: str | None) -> str:
+    """Normaliza RP para el email de resultados."""
+    return rp if rp is not None else "DNS"
+
+
+def _crear_podio_publicado(
+    posicion: int,
+    atleta_nombre: str,
+    rp: str,
+) -> PodioPublicado:
+    """Crea una entrada de podio para P-11."""
+    return PodioPublicado(posicion=posicion, atleta_nombre=atleta_nombre, rp=rp)
+
+
+async def _obtener_nombre_torneo(
+    torneo_id: UUID | None,
+    torneo_db_path: str,
+    torneo_repo: SQLiteTorneoRepository | None = None,
+) -> str:
+    """Obtiene nombre de torneo para P-11 con fallback estable."""
+    if torneo_id is None:
+        return "Torneo sin nombre"
+    torneos = torneo_repo or SQLiteTorneoRepository(torneo_db_path)
+    torneo = await torneos.find_by_id(torneo_id)
+    return torneo.nombre if torneo is not None else f"Torneo {torneo_id}"
 
 
 async def _calcular_ranking_por_finalizacion(
