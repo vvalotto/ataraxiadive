@@ -32,6 +32,7 @@ class EntradaGrillaDTO:
     ap_declarado: str
     unidad: str
     estado: str
+    tarjeta_asignada: str | None
 
 
 @dataclass(frozen=True)  # pylint: disable=too-few-public-methods
@@ -77,6 +78,7 @@ class ObtenerGrillaHandler:
                 ap_declarado=performance.ap_declarado,
                 unidad=performance.unidad,
                 estado=performance.estado,
+                tarjeta_asignada=performance.tarjeta_asignada,
             )
             for e in competencia.grilla
             for performance in [
@@ -99,6 +101,7 @@ class ObtenerGrillaHandler:
                 ap_declarado="",
                 unidad="",
                 estado="AnunciadaAP",
+                tarjeta_asignada=None,
             )
         performance = Performance.reconstitute(events)
         ap = performance.ap
@@ -107,6 +110,7 @@ class ObtenerGrillaHandler:
             ap_declarado=str(ap.valor) if ap else "",
             unidad=ap.unidad.value if ap else "",
             estado=performance.estado.value if performance.estado else "",
+            tarjeta_asignada=performance.tarjeta.value if performance.tarjeta else None,
         )
 
 
@@ -116,3 +120,4 @@ class _PerformanceProjection:
     ap_declarado: str
     unidad: str
     estado: str
+    tarjeta_asignada: str | None

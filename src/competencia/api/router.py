@@ -900,6 +900,7 @@ async def get_grilla(
                 "ap_declarado": e.ap_declarado,
                 "unidad": e.unidad,
                 "estado": e.estado,
+                "tarjeta_asignada": e.tarjeta_asignada,
             }
             for e in entradas
         ],
