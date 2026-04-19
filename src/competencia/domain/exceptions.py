@@ -8,6 +8,7 @@ Jerarquía (ADR-013):
     │   ├── EstadoInvalidoParaRegistrarDNS
     │   ├── EstadoInvalidoParaAsignarTarjeta
     │   ├── EstadoInvalidoParaCorregirResultado
+    │   ├── EstadoInvalidoParaCorregirResultadoTrasDNS
     │   ├── MotivoObligatorio
     │   └── DistanciaBlackoutObligatoria
     └── Competencia
@@ -57,6 +58,10 @@ class EstadoInvalidoParaCorregirResultado(DomainError):
     """Performance no está en estado Ejecutada — no se puede corregir el resultado (INV-P-12/13)."""
 
 
+class EstadoInvalidoParaCorregirResultadoTrasDNS(DomainError):
+    """Performance no está en estado DNS — no se puede corregir resultado tras DNS."""
+
+
 class MotivoObligatorio(DomainError):
     """Tarjeta amarilla o roja requieren motivo obligatorio (INV-P-11).
     También aplica a la corrección de resultado (INV-P-12).
@@ -99,7 +104,10 @@ class GrillaNoGenerada(DomainError):
 
 
 class PerformanceNoEncontrada(DomainError):
-    """Performance no encontrada en la grilla — el performanceId no corresponde a ninguna entrada."""
+    """Performance no encontrada en la grilla.
+
+    El performanceId no corresponde a ninguna entrada.
+    """
 
 
 class CompetenciaNoConfirmada(DomainError):

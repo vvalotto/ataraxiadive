@@ -10,6 +10,7 @@ from competencia.domain.events.ap_registrado import APRegistrado
 from competencia.domain.events.atleta_llamado import AtletaLlamado
 from competencia.domain.events.dns_registrado import DNSRegistrado
 from competencia.domain.events.resultado_corregido import ResultadoCorregido
+from competencia.domain.events.resultado_corregido_tras_dns import ResultadoCorregidoTrasDNS
 from competencia.domain.events.resultado_registrado import ResultadoRegistrado
 from competencia.domain.events.revision_resuelta import RevisionResuelta
 from competencia.domain.events.tarjeta_asignada import TarjetaAsignada
@@ -134,6 +135,32 @@ def crear_resultado_corregido(
         unidad=unidad.value,
         motivo=motivo,
         registrado_por=registrado_por,
+        corregido_en=now.isoformat(),
+    )
+
+
+def crear_resultado_corregido_tras_dns(
+    *,
+    performance_id: UUID,
+    participante_id: UUID,
+    disciplina: Disciplina,
+    valor_rp: Decimal,
+    unidad: UnidadMedida,
+    registrado_por: str,
+    motivo_correccion: str,
+) -> ResultadoCorregidoTrasDNS:
+    now = ResultadoCorregidoTrasDNS.now()
+    return ResultadoCorregidoTrasDNS(
+        event_type="ResultadoCorregidoTrasDNS",
+        aggregate_id=str(performance_id),
+        occurred_at=now,
+        performance_id=str(performance_id),
+        participante_id=str(participante_id),
+        disciplina=disciplina.value,
+        valor_rp=str(valor_rp),
+        unidad=unidad.value,
+        registrado_por=registrado_por,
+        motivo_correccion=motivo_correccion,
         corregido_en=now.isoformat(),
     )
 
