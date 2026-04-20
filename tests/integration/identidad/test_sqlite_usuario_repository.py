@@ -81,3 +81,14 @@ async def test_save_persiste_rol_correctamente(repo: SQLiteUsuarioRepository) ->
     resultado = await repo.find_by_id(u.usuario_id)
     assert resultado is not None
     assert resultado.rol == Rol.ADMIN
+
+
+@pytest.mark.asyncio
+async def test_list_by_rol_filtra_y_ordena_por_email(repo: SQLiteUsuarioRepository) -> None:
+    await repo.save(_usuario(email="z-juez@test.com", rol=Rol.JUEZ))
+    await repo.save(_usuario(email="a-juez@test.com", rol=Rol.JUEZ))
+    await repo.save(_usuario(email="org@test.com", rol=Rol.ORGANIZADOR))
+
+    jueces = await repo.list_by_rol(Rol.JUEZ)
+
+    assert [usuario.email for usuario in jueces] == ["a-juez@test.com", "z-juez@test.com"]
