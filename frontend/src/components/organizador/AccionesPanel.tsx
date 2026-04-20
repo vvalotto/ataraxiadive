@@ -1,0 +1,169 @@
+import { useState } from 'react'
+import {
+  abrirInscripcion,
+  cancelarTorneo,
+  cerrarInscripcion,
+  cerrarTorneo,
+  iniciarEjecucion,
+  iniciarPremiacion,
+  volverPreparacion,
+  type EstadoTorneo,
+} from '../../api/torneo'
+
+interface AccionFase {
+  label: string
+  run: (torneoId: string) => Promise<void>
+  variant?: 'primary' | 'secondary'
+}
+
+const ACCIONES_POR_ESTADO: Partial<Record<EstadoTorneo, AccionFase[]>> = {
+  CREADO: [{ label: 'Abrir inscripcion', run: abrirInscripcion, variant: 'primary' }],
+  INSCRIPCION_ABIERTA: [
+    { label: 'Cerrar inscripcion', run: cerrarInscripcion, variant: 'primary' },
+  ],
+  PREPARACION: [{ label: 'Iniciar ejecucion', run: iniciarEjecucion, variant: 'primary' }],
+  EJECUCION: [
+    { label: 'Volver a preparacion', run: volverPreparacion, variant: 'secondary' },
+    { label: 'Iniciar premiacion', run: iniciarPremiacion, variant: 'primary' },
+  ],
+  PREMIACION: [{ label: 'Cerrar torneo', run: cerrarTorneo, variant: 'primary' }],
+}
+
+const ESTADOS_TERMINALES = new Set<EstadoTorneo>(['CERRADO', 'CANCELADO'])
+
+interface AccionesPanelProps {
+  torneoId: string
+  torneoNombre: string
+  estado: EstadoTorneo
+  onSuccess: () => Promise<void>
+  onError: (message: string) => void
+}
+
+function buttonClass(variant: 'primary' | 'secondary' | 'danger'): string {
+  if (variant === 'danger') {
+    return 'rounded-lg border border-red-700 px-4 py-2 text-sm font-semibold text-red-800 disabled:cursor-not-allowed disabled:opacity-60'
+  }
+  if (variant === 'secondary') {
+    return 'rounded-lg border border-stone-700 px-4 py-2 text-sm font-semibold text-stone-900 disabled:cursor-not-allowed disabled:opacity-60'
+  }
+  return 'rounded-lg bg-stone-900 px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-stone-500'
+}
+
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message
+  return 'No se pudo transicionar el torneo'
+}
+
+export function AccionesPanel({
+  torneoId,
+  torneoNombre,
+  estado,
+  onSuccess,
+  onError,
+}: AccionesPanelProps) {
+  const [runningAction, setRunningAction] = useState<string | null>(null)
+  const [showCancelDialog, setShowCancelDialog] = useState(false)
+  const acciones = ACCIONES_POR_ESTADO[estado] ?? []
+  const puedeCancelar = !ESTADOS_TERMINALES.has(estado)
+
+  async function runAction(action: AccionFase) {
+    setRunningAction(action.label)
+    onError('')
+    try {
+      await action.run(torneoId)
+      await onSuccess()
+    } catch (error) {
+      onError(getErrorMessage(error))
+    } finally {
+      setRunningAction(null)
+    }
+  }
+
+  async function confirmCancel() {
+    setRunningAction('Cancelar torneo')
+    onError('')
+    try {
+      await cancelarTorneo(torneoId)
+      setShowCancelDialog(false)
+      await onSuccess()
+    } catch (error) {
+      onError(getErrorMessage(error))
+    } finally {
+      setRunningAction(null)
+    }
+  }
+
+  if (acciones.length === 0 && !puedeCancelar) {
+    return null
+  }
+
+  return (
+    <section className="rounded-lg border border-stone-300 bg-white p-5 shadow-[0_20px_60px_rgba(120,93,54,0.08)]">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h3 className="text-lg font-semibold text-stone-950">Acciones de fase</h3>
+          <p className="mt-1 text-sm text-stone-600">
+            Ejecuta transiciones permitidas por el ciclo de vida del torneo.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {acciones.map((action) => (
+            <button
+              key={action.label}
+              type="button"
+              onClick={() => void runAction(action)}
+              disabled={runningAction !== null}
+              className={buttonClass(action.variant ?? 'primary')}
+            >
+              {runningAction === action.label ? 'Procesando...' : action.label}
+            </button>
+          ))}
+          {puedeCancelar ? (
+            <button
+              type="button"
+              onClick={() => setShowCancelDialog(true)}
+              disabled={runningAction !== null}
+              className={buttonClass('danger')}
+            >
+              Cancelar torneo
+            </button>
+          ) : null}
+        </div>
+      </div>
+
+      {showCancelDialog ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/40 px-4">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cancelar-torneo-title"
+            className="w-full max-w-md rounded-lg bg-white p-5 shadow-2xl"
+          >
+            <h3 id="cancelar-torneo-title" className="text-lg font-semibold text-stone-950">
+              Cancelar torneo {torneoNombre}
+            </h3>
+            <p className="mt-2 text-sm text-stone-600">Esta accion no se puede deshacer.</p>
+            <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={() => setShowCancelDialog(false)}
+                disabled={runningAction !== null}
+                className="rounded-lg border border-stone-300 px-4 py-2 text-sm font-semibold text-stone-800"
+              >
+                Mantener torneo
+              </button>
+              <button
+                type="button"
+                onClick={() => void confirmCancel()}
+                disabled={runningAction !== null}
+                className="rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white disabled:bg-red-400"
+              >
+                {runningAction === 'Cancelar torneo' ? 'Cancelando...' : 'Confirmar cancelacion'}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </section>
+  )
+}
