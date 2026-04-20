@@ -30,13 +30,21 @@ export function DashboardPage() {
       title="Panel del organizador"
       subtitle={email ? `Sesion activa: ${email}` : 'Gestion de auditoria y seguimiento'}
       actions={
-        <button
-          type="button"
-          onClick={logout}
-          className="rounded-full bg-stone-900 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-stone-50"
-        >
-          Cerrar sesion
-        </button>
+        <>
+          <Link
+            to="/organizador/torneos/nuevo"
+            className="rounded-lg bg-emerald-800 px-4 py-2 text-sm font-semibold text-white"
+          >
+            Nuevo torneo
+          </Link>
+          <button
+            type="button"
+            onClick={logout}
+            className="rounded-lg bg-stone-900 px-4 py-2 text-sm font-semibold text-stone-50"
+          >
+            Cerrar sesion
+          </button>
+        </>
       }
     >
       {torneosQuery.isLoading ? (
@@ -74,10 +82,10 @@ export function DashboardPage() {
                   </p>
                 </div>
                 <Link
-                  to={`/organizador/torneos/${torneo.torneo_id}/competencias`}
-                  className="rounded-full border border-stone-900 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-stone-900"
+                  to={`/organizador/torneo/${torneo.torneo_id}`}
+                  className="rounded-lg border border-stone-900 px-4 py-2 text-sm font-semibold text-stone-900"
                 >
-                  Ver competencias
+                  Gestionar
                 </Link>
               </div>
             </article>

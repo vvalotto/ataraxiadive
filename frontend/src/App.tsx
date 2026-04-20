@@ -8,6 +8,8 @@ import { DisciplinasPage } from './pages/juez/DisciplinasPage'
 import { GrillaPage } from './pages/juez/GrillaPage'
 import { PerformanceFlowPage } from './pages/juez/PerformanceFlowPage'
 import { DashboardPage } from './pages/organizador/DashboardPage'
+import { CrearTorneoPage } from './pages/organizador/CrearTorneoPage'
+import { DetalleTorneoPage } from './pages/organizador/DetalleTorneoPage'
 import { TorneoCompetenciasPage } from './pages/organizador/TorneoCompetenciasPage'
 import { AuditoriaCompetenciaPage } from './pages/organizador/AuditoriaCompetenciaPage'
 import { AuditoriaPerformancePage } from './pages/organizador/AuditoriaPerformancePage'
@@ -61,6 +63,22 @@ function App() {
           element={
             <RequireRole role="organizador">
               <DashboardPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/organizador/torneos/nuevo"
+          element={
+            <RequireRole role="organizador">
+              <CrearTorneoPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/organizador/torneo/:torneoId"
+          element={
+            <RequireRole role="organizador">
+              <DetalleTorneoPage />
             </RequireRole>
           }
         />
