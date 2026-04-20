@@ -459,6 +459,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-4.6.4 | unit/resultados/application (ExportarResultados) + integration/resultados · UAT INC-4.6 | ✅ UAT SP4 2026-04-18 |
 | US-5.1.1 | frontend (build + eslint src) · features/US-5.1.1 | ✅ Implementada (lint global bloqueado por `.vite/deps` generado) |
 | US-5.1.2 | frontend (build + eslint src) · features/US-5.1.2 | ✅ Implementada (lint global bloqueado por `.vite/deps` generado) |
+| US-5.1.3 | frontend (build + eslint src) · features/US-5.1.3 | ✅ Implementada (lint global bloqueado por `.vite/deps` generado) |
 
 ---
 
@@ -489,6 +490,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.17 — 2026-04-18: SP4 cerrado (v0.5.0 · BL-004) · SP-ADJ-06 §18 agregado (7 US) · US→Tests completado (INC-4.4/4.5/4.6) · §§ renumerados 18..22 · §2 cobertura actualizada*
 *v1.18 — 2026-04-20: SP5 iniciado · US-5.1.1 implementada · trazabilidad frontend de creacion de torneo agregada*
 *v1.19 — 2026-04-20: US-5.1.2 implementada · trazabilidad frontend de gestion de fases agregada*
+*v1.20 — 2026-04-20: US-5.1.3 implementada · trazabilidad frontend de inscriptos/AP agregada*
 *v1.15 — 2026-04-13: INC-4.4 especificado (§15 nuevo — 3 US offline-first) · §§ renumerados 16..19 · §2 cobertura actualizada*
 *v1.14 — 2026-04-13: INC-4.3 completado (§14 — 5/5 US ✅, UAT BA 2025) · RF-NT §3.7 INC corregido (4.2→4.5) · US-4.3.x en §18*
 *v1.13 — 2026-04-11: US-4.2.2 implementada y mergeada · DesignReviewer consolidado INC-4.2 OK · validación manual pendiente*
