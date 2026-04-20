@@ -24,8 +24,17 @@ export interface TorneoDto {
     nombre: string
     tipo: string
   }
-  estado: string
+  estado: EstadoTorneo
 }
+
+export type EstadoTorneo =
+  | 'CREADO'
+  | 'INSCRIPCION_ABIERTA'
+  | 'PREPARACION'
+  | 'EJECUCION'
+  | 'PREMIACION'
+  | 'CERRADO'
+  | 'CANCELADO'
 
 export type DisciplinaCodigo =
   | 'STA'
@@ -135,6 +144,43 @@ export async function asignarDisciplinas(
   })
 
   await parseResponse<{ ok: boolean }>(response)
+}
+
+async function transicionarTorneo(torneoId: string, endpoint: string): Promise<void> {
+  const response = await fetch(`/torneos/${torneoId}/${endpoint}`, {
+    method: 'PUT',
+    headers: buildHeaders(),
+  })
+
+  await parseResponse<{ ok: boolean }>(response)
+}
+
+export async function abrirInscripcion(torneoId: string): Promise<void> {
+  await transicionarTorneo(torneoId, 'abrir-inscripcion')
+}
+
+export async function cerrarInscripcion(torneoId: string): Promise<void> {
+  await transicionarTorneo(torneoId, 'cerrar-inscripcion')
+}
+
+export async function iniciarEjecucion(torneoId: string): Promise<void> {
+  await transicionarTorneo(torneoId, 'iniciar-ejecucion')
+}
+
+export async function volverPreparacion(torneoId: string): Promise<void> {
+  await transicionarTorneo(torneoId, 'volver-preparacion')
+}
+
+export async function iniciarPremiacion(torneoId: string): Promise<void> {
+  await transicionarTorneo(torneoId, 'iniciar-premiacion')
+}
+
+export async function cerrarTorneo(torneoId: string): Promise<void> {
+  await transicionarTorneo(torneoId, 'cerrar')
+}
+
+export async function cancelarTorneo(torneoId: string): Promise<void> {
+  await transicionarTorneo(torneoId, 'cancelar')
 }
 
 export async function fetchDisciplinasDeJuez(
