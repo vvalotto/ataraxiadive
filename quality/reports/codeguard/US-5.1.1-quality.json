@@ -1,0 +1,25 @@
+{
+  "us_id": "US-5.1.1",
+  "producto": "frontend",
+  "status": "passed_with_note",
+  "checks": [
+    {
+      "name": "frontend_build",
+      "command": "npm run build",
+      "status": "passed"
+    },
+    {
+      "name": "frontend_eslint_src",
+      "command": "npx eslint src",
+      "status": "passed"
+    },
+    {
+      "name": "frontend_lint_package",
+      "command": "npm run lint",
+      "status": "failed_external_generated_files",
+      "note": "Falla por frontend/.vite/deps/react-router-dom.js, archivo generado preexistente fuera de src."
+    }
+  ],
+  "codeguard_applicable": false,
+  "note": "CodeGuard esta orientado a Python src/. Para esta US frontend se usaron build TypeScript y ESLint sobre src."
+}
