@@ -34,6 +34,10 @@ from competencia.application.commands.configurar_intervalo_ot import (
     ConfigurarIntervaloOTCommand,
     ConfigurarIntervaloOTHandler,
 )
+from competencia.application.commands.generar_grilla import (
+    GenerarGrillaCommand,
+    GenerarGrillaHandler,
+)
 from competencia.application.commands.llamar_atleta import (
     AndarivelesConflicto,
     CompetenciaNoEnEjecucion,
@@ -123,6 +127,7 @@ from competencia.infrastructure.repositories.disciplina_descriptor_adapter impor
 from competencia.infrastructure.repositories.performances_estado_adapter import (
     PerformancesEstadoAdapter,
 )
+from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
 from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
     SQLiteCompetenciasPorTorneo,
 )
@@ -162,6 +167,14 @@ class IniciarCompetenciaBody(BaseModel):
 
     disciplina: Disciplina
     juez_id: str
+
+
+class GenerarGrillaBody(BaseModel):
+    """Body del endpoint POST /generar-grilla."""
+
+    disciplina: Disciplina
+    ot_inicio: datetime
+    andariveles: int = 1
 
 
 class ConfigurarOTBody(BaseModel):
@@ -456,6 +469,18 @@ def get_confirmar_grilla_handler(event_store: EventStoreDep) -> ConfirmarGrillaH
     return ConfirmarGrillaHandler(event_store)
 
 
+def get_generar_grilla_handler(
+    event_store: EventStoreDep,
+    disciplina_descriptor: DisciplinaDescriptorDep,
+) -> GenerarGrillaHandler:
+    """Dependency: handler para generar la grilla."""
+    return GenerarGrillaHandler(
+        event_store,
+        PerformancesAPAdapter(event_store),
+        disciplina_descriptor,
+    )
+
+
 def get_iniciar_competencia_handler(event_store: EventStoreDep) -> IniciarCompetenciaHandler:
     """Dependency: handler para iniciar la competencia."""
     return IniciarCompetenciaHandler(event_store)
@@ -475,6 +500,7 @@ def get_obtener_estado_competencia_handler(
 
 AjustarGrillaHandlerDep = Annotated[AjustarGrillaHandler, Depends(get_ajustar_grilla_handler)]
 ConfirmarGrillaHandlerDep = Annotated[ConfirmarGrillaHandler, Depends(get_confirmar_grilla_handler)]
+GenerarGrillaHandlerDep = Annotated[GenerarGrillaHandler, Depends(get_generar_grilla_handler)]
 IniciarCompetenciaHandlerDep = Annotated[
     IniciarCompetenciaHandler, Depends(get_iniciar_competencia_handler)
 ]
@@ -712,6 +738,25 @@ async def post_ajustar_grilla(
             competencia_id=competencia_id,
             disciplina=body.disciplina,
             cambios=cambios,
+        )
+    )
+    return Response(status_code=204)
+
+
+@router.post("/{competencia_id}/generar-grilla", response_class=JSONResponse)
+async def post_generar_grilla(
+    competencia_id: UUID,
+    body: GenerarGrillaBody,
+    handler: GenerarGrillaHandlerDep,
+    _: OrganizadorDep,
+) -> JSONResponse:
+    """Genera la Grilla de Salida desde el primer OT definido por organizador."""
+    await handler.handle(
+        GenerarGrillaCommand(
+            competencia_id=competencia_id,
+            disciplina=body.disciplina,
+            ot_inicio=body.ot_inicio,
+            andariveles=body.andariveles,
         )
     )
     return Response(status_code=204)

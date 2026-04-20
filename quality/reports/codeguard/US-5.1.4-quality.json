@@ -1,0 +1,8 @@
+{
+  "us_id": "US-5.1.4",
+  "frontend_build": "passed",
+  "frontend_lint_src": "passed",
+  "frontend_lint_global": "failed_generated_vite_deps",
+  "python_py_compile": "passed",
+  "pytest": "blocked_missing_aiosqlite"
+}

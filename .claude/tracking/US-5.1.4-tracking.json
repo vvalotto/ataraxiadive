@@ -1,0 +1,219 @@
+{
+  "metadata": {
+    "us_id": "US-5.1.4",
+    "us_title": "Generación y ajuste de grilla desde la UI del organizador",
+    "us_points": 3,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-20T19:54:35.939269+00:00",
+    "completed_at": "2026-04-20T20:14:27.094785+00:00",
+    "total_elapsed_seconds": 1191,
+    "effective_seconds": 1191,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-04-20T19:54:39.747556+00:00",
+      "completed_at": "2026-04-20T19:55:30.155873+00:00",
+      "elapsed_seconds": 50,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-20T19:55:34.257479+00:00",
+      "completed_at": "2026-04-20T19:55:59.461705+00:00",
+      "elapsed_seconds": 25,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-04-20T19:56:04.871464+00:00",
+      "completed_at": "2026-04-20T19:57:36.773741+00:00",
+      "elapsed_seconds": 91,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-04-20T19:58:15.100128+00:00",
+      "completed_at": "2026-04-20T20:06:29.503244+00:00",
+      "elapsed_seconds": 494,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Endpoint generar grilla",
+          "task_type": "backend",
+          "estimated_minutes": 25.0,
+          "started_at": "2026-04-20T19:59:34.591373+00:00",
+          "completed_at": "2026-04-20T20:00:39.420680+00:00",
+          "elapsed_seconds": 64,
+          "actual_minutes": 1.07,
+          "variance_minutes": -23.93,
+          "file_created": "src/competencia/api/router.py",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_002",
+          "task_name": "API client frontend",
+          "task_type": "frontend",
+          "estimated_minutes": 25.0,
+          "started_at": "2026-04-20T20:00:44.760920+00:00",
+          "completed_at": "2026-04-20T20:01:08.025543+00:00",
+          "elapsed_seconds": 23,
+          "actual_minutes": 0.38,
+          "variance_minutes": -24.62,
+          "file_created": "frontend/src/api/competencia.ts",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_003",
+          "task_name": "Componentes de grilla",
+          "task_type": "frontend",
+          "estimated_minutes": 70.0,
+          "started_at": "2026-04-20T20:01:14.372018+00:00",
+          "completed_at": "2026-04-20T20:02:36.299758+00:00",
+          "elapsed_seconds": 81,
+          "actual_minutes": 1.35,
+          "variance_minutes": -68.65,
+          "file_created": "frontend/src/components/organizador/GrillaPanel.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_004",
+          "task_name": "Integrar tab Grilla",
+          "task_type": "frontend",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-04-20T20:02:41.930858+00:00",
+          "completed_at": "2026-04-20T20:03:04.330281+00:00",
+          "elapsed_seconds": 22,
+          "actual_minutes": 0.37,
+          "variance_minutes": -14.63,
+          "file_created": "frontend/src/pages/organizador/DetalleTorneoPage.tsx",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-20T20:06:41.102195+00:00",
+      "completed_at": "2026-04-20T20:08:38.283540+00:00",
+      "elapsed_seconds": 117,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_005",
+          "task_name": "Test unitario endpoint",
+          "task_type": "test",
+          "estimated_minutes": 25.0,
+          "started_at": "2026-04-20T20:07:17.872128+00:00",
+          "completed_at": "2026-04-20T20:08:26.632337+00:00",
+          "elapsed_seconds": 68,
+          "actual_minutes": 1.13,
+          "variance_minutes": -23.87,
+          "file_created": "tests/unit/competencia/api/test_generar_grilla_endpoint.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-04-20T20:08:43.216855+00:00",
+      "completed_at": "2026-04-20T20:10:26.043048+00:00",
+      "elapsed_seconds": 102,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_006",
+          "task_name": "Test integración endpoint",
+          "task_type": "test",
+          "estimated_minutes": 30.0,
+          "started_at": "2026-04-20T20:09:31.620853+00:00",
+          "completed_at": "2026-04-20T20:10:16.418615+00:00",
+          "elapsed_seconds": 44,
+          "actual_minutes": 0.73,
+          "variance_minutes": -29.27,
+          "file_created": "tests/integration/competencia/test_generar_grilla_api.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-04-20T20:10:32.837774+00:00",
+      "completed_at": "2026-04-20T20:11:04.580290+00:00",
+      "elapsed_seconds": 31,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-20T20:11:10.548220+00:00",
+      "completed_at": "2026-04-20T20:13:15.360404+00:00",
+      "elapsed_seconds": 124,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-04-20T20:13:21.163451+00:00",
+      "completed_at": "2026-04-20T20:13:43.915020+00:00",
+      "elapsed_seconds": 22,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-04-20T20:13:52.452701+00:00",
+      "completed_at": "2026-04-20T20:14:22.565244+00:00",
+      "elapsed_seconds": 30,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 6,
+    "completed_tasks": 6,
+    "total_phases": 10,
+    "estimated_total_minutes": 190.0,
+    "actual_total_minutes": 5.03,
+    "variance_minutes": -184.97,
+    "variance_percent": -97.35
+  }
+}

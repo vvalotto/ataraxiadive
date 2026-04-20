@@ -16,6 +16,24 @@ export interface CompetenciaResumenDto {
   torneo_id: string
 }
 
+export interface CrearCompetenciaPayload {
+  competenciaId: string
+  disciplina: string
+  intervaloMinutos: number
+  configuradoPor: string
+  torneoId: string
+}
+
+export interface CrearCompetenciaResponse {
+  competencia_id: string
+}
+
+export interface CambioGrillaPayload {
+  performance_id: string
+  campo: 'posicion_grilla' | 'andarivel'
+  valor_nuevo: number
+}
+
 export interface EstadoCompetenciaDto {
   estado: string
   intervalo_minutos: number | null
@@ -109,6 +127,24 @@ export async function fetchCompetenciasPorTorneo(
   return parseResponse<CompetenciaResumenDto[]>(response)
 }
 
+export async function crearCompetencia(
+  payload: CrearCompetenciaPayload,
+): Promise<CrearCompetenciaResponse> {
+  const response = await fetch('/competencia', {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      competencia_id: payload.competenciaId,
+      disciplina: payload.disciplina,
+      intervalo_minutos: payload.intervaloMinutos,
+      configurado_por: payload.configuradoPor,
+      torneo_id: payload.torneoId,
+    }),
+  })
+
+  return parseResponse<CrearCompetenciaResponse>(response)
+}
+
 export async function fetchEstadoCompetencia(
   competenciaId: string,
   disciplina: string,
@@ -140,6 +176,57 @@ export async function fetchGrillaCompetencia(
     `/competencia/${competenciaId}/grilla?disciplina=${encodeURIComponent(disciplina)}`,
   )
   return parseResponse<GrillaAtletaDto[]>(response)
+}
+
+export async function generarGrilla(payload: {
+  competenciaId: string
+  disciplina: string
+  otInicio: string
+  andariveles?: number
+}): Promise<void> {
+  const response = await fetch(`/competencia/${payload.competenciaId}/generar-grilla`, {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      disciplina: payload.disciplina,
+      ot_inicio: payload.otInicio,
+      andariveles: payload.andariveles ?? 1,
+    }),
+  })
+
+  await parseResponse<void>(response)
+}
+
+export async function ajustarGrilla(payload: {
+  competenciaId: string
+  disciplina: string
+  cambios: CambioGrillaPayload[]
+}): Promise<void> {
+  const response = await fetch(`/competencia/${payload.competenciaId}/ajustar-grilla`, {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      disciplina: payload.disciplina,
+      cambios: payload.cambios,
+    }),
+  })
+
+  await parseResponse<void>(response)
+}
+
+export async function confirmarGrilla(payload: {
+  competenciaId: string
+  disciplina: string
+}): Promise<void> {
+  const response = await fetch(`/competencia/${payload.competenciaId}/confirmar-grilla`, {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      disciplina: payload.disciplina,
+    }),
+  })
+
+  await parseResponse<void>(response)
 }
 
 export async function fetchPerformanceActual(
