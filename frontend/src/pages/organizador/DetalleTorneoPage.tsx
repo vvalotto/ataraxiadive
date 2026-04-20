@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom'
 import { fetchTorneo } from '../../api/torneo'
 import { AccionesPanel } from '../../components/organizador/AccionesPanel'
 import { FaseBadge } from '../../components/organizador/FaseBadge'
+import { InscriptosPanel } from '../../components/organizador/InscriptosPanel'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
 
 const TABS = ['Detalle', 'Inscriptos', 'Grilla', 'Jueces', 'Ejecucion'] as const
@@ -105,11 +106,19 @@ export function DetalleTorneoPage() {
                   </dd>
                 </div>
               </dl>
-            ) : (
+            ) : null}
+
+            {activeTab === 'Inscriptos' ? (
+              <div className="mt-6">
+                <InscriptosPanel torneoId={torneoQuery.data.torneo_id} />
+              </div>
+            ) : null}
+
+            {activeTab !== 'Detalle' && activeTab !== 'Inscriptos' ? (
               <div className="mt-6 rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
                 {activeTab} quedara disponible en las siguientes US de INC-5.1.
               </div>
-            )}
+            ) : null}
           </section>
 
           {transitionError ? (
