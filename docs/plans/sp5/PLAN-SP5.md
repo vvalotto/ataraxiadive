@@ -167,20 +167,10 @@ cualquier estado).
 
 ### INC-5.1-ADJ — Ajuste post-UAT INC-5.1
 
-**Origen:** hallazgos UAT funcional del panel organizador (2026-04-21) — bugs de navegación
-por fase y composición de datos que bloquean el flujo operativo real. Son correcciones del
-código ya implementado en INC-5.1, no scope nuevo.
+**Plan detallado:** `docs/plans/inc-5.1-adj/PLAN-INC-5.1-ADJ.md`
 
-**DoD:** el panel organizador respeta las fases del torneo en tabs, acciones y estados
-terminales; las pantallas de competencias y jueces componen correctamente ambas fuentes de
-datos del dominio.
-
-| US | Descripción | Hallazgo origen | Área |
-|----|-------------|-----------------|------|
-| US-5.1.7 | Política de tabs por fase — deshabilitar `Grilla`, `Jueces`, `Ejecucion` fuera del estado correspondiente; ocultar todo excepto resumen en `CANCELADO` | UAT-5.1-03, UAT-5.1-05 | `frontend/` |
-| US-5.1.8 | Componer disciplinas + competencias en `Ver competencias` — mostrar disciplinas del torneo aunque no exista competencia creada aún | UAT-5.1-01 | `frontend/` |
-| US-5.1.9 | Precondición grilla en asignación de jueces — bloquear selector de juez por disciplina si no tiene grilla OT generada | UAT-5.1-02 | `frontend/` |
-| US-5.1.10 | Corregir acciones de fase en `AccionesPanel` — mostrar acción correcta según estado del torneo; ocultar `Iniciar Ejecución` si ya está en `EJECUCION` | UAT-5.1-04 | `frontend/` |
+4 US de ajuste frontend (US-5.1.7..5.1.10) — bugs de navegación por fase y composición
+de datos identificados en UAT funcional del panel organizador (2026-04-21).
 
 ---
 
