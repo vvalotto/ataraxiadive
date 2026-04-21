@@ -122,7 +122,7 @@ US-5.1.10 ← acciones de fase (independiente, pero conveniente validar con tabs
 
 ## Criterio de cierre de INC-5.1-ADJ
 
-- [ ] US-5.1.7 — tabs habilitadas correctamente por fase; `CANCELADO` muestra solo resumen
+- [x] US-5.1.7 — tabs habilitadas correctamente por fase; `CANCELADO` muestra solo resumen
 - [ ] US-5.1.8 — `Ver competencias` muestra disciplinas configuradas aunque no existan competencias
 - [ ] US-5.1.9 — selector de juez bloqueado si disciplina no tiene grilla generada
 - [ ] US-5.1.10 — `Iniciar Ejecución` oculto en `EJECUCION`; acción de premiación visible
