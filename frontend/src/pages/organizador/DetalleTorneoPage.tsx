@@ -31,8 +31,7 @@ export function DetalleTorneoPage() {
     queryFn: () => fetchTorneo(torneoId ?? ''),
     enabled: Boolean(torneoId),
   })
-  const estado = torneoQuery.data?.estado
-  const isCancelado = estado === 'CANCELADO'
+  const isCancelado = torneoQuery.data?.estado === 'CANCELADO'
 
   return (
     <OrganizadorLayout
