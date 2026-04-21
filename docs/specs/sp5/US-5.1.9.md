@@ -1,6 +1,6 @@
-c# US-5.1.9: Precondición de grilla en asignación de jueces
+# US-5.1.9: Precondición de grilla en asignación de jueces
 
-**Estado**: `To Do`
+**Estado**: `Done`
 **Sprint**: SP5 — La Puesta en Marcha
 **Incremento**: INC-5.1-ADJ
 **Bounded Context**: `frontend`

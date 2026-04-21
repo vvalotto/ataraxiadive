@@ -6,6 +6,7 @@ interface TablaJuecesProps {
   disciplinas: DisciplinaTorneoDto[]
   jueces: UsuarioDto[]
   savingDisciplina: string | null
+  asignablePorDisciplina: Map<string, boolean>
   onAsignar: (disciplina: DisciplinaTorneoDto, juezId: string) => void
 }
 
@@ -18,6 +19,7 @@ export function TablaJueces({
   disciplinas,
   jueces,
   savingDisciplina,
+  asignablePorDisciplina,
   onAsignar,
 }: TablaJuecesProps) {
   if (disciplinas.length === 0) {
@@ -42,6 +44,7 @@ export function TablaJueces({
         <tbody className="divide-y divide-stone-200 bg-white">
           {disciplinas.map((disciplina) => {
             const saving = savingDisciplina === disciplina.disciplina
+            const puedeAsignar = asignablePorDisciplina.get(disciplina.disciplina) ?? false
             return (
               <tr key={disciplina.disciplina}>
                 <td className="px-4 py-3 font-semibold text-stone-950">
@@ -54,12 +57,18 @@ export function TablaJueces({
                   <JuezSelector
                     jueces={jueces}
                     value={disciplina.juez_id}
-                    disabled={saving || jueces.length === 0}
+                    disabled={saving || jueces.length === 0 || !puedeAsignar}
                     onChange={(juezId) => onAsignar(disciplina, juezId)}
                   />
                 </td>
                 <td className="px-4 py-3 text-stone-700">
-                  {saving ? 'Guardando...' : disciplina.juez_id ? 'Asignado' : 'Pendiente'}
+                  {saving
+                    ? 'Guardando...'
+                    : !puedeAsignar
+                      ? 'Generar grilla antes de asignar juez'
+                      : disciplina.juez_id
+                        ? 'Asignado'
+                        : 'Pendiente'}
                 </td>
               </tr>
             )
