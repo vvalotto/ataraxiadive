@@ -1,5 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
+import {
+  fetchCompetenciasPorTorneo,
+  fetchEstadoCompetencia,
+  type CompetenciaResumenDto,
+  type EstadoCompetenciaDto,
+} from '../../api/competencia'
 import { listarUsuariosPorRol } from '../../api/identidad'
 import {
   asignarJuez,
@@ -10,6 +16,33 @@ import { TablaJueces } from './TablaJueces'
 
 interface JuecesPanelProps {
   torneoId: string
+}
+
+interface CompetenciaConEstado {
+  competencia: CompetenciaResumenDto
+  estado: EstadoCompetenciaDto
+}
+
+const ESTADOS_CON_GRILLA_GENERADA = new Set([
+  'GrillaGenerada',
+  'GrillaConfirmada',
+  'EnEjecucion',
+  'Finalizada',
+  'CompetenciaFinalizada',
+])
+
+function tieneGrillaGenerada(estado: EstadoCompetenciaDto): boolean {
+  return estado.grilla_confirmada || ESTADOS_CON_GRILLA_GENERADA.has(estado.estado)
+}
+
+async function fetchCompetenciasConEstado(torneoId: string): Promise<CompetenciaConEstado[]> {
+  const competencias = await fetchCompetenciasPorTorneo(torneoId)
+  return Promise.all(
+    competencias.map(async (competencia) => ({
+      competencia,
+      estado: await fetchEstadoCompetencia(competencia.competencia_id, competencia.disciplina),
+    })),
+  )
 }
 
 export function JuecesPanel({ torneoId }: JuecesPanelProps) {
@@ -26,12 +59,25 @@ export function JuecesPanel({ torneoId }: JuecesPanelProps) {
     queryKey: ['usuarios-rol', 'JUEZ'],
     queryFn: () => listarUsuariosPorRol('JUEZ'),
   })
+  const competenciasQuery = useQuery({
+    queryKey: ['competencias-estado-jueces', torneoId],
+    queryFn: () => fetchCompetenciasConEstado(torneoId),
+  })
 
   const disciplinas = disciplinasQuery.data ?? []
   const jueces = useMemo(
     () => (juecesQuery.data ?? []).filter((usuario) => usuario.rol === 'JUEZ' && usuario.activo),
     [juecesQuery.data],
   )
+  const asignablePorDisciplina = useMemo(() => {
+    const asignable = new Map<string, boolean>()
+
+    for (const item of competenciasQuery.data ?? []) {
+      asignable.set(item.competencia.disciplina, tieneGrillaGenerada(item.estado))
+    }
+
+    return asignable
+  }, [competenciasQuery.data])
   const todasAsignadas =
     disciplinas.length > 0 && disciplinas.every((disciplina) => Boolean(disciplina.juez_id))
 
@@ -54,7 +100,7 @@ export function JuecesPanel({ torneoId }: JuecesPanelProps) {
     onSettled: () => setSavingDisciplina(null),
   })
 
-  if (disciplinasQuery.isLoading || juecesQuery.isLoading) {
+  if (disciplinasQuery.isLoading || juecesQuery.isLoading || competenciasQuery.isLoading) {
     return (
       <div className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
         Cargando jueces...
@@ -62,10 +108,10 @@ export function JuecesPanel({ torneoId }: JuecesPanelProps) {
     )
   }
 
-  if (disciplinasQuery.isError || juecesQuery.isError) {
+  if (disciplinasQuery.isError || juecesQuery.isError || competenciasQuery.isError) {
     return (
       <div className="rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-900">
-        No se pudieron cargar disciplinas o jueces.
+        No se pudieron cargar disciplinas, jueces o grillas.
       </div>
     )
   }
@@ -98,6 +144,7 @@ export function JuecesPanel({ torneoId }: JuecesPanelProps) {
         disciplinas={disciplinas}
         jueces={jueces}
         savingDisciplina={savingDisciplina}
+        asignablePorDisciplina={asignablePorDisciplina}
         onAsignar={(disciplina, juezId) => asignarMutation.mutate({ disciplina, juezId })}
       />
     </div>

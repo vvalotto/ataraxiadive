@@ -1,0 +1,165 @@
+{
+  "metadata": {
+    "us_id": "US-5.1.9",
+    "us_title": "Precondicion grilla en asignacion de jueces",
+    "us_points": 2,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-21T22:44:12.080862+00:00",
+    "completed_at": "2026-04-21T22:48:26.799025+00:00",
+    "total_elapsed_seconds": 254,
+    "effective_seconds": 254,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validacion de Contexto",
+      "started_at": "2026-04-21T22:44:18.219874+00:00",
+      "completed_at": "2026-04-21T22:44:28.355335+00:00",
+      "elapsed_seconds": 10,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generacion de Escenarios BDD",
+      "started_at": "2026-04-21T22:44:32.860397+00:00",
+      "completed_at": "2026-04-21T22:44:47.953238+00:00",
+      "elapsed_seconds": 15,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de Implementacion",
+      "started_at": "2026-04-21T22:44:54.271444+00:00",
+      "completed_at": "2026-04-21T22:45:08.610031+00:00",
+      "elapsed_seconds": 14,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementacion",
+      "started_at": "2026-04-21T22:45:32.692293+00:00",
+      "completed_at": "2026-04-21T22:46:20.145454+00:00",
+      "elapsed_seconds": 47,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Bloquear jueces sin grilla",
+          "task_type": "frontend",
+          "estimated_minutes": 40.0,
+          "started_at": "2026-04-21T22:45:32.831437+00:00",
+          "completed_at": "2026-04-21T22:46:04.852609+00:00",
+          "elapsed_seconds": 32,
+          "actual_minutes": 0.53,
+          "variance_minutes": -39.47,
+          "file_created": "frontend/src/components/organizador/JuecesPanel.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_002",
+          "task_name": "Actualizar artefactos de US",
+          "task_type": "documentation",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-04-21T22:46:05.003285+00:00",
+          "completed_at": "2026-04-21T22:46:20.024089+00:00",
+          "elapsed_seconds": 15,
+          "actual_minutes": 0.25,
+          "variance_minutes": -4.75,
+          "file_created": "docs/plans/sp5/US-5.1.9-plan.md",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-21T22:46:24.891783+00:00",
+      "completed_at": "2026-04-21T22:46:38.517448+00:00",
+      "elapsed_seconds": 13,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integracion",
+      "started_at": "2026-04-21T22:46:38.638007+00:00",
+      "completed_at": "2026-04-21T22:46:52.667729+00:00",
+      "elapsed_seconds": 14,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validacion BDD",
+      "started_at": "2026-04-21T22:46:52.824870+00:00",
+      "completed_at": "2026-04-21T22:47:07.953203+00:00",
+      "elapsed_seconds": 15,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-21T22:47:08.071505+00:00",
+      "completed_at": "2026-04-21T22:47:52.712318+00:00",
+      "elapsed_seconds": 44,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentacion",
+      "started_at": "2026-04-21T22:47:52.847818+00:00",
+      "completed_at": "2026-04-21T22:48:09.645874+00:00",
+      "elapsed_seconds": 16,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-04-21T22:48:09.764579+00:00",
+      "completed_at": "2026-04-21T22:48:26.656757+00:00",
+      "elapsed_seconds": 16,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 2,
+    "completed_tasks": 2,
+    "total_phases": 10,
+    "estimated_total_minutes": 45.0,
+    "actual_total_minutes": 0.78,
+    "variance_minutes": -44.22,
+    "variance_percent": -98.26
+  }
+}
