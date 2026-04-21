@@ -1,12 +1,14 @@
 from __future__ import annotations
 
+from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, field_validator
 
 from identidad.api.dependencies import (
+    OrganizadorDep,
     get_password_hasher,
     get_token_service,
     get_usuario_repository,
@@ -26,6 +28,7 @@ from identidad.domain.exceptions import (
     PasswordDemasiadoCorto,
     UsuarioInactivo,
 )
+from identidad.domain.ports.usuario_repository_port import UsuarioRepositoryPort
 from identidad.domain.value_objects.rol import Rol
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -59,6 +62,13 @@ class LoginRequest(BaseModel):
 class LoginResponse(BaseModel):
     access_token: str
     token_type: str
+
+
+class UsuarioResponse(BaseModel):
+    usuario_id: UUID
+    email: str
+    rol: Rol
+    activo: bool
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
@@ -96,4 +106,25 @@ async def autenticar_usuario(body: LoginRequest) -> JSONResponse:
             "access_token": token_response.access_token,
             "token_type": token_response.token_type,
         },
+    )
+
+
+@router.get("/usuarios", status_code=200)
+async def listar_usuarios(
+    rol: Rol,
+    _: OrganizadorDep,
+    repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
+) -> JSONResponse:
+    usuarios = await repo.list_by_rol(rol)
+    return JSONResponse(
+        status_code=200,
+        content=[
+            {
+                "usuario_id": str(usuario.usuario_id),
+                "email": usuario.email,
+                "rol": usuario.rol.value,
+                "activo": usuario.activo,
+            }
+            for usuario in usuarios
+        ],
     )

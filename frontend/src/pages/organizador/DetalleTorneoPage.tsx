@@ -6,6 +6,7 @@ import { AccionesPanel } from '../../components/organizador/AccionesPanel'
 import { FaseBadge } from '../../components/organizador/FaseBadge'
 import { GrillaPanel } from '../../components/organizador/GrillaPanel'
 import { InscriptosPanel } from '../../components/organizador/InscriptosPanel'
+import { JuecesPanel } from '../../components/organizador/JuecesPanel'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
 
 const TABS = ['Detalle', 'Inscriptos', 'Grilla', 'Jueces', 'Ejecucion'] as const
@@ -121,7 +122,16 @@ export function DetalleTorneoPage() {
               </div>
             ) : null}
 
-            {activeTab !== 'Detalle' && activeTab !== 'Inscriptos' && activeTab !== 'Grilla' ? (
+            {activeTab === 'Jueces' ? (
+              <div className="mt-6">
+                <JuecesPanel torneoId={torneoQuery.data.torneo_id} />
+              </div>
+            ) : null}
+
+            {activeTab !== 'Detalle' &&
+            activeTab !== 'Inscriptos' &&
+            activeTab !== 'Grilla' &&
+            activeTab !== 'Jueces' ? (
               <div className="mt-6 rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
                 {activeTab} quedara disponible en las siguientes US de INC-5.1.
               </div>

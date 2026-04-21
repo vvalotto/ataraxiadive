@@ -1,0 +1,205 @@
+{
+  "metadata": {
+    "us_id": "US-5.1.5",
+    "us_title": "Asignación de jueces a disciplinas desde la UI",
+    "us_points": 3,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-20T20:53:36.725113+00:00",
+    "completed_at": "2026-04-20T21:02:53.825887+00:00",
+    "total_elapsed_seconds": 557,
+    "effective_seconds": 557,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-04-20T20:53:40.258515+00:00",
+      "completed_at": "2026-04-20T20:54:11.868915+00:00",
+      "elapsed_seconds": 31,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-20T20:54:16.002677+00:00",
+      "completed_at": "2026-04-20T20:54:34.762892+00:00",
+      "elapsed_seconds": 18,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-04-20T20:54:40.829977+00:00",
+      "completed_at": "2026-04-20T20:55:19.982255+00:00",
+      "elapsed_seconds": 39,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-04-20T20:55:42.548728+00:00",
+      "completed_at": "2026-04-20T20:59:34.628864+00:00",
+      "elapsed_seconds": 232,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Endpoint usuarios por rol",
+          "task_type": "backend",
+          "estimated_minutes": 45.0,
+          "started_at": "2026-04-20T20:56:10.930869+00:00",
+          "completed_at": "2026-04-20T20:56:44.306759+00:00",
+          "elapsed_seconds": 33,
+          "actual_minutes": 0.55,
+          "variance_minutes": -44.45,
+          "file_created": "src/identidad/api/router.py",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_002",
+          "task_name": "API client jueces",
+          "task_type": "frontend",
+          "estimated_minutes": 25.0,
+          "started_at": "2026-04-20T20:56:48.734167+00:00",
+          "completed_at": "2026-04-20T20:57:14.233462+00:00",
+          "elapsed_seconds": 25,
+          "actual_minutes": 0.42,
+          "variance_minutes": -24.58,
+          "file_created": "frontend/src/api/identidad.ts",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_003",
+          "task_name": "Componentes jueces",
+          "task_type": "frontend",
+          "estimated_minutes": 70.0,
+          "started_at": "2026-04-20T20:57:18.520630+00:00",
+          "completed_at": "2026-04-20T20:58:06.942708+00:00",
+          "elapsed_seconds": 48,
+          "actual_minutes": 0.8,
+          "variance_minutes": -69.2,
+          "file_created": "frontend/src/components/organizador/JuecesPanel.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_004",
+          "task_name": "Integrar tab Jueces",
+          "task_type": "frontend",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-04-20T20:58:11.121562+00:00",
+          "completed_at": "2026-04-20T20:58:27.150996+00:00",
+          "elapsed_seconds": 16,
+          "actual_minutes": 0.27,
+          "variance_minutes": -14.73,
+          "file_created": "frontend/src/pages/organizador/DetalleTorneoPage.tsx",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-20T20:59:38.318175+00:00",
+      "completed_at": "2026-04-20T21:00:42.297170+00:00",
+      "elapsed_seconds": 63,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_005",
+          "task_name": "Test endpoint usuarios",
+          "task_type": "test",
+          "estimated_minutes": 25.0,
+          "started_at": "2026-04-20T20:59:42.971229+00:00",
+          "completed_at": "2026-04-20T21:00:38.690538+00:00",
+          "elapsed_seconds": 55,
+          "actual_minutes": 0.92,
+          "variance_minutes": -24.08,
+          "file_created": "tests/unit/identidad/api/test_listar_usuarios.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-04-20T21:00:47.275825+00:00",
+      "completed_at": "2026-04-20T21:00:57.277947+00:00",
+      "elapsed_seconds": 10,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-04-20T21:01:02.688923+00:00",
+      "completed_at": "2026-04-20T21:01:14.939653+00:00",
+      "elapsed_seconds": 12,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-20T21:01:19.152796+00:00",
+      "completed_at": "2026-04-20T21:02:05.091348+00:00",
+      "elapsed_seconds": 45,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-04-20T21:02:09.351751+00:00",
+      "completed_at": "2026-04-20T21:02:23.280652+00:00",
+      "elapsed_seconds": 13,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-04-20T21:02:28.916784+00:00",
+      "completed_at": "2026-04-20T21:02:53.685757+00:00",
+      "elapsed_seconds": 24,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 5,
+    "completed_tasks": 5,
+    "total_phases": 10,
+    "estimated_total_minutes": 180.0,
+    "actual_total_minutes": 2.95,
+    "variance_minutes": -177.05,
+    "variance_percent": -98.36
+  }
+}

@@ -67,6 +67,21 @@ class SQLiteUsuarioRepository(UsuarioRepositoryPort):
                 row = await cursor.fetchone()
         return _row_to_usuario(row) if row else None
 
+    async def list_by_rol(self, rol: Rol) -> list[Usuario]:
+        async with aiosqlite.connect(self._db_path) as conn:
+            await self._ensure_table(conn)
+            async with conn.execute(
+                """
+                SELECT usuario_id, email, password_hash, rol, activo
+                FROM usuarios
+                WHERE rol = ?
+                ORDER BY email
+                """,
+                (rol.value,),
+            ) as cursor:
+                rows = await cursor.fetchall()
+        return [_row_to_usuario(row) for row in rows]
+
 
 def _row_to_usuario(row: tuple) -> Usuario:  # type: ignore[type-arg]
     usuario_id, email, password_hash, rol, activo = row

@@ -66,6 +66,11 @@ export interface CrearTorneoResponse {
   torneo_id: string
 }
 
+export interface DisciplinaTorneoDto {
+  disciplina: DisciplinaCodigo
+  juez_id: string | null
+}
+
 function buildHeaders(): Record<string, string> {
   const token = getToken()
   const headers: Record<string, string> = {
@@ -144,6 +149,30 @@ export async function asignarDisciplinas(
   })
 
   await parseResponse<{ ok: boolean }>(response)
+}
+
+export async function listarDisciplinasTorneo(
+  torneoId: string,
+): Promise<DisciplinaTorneoDto[]> {
+  const response = await fetch(`/torneos/${torneoId}/disciplinas`)
+  return parseResponse<DisciplinaTorneoDto[]>(response)
+}
+
+export async function asignarJuez(payload: {
+  torneoId: string
+  disciplina: DisciplinaCodigo
+  juezId: string
+}): Promise<{ juez_id: string }> {
+  const response = await fetch(
+    `/torneos/${payload.torneoId}/disciplinas/${payload.disciplina}/juez`,
+    {
+      method: 'PUT',
+      headers: buildHeaders(),
+      body: JSON.stringify({ juez_id: payload.juezId }),
+    },
+  )
+
+  return parseResponse<{ juez_id: string }>(response)
 }
 
 async function transicionarTorneo(torneoId: string, endpoint: string): Promise<void> {
