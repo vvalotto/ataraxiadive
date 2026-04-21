@@ -65,6 +65,20 @@ export interface PerformanceActualDto {
   estado: EstadoPerformance
 }
 
+export interface ProgresoCompetenciaDto {
+  total: number
+  ejecutadas: number
+  dns_count: number
+  completadas: number
+}
+
+export interface ProximoAtletaDto {
+  nombre_atleta: string
+  ap_declarado: string
+  unidad: string
+  posicion: number
+}
+
 export interface PenalizacionPayload {
   tipo: string
   deduccion: string
@@ -234,6 +248,23 @@ export async function fetchPerformanceActual(
 ): Promise<PerformanceActualDto | null> {
   const response = await fetch(`/competencia/${competenciaId}/performance/actual`)
   return parseResponse<PerformanceActualDto | null>(response)
+}
+
+export async function fetchProximasPerformances(
+  competenciaId: string,
+  disciplina: string,
+): Promise<ProximoAtletaDto[]> {
+  const response = await fetch(
+    `/competencia/${competenciaId}/performance/proximas?disciplina=${encodeURIComponent(disciplina)}`,
+  )
+  return parseResponse<ProximoAtletaDto[]>(response)
+}
+
+export async function fetchProgresoCompetencia(
+  competenciaId: string,
+): Promise<ProgresoCompetenciaDto> {
+  const response = await fetch(`/competencia/${competenciaId}/progreso`)
+  return parseResponse<ProgresoCompetenciaDto>(response)
 }
 
 export async function llamarAtleta(payload: {

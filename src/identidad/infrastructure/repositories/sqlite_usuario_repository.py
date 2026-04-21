@@ -51,7 +51,11 @@ class SQLiteUsuarioRepository(UsuarioRepositoryPort):
         async with aiosqlite.connect(self._db_path) as conn:
             await self._ensure_table(conn)
             async with conn.execute(
-                "SELECT usuario_id, email, password_hash, rol, activo FROM usuarios WHERE usuario_id = ?",
+                """
+                SELECT usuario_id, email, password_hash, rol, activo
+                FROM usuarios
+                WHERE usuario_id = ?
+                """,
                 (str(usuario_id),),
             ) as cursor:
                 row = await cursor.fetchone()
@@ -61,7 +65,11 @@ class SQLiteUsuarioRepository(UsuarioRepositoryPort):
         async with aiosqlite.connect(self._db_path) as conn:
             await self._ensure_table(conn)
             async with conn.execute(
-                "SELECT usuario_id, email, password_hash, rol, activo FROM usuarios WHERE email = ?",
+                """
+                SELECT usuario_id, email, password_hash, rol, activo
+                FROM usuarios
+                WHERE email = ?
+                """,
                 (email,),
             ) as cursor:
                 row = await cursor.fetchone()
