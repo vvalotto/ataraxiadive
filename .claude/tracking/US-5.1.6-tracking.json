@@ -1,0 +1,178 @@
+{
+  "metadata": {
+    "us_id": "US-5.1.6",
+    "us_title": "Monitor de ejecucion del organizador",
+    "us_points": 3,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-21T11:23:12.643134+00:00",
+    "completed_at": "2026-04-21T11:31:05.545374+00:00",
+    "total_elapsed_seconds": 472,
+    "effective_seconds": 472,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-04-21T11:23:18.940538+00:00",
+      "completed_at": "2026-04-21T11:24:39.547223+00:00",
+      "elapsed_seconds": 80,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-21T11:24:42.961152+00:00",
+      "completed_at": "2026-04-21T11:24:48.067779+00:00",
+      "elapsed_seconds": 5,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-04-21T11:24:52.806424+00:00",
+      "completed_at": "2026-04-21T11:24:59.964777+00:00",
+      "elapsed_seconds": 7,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-04-21T11:25:09.820706+00:00",
+      "completed_at": "2026-04-21T11:27:11.608153+00:00",
+      "elapsed_seconds": 121,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "API frontend monitor",
+          "task_type": "frontend",
+          "estimated_minutes": 25.0,
+          "started_at": "2026-04-21T11:25:13.680667+00:00",
+          "completed_at": "2026-04-21T11:25:36.713848+00:00",
+          "elapsed_seconds": 23,
+          "actual_minutes": 0.38,
+          "variance_minutes": -24.62,
+          "file_created": "frontend/src/api/competencia.ts",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_002",
+          "task_name": "Componentes monitor ejecucion",
+          "task_type": "frontend",
+          "estimated_minutes": 70.0,
+          "started_at": "2026-04-21T11:25:41.909356+00:00",
+          "completed_at": "2026-04-21T11:27:00.266172+00:00",
+          "elapsed_seconds": 78,
+          "actual_minutes": 1.3,
+          "variance_minutes": -68.7,
+          "file_created": "frontend/src/components/organizador/EjecucionPanel.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_003",
+          "task_name": "Integrar tab Ejecucion",
+          "task_type": "frontend",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-04-21T11:27:04.084890+00:00",
+          "completed_at": "2026-04-21T11:27:07.494146+00:00",
+          "elapsed_seconds": 3,
+          "actual_minutes": 0.05,
+          "variance_minutes": -14.95,
+          "file_created": "frontend/src/pages/organizador/DetalleTorneoPage.tsx",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-21T11:27:32.327127+00:00",
+      "completed_at": "2026-04-21T11:27:35.348258+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-04-21T11:27:38.715585+00:00",
+      "completed_at": "2026-04-21T11:27:41.893262+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-04-21T11:27:45.143775+00:00",
+      "completed_at": "2026-04-21T11:27:57.351093+00:00",
+      "elapsed_seconds": 12,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-21T11:28:09.501767+00:00",
+      "completed_at": "2026-04-21T11:30:09.106001+00:00",
+      "elapsed_seconds": 119,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-04-21T11:30:15.452777+00:00",
+      "completed_at": "2026-04-21T11:30:32.520877+00:00",
+      "elapsed_seconds": 17,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-04-21T11:30:36.606258+00:00",
+      "completed_at": "2026-04-21T11:31:02.008603+00:00",
+      "elapsed_seconds": 25,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 3,
+    "completed_tasks": 3,
+    "total_phases": 10,
+    "estimated_total_minutes": 110.0,
+    "actual_total_minutes": 1.73,
+    "variance_minutes": -108.27,
+    "variance_percent": -98.42
+  }
+}
