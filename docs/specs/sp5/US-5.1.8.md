@@ -1,6 +1,6 @@
 # US-5.1.8: Componer disciplinas + competencias en "Ver competencias"
 
-**Estado**: `To Do`
+**Estado**: `Done`
 **Sprint**: SP5 — La Puesta en Marcha
 **Incremento**: INC-5.1-ADJ
 **Bounded Context**: `frontend` (consume `torneo/api/` + `competencia/api/`)
