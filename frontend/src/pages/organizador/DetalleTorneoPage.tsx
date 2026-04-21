@@ -62,16 +62,20 @@ export function DetalleTorneoPage() {
         <>
           {isCancelado ? (
             <section className="rounded-lg border border-red-300 bg-red-50 p-5 shadow-[0_20px_60px_rgba(120,93,54,0.08)]">
-              <div>
-                <FaseBadge estado={torneoQuery.data.estado} />
-                <h2 className="mt-3 text-2xl font-semibold text-red-950">
-                  {torneoQuery.data.nombre}
-                </h2>
-                <p className="mt-2 text-sm font-semibold text-red-900">Torneo cancelado</p>
-                <p className="mt-2 text-sm text-red-800">
-                  El torneo quedo en estado terminal. La informacion operativa no se
-                  muestra desde el flujo normal de gestion.
-                </p>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <FaseBadge estado={torneoQuery.data.estado} />
+                  <h2 className="mt-3 text-2xl font-semibold text-red-950">
+                    {torneoQuery.data.nombre}
+                  </h2>
+                  <p className="mt-2 text-sm font-semibold text-red-900">
+                    Torneo cancelado
+                  </p>
+                  <p className="mt-2 text-sm text-red-800">
+                    El torneo quedo en estado terminal. La informacion operativa no se
+                    muestra desde el flujo normal de gestion.
+                  </p>
+                </div>
               </div>
 
               <dl className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
