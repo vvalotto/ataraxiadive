@@ -165,7 +165,43 @@ cualquier estado).
 
 ---
 
-### INC-5.2 — Gestión de usuarios y roles
+### INC-5.1-ADJ — Ajuste post-UAT INC-5.1
+
+**Origen:** hallazgos UAT funcional del panel organizador (2026-04-21) — bugs de navegación
+por fase y composición de datos que bloquean el flujo operativo real. Son correcciones del
+código ya implementado en INC-5.1, no scope nuevo.
+
+**DoD:** el panel organizador respeta las fases del torneo en tabs, acciones y estados
+terminales; las pantallas de competencias y jueces componen correctamente ambas fuentes de
+datos del dominio.
+
+| US | Descripción | Hallazgo origen | Área |
+|----|-------------|-----------------|------|
+| US-5.1.7 | Política de tabs por fase — deshabilitar `Grilla`, `Jueces`, `Ejecucion` fuera del estado correspondiente; ocultar todo excepto resumen en `CANCELADO` | UAT-5.1-03, UAT-5.1-05 | `frontend/` |
+| US-5.1.8 | Componer disciplinas + competencias en `Ver competencias` — mostrar disciplinas del torneo aunque no exista competencia creada aún | UAT-5.1-01 | `frontend/` |
+| US-5.1.9 | Precondición grilla en asignación de jueces — bloquear selector de juez por disciplina si no tiene grilla OT generada | UAT-5.1-02 | `frontend/` |
+| US-5.1.10 | Corregir acciones de fase en `AccionesPanel` — mostrar acción correcta según estado del torneo; ocultar `Iniciar Ejecución` si ya está en `EJECUCION` | UAT-5.1-04 | `frontend/` |
+
+---
+
+### INC-5.2 — Ejecución por Disciplina
+
+**Origen:** gaps funcionales UAT-5.1-06 y UAT-5.1-07 — el flujo de ejecución del
+organizador carece de la vista maestro-detalle que permite habilitar cada disciplina
+individualmente y del cierre manual de prueba.
+
+**DoD:** el organizador puede seleccionar una disciplina del torneo en ejecución, habilitarla
+(disparar `POST /competencia/{id}/iniciar`), monitorear su progreso en detalle y finalizarla
+manualmente cuando corresponda. El cierre automático por P-08 coexiste con el cierre manual.
+
+| US | Descripción | Hallazgo origen | Área |
+|----|-------------|-----------------|------|
+| US-5.2.1 | Vista maestro-detalle de disciplinas en ejecución — listar todas las disciplinas del torneo con estado, juez, grilla y progreso; al seleccionar una, abrir detalle con acción `Habilitar disciplina` | UAT-5.1-06 | `frontend/`, `competencia/api/` |
+| US-5.2.2 | Finalización manual de prueba — acción `Finalizar prueba` por disciplina; permitir solo si no hay performances pendientes; registrar en auditoría si cierre fue manual o automático | UAT-5.1-07 | `competencia/api/`, `competencia/application/`, `frontend/` |
+
+---
+
+### INC-5.3 — Gestión de usuarios y roles
 
 **DoD:** el organizador puede crear usuarios y asignarles rol (organizador / juez / atleta)
 desde la UI. Los jueces solo ven las disciplinas que tienen asignadas. Los atletas solo
@@ -173,12 +209,12 @@ acceden a su perfil e inscripción. Los roles se respetan en toda la UI sin exce
 
 | US | Descripción | Área |
 |----|-------------|------|
-| US-5.2.1 | UI de gestión de usuarios — organizador crea usuarios y asigna roles | `frontend/`, `identidad/api/` |
-| US-5.2.2 | Vista del atleta — pantalla de perfil y disciplinas disponibles para inscripción | `frontend/` |
+| US-5.3.1 | UI de gestión de usuarios — organizador crea usuarios y asigna roles | `frontend/`, `identidad/api/` |
+| US-5.3.2 | Vista del atleta — pantalla de perfil y disciplinas disponibles para inscripción | `frontend/` |
 
 ---
 
-### INC-5.3 — Inscripción completa
+### INC-5.4 — Inscripción completa
 
 **DoD:** un atleta puede auto-registrarse con sus datos completos y registrar sus APs por
 disciplina. El organizador ve la lista de inscriptos con estado. La transición Inscripción
@@ -186,13 +222,13 @@ disciplina. El organizador ve la lista de inscriptos con estado. La transición 
 
 | US | Descripción | Área |
 |----|-------------|------|
-| US-5.3.1 | Formulario de inscripción — nombre, club, categoría, género, disciplinas, apto médico, constancia de pago | `frontend/`, `registro/api/` |
-| US-5.3.2 | Registro de APs — atleta ingresa Performance Anunciada por cada disciplina inscripta | `frontend/`, `competencia/api/` |
-| US-5.3.3 | Vista del organizador — lista de inscriptos con estado (inscripto / AP registrado / sin AP) | `frontend/`, `registro/api/` |
+| US-5.4.1 | Formulario de inscripción — nombre, club, categoría, género, disciplinas, apto médico, constancia de pago | `frontend/`, `registro/api/` |
+| US-5.4.2 | Registro de APs — atleta ingresa Performance Anunciada por cada disciplina inscripta | `frontend/`, `competencia/api/` |
+| US-5.4.3 | Vista del organizador — lista de inscriptos con estado (inscripto / AP registrado / sin AP) | `frontend/`, `registro/api/` |
 
 ---
 
-### INC-5.4 — Algoritmo de puntaje y rankings por categoría/género
+### INC-5.5 — Algoritmo de puntaje y rankings por categoría/género
 
 **DoD:** al cerrar una disciplina, el sistema calcula y muestra instantáneamente:
 (1) tabla de ejecución con género, categoría, AP, RP, tarjeta y puntos ordenada por OT;
@@ -202,16 +238,16 @@ las disciplinas por división.
 
 | US | Descripción | Área |
 |----|-------------|------|
-| US-5.4.1 | Puerto `AlgoritmoPuntaje` + `AlgoritmoPuntajeFAAS` — fórmulas distancia y tiempo | `resultados/domain/ports/`, `resultados/domain/services/` |
-| US-5.4.2 | `TipoReglamento` en `Torneo` — VO extensible (FAAS / CMAS / AIDA); DI en `CalcularRanking` | `torneo/domain/`, `resultados/application/` |
-| US-5.4.3 | Ranking por categoría/género — `RankingCompetencia` genera 6 sub-rankings con puntaje | `resultados/domain/`, `resultados/application/` |
-| US-5.4.4 | `RankingOverall` por categoría/género — suma algebraica de puntos por división | `resultados/domain/`, `resultados/application/` |
-| US-5.4.5 | UI tabla de ejecución — vista ordenada por OT con columna género y puntos | `frontend/` |
-| US-5.4.6 | UI podios — 6 divisiones con posición, nombre, club, puntos, RP | `frontend/` |
+| US-5.5.1 | Puerto `AlgoritmoPuntaje` + `AlgoritmoPuntajeFAAS` — fórmulas distancia y tiempo | `resultados/domain/ports/`, `resultados/domain/services/` |
+| US-5.5.2 | `TipoReglamento` en `Torneo` — VO extensible (FAAS / CMAS / AIDA); DI en `CalcularRanking` | `torneo/domain/`, `resultados/application/` |
+| US-5.5.3 | Ranking por categoría/género — `RankingCompetencia` genera 6 sub-rankings con puntaje | `resultados/domain/`, `resultados/application/` |
+| US-5.5.4 | `RankingOverall` por categoría/género — suma algebraica de puntos por división | `resultados/domain/`, `resultados/application/` |
+| US-5.5.5 | UI tabla de ejecución — vista ordenada por OT con columna género y puntos | `frontend/` |
+| US-5.5.6 | UI podios — 6 divisiones con posición, nombre, club, puntos, RP | `frontend/` |
 
 ---
 
-### INC-5.5 — Portal del Atleta
+### INC-5.6 — Portal del Atleta
 
 **DoD:** el atleta tiene una vista completa de su participación en el torneo: sus torneos
 inscriptos, su posición en la grilla por disciplina, sus resultados al cierre de cada
@@ -219,14 +255,14 @@ disciplina, y los rankings/podios de las disciplinas en las que compitió.
 
 | US | Descripción | Área |
 |----|-------------|------|
-| US-5.5.1 | Mis torneos — lista de torneos inscriptos con estado actual del torneo | `frontend/`, `torneo/api/` |
-| US-5.5.2 | Mi grilla — posición del atleta (OT + línea) por disciplina inscripta | `frontend/`, `competencia/api/` |
-| US-5.5.3 | Mis resultados — RP, tarjeta y puntos obtenidos por disciplina | `frontend/`, `resultados/api/` |
-| US-5.5.4 | Rankings y podios — tabla de ejecución + podio de cada disciplina en la que participó | `frontend/`, `resultados/api/` |
+| US-5.6.1 | Mis torneos — lista de torneos inscriptos con estado actual del torneo | `frontend/`, `torneo/api/` |
+| US-5.6.2 | Mi grilla — posición del atleta (OT + línea) por disciplina inscripta | `frontend/`, `competencia/api/` |
+| US-5.6.3 | Mis resultados — RP, tarjeta y puntos obtenidos por disciplina | `frontend/`, `resultados/api/` |
+| US-5.6.4 | Rankings y podios — tabla de ejecución + podio de cada disciplina en la que participó | `frontend/`, `resultados/api/` |
 
 ---
 
-### INC-5.6 — Polish y demo-readiness
+### INC-5.7 — Polish y demo-readiness
 
 **DoD:** el flujo completo puede ejecutarse con los datos del torneo BA 2025 sin errores
 visibles, workarounds, ni datos hardcodeados. La UI es presentable a un comprador.
@@ -235,9 +271,9 @@ coinciden con los resultados oficiales del PDF.
 
 | US | Descripción | Área |
 |----|-------------|------|
-| US-5.6.1 | Seed del torneo BA 2025 completo — datos reales como caso de demostración | `data/`, `scripts/` |
-| US-5.6.2 | Verificación de resultados BA 2025 — comparar salida del sistema contra PDFs oficiales | `tests/` |
-| US-5.6.3 | UX fixes del flujo completo — correcciones identificadas al ejecutar el demo end-to-end | `frontend/` |
+| US-5.7.1 | Seed del torneo BA 2025 completo — datos reales como caso de demostración | `data/`, `scripts/` |
+| US-5.7.2 | Verificación de resultados BA 2025 — comparar salida del sistema contra PDFs oficiales | `tests/` |
+| US-5.7.3 | UX fixes del flujo completo — correcciones identificadas al ejecutar el demo end-to-end | `frontend/` |
 
 ---
 
@@ -246,11 +282,13 @@ coinciden con los resultados oficiales del PDF.
 ```
 SP-ADJ-07 (deuda SP4)
   └── INC-5.1 (Panel Organizador — ciclo de vida)
-        └── INC-5.2 (Roles y usuarios)
-              └── INC-5.3 (Inscripción completa)
-                    └── INC-5.4 (Puntaje + Rankings)
-                          └── INC-5.5 (Portal del Atleta)
-                                └── INC-5.6 (Polish + BA 2025)
+        └── INC-5.1-ADJ (Ajuste post-UAT — bugs de fase y composición)
+              └── INC-5.2 (Ejecución por Disciplina — maestro-detalle + cierre manual)
+                    └── INC-5.3 (Roles y usuarios)
+                          └── INC-5.4 (Inscripción completa)
+                                └── INC-5.5 (Puntaje + Rankings)
+                                      └── INC-5.6 (Portal del Atleta)
+                                            └── INC-5.7 (Polish + BA 2025)
 ```
 
 ---
