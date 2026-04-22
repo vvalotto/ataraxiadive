@@ -65,7 +65,7 @@ export function TablaJueces({
                   {saving
                     ? 'Guardando...'
                     : !puedeAsignar
-                      ? 'Generar grilla antes de asignar juez'
+                      ? `Falta generar la grilla de ${disciplina.disciplina} en el tab Grilla`
                       : disciplina.juez_id
                         ? 'Asignado'
                         : 'Pendiente'}

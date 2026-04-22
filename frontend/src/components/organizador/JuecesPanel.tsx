@@ -80,6 +80,8 @@ export function JuecesPanel({ torneoId }: JuecesPanelProps) {
   }, [competenciasQuery.data])
   const todasAsignadas =
     disciplinas.length > 0 && disciplinas.every((disciplina) => Boolean(disciplina.juez_id))
+  const sinJuecesAsignados =
+    disciplinas.length > 0 && disciplinas.every((disciplina) => !disciplina.juez_id)
 
   const asignarMutation = useMutation({
     mutationFn: async (payload: { disciplina: DisciplinaTorneoDto; juezId: string }) => {
@@ -111,7 +113,7 @@ export function JuecesPanel({ torneoId }: JuecesPanelProps) {
   if (disciplinasQuery.isError || juecesQuery.isError || competenciasQuery.isError) {
     return (
       <div className="rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-900">
-        No se pudieron cargar disciplinas, jueces o grillas.
+        No se pudieron cargar los jueces.
       </div>
     )
   }
@@ -137,6 +139,12 @@ export function JuecesPanel({ torneoId }: JuecesPanelProps) {
       {error ? (
         <div className="rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-900">
           {error}
+        </div>
+      ) : null}
+
+      {sinJuecesAsignados ? (
+        <div className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
+          Todavia no hay jueces asignados
         </div>
       ) : null}
 
