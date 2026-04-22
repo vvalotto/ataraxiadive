@@ -6,7 +6,7 @@
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
 | **Fecha** | 2026-04-22 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.21 — SP5 INC-5.1 ✅ cerrado (US-5.1.1..5.1.10 · INC-5.1-ADJ · DesignReviewer 0 CRITICAL · HITO-26) |
+| **Estado** | ✅ v1.22 — SP5 INC-5.2 ✅ cerrado (US-5.2.1..5.2.2 · SP-ADJ-08 · DesignReviewer 0 CRITICAL · 215 WARNING) |
 
 ---
 
@@ -402,7 +402,32 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
-## 21. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §19 -->
+## 21. US-IEDD SP5 INC-5.2 — Ejecución por Disciplina
+
+> Estado al 2026-04-22: 2/2 US mergeadas a `develop`. SP-ADJ-08 resuelve hallazgos UAT.
+> DesignReviewer consolidado INC-5.2: **0 CRITICAL · 215 WARNING** (`quality/reports/designreviewer/INC-5.2-report.txt`).
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-5.2.1 | 5.2 | `TorneoCompetenciasPage` — vista maestro-detalle: lista todas las disciplinas del torneo con estado, juez asignado y progreso; al seleccionar una disciplina, abre detalle con acción `Habilitar disciplina` (`POST /competencia/{id}/iniciar`) | ✅ Done (PR #105) |
+| US-5.2.2 | 5.2 | Acción `Finalizar prueba` por disciplina — habilitada solo si no hay performances pendientes; `PATCH /competencia/{id}/finalizar`; distingue cierre manual vs. automático (P-08) | ✅ Done (PR #106) |
+
+---
+
+## 22. SP-ADJ-08 — Ajuste post-UAT INC-5.2
+
+> SP-ADJ-08 resuelve 8 hallazgos (UAT-5.2-01..08) detectados en la UAT de cierre de INC-5.2.
+> Plan: `docs/plans/sp-adj-08/PLAN-SP-ADJ-08.md`.
+
+| US | Hallazgo UAT | Área | Descripción | Estado |
+|----|-------------|------|-------------|--------|
+| US-ADJ-8.2 | UAT-5.2-02, UAT-5.2-05, UAT-5.2-07 | `TorneoCompetenciasPage`, `AccionesPanel` | Selector de grilla filtrado por `GET /torneos/{id}/disciplinas`; `Pasar a premiacion` habilitado solo si todas las competencias esperadas están `Finalizada` | ✅ Done (PR #107) |
+| US-ADJ-8.1 | UAT-5.2-01, UAT-5.2-03, UAT-5.2-04, UAT-5.2-06, UAT-5.2-07 | Paneles del organizador | Estados vacío/loading/error claros; mensajes de ejecución accionables; disciplina seleccionada destacada; lenguaje de fase preciso (`Pasar a premiacion` / `Cerrar torneo`) | ✅ Done (PR #108) |
+| US-ADJ-8.3 | UAT-5.2-08 | `AccionesPanel` | Cancelar torneo en zona de peligro con modal de confirmación fuerte — habilita acción solo si el usuario escribe el nombre exacto del torneo | ✅ Done (PR #109) |
+
+---
+
+## 23. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §19 -->
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -421,7 +446,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 22. Cobertura Total
+## 24. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -439,7 +464,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 23. US → Tests
+## 25. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -499,10 +524,15 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-5.1.8 | frontend (build + eslint src) · UAT regresión INC-5.1-ADJ 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #102) |
 | US-5.1.9 | frontend (build + eslint src) · UAT regresión INC-5.1-ADJ 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #103) |
 | US-5.1.10 | frontend (build + eslint src) · UAT regresión INC-5.1-ADJ 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #104) |
+| US-5.2.1 | frontend (build + eslint src) · integration/competencia (`GET /competencia?torneo_id`) · UAT INC-5.2 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #105) |
+| US-5.2.2 | frontend (build + eslint src) · integration/competencia (`PATCH /competencia/{id}/finalizar`) · UAT INC-5.2 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #106) |
+| US-ADJ-8.2 | frontend (build + eslint src) · UAT regresión SP-ADJ-08 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #107) |
+| US-ADJ-8.1 | frontend (build + eslint src) · UAT regresión SP-ADJ-08 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #108) |
+| US-ADJ-8.3 | frontend (build + eslint src) · UAT regresión SP-ADJ-08 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #109) |
 
 ---
 
-## 24. US → ADR
+## 26. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -530,6 +560,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.18 — 2026-04-20: SP5 iniciado · US-5.1.1 implementada · trazabilidad frontend de creacion de torneo agregada*
 *v1.19 — 2026-04-20: US-5.1.2 implementada · trazabilidad frontend de gestion de fases agregada*
 *v1.20 — 2026-04-20: US-5.1.3 implementada · trazabilidad frontend de inscriptos/AP agregada*
+*v1.22 — 2026-04-22: INC-5.2 cerrado (§21 nuevo · DesignReviewer 0 CRITICAL · 215 WARNING) · SP-ADJ-08 §22 · §§ renumerados 23..26 · US→Tests US-5.2.1..5.2.2 · US-ADJ-8.1..8.3*
 *v1.21 — 2026-04-22: INC-5.1 cerrado (§19 nuevo · DesignReviewer 0 CRITICAL · 208 WARNING) · INC-5.1-ADJ §20 · §§ renumerados 21..24 · US→Tests US-5.1.1..5.1.10 · §2 cobertura actualizada · HITO-26*
 *v1.15 — 2026-04-13: INC-4.4 especificado (§15 nuevo — 3 US offline-first) · §§ renumerados 16..19 · §2 cobertura actualizada*
 *v1.14 — 2026-04-13: INC-4.3 completado (§14 — 5/5 US ✅, UAT BA 2025) · RF-NT §3.7 INC corregido (4.2→4.5) · US-4.3.x en §18*

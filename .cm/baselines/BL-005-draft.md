@@ -37,7 +37,8 @@ gestionable desde el panel del organizador, con ejecución por disciplina y resu
 |-----------|-------------|--------|-----|
 | INC-5.1 | Panel del Organizador — CrearTorneo, gestión de fases, inscriptos, grilla, jueces, monitor de ejecución (US-5.1.1..5.1.6) | ✅ Cerrado 2026-04-22 | #95..#100 |
 | INC-5.1-ADJ | Ajuste post-UAT panel organizador — política de tabs, composición disciplinas/competencias, precondición grilla en jueces, normalización estado (US-5.1.7..5.1.10) | ✅ Cerrado 2026-04-22 | #101..#104 |
-| INC-5.2 | Ejecución por Disciplina — vista maestro-detalle, habilitar disciplina, cierre manual | ⏳ Pendiente | — |
+| INC-5.2 | Ejecución por Disciplina — vista maestro-detalle, habilitar disciplina, cierre manual (US-5.2.1..5.2.2) | ✅ Cerrado 2026-04-22 | #105, #106 |
+| SP-ADJ-08 | Ajuste post-UAT INC-5.2 — reglas operativas, UX/lenguaje, cancelación fuerte (US-ADJ-8.1..8.3) | ✅ Cerrado 2026-04-22 | #107, #108, #109 |
 | INC-5.3 | Roles y gestión de usuarios | ⏳ Pendiente | — |
 | INC-5.4 | Algoritmo de puntaje FAAS | ⏳ Pendiente | — |
 | INC-5.5 | Resultados y premiación | ⏳ Pendiente | — |
@@ -52,6 +53,7 @@ gestionable desde el panel del organizador, con ejecución por disciplina y resu
 | DesignReviewer SP-ADJ-07 | designreviewer | 0 CRITICAL · 208 WARNING | `quality/reports/designreviewer/SP-ADJ-07-report.txt` |
 | DesignReviewer INC-5.1 | designreviewer | 0 CRITICAL · 208 WARNING | `quality/reports/designreviewer/INC-5.1-report.txt` |
 | DesignReviewer INC-5.1-ADJ | incluido en INC-5.1 (misma ejecución) | 0 CRITICAL · 208 WARNING | `quality/reports/designreviewer/INC-5.1-report.txt` |
+| DesignReviewer INC-5.2 + SP-ADJ-08 | designreviewer | 0 CRITICAL · 215 WARNING | `quality/reports/designreviewer/INC-5.2-report.txt` |
 | ArchitectAnalyst BL-005 | architectanalyst | ⏳ pendiente (al cerrar SP5) | — |
 | UAT SP5 | funcional | ⏳ pendiente (INC-5.6) | — |
 
@@ -88,5 +90,6 @@ gestionable desde el panel del organizador, con ejecución por disciplina y resu
 
 ---
 
+*2026-04-22 — INC-5.2 cerrado + SP-ADJ-08 (UAT-5.2-01..08 resueltos · DesignReviewer 0 CRITICAL · 215 WARNING)*
 *Draft creado: 2026-04-22 — INC-5.1 cerrado*
 *Mantenido por: Victor Valotto + Claude Code*
