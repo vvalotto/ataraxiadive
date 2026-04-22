@@ -1,6 +1,6 @@
 # US-ADJ-8.2: Restringir operaciones por torneo y fase — UAT-5.2 reglas operativas
 
-**Estado**: `Pendiente`
+**Estado**: `Implementada`
 **Iteracion / Sprint**: SP-ADJ-08
 **Tipo**: fix de regla funcional frontend + validacion de fase
 **Agregado principal afectado**: `Torneo` / `Competencia`
@@ -141,6 +141,9 @@ Feature: Restricciones operativas por torneo y fase
 2. Usar `GET /torneos/{torneo_id}/disciplinas` como fuente de verdad de disciplinas esperadas.
 3. Cruzar contra `GET /competencia?torneo_id=...` para determinar estado por disciplina.
 4. Si existen disciplinas configuradas sin participantes y se decide excluirlas del cierre, documentar la regla explicitamente antes de implementarla.
+5. Implementado: el backend valida la precondicion mediante callback configurable en
+   `torneo.api.router`, cableado desde `src/app.py` para consultar Competencia sin romper
+   la frontera del dominio de Torneo.
 
 ---
 

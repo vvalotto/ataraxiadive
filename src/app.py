@@ -58,7 +58,11 @@ from registro.api.router import (
 from registro.domain.aggregates.inscripcion import Inscripcion
 from registro.infrastructure.repositories.sqlite_atleta_repository import SQLiteAtletaRepository
 from torneo.api.exception_handlers import register_torneo_exception_handlers
-from torneo.api.router import router as torneo_router
+from torneo.api.router import (
+    configure_premiacion_precondition,
+    router as torneo_router,
+)
+from torneo.domain.exceptions import PremiacionNoPermitida
 from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTorneoRepository
 from resultados.application.commands.calcular_ranking import (
     CalcularRankingCommand,
@@ -354,7 +358,11 @@ async def _calcular_overall_si_corresponde(
     if torneo_id is None:
         return
 
-    if not await _verificar_todas_disciplinas_finalizadas(torneo_id, competencia_event_store):
+    if await _obtener_disciplinas_pendientes_premiacion(
+        torneo_id,
+        competencia_event_store,
+        torneo_db_path,
+    ):
         return
 
     disciplinas = await _obtener_disciplinas_torneo(torneo_id, torneo_db_path)
@@ -370,21 +378,63 @@ async def _calcular_overall_si_corresponde(
     )
 
 
-async def _verificar_todas_disciplinas_finalizadas(
+def build_premiacion_precondition(
+    competencia_event_store: SQLiteEventStore | None = None,
+    torneo_db_path: str | None = None,
+) -> Callable[[UUID], Awaitable[None]]:
+    """Construye la precondicion para pasar un torneo a premiacion."""
+    event_store = competencia_event_store or SQLiteEventStore(
+        os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db")
+    )
+    torneos_path = torneo_db_path or os.getenv("TORNEO_DB_PATH", "data/torneo.db")
+
+    async def _precondition(torneo_id: UUID) -> None:
+        pendientes = await _obtener_disciplinas_pendientes_premiacion(
+            torneo_id,
+            event_store,
+            torneos_path,
+        )
+        if pendientes:
+            detalle = ", ".join(pendientes)
+            cantidad = len(pendientes)
+            etiqueta = "disciplina" if cantidad == 1 else "disciplinas"
+            raise PremiacionNoPermitida(
+                f"No se puede pasar a premiacion: falta cerrar {cantidad} {etiqueta}: "
+                f"{detalle}"
+            )
+
+    return _precondition
+
+
+async def _obtener_disciplinas_pendientes_premiacion(
     torneo_id: UUID,
     competencia_event_store: SQLiteEventStore,
-) -> bool:
-    """Helper de P-09: verifica si todas las competencias del torneo finalizaron."""
-    handler = ObtenerCompetenciasPorTorneoHandler(SQLiteCompetenciasPorTorneo())
-    competencias = await handler.handle(ObtenerCompetenciasPorTorneoQuery(torneo_id=torneo_id))
-    if not competencias:
-        return False
+    torneo_db_path: str,
+) -> list[str]:
+    """Retorna disciplinas configuradas que aun no tienen competencia finalizada."""
+    disciplinas = await _obtener_disciplinas_torneo(torneo_id, torneo_db_path)
+    if not disciplinas:
+        return []
 
-    for competencia in competencias:
-        events = await competencia_event_store.load(f"competencia-{competencia.competencia_id}")
+    competencias = await ObtenerCompetenciasPorTorneoHandler(SQLiteCompetenciasPorTorneo()).handle(
+        ObtenerCompetenciasPorTorneoQuery(torneo_id=torneo_id)
+    )
+    competencias_por_disciplina = {
+        competencia.disciplina: competencia.competencia_id for competencia in competencias
+    }
+
+    pendientes: list[str] = []
+    for disciplina in disciplinas:
+        competencia_id = competencias_por_disciplina.get(disciplina.value)
+        if competencia_id is None:
+            pendientes.append(disciplina.value)
+            continue
+
+        events = await competencia_event_store.load(f"competencia-{competencia_id}")
         if not any(event["event_type"] == "CompetenciaFinalizada" for event in events):
-            return False
-    return True
+            pendientes.append(disciplina.value)
+
+    return pendientes
 
 
 async def _obtener_disciplinas_torneo(
@@ -397,6 +447,9 @@ async def _obtener_disciplinas_torneo(
     if torneo is None:
         return []
     return [Disciplina(disciplina.disciplina) for disciplina in torneo.disciplinas_torneo]
+
+
+configure_premiacion_precondition(build_premiacion_precondition())
 
 
 @app.get("/health", response_class=JSONResponse)

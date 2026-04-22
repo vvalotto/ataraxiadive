@@ -108,7 +108,7 @@ UAT de regresion INC-5.2
 
 ## Criterio de cierre de SP-ADJ-08
 
-- [ ] US-ADJ-8.2 — selector de grilla filtrado por torneo y premiacion bloqueada hasta competencias finalizadas.
+- [x] US-ADJ-8.2 — selector de grilla filtrado por torneo y premiacion bloqueada hasta competencias finalizadas.
 - [ ] US-ADJ-8.1 — estados vacios/loading/error claros, mensajes accionables y lenguaje de fase preciso.
 - [ ] US-ADJ-8.3 — cancelacion en zona de peligro con confirmacion por nombre exacto.
 - [ ] UAT de regresion INC-5.2 sin hallazgos Alta abiertos.

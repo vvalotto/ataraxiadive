@@ -11,14 +11,16 @@ import {
   type CambioGrillaPayload,
   type GrillaAtletaDto,
 } from '../../api/competencia'
+import {
+  listarDisciplinasTorneo,
+  type DisciplinaCodigo,
+} from '../../api/torneo'
 import { ConfigurarGrillaForm } from './ConfigurarGrillaForm'
 import { TablaGrilla } from './TablaGrilla'
 
 interface GrillaPanelProps {
   torneoId: string
 }
-
-const DISCIPLINAS = ['STA', 'DNF', 'DYN', 'DBF', 'SPE_2X50', 'SPE_4X50', 'SPE_8X50', 'SPE_16X50']
 
 function buildOtIso(time: string) {
   const [hours, minutes] = time.split(':').map(Number)
@@ -29,9 +31,23 @@ function buildOtIso(time: string) {
 
 export function GrillaPanel({ torneoId }: GrillaPanelProps) {
   const queryClient = useQueryClient()
-  const [disciplina, setDisciplina] = useState('DNF')
+  const [disciplinaSeleccionada, setDisciplinaSeleccionada] = useState<DisciplinaCodigo | ''>('')
   const [localRows, setLocalRows] = useState<GrillaAtletaDto[] | null>(null)
   const [error, setError] = useState('')
+
+  const disciplinasQuery = useQuery({
+    queryKey: ['torneo-disciplinas', torneoId],
+    queryFn: () => listarDisciplinasTorneo(torneoId),
+  })
+
+  const disciplinas = useMemo(
+    () => disciplinasQuery.data?.map((item) => item.disciplina) ?? [],
+    [disciplinasQuery.data],
+  )
+  const disciplina =
+    disciplinaSeleccionada && disciplinas.includes(disciplinaSeleccionada)
+      ? disciplinaSeleccionada
+      : disciplinas[0] ?? ''
 
   const competenciasQuery = useQuery({
     queryKey: ['competencias-torneo', torneoId],
@@ -39,20 +55,23 @@ export function GrillaPanel({ torneoId }: GrillaPanelProps) {
   })
 
   const competencia = useMemo(
-    () => competenciasQuery.data?.find((item) => item.disciplina === disciplina) ?? null,
+    () =>
+      disciplina
+        ? competenciasQuery.data?.find((item) => item.disciplina === disciplina) ?? null
+        : null,
     [competenciasQuery.data, disciplina],
   )
 
   const estadoQuery = useQuery({
     queryKey: ['competencia-estado', competencia?.competencia_id, disciplina],
     queryFn: () => fetchEstadoCompetencia(competencia?.competencia_id ?? '', disciplina),
-    enabled: Boolean(competencia),
+    enabled: Boolean(competencia && disciplina),
   })
 
   const grillaQuery = useQuery({
     queryKey: ['competencia-grilla', competencia?.competencia_id, disciplina],
     queryFn: () => fetchGrillaCompetencia(competencia?.competencia_id ?? '', disciplina),
-    enabled: Boolean(competencia),
+    enabled: Boolean(competencia && disciplina),
   })
 
   const rows = localRows ?? grillaQuery.data ?? []
@@ -70,6 +89,9 @@ export function GrillaPanel({ torneoId }: GrillaPanelProps) {
 
   const generarMutation = useMutation({
     mutationFn: async (payload: { intervaloMinutos: number; primerOt: string }) => {
+      if (!disciplina) {
+        throw new Error('El torneo no tiene disciplinas configuradas para generar grilla.')
+      }
       const competenciaId = crypto.randomUUID()
       await crearCompetencia({
         competenciaId,
@@ -91,7 +113,7 @@ export function GrillaPanel({ torneoId }: GrillaPanelProps) {
 
   const ajustarMutation = useMutation({
     mutationFn: async (payload: { rows: GrillaAtletaDto[]; cambios: CambioGrillaPayload[] }) => {
-      if (!competencia) return
+      if (!competencia || !disciplina) return
       setLocalRows(payload.rows)
       await ajustarGrilla({
         competenciaId: competencia.competencia_id,
@@ -105,7 +127,7 @@ export function GrillaPanel({ torneoId }: GrillaPanelProps) {
 
   const confirmarMutation = useMutation({
     mutationFn: async () => {
-      if (!competencia) return
+      if (!competencia || !disciplina) return
       await confirmarGrilla({ competenciaId: competencia.competencia_id, disciplina })
     },
     onSuccess: refresh,
@@ -120,13 +142,14 @@ export function GrillaPanel({ torneoId }: GrillaPanelProps) {
           <select
             value={disciplina}
             onChange={(event) => {
-              setDisciplina(event.target.value)
+              setDisciplinaSeleccionada(event.target.value as DisciplinaCodigo)
               setLocalRows(null)
               setError('')
             }}
+            disabled={disciplinasQuery.isLoading || disciplinas.length === 0}
             className="ml-0 mt-2 min-h-10 rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm sm:ml-3 sm:mt-0"
           >
-            {DISCIPLINAS.map((item) => (
+            {disciplinas.map((item) => (
               <option key={item} value={item}>
                 {item}
               </option>
@@ -146,13 +169,31 @@ export function GrillaPanel({ torneoId }: GrillaPanelProps) {
         </div>
       ) : null}
 
+      {disciplinasQuery.isLoading ? (
+        <div className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
+          Cargando disciplinas del torneo...
+        </div>
+      ) : null}
+
+      {disciplinasQuery.isError ? (
+        <div className="rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-900">
+          No se pudieron cargar las disciplinas del torneo.
+        </div>
+      ) : null}
+
+      {!disciplinasQuery.isLoading && !disciplinasQuery.isError && disciplinas.length === 0 ? (
+        <div className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
+          Este torneo no tiene disciplinas configuradas para generar grilla.
+        </div>
+      ) : null}
+
       {competenciasQuery.isLoading ? (
         <div className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
           Cargando competencias...
         </div>
       ) : null}
 
-      {!competenciasQuery.isLoading && !competencia ? (
+      {disciplina && !competenciasQuery.isLoading && !competencia ? (
         <ConfigurarGrillaForm
           disciplina={disciplina}
           isSubmitting={generarMutation.isPending}
