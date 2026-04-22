@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Awaitable, Callable
 from datetime import date
 from uuid import UUID
 
@@ -39,6 +40,14 @@ from torneo.domain.exceptions import AsignacionNoPermitida, DisciplinaNoEnTorneo
 from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTorneoRepository
 
 router = APIRouter(prefix="/torneos", tags=["torneos"])
+PremiacionPrecondition = Callable[[UUID], Awaitable[None]]
+_premiacion_precondition: PremiacionPrecondition | None = None
+
+
+def configure_premiacion_precondition(precondition: PremiacionPrecondition | None) -> None:
+    """Configura validacion externa antes de pasar un torneo a premiacion."""
+    global _premiacion_precondition  # noqa: PLW0603
+    _premiacion_precondition = precondition
 
 
 # ── Schemas ───────────────────────────────────────────────────────────────────
@@ -178,6 +187,8 @@ async def volver_preparacion(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse
 
 @router.put("/{torneo_id}/iniciar-premiacion", status_code=200)
 async def iniciar_premiacion(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse:
+    if _premiacion_precondition is not None:
+        await _premiacion_precondition(torneo_id)
     await IniciarPremiacionHandler(_repo()).handle(TransicionarTorneoCommand(torneo_id))
     return JSONResponse(status_code=200, content={"ok": True})
 

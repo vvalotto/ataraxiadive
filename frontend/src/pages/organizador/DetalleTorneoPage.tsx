@@ -1,7 +1,16 @@
-import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useQueries, useQuery } from '@tanstack/react-query'
+import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { fetchTorneo, type EstadoTorneo, type TorneoDto } from '../../api/torneo'
+import {
+  fetchCompetenciasPorTorneo,
+  fetchEstadoCompetencia,
+} from '../../api/competencia'
+import {
+  fetchTorneo,
+  listarDisciplinasTorneo,
+  type EstadoTorneo,
+  type TorneoDto,
+} from '../../api/torneo'
 import { AccionesPanel } from '../../components/organizador/AccionesPanel'
 import { EjecucionPanel } from '../../components/organizador/EjecucionPanel'
 import { FaseBadge } from '../../components/organizador/FaseBadge'
@@ -31,6 +40,56 @@ export function DetalleTorneoPage() {
     queryFn: () => fetchTorneo(torneoId ?? ''),
     enabled: Boolean(torneoId),
   })
+  const disciplinasQuery = useQuery({
+    queryKey: ['torneo-disciplinas', torneoId],
+    queryFn: () => listarDisciplinasTorneo(torneoId ?? ''),
+    enabled: Boolean(torneoId) && torneoQuery.data?.estado === 'EJECUCION',
+  })
+  const competenciasQuery = useQuery({
+    queryKey: ['competencias-torneo', torneoId],
+    queryFn: () => fetchCompetenciasPorTorneo(torneoId ?? ''),
+    enabled: Boolean(torneoId) && torneoQuery.data?.estado === 'EJECUCION',
+  })
+  const estadoCompetenciasQueries = useQueries({
+    queries:
+      competenciasQuery.data?.map((competencia) => ({
+        queryKey: ['competencia-estado', competencia.competencia_id, competencia.disciplina],
+        queryFn: () =>
+          fetchEstadoCompetencia(competencia.competencia_id, competencia.disciplina),
+        enabled: torneoQuery.data?.estado === 'EJECUCION',
+      })) ?? [],
+  })
+  const isPremiacionStatusLoading =
+    torneoQuery.data?.estado === 'EJECUCION' &&
+    (disciplinasQuery.isLoading ||
+      competenciasQuery.isLoading ||
+      estadoCompetenciasQueries.some((query) => query.isLoading))
+  const premiacionPendientes = useMemo(() => {
+    if (torneoQuery.data?.estado !== 'EJECUCION') return null
+    const disciplinas = disciplinasQuery.data ?? []
+    const competencias = competenciasQuery.data ?? []
+    const estadosPorCompetencia = new Map(
+      estadoCompetenciasQueries.map((query, index) => [
+        competencias[index]?.competencia_id,
+        query.data?.estado,
+      ]),
+    )
+
+    return disciplinas
+      .filter((disciplinaTorneo) => {
+        const competencia = competencias.find(
+          (item) => item.disciplina === disciplinaTorneo.disciplina,
+        )
+        if (!competencia) return true
+        return estadosPorCompetencia.get(competencia.competencia_id) !== 'Finalizada'
+      })
+      .map((disciplinaTorneo) => disciplinaTorneo.disciplina)
+  }, [
+    competenciasQuery.data,
+    disciplinasQuery.data,
+    estadoCompetenciasQueries,
+    torneoQuery.data?.estado,
+  ])
   const isCancelado = torneoQuery.data?.estado === 'CANCELADO'
 
   return (
@@ -116,6 +175,8 @@ export function DetalleTorneoPage() {
               torneoId={torneoQuery.data.torneo_id}
               torneoNombre={torneoQuery.data.nombre}
               estado={torneoQuery.data.estado}
+              premiacionPendientes={premiacionPendientes}
+              isPremiacionStatusLoading={isPremiacionStatusLoading}
               onSuccess={async () => {
                 setTransitionError('')
                 await torneoQuery.refetch()

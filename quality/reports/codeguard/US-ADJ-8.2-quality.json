@@ -1,0 +1,25 @@
+{
+  "us_id": "US-ADJ-8.2",
+  "date": "2026-04-22",
+  "scope": "frontend organizador + precondicion backend de premiacion",
+  "checks": [
+    {
+      "command": "./.venv/bin/pytest tests/unit/torneo/application/test_premiacion_precondition.py tests/unit/torneo/application/test_transiciones_handlers.py tests/integration/torneo/test_premiacion_precondicion.py",
+      "result": "13 passed"
+    },
+    {
+      "command": "npm run lint",
+      "cwd": "frontend",
+      "result": "OK"
+    },
+    {
+      "command": "npm run build",
+      "cwd": "frontend",
+      "result": "OK"
+    }
+  ],
+  "notes": [
+    "Fase 7 acotada a cambios de la US; no se ejecuto DesignReviewer manual completo.",
+    "La primera corrida de npm run lint detecto setState dentro de effect en GrillaPanel; fue corregido y el rerun paso."
+  ]
+}

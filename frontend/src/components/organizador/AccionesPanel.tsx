@@ -24,7 +24,7 @@ const ACCIONES_POR_ESTADO: Partial<Record<EstadoTorneo, AccionFase[]>> = {
   PREPARACION: [{ label: 'Iniciar ejecucion', run: iniciarEjecucion, variant: 'primary' }],
   EJECUCION: [
     { label: 'Volver a preparacion', run: volverPreparacion, variant: 'secondary' },
-    { label: 'Iniciar premiacion', run: iniciarPremiacion, variant: 'primary' },
+    { label: 'Pasar a premiacion', run: iniciarPremiacion, variant: 'primary' },
   ],
   PREMIACION: [{ label: 'Cerrar torneo', run: cerrarTorneo, variant: 'primary' }],
 }
@@ -35,6 +35,8 @@ interface AccionesPanelProps {
   torneoId: string
   torneoNombre: string
   estado: EstadoTorneo
+  premiacionPendientes?: string[] | null
+  isPremiacionStatusLoading?: boolean
   onSuccess: () => Promise<void>
   onError: (message: string) => void
 }
@@ -58,6 +60,8 @@ export function AccionesPanel({
   torneoId,
   torneoNombre,
   estado,
+  premiacionPendientes,
+  isPremiacionStatusLoading = false,
   onSuccess,
   onError,
 }: AccionesPanelProps) {
@@ -65,8 +69,14 @@ export function AccionesPanel({
   const [showCancelDialog, setShowCancelDialog] = useState(false)
   const acciones = ACCIONES_POR_ESTADO[estado] ?? []
   const puedeCancelar = !ESTADOS_TERMINALES.has(estado)
+  const bloqueoPremiacion =
+    estado === 'EJECUCION' &&
+    (isPremiacionStatusLoading || (premiacionPendientes?.length ?? 0) > 0)
 
   async function runAction(action: AccionFase) {
+    if (action.label === 'Pasar a premiacion' && bloqueoPremiacion) {
+      return
+    }
     setRunningAction(action.label)
     onError('')
     try {
@@ -112,7 +122,10 @@ export function AccionesPanel({
               key={action.label}
               type="button"
               onClick={() => void runAction(action)}
-              disabled={runningAction !== null}
+              disabled={
+                runningAction !== null ||
+                (action.label === 'Pasar a premiacion' && bloqueoPremiacion)
+              }
               className={buttonClass(action.variant ?? 'primary')}
             >
               {runningAction === action.label ? 'Procesando...' : action.label}
@@ -130,6 +143,20 @@ export function AccionesPanel({
           ) : null}
         </div>
       </div>
+
+      {estado === 'EJECUCION' && isPremiacionStatusLoading ? (
+        <p className="mt-3 text-sm font-semibold text-stone-600">
+          Verificando cierre de disciplinas antes de pasar a premiacion...
+        </p>
+      ) : null}
+
+      {estado === 'EJECUCION' && premiacionPendientes && premiacionPendientes.length > 0 ? (
+        <p className="mt-3 text-sm font-semibold text-amber-800">
+          Falta cerrar {premiacionPendientes.length}{' '}
+          {premiacionPendientes.length === 1 ? 'disciplina' : 'disciplinas'}:{' '}
+          {premiacionPendientes.join(', ')}.
+        </p>
+      ) : null}
 
       {showCancelDialog ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/40 px-4">

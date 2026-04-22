@@ -1,0 +1,220 @@
+{
+  "metadata": {
+    "us_id": "US-ADJ-8.2",
+    "us_title": "Restringir operaciones por torneo y fase",
+    "us_points": 3,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-22T18:10:08.649164+00:00",
+    "completed_at": "2026-04-22T18:22:57.663358+00:00",
+    "total_elapsed_seconds": 769,
+    "effective_seconds": 769,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-04-22T18:10:15.040154+00:00",
+      "completed_at": "2026-04-22T18:10:34.676175+00:00",
+      "elapsed_seconds": 19,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-22T18:11:26.329788+00:00",
+      "completed_at": "2026-04-22T18:11:48.178201+00:00",
+      "elapsed_seconds": 21,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-04-22T18:11:58.206360+00:00",
+      "completed_at": "2026-04-22T18:13:42.309221+00:00",
+      "elapsed_seconds": 104,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación Guiada por Tareas",
+      "started_at": "2026-04-22T18:13:56.856969+00:00",
+      "completed_at": "2026-04-22T18:16:36.560725+00:00",
+      "elapsed_seconds": 159,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Filtrar selector de grilla por torneo",
+          "task_type": "frontend",
+          "estimated_minutes": 25.0,
+          "started_at": "2026-04-22T18:14:01.554460+00:00",
+          "completed_at": "2026-04-22T18:14:37.060633+00:00",
+          "elapsed_seconds": 35,
+          "actual_minutes": 0.58,
+          "variance_minutes": -24.42,
+          "file_created": "frontend/src/components/organizador/GrillaPanel.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_002",
+          "task_name": "Bloquear premiación en frontend",
+          "task_type": "frontend",
+          "estimated_minutes": 35.0,
+          "started_at": "2026-04-22T18:14:41.410168+00:00",
+          "completed_at": "2026-04-22T18:15:29.215248+00:00",
+          "elapsed_seconds": 47,
+          "actual_minutes": 0.78,
+          "variance_minutes": -34.22,
+          "file_created": "frontend/src/pages/organizador/DetalleTorneoPage.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_003",
+          "task_name": "Validar precondición backend de premiación",
+          "task_type": "backend",
+          "estimated_minutes": 45.0,
+          "started_at": "2026-04-22T18:15:34.792565+00:00",
+          "completed_at": "2026-04-22T18:16:29.411491+00:00",
+          "elapsed_seconds": 54,
+          "actual_minutes": 0.9,
+          "variance_minutes": -44.1,
+          "file_created": "src/app.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-22T18:16:45.955987+00:00",
+      "completed_at": "2026-04-22T18:17:40.481508+00:00",
+      "elapsed_seconds": 54,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_004",
+          "task_name": "Tests unitarios precondición premiación",
+          "task_type": "test",
+          "estimated_minutes": 25.0,
+          "started_at": "2026-04-22T18:16:52.493677+00:00",
+          "completed_at": "2026-04-22T18:17:22.833566+00:00",
+          "elapsed_seconds": 30,
+          "actual_minutes": 0.5,
+          "variance_minutes": -24.5,
+          "file_created": "tests/unit/torneo/application/test_premiacion_precondition.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-04-22T18:17:52.597126+00:00",
+      "completed_at": "2026-04-22T18:18:47.482427+00:00",
+      "elapsed_seconds": 54,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_005",
+          "task_name": "Test integración endpoint premiación",
+          "task_type": "test",
+          "estimated_minutes": 30.0,
+          "started_at": "2026-04-22T18:17:57.168101+00:00",
+          "completed_at": "2026-04-22T18:18:36.422311+00:00",
+          "elapsed_seconds": 39,
+          "actual_minutes": 0.65,
+          "variance_minutes": -29.35,
+          "file_created": "tests/integration/torneo/test_premiacion_precondicion.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-04-22T18:18:54.199008+00:00",
+      "completed_at": "2026-04-22T18:19:05.298759+00:00",
+      "elapsed_seconds": 11,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-22T18:19:12.509832+00:00",
+      "completed_at": "2026-04-22T18:21:30.506991+00:00",
+      "elapsed_seconds": 137,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-04-22T18:21:34.940581+00:00",
+      "completed_at": "2026-04-22T18:22:25.685086+00:00",
+      "elapsed_seconds": 50,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_006",
+          "task_name": "Actualizar documentación US-ADJ-8.2",
+          "task_type": "docs",
+          "estimated_minutes": 20.0,
+          "started_at": "2026-04-22T18:21:38.577740+00:00",
+          "completed_at": "2026-04-22T18:22:21.432276+00:00",
+          "elapsed_seconds": 42,
+          "actual_minutes": 0.7,
+          "variance_minutes": -19.3,
+          "file_created": "docs/plans/sp-adj-08/US-ADJ-8.2-implementation-notes.md",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-04-22T18:22:31.911867+00:00",
+      "completed_at": "2026-04-22T18:22:53.171634+00:00",
+      "elapsed_seconds": 21,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 6,
+    "completed_tasks": 6,
+    "total_phases": 10,
+    "estimated_total_minutes": 180.0,
+    "actual_total_minutes": 4.12,
+    "variance_minutes": -175.88,
+    "variance_percent": -97.71
+  }
+}
