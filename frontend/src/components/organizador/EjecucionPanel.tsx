@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react'
 import {
   fetchCompetenciasPorTorneo,
   fetchEstadoCompetencia,
+  finalizarCompetencia,
   fetchGrillaCompetencia,
   fetchPerformanceActual,
   fetchProgresoCompetencia,
@@ -218,6 +219,25 @@ export function EjecucionPanel({ torneoId }: EjecucionPanelProps) {
     onError: (mutationError) => setError((mutationError as Error).message),
   })
 
+  const finalizarMutation = useMutation({
+    mutationFn: async (item: DisciplinaEjecucionItem) => {
+      if (!item.competencia) return
+      await finalizarCompetencia({
+        competenciaId: item.competencia.competencia_id,
+        disciplina: item.disciplina.disciplina,
+      })
+    },
+    onSuccess: async () => {
+      setError('')
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['ejecucion-disciplinas', torneoId] }),
+        queryClient.invalidateQueries({ queryKey: ['ejecucion-detalle'] }),
+        queryClient.invalidateQueries({ queryKey: ['monitor-ejecucion', torneoId] }),
+      ])
+    },
+    onError: (mutationError) => setError((mutationError as Error).message),
+  })
+
   if (ejecucionQuery.isLoading) {
     return (
       <div className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
@@ -286,7 +306,9 @@ export function EjecucionPanel({ torneoId }: EjecucionPanelProps) {
           isLoading={detalleQuery.isLoading}
           isError={detalleQuery.isError}
           isStarting={iniciarMutation.isPending}
+          isFinishing={finalizarMutation.isPending}
           onIniciar={(item) => iniciarMutation.mutate(item)}
+          onFinalizar={(item) => finalizarMutation.mutate(item)}
         />
       </div>
     </div>
@@ -362,7 +384,9 @@ interface DisciplinaDetalleProps {
   isLoading: boolean
   isError: boolean
   isStarting: boolean
+  isFinishing: boolean
   onIniciar: (item: DisciplinaEjecucionItem) => void
+  onFinalizar: (item: DisciplinaEjecucionItem) => void
 }
 
 function DisciplinaDetalle({
@@ -371,7 +395,9 @@ function DisciplinaDetalle({
   isLoading,
   isError,
   isStarting,
+  isFinishing,
   onIniciar,
+  onFinalizar,
 }: DisciplinaDetalleProps) {
   if (!item) {
     return (
@@ -382,6 +408,7 @@ function DisciplinaDetalle({
   }
 
   const canStart = item.estadoOperativo === 'lista_para_iniciar'
+  const canFinish = puedeFinalizar(item, detalle)
   const hash = item.estado?.hash_sha256
 
   return (
@@ -425,6 +452,18 @@ function DisciplinaDetalle({
               {isStarting ? 'Habilitando...' : 'Habilitar disciplina'}
             </button>
           ) : null}
+          {item.estadoOperativo === 'en_ejecucion' ? (
+            <button
+              type="button"
+              disabled={!canFinish || isFinishing}
+              onClick={() => {
+                if (canFinish) onFinalizar(item)
+              }}
+              className="min-h-10 rounded-lg bg-stone-900 px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-stone-300"
+            >
+              {isFinishing ? 'Finalizando...' : 'Finalizar prueba'}
+            </button>
+          ) : null}
         </div>
       </div>
 
@@ -441,13 +480,32 @@ function DisciplinaDetalle({
 }
 
 function detalleBloqueo(item: DisciplinaEjecucionItem): string {
+  const progreso = item.progreso
   if (item.estadoOperativo === 'sin_competencia') return 'Configurar competencia antes de habilitar.'
   if (item.estadoOperativo === 'sin_grilla') return 'Confirmar grilla antes de habilitar.'
   if (item.estadoOperativo === 'sin_juez') return 'Asignar juez antes de habilitar.'
   if (item.estadoOperativo === 'lista_para_iniciar') return 'La disciplina esta lista para iniciar.'
+  if (item.estadoOperativo === 'en_ejecucion' && progreso) {
+    const pendientes = Math.max(progreso.total - progreso.completadas, 0)
+    if (pendientes > 0) return `Quedan ${pendientes} performances pendientes.`
+    if (progreso.total > 0) return 'La disciplina puede finalizarse manualmente.'
+  }
   if (item.estadoOperativo === 'en_ejecucion') return 'La disciplina esta en ejecucion.'
   if (item.estadoOperativo === 'finalizada') return 'La disciplina finalizo y queda en modo lectura.'
   return 'La disciplina no esta disponible para habilitar.'
+}
+
+function puedeFinalizar(
+  item: DisciplinaEjecucionItem,
+  detalle: DetalleDisciplinaData | null,
+): boolean {
+  const progreso = detalle?.progreso ?? item.progreso
+  return Boolean(
+    item.estadoOperativo === 'en_ejecucion' &&
+      progreso &&
+      progreso.total > 0 &&
+      progreso.completadas === progreso.total,
+  )
 }
 
 interface DetalleConCompetenciaProps {

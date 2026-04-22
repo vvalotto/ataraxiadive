@@ -338,6 +338,8 @@ class Competencia(AggregateRoot):
         ejecutadas: int,
         dns_count: int,
         hash_sha256: str,
+        origen: str = "automatico",
+        finalizada_por: str | None = None,
     ) -> None:
         """Finaliza la Competencia cuando todas las performances están completas (INV-C-04).
 
@@ -348,6 +350,8 @@ class Competencia(AggregateRoot):
             ejecutadas: Cantidad en estado Ejecutada.
             dns_count: Cantidad en estado DNS.
             hash_sha256: Hash SHA-256 de la secuencia canónica de eventos de la disciplina.
+            origen: Origen auditable del cierre.
+            finalizada_por: Usuario que solicito el cierre manual, si aplica.
 
         Raises:
             CompetenciaNoFinalizable: INV-C-04 — quedan performances en AnunciadaAP o Llamada.
@@ -371,6 +375,8 @@ class Competencia(AggregateRoot):
             dns_count=dns_count,
             finalizada_en=now.isoformat(),
             hash_sha256=hash_sha256,
+            origen=origen,
+            finalizada_por=finalizada_por,
         )
         self._estado = EstadoCompetencia.Finalizada
         self._hash_sha256 = hash_sha256

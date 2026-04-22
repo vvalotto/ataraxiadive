@@ -57,6 +57,7 @@ async def trigger_finalizacion_si_corresponde(
         ejecutadas=estado.ejecutadas,
         dns_count=estado.dns_count,
         hash_sha256=hash_sha256,
+        origen="automatico",
     )
 
     for event in competencia.pull_events():
