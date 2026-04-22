@@ -1,0 +1,138 @@
+{
+  "metadata": {
+    "us_id": "US-5.2.1",
+    "us_title": "Vista maestro-detalle de disciplinas en ejecucion",
+    "us_points": 3,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-22T13:51:35.976482+00:00",
+    "completed_at": "2026-04-22T14:06:23.417645+00:00",
+    "total_elapsed_seconds": 887,
+    "effective_seconds": 887,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-04-22T13:53:16.001727+00:00",
+      "completed_at": "2026-04-22T13:55:26.591159+00:00",
+      "elapsed_seconds": 130,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-22T13:55:36.229648+00:00",
+      "completed_at": "2026-04-22T13:56:08.333092+00:00",
+      "elapsed_seconds": 32,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-04-22T13:56:34.374453+00:00",
+      "completed_at": "2026-04-22T13:57:18.637409+00:00",
+      "elapsed_seconds": 44,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-04-22T13:57:34.788690+00:00",
+      "completed_at": "2026-04-22T14:02:04.897996+00:00",
+      "elapsed_seconds": 270,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-22T14:02:12.017806+00:00",
+      "completed_at": "2026-04-22T14:02:46.416094+00:00",
+      "elapsed_seconds": 34,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-04-22T14:02:51.795628+00:00",
+      "completed_at": "2026-04-22T14:03:32.017996+00:00",
+      "elapsed_seconds": 40,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-04-22T14:03:40.269881+00:00",
+      "completed_at": "2026-04-22T14:03:49.540317+00:00",
+      "elapsed_seconds": 9,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-22T14:03:58.141601+00:00",
+      "completed_at": "2026-04-22T14:04:53.006074+00:00",
+      "elapsed_seconds": 54,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-04-22T14:04:58.484123+00:00",
+      "completed_at": "2026-04-22T14:05:14.362223+00:00",
+      "elapsed_seconds": 15,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-04-22T14:05:42.956923+00:00",
+      "completed_at": "2026-04-22T14:06:19.033353+00:00",
+      "elapsed_seconds": 36,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 0,
+    "completed_tasks": 0,
+    "total_phases": 10,
+    "estimated_total_minutes": 0,
+    "actual_total_minutes": 0,
+    "variance_minutes": 0,
+    "variance_percent": 0.0
+  }
+}
