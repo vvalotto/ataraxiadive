@@ -2,10 +2,10 @@
 │  🔍  DesignReviewer - Análisis de Calidad de Diseño                          │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 
-Archivos analizados:   269   
-Analyzers ejecutados:  12    
-Tiempo de ejecución:   13.29s
-Resultados totales:    208   
+Archivos analizados:   269  
+Analyzers ejecutados:  12   
+Tiempo de ejecución:   6.53s
+Resultados totales:    208  
 
 ───────────────────────── 📦  aggregates  (44 issues) ──────────────────────────
 

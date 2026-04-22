@@ -4,9 +4,9 @@
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-04-18 |
+| **Fecha** | 2026-04-22 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.17 — SP4 ✅ cerrado (INC-4.0..4.6 Done · SP-ADJ-06 · UAT PASS · tag v0.5.0 · BL-004) |
+| **Estado** | ✅ v1.21 — SP5 INC-5.1 ✅ cerrado (US-5.1.1..5.1.10 · INC-5.1-ADJ · DesignReviewer 0 CRITICAL · HITO-26) |
 
 ---
 
@@ -37,7 +37,8 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP4 INC-4.4 | Frontend (offline-first) | RF-EJ-03 (tarjetas), RF-EJ-06 (corrección con ventana) — operación sin red |
 | SP4 INC-4.5/4.6 | Notificaciones + Auditoría + Exportación | RF-NT-01..04, RF-EJ-06 |
 | SP-ADJ-06 | FAZ→FAAS (código + docs) + refactoring técnico + UAT SP4 | — (deuda técnica + validación) |
-| SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
+| SP5 INC-5.1 / INC-5.1-ADJ | Frontend organizador (panel completo) | RF-GT-01..07, RF-PR-04..08, RF-EJ-01..10 (UI organizador) |
+| SP5 (pendiente) | Integración externa | RF-IG-01..04, RF-IN-07 |
 
 ---
 
@@ -370,7 +371,38 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
-## 19. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §16 -->
+## 19. US-IEDD SP5 INC-5.1 — Panel del Organizador
+
+> Estado al 2026-04-21: 6/6 US mergeadas a `develop`. UAT funcional ejecutada — 5 hallazgos resueltos en INC-5.1-ADJ.
+> DesignReviewer consolidado INC-5.1: **0 CRITICAL · 208 WARNING** (`quality/reports/designreviewer/INC-5.1-report.txt`).
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-5.1.1 | 5.1 | `CrearTorneoPage` + formulario + `POST /torneos` + `useAuthStore` organizador | ✅ Done (PR #95) |
+| US-5.1.2 | 5.1 | `DetalleTorneoPage` + tabs (`Detalle`, `Inscriptos`, `Grilla`, `Jueces`, `Ejecucion`) + `AccionesPanel` (transiciones de fase) + `FaseBadge` | ✅ Done (PR #96) |
+| US-5.1.3 | 5.1 | `InscriptosPanel` — lista de atletas inscriptos con estado AP (`AnunciadaAP` / `NoCompite`) | ✅ Done (PR #97) |
+| US-5.1.4 | 5.1 | `GrillaPanel` — lista de disciplinas con botón generar/confirmar grilla por disciplina + estado `GrillaGenerada` / `GrillaConfirmada` | ✅ Done (PR #98) |
+| US-5.1.5 | 5.1 | `JuecesPanel` + `TablaJueces` + `JuezSelector` — asignación de juez por disciplina (`PUT /torneos/{id}/disciplinas/{disc}/juez`) | ✅ Done (PR #99) |
+| US-5.1.6 | 5.1 | `EjecucionPanel` — monitor de competencias activas con estado por disciplina + `GET /competencia?torneo_id={id}` | ✅ Done (PR #100) |
+
+---
+
+## 20. US-IEDD INC-5.1-ADJ — Ajuste post-UAT Panel del Organizador
+
+> INC-5.1-ADJ resuelve 5 hallazgos funcionales detectados en la UAT de INC-5.1.
+> Patrón SP-ADJ: plan en `docs/plans/inc-5.1-adj/PLAN-INC-5.1-ADJ.md`.
+> HITO-26: cobertura asimétrica del Event Storming como causa de los hallazgos.
+
+| US | Hallazgo UAT | Área | Descripción | Estado |
+|----|-------------|------|-------------|--------|
+| US-5.1.7 | UAT-5.1-03, UAT-5.1-05 | `DetalleTorneoPage` | Política de tabs por fase: `CREADO`→solo Detalle, `INSCRIPCION_ABIERTA`→+Inscriptos, `PREPARACION`→+Grilla+Jueces, `EJECUCION/PREMIACION/CERRADO`→todas; `CANCELADO`→resumen + mensaje, sin tabs operativas | ✅ Done (PR #101) |
+| US-5.1.8 | UAT-5.1-01 | `TorneoCompetenciasPage` | Composición disciplinas + competencias: `GET /torneos/{id}/disciplinas` como fuente primaria; cruzar con competencias materializadas; card por disciplina aunque no exista `competencia_id` | ✅ Done (PR #102) |
+| US-5.1.9 | UAT-5.1-02 | `JuecesPanel`, `TablaJueces` | Precondición grilla en asignación de jueces: selector habilitado solo si disciplina tiene `Competencia` en estado `GrillaGenerada`, `GrillaConfirmada`, `EnEjecucion` o `Finalizada` | ✅ Done (PR #103) |
+| US-5.1.10 | UAT-5.1-04 | `AccionesPanel` | Normalización del campo `estado` en `fetchTorneo` — fix mismatch entre valor HTTP y enum `EstadoTorneo`; `EJECUCION` muestra `Iniciar premiacion`, nunca `Iniciar ejecucion` | ✅ Done (PR #104) |
+
+---
+
+## 21. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §19 -->
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -389,7 +421,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 20. Cobertura Total
+## 22. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -407,7 +439,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 21. US → Tests
+## 23. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -457,13 +489,20 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-4.6.2 | unit/competencia/domain (CalculadorHashCompetencia) + integration/competencia | ✅ Done |
 | US-4.6.3 | frontend (build + lint) · UAT INC-4.6 iPad organizador | ✅ UAT SP4 2026-04-18 |
 | US-4.6.4 | unit/resultados/application (ExportarResultados) + integration/resultados · UAT INC-4.6 | ✅ UAT SP4 2026-04-18 |
-| US-5.1.1 | frontend (build + eslint src) · features/US-5.1.1 | ✅ Implementada (lint global bloqueado por `.vite/deps` generado) |
-| US-5.1.2 | frontend (build + eslint src) · features/US-5.1.2 | ✅ Implementada (lint global bloqueado por `.vite/deps` generado) |
-| US-5.1.3 | frontend (build + eslint src) · features/US-5.1.3 | ✅ Implementada (lint global bloqueado por `.vite/deps` generado) |
+| US-5.1.1 | frontend (build + eslint src) · UAT INC-5.1 2026-04-21 | ✅ Done (PR #95) |
+| US-5.1.2 | frontend (build + eslint src) · UAT INC-5.1 2026-04-21 | ✅ Done (PR #96) |
+| US-5.1.3 | frontend (build + eslint src) · UAT INC-5.1 2026-04-21 | ✅ Done (PR #97) |
+| US-5.1.4 | frontend (build + eslint src) · UAT INC-5.1 2026-04-21 | ✅ Done (PR #98) |
+| US-5.1.5 | frontend (build + eslint src) · UAT INC-5.1 2026-04-21 | ✅ Done (PR #99) |
+| US-5.1.6 | frontend (build + eslint src) · UAT INC-5.1 2026-04-21 | ✅ Done (PR #100) |
+| US-5.1.7 | frontend (build + eslint src) · UAT regresión INC-5.1-ADJ 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #101) |
+| US-5.1.8 | frontend (build + eslint src) · UAT regresión INC-5.1-ADJ 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #102) |
+| US-5.1.9 | frontend (build + eslint src) · UAT regresión INC-5.1-ADJ 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #103) |
+| US-5.1.10 | frontend (build + eslint src) · UAT regresión INC-5.1-ADJ 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #104) |
 
 ---
 
-## 22. US → ADR
+## 24. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -491,6 +530,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.18 — 2026-04-20: SP5 iniciado · US-5.1.1 implementada · trazabilidad frontend de creacion de torneo agregada*
 *v1.19 — 2026-04-20: US-5.1.2 implementada · trazabilidad frontend de gestion de fases agregada*
 *v1.20 — 2026-04-20: US-5.1.3 implementada · trazabilidad frontend de inscriptos/AP agregada*
+*v1.21 — 2026-04-22: INC-5.1 cerrado (§19 nuevo · DesignReviewer 0 CRITICAL · 208 WARNING) · INC-5.1-ADJ §20 · §§ renumerados 21..24 · US→Tests US-5.1.1..5.1.10 · §2 cobertura actualizada · HITO-26*
 *v1.15 — 2026-04-13: INC-4.4 especificado (§15 nuevo — 3 US offline-first) · §§ renumerados 16..19 · §2 cobertura actualizada*
 *v1.14 — 2026-04-13: INC-4.3 completado (§14 — 5/5 US ✅, UAT BA 2025) · RF-NT §3.7 INC corregido (4.2→4.5) · US-4.3.x en §18*
 *v1.13 — 2026-04-11: US-4.2.2 implementada y mergeada · DesignReviewer consolidado INC-4.2 OK · validación manual pendiente*
