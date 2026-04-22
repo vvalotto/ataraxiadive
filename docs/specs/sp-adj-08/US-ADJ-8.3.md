@@ -1,6 +1,6 @@
 # US-ADJ-8.3: Fortalecer cancelacion de torneo — UAT-5.2 accion destructiva
 
-**Estado**: `Pendiente`
+**Estado**: `Implementada`
 **Iteracion / Sprint**: SP-ADJ-08
 **Tipo**: hardening UX de accion destructiva
 **Agregado principal afectado**: `Torneo`
@@ -127,6 +127,7 @@ Feature: Cancelacion fuerte de torneo
 1. La comparacion debe ser exacta contra el nombre mostrado del torneo; no usar coincidencia parcial.
 2. Mantener accesibilidad basica del modal: foco inicial, cierre por cancelar y labels claros.
 3. Evitar que Enter confirme si el texto todavia no coincide.
+4. Implementado en frontend manteniendo la API existente de cancelacion.
 
 ---
 

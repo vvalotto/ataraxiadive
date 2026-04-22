@@ -1,0 +1,20 @@
+{
+  "us_id": "US-ADJ-8.3",
+  "date": "2026-04-22",
+  "scope": "frontend organizador",
+  "checks": [
+    {
+      "command": "npm run lint",
+      "cwd": "frontend",
+      "result": "OK"
+    },
+    {
+      "command": "npm run build",
+      "cwd": "frontend",
+      "result": "OK"
+    }
+  ],
+  "notes": [
+    "No se ejecutaron tests UI automatizados por falta de harness React/browser."
+  ]
+}

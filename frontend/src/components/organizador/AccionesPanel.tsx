@@ -67,8 +67,10 @@ export function AccionesPanel({
 }: AccionesPanelProps) {
   const [runningAction, setRunningAction] = useState<string | null>(null)
   const [showCancelDialog, setShowCancelDialog] = useState(false)
+  const [cancelConfirmation, setCancelConfirmation] = useState('')
   const acciones = ACCIONES_POR_ESTADO[estado] ?? []
   const puedeCancelar = !ESTADOS_TERMINALES.has(estado)
+  const canConfirmCancel = cancelConfirmation === torneoNombre
   const bloqueoPremiacion =
     estado === 'EJECUCION' &&
     (isPremiacionStatusLoading || (premiacionPendientes?.length ?? 0) > 0)
@@ -90,6 +92,7 @@ export function AccionesPanel({
   }
 
   async function confirmCancel() {
+    if (!canConfirmCancel) return
     setRunningAction('Cancelar torneo')
     onError('')
     try {
@@ -101,6 +104,17 @@ export function AccionesPanel({
     } finally {
       setRunningAction(null)
     }
+  }
+
+  function openCancelDialog() {
+    setCancelConfirmation('')
+    setShowCancelDialog(true)
+  }
+
+  function closeCancelDialog() {
+    if (runningAction !== null) return
+    setCancelConfirmation('')
+    setShowCancelDialog(false)
   }
 
   if (acciones.length === 0 && !puedeCancelar) {
@@ -131,16 +145,6 @@ export function AccionesPanel({
               {runningAction === action.label ? 'Procesando...' : action.label}
             </button>
           ))}
-          {puedeCancelar ? (
-            <button
-              type="button"
-              onClick={() => setShowCancelDialog(true)}
-              disabled={runningAction !== null}
-              className={buttonClass('danger')}
-            >
-              Cancelar torneo
-            </button>
-          ) : null}
         </div>
       </div>
 
@@ -158,37 +162,75 @@ export function AccionesPanel({
         </p>
       ) : null}
 
+      {puedeCancelar ? (
+        <div className="mt-5 border-t border-red-200 pt-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm font-semibold text-red-950">Zona de peligro</p>
+              <p className="mt-1 text-sm text-red-800">
+                Cancelar el torneo detiene el flujo operativo.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={openCancelDialog}
+              disabled={runningAction !== null}
+              className={buttonClass('danger')}
+            >
+              Cancelar torneo
+            </button>
+          </div>
+        </div>
+      ) : null}
+
       {showCancelDialog ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/40 px-4">
-          <div
+          <form
             role="dialog"
             aria-modal="true"
             aria-labelledby="cancelar-torneo-title"
+            onSubmit={(event) => {
+              event.preventDefault()
+              void confirmCancel()
+            }}
             className="w-full max-w-md rounded-lg bg-white p-5 shadow-2xl"
           >
             <h3 id="cancelar-torneo-title" className="text-lg font-semibold text-stone-950">
               Cancelar torneo {torneoNombre}
             </h3>
-            <p className="mt-2 text-sm text-stone-600">Esta accion no se puede deshacer.</p>
+            <p className="mt-2 text-sm text-stone-600">
+              Esta accion no se puede deshacer. Escribi el nombre exacto del torneo para
+              confirmar.
+            </p>
+            <label className="mt-5 block text-sm font-semibold text-stone-900">
+              Nombre del torneo
+              <input
+                value={cancelConfirmation}
+                onChange={(event) => setCancelConfirmation(event.target.value)}
+                disabled={runningAction !== null}
+                autoFocus
+                className="mt-2 min-h-10 w-full rounded-lg border border-stone-300 px-3 py-2 text-sm"
+                placeholder={torneoNombre}
+              />
+            </label>
             <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-end">
               <button
                 type="button"
-                onClick={() => setShowCancelDialog(false)}
+                onClick={closeCancelDialog}
                 disabled={runningAction !== null}
                 className="rounded-lg border border-stone-300 px-4 py-2 text-sm font-semibold text-stone-800"
               >
                 Mantener torneo
               </button>
               <button
-                type="button"
-                onClick={() => void confirmCancel()}
-                disabled={runningAction !== null}
+                type="submit"
+                disabled={runningAction !== null || !canConfirmCancel}
                 className="rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white disabled:bg-red-400"
               >
                 {runningAction === 'Cancelar torneo' ? 'Cancelando...' : 'Confirmar cancelacion'}
               </button>
             </div>
-          </div>
+          </form>
         </div>
       ) : null}
     </section>
