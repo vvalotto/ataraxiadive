@@ -243,6 +243,23 @@ export async function confirmarGrilla(payload: {
   await parseResponse<void>(response)
 }
 
+export async function iniciarCompetencia(payload: {
+  competenciaId: string
+  disciplina: string
+  juezId: string
+}): Promise<void> {
+  const response = await fetch(`/competencia/${payload.competenciaId}/iniciar`, {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      disciplina: payload.disciplina,
+      juez_id: payload.juezId,
+    }),
+  })
+
+  await parseResponse<void>(response)
+}
+
 export async function fetchPerformanceActual(
   competenciaId: string,
 ): Promise<PerformanceActualDto | null> {
