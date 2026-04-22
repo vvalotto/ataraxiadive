@@ -1,6 +1,6 @@
 # US-5.1.10: Corregir acciones de fase en AccionesPanel
 
-**Estado**: `To Do`
+**Estado**: `Done`
 **Sprint**: SP5 — La Puesta en Marcha
 **Incremento**: INC-5.1-ADJ
 **Bounded Context**: `frontend`
@@ -59,7 +59,7 @@ Esta US debe verificar la causa exacta y aplicar el fix correspondiente.
 
 ### Investigación y fix requeridos
 
-1. Hacer `console.log(estado)` en `AccionesPanel` con el torneo afectado para confirmar el valor real recibido.
+1. Verificar el valor real recibido por `AccionesPanel`.
 2. Comparar con `GET /torneos/{id}` en backend: verificar campo y formato del `estado` retornado.
 3. Si hay mismatch de string, corregirlo en `fetchTorneo` o en el tipo `EstadoTorneo`.
 4. Si el torneo tiene estado inconsistente en DB, documentar como dato corrupto y verificar si el backend acepta `EJECUCION` como valor canónico.

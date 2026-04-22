@@ -27,6 +27,10 @@ export interface TorneoDto {
   estado: EstadoTorneo
 }
 
+type TorneoApiDto = Omit<TorneoDto, 'estado'> & {
+  estado: unknown
+}
+
 export type EstadoTorneo =
   | 'CREADO'
   | 'INSCRIPCION_ABIERTA'
@@ -35,6 +39,18 @@ export type EstadoTorneo =
   | 'PREMIACION'
   | 'CERRADO'
   | 'CANCELADO'
+
+const ESTADO_TORNEO_ALIASES: Record<string, EstadoTorneo> = {
+  CREADO: 'CREADO',
+  INSCRIPCION_ABIERTA: 'INSCRIPCION_ABIERTA',
+  INSCRIPCIONABIERTA: 'INSCRIPCION_ABIERTA',
+  PREPARACION: 'PREPARACION',
+  EJECUCION: 'EJECUCION',
+  ENEJECUCION: 'EJECUCION',
+  PREMIACION: 'PREMIACION',
+  CERRADO: 'CERRADO',
+  CANCELADO: 'CANCELADO',
+}
 
 export type DisciplinaCodigo =
   | 'STA'
@@ -99,6 +115,34 @@ function formatDetail(detail: unknown, fallback: string): string {
   return fallback
 }
 
+function normalizarClaveEstado(rawEstado: unknown): string {
+  return String(rawEstado)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .toUpperCase()
+}
+
+function normalizarEstadoTorneo(rawEstado: unknown): EstadoTorneo {
+  const normalized = normalizarClaveEstado(rawEstado)
+  const compact = normalized.split('_').join('')
+  const estado = ESTADO_TORNEO_ALIASES[normalized] ?? ESTADO_TORNEO_ALIASES[compact]
+
+  if (!estado) {
+    throw new ApiError(500, `Estado de torneo desconocido: ${String(rawEstado)}`)
+  }
+
+  return estado
+}
+
+function normalizarTorneo(torneo: TorneoApiDto): TorneoDto {
+  return {
+    ...torneo,
+    estado: normalizarEstadoTorneo(torneo.estado),
+  }
+}
+
 async function parseResponse<T>(response: Response): Promise<T> {
   if (response.ok) {
     if (response.status === 204) {
@@ -120,12 +164,14 @@ async function parseResponse<T>(response: Response): Promise<T> {
 
 export async function fetchTorneos(): Promise<TorneoDto[]> {
   const response = await fetch('/torneos')
-  return parseResponse<TorneoDto[]>(response)
+  const torneos = await parseResponse<TorneoApiDto[]>(response)
+  return torneos.map(normalizarTorneo)
 }
 
 export async function fetchTorneo(torneoId: string): Promise<TorneoDto> {
   const response = await fetch(`/torneos/${torneoId}`)
-  return parseResponse<TorneoDto>(response)
+  const torneo = await parseResponse<TorneoApiDto>(response)
+  return normalizarTorneo(torneo)
 }
 
 export async function crearTorneo(payload: CrearTorneoPayload): Promise<CrearTorneoResponse> {
