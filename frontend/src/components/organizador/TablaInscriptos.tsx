@@ -34,7 +34,7 @@ export function TablaInscriptos({ rows, disciplinas }: TablaInscriptosProps) {
   if (rows.length === 0) {
     return (
       <div className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
-        No hay atletas inscriptos en este torneo
+        Todavia no hay inscriptos para este torneo
       </div>
     )
   }

@@ -1,6 +1,6 @@
 # US-ADJ-8.1: Clarificar estados y lenguaje operativo del panel organizador — UAT-5.2 UX
 
-**Estado**: `Pendiente`
+**Estado**: `Implementada`
 **Iteracion / Sprint**: SP-ADJ-08
 **Tipo**: fix UX funcional frontend
 **Agregado principal afectado**: `DetalleTorneoPage` / paneles de organizador
@@ -146,6 +146,8 @@ Feature: Claridad operativa del panel organizador
 1. No esconder datos utiles; el cambio es de jerarquia y lenguaje, no de perdida de informacion.
 2. Evitar duplicar strings dispersos si ya existe un componente/helper de estado vacio.
 3. Verificar en viewport mobile y desktop que el destaque de disciplina seleccionada no degrade legibilidad.
+4. Implementado: los cambios se limitaron a componentes frontend del panel organizador;
+   no se modificaron reglas backend.
 
 ---
 

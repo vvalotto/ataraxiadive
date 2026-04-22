@@ -83,9 +83,9 @@ function estadoOperativoDe(
 
 function estadoLabel(estado: EstadoOperativo): string {
   const labels: Record<EstadoOperativo, string> = {
-    sin_competencia: 'Configurar competencia',
-    sin_grilla: 'Confirmar grilla antes de habilitar',
-    sin_juez: 'Asignar juez antes de habilitar',
+    sin_competencia: 'Falta grilla',
+    sin_grilla: 'Grilla pendiente',
+    sin_juez: 'Juez pendiente',
     lista_para_iniciar: 'Lista para iniciar',
     en_ejecucion: 'En ejecucion',
     finalizada: 'Finalizada',
@@ -338,7 +338,9 @@ function DisciplinaMaestro({
             onClick={() => onSelect(item.disciplina.disciplina)}
             className={[
               'w-full rounded-lg border bg-white p-4 text-left transition',
-              selected ? 'border-stone-900 shadow-[0_20px_60px_rgba(120,93,54,0.10)]' : 'border-stone-200 hover:border-stone-400',
+              selected
+                ? 'border-sky-700 bg-sky-50 shadow-[0_20px_60px_rgba(120,93,54,0.10)]'
+                : 'border-stone-200 hover:border-stone-400',
             ].join(' ')}
           >
             <div className="flex items-start justify-between gap-3">
@@ -413,7 +415,7 @@ function DisciplinaDetalle({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-lg border border-stone-300 bg-white p-5">
+      <div className="rounded-lg border border-sky-700 bg-sky-50/40 p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase text-stone-500">Detalle</p>
@@ -481,9 +483,16 @@ function DisciplinaDetalle({
 
 function detalleBloqueo(item: DisciplinaEjecucionItem): string {
   const progreso = item.progreso
-  if (item.estadoOperativo === 'sin_competencia') return 'Configurar competencia antes de habilitar.'
-  if (item.estadoOperativo === 'sin_grilla') return 'Confirmar grilla antes de habilitar.'
-  if (item.estadoOperativo === 'sin_juez') return 'Asignar juez antes de habilitar.'
+  const disciplina = item.disciplina.disciplina
+  if (item.estadoOperativo === 'sin_competencia') {
+    return `Falta generar la grilla de ${disciplina} en el tab Grilla.`
+  }
+  if (item.estadoOperativo === 'sin_grilla') {
+    return `Falta confirmar la grilla de ${disciplina} en el tab Grilla.`
+  }
+  if (item.estadoOperativo === 'sin_juez') {
+    return `Falta asignar juez a ${disciplina} en el tab Jueces.`
+  }
   if (item.estadoOperativo === 'lista_para_iniciar') return 'La disciplina esta lista para iniciar.'
   if (item.estadoOperativo === 'en_ejecucion' && progreso) {
     const pendientes = Math.max(progreso.total - progreso.completadas, 0)
