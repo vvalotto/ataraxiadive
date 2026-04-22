@@ -38,6 +38,10 @@ from competencia.application.commands.generar_grilla import (
     GenerarGrillaCommand,
     GenerarGrillaHandler,
 )
+from competencia.application.commands.finalizar_competencia_manual import (
+    FinalizarCompetenciaManualCommand,
+    FinalizarCompetenciaManualHandler,
+)
 from competencia.application.commands.llamar_atleta import (
     AndarivelesConflicto,
     CompetenciaNoEnEjecucion,
@@ -167,6 +171,12 @@ class IniciarCompetenciaBody(BaseModel):
 
     disciplina: Disciplina
     juez_id: str
+
+
+class FinalizarCompetenciaBody(BaseModel):
+    """Body del endpoint POST /finalizar."""
+
+    disciplina: Disciplina
 
 
 class GenerarGrillaBody(BaseModel):
@@ -486,6 +496,14 @@ def get_iniciar_competencia_handler(event_store: EventStoreDep) -> IniciarCompet
     return IniciarCompetenciaHandler(event_store)
 
 
+def get_finalizar_competencia_manual_handler(
+    event_store: EventStoreDep,
+    performances_estado: PerformancesEstadoAdapterDep,
+) -> FinalizarCompetenciaManualHandler:
+    """Dependency: handler para finalizar manualmente la competencia."""
+    return FinalizarCompetenciaManualHandler(event_store, performances_estado)
+
+
 def get_obtener_grilla_handler(event_store: EventStoreDep) -> ObtenerGrillaHandler:
     """Dependency: handler de consulta de la grilla."""
     return ObtenerGrillaHandler(event_store, AtletaNombreAdapter())
@@ -503,6 +521,10 @@ ConfirmarGrillaHandlerDep = Annotated[ConfirmarGrillaHandler, Depends(get_confir
 GenerarGrillaHandlerDep = Annotated[GenerarGrillaHandler, Depends(get_generar_grilla_handler)]
 IniciarCompetenciaHandlerDep = Annotated[
     IniciarCompetenciaHandler, Depends(get_iniciar_competencia_handler)
+]
+FinalizarCompetenciaManualHandlerDep = Annotated[
+    FinalizarCompetenciaManualHandler,
+    Depends(get_finalizar_competencia_manual_handler),
 ]
 ObtenerGrillaHandlerDep = Annotated[ObtenerGrillaHandler, Depends(get_obtener_grilla_handler)]
 ObtenerEstadoCompetenciaHandlerDep = Annotated[
@@ -983,6 +1005,24 @@ async def post_iniciar_competencia(
             competencia_id=competencia_id,
             disciplina=body.disciplina,
             juez_id=body.juez_id,
+        )
+    )
+    return Response(status_code=204)
+
+
+@router.post("/{competencia_id}/finalizar", response_class=JSONResponse)
+async def post_finalizar_competencia(
+    competencia_id: UUID,
+    body: FinalizarCompetenciaBody,
+    handler: FinalizarCompetenciaManualHandlerDep,
+    user: OrganizadorDep,
+) -> JSONResponse:
+    """Finaliza manualmente una competencia sin performances pendientes."""
+    await handler.handle(
+        FinalizarCompetenciaManualCommand(
+            competencia_id=competencia_id,
+            disciplina=body.disciplina,
+            solicitado_por=user["email"],
         )
     )
     return Response(status_code=204)

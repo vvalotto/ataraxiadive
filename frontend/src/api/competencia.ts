@@ -260,6 +260,21 @@ export async function iniciarCompetencia(payload: {
   await parseResponse<void>(response)
 }
 
+export async function finalizarCompetencia(payload: {
+  competenciaId: string
+  disciplina: string
+}): Promise<void> {
+  const response = await fetch(`/competencia/${payload.competenciaId}/finalizar`, {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      disciplina: payload.disciplina,
+    }),
+  })
+
+  await parseResponse<void>(response)
+}
+
 export async function fetchPerformanceActual(
   competenciaId: string,
 ): Promise<PerformanceActualDto | null> {

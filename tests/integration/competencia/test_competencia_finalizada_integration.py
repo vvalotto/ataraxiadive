@@ -305,3 +305,5 @@ async def test_competencia_finalizada_payload_correcto(
     assert payload["dns_count"] == 1
     assert "hash_sha256" in payload
     assert len(payload["hash_sha256"]) == 64
+    assert payload["origen"] == "automatico"
+    assert payload["finalizada_por"] is None
