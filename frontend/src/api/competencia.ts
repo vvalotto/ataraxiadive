@@ -1,5 +1,5 @@
 import type { EstadoPerformance } from '../types/auth'
-import { getToken } from './tokenProvider'
+import { getToken, handleUnauthorized } from './tokenProvider'
 
 export class ApiError extends Error {
   status: number
@@ -51,6 +51,7 @@ export interface GrillaAtletaDto {
   ot_programado: string
   ap_declarado: string
   unidad: string
+  performance?: string | null
   estado: EstadoPerformance
   tarjeta_asignada: string | null
 }
@@ -118,6 +119,10 @@ async function parseResponse<T>(response: Response): Promise<T> {
       return undefined as T
     }
     return response.json() as Promise<T>
+  }
+
+  if (response.status === 401) {
+    handleUnauthorized()
   }
 
   let detail = `Error de API: ${response.status}`

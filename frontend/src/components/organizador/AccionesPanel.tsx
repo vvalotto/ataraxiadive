@@ -24,7 +24,7 @@ const ACCIONES_POR_ESTADO: Partial<Record<EstadoTorneo, AccionFase[]>> = {
   PREPARACION: [{ label: 'Iniciar ejecucion', run: iniciarEjecucion, variant: 'primary' }],
   EJECUCION: [
     { label: 'Volver a preparacion', run: volverPreparacion, variant: 'secondary' },
-    { label: 'Pasar a premiacion', run: iniciarPremiacion, variant: 'primary' },
+    { label: 'Premiación', run: iniciarPremiacion, variant: 'primary' },
   ],
   PREMIACION: [{ label: 'Cerrar torneo', run: cerrarTorneo, variant: 'primary' }],
 }
@@ -37,6 +37,7 @@ interface AccionesPanelProps {
   estado: EstadoTorneo
   premiacionPendientes?: string[] | null
   isPremiacionStatusLoading?: boolean
+  hayDisciplinasEnCurso?: boolean
   onSuccess: () => Promise<void>
   onError: (message: string) => void
 }
@@ -62,21 +63,27 @@ export function AccionesPanel({
   estado,
   premiacionPendientes,
   isPremiacionStatusLoading = false,
+  hayDisciplinasEnCurso = false,
   onSuccess,
   onError,
 }: AccionesPanelProps) {
   const [runningAction, setRunningAction] = useState<string | null>(null)
   const [showCancelDialog, setShowCancelDialog] = useState(false)
   const [cancelConfirmation, setCancelConfirmation] = useState('')
-  const acciones = ACCIONES_POR_ESTADO[estado] ?? []
   const puedeCancelar = !ESTADOS_TERMINALES.has(estado)
   const canConfirmCancel = cancelConfirmation === torneoNombre
   const bloqueoPremiacion =
     estado === 'EJECUCION' &&
     (isPremiacionStatusLoading || (premiacionPendientes?.length ?? 0) > 0)
+  const acciones = (ACCIONES_POR_ESTADO[estado] ?? []).filter((action) => {
+    if (action.label === 'Volver a preparacion' && hayDisciplinasEnCurso) {
+      return false
+    }
+    return true
+  })
 
   async function runAction(action: AccionFase) {
-    if (action.label === 'Pasar a premiacion' && bloqueoPremiacion) {
+    if (action.label === 'Premiación' && bloqueoPremiacion) {
       return
     }
     setRunningAction(action.label)
@@ -138,7 +145,7 @@ export function AccionesPanel({
               onClick={() => void runAction(action)}
               disabled={
                 runningAction !== null ||
-                (action.label === 'Pasar a premiacion' && bloqueoPremiacion)
+                (action.label === 'Premiación' && bloqueoPremiacion)
               }
               className={buttonClass(action.variant ?? 'primary')}
             >

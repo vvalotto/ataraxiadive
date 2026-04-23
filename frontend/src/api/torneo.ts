@@ -1,4 +1,4 @@
-import { getToken } from './tokenProvider'
+import { getToken, handleUnauthorized } from './tokenProvider'
 
 export class ApiError extends Error {
   status: number
@@ -149,6 +149,10 @@ async function parseResponse<T>(response: Response): Promise<T> {
       return undefined as T
     }
     return response.json() as Promise<T>
+  }
+
+  if (response.status === 401) {
+    handleUnauthorized()
   }
 
   const fallback = `Error de API: ${response.status}`

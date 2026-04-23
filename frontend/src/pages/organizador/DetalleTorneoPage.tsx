@@ -90,6 +90,10 @@ export function DetalleTorneoPage() {
     estadoCompetenciasQueries,
     torneoQuery.data?.estado,
   ])
+  const hayDisciplinasEnCurso = useMemo(() => {
+    if (torneoQuery.data?.estado !== 'EJECUCION') return false
+    return estadoCompetenciasQueries.some((query) => query.data?.estado === 'EnEjecucion')
+  }, [estadoCompetenciasQueries, torneoQuery.data?.estado])
   const isCancelado = torneoQuery.data?.estado === 'CANCELADO'
 
   return (
@@ -177,6 +181,7 @@ export function DetalleTorneoPage() {
               estado={torneoQuery.data.estado}
               premiacionPendientes={premiacionPendientes}
               isPremiacionStatusLoading={isPremiacionStatusLoading}
+              hayDisciplinasEnCurso={hayDisciplinasEnCurso || isPremiacionStatusLoading}
               onSuccess={async () => {
                 setTransitionError('')
                 await torneoQuery.refetch()

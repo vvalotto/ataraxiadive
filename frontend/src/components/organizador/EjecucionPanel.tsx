@@ -16,6 +16,7 @@ import {
   type ProgresoCompetenciaDto,
   type ProximoAtletaDto,
 } from '../../api/competencia'
+import { listarUsuariosPorRol, type UsuarioDto } from '../../api/identidad'
 import { listarDisciplinasTorneo, type DisciplinaTorneoDto } from '../../api/torneo'
 import { MonitorDisciplina } from './MonitorDisciplina'
 import { ProgressBar } from './ProgressBar'
@@ -101,6 +102,11 @@ function estadoClasses(estado: EstadoOperativo): string {
   return 'border-amber-300 bg-amber-50 text-amber-900'
 }
 
+function juezLabel(jueces: UsuarioDto[], juezId: string | null): string {
+  if (!juezId) return 'Sin juez asignado'
+  return jueces.find((juez) => juez.usuario_id === juezId)?.email ?? 'Juez no encontrado'
+}
+
 async function fetchCompetenciasConEstado(torneoId: string): Promise<CompetenciaConEstado[]> {
   const competencias = await fetchCompetenciasPorTorneo(torneoId)
 
@@ -176,6 +182,10 @@ export function EjecucionPanel({ torneoId }: EjecucionPanelProps) {
     queryKey: ['ejecucion-disciplinas', torneoId],
     queryFn: () => loadEjecucionData(torneoId),
     refetchInterval: 30000,
+  })
+  const juecesQuery = useQuery({
+    queryKey: ['usuarios', 'JUEZ'],
+    queryFn: () => listarUsuariosPorRol('JUEZ'),
   })
 
   const disciplinas = useMemo(
@@ -290,9 +300,10 @@ export function EjecucionPanel({ torneoId }: EjecucionPanelProps) {
         </div>
       ) : null}
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(18rem,24rem)_1fr]">
-        <DisciplinaMaestro
+      <div className="space-y-4">
+        <DisciplinaTabs
           disciplinas={disciplinas}
+          jueces={juecesQuery.data ?? []}
           selectedDisciplina={selectedItem?.disciplina.disciplina ?? null}
           onSelect={(disciplina) => {
             setError('')
@@ -302,6 +313,7 @@ export function EjecucionPanel({ torneoId }: EjecucionPanelProps) {
 
         <DisciplinaDetalle
           item={selectedItem}
+          jueces={juecesQuery.data ?? []}
           detalle={detalleQuery.data ?? null}
           isLoading={detalleQuery.isLoading}
           isError={detalleQuery.isError}
@@ -315,19 +327,22 @@ export function EjecucionPanel({ torneoId }: EjecucionPanelProps) {
   )
 }
 
-interface DisciplinaMaestroProps {
+interface DisciplinaTabsProps {
   disciplinas: DisciplinaEjecucionItem[]
+  jueces: UsuarioDto[]
   selectedDisciplina: string | null
   onSelect: (disciplina: string) => void
 }
 
-function DisciplinaMaestro({
+function DisciplinaTabs({
   disciplinas,
+  jueces,
   selectedDisciplina,
   onSelect,
-}: DisciplinaMaestroProps) {
+}: DisciplinaTabsProps) {
   return (
-    <div className="space-y-3">
+    <div className="overflow-x-auto">
+      <div className="flex min-w-max gap-2 border-b border-stone-200 pb-2">
       {disciplinas.map((item) => {
         const selected = item.disciplina.disciplina === selectedDisciplina
         const progreso = item.progreso
@@ -337,22 +352,19 @@ function DisciplinaMaestro({
             type="button"
             onClick={() => onSelect(item.disciplina.disciplina)}
             className={[
-              'w-full rounded-lg border bg-white p-4 text-left transition',
+              'min-w-40 rounded-t-lg border border-b-0 bg-white px-4 py-3 text-left transition',
               selected
-                ? 'border-sky-700 bg-sky-50 shadow-[0_20px_60px_rgba(120,93,54,0.10)]'
+                ? 'border-sky-700 bg-sky-50 shadow-[0_16px_36px_rgba(120,93,54,0.10)]'
                 : 'border-stone-200 hover:border-stone-400',
             ].join(' ')}
           >
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-xs font-semibold uppercase text-stone-500">Disciplina</p>
-                <h3 className="mt-1 text-lg font-semibold text-stone-950">
-                  {item.disciplina.disciplina}
-                </h3>
-              </div>
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-base font-semibold text-stone-950">
+                {item.disciplina.disciplina}
+              </h3>
               <span
                 className={[
-                  'rounded-lg border px-3 py-2 text-xs font-semibold',
+                  'rounded-lg border px-2 py-1 text-xs font-semibold',
                   estadoClasses(item.estadoOperativo),
                 ].join(' ')}
               >
@@ -360,28 +372,26 @@ function DisciplinaMaestro({
               </span>
             </div>
 
-            <div className="mt-4 space-y-2 text-sm text-stone-600">
-              <p>Juez: {item.disciplina.juez_id ?? 'Sin juez asignado'}</p>
-              <p>
-                Competencia:{' '}
-                {item.competencia ? item.competencia.competencia_id.slice(0, 8) : 'Pendiente'}
-              </p>
+            <div className="mt-3 space-y-1 text-xs text-stone-600">
+              <p>Juez: {juezLabel(jueces, item.disciplina.juez_id)}</p>
             </div>
 
             {progreso ? (
-              <div className="mt-4">
+              <div className="mt-3">
                 <ProgressBar completed={progreso.completadas} total={progreso.total} />
               </div>
             ) : null}
           </button>
         )
       })}
+      </div>
     </div>
   )
 }
 
 interface DisciplinaDetalleProps {
   item: DisciplinaEjecucionItem | null
+  jueces: UsuarioDto[]
   detalle: DetalleDisciplinaData | null
   isLoading: boolean
   isError: boolean
@@ -393,6 +403,7 @@ interface DisciplinaDetalleProps {
 
 function DisciplinaDetalle({
   item,
+  jueces,
   detalle,
   isLoading,
   isError,
@@ -423,7 +434,7 @@ function DisciplinaDetalle({
               {item.disciplina.disciplina}
             </h3>
             <p className="mt-2 text-sm text-stone-600">
-              Juez asignado: {item.disciplina.juez_id ?? 'Sin juez asignado'}
+              Juez asignado: {juezLabel(jueces, item.disciplina.juez_id)}
             </p>
           </div>
           <span
@@ -530,6 +541,8 @@ function DetalleConCompetencia({
   isLoading,
   isError,
 }: DetalleConCompetenciaProps) {
+  const [showGrilla, setShowGrilla] = useState(false)
+
   if (isLoading) {
     return (
       <div className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
@@ -551,8 +564,6 @@ function DetalleConCompetencia({
       <MonitorDisciplina
         competencia={item.competencia}
         progreso={detalle.progreso}
-        performanceActual={detalle.performanceActual}
-        proximas={detalle.proximas}
         grilla={detalle.grilla}
       />
     )
@@ -560,34 +571,58 @@ function DetalleConCompetencia({
 
   return (
     <div className="rounded-lg border border-stone-300 bg-white p-5">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm font-semibold text-stone-950">Grilla OT</p>
-        <p className="text-sm text-stone-600">
-          {detalle.progreso.completadas} / {detalle.progreso.total} completadas
-        </p>
-      </div>
+      <div className="rounded-lg border border-stone-200">
+        <button
+          type="button"
+          onClick={() => setShowGrilla((current) => !current)}
+          className="flex min-h-12 w-full items-center justify-between gap-3 px-4 py-3 text-left"
+          aria-expanded={showGrilla}
+        >
+          <span>
+            <span className="block text-sm font-semibold text-stone-950">Grilla de atletas</span>
+            <span className="block text-xs text-stone-600">
+              {detalle.progreso.completadas} / {detalle.progreso.total} completadas
+            </span>
+          </span>
+          <span className="text-sm font-semibold text-stone-800">
+            {showGrilla ? 'Ocultar' : 'Mostrar'}
+          </span>
+        </button>
 
-      <div className="mt-4 overflow-x-auto rounded-lg border border-stone-200">
-        <table className="min-w-full divide-y divide-stone-200 text-left text-sm">
-          <thead className="bg-stone-50 text-xs font-semibold uppercase text-stone-500">
-            <tr>
-              <th className="px-4 py-3">Posicion</th>
-              <th className="px-4 py-3">Atleta</th>
-              <th className="px-4 py-3">OT</th>
-              <th className="px-4 py-3">Estado</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-stone-200 bg-white">
-            {detalle.grilla.map((row) => (
-              <tr key={row.performance_id}>
-                <td className="px-4 py-3 font-semibold text-stone-950">{row.posicion}</td>
-                <td className="px-4 py-3 text-stone-700">{row.nombre_atleta}</td>
-                <td className="px-4 py-3 text-stone-700">{formatOt(row.ot_programado)}</td>
-                <td className="px-4 py-3 text-stone-700">{row.estado}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {showGrilla ? (
+          <div className="overflow-x-auto border-t border-stone-200">
+            <table className="min-w-full divide-y divide-stone-200 text-left text-sm">
+              <thead className="bg-stone-50 text-xs font-semibold uppercase text-stone-500">
+                <tr>
+                  <th className="px-4 py-3">Nombre</th>
+                  <th className="px-4 py-3">Andarivel</th>
+                  <th className="px-4 py-3">OT</th>
+                  <th className="px-4 py-3">AP</th>
+                  <th className="px-4 py-3">Performance</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-stone-200 bg-white">
+                {detalle.grilla.map((row) => (
+                  <tr key={row.performance_id}>
+                    <td className="px-4 py-3 font-semibold text-stone-950">
+                      {row.nombre_atleta}
+                    </td>
+                    <td className="px-4 py-3 text-stone-700">{row.andarivel}</td>
+                    <td className="px-4 py-3 text-stone-700">{formatOt(row.ot_programado)}</td>
+                    <td className="px-4 py-3 text-stone-700">
+                      {formatMarca(row.ap_declarado, row.unidad)}
+                    </td>
+                    <td className="px-4 py-3 text-stone-700">
+                      {row.estado === 'DNS'
+                        ? 'DNS'
+                        : formatMarca(row.performance, row.performance ? row.unidad : '')}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : null}
       </div>
     </div>
   )
@@ -602,4 +637,9 @@ function formatOt(value?: string) {
     minute: '2-digit',
     hour12: false,
   })
+}
+
+function formatMarca(value?: string | null, unidad?: string) {
+  if (!value) return '-'
+  return unidad ? `${value} ${unidad}` : value
 }

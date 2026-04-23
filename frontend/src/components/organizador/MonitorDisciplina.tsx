@@ -1,17 +1,10 @@
-import type {
-  CompetenciaResumenDto,
-  GrillaAtletaDto,
-  PerformanceActualDto,
-  ProgresoCompetenciaDto,
-  ProximoAtletaDto,
-} from '../../api/competencia'
+import { useState } from 'react'
+import type { CompetenciaResumenDto, GrillaAtletaDto, ProgresoCompetenciaDto } from '../../api/competencia'
 import { ProgressBar } from './ProgressBar'
 
 interface MonitorDisciplinaProps {
   competencia: CompetenciaResumenDto
   progreso: ProgresoCompetenciaDto
-  performanceActual: PerformanceActualDto | null
-  proximas: ProximoAtletaDto[]
   grilla: GrillaAtletaDto[]
 }
 
@@ -26,24 +19,17 @@ function formatOt(value?: string) {
   })
 }
 
-function findOtByPerformance(grilla: GrillaAtletaDto[], performanceId?: string) {
-  if (!performanceId) return null
-  return formatOt(grilla.find((row) => row.performance_id === performanceId)?.ot_programado)
-}
-
-function findOtByPosition(grilla: GrillaAtletaDto[], position: number) {
-  return formatOt(grilla.find((row) => row.posicion === position)?.ot_programado)
+function formatMarca(value?: string | null, unidad?: string) {
+  if (!value) return '-'
+  return unidad ? `${value} ${unidad}` : value
 }
 
 export function MonitorDisciplina({
   competencia,
   progreso,
-  performanceActual,
-  proximas,
   grilla,
 }: MonitorDisciplinaProps) {
   const pendientes = Math.max(progreso.total - progreso.completadas, 0)
-  const otActual = findOtByPerformance(grilla, performanceActual?.performance_id)
 
   return (
     <article className="rounded-lg border border-stone-300 bg-white p-5 shadow-[0_20px_60px_rgba(120,93,54,0.08)]">
@@ -64,50 +50,79 @@ export function MonitorDisciplina({
         </p>
       </div>
 
-      <div className="mt-5 rounded-lg border border-stone-200 bg-stone-50 p-4">
-        <p className="text-xs font-semibold uppercase text-stone-500">En curso</p>
-        {performanceActual ? (
-          <div className="mt-2">
-            <p className="text-lg font-semibold text-stone-950">
-              {performanceActual.nombre_atleta}
-            </p>
-            <p className="mt-1 text-sm text-stone-600">
-              {otActual ? `OT ${otActual} · ` : ''}
-              Andarivel {performanceActual.andarivel || '-'} · AP{' '}
-              {performanceActual.ap_declarado || '-'} {performanceActual.unidad}
-            </p>
-          </div>
-        ) : (
-          <p className="mt-2 text-lg font-semibold text-stone-700">- En espera -</p>
-        )}
-      </div>
-
-      <div className="mt-5">
-        <p className="text-xs font-semibold uppercase text-stone-500">Proximos</p>
-        {proximas.length > 0 ? (
-          <ol className="mt-3 divide-y divide-stone-200 rounded-lg border border-stone-200">
-            {proximas.map((atleta) => {
-              const ot = findOtByPosition(grilla, atleta.posicion)
-              return (
-                <li
-                  key={`${atleta.posicion}-${atleta.nombre_atleta}`}
-                  className="flex flex-col gap-1 p-3 sm:flex-row sm:items-center sm:justify-between"
-                >
-                  <span className="font-semibold text-stone-900">{atleta.nombre_atleta}</span>
-                  <span className="text-sm text-stone-600">
-                    {ot ? `OT ${ot} · ` : ''}
-                    Posicion {atleta.posicion}
-                  </span>
-                </li>
-              )
-            })}
-          </ol>
-        ) : (
-          <p className="mt-2 rounded-lg border border-stone-200 bg-stone-50 p-3 text-sm text-stone-600">
-            No hay proximos atletas.
-          </p>
-        )}
-      </div>
+      <GrillaCompleta
+        grilla={grilla}
+        completadas={progreso.completadas}
+        total={progreso.total}
+      />
     </article>
+  )
+}
+
+interface GrillaCompletaProps {
+  grilla: GrillaAtletaDto[]
+  completadas: number
+  total: number
+}
+
+function GrillaCompleta({ grilla, completadas, total }: GrillaCompletaProps) {
+  const [showGrilla, setShowGrilla] = useState(false)
+
+  return (
+    <div className="mt-5 rounded-lg border border-sky-700 bg-sky-50/40">
+      <button
+        type="button"
+        onClick={() => setShowGrilla((current) => !current)}
+        className="flex min-h-12 w-full items-center justify-between gap-3 px-4 py-3 text-left"
+        aria-expanded={showGrilla}
+      >
+        <span>
+          <span className="block text-sm font-semibold text-stone-950">Grilla completa</span>
+          <span className="block text-xs text-stone-600">
+            {completadas} / {total} completadas · {grilla.length} atletas
+          </span>
+        </span>
+        <span className="rounded-lg border border-sky-700 bg-white px-3 py-1 text-sm font-semibold text-sky-900">
+          {showGrilla ? 'Ocultar' : 'Mostrar grilla'}
+        </span>
+      </button>
+
+      {showGrilla ? (
+        <div className="overflow-x-auto border-t border-sky-200 bg-white">
+          <table className="min-w-full divide-y divide-stone-200 text-left text-sm">
+            <thead className="bg-stone-50 text-xs font-semibold uppercase text-stone-500">
+              <tr>
+                <th className="px-4 py-3">Nombre</th>
+                <th className="px-4 py-3">Andarivel</th>
+                <th className="px-4 py-3">OT</th>
+                <th className="px-4 py-3">AP</th>
+                <th className="px-4 py-3">Performance</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-stone-200 bg-white">
+              {grilla.map((row) => (
+                <tr key={row.performance_id}>
+                  <td className="px-4 py-3 font-semibold text-stone-950">
+                    {row.nombre_atleta}
+                  </td>
+                  <td className="px-4 py-3 text-stone-700">{row.andarivel}</td>
+                  <td className="px-4 py-3 text-stone-700">
+                    {formatOt(row.ot_programado) ?? '-'}
+                  </td>
+                  <td className="px-4 py-3 text-stone-700">
+                    {formatMarca(row.ap_declarado, row.unidad)}
+                  </td>
+                  <td className="px-4 py-3 text-stone-700">
+                    {row.estado === 'DNS'
+                      ? 'DNS'
+                      : formatMarca(row.performance, row.performance ? row.unidad : '')}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : null}
+    </div>
   )
 }

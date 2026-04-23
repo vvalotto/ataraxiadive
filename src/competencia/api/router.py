@@ -1054,6 +1054,7 @@ async def get_grilla(
                 "ot_programado": e.ot_programado,
                 "ap_declarado": e.ap_declarado,
                 "unidad": e.unidad,
+                "performance": e.performance,
                 "estado": e.estado,
                 "tarjeta_asignada": e.tarjeta_asignada,
             }
