@@ -27,6 +27,10 @@ export function LoginPage() {
     void navigate('/organizador/dashboard', { replace: true })
     return null
   }
+  if (rol === 'atleta') {
+    void navigate('/atleta/dashboard', { replace: true })
+    return null
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -44,7 +48,7 @@ export function LoginPage() {
             Iniciar sesión
           </h1>
           <p className="mb-6 text-center text-sm text-slate-400">
-            Portal del juez y organizador
+            Portal del juez, organizador y atleta
           </p>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>

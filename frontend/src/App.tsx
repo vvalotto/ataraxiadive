@@ -7,6 +7,7 @@ import { RequireRole } from './components/RequireRole'
 import { DisciplinasPage } from './pages/juez/DisciplinasPage'
 import { GrillaPage } from './pages/juez/GrillaPage'
 import { PerformanceFlowPage } from './pages/juez/PerformanceFlowPage'
+import { AtletaDashboardPage } from './pages/atleta/AtletaDashboardPage'
 import { DashboardPage } from './pages/organizador/DashboardPage'
 import { CrearTorneoPage } from './pages/organizador/CrearTorneoPage'
 import { DetalleTorneoPage } from './pages/organizador/DetalleTorneoPage'
@@ -20,6 +21,7 @@ function RootRedirect() {
   const rol = useAuthStore((s) => s.rol)
   if (rol === 'juez') return <Navigate to="/juez/disciplinas" replace />
   if (rol === 'organizador') return <Navigate to="/organizador/dashboard" replace />
+  if (rol === 'atleta') return <Navigate to="/atleta/dashboard" replace />
   return <Navigate to="/login" replace />
 }
 
@@ -56,6 +58,14 @@ function App() {
           element={
             <RequireRole role="juez">
               <PerformanceFlowPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/atleta/dashboard"
+          element={
+            <RequireRole role="atleta">
+              <AtletaDashboardPage />
             </RequireRole>
           }
         />

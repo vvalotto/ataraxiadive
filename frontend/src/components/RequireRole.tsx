@@ -11,6 +11,7 @@ interface RequireRoleProps {
 const HOME_BY_ROL: Record<RolUsuario, string> = {
   juez: '/juez/disciplinas',
   organizador: '/organizador/dashboard',
+  atleta: '/atleta/dashboard',
 }
 
 export function RequireRole({ role, children }: RequireRoleProps) {
