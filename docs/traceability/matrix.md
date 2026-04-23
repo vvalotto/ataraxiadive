@@ -4,9 +4,9 @@
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-04-22 |
+| **Fecha** | 2026-04-23 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.22 — SP5 INC-5.2 ✅ cerrado (US-5.2.1..5.2.2 · SP-ADJ-08 · DesignReviewer 0 CRITICAL · 215 WARNING) |
+| **Estado** | ✅ v1.23 — matriz reconciliada contra PLAN-SP5 vigente (INC-5.3..5.7 · integración FAAS fuera de scope SP5) |
 
 ---
 
@@ -21,6 +21,8 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
   de elicitación — deben resolverse antes del SP que los involucra.
 - Los RFs marcados `— fuera de alcance v1` están documentados pero excluidos
   del horizonte actual del proyecto.
+- Los RFs marcados como `parcial` tienen definición o soporte técnico previo,
+  pero todavía no están expuestos como producto final en el incremento vigente.
 
 ---
 
@@ -38,7 +40,13 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP4 INC-4.5/4.6 | Notificaciones + Auditoría + Exportación | RF-NT-01..04, RF-EJ-06 |
 | SP-ADJ-06 | FAZ→FAAS (código + docs) + refactoring técnico + UAT SP4 | — (deuda técnica + validación) |
 | SP5 INC-5.1 / INC-5.1-ADJ | Frontend organizador (panel completo) | RF-GT-01..07, RF-PR-04..08, RF-EJ-01..10 (UI organizador) |
-| SP5 (pendiente) | Integración externa | RF-IG-01..04, RF-IN-07 |
+| SP5 INC-5.2 / SP-ADJ-08 | Frontend organizador + Competencia | Ejecución por disciplina, cierre manual, cancelación fuerte |
+| SP5 INC-5.3 (pendiente) | Identidad + Frontend | RF-US-01..05 (gestión UI de usuarios/roles) |
+| SP5 INC-5.4 (pendiente) | Registro + Competencia + Frontend | RF-IN-05/06 y flujo UI de inscripción/APs |
+| SP5 INC-5.5 (pendiente) | Resultados + Torneo + Frontend | RF-PM-01/02/05/06 como producto final con puntaje FAAS y podios |
+| SP5 INC-5.6 (pendiente) | Frontend atleta + Resultados | Portal del atleta |
+| SP5 INC-5.7 (pendiente) | Demo/UAT | Seed BA 2025, verificación oficial, polish |
+| Futuro / fuera de scope SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
 
 ---
 
@@ -66,9 +74,9 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-IN-02 | Brevet no obligatorio | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 | RF-IN-03 | Sin límite de atletas por torneo o disciplina | Registro | SP3 | 3.2 | US-3.2.3 | ✅ implementado |
 | RF-IN-04 | Cancelar inscripción hasta el día anterior | Registro | SP3 | 3.2 | US-3.2.3 | ✅ implementado |
-| RF-IN-05 | Apto médico como requisito de inscripción | Registro | SP4 | 4.5 | US-4.5.x | ✅ definido |
-| RF-IN-06 | Constancia de pago como requisito | Registro | SP4 | 4.5 | US-4.5.x | ✅ definido |
-| RF-IN-07 | Conflicto de datos con BD FAAS | Registro | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
+| RF-IN-05 | Apto médico como requisito de inscripción | Registro | SP5 | 5.4 | US-5.4.1 | 🟡 definido conceptualmente; exposición en producto pendiente en INC-5.4 |
+| RF-IN-06 | Constancia de pago como requisito | Registro | SP5 | 5.4 | US-5.4.1 | 🟡 definido conceptualmente; exposición en producto pendiente en INC-5.4 |
+| RF-IN-07 | Conflicto de datos con BD FAAS | Registro | Futuro | — | — | — fuera de scope SP5/v1.0; depende de integración FAAS |
 | RF-IN-08 | Género solo para categorización — sin otro efecto | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 | RF-IN-09 | Atleta no puede cambiar categoría por disciplina | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 | RF-IN-10 | Club obligatorio del atleta y visible en grillas/reportes | Registro | SP-ADJ-04 | — | US-ADJ-4.4 | ✅ implementado |
@@ -111,12 +119,12 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-PM-01 | Fórmula de puntos configurable por torneo (HS-19 ✅) | Resultados / Torneo | SP3 | 3.5 | US-3.5.x | ✅ definido |
-| RF-PM-02 | Overall = ranking general multi-disciplina por categoría | Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
+| RF-PM-01 | Fórmula de puntos configurable por torneo (HS-19 ✅) | Resultados / Torneo | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.1..5.5.2 | 🟡 definido; algoritmo FAAS y exposición final pendientes en INC-5.5 |
+| RF-PM-02 | Overall = ranking general multi-disciplina por categoría | Resultados | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.4 | 🟡 base implementada; overall por categoría/género con puntos pendiente en INC-5.5 |
 | RF-PM-03 | Empates = mismo puesto y mismos puntos | Resultados | SP2 | 2.4 | US-2.4.2 | ✅ Implementado |
 | RF-PM-04 | Certificados/diplomas | — | — | — | — | — fuera de alcance v1 |
-| RF-PM-05 | Rankings por categoría y género | Resultados | SP-ADJ-04 | — | US-ADJ-4.5 | ✅ implementado en SP-ADJ-04 — ranking y overall segmentados por categoría |
-| RF-PM-06 | Publicación en plataforma + descarga | Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
+| RF-PM-05 | Rankings por categoría y género | Resultados | SP-ADJ-04/SP5 | — / 5.5 | US-ADJ-4.5 / US-5.5.3..5.5.6 | 🟡 soporte parcial; rankings/podios por categoría y género como producto final pendientes en INC-5.5 |
+| RF-PM-06 | Publicación en plataforma + descarga | Resultados | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.5..5.5.6 | 🟡 definido; vistas finales tabla OT + podios pendientes en INC-5.5 |
 
 ---
 
@@ -143,27 +151,28 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 ---
 
-### 3.8 RF-IG — Integración con Sistemas Externos → BC Registro / SP5
+### 3.8 RF-IG — Integración con Sistemas Externos → Futuro / fuera de scope SP5
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-IG-01 | Integración con BD FAAS (protocolo/formato) | Registro | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
-| RF-IG-02 | Consulta a BD externa: solo lectura o lectura/escritura | Registro | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
-| RF-IG-03 | BD externa no disponible al inscribir atleta | Registro | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
-| RF-IG-04 | Exportación a sistemas de rankings (AIDA, CMAS) | Resultados | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
+| RF-IG-01 | Integración con BD FAAS (protocolo/formato) | Registro | Futuro | — | — | — fuera de scope SP5/v1.0 |
+| RF-IG-02 | Consulta a BD externa: solo lectura o lectura/escritura | Registro | Futuro | — | — | — fuera de scope SP5/v1.0 |
+| RF-IG-03 | BD externa no disponible al inscribir atleta | Registro | Futuro | — | — | — fuera de scope SP5/v1.0 |
+| RF-IG-04 | Exportación a sistemas de rankings (AIDA, CMAS) | Resultados | Futuro | — | — | — fuera de scope SP5/v1.0 |
 
 ---
 
 ## 4. RFs Pendientes de Definición
 
-Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
+Deben resolverse antes del incremento futuro que los involucre. No bloquean el
+alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 
 | RF | Descripción | Bloquea | Resolver antes de |
 |----|-------------|---------|-------------------|
-| RF-IN-07 | ¿Qué pasa si los datos del atleta difieren de la BD FAAS? | SP5 inc. 5.1 | SP5 |
-| RF-EJ-04 | Códigos de penalización (AIDA/CMAS u otra federación) | SP4 inc. 4.4 | SP4 |
-| RF-NT-03 | ¿Juez u organizador reciben notificaciones durante ejecución? | SP4 inc. 4.5 | SP4 |
-| RF-IG-01..04 | Integración completa con BD FAAS / exportación a rankings | SP5 inc. 5.1 | SP5 |
+| RF-IN-07 | ¿Qué pasa si los datos del atleta difieren de la BD FAAS? | Futuro | Post-SP5 |
+| RF-EJ-04 | Códigos de penalización (AIDA/CMAS u otra federación) | Futuro | Post-SP5 |
+| RF-NT-03 | ¿Juez u organizador reciben notificaciones durante ejecución? | Futuro | Post-SP5 |
+| RF-IG-01..04 | Integración completa con BD FAAS / exportación a rankings | Futuro | Post-SP5 |
 
 ---
 
@@ -451,16 +460,18 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
 | Gestión del Torneo (RF-GT) | 7 | 7 | 0 | 0 |
-| Inscripción (RF-IN) | 10 | 9 | 1 | 0 |
+| Inscripción (RF-IN) | 10 | 9 | 0 | 1 |
 | Preparación (RF-PR) | 8 | 8 | 0 | 0 |
 | Ejecución (RF-EJ) | 10 | 9 | 1 | 1 |
 | Resultados (RF-PM) | 6 | 5 | 0 | 1 |
 | Usuarios (RF-US) | 5 | 5 | 0 | 0 |
 | Notificaciones (RF-NT) | 4 | 3 | 1 | 0 |
-| Integración (RF-IG) | 4 | 0 | 4 | 0 |
-| **Total** | **54** | **45** | **7** | **2** |
+| Integración (RF-IG) | 4 | 0 | 0 | 4 |
+| **Total** | **54** | **45** | **2** | **7** |
 
-> **85% de RFs completamente definidos.** Los 7 pendientes están en SP4+ — no bloquean SP1/SP2.
+> **85% de RFs completamente definidos.** Los pendientes reales son decisiones
+> funcionales abiertas. La integración FAAS/importación CSV está diferida fuera
+> de SP5/v1.0 según `docs/plans/sp5/PLAN-SP5.md`.
 
 ---
 
@@ -561,6 +572,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.19 — 2026-04-20: US-5.1.2 implementada · trazabilidad frontend de gestion de fases agregada*
 *v1.20 — 2026-04-20: US-5.1.3 implementada · trazabilidad frontend de inscriptos/AP agregada*
 *v1.22 — 2026-04-22: INC-5.2 cerrado (§21 nuevo · DesignReviewer 0 CRITICAL · 215 WARNING) · SP-ADJ-08 §22 · §§ renumerados 23..26 · US→Tests US-5.2.1..5.2.2 · US-ADJ-8.1..8.3*
+*v1.23 — 2026-04-23: matriz reconciliada contra PLAN-SP5 vigente · RF-IG/RF-IN-07 movidos a futuro fuera de scope SP5 · RF-PM y RF-IN-05/06 marcados como parciales con exposición final en INC-5.4/5.5*
 *v1.21 — 2026-04-22: INC-5.1 cerrado (§19 nuevo · DesignReviewer 0 CRITICAL · 208 WARNING) · INC-5.1-ADJ §20 · §§ renumerados 21..24 · US→Tests US-5.1.1..5.1.10 · §2 cobertura actualizada · HITO-26*
 *v1.15 — 2026-04-13: INC-4.4 especificado (§15 nuevo — 3 US offline-first) · §§ renumerados 16..19 · §2 cobertura actualizada*
 *v1.14 — 2026-04-13: INC-4.3 completado (§14 — 5/5 US ✅, UAT BA 2025) · RF-NT §3.7 INC corregido (4.2→4.5) · US-4.3.x en §18*

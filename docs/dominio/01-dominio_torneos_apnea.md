@@ -1,5 +1,10 @@
 Gestión, seguimiento y control de los torneos nacionales de apnea.
 
+> **Estado documental:** referencia historica de dominio — elicitacion inicial
+> de Febrero 2026. Conserva lenguaje, fases y conceptos base del dominio.
+> Para estado operativo actual usar `README.md`, `.cm/baselines/` y
+> `docs/plans/sp5/PLAN-SP5.md`.
+
 Los torneos de apnea son competencias donde los atletas desarrollan distintas modalidades de actividades subacuáticas conteniendo la respiración.
 
 La intención es llevar el registro de los atletas inscriptos y performance de cada uno de ellos en las disciplinas.

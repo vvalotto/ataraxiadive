@@ -4,6 +4,10 @@ Plataforma de Gestión de Torneos de Apnea
 
 Cuestionario de Elicitación - Atributos de Calidad
 
+> **Estado documental:** referencia historica de elicitacion — Febrero 2026.
+> Preserva drivers de calidad iniciales. Las decisiones arquitectonicas vigentes
+> estan en `docs/adr/` y `docs/architecture/`.
+
   **Proyecto:**    Ataraxiadive
   ---------------- ------------------------
   **Versión:**     1.0 - Borrador inicial

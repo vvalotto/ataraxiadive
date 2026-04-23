@@ -7,9 +7,13 @@
 | **Capa IEDD** | Capa 4 — Arquitectura |
 | **Fecha** | 2026-03-20 |
 | **Fuentes** | Context Map v1.1 · Domain Model v1.0 · ADR-001 a ADR-012 |
-| **Estado** | ✅ v1.1 — SQLite por BC (ADR-007/008), proyección síncrona |
+| **Estado** | Histórico / superseded por `docs/architecture/` |
 
 ---
+
+> **Documento histórico:** este archivo conserva el diseño C4 producido en Semana
+> 0 / Fase 0. Para arquitectura vigente usar `docs/architecture/`. Los contratos
+> HTTP operativos deben verificarse contra los routers FastAPI y OpenAPI generado.
 
 ## 1. L1 — System Context
 
@@ -202,8 +206,8 @@ C4Component
     Container_Boundary(competencia_bc, "BC Competencia dentro del Backend API") {
 
         Container_Boundary(api_layer, "API Layer") {
-            Component(routes_comp, "CompetenciaRoutes", "FastAPI · Pydantic", "POST /competencias/{id}/grilla\nPOST /competencias/{id}/iniciar\nPOST /competencias/{id}/finalizar\nGET  /competencias/{id}/grilla")
-            Component(routes_perf, "PerformanceRoutes", "FastAPI · Pydantic", "POST /performances/{id}/ap\nPOST /performances/{id}/resultado\nPOST /performances/{id}/tarjeta\nPOST /performances/{id}/dns")
+            Component(routes_comp, "CompetenciaRoutes", "FastAPI · Pydantic", "POST /competencia\nGET  /competencia\nPOST /competencia/{id}/generar-grilla\nPOST /competencia/{id}/confirmar-grilla\nPOST /competencia/{id}/iniciar\nPOST /competencia/{id}/finalizar\nGET  /competencia/{id}/grilla\nGET  /competencia/{id}/estado")
+            Component(routes_perf, "PerformanceRoutes", "FastAPI · Pydantic", "POST /competencia/{id}/llamar\nPOST /competencia/{id}/registrar-resultado\nPOST /competencia/{id}/registrar-dns\nPOST /competencia/{id}/asignar-tarjeta\nPOST /competencia/{id}/resolver-revision\nPOST /competencia/{id}/performances/{performance_id}/corregir-resultado-tras-dns")
         }
 
         Container_Boundary(app_layer, "Application Layer") {
@@ -248,8 +252,8 @@ C4Component
 
 | Elemento o Componente | Responsabilidad asignada |
 |-----------------------|--------------------------|
-| CompetenciaRoutes | Expone los endpoints REST para operaciones sobre el aggregate Competencia: gestión de grilla, inicio y finalización. |
-| PerformanceRoutes | Expone los endpoints REST para operaciones sobre el aggregate Performance: registro de AP, resultado, tarjeta y DNS. |
+| CompetenciaRoutes | Expone endpoints REST bajo `/competencia` para configuración, grilla, inicio, finalización, estado y consultas de competencia. |
+| PerformanceRoutes | Expone endpoints REST bajo `/competencia/{competencia_id}/...` para operaciones sobre performances: llamado, resultado, DNS, tarjeta, revisión y corrección post-DNS. |
 | CompetenciaHandlers | Maneja los comandos del ciclo de vida de Competencia: GenerarGrilla, AjustarGrilla, ConfirmarGrilla, IniciarCompetencia, FinalizarCompetencia. Actualiza el read model tras cada append. |
 | PerformanceHandlers | Maneja los comandos del ciclo de vida de Performance: RegistrarAP, LlamarAtleta, RegistrarResultado, AsignarTarjeta, RegistrarDNS, CorregirResultado. Actualiza el read model tras cada append. |
 | ParticipanteACL | Anti-Corruption Layer. Suscribe al evento AtletaInscripto de BC Registro y traduce el modelo de Atleta al modelo local de Participante. Aísla el Core Domain de cambios en BC Registro. |
@@ -425,13 +429,17 @@ Nueva instancia Cloud Run ← restaura desde GCS ← punto de recuperación
 
 ---
 
-## 8. Próximo Paso
+## 8. Uso actual
 
-Este documento es insumo directo para:
+Este documento se conserva como referencia histórica del diseño producido antes
+de la implementación incremental. No debe usarse como fuente canónica de estado
+ni como contrato API vigente.
 
-1. **`docs/design/estrategia-desarrollo-bc.md`** — mapear los BCs a los incrementos de SP1–SP5
-2. **`docs/traceability/matrix.md`** — trazabilidad RFs → BCs → US-IEDD
-3. **US-IEDD de SP1** — las rutas y handlers del L3b definen el contrato de las primeras historias
+Fuentes actuales:
+
+1. `docs/architecture/` — arquitectura vigente.
+2. `src/*/api/router.py` — contrato HTTP observable en implementación.
+3. `docs/plans/sp5/PLAN-SP5.md` — alcance vigente de SP5.
 
 ---
 

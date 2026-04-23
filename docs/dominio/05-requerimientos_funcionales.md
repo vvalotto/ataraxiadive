@@ -4,6 +4,11 @@ Plataforma de Gestión de Torneos de Apnea
 
 Cuestionario de Elicitación - Requerimientos Funcionales
 
+> **Estado documental:** referencia historica de elicitacion — Febrero 2026.
+> Contiene preguntas, respuestas y pendientes originales. Para trazabilidad y
+> alcance vigente usar `docs/traceability/matrix.md` y
+> `docs/plans/sp5/PLAN-SP5.md`.
+
   **Proyecto:**    Ataraxiadive
   ---------------- ----------------------------
   **Versión:**     1.0 - Borrador inicial

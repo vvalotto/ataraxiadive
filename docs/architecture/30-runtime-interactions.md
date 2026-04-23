@@ -132,30 +132,35 @@ sequenceDiagram
   más explícitos; la implementación actual resuelve la validación con un ACL
   técnico.
 
-## Escenario 3: atleta inscripto propagado hacia Competencia
+## Escenario 3: datos de atleta usados por Competencia
 
-Este flujo refleja la colaboración estratégica `Registro -> Competencia`.
+Este flujo refleja la colaboración actual `Competencia -> Registro` para datos
+descriptivos de atleta. El diseño estratégico conserva como evolución posible
+un evento `AtletaInscripto`, pero la implementación vigente no materializa un
+`Participante` local dentro de `Competencia`.
 
 ```mermaid
 sequenceDiagram
-    participant REG as BC Registro
-    participant BUS as Bus / mecanismo de publicación
-    participant ACL as Participante ACL en Competencia
     participant COMP as BC Competencia
+    participant PORT as AtletaNombrePort
+    participant ADAPTER as AtletaNombreAdapter
+    participant REG_DB as registro.db
 
-    REG->>BUS: Evento AtletaInscripto
-    BUS->>ACL: AtletaInscripto
-    ACL->>ACL: Traduce Atleta -> Participante
-    ACL->>COMP: crea/actualiza Participante local
-    COMP-->>ACL: participante disponible para grilla y performance
+    COMP->>PORT: get_nombre(atletaId)
+    PORT->>ADAPTER: resolver nombre
+    ADAPTER->>REG_DB: SELECT nombre, apellido FROM atletas
+    REG_DB-->>ADAPTER: datos del atleta / none
+    ADAPTER-->>PORT: nombre completo o fallback
+    PORT-->>COMP: nombre para grilla/auditoria
 ```
 
 ### Observaciones
 
-- Este flujo está definido arquitectónicamente y ya aparece en el context map.
-- La implementación del ACL está documentada del lado de `Competencia`.
-- La publicación explícita del evento todavía no está materializada en
-  `Registro`.
+- `Competencia` conserva referencias por `participante_id` / `atleta_id` en
+  streams, eventos y grilla.
+- No existe hoy una entidad `Participante` persistida dentro del BC.
+- La dependencia con `Registro` queda encapsulada detrás de puertos/adaptadores
+  de infraestructura.
 
 ## Escenario 4: cierre de competencia y cálculo de ranking
 

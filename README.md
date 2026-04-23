@@ -11,10 +11,18 @@ Repositorio del experimento IEDD + Software Limpio aplicado a un producto real.
 | SP1 — La Performance | ✅ Cerrado | BL-001 |
 | SP2 — La Competencia | ✅ Cerrado | BL-002 |
 | SP3 — El Torneo | ✅ Cerrado | BL-003 |
-| SP4 — La Plataforma | 🔲 Pendiente | BL-004 |
-| SP5 — La Puesta en Marcha | 🔲 Pendiente | BL-005 |
+| SP4 — La Plataforma | ✅ Cerrado | BL-004 |
+| SP5 — La Puesta en Marcha | 🔄 En construcción | BL-005 draft |
 
-SP3 implementó `Torneo`, `Registro`, `Identidad`, auth por rol y el flujo de overall por torneo (`US-3.5.1` a `US-3.5.3`). Cerrado con tag `v0.4.0`.
+SP4 transformó el sistema de API-only a plataforma completa: frontend React PWA
+offline-first para jueces, BC Notificaciones con email real, auditoría con hash
+SHA-256 y exportación CSV/JSON. Cerrado el 2026-04-18 con tag `v0.5.0`.
+
+SP5 está en curso con objetivo MVP Demo (`v1.0.0` planificado): ciclo completo
+crear torneo → inscribir atletas → generar grilla → ejecutar disciplina →
+publicar resultados y podios. El alcance vigente está en
+[`docs/plans/sp5/PLAN-SP5.md`](docs/plans/sp5/PLAN-SP5.md) y el estado operativo
+en [`.cm/baselines/BL-005-draft.md`](.cm/baselines/BL-005-draft.md).
 
 ## Stack
 
@@ -24,6 +32,10 @@ SP3 implementó `Torneo`, `Registro`, `Identidad`, auth por rol y el flujo de ov
 
 ## Documentación
 
+- [Fuentes canónicas](docs/CANONICAL-SOURCES.md)
+- [Estado y baselines](.cm/baselines/)
+- [Plan vigente SP5](docs/plans/sp5/PLAN-SP5.md)
+- [Arquitectura vigente](docs/architecture/)
 - [Architecture Decision Records](docs/adr/)
 - [Estrategia de Desarrollo](docs/plans/)
 - [Gestión de la Configuración](.cm/)

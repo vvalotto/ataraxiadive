@@ -1,5 +1,9 @@
 # Brechas entre el Reglamento CMAS/FAAS y la aplicación actual
 
+> **Estado documental:** referencia de analisis reglamentario. Cada brecha debe
+> leerse junto con `docs/traceability/matrix.md`, `.cm/baselines/` y el plan
+> vigente del subproyecto en curso antes de inferir alcance pendiente.
+
 > **Fuente:** Reglamento CMAS Apnea Indoor v2022/01 — Traducción FAAS (versión en uso 2025)
 > **Fecha de análisis:** 2026-04-05
 > **Propósito:** Registro de funcionalidad definida en el reglamento oficial que no está

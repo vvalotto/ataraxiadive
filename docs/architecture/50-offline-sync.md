@@ -2,8 +2,8 @@
 
 ## Propósito
 
-Describir la arquitectura objetivo para operación offline-first de la interfaz
-del juez y la sincronización posterior con el backend.
+Describir la arquitectura implementada para operación offline-first de la
+interfaz del juez y la sincronización posterior con el backend.
 
 Esta vista se enfoca en cómo el sistema debe seguir operando cuando la
 conectividad falla durante la competencia, preservando confirmación inmediata,
@@ -32,12 +32,27 @@ No describe la UI completa del juez ni el detalle de componentes frontend.
 
 ## Estado actual
 
-El modo offline-first está decidido arquitectónicamente, pero todavía no aparece
-materializado en el código del repositorio con Service Worker, IndexedDB ni cola
-de sincronización.
+El modo offline-first fue materializado en SP4 para la interfaz del juez.
 
-Por lo tanto, este documento describe la **arquitectura objetivo vigente** para
-SP4 y posteriores.
+Implementación observable:
+
+- Service Worker con Workbox y Background Sync:
+  `frontend/src/sw.ts`;
+- almacenamiento local durable en IndexedDB vía Dexie:
+  `frontend/src/db/index.ts`, `frontend/src/db/schema.ts`;
+- cache de grilla/estado y cola local de comandos:
+  `frontend/src/db/queries.ts`;
+- precarga y fallback de lectura desde cache:
+  `frontend/src/hooks/usePrecarga.ts`;
+- encolado optimista de comandos de juez:
+  `frontend/src/hooks/useComandoQueue.ts`;
+- proyección visual de comandos pendientes sobre la grilla:
+  `frontend/src/hooks/useGrillaQueue.ts`;
+- sincronización ordenada, reintentos y reconciliación básica:
+  `frontend/src/hooks/useSyncQueue.ts`.
+
+Este documento describe la arquitectura vigente implementada y los límites que
+quedan como evolución futura.
 
 ## Objetivo operativo
 
@@ -47,7 +62,7 @@ Durante la ejecución de una disciplina, el juez debe poder:
 - seguir operando sin conexión;
 - recibir confirmación inmediata de cada acción;
 - no perder datos si la red cae;
-- sincronizar los eventos cuando la conectividad vuelva.
+- sincronizar las acciones cuando la conectividad vuelva.
 
 ## Principio arquitectónico
 
@@ -57,16 +72,17 @@ del juez debe comportarse como **offline-first**.
 Eso implica una separación clara:
 
 - el backend conserva el estado canónico y la auditoría oficial;
-- el dispositivo del juez mantiene una cola local durable de eventos pendientes;
+- el dispositivo del juez mantiene una cola local durable de comandos
+  pendientes;
 - el usuario no depende de un round-trip al servidor para seguir operando.
 
 ## Modelo de operación
 
-El flujo operativo objetivo es:
+El flujo operativo implementado es:
 
 1. pre-cargar la disciplina en el dispositivo;
 2. operar localmente sobre datos ya descargados;
-3. persistir cada acción como evento local;
+3. persistir cada acción como comando local pendiente;
 4. sincronizar en orden al recuperar conexión;
 5. reconciliar respuesta del servidor y estado local.
 
@@ -89,28 +105,28 @@ sequenceDiagram
     PWA->>IDB: guarda snapshot local
 
     J->>PWA: registra acción de competencia
-    PWA->>IDB: persiste evento local pendiente
+    PWA->>IDB: persiste comando local pendiente
     IDB-->>PWA: confirmación inmediata
 
     alt con conexión
-        PWA->>SW: solicita sync
-        SW->>IDB: lee pendientes en orden
-        SW->>API: envía eventos pendientes
+        PWA->>IDB: lee pendientes en orden
+        PWA->>API: envía comandos pendientes
         API->>COMP: valida y persiste en event store
         COMP-->>API: confirmado
-        API-->>SW: ack
-        SW->>IDB: marca sincronizado
+        API-->>PWA: ack
+        PWA->>IDB: elimina comando sincronizado
     else sin conexión
-        SW->>IDB: mantiene cola pendiente
-        IDB-->>J: indicador offline
+        PWA->>IDB: mantiene cola pendiente
+        PWA-->>J: indicador offline / pendiente
     end
 
     alt reconexión
-        SW->>IDB: obtiene pendientes
-        SW->>API: sincroniza en orden
-        API-->>SW: ack / rechazo
-        SW->>IDB: actualiza estado local
-        SW-->>PWA: reconciliación
+        SW->>PWA: postMessage SYNC_QUEUE_REQUEST
+        PWA->>IDB: obtiene pendientes
+        PWA->>API: sincroniza en orden
+        API-->>PWA: ack / rechazo
+        PWA->>IDB: actualiza estado local
+        PWA-->>J: reconciliación
     end
 ```
 
@@ -126,12 +142,12 @@ Antes de operar offline, el cliente necesita un snapshot mínimo de trabajo:
 
 La pre-carga evita dependencias de lectura remota durante la operación local.
 
-## Cola local de eventos
+## Cola local de comandos
 
-La arquitectura objetivo usa `IndexedDB` como almacenamiento local durable,
-preferentemente mediante una abstracción como `Dexie.js`.
+La implementación usa `IndexedDB` como almacenamiento local durable mediante
+`Dexie.js`.
 
-Cada acción del juez debe registrarse localmente como evento pendiente, por
+Cada acción del juez puede registrarse localmente como comando pendiente, por
 ejemplo:
 
 - llamar atleta;
@@ -140,35 +156,44 @@ ejemplo:
 - asignar tarjeta;
 - corregir resultado, si la política lo permite.
 
+La cola se persiste en `comando_queue` con estado `pendiente`, `enviando` o
+`error`. La sincronización lee los comandos por `id`, preservando el orden de
+creación local.
+
 ## Relación con Event Sourcing
 
 El modo offline encaja naturalmente con el modelo de `Competencia` porque el BC
 ya persiste una secuencia de eventos inmutables.
 
-La estrategia objetivo es:
+La estrategia implementada es:
 
-- generar eventos primero en local;
-- sincronizarlos al backend en el mismo orden lógico;
-- persistirlos en el event store canónico del BC `Competencia`;
-- reconstruir el estado oficial a partir de esa secuencia.
+- generar comandos primero en local cuando no hay conectividad o existen
+  pendientes previos;
+- proyectar cambios optimistas sobre la grilla cacheada;
+- sincronizar esos comandos al backend en el mismo orden lógico;
+- dejar que el BC `Competencia` valide invariantes y persista los eventos
+  canónicos derivados;
+- refrescar grilla/estado desde el servidor cuando la cola queda vacía.
 
 Esto reduce la fricción conceptual entre cliente offline y backend auditor.
 
 ## Reconciliación y conflictos
 
-La reconciliación ocurre cuando el backend responde al lote sincronizado.
+La reconciliación ocurre cuando el backend responde a cada comando sincronizado.
 
-Reglas arquitectónicas previstas:
+Reglas arquitectónicas vigentes:
 
 - el servidor sigue validando invariantes de dominio;
 - el cliente no asume aceptación automática de todo evento local;
-- si un evento es rechazado, el juez debe recibir una discrepancia visible;
+- si un comando es rechazado, queda en estado `error` con mensaje visible para
+  la UI;
 - la resolución de conflicto se simplifica por la partición operativa por
   andarivel o disciplina.
 
-La documentación de referencia menciona `last-write-wins por andarivel` como
-estrategia inicial, apoyada en la baja probabilidad de conflicto real entre
-jueces que operan ámbitos distintos.
+La documentación de referencia menciona `last-write-wins por andarivel` como una
+estrategia posible. La implementación actual evita asumir aceptación automática:
+un rechazo HTTP 4xx detiene la cola y conserva el comando con error para
+intervención visible.
 
 ## Responsabilidades por componente
 
@@ -181,21 +206,35 @@ jueces que operan ámbitos distintos.
 ### Service Worker / Sync Manager
 
 - detectar conectividad;
-- encolar y despachar sincronización;
-- reintentar sin intervención del usuario cuando sea posible.
+- precachear assets de la PWA;
+- cachear lecturas API relevantes con estrategia Network First;
+- registrar Background Sync con tag `ataraxia-sync-queue`;
+- enviar `SYNC_QUEUE_REQUEST` a las ventanas abiertas para que la aplicación
+  sincronice la cola.
 
 ### IndexedDB
 
 - persistir snapshot local;
-- persistir eventos pendientes;
+- persistir comandos pendientes;
 - conservar estado de sincronización.
 
 ### Backend API y BC Competencia
 
-- recibir eventos sincronizados;
+- recibir comandos sincronizados;
 - validar invariantes;
 - persistir en el event store oficial;
 - devolver acks o rechazos utilizables para reconciliación.
+
+## Límites conocidos
+
+- La sincronización efectiva de comandos vive en la aplicación React
+  (`useSyncQueue`); el Service Worker dispara la solicitud por `postMessage`.
+- La cola sincroniza comandos individuales contra endpoints existentes; no hay
+  endpoint batch específico para offline sync.
+- El fallback principal ante navegadores sin Background Sync es el evento de
+  reconexión observado por la aplicación.
+- La resolución de conflictos complejos queda delegada al rechazo del backend y
+  a la intervención operativa; no existe todavía una UI especializada de merge.
 
 ## Restricciones a preservar
 
@@ -214,4 +253,3 @@ jueces que operan ámbitos distintos.
   deben resolverse explícitamente.
 - La arquitectura es más robusta operativamente, pero exige una disciplina clara
   de eventos y reconciliación.
-
