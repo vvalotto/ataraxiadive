@@ -11,6 +11,7 @@ import { DashboardPage } from './pages/organizador/DashboardPage'
 import { CrearTorneoPage } from './pages/organizador/CrearTorneoPage'
 import { DetalleTorneoPage } from './pages/organizador/DetalleTorneoPage'
 import { TorneoCompetenciasPage } from './pages/organizador/TorneoCompetenciasPage'
+import { UsuariosPage } from './pages/organizador/UsuariosPage'
 import { AuditoriaCompetenciaPage } from './pages/organizador/AuditoriaCompetenciaPage'
 import { AuditoriaPerformancePage } from './pages/organizador/AuditoriaPerformancePage'
 import { HealthCheck } from './components/HealthCheck'
@@ -71,6 +72,14 @@ function App() {
           element={
             <RequireRole role="organizador">
               <CrearTorneoPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/organizador/usuarios"
+          element={
+            <RequireRole role="organizador">
+              <UsuariosPage />
             </RequireRole>
           }
         />

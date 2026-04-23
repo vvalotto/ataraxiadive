@@ -10,12 +10,23 @@ export class ApiError extends Error {
 }
 
 export type RolIdentidad = 'JUEZ' | 'ORGANIZADOR' | 'ATLETA' | 'ADMIN'
+export type RolGestionUsuario = Exclude<RolIdentidad, 'ADMIN'>
 
 export interface UsuarioDto {
   usuario_id: string
   email: string
   rol: RolIdentidad
   activo: boolean
+}
+
+export interface CrearUsuarioRequest {
+  email: string
+  password: string
+  rol: RolGestionUsuario
+}
+
+export interface CrearUsuarioResponse {
+  usuario_id: string
 }
 
 function buildHeaders(): Record<string, string> {
@@ -60,4 +71,20 @@ export async function listarUsuariosPorRol(rol: RolIdentidad): Promise<UsuarioDt
     headers: buildHeaders(),
   })
   return parseResponse<UsuarioDto[]>(response)
+}
+
+export async function listarTodosLosUsuarios(): Promise<UsuarioDto[]> {
+  const response = await fetch('/auth/usuarios', {
+    headers: buildHeaders(),
+  })
+  return parseResponse<UsuarioDto[]>(response)
+}
+
+export async function crearUsuario(body: CrearUsuarioRequest): Promise<CrearUsuarioResponse> {
+  const response = await fetch('/auth/registro', {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify(body),
+  })
+  return parseResponse<CrearUsuarioResponse>(response)
 }

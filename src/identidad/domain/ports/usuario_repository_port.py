@@ -19,3 +19,6 @@ class UsuarioRepositoryPort(ABC):
 
     @abstractmethod
     async def list_by_rol(self, rol: Rol) -> list[Usuario]: ...
+
+    @abstractmethod
+    async def list_all(self) -> list[Usuario]: ...
