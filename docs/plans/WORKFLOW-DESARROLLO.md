@@ -1,6 +1,6 @@
 # Workflow de Desarrollo — AtaraxiaDive
 
-**Versión:** 1.6
+**Versión:** 1.7
 **Fecha:** 2026-04-23
 **Alcance:** Convenciones de branching, PRs, quality gates y gestión administrativa para SP1 en adelante
 
@@ -191,8 +191,14 @@ max_god_object_lines = N
      - Decisión de stack/infra → `README.md`, `docs/design/architecture.md`
      - Lenguaje ubicuo → `CLAUDE.md §8`, `event-storming-*.md`
    → Costo esperado: ~15 min. No aplica a INCs sin ADRs nuevos (ej: frontend puro).
-7. Mini-retrospectiva: ¿qué funcionó? ¿qué ajustar en el próximo?
-8. Cerrar Issue del incremento en GitHub con comentario de DoD verificado
+7. **[CONDICIONAL] Si el INC tiene UAT manual:** clasificar cada hallazgo antes de resolverlo
+   → **Solo toca `frontend/`** → track informal (vibe coding): sin spec, sin pipeline de 10 fases.
+     Commits descriptivos con referencia al hallazgo (ej: `[UAT-X.Y-NN]`).
+   → **Toca cualquier archivo de `src/`** → track formal obligatorio: US-IEDD → spec → `/implement-us`.
+   → Regla de pivote: declarar el track ANTES de codear. Si al iniciar un ajuste "de UX"
+     la primera acción es abrir `src/`, pivotar al track formal en ese momento.
+8. Mini-retrospectiva: ¿qué funcionó? ¿qué ajustar en el próximo?
+9. Cerrar Issue del incremento en GitHub con comentario de DoD verificado
 ```
 
 **Para incrementos técnicos sin US (ej: Inc 1.1):**
@@ -219,13 +225,14 @@ max_god_object_lines = N
 3. Registrar métricas en .cm/baselines/BL-NNN.md
 4. UAT post-SP — flujo DoD de punta a punta:
    a. Diseñar pruebas en quality/reports/uat/SPN/design.md
-   b. Implementar seed + script en tests/uat/spN/
+   b. Clasificar cada hallazgo antes de resolverlo (ver §6 paso 7 — criterio `frontend/` vs `src/`)
+   c. Implementar seed + script en tests/uat/spN/
       → Patrón HTTP completo si los comandos están expuestos como endpoints POST
       → Patrón híbrido (seed Application layer + HTTP) si algún comando no tiene endpoint
-   c. Ejecutar: Capa 1 pytest (flujo de dominio) + Capa 2 HTTP (endpoints observables)
-   d. Guardar evidencia en quality/reports/uat/SPN/
+   d. Ejecutar: Capa 1 pytest (flujo de dominio) + Capa 2 HTTP (endpoints observables)
+   e. Guardar evidencia en quality/reports/uat/SPN/
       (capa1-pytest.txt · capa2-http.json · report.md)
-   e. UAT aprobado → PR mergeado a develop antes de continuar
+   f. UAT aprobado → PR mergeado a develop antes de continuar
 5. Merge develop → main
 6. Tag: git tag vN.0.0  — cerrar Milestone en GitHub
 7. Retrospectiva documentada en BL-NNN.md (alimenta el libro y el paper)
@@ -260,6 +267,10 @@ del reporte antes de cerrar el Baseline, no en la automatización.
 | Cierre de Subproyecto | ArchitectAnalyst | Manual, antes de merge a main | `architectanalyst src/ --sprint-id BL-NNN --format json` | Informa tendencias |
 | Cierre de INC (con ADR nuevo) | Revisión manual | Condicional — solo si el INC produjo ADRs | Ver §6 paso 6 — áreas de impacto por tipo de ADR | Actualizar artefactos afectados |
 | SP-ADJ pre-baseline | Revisión manual | Obligatorio en cada SP-ADJ | Ver §7 — checklist de consistencia documental | Barrido completo de artefactos |
+
+> **Clasificación de hallazgos UAT:** solo `frontend/` → track informal (vibe coding, sin US-IEDD).
+> Cualquier archivo de `src/` → track formal obligatorio. Declarar el track antes de codear.
+> Ver §6 paso 7 y HITO-28.
 
 > **Importante:** siempre pasar `--config pyproject.toml` al correr DesignReviewer manualmente.
 > Sin él se usan defaults del sistema (CBO=5, WMC=20) que no reflejan la config del proyecto
@@ -297,6 +308,7 @@ feature/US-1.2.3-registrar-resultado → /implement-us → /pr → merge develop
 
 ---
 
+*v1.7 — 2026-04-23. §6: clasificación de hallazgos UAT por track (frontend/ vs src/). §7: paso de clasificación en UAT post-SP. §8: nota de clasificación UAT. Ver HITO-28.*
 *v1.6 — 2026-04-23. §6: gate condicional de consistencia documental si hay ADRs nuevos. §7: SP-ADJ incluye barrido documental obligatorio (Gate 2). §8: dos nuevas filas de quality gate documental. Ver HITO-27.*
 *v1.5 — 2026-03-29. §5: orden de arranque, artefactos por fase, aprobaciones, bug tracker prefijo non-US-.*
 *§6: ajuste de umbrales CBO/WMC al inicio del incremento. §7: UAT post-SP como paso obligatorio.*
