@@ -6,7 +6,7 @@
 | **Baseline** | BL-005 |
 | **Tag git** | `v1.0.0` |
 | **Fecha** | 2026-04-18 |
-| **Estado** | ⏳ Planificado |
+| **Estado** | ⏳ En progreso (INC-5.1..5.3 ✅) |
 
 ---
 
@@ -191,34 +191,52 @@ manualmente cuando corresponda. El cierre automático por P-08 coexiste con el c
 
 ---
 
-### INC-5.3 — Gestión de usuarios y roles
+### INC-5.3 — Gestión de usuarios y roles ✅ Cerrado 2026-04-23
 
-**DoD:** el organizador puede crear usuarios y asignarles rol (organizador / juez / atleta)
-desde la UI. Los jueces solo ven las disciplinas que tienen asignadas. Los atletas solo
-acceden a su perfil e inscripción. Los roles se respetan en toda la UI sin excepción.
+**DoD:** el organizador puede crear usuarios y asignarles rol desde la UI. Los atletas
+acceden a su perfil e inscripción básica. Los roles se respetan en toda la UI.
 
-| US | Descripción | Área |
-|----|-------------|------|
-| US-5.3.1 | UI de gestión de usuarios — organizador crea usuarios y asigna roles | `frontend/`, `identidad/api/` |
-| US-5.3.2 | Vista del atleta — pantalla de perfil y disciplinas disponibles para inscripción | `frontend/` |
-
----
-
-### INC-5.4 — Inscripción completa
-
-**DoD:** un atleta puede auto-registrarse con sus datos completos y registrar sus APs por
-disciplina. El organizador ve la lista de inscriptos con estado. La transición Inscripción
-→ Preparación cierra el período de inscripción y bloquea nuevos anuncios.
-
-| US | Descripción | Área |
-|----|-------------|------|
-| US-5.4.1 | Formulario de inscripción — nombre, club, categoría, género, disciplinas, apto médico, constancia de pago | `frontend/`, `registro/api/` |
-| US-5.4.2 | Registro de APs — atleta ingresa Performance Anunciada por cada disciplina inscripta | `frontend/`, `competencia/api/` |
-| US-5.4.3 | Vista del organizador — lista de inscriptos con estado (inscripto / AP registrado / sin AP) | `frontend/`, `registro/api/` |
+| US | Descripción | Estado |
+|----|-------------|--------|
+| US-5.3.1 | UI de gestión de usuarios — organizador crea usuarios y asigna roles | ✅ PR #110 |
+| US-5.3.2 | Vista del atleta — perfil + torneos en inscripción + `InscripcionPanel` básico | ✅ PR #111 |
 
 ---
 
-### INC-5.5 — Algoritmo de puntaje y rankings por categoría/género
+### INC-5.4 — Identidad Extendida
+
+**DoD:** cualquier persona puede auto-registrarse con nombre, apellido, email, password
+y rol. El usuario autenticado puede cambiar su contraseña. Un usuario sin acceso puede
+recuperar su contraseña vía email (Resend + JWT temporal con expiración 1h).
+
+> **Nota:** extiende el modelo `Usuario` con `nombre` y `apellido` — impacta todas las
+> capas de BC Identidad y los formularios de frontend que muestran usuarios.
+
+| US | Descripción | Área |
+|----|-------------|------|
+| US-5.4.1 | Auto-registro — extender `Usuario` (nombre, apellido) + validar `rol ≠ ADMIN` en backend + página `/registro` con todos los campos + link "Nuevo usuario" en `LoginPage` | `identidad/`, `frontend/` |
+| US-5.4.2 | Cambiar contraseña — `POST /auth/cambiar-password` (JWT requerido, verifica bcrypt actual, setea nueva ≥8 chars) + pantalla frontend accesible desde el perfil | `identidad/api/`, `frontend/` |
+| US-5.4.3 | Olvidé contraseña — `POST /auth/solicitar-reset` (genera JWT `{sub, type:"password_reset", exp:+1h}`, envía email Resend con link) + `POST /auth/reset-password` (valida token, setea nueva password) + 2 pantallas frontend | `identidad/api/`, `notificaciones/`, `frontend/` |
+
+---
+
+### INC-5.5 — Inscripción completa
+
+**DoD:** el atleta puede registrar sus APs por disciplina. El organizador ve la lista de
+inscriptos actualizada con nombre/apellido (del modelo extendido en INC-5.4). La
+transición Inscripción → Preparación cierra el período y bloquea nuevos anuncios.
+
+> **Nota:** la inscripción básica (selección de disciplinas) fue adelantada en US-5.3.2.
+> Este INC agrega APs y la vista completa del organizador.
+
+| US | Descripción | Área |
+|----|-------------|------|
+| US-5.5.1 | Registro de APs — atleta ingresa Performance Anunciada por cada disciplina inscripta | `frontend/`, `competencia/api/` |
+| US-5.5.2 | Vista del organizador — lista de inscriptos con nombre, disciplinas y estado AP (registrado / sin AP) | `frontend/`, `registro/api/` |
+
+---
+
+### INC-5.6 — Algoritmo de puntaje y rankings por categoría/género
 
 **DoD:** al cerrar una disciplina, el sistema calcula y muestra instantáneamente:
 (1) tabla de ejecución con género, categoría, AP, RP, tarjeta y puntos ordenada por OT;
@@ -228,16 +246,16 @@ las disciplinas por división.
 
 | US | Descripción | Área |
 |----|-------------|------|
-| US-5.5.1 | Puerto `AlgoritmoPuntaje` + `AlgoritmoPuntajeFAAS` — fórmulas distancia y tiempo | `resultados/domain/ports/`, `resultados/domain/services/` |
-| US-5.5.2 | `TipoReglamento` en `Torneo` — VO extensible (FAAS / CMAS / AIDA); DI en `CalcularRanking` | `torneo/domain/`, `resultados/application/` |
-| US-5.5.3 | Ranking por categoría/género — `RankingCompetencia` genera 6 sub-rankings con puntaje | `resultados/domain/`, `resultados/application/` |
-| US-5.5.4 | `RankingOverall` por categoría/género — suma algebraica de puntos por división | `resultados/domain/`, `resultados/application/` |
-| US-5.5.5 | UI tabla de ejecución — vista ordenada por OT con columna género y puntos | `frontend/` |
-| US-5.5.6 | UI podios — 6 divisiones con posición, nombre, club, puntos, RP | `frontend/` |
+| US-5.6.1 | Puerto `AlgoritmoPuntaje` + `AlgoritmoPuntajeFAAS` — fórmulas distancia y tiempo | `resultados/domain/ports/`, `resultados/domain/services/` |
+| US-5.6.2 | `TipoReglamento` en `Torneo` — VO extensible (FAAS / CMAS / AIDA); DI en `CalcularRanking` | `torneo/domain/`, `resultados/application/` |
+| US-5.6.3 | Ranking por categoría/género — `RankingCompetencia` genera 6 sub-rankings con puntaje | `resultados/domain/`, `resultados/application/` |
+| US-5.6.4 | `RankingOverall` por categoría/género — suma algebraica de puntos por división | `resultados/domain/`, `resultados/application/` |
+| US-5.6.5 | UI tabla de ejecución — vista ordenada por OT con columna género y puntos | `frontend/` |
+| US-5.6.6 | UI podios — 6 divisiones con posición, nombre, club, puntos, RP | `frontend/` |
 
 ---
 
-### INC-5.6 — Portal del Atleta
+### INC-5.7 — Portal del Atleta
 
 **DoD:** el atleta tiene una vista completa de su participación en el torneo: sus torneos
 inscriptos, su posición en la grilla por disciplina, sus resultados al cierre de cada
@@ -245,14 +263,14 @@ disciplina, y los rankings/podios de las disciplinas en las que compitió.
 
 | US | Descripción | Área |
 |----|-------------|------|
-| US-5.6.1 | Mis torneos — lista de torneos inscriptos con estado actual del torneo | `frontend/`, `torneo/api/` |
-| US-5.6.2 | Mi grilla — posición del atleta (OT + línea) por disciplina inscripta | `frontend/`, `competencia/api/` |
-| US-5.6.3 | Mis resultados — RP, tarjeta y puntos obtenidos por disciplina | `frontend/`, `resultados/api/` |
-| US-5.6.4 | Rankings y podios — tabla de ejecución + podio de cada disciplina en la que participó | `frontend/`, `resultados/api/` |
+| US-5.7.1 | Mis torneos — lista de torneos inscriptos con estado actual del torneo | `frontend/`, `torneo/api/` |
+| US-5.7.2 | Mi grilla — posición del atleta (OT + línea) por disciplina inscripta | `frontend/`, `competencia/api/` |
+| US-5.7.3 | Mis resultados — RP, tarjeta y puntos obtenidos por disciplina | `frontend/`, `resultados/api/` |
+| US-5.7.4 | Rankings y podios — tabla de ejecución + podio de cada disciplina en la que participó | `frontend/`, `resultados/api/` |
 
 ---
 
-### INC-5.7 — Polish y demo-readiness
+### INC-5.8 — Polish y demo-readiness
 
 **DoD:** el flujo completo puede ejecutarse con los datos del torneo BA 2025 sin errores
 visibles, workarounds, ni datos hardcodeados. La UI es presentable a un comprador.
@@ -261,24 +279,25 @@ coinciden con los resultados oficiales del PDF.
 
 | US | Descripción | Área |
 |----|-------------|------|
-| US-5.7.1 | Seed del torneo BA 2025 completo — datos reales como caso de demostración | `data/`, `scripts/` |
-| US-5.7.2 | Verificación de resultados BA 2025 — comparar salida del sistema contra PDFs oficiales | `tests/` |
-| US-5.7.3 | UX fixes del flujo completo — correcciones identificadas al ejecutar el demo end-to-end | `frontend/` |
+| US-5.8.1 | Seed del torneo BA 2025 completo — datos reales como caso de demostración | `data/`, `scripts/` |
+| US-5.8.2 | Verificación de resultados BA 2025 — comparar salida del sistema contra PDFs oficiales | `tests/` |
+| US-5.8.3 | UX fixes del flujo completo — correcciones identificadas al ejecutar el demo end-to-end | `frontend/` |
 
 ---
 
 ## Dependencias entre incrementos
 
 ```
-SP-ADJ-07 (deuda SP4)
-  └── INC-5.1 (Panel Organizador — ciclo de vida)
-        └── INC-5.1-ADJ (Ajuste post-UAT — bugs de fase y composición)
-              └── INC-5.2 (Ejecución por Disciplina — maestro-detalle + cierre manual)
-                    └── INC-5.3 (Roles y usuarios)
-                          └── INC-5.4 (Inscripción completa)
-                                └── INC-5.5 (Puntaje + Rankings)
-                                      └── INC-5.6 (Portal del Atleta)
-                                            └── INC-5.7 (Polish + BA 2025)
+SP-ADJ-07 (deuda SP4)                         ✅
+  └── INC-5.1 (Panel Organizador)             ✅
+        └── INC-5.1-ADJ (Ajuste post-UAT)    ✅
+              └── INC-5.2 (Ejecución)         ✅
+                    └── INC-5.3 (Usuarios)    ✅
+                          └── INC-5.4 (Identidad Extendida — auto-registro, cambiar pw, olvidé pw)
+                                └── INC-5.5 (Inscripción completa — APs + vista organizador)
+                                      └── INC-5.6 (Puntaje + Rankings)
+                                            └── INC-5.7 (Portal del Atleta)
+                                                  └── INC-5.8 (Polish + BA 2025)
 ```
 
 ---
@@ -310,3 +329,4 @@ SP-ADJ-07 (deuda SP4)
 
 *Redactado: 2026-04-18 — SP5 La Puesta en Marcha (MVP Demo)*
 *Algoritmo de puntaje FAAS definido en sesión de planificación 2026-04-18*
+*2026-04-23 — INC-5.3 marcado ✅ · INC-5.4 redefinido como "Identidad Extendida" (auto-registro, cambiar/olvidé pw, modelo nombre/apellido) · INC-5.5..5.8 renumerados desde INC-5.4..5.7 original*
