@@ -1,7 +1,7 @@
 # Workflow de Desarrollo — AtaraxiaDive
 
-**Versión:** 1.5
-**Fecha:** 2026-03-29
+**Versión:** 1.6
+**Fecha:** 2026-04-23
 **Alcance:** Convenciones de branching, PRs, quality gates y gestión administrativa para SP1 en adelante
 
 ---
@@ -183,8 +183,16 @@ max_god_object_lines = N
    → Actualizar métricas del incremento
    → Registrar decisiones técnicas relevantes
 5. Documentar aprendizajes experimentales en HITO-N si hay observaciones relevantes
-6. Mini-retrospectiva: ¿qué funcionó? ¿qué ajustar en el próximo?
-7. Cerrar Issue del incremento en GitHub con comentario de DoD verificado
+6. **[CONDICIONAL] Si el INC produjo ADRs nuevos:** verificar consistencia documental acotada
+   → Identificar qué artefactos referencian el área que tocó el ADR
+   → Áreas de impacto típicas por tipo de ADR:
+     - Nuevo BC / integración → `docs/architecture/20-context-map-integrations.md`
+     - Decisión de persistencia → `docs/architecture/10-bc-*.md`, `domain-model.md`
+     - Decisión de stack/infra → `README.md`, `docs/design/architecture.md`
+     - Lenguaje ubicuo → `CLAUDE.md §8`, `event-storming-*.md`
+   → Costo esperado: ~15 min. No aplica a INCs sin ADRs nuevos (ej: frontend puro).
+7. Mini-retrospectiva: ¿qué funcionó? ¿qué ajustar en el próximo?
+8. Cerrar Issue del incremento en GitHub con comentario de DoD verificado
 ```
 
 **Para incrementos técnicos sin US (ej: Inc 1.1):**
@@ -229,6 +237,15 @@ del reporte antes de cerrar el Baseline, no en la automatización.
 > **SP-ADJ:** evaluar al cierre de cada SP si hay deuda acumulada (técnica o documental)
 > que justifique un sprint de ajuste antes de arrancar el siguiente SP.
 > Ver patrón establecido en SP-ADJ-01 y SP-ADJ-02 post-SP2.
+>
+> El SP-ADJ incluye **siempre** un barrido de consistencia documental (Gate 2):
+> - `docs/architecture/` alineada con la estructura real de `src/`
+> - `docs/design/` refleja decisiones del período
+> - `CLAUDE.md §14` actualizado con el estado del SP
+> - `docs/traceability/matrix.md` sin US sin cerrar
+> - `README.md` apuntando a los documentos correctos
+> - `docs/dominio/` sin referencias a conceptos renombrados o eliminados
+> Costo esperado: 30–60 min si el Gate 1 (ADR trigger) funcionó bien durante el SP.
 
 ---
 
@@ -241,6 +258,8 @@ del reporte antes de cerrar el Baseline, no en la automatización.
 | Cierre de Incremento | DesignReviewer | Manual, después del último merge | `designreviewer src/ --config pyproject.toml` | Confirmar cero CRITICAL |
 | UAT post-SP | Tests funcionales | Manual, antes de merge a main | `tests/uat/spN/run_uat.sh` | Capa 1 + Capa 2 aprobadas |
 | Cierre de Subproyecto | ArchitectAnalyst | Manual, antes de merge a main | `architectanalyst src/ --sprint-id BL-NNN --format json` | Informa tendencias |
+| Cierre de INC (con ADR nuevo) | Revisión manual | Condicional — solo si el INC produjo ADRs | Ver §6 paso 6 — áreas de impacto por tipo de ADR | Actualizar artefactos afectados |
+| SP-ADJ pre-baseline | Revisión manual | Obligatorio en cada SP-ADJ | Ver §7 — checklist de consistencia documental | Barrido completo de artefactos |
 
 > **Importante:** siempre pasar `--config pyproject.toml` al correr DesignReviewer manualmente.
 > Sin él se usan defaults del sistema (CBO=5, WMC=20) que no reflejan la config del proyecto
@@ -278,6 +297,7 @@ feature/US-1.2.3-registrar-resultado → /implement-us → /pr → merge develop
 
 ---
 
+*v1.6 — 2026-04-23. §6: gate condicional de consistencia documental si hay ADRs nuevos. §7: SP-ADJ incluye barrido documental obligatorio (Gate 2). §8: dos nuevas filas de quality gate documental. Ver HITO-27.*
 *v1.5 — 2026-03-29. §5: orden de arranque, artefactos por fase, aprobaciones, bug tracker prefijo non-US-.*
 *§6: ajuste de umbrales CBO/WMC al inicio del incremento. §7: UAT post-SP como paso obligatorio.*
 *§8: --config pyproject.toml obligatorio en ejecución manual. SP-ADJ como patrón establecido.*
