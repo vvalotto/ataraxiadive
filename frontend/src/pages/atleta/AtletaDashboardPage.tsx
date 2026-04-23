@@ -1,6 +1,12 @@
-import { useMemo } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { fetchTorneos } from '../../api/torneo'
+import { useMemo, useState } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { ApiError, inscribirAtleta } from '../../api/registro'
+import {
+  fetchTorneos,
+  listarDisciplinasTorneo,
+  type DisciplinaCodigo,
+  type TorneoDto,
+} from '../../api/torneo'
 import useAuthStore from '../../stores/useAuthStore'
 
 function formatearFecha(fechaIso: string): string {
@@ -12,8 +18,169 @@ function formatearFecha(fechaIso: string): string {
   }).format(fecha)
 }
 
+const DISCIPLINA_LABELS: Record<DisciplinaCodigo, string> = {
+  STA: 'STA',
+  DNF: 'DNF',
+  DYN: 'DYN',
+  DBF: 'DBF',
+  SPE_2X50: 'SPE 2x50',
+  SPE_4X50: 'SPE 4x50',
+  SPE_8X50: 'SPE 8x50',
+  SPE_16X50: 'SPE 16x50',
+}
+
+function formatDisciplina(disciplina: DisciplinaCodigo): string {
+  return DISCIPLINA_LABELS[disciplina] ?? disciplina
+}
+
+function getInscripcionError(error: unknown): string {
+  if (error instanceof ApiError) {
+    if (error.status === 409) return error.message
+    if (error.status === 422) return 'Debes seleccionar al menos una disciplina'
+    return error.message
+  }
+  if (error instanceof Error) return error.message
+  return 'No se pudo completar la inscripcion'
+}
+
+interface InscripcionPanelProps {
+  torneo: TorneoDto
+  atletaId: string | null
+}
+
+function InscripcionPanel({ torneo, atletaId }: InscripcionPanelProps) {
+  const [open, setOpen] = useState(false)
+  const [selected, setSelected] = useState<DisciplinaCodigo[]>([])
+  const disciplinasQuery = useQuery({
+    queryKey: ['disciplinas-torneo-atleta', torneo.torneo_id],
+    queryFn: async () => {
+      const disciplinas = await listarDisciplinasTorneo(torneo.torneo_id)
+      return disciplinas.map((item) => item.disciplina)
+    },
+    enabled: open,
+  })
+  const inscripcionMutation = useMutation({
+    mutationFn: (disciplinas: DisciplinaCodigo[]) => {
+      if (!atletaId) {
+        throw new Error('No se pudo identificar al atleta autenticado')
+      }
+      return inscribirAtleta({
+        atletaId,
+        torneoId: torneo.torneo_id,
+        disciplinas,
+      })
+    },
+    onSuccess: () => {
+      setOpen(false)
+      setSelected([])
+    },
+  })
+
+  function toggleDisciplina(disciplina: DisciplinaCodigo) {
+    setSelected((current) =>
+      current.includes(disciplina)
+        ? current.filter((item) => item !== disciplina)
+        : [...current, disciplina],
+    )
+  }
+
+  return (
+    <div className="mt-5 rounded-[1.25rem] border border-teal-200/80 bg-teal-50/60 p-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">
+            Inscripcion
+          </p>
+          <p className="mt-1 text-sm text-stone-600">
+            Selecciona las disciplinas para inscribirte en este torneo.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setOpen((current) => !current)}
+          className="rounded-lg bg-teal-700 px-4 py-2 text-sm font-semibold text-white"
+        >
+          {open ? 'Cancelar' : 'Inscribirme'}
+        </button>
+      </div>
+
+      {inscripcionMutation.isSuccess ? (
+        <div className="mt-4 rounded-xl border border-emerald-300 bg-emerald-50 p-3 text-sm text-emerald-900">
+          Inscripcion confirmada.
+        </div>
+      ) : null}
+
+      {open ? (
+        <div className="mt-4 space-y-4">
+          {disciplinasQuery.isLoading ? (
+            <div className="rounded-xl border border-stone-200 bg-white p-3 text-sm text-stone-600">
+              Cargando disciplinas...
+            </div>
+          ) : null}
+
+          {disciplinasQuery.isError ? (
+            <div className="rounded-xl border border-red-300 bg-red-50 p-3 text-sm text-red-900">
+              No se pudieron cargar las disciplinas del torneo.
+            </div>
+          ) : null}
+
+          {!disciplinasQuery.isLoading &&
+          !disciplinasQuery.isError &&
+          (disciplinasQuery.data?.length ?? 0) === 0 ? (
+            <div className="rounded-xl border border-stone-200 bg-white p-3 text-sm text-stone-600">
+              Este torneo no tiene disciplinas configuradas.
+            </div>
+          ) : null}
+
+          {!disciplinasQuery.isLoading &&
+          !disciplinasQuery.isError &&
+          (disciplinasQuery.data?.length ?? 0) > 0 ? (
+            <>
+              <div className="grid gap-2 sm:grid-cols-2">
+                {disciplinasQuery.data?.map((disciplina) => {
+                  const checked = selected.includes(disciplina)
+                  return (
+                    <label
+                      key={disciplina}
+                      className="flex items-center gap-3 rounded-xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-800"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggleDisciplina(disciplina)}
+                        className="h-4 w-4 rounded border-stone-300 text-teal-700 focus:ring-teal-600"
+                      />
+                      <span className="font-medium">{formatDisciplina(disciplina)}</span>
+                    </label>
+                  )
+                })}
+              </div>
+
+              {inscripcionMutation.isError ? (
+                <div className="rounded-xl border border-red-300 bg-red-50 p-3 text-sm text-red-900">
+                  {getInscripcionError(inscripcionMutation.error)}
+                </div>
+              ) : null}
+
+              <button
+                type="button"
+                onClick={() => inscripcionMutation.mutate(selected)}
+                disabled={inscripcionMutation.isPending || !atletaId}
+                className="rounded-lg bg-stone-900 px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-stone-400"
+              >
+                {inscripcionMutation.isPending ? 'Confirmando...' : 'Confirmar inscripcion'}
+              </button>
+            </>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
 export function AtletaDashboardPage() {
   const email = useAuthStore((s) => s.email)
+  const atletaId = useAuthStore((s) => s.userId)
   const logout = useAuthStore((s) => s.logout)
   const torneosQuery = useQuery({
     queryKey: ['torneos-atleta'],
@@ -124,6 +291,7 @@ export function AtletaDashboardPage() {
                     <p className="mt-2 text-sm text-stone-600">
                       {formatearFecha(torneo.fecha_inicio)} al {formatearFecha(torneo.fecha_fin)}
                     </p>
+                    <InscripcionPanel torneo={torneo} atletaId={atletaId} />
                   </article>
                 ))}
               </div>

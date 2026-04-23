@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { loginApi } from '../api/auth'
 import useAuthStore from '../stores/useAuthStore'
@@ -7,7 +7,6 @@ import useAuthStore from '../stores/useAuthStore'
 export function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const navigate = useNavigate()
   const login = useAuthStore((s) => s.login)
   const rol = useAuthStore((s) => s.rol)
 
@@ -20,16 +19,13 @@ export function LoginPage() {
 
   // Redirect si ya tiene sesión activa
   if (rol === 'juez') {
-    void navigate('/juez/disciplinas', { replace: true })
-    return null
+    return <Navigate to="/juez/disciplinas" replace />
   }
   if (rol === 'organizador') {
-    void navigate('/organizador/dashboard', { replace: true })
-    return null
+    return <Navigate to="/organizador/dashboard" replace />
   }
   if (rol === 'atleta') {
-    void navigate('/atleta/dashboard', { replace: true })
-    return null
+    return <Navigate to="/atleta/dashboard" replace />
   }
 
   const handleSubmit = (e: React.FormEvent) => {

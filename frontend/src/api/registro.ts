@@ -1,3 +1,4 @@
+import type { DisciplinaCodigo } from './torneo'
 import { getToken, handleUnauthorized } from './tokenProvider'
 
 export class ApiError extends Error {
@@ -27,6 +28,16 @@ export interface AtletaDto {
   categoria: string
   club: string
   brevet: string | null
+}
+
+export interface InscribirAtletaPayload {
+  atletaId: string
+  torneoId: string
+  disciplinas: DisciplinaCodigo[]
+}
+
+export interface InscribirAtletaResponse {
+  inscripcion_id: string
 }
 
 function buildHeaders(): Record<string, string> {
@@ -78,4 +89,19 @@ export async function fetchAtleta(atletaId: string): Promise<AtletaDto> {
     headers: buildHeaders(),
   })
   return parseResponse<AtletaDto>(response)
+}
+
+export async function inscribirAtleta(
+  payload: InscribirAtletaPayload,
+): Promise<InscribirAtletaResponse> {
+  const response = await fetch('/registro/inscripciones', {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      atleta_id: payload.atletaId,
+      torneo_id: payload.torneoId,
+      disciplinas: payload.disciplinas,
+    }),
+  })
+  return parseResponse<InscribirAtletaResponse>(response)
 }
