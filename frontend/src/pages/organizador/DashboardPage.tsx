@@ -66,6 +66,12 @@ export function DashboardPage() {
       actions={
         <>
           <Link
+            to="/organizador/usuarios"
+            className="rounded-lg border border-stone-900 px-4 py-2 text-sm font-semibold text-stone-900"
+          >
+            Usuarios
+          </Link>
+          <Link
             to="/organizador/torneos/nuevo"
             className="rounded-lg bg-emerald-800 px-4 py-2 text-sm font-semibold text-white"
           >

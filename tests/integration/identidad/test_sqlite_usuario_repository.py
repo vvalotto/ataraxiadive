@@ -92,3 +92,22 @@ async def test_list_by_rol_filtra_y_ordena_por_email(repo: SQLiteUsuarioReposito
     jueces = await repo.list_by_rol(Rol.JUEZ)
 
     assert [usuario.email for usuario in jueces] == ["a-juez@test.com", "z-juez@test.com"]
+
+
+@pytest.mark.asyncio
+async def test_list_all_devuelve_todos_ordenados_por_rol_y_email(
+    repo: SQLiteUsuarioRepository,
+) -> None:
+    await repo.save(_usuario(email="z-juez@test.com", rol=Rol.JUEZ))
+    await repo.save(_usuario(email="org@test.com", rol=Rol.ORGANIZADOR))
+    await repo.save(_usuario(email="atleta@test.com", rol=Rol.ATLETA))
+    await repo.save(_usuario(email="a-juez@test.com", rol=Rol.JUEZ))
+
+    usuarios = await repo.list_all()
+
+    assert [(usuario.rol, usuario.email) for usuario in usuarios] == [
+        (Rol.ATLETA, "atleta@test.com"),
+        (Rol.JUEZ, "a-juez@test.com"),
+        (Rol.JUEZ, "z-juez@test.com"),
+        (Rol.ORGANIZADOR, "org@test.com"),
+    ]

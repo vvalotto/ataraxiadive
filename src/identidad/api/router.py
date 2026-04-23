@@ -111,11 +111,11 @@ async def autenticar_usuario(body: LoginRequest) -> JSONResponse:
 
 @router.get("/usuarios", status_code=200)
 async def listar_usuarios(
-    rol: Rol,
     _: OrganizadorDep,
     repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
+    rol: Rol | None = None,
 ) -> JSONResponse:
-    usuarios = await repo.list_by_rol(rol)
+    usuarios = await repo.list_by_rol(rol) if rol else await repo.list_all()
     return JSONResponse(
         status_code=200,
         content=[
