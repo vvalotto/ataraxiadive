@@ -4,9 +4,9 @@
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-04-23 |
+| **Fecha** | 2026-04-24 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.24 — INC-5.3 cerrado (US-5.3.1..5.3.2 · DesignReviewer 0 CRITICAL · 215 WARNING) |
+| **Estado** | ✅ v1.25 — INC-5.4 cerrado (US-5.4.1..5.4.3 · DesignReviewer 0 CRITICAL · 222 WARNING) |
 
 ---
 
@@ -449,7 +449,21 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 
 ---
 
-## 24. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §23 -->
+## 24. US-IEDD SP5 INC-5.4 — Identidad Extendida
+
+> Estado al 2026-04-24: 3/3 US mergeadas a `develop`.
+> DesignReviewer INC-5.4: **0 CRITICAL · 222 WARNING** (`quality/reports/designreviewer/INC-5.4-report.txt`).
+> +7 WARNING respecto a INC-5.3 (215→222), atribuidos a nuevos endpoints en `identidad/api/router.py`.
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-5.4.1 | 5.4 | Auto-registro público — extensión modelo `Usuario` (nombre/apellido) + `POST /auth/registro` (rol ≠ ADMIN) + página `/registro` en frontend | ✅ Done (PR #112) |
+| US-5.4.2 | 5.4 | Cambiar contraseña — `POST /auth/cambiar-password` (usuario autenticado) + handler `CambiarPasswordHandler` | ✅ Done (PR #113) |
+| US-5.4.3 | 5.4 | Recuperar contraseña — `TokenServicePort` + JWT firmado exp 1h + `POST /auth/forgot-password` + `POST /auth/reset-password` + email Resend + páginas `/recuperar-password` y `/reset-password` | ✅ Done (PR #114) |
+
+---
+
+## 25. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §24 -->
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -468,7 +482,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 25. Cobertura Total
+## 26. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -488,7 +502,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 26. US → Tests
+## 27. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -555,10 +569,13 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-ADJ-8.3 | frontend (build + eslint src) · UAT regresión SP-ADJ-08 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #109) |
 | US-5.3.1 | unit/identidad/api (`test_listar_usuarios.py`) · integration/identidad (`test_sqlite_usuario_repository.py`) · `tests/features/US-5.3.1-gestion-usuarios.feature` · frontend (build + eslint) | ✅ Done (PR #110) |
 | US-5.3.2 | `tests/features/US-5.3.2-vista-atleta.feature` · frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #111) |
+| US-5.4.1 | unit/identidad/application (`registrar_usuario`) · integration/identidad · `tests/features/US-5.4.1` · frontend (build + eslint) | ✅ Done (PR #112) |
+| US-5.4.2 | unit/identidad/application (`test_handlers.py` CambiarPassword) · integration/identidad · `tests/features/US-5.4.2` | ✅ Done (PR #113) |
+| US-5.4.3 | unit/identidad/api (`test_reset_password.py`) · unit/identidad/application (`test_handlers.py` Reset) · `tests/features/US-5.4.3-recuperar-password.feature` · frontend (build + eslint) | ✅ Done (PR #114) |
 
 ---
 
-## 27. US → ADR
+## 28. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -587,6 +604,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.19 — 2026-04-20: US-5.1.2 implementada · trazabilidad frontend de gestion de fases agregada*
 *v1.20 — 2026-04-20: US-5.1.3 implementada · trazabilidad frontend de inscriptos/AP agregada*
 *v1.22 — 2026-04-22: INC-5.2 cerrado (§21 nuevo · DesignReviewer 0 CRITICAL · 215 WARNING) · SP-ADJ-08 §22 · §§ renumerados 23..26 · US→Tests US-5.2.1..5.2.2 · US-ADJ-8.1..8.3*
+*v1.25 — 2026-04-24: INC-5.4 cerrado (§24 nuevo · DesignReviewer 0 CRITICAL · 222 WARNING) · §§ renumerados 25..28 · US→Tests US-5.4.1..5.4.3 · PRs #112..#114*
 *v1.24 — 2026-04-23: INC-5.3 cerrado (§23 nuevo · DesignReviewer 0 CRITICAL · 215 WARNING) · §§ renumerados 24..27 · US→Tests US-5.3.1..5.3.2 · nota scope adelantado INC-5.4 en US-5.3.2*
 *v1.23 — 2026-04-23: matriz reconciliada contra PLAN-SP5 vigente · RF-IG/RF-IN-07 movidos a futuro fuera de scope SP5 · RF-PM y RF-IN-05/06 marcados como parciales con exposición final en INC-5.4/5.5*
 *v1.21 — 2026-04-22: INC-5.1 cerrado (§19 nuevo · DesignReviewer 0 CRITICAL · 208 WARNING) · INC-5.1-ADJ §20 · §§ renumerados 21..24 · US→Tests US-5.1.1..5.1.10 · §2 cobertura actualizada · HITO-26*

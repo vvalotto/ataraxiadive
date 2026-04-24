@@ -40,7 +40,7 @@ gestionable desde el panel del organizador, con ejecución por disciplina y resu
 | INC-5.2 | Ejecución por Disciplina — vista maestro-detalle, habilitar disciplina, cierre manual (US-5.2.1..5.2.2) | ✅ Cerrado 2026-04-22 | #105, #106 |
 | SP-ADJ-08 | Ajuste post-UAT INC-5.2 — reglas operativas, UX/lenguaje, cancelación fuerte (US-ADJ-8.1..8.3) | ✅ Cerrado 2026-04-22 | #107, #108, #109 |
 | INC-5.3 | Gestión de usuarios y roles — crear usuarios, asignar roles, vista atleta con inscripción básica (US-5.3.1..5.3.2) | ✅ Cerrado 2026-04-23 | #110, #111 |
-| INC-5.4 | Inscripción completa — APs por disciplina, vista de inscriptos (inscripción básica adelantada en US-5.3.2) | ⏳ Pendiente | — |
+| INC-5.4 | Identidad Extendida — auto-registro público, cambiar contraseña, recuperar contraseña JWT+Resend (US-5.4.1..5.4.3) | ✅ Cerrado 2026-04-24 | #112, #113, #114 |
 | INC-5.5 | Algoritmo de puntaje y rankings por categoría/género — FAAS, tabla OT, podios y overall (US-5.5.1..5.5.6) | ⏳ Pendiente | — |
 | INC-5.6 | Portal del Atleta — mis torneos, mi grilla, mis resultados, rankings/podios (US-5.6.1..5.6.4) | ⏳ Pendiente | — |
 | INC-5.7 | Polish y demo-readiness — seed BA 2025, verificación contra resultados oficiales, UX fixes (US-5.7.1..5.7.3) | ⏳ Pendiente | — |
@@ -58,6 +58,7 @@ gestionable desde el panel del organizador, con ejecución por disciplina y resu
 | DesignReviewer INC-5.1-ADJ | incluido en INC-5.1 (misma ejecución) | 0 CRITICAL · 208 WARNING | `quality/reports/designreviewer/INC-5.1-report.txt` |
 | DesignReviewer INC-5.2 + SP-ADJ-08 | designreviewer | 0 CRITICAL · 215 WARNING | `quality/reports/designreviewer/INC-5.2-report.txt` |
 | DesignReviewer INC-5.3 | designreviewer | 0 CRITICAL · 215 WARNING | `quality/reports/designreviewer/INC-5.3-report.txt` |
+| DesignReviewer INC-5.4 | designreviewer | 0 CRITICAL · 222 WARNING | `quality/reports/designreviewer/INC-5.4-report.txt` |
 | ArchitectAnalyst BL-005 | architectanalyst | ⏳ pendiente (al cerrar SP5) | — |
 | UAT SP5 | funcional | ⏳ pendiente (INC-5.7 / cierre BL-005) | — |
 
