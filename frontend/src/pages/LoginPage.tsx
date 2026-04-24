@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Link, Navigate, useSearchParams } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { loginApi } from '../api/auth'
 import useAuthStore from '../stores/useAuthStore'
 
 export function LoginPage() {
+  const [searchParams] = useSearchParams()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const login = useAuthStore((s) => s.login)
@@ -16,6 +17,7 @@ export function LoginPage() {
       login(data.access_token)
     },
   })
+  const registered = searchParams.get('registered') === '1'
 
   // Redirect si ya tiene sesión activa
   if (rol === 'juez') {
@@ -46,6 +48,11 @@ export function LoginPage() {
           <p className="mb-6 text-center text-sm text-slate-400">
             Portal del juez, organizador y atleta
           </p>
+          {registered ? (
+            <p className="mb-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-center text-sm text-emerald-100">
+              Cuenta creada. Inicia sesion.
+            </p>
+          ) : null}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
             <label className="mb-1 block text-sm font-medium text-slate-300">Email</label>
@@ -82,6 +89,12 @@ export function LoginPage() {
             {mutation.isPending ? 'Iniciando sesión...' : 'Iniciar sesión'}
           </button>
         </form>
+          <p className="mt-5 text-center text-sm text-slate-400">
+            No tenes cuenta?{' '}
+            <Link to="/registro" className="font-semibold text-sky-300 hover:text-sky-200">
+              Registrate
+            </Link>
+          </p>
       </div>
       </div>
     </div>

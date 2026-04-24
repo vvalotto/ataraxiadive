@@ -23,11 +23,15 @@ from identidad.application.commands.registrar_usuario import (
     RegistrarUsuarioHandler,
 )
 from identidad.domain.exceptions import (
+    CampoRequerido,
     CredencialesInvalidas,
     EmailYaRegistrado,
     PasswordDemasiadoCorto,
+    RolNoPermitido,
     UsuarioInactivo,
 )
+from identidad.domain.ports.password_hashing_port import PasswordHashingPort
+from identidad.domain.ports.token_service_port import TokenServicePort
 from identidad.domain.ports.usuario_repository_port import UsuarioRepositoryPort
 from identidad.domain.value_objects.rol import Rol
 
@@ -38,9 +42,19 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 class RegistroRequest(BaseModel):
+    nombre: str
+    apellido: str
     email: str
     password: str
     rol: Rol
+
+    @field_validator("nombre", "apellido")
+    @classmethod
+    def required_trimmed(cls, v: str, info) -> str:  # type: ignore[no-untyped-def]
+        normalizado = v.strip()
+        if not normalizado:
+            raise ValueError(f"El {info.field_name} es requerido")
+        return normalizado
 
     @field_validator("password")
     @classmethod
@@ -66,6 +80,8 @@ class LoginResponse(BaseModel):
 
 class UsuarioResponse(BaseModel):
     usuario_id: UUID
+    nombre: str
+    apellido: str
     email: str
     rol: Rol
     activo: bool
@@ -75,25 +91,39 @@ class UsuarioResponse(BaseModel):
 
 
 @router.post("/registro", status_code=201)
-async def registrar_usuario(body: RegistroRequest) -> JSONResponse:
-    repo = get_usuario_repository()
-    password_hasher = get_password_hasher()
+async def registrar_usuario(
+    body: RegistroRequest,
+    repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
+    password_hasher: Annotated[PasswordHashingPort, Depends(get_password_hasher)],
+) -> JSONResponse:
     handler = RegistrarUsuarioHandler(repo, password_hasher)
-    cmd = RegistrarUsuarioCommand(email=body.email, password=body.password, rol=body.rol)
+    cmd = RegistrarUsuarioCommand(
+        nombre=body.nombre,
+        apellido=body.apellido,
+        email=body.email,
+        password=body.password,
+        rol=body.rol,
+    )
     try:
         usuario_id = await handler.handle(cmd)
+    except CampoRequerido as exc:
+        return JSONResponse(status_code=422, content={"detail": str(exc)})
     except PasswordDemasiadoCorto as exc:
         return JSONResponse(status_code=422, content={"detail": str(exc)})
     except EmailYaRegistrado as exc:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
+    except RolNoPermitido as exc:
+        return JSONResponse(status_code=403, content={"detail": str(exc)})
     return JSONResponse(status_code=201, content={"usuario_id": str(usuario_id)})
 
 
 @router.post("/login", status_code=200)
-async def autenticar_usuario(body: LoginRequest) -> JSONResponse:
-    repo = get_usuario_repository()
-    token_service = get_token_service()
-    password_hasher = get_password_hasher()
+async def autenticar_usuario(
+    body: LoginRequest,
+    repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
+    token_service: Annotated[TokenServicePort, Depends(get_token_service)],
+    password_hasher: Annotated[PasswordHashingPort, Depends(get_password_hasher)],
+) -> JSONResponse:
     handler = AutenticarUsuarioHandler(repo, token_service, password_hasher)
     cmd = AutenticarUsuarioCommand(email=body.email, password=body.password)
     try:
@@ -121,6 +151,8 @@ async def listar_usuarios(
         content=[
             {
                 "usuario_id": str(usuario.usuario_id),
+                "nombre": usuario.nombre,
+                "apellido": usuario.apellido,
                 "email": usuario.email,
                 "rol": usuario.rol.value,
                 "activo": usuario.activo,

@@ -23,6 +23,7 @@ from identidad.domain.exceptions import (
     CredencialesInvalidas,
     EmailYaRegistrado,
     PasswordDemasiadoCorto,
+    RolNoPermitido,
     UsuarioInactivo,
 )
 from identidad.domain.ports.password_hashing_port import PasswordHashingPort
@@ -65,7 +66,13 @@ async def test_registrar_usuario_exitoso(
     mock_repo: AsyncMock, password_hasher: PasswordHashingPort
 ) -> None:
     handler = RegistrarUsuarioHandler(mock_repo, password_hasher)
-    cmd = RegistrarUsuarioCommand(email="nuevo@test.com", password="seguro12", rol=Rol.ORGANIZADOR)
+    cmd = RegistrarUsuarioCommand(
+        nombre="Nuevo",
+        apellido="Usuario",
+        email="nuevo@test.com",
+        password="seguro12",
+        rol=Rol.ORGANIZADOR,
+    )
     usuario_id = await handler.handle(cmd)
     assert usuario_id is not None
     mock_repo.save.assert_called_once()
@@ -76,9 +83,17 @@ async def test_registrar_guarda_hash_no_plain(
     mock_repo: AsyncMock, password_hasher: PasswordHashingPort
 ) -> None:
     handler = RegistrarUsuarioHandler(mock_repo, password_hasher)
-    cmd = RegistrarUsuarioCommand(email="t@t.com", password="password1", rol=Rol.ATLETA)
+    cmd = RegistrarUsuarioCommand(
+        nombre="Ana",
+        apellido="Garcia",
+        email="t@t.com",
+        password="password1",
+        rol=Rol.ATLETA,
+    )
     await handler.handle(cmd)
     saved_usuario: Usuario = mock_repo.save.call_args[0][0]
+    assert saved_usuario.nombre == "Ana"
+    assert saved_usuario.apellido == "Garcia"
     assert saved_usuario.password_hash != "password1"
     assert saved_usuario.password_hash.startswith("$2b$")
 
@@ -87,10 +102,16 @@ async def test_registrar_guarda_hash_no_plain(
 async def test_registrar_email_duplicado_lanza_excepcion(
     mock_repo: AsyncMock, password_hasher: PasswordHashingPort
 ) -> None:
-    existente = Usuario(uuid.uuid4(), "dup@test.com", "$2b$hash", Rol.JUEZ)
+    existente = Usuario(uuid.uuid4(), "Dup", "Existente", "dup@test.com", "$2b$hash", Rol.JUEZ)
     mock_repo.find_by_email.return_value = existente
     handler = RegistrarUsuarioHandler(mock_repo, password_hasher)
-    cmd = RegistrarUsuarioCommand(email="dup@test.com", password="password1", rol=Rol.JUEZ)
+    cmd = RegistrarUsuarioCommand(
+        nombre="Dup",
+        apellido="Nuevo",
+        email="dup@test.com",
+        password="password1",
+        rol=Rol.JUEZ,
+    )
     with pytest.raises(EmailYaRegistrado):
         await handler.handle(cmd)
 
@@ -100,7 +121,13 @@ async def test_registrar_password_corto_lanza_excepcion(
     mock_repo: AsyncMock, password_hasher: PasswordHashingPort
 ) -> None:
     handler = RegistrarUsuarioHandler(mock_repo, password_hasher)
-    cmd = RegistrarUsuarioCommand(email="t@t.com", password="corto", rol=Rol.ATLETA)
+    cmd = RegistrarUsuarioCommand(
+        nombre="Ana",
+        apellido="Garcia",
+        email="t@t.com",
+        password="corto",
+        rol=Rol.ATLETA,
+    )
     with pytest.raises(PasswordDemasiadoCorto):
         await handler.handle(cmd)
 
@@ -110,9 +137,31 @@ async def test_registrar_password_exactamente_8_es_valido(
     mock_repo: AsyncMock, password_hasher: PasswordHashingPort
 ) -> None:
     handler = RegistrarUsuarioHandler(mock_repo, password_hasher)
-    cmd = RegistrarUsuarioCommand(email="t@t.com", password="12345678", rol=Rol.ATLETA)
+    cmd = RegistrarUsuarioCommand(
+        nombre="Ana",
+        apellido="Garcia",
+        email="t@t.com",
+        password="12345678",
+        rol=Rol.ATLETA,
+    )
     usuario_id = await handler.handle(cmd)
     assert usuario_id is not None
+
+
+@pytest.mark.asyncio
+async def test_registrar_admin_lanza_excepcion(
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+) -> None:
+    handler = RegistrarUsuarioHandler(mock_repo, password_hasher)
+    cmd = RegistrarUsuarioCommand(
+        nombre="Admin",
+        apellido="Prohibido",
+        email="admin@test.com",
+        password="12345678",
+        rol=Rol.ADMIN,
+    )
+    with pytest.raises(RolNoPermitido):
+        await handler.handle(cmd)
 
 
 # ── AutenticarUsuarioHandler ──────────────────────────────────────────────────
@@ -120,7 +169,7 @@ async def test_registrar_password_exactamente_8_es_valido(
 
 def _make_usuario(email: str, password: str, rol: Rol = Rol.JUEZ, activo: bool = True) -> Usuario:
     hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-    return Usuario(uuid.uuid4(), email, hashed, rol, activo)
+    return Usuario(uuid.uuid4(), "Test", "Usuario", email, hashed, rol, activo)
 
 
 @pytest.mark.asyncio

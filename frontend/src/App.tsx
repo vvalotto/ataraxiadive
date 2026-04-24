@@ -3,6 +3,7 @@ import { useConnectionSync } from './stores/useConnectionStore'
 import { useSyncQueue } from './hooks/useSyncQueue'
 import useAuthStore from './stores/useAuthStore'
 import { LoginPage } from './pages/LoginPage'
+import { RegistroPage } from './pages/RegistroPage'
 import { RequireRole } from './components/RequireRole'
 import { DisciplinasPage } from './pages/juez/DisciplinasPage'
 import { GrillaPage } from './pages/juez/GrillaPage'
@@ -36,6 +37,7 @@ function App() {
       </div>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/registro" element={<RegistroPage />} />
         <Route path="/" element={<RootRedirect />} />
         <Route
           path="/juez/disciplinas"

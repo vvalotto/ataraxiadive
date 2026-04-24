@@ -14,12 +14,16 @@ export type RolGestionUsuario = Exclude<RolIdentidad, 'ADMIN'>
 
 export interface UsuarioDto {
   usuario_id: string
+  nombre: string
+  apellido: string
   email: string
   rol: RolIdentidad
   activo: boolean
 }
 
 export interface CrearUsuarioRequest {
+  nombre: string
+  apellido: string
   email: string
   password: string
   rol: RolGestionUsuario

@@ -12,6 +12,8 @@ import {
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
 
 interface FormState {
+  nombre: string
+  apellido: string
   email: string
   password: string
   rol: RolGestionUsuario
@@ -20,6 +22,8 @@ interface FormState {
 type FormErrors = Partial<Record<keyof FormState | 'general', string>>
 
 const INITIAL_FORM: FormState = {
+  nombre: '',
+  apellido: '',
   email: '',
   password: '',
   rol: 'JUEZ',
@@ -106,6 +110,12 @@ export function UsuariosPage() {
     if (!form.email.trim()) {
       nextErrors.email = 'El email es obligatorio'
     }
+    if (!form.nombre.trim()) {
+      nextErrors.nombre = 'El nombre es obligatorio'
+    }
+    if (!form.apellido.trim()) {
+      nextErrors.apellido = 'El apellido es obligatorio'
+    }
     if (!form.password) {
       nextErrors.password = 'La contrasena es obligatoria'
     } else if (form.password.length < 8) {
@@ -123,6 +133,8 @@ export function UsuariosPage() {
     }
 
     crearUsuarioMutation.mutate({
+      nombre: form.nombre.trim(),
+      apellido: form.apellido.trim(),
       email: form.email.trim(),
       password: form.password,
       rol: form.rol,
@@ -175,6 +187,8 @@ export function UsuariosPage() {
               <table className="w-full border-collapse text-left text-sm">
                 <thead className="bg-stone-100 text-xs uppercase text-stone-500">
                   <tr>
+                    <th className="px-4 py-3 font-semibold">Nombre</th>
+                    <th className="px-4 py-3 font-semibold">Apellido</th>
                     <th className="px-4 py-3 font-semibold">Email</th>
                     <th className="px-4 py-3 font-semibold">Rol</th>
                     <th className="px-4 py-3 font-semibold">Estado</th>
@@ -183,6 +197,8 @@ export function UsuariosPage() {
                 <tbody className="divide-y divide-stone-200">
                   {usuarios.map((usuario) => (
                     <tr key={usuario.usuario_id} className="bg-white">
+                      <td className="px-4 py-3 text-stone-900">{usuario.nombre}</td>
+                      <td className="px-4 py-3 text-stone-900">{usuario.apellido}</td>
                       <td className="px-4 py-3 font-medium text-stone-900">{usuario.email}</td>
                       <td className="px-4 py-3 text-stone-700">
                         {ROL_LABELS[usuario.rol] ?? usuario.rol}
@@ -218,6 +234,34 @@ export function UsuariosPage() {
               {errors.general}
             </div>
           ) : null}
+
+          <label className="mt-5 block text-sm font-semibold text-stone-900">
+            Nombre
+            <input
+              type="text"
+              value={form.nombre}
+              onChange={(event) => updateField('nombre', event.target.value)}
+              className={inputClass(Boolean(errors.nombre))}
+              placeholder="Ana"
+            />
+            {errors.nombre ? (
+              <span className="mt-1 block text-sm text-red-700">{errors.nombre}</span>
+            ) : null}
+          </label>
+
+          <label className="mt-4 block text-sm font-semibold text-stone-900">
+            Apellido
+            <input
+              type="text"
+              value={form.apellido}
+              onChange={(event) => updateField('apellido', event.target.value)}
+              className={inputClass(Boolean(errors.apellido))}
+              placeholder="Garcia"
+            />
+            {errors.apellido ? (
+              <span className="mt-1 block text-sm text-red-700">{errors.apellido}</span>
+            ) : null}
+          </label>
 
           <label className="mt-5 block text-sm font-semibold text-stone-900">
             Email

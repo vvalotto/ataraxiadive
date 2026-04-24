@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from identidad.domain.aggregates.usuario import Usuario
-from identidad.domain.exceptions import EmailYaRegistrado, PasswordDemasiadoCorto
+from identidad.domain.exceptions import EmailYaRegistrado, PasswordDemasiadoCorto, RolNoPermitido
 from identidad.domain.ports.password_hashing_port import PasswordHashingPort
 from identidad.domain.ports.usuario_repository_port import UsuarioRepositoryPort
 from identidad.domain.value_objects.rol import Rol
@@ -15,6 +15,8 @@ _MIN_PASSWORD_LENGTH = 8
 
 @dataclass(frozen=True)
 class RegistrarUsuarioCommand:
+    nombre: str
+    apellido: str
     email: str
     password: str  # plain — el handler hashea con bcrypt
     rol: Rol
@@ -30,6 +32,9 @@ class RegistrarUsuarioHandler:
         if len(cmd.password) < _MIN_PASSWORD_LENGTH:
             raise PasswordDemasiadoCorto()
 
+        if cmd.rol == Rol.ADMIN:
+            raise RolNoPermitido()
+
         # INV-ID-01: email único
         existente = await self._repo.find_by_email(cmd.email)
         if existente is not None:
@@ -40,6 +45,8 @@ class RegistrarUsuarioHandler:
 
         usuario = Usuario(
             usuario_id=uuid.uuid4(),
+            nombre=cmd.nombre,
+            apellido=cmd.apellido,
             email=cmd.email,
             password_hash=password_hash,
             rol=cmd.rol,
