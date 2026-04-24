@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { DisciplinaCard } from '../../components/juez/DisciplinaCard'
 import { JuezLayout } from '../../components/juez/JuezLayout'
 import { useDisciplinasJuez } from '../../hooks/useDisciplinasJuez'
@@ -6,6 +6,7 @@ import useAuthStore from '../../stores/useAuthStore'
 import useCompetenciaStore from '../../stores/useCompetenciaStore'
 
 export function DisciplinasPage() {
+  const location = useLocation()
   const navigate = useNavigate()
   const logout = useAuthStore((s) => s.logout)
   const seleccionarCompetencia = useCompetenciaStore((s) => s.seleccionarCompetencia)
@@ -16,15 +17,30 @@ export function DisciplinasPage() {
       title="Mis disciplinas"
       subtitle={subtitle}
       actions={
-        <button
-          type="button"
-          onClick={logout}
-          className="rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-200"
-        >
-          Salir
-        </button>
+        <div className="flex flex-col gap-2 sm:items-end">
+          <button
+            type="button"
+            onClick={() => void navigate('/cambiar-password')}
+            className="rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-200"
+          >
+            Password
+          </button>
+          <button
+            type="button"
+            onClick={logout}
+            className="rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-200"
+          >
+            Salir
+          </button>
+        </div>
       }
     >
+      {location.state && (location.state as { passwordUpdated?: boolean }).passwordUpdated ? (
+        <section className="rounded-3xl border border-emerald-500/30 bg-emerald-500/10 p-5 text-sm text-emerald-100">
+          Contrasena actualizada correctamente.
+        </section>
+      ) : null}
+
       {isLoading ? (
         <section className="rounded-3xl border border-slate-800 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando disciplinas asignadas...

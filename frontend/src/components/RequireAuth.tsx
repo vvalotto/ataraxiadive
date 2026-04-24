@@ -1,24 +1,17 @@
 import type { ReactNode } from 'react'
 import { Navigate } from 'react-router-dom'
 import useAuthStore from '../stores/useAuthStore'
-import type { RolUsuario } from '../types/auth'
-import { HOME_BY_ROL } from '../utils/auth'
 
-interface RequireRoleProps {
-  role: RolUsuario
+interface RequireAuthProps {
   children: ReactNode
 }
 
-export function RequireRole({ role, children }: RequireRoleProps) {
+export function RequireAuth({ children }: RequireAuthProps) {
   const token = useAuthStore((s) => s.token)
   const rol = useAuthStore((s) => s.rol)
 
   if (!token || !rol) {
     return <Navigate to="/login" replace />
-  }
-
-  if (rol !== role) {
-    return <Navigate to={HOME_BY_ROL[rol]} replace />
   }
 
   return <>{children}</>

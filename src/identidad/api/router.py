@@ -9,6 +9,7 @@ from pydantic import BaseModel, field_validator
 
 from identidad.api.dependencies import (
     OrganizadorDep,
+    get_current_user,
     get_password_hasher,
     get_token_service,
     get_usuario_repository,
@@ -18,6 +19,10 @@ from identidad.application.commands.autenticar_usuario import (
     AutenticarUsuarioHandler,
     TokenResponse,
 )
+from identidad.application.commands.cambiar_password import (
+    CambiarPasswordCommand,
+    CambiarPasswordHandler,
+)
 from identidad.application.commands.registrar_usuario import (
     RegistrarUsuarioCommand,
     RegistrarUsuarioHandler,
@@ -26,9 +31,11 @@ from identidad.domain.exceptions import (
     CampoRequerido,
     CredencialesInvalidas,
     EmailYaRegistrado,
+    PasswordActualIncorrecto,
     PasswordDemasiadoCorto,
     RolNoPermitido,
     UsuarioInactivo,
+    UsuarioNoEncontrado,
 )
 from identidad.domain.ports.password_hashing_port import PasswordHashingPort
 from identidad.domain.ports.token_service_port import TokenServicePort
@@ -76,6 +83,18 @@ class LoginRequest(BaseModel):
 class LoginResponse(BaseModel):
     access_token: str
     token_type: str
+
+
+class CambiarPasswordRequest(BaseModel):
+    password_actual: str
+    password_nueva: str
+
+    @field_validator("password_nueva")
+    @classmethod
+    def password_min_length(cls, v: str) -> str:
+        if len(v) < 8:
+            raise ValueError("La contraseña debe tener al menos 8 caracteres")
+        return v
 
 
 class UsuarioResponse(BaseModel):
@@ -137,6 +156,30 @@ async def autenticar_usuario(
             "token_type": token_response.token_type,
         },
     )
+
+
+@router.post("/cambiar-password", status_code=204)
+async def cambiar_password(
+    body: CambiarPasswordRequest,
+    current_user: Annotated[dict, Depends(get_current_user)],
+    repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
+    password_hasher: Annotated[PasswordHashingPort, Depends(get_password_hasher)],
+) -> JSONResponse:
+    handler = CambiarPasswordHandler(repo, password_hasher)
+    cmd = CambiarPasswordCommand(
+        usuario_id=UUID(current_user["sub"]),
+        password_actual=body.password_actual,
+        password_nueva=body.password_nueva,
+    )
+    try:
+        await handler.handle(cmd)
+    except PasswordActualIncorrecto as exc:
+        return JSONResponse(status_code=401, content={"detail": str(exc)})
+    except PasswordDemasiadoCorto as exc:
+        return JSONResponse(status_code=422, content={"detail": str(exc)})
+    except UsuarioNoEncontrado:
+        return JSONResponse(status_code=401, content={"detail": "Token inválido o expirado"})
+    return JSONResponse(status_code=204, content=None)
 
 
 @router.get("/usuarios", status_code=200)

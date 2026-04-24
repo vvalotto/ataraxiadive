@@ -33,6 +33,11 @@ export interface CrearUsuarioResponse {
   usuario_id: string
 }
 
+export interface CambiarPasswordRequest {
+  password_actual: string
+  password_nueva: string
+}
+
 function buildHeaders(): Record<string, string> {
   const token = getToken()
   const headers: Record<string, string> = {
@@ -46,7 +51,11 @@ function buildHeaders(): Record<string, string> {
   return headers
 }
 
-async function parseResponse<T>(response: Response): Promise<T> {
+async function parseResponse<T>(
+  response: Response,
+  options: { redirectOn401?: boolean } = {},
+): Promise<T> {
+  const { redirectOn401 = true } = options
   if (response.ok) {
     if (response.status === 204) {
       return undefined as T
@@ -54,7 +63,7 @@ async function parseResponse<T>(response: Response): Promise<T> {
     return response.json() as Promise<T>
   }
 
-  if (response.status === 401) {
+  if (response.status === 401 && redirectOn401) {
     handleUnauthorized()
   }
 
@@ -91,4 +100,13 @@ export async function crearUsuario(body: CrearUsuarioRequest): Promise<CrearUsua
     body: JSON.stringify(body),
   })
   return parseResponse<CrearUsuarioResponse>(response)
+}
+
+export async function cambiarPassword(body: CambiarPasswordRequest): Promise<void> {
+  const response = await fetch('/auth/cambiar-password', {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify(body),
+  })
+  return parseResponse<void>(response, { redirectOn401: false })
 }

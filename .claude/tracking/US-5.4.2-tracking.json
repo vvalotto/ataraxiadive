@@ -1,0 +1,178 @@
+{
+  "metadata": {
+    "us_id": "US-5.4.2",
+    "us_title": "Cambiar contraseña",
+    "us_points": 3,
+    "producto": "identidad",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-24T12:15:40.721280+00:00",
+    "completed_at": "2026-04-24T12:28:50.198216+00:00",
+    "total_elapsed_seconds": 789,
+    "effective_seconds": 789,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-04-24T12:15:46.583032+00:00",
+      "completed_at": "2026-04-24T12:16:42.087529+00:00",
+      "elapsed_seconds": 55,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-24T12:16:46.850331+00:00",
+      "completed_at": "2026-04-24T12:16:51.876676+00:00",
+      "elapsed_seconds": 5,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-04-24T12:16:56.570935+00:00",
+      "completed_at": "2026-04-24T12:17:00.991800+00:00",
+      "elapsed_seconds": 4,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación Guiada por Tareas",
+      "started_at": "2026-04-24T12:20:35.619531+00:00",
+      "completed_at": "2026-04-24T12:27:46.372364+00:00",
+      "elapsed_seconds": 430,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Backend cambio de password",
+          "task_type": "backend",
+          "estimated_minutes": 90.0,
+          "started_at": "2026-04-24T12:20:43.760390+00:00",
+          "completed_at": "2026-04-24T12:21:48.462256+00:00",
+          "elapsed_seconds": 64,
+          "actual_minutes": 1.07,
+          "variance_minutes": -88.93,
+          "file_created": "src/identidad/application/commands/cambiar_password.py",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_002",
+          "task_name": "Frontend cambio de password",
+          "task_type": "frontend",
+          "estimated_minutes": 90.0,
+          "started_at": "2026-04-24T12:21:51.890043+00:00",
+          "completed_at": "2026-04-24T12:26:46.878121+00:00",
+          "elapsed_seconds": 294,
+          "actual_minutes": 4.9,
+          "variance_minutes": -85.1,
+          "file_created": "frontend/src/pages/CambiarPasswordPage.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_003",
+          "task_name": "Validacion automatizada",
+          "task_type": "test",
+          "estimated_minutes": 40.0,
+          "started_at": "2026-04-24T12:26:50.789090+00:00",
+          "completed_at": "2026-04-24T12:27:40.946925+00:00",
+          "elapsed_seconds": 50,
+          "actual_minutes": 0.83,
+          "variance_minutes": -39.17,
+          "file_created": "docs/reports/US-5.4.2-report.md",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-24T12:27:53.735916+00:00",
+      "completed_at": "2026-04-24T12:27:59.704195+00:00",
+      "elapsed_seconds": 5,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-04-24T12:28:06.056773+00:00",
+      "completed_at": "2026-04-24T12:28:09.940246+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-04-24T12:28:16.012718+00:00",
+      "completed_at": "2026-04-24T12:28:20.399684+00:00",
+      "elapsed_seconds": 4,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-24T12:28:26.093645+00:00",
+      "completed_at": "2026-04-24T12:28:29.678010+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Actualización de Documentación",
+      "started_at": "2026-04-24T12:28:33.507558+00:00",
+      "completed_at": "2026-04-24T12:28:37.382485+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-04-24T12:28:43.210650+00:00",
+      "completed_at": "2026-04-24T12:28:46.771124+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 3,
+    "completed_tasks": 3,
+    "total_phases": 10,
+    "estimated_total_minutes": 220.0,
+    "actual_total_minutes": 6.8,
+    "variance_minutes": -213.2,
+    "variance_percent": -96.91
+  }
+}

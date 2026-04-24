@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { fetchTorneos, type EstadoTorneo, type TorneoDto } from '../../api/torneo'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
 import useAuthStore from '../../stores/useAuthStore'
@@ -47,6 +47,7 @@ function emptyMessage(filtro: FiltroTorneos): string {
 }
 
 export function DashboardPage() {
+  const location = useLocation()
   const logout = useAuthStore((s) => s.logout)
   const email = useAuthStore((s) => s.email)
   const [filtro, setFiltro] = useState<FiltroTorneos>('abiertos')
@@ -65,6 +66,12 @@ export function DashboardPage() {
       subtitle={email ? `Sesion activa: ${email}` : 'Gestion de auditoria y seguimiento'}
       actions={
         <>
+          <Link
+            to="/cambiar-password"
+            className="rounded-lg border border-stone-900 px-4 py-2 text-sm font-semibold text-stone-900"
+          >
+            Password
+          </Link>
           <Link
             to="/organizador/usuarios"
             className="rounded-lg border border-stone-900 px-4 py-2 text-sm font-semibold text-stone-900"
@@ -87,6 +94,12 @@ export function DashboardPage() {
         </>
       }
     >
+      {location.state && (location.state as { passwordUpdated?: boolean }).passwordUpdated ? (
+        <section className="rounded-[2rem] border border-emerald-300 bg-emerald-50 p-5 text-sm text-emerald-900">
+          Contrasena actualizada correctamente.
+        </section>
+      ) : null}
+
       {torneosQuery.isLoading ? (
         <section className="rounded-[2rem] border border-stone-300/80 bg-white/80 p-5 text-sm text-stone-600">
           Cargando torneos...
