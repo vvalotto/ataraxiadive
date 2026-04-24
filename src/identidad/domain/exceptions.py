@@ -44,3 +44,8 @@ class PasswordActualIncorrecto(Exception):
 class TokenInvalido(Exception):
     def __init__(self) -> None:
         super().__init__("Token JWT inválido o expirado")
+
+
+class TokenResetInvalido(Exception):
+    def __init__(self) -> None:
+        super().__init__("Token de recuperación inválido o expirado")

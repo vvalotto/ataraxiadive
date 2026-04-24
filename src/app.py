@@ -94,6 +94,7 @@ if os.getenv("IDENTIDAD_JWT_SECRET"):
     configure_identity_dependencies(
         token_service=JWTService(),
         password_hasher=BcryptPasswordHasher(),
+        email_sender=ResendEmailAdapter() if os.getenv("RESEND_API_KEY") else LoggingEmailAdapter(),
     )
 
 app.include_router(identidad_router)

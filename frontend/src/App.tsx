@@ -5,6 +5,8 @@ import useAuthStore from './stores/useAuthStore'
 import { LoginPage } from './pages/LoginPage'
 import { RegistroPage } from './pages/RegistroPage'
 import { CambiarPasswordPage } from './pages/CambiarPasswordPage'
+import { RecuperarPasswordPage } from './pages/RecuperarPasswordPage'
+import { ResetPasswordPage } from './pages/ResetPasswordPage'
 import { RequireAuth } from './components/RequireAuth'
 import { RequireRole } from './components/RequireRole'
 import { DisciplinasPage } from './pages/juez/DisciplinasPage'
@@ -40,6 +42,8 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registro" element={<RegistroPage />} />
+        <Route path="/recuperar-password" element={<RecuperarPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route
           path="/cambiar-password"
           element={

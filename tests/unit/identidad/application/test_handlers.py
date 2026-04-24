@@ -18,9 +18,14 @@ from identidad.application.commands.cambiar_password import (
     CambiarPasswordCommand,
     CambiarPasswordHandler,
 )
+from identidad.application.commands.reset_password import ResetPasswordCommand, ResetPasswordHandler
 from identidad.application.commands.registrar_usuario import (
     RegistrarUsuarioCommand,
     RegistrarUsuarioHandler,
+)
+from identidad.application.commands.solicitar_reset_password import (
+    SolicitarResetPasswordCommand,
+    SolicitarResetPasswordHandler,
 )
 from identidad.domain.aggregates.usuario import Usuario
 from identidad.domain.exceptions import (
@@ -29,6 +34,7 @@ from identidad.domain.exceptions import (
     PasswordActualIncorrecto,
     PasswordDemasiadoCorto,
     RolNoPermitido,
+    TokenResetInvalido,
     UsuarioNoEncontrado,
     UsuarioInactivo,
 )
@@ -244,6 +250,93 @@ async def test_cambiar_password_rechaza_usuario_inexistente(
                 password_nueva="nuevapass456",
             )
         )
+
+
+class FakeEmailSender:
+    def __init__(self) -> None:
+        self.enviados: list[tuple[str, str, str]] = []
+
+    async def enviar(self, destinatario, contenido):  # type: ignore[no-untyped-def]
+        self.enviados.append((destinatario.email, contenido.asunto, contenido.cuerpo_texto))
+        return "fake-provider-id"
+
+
+@pytest.mark.asyncio
+async def test_solicitar_reset_password_envia_email_si_usuario_existe(
+    mock_repo: AsyncMock, token_service: TokenServicePort
+) -> None:
+    usuario = _make_usuario("juez@test.com", "clave1234")
+    mock_repo.find_by_email.return_value = usuario
+    email_sender = FakeEmailSender()
+    handler = SolicitarResetPasswordHandler(
+        repo=mock_repo,
+        token_service=token_service,
+        email_sender=email_sender,
+        frontend_base_url="http://localhost:5173",
+    )
+
+    await handler.handle(SolicitarResetPasswordCommand(email=usuario.email))
+
+    assert len(email_sender.enviados) == 1
+    destinatario, asunto, cuerpo = email_sender.enviados[0]
+    assert destinatario == usuario.email
+    assert asunto == "Recuperar contraseña de AtaraxiaDive"
+    assert "/reset-password?token=" in cuerpo
+
+
+@pytest.mark.asyncio
+async def test_solicitar_reset_password_no_filtra_usuario_inexistente(
+    mock_repo: AsyncMock, token_service: TokenServicePort
+) -> None:
+    mock_repo.find_by_email.return_value = None
+    email_sender = FakeEmailSender()
+    handler = SolicitarResetPasswordHandler(
+        repo=mock_repo,
+        token_service=token_service,
+        email_sender=email_sender,
+        frontend_base_url="http://localhost:5173",
+    )
+
+    await handler.handle(SolicitarResetPasswordCommand(email="nadie@test.com"))
+
+    assert email_sender.enviados == []
+
+
+@pytest.mark.asyncio
+async def test_reset_password_exitoso(
+    mock_repo: AsyncMock, token_service: TokenServicePort, password_hasher: PasswordHashingPort
+) -> None:
+    usuario = _make_usuario("juez@test.com", "clave1234")
+    mock_repo.find_by_email.return_value = usuario
+    handler = ResetPasswordHandler(mock_repo, token_service, password_hasher)
+    token = token_service.generate_reset_token(usuario.email)
+
+    await handler.handle(ResetPasswordCommand(token=token, password_nueva="nuevapass456"))
+
+    assert password_hasher.verify("nuevapass456", usuario.password_hash)
+    mock_repo.save.assert_called_once_with(usuario)
+
+
+@pytest.mark.asyncio
+async def test_reset_password_rechaza_token_de_sesion(
+    mock_repo: AsyncMock, token_service: TokenServicePort, password_hasher: PasswordHashingPort
+) -> None:
+    usuario = _make_usuario("juez@test.com", "clave1234")
+    handler = ResetPasswordHandler(mock_repo, token_service, password_hasher)
+    token = token_service.generate(usuario)
+
+    with pytest.raises(TokenResetInvalido):
+        await handler.handle(ResetPasswordCommand(token=token, password_nueva="nuevapass456"))
+
+
+@pytest.mark.asyncio
+async def test_reset_password_rechaza_password_corta(
+    mock_repo: AsyncMock, token_service: TokenServicePort, password_hasher: PasswordHashingPort
+) -> None:
+    handler = ResetPasswordHandler(mock_repo, token_service, password_hasher)
+
+    with pytest.raises(PasswordDemasiadoCorto):
+        await handler.handle(ResetPasswordCommand(token="fake", password_nueva="short"))
 
 
 # ── AutenticarUsuarioHandler ──────────────────────────────────────────────────

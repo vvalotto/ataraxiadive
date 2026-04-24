@@ -38,6 +38,19 @@ export interface CambiarPasswordRequest {
   password_nueva: string
 }
 
+export interface SolicitarResetPasswordRequest {
+  email: string
+}
+
+export interface SolicitarResetPasswordResponse {
+  detail: string
+}
+
+export interface ResetPasswordRequest {
+  token: string
+  password_nueva: string
+}
+
 function buildHeaders(): Record<string, string> {
   const token = getToken()
   const headers: Record<string, string> = {
@@ -104,6 +117,26 @@ export async function crearUsuario(body: CrearUsuarioRequest): Promise<CrearUsua
 
 export async function cambiarPassword(body: CambiarPasswordRequest): Promise<void> {
   const response = await fetch('/auth/cambiar-password', {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify(body),
+  })
+  return parseResponse<void>(response, { redirectOn401: false })
+}
+
+export async function solicitarResetPassword(
+  body: SolicitarResetPasswordRequest,
+): Promise<SolicitarResetPasswordResponse> {
+  const response = await fetch('/auth/solicitar-reset', {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify(body),
+  })
+  return parseResponse<SolicitarResetPasswordResponse>(response, { redirectOn401: false })
+}
+
+export async function resetPassword(body: ResetPasswordRequest): Promise<void> {
+  const response = await fetch('/auth/reset-password', {
     method: 'POST',
     headers: buildHeaders(),
     body: JSON.stringify(body),
