@@ -36,7 +36,10 @@ class SolicitarResetPasswordHandler:
         token = self._token_service.generate_reset_token(usuario.email)
         reset_link = f"{self._frontend_base_url}/reset-password?token={quote(token, safe='')}"
         await self._email_sender.enviar(
-            Destinatario(email=usuario.email, nombre=f"{usuario.nombre} {usuario.apellido}".strip()),
+            Destinatario(
+                email=usuario.email,
+                nombre=f"{usuario.nombre} {usuario.apellido}".strip(),
+            ),
             ContenidoEmail(
                 asunto="Recuperar contraseña de AtaraxiaDive",
                 cuerpo_texto=(

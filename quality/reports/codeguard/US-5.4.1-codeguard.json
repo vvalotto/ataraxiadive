@@ -1,0 +1,27 @@
+{
+  "us_id": "US-5.4.1",
+  "date": "2026-04-24",
+  "scope": "auto-registro público — BC Identidad",
+  "files_analyzed": [
+    "src/identidad/api/router.py",
+    "src/identidad/application/commands/registrar_usuario.py",
+    "src/identidad/domain/aggregates/usuario.py",
+    "src/identidad/domain/exceptions.py",
+    "src/identidad/infrastructure/repositories/sqlite_usuario_repository.py"
+  ],
+  "checks": [
+    { "check": "Security", "result": "OK", "issues": 0 },
+    { "check": "PEP8",     "result": "OK (post-fix)", "issues": 0 },
+    { "check": "Complexity","result": "OK", "issues": 0 }
+  ],
+  "warnings_fixed": [
+    {
+      "file": "src/identidad/api/router.py",
+      "lines": [230, 243],
+      "rule": "E501 line too long",
+      "fix": "Expandir dict content y llamada a ResetPasswordCommand en múltiples líneas"
+    }
+  ],
+  "result": "PASS",
+  "notes": []
+}

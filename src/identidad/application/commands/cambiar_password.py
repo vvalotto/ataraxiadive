@@ -3,7 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from uuid import UUID
 
-from identidad.domain.exceptions import PasswordActualIncorrecto, PasswordDemasiadoCorto, UsuarioNoEncontrado
+from identidad.domain.exceptions import (
+    PasswordActualIncorrecto,
+    PasswordDemasiadoCorto,
+    UsuarioNoEncontrado,
+)
 from identidad.domain.ports.password_hashing_port import PasswordHashingPort
 from identidad.domain.ports.usuario_repository_port import UsuarioRepositoryPort
 

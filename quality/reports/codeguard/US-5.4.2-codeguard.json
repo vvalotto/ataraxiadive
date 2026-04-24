@@ -1,0 +1,25 @@
+{
+  "us_id": "US-5.4.2",
+  "date": "2026-04-24",
+  "scope": "cambiar contraseña — BC Identidad",
+  "files_analyzed": [
+    "src/identidad/api/router.py",
+    "src/identidad/application/commands/cambiar_password.py",
+    "src/identidad/domain/exceptions.py"
+  ],
+  "checks": [
+    { "check": "Security", "result": "OK", "issues": 0 },
+    { "check": "PEP8",     "result": "OK (post-fix)", "issues": 0 },
+    { "check": "Complexity","result": "OK", "issues": 0 }
+  ],
+  "warnings_fixed": [
+    {
+      "file": "src/identidad/application/commands/cambiar_password.py",
+      "lines": [6],
+      "rule": "E501 line too long",
+      "fix": "Separar import de excepciones en múltiples líneas con paréntesis"
+    }
+  ],
+  "result": "PASS",
+  "notes": []
+}

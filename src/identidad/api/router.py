@@ -227,7 +227,9 @@ async def solicitar_reset_password(
     await handler.handle(SolicitarResetPasswordCommand(email=body.email))
     return JSONResponse(
         status_code=200,
-        content={"detail": "Si el email existe, enviaremos instrucciones para restablecer la contraseña"},
+        content={
+            "detail": "Si el email existe, enviaremos instrucciones para restablecer la contraseña"
+        },
     )
 
 
@@ -240,7 +242,9 @@ async def reset_password(
 ) -> JSONResponse:
     handler = ResetPasswordHandler(repo, token_service, password_hasher)
     try:
-        await handler.handle(ResetPasswordCommand(token=body.token, password_nueva=body.password_nueva))
+        await handler.handle(
+            ResetPasswordCommand(token=body.token, password_nueva=body.password_nueva)
+        )
     except TokenResetInvalido as exc:
         return JSONResponse(status_code=400, content={"detail": str(exc)})
     except PasswordDemasiadoCorto as exc:
