@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
 import { ApiError, cambiarPassword } from '../api/identidad'
 import useAuthStore from '../stores/useAuthStore'
+import { PasswordStrengthBar } from '../components/PasswordStrengthBar'
 import { HOME_BY_ROL } from '../utils/auth'
 
 interface FormState {
@@ -32,7 +33,7 @@ function inputClass(hasError: boolean): string {
 function resolveApiError(error: unknown): string {
   if (error instanceof ApiError) {
     if (error.status === 401) return 'La contrasena actual es incorrecta'
-    if (error.status === 422) return 'La contrasena debe tener al menos 8 caracteres'
+    if (error.status === 422) return error.message
     return error.message
   }
   if (error instanceof Error) return error.message
@@ -79,8 +80,12 @@ export function CambiarPasswordPage() {
     if (!form.passwordActual) nextErrors.passwordActual = 'La contrasena actual es obligatoria'
     if (!form.passwordNueva) {
       nextErrors.passwordNueva = 'La contrasena nueva es obligatoria'
-    } else if (form.passwordNueva.length < 8) {
-      nextErrors.passwordNueva = 'La contrasena debe tener al menos 8 caracteres'
+    } else if (form.passwordNueva.length < 10) {
+      nextErrors.passwordNueva = 'La contrasena debe tener al menos 10 caracteres'
+    } else if (!/[A-Z]/.test(form.passwordNueva)) {
+      nextErrors.passwordNueva = 'La contrasena debe incluir al menos una mayuscula'
+    } else if (!/[0-9]/.test(form.passwordNueva)) {
+      nextErrors.passwordNueva = 'La contrasena debe incluir al menos un numero'
     }
     if (!form.confirmacion) {
       nextErrors.confirmacion = 'Debes confirmar la contrasena nueva'
@@ -142,6 +147,7 @@ export function CambiarPasswordPage() {
                 onChange={(event) => updateField('passwordNueva', event.target.value)}
                 className={inputClass(Boolean(errors.passwordNueva))}
               />
+              <PasswordStrengthBar password={form.passwordNueva} />
               {errors.passwordNueva ? (
                 <span className="mt-1 block text-sm text-red-300">{errors.passwordNueva}</span>
               ) : null}

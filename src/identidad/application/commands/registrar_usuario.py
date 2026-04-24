@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import uuid
 from dataclasses import dataclass
 from uuid import UUID
@@ -10,7 +11,7 @@ from identidad.domain.ports.password_hashing_port import PasswordHashingPort
 from identidad.domain.ports.usuario_repository_port import UsuarioRepositoryPort
 from identidad.domain.value_objects.rol import Rol
 
-_MIN_PASSWORD_LENGTH = 8
+_MIN_PASSWORD_LENGTH = 10
 
 
 @dataclass(frozen=True)
@@ -28,8 +29,12 @@ class RegistrarUsuarioHandler:
         self._password_hasher = password_hasher
 
     async def handle(self, cmd: RegistrarUsuarioCommand) -> UUID:
-        # INV-ID-02: mínimo 8 caracteres
-        if len(cmd.password) < _MIN_PASSWORD_LENGTH:
+        # INV-ID-02: mínimo 10 caracteres, al menos 1 mayúscula y 1 número
+        if (
+            len(cmd.password) < _MIN_PASSWORD_LENGTH
+            or not re.search(r"[A-Z]", cmd.password)
+            or not re.search(r"[0-9]", cmd.password)
+        ):
             raise PasswordDemasiadoCorto()
 
         if cmd.rol == Rol.ADMIN:

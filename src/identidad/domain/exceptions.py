@@ -23,7 +23,7 @@ class UsuarioInactivo(Exception):
 
 class PasswordDemasiadoCorto(Exception):
     def __init__(self) -> None:
-        super().__init__("La contraseña debe tener al menos 8 caracteres")
+        super().__init__("La contraseña debe tener al menos 10 caracteres, una mayúscula y un número")
 
 
 class CampoRequerido(Exception):

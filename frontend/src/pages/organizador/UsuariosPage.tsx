@@ -118,8 +118,12 @@ export function UsuariosPage() {
     }
     if (!form.password) {
       nextErrors.password = 'La contrasena es obligatoria'
-    } else if (form.password.length < 8) {
-      nextErrors.password = 'La contrasena debe tener al menos 8 caracteres'
+    } else if (form.password.length < 10) {
+      nextErrors.password = 'La contrasena debe tener al menos 10 caracteres'
+    } else if (!/[A-Z]/.test(form.password)) {
+      nextErrors.password = 'La contrasena debe incluir al menos una mayuscula'
+    } else if (!/[0-9]/.test(form.password)) {
+      nextErrors.password = 'La contrasena debe incluir al menos un numero'
     }
     return nextErrors
   }

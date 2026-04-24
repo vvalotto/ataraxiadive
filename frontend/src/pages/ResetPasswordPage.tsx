@@ -4,6 +4,7 @@ import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { ApiError, resetPassword } from '../api/identidad'
 import useAuthStore from '../stores/useAuthStore'
+import { PasswordStrengthBar } from '../components/PasswordStrengthBar'
 
 export function ResetPasswordPage() {
   const [searchParams] = useSearchParams()
@@ -39,8 +40,16 @@ export function ResetPasswordPage() {
       setErrorMessage('El enlace de recuperacion es invalido')
       return
     }
-    if (passwordNueva.length < 8) {
-      setErrorMessage('La contrasena debe tener al menos 8 caracteres')
+    if (passwordNueva.length < 10) {
+      setErrorMessage('La contrasena debe tener al menos 10 caracteres')
+      return
+    }
+    if (!/[A-Z]/.test(passwordNueva)) {
+      setErrorMessage('La contrasena debe incluir al menos una mayuscula')
+      return
+    }
+    if (!/[0-9]/.test(passwordNueva)) {
+      setErrorMessage('La contrasena debe incluir al menos un numero')
       return
     }
     if (passwordNueva !== passwordConfirmacion) {
@@ -76,6 +85,7 @@ export function ResetPasswordPage() {
                 required
                 className="mt-1 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
               />
+              <PasswordStrengthBar password={passwordNueva} />
             </label>
 
             <label className="text-sm font-medium text-slate-300">

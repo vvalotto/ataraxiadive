@@ -44,7 +44,8 @@ para **acceder a la plataforma con el rol adecuado sin intervención del organiz
 - **INV-5.4.1-01:** `nombre` y `apellido` son requeridos — no pueden estar vacíos ni ser solo espacios.
 - **INV-5.4.1-02:** el rol no puede ser `ADMIN` en el auto-registro — rechaza con 403 si se envía.
 - **INV-5.4.1-03:** email único (ya existente INV-ID-01) — rechaza con 409 si ya registrado.
-- **INV-5.4.1-04:** password ≥ 8 caracteres (ya existente INV-ID-02) — rechaza con 422.
+- **INV-5.4.1-04:** ~~password ≥ 8 caracteres~~ → password ≥ 10 caracteres + al menos 1 mayúscula + 1 número — rechaza con 422. Ver ADR-019.
+- **INV-5.4.1-06:** el formulario frontend requiere campo de confirmación de contraseña — validado solo en frontend, no se envía al backend.
 - **INV-5.4.1-05:** la pagina `/registro` es accesible sin autenticacion y redirige al login al completar con exito.
 
 ### Operacion principal — auto-registro
@@ -63,7 +64,7 @@ Body: { nombre, apellido, email, password, rol }
 201 Created -> { usuario_id: UUID }
 403 Forbidden -> { detail: "El rol ADMIN no está permitido en el auto-registro" }
 409 Conflict  -> { detail: "Este email ya está registrado" }
-422 Unprocessable -> { detail: "La contraseña debe tener al menos 8 caracteres" }
+422 Unprocessable -> { detail: "La contraseña debe tener al menos 10 caracteres, una mayúscula y un número" }
 ```
 
 **Flujo en frontend:**
@@ -183,3 +184,4 @@ Los usuarios preexistentes quedan con nombre/apellido vacíos — aceptable para
 ---
 
 *Redactado: 2026-04-24 — INC-5.4 Identidad Extendida*
+*Enmendado: 2026-04-24 — INV-5.4.1-04 actualizado (política contraseñas → ADR-019) · INV-5.4.1-06 nuevo (confirmación frontend) · RegistroPage agrega campo confirmación + PasswordStrengthBar*

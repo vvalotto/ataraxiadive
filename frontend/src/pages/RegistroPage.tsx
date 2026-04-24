@@ -9,8 +9,9 @@ import {
   type RolGestionUsuario,
 } from '../api/identidad'
 import useAuthStore from '../stores/useAuthStore'
+import { PasswordStrengthBar } from '../components/PasswordStrengthBar'
 
-type FormState = CrearUsuarioRequest
+type FormState = CrearUsuarioRequest & { confirmarPassword: string }
 
 type FormErrors = Partial<Record<keyof FormState | 'general', string>>
 
@@ -19,6 +20,7 @@ const INITIAL_FORM: FormState = {
   apellido: '',
   email: '',
   password: '',
+  confirmarPassword: '',
   rol: 'ATLETA',
 }
 
@@ -40,7 +42,7 @@ function inputClass(hasError: boolean): string {
 function resolveApiError(error: unknown): string {
   if (error instanceof ApiError) {
     if (error.status === 409) return 'Este email ya esta registrado'
-    if (error.status === 422) return 'La contrasena debe tener al menos 8 caracteres'
+    if (error.status === 422) return error.message
     if (error.status === 403) return 'El rol ADMIN no esta permitido en el auto-registro'
     return error.message
   }
@@ -89,8 +91,17 @@ export function RegistroPage() {
     if (!form.email.trim()) nextErrors.email = 'El email es obligatorio'
     if (!form.password) {
       nextErrors.password = 'La contrasena es obligatoria'
-    } else if (form.password.length < 8) {
-      nextErrors.password = 'La contrasena debe tener al menos 8 caracteres'
+    } else if (form.password.length < 10) {
+      nextErrors.password = 'La contrasena debe tener al menos 10 caracteres'
+    } else if (!/[A-Z]/.test(form.password)) {
+      nextErrors.password = 'La contrasena debe incluir al menos una mayuscula'
+    } else if (!/[0-9]/.test(form.password)) {
+      nextErrors.password = 'La contrasena debe incluir al menos un numero'
+    }
+    if (!form.confirmarPassword) {
+      nextErrors.confirmarPassword = 'Confirma tu contrasena'
+    } else if (form.password !== form.confirmarPassword) {
+      nextErrors.confirmarPassword = 'Las contrasenas no coinciden'
     }
     return nextErrors
   }
@@ -173,8 +184,22 @@ export function RegistroPage() {
                 onChange={(event) => updateField('password', event.target.value)}
                 className={inputClass(Boolean(errors.password))}
               />
+              <PasswordStrengthBar password={form.password} />
               {errors.password ? (
                 <span className="mt-1 block text-sm text-red-300">{errors.password}</span>
+              ) : null}
+            </label>
+
+            <label className="text-sm font-medium text-slate-300">
+              Confirmar contraseña
+              <input
+                type="password"
+                value={form.confirmarPassword}
+                onChange={(event) => updateField('confirmarPassword', event.target.value)}
+                className={inputClass(Boolean(errors.confirmarPassword))}
+              />
+              {errors.confirmarPassword ? (
+                <span className="mt-1 block text-sm text-red-300">{errors.confirmarPassword}</span>
               ) : null}
             </label>
 

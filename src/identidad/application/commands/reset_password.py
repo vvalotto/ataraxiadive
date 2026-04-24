@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 
 from identidad.domain.exceptions import PasswordDemasiadoCorto, TokenInvalido, TokenResetInvalido
@@ -7,7 +8,7 @@ from identidad.domain.ports.password_hashing_port import PasswordHashingPort
 from identidad.domain.ports.token_service_port import TokenServicePort
 from identidad.domain.ports.usuario_repository_port import UsuarioRepositoryPort
 
-_MIN_PASSWORD_LENGTH = 8
+_MIN_PASSWORD_LENGTH = 10
 
 
 @dataclass(frozen=True)
@@ -28,7 +29,11 @@ class ResetPasswordHandler:
         self._password_hasher = password_hasher
 
     async def handle(self, cmd: ResetPasswordCommand) -> None:
-        if len(cmd.password_nueva) < _MIN_PASSWORD_LENGTH:
+        if (
+            len(cmd.password_nueva) < _MIN_PASSWORD_LENGTH
+            or not re.search(r"[A-Z]", cmd.password_nueva)
+            or not re.search(r"[0-9]", cmd.password_nueva)
+        ):
             raise PasswordDemasiadoCorto()
 
         try:

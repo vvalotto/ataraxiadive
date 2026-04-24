@@ -48,7 +48,7 @@ para **recuperar el acceso sin intervención del administrador**.
 - **INV-5.4.3-01:** `POST /auth/solicitar-reset` siempre responde 200 independientemente de si el email existe — previene enumeracion de usuarios.
 - **INV-5.4.3-02:** el token de reset tiene `type: "password_reset"` y `exp: now+1h` firmado con `IDENTIDAD_JWT_SECRET`.
 - **INV-5.4.3-03:** `POST /auth/reset-password` rechaza con 400 si el token es invalido, expirado o su `type ≠ "password_reset"`.
-- **INV-5.4.3-04:** `password_nueva` debe tener ≥8 caracteres — rechaza con 422.
+- **INV-5.4.3-04:** ~~`password_nueva` debe tener ≥8 caracteres~~ → ≥10 caracteres + al menos 1 mayúscula + 1 número — rechaza con 422. Ver ADR-019.
 - **INV-5.4.3-05:** el email se envía unicamente si el usuario existe en el sistema — el endpoint no revela este hecho externamente.
 
 ### Operacion 1 — solicitar reset
@@ -97,7 +97,7 @@ Body: { token, password_nueva }
 
 204 No Content   -> exito
 400 Bad Request  -> { detail: "El enlace es inválido o ha expirado" }
-422 Unprocessable -> { detail: "La contraseña debe tener al menos 8 caracteres" }
+422 Unprocessable -> { detail: "La contraseña debe tener al menos 10 caracteres, una mayúscula y un número" }
 ```
 
 **Flujo en frontend:**
@@ -248,6 +248,11 @@ Alternativa mas simple aceptable para MVP: `SolicitarResetPasswordHandler` recib
 - Email port: `src/notificaciones/domain/ports/email_port.py`
 - Composition root: `src/app.py`
 - Pagina de login: `frontend/src/pages/LoginPage.tsx`
+- Política de contraseñas: `docs/adr/ADR-019-politica-contrasenas.md`
+
+---
+
+*Enmendado: 2026-04-24 — INV-5.4.3-04 actualizado (política contraseñas → ADR-019) · ResetPasswordPage agrega PasswordStrengthBar*
 
 ---
 

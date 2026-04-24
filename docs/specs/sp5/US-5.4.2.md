@@ -42,7 +42,7 @@ para **mantener el control de la seguridad de mi cuenta**.
 
 - **INV-5.4.2-01:** el usuario debe estar autenticado (JWT valido) para acceder al endpoint.
 - **INV-5.4.2-02:** la `password_actual` debe coincidir con el hash almacenado — rechaza con 401 si no coincide.
-- **INV-5.4.2-03:** `password_nueva` debe tener ≥8 caracteres — rechaza con 422.
+- **INV-5.4.2-03:** ~~`password_nueva` debe tener ≥8 caracteres~~ → ≥10 caracteres + al menos 1 mayúscula + 1 número — rechaza con 422. Ver ADR-019.
 - **INV-5.4.2-04:** `password_nueva` ≠ `password_actual` — validado en frontend; no es invariante de dominio.
 - **INV-5.4.2-05:** la confirmacion de password nueva es validada solo en frontend — no se envía al backend.
 
@@ -62,7 +62,7 @@ Body: { password_actual, password_nueva }
 
 204 No Content  -> exito (sin body)
 401 Unauthorized -> { detail: "La contraseña actual es incorrecta" }
-422 Unprocessable -> { detail: "La contraseña debe tener al menos 8 caracteres" }
+422 Unprocessable -> { detail: "La contraseña debe tener al menos 10 caracteres, una mayúscula y un número" }
 ```
 
 **Flujo en frontend:**
@@ -154,6 +154,11 @@ Feature: US-5.4.2 — Cambiar contraseña
 - Dependencias: `src/identidad/api/dependencies.py` — `get_current_user`
 - Aggregate: `src/identidad/domain/aggregates/usuario.py`
 - Repo port: `src/identidad/domain/ports/usuario_repository_port.py`
+- Política de contraseñas: `docs/adr/ADR-019-politica-contrasenas.md`
+
+---
+
+*Enmendado: 2026-04-24 — INV-5.4.2-03 actualizado (política contraseñas → ADR-019) · CambiarPasswordPage agrega PasswordStrengthBar*
 
 ---
 
