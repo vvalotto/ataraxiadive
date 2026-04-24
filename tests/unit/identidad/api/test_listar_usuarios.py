@@ -16,10 +16,10 @@ from identidad.domain.value_objects.rol import Rol
 class FakeUsuarioRepository:
     def __init__(self) -> None:
         self.usuarios = [
-            Usuario(uuid4(), "juez2@ataraxia.com", "$2b$hash", Rol.JUEZ),
-            Usuario(uuid4(), "org@ataraxia.com", "$2b$hash", Rol.ORGANIZADOR),
-            Usuario(uuid4(), "juez1@ataraxia.com", "$2b$hash", Rol.JUEZ),
-            Usuario(uuid4(), "atleta@ataraxia.com", "$2b$hash", Rol.ATLETA),
+            Usuario(uuid4(), "Julia", "Segura", "juez2@ataraxia.com", "$2b$hash", Rol.JUEZ),
+            Usuario(uuid4(), "Olga", "Rios", "org@ataraxia.com", "$2b$hash", Rol.ORGANIZADOR),
+            Usuario(uuid4(), "Juan", "Acuna", "juez1@ataraxia.com", "$2b$hash", Rol.JUEZ),
+            Usuario(uuid4(), "Ana", "Lopez", "atleta@ataraxia.com", "$2b$hash", Rol.ATLETA),
         ]
 
     async def list_by_rol(self, rol: Rol) -> list[Usuario]:
@@ -52,6 +52,7 @@ def test_listar_usuarios_filtra_rol_juez() -> None:
         "juez2@ataraxia.com",
     ]
     assert all(usuario["rol"] == "JUEZ" for usuario in data)
+    assert [usuario["nombre"] for usuario in data] == ["Juan", "Julia"]
 
 
 def test_listar_usuarios_sin_rol_devuelve_todos_ordenados() -> None:
@@ -71,6 +72,7 @@ def test_listar_usuarios_sin_rol_devuelve_todos_ordenados() -> None:
         ("JUEZ", "juez2@ataraxia.com"),
         ("ORGANIZADOR", "org@ataraxia.com"),
     ]
+    assert data[0]["apellido"] == "Lopez"
 
 
 def test_listar_usuarios_requiere_organizador() -> None:
