@@ -14,6 +14,10 @@ from identidad.application.commands.autenticar_usuario import (
     AutenticarUsuarioHandler,
     TokenResponse,
 )
+from identidad.application.commands.cambiar_password import (
+    CambiarPasswordCommand,
+    CambiarPasswordHandler,
+)
 from identidad.application.commands.registrar_usuario import (
     RegistrarUsuarioCommand,
     RegistrarUsuarioHandler,
@@ -22,8 +26,10 @@ from identidad.domain.aggregates.usuario import Usuario
 from identidad.domain.exceptions import (
     CredencialesInvalidas,
     EmailYaRegistrado,
+    PasswordActualIncorrecto,
     PasswordDemasiadoCorto,
     RolNoPermitido,
+    UsuarioNoEncontrado,
     UsuarioInactivo,
 )
 from identidad.domain.ports.password_hashing_port import PasswordHashingPort
@@ -162,6 +168,82 @@ async def test_registrar_admin_lanza_excepcion(
     )
     with pytest.raises(RolNoPermitido):
         await handler.handle(cmd)
+
+
+# ── CambiarPasswordHandler ────────────────────────────────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_cambiar_password_exitoso(
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+) -> None:
+    usuario = _make_usuario("juez@test.com", "clave1234")
+    mock_repo.find_by_id.return_value = usuario
+    handler = CambiarPasswordHandler(mock_repo, password_hasher)
+
+    await handler.handle(
+        CambiarPasswordCommand(
+            usuario_id=usuario.usuario_id,
+            password_actual="clave1234",
+            password_nueva="nuevapass456",
+        )
+    )
+
+    assert password_hasher.verify("nuevapass456", usuario.password_hash)
+    mock_repo.save.assert_called_once_with(usuario)
+
+
+@pytest.mark.asyncio
+async def test_cambiar_password_rechaza_password_actual_incorrecta(
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+) -> None:
+    usuario = _make_usuario("juez@test.com", "clave1234")
+    mock_repo.find_by_id.return_value = usuario
+    handler = CambiarPasswordHandler(mock_repo, password_hasher)
+
+    with pytest.raises(PasswordActualIncorrecto):
+        await handler.handle(
+            CambiarPasswordCommand(
+                usuario_id=usuario.usuario_id,
+                password_actual="wrongpass",
+                password_nueva="nuevapass456",
+            )
+        )
+
+
+@pytest.mark.asyncio
+async def test_cambiar_password_rechaza_password_nueva_corta(
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+) -> None:
+    usuario = _make_usuario("juez@test.com", "clave1234")
+    mock_repo.find_by_id.return_value = usuario
+    handler = CambiarPasswordHandler(mock_repo, password_hasher)
+
+    with pytest.raises(PasswordDemasiadoCorto):
+        await handler.handle(
+            CambiarPasswordCommand(
+                usuario_id=usuario.usuario_id,
+                password_actual="clave1234",
+                password_nueva="abc",
+            )
+        )
+
+
+@pytest.mark.asyncio
+async def test_cambiar_password_rechaza_usuario_inexistente(
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+) -> None:
+    mock_repo.find_by_id.return_value = None
+    handler = CambiarPasswordHandler(mock_repo, password_hasher)
+
+    with pytest.raises(UsuarioNoEncontrado):
+        await handler.handle(
+            CambiarPasswordCommand(
+                usuario_id=uuid.uuid4(),
+                password_actual="clave1234",
+                password_nueva="nuevapass456",
+            )
+        )
 
 
 # ── AutenticarUsuarioHandler ──────────────────────────────────────────────────

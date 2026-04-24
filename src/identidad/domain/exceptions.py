@@ -36,6 +36,11 @@ class RolNoPermitido(Exception):
         super().__init__("El rol ADMIN no está permitido en el auto-registro")
 
 
+class PasswordActualIncorrecto(Exception):
+    def __init__(self) -> None:
+        super().__init__("La contraseña actual es incorrecta")
+
+
 class TokenInvalido(Exception):
     def __init__(self) -> None:
         super().__init__("Token JWT inválido o expirado")

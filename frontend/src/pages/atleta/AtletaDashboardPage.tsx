@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { Link, useLocation } from 'react-router-dom'
 import { ApiError, inscribirAtleta } from '../../api/registro'
 import {
   fetchTorneos,
@@ -179,6 +180,7 @@ function InscripcionPanel({ torneo, atletaId }: InscripcionPanelProps) {
 }
 
 export function AtletaDashboardPage() {
+  const location = useLocation()
   const email = useAuthStore((s) => s.email)
   const atletaId = useAuthStore((s) => s.userId)
   const logout = useAuthStore((s) => s.logout)
@@ -218,6 +220,12 @@ export function AtletaDashboardPage() {
           </div>
         </header>
 
+        {location.state && (location.state as { passwordUpdated?: boolean }).passwordUpdated ? (
+          <div className="mt-4 rounded-[1.5rem] border border-emerald-300 bg-emerald-50 px-5 py-4 text-sm text-emerald-900">
+            Contrasena actualizada correctamente.
+          </div>
+        ) : null}
+
         <main className="mt-6 grid gap-4 lg:grid-cols-[320px_minmax(0,1fr)]">
           <section className="rounded-[2rem] border border-teal-200/70 bg-white/85 p-5 shadow-[0_20px_60px_rgba(45,94,99,0.08)]">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">
@@ -238,6 +246,12 @@ export function AtletaDashboardPage() {
                 </p>
                 <p className="mt-1 text-base font-semibold text-stone-900">Atleta</p>
               </div>
+              <Link
+                to="/cambiar-password"
+                className="inline-flex rounded-lg border border-teal-700 px-4 py-2 text-sm font-semibold text-teal-900"
+              >
+                Cambiar contrasena
+              </Link>
             </div>
           </section>
 
