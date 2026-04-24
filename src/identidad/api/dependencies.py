@@ -15,21 +15,26 @@ from identidad.infrastructure.jwt_service import JWTService
 from identidad.infrastructure.repositories.sqlite_usuario_repository import (
     SQLiteUsuarioRepository,
 )
+from notificaciones.domain.ports.email_port import EmailPort
+from notificaciones.infrastructure.email.logging_email_adapter import LoggingEmailAdapter
 
 _oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 _token_service: TokenServicePort | None = None
 _password_hasher: PasswordHashingPort | None = None
+_email_sender: EmailPort | None = None
 
 
 def configure_identity_dependencies(
     *,
     token_service: TokenServicePort | None = None,
     password_hasher: PasswordHashingPort | None = None,
+    email_sender: EmailPort | None = None,
 ) -> None:
     """Permite configurar dependencias tecnicas desde el composition root."""
-    global _token_service, _password_hasher
+    global _token_service, _password_hasher, _email_sender
     _token_service = token_service
     _password_hasher = password_hasher
+    _email_sender = email_sender
 
 
 def get_usuario_repository() -> UsuarioRepositoryPort:
@@ -48,6 +53,13 @@ def get_password_hasher() -> PasswordHashingPort:
     if _password_hasher is None:
         _password_hasher = BcryptPasswordHasher()
     return _password_hasher
+
+
+def get_email_sender() -> EmailPort:
+    global _email_sender
+    if _email_sender is None:
+        _email_sender = LoggingEmailAdapter()
+    return _email_sender
 
 
 async def get_current_user(
