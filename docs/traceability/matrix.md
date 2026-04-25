@@ -4,9 +4,9 @@
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-04-24 |
+| **Fecha** | 2026-04-25 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.26 — INC-5.5 parcial: US-5.5.1 (PR #115) + US-5.5.2 Done · DesignReviewer pendiente |
+| **Estado** | ✅ v1.26 — INC-5.4 cerrado · INC-5.5 reiniciado por reversión documental/funcional el 2026-04-25 |
 
 ---
 
@@ -43,7 +43,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP5 INC-5.2 / SP-ADJ-08 | Frontend organizador + Competencia | Ejecución por disciplina, cierre manual, cancelación fuerte |
 | SP5 INC-5.3 | Identidad + Frontend | RF-US-01..05 (gestión UI de usuarios/roles + vista atleta con inscripción básica) |
 | SP5 INC-5.4 (pendiente) | Registro + Competencia + Frontend | RF-IN-05/06 y flujo UI de inscripción/APs — inscripción básica adelantada en US-5.3.2 |
-| SP5 INC-5.5 (pendiente) | Resultados + Torneo + Frontend | RF-PM-01/02/05/06 como producto final con puntaje FAAS y podios |
+| SP5 INC-5.5 (reinicio) | Registro + Competencia + Frontend | Flujo de inscripción completa y APs a redefinir desde `docs/design/ux` tras revertir US-5.5.1/US-5.5.2 |
 | SP5 INC-5.6 (pendiente) | Frontend atleta + Resultados | Portal del atleta |
 | SP5 INC-5.7 (pendiente) | Demo/UAT | Seed BA 2025, verificación oficial, polish |
 | Futuro / fuera de scope SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
@@ -572,8 +572,6 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-5.4.1 | unit/identidad/application (`registrar_usuario`) · integration/identidad · `tests/features/US-5.4.1` · frontend (build + eslint) | ✅ Done (PR #112) |
 | US-5.4.2 | unit/identidad/application (`test_handlers.py` CambiarPassword) · integration/identidad · `tests/features/US-5.4.2` | ✅ Done (PR #113) |
 | US-5.4.3 | unit/identidad/api (`test_reset_password.py`) · unit/identidad/application (`test_handlers.py` Reset) · `tests/features/US-5.4.3-recuperar-password.feature` · frontend (build + eslint) | ✅ Done (PR #114) |
-| US-5.5.1 | unit/competencia/application (`test_registrar_ap_handler.py`) · integration/competencia (`test_registrar_ap_endpoint.py`) · `tests/features/US-5.5.1-registro-aps.feature` · frontend (build) | ✅ Done (PR #115) |
-| US-5.5.2 | unit/registro/application (`test_listar_inscriptos_detalle_handler.py`) · integration/registro (`test_inscriptos_detalle_endpoint.py`) · `tests/features/US-5.5.2-vista-organizador-inscriptos.feature` · frontend (build) | ✅ Done |
 
 ---
 
@@ -606,7 +604,6 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.19 — 2026-04-20: US-5.1.2 implementada · trazabilidad frontend de gestion de fases agregada*
 *v1.20 — 2026-04-20: US-5.1.3 implementada · trazabilidad frontend de inscriptos/AP agregada*
 *v1.22 — 2026-04-22: INC-5.2 cerrado (§21 nuevo · DesignReviewer 0 CRITICAL · 215 WARNING) · SP-ADJ-08 §22 · §§ renumerados 23..26 · US→Tests US-5.2.1..5.2.2 · US-ADJ-8.1..8.3*
-*v1.26 — 2026-04-25: INC-5.5 parcial: US-5.5.1 (PR #115) + US-5.5.2 Done · §27 US→Tests actualizado*
 *v1.25 — 2026-04-24: INC-5.4 cerrado (§24 nuevo · DesignReviewer 0 CRITICAL · 222 WARNING) · §§ renumerados 25..28 · US→Tests US-5.4.1..5.4.3 · PRs #112..#114*
 *v1.24 — 2026-04-23: INC-5.3 cerrado (§23 nuevo · DesignReviewer 0 CRITICAL · 215 WARNING) · §§ renumerados 24..27 · US→Tests US-5.3.1..5.3.2 · nota scope adelantado INC-5.4 en US-5.3.2*
 *v1.23 — 2026-04-23: matriz reconciliada contra PLAN-SP5 vigente · RF-IG/RF-IN-07 movidos a futuro fuera de scope SP5 · RF-PM y RF-IN-05/06 marcados como parciales con exposición final en INC-5.4/5.5*

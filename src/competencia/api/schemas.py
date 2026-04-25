@@ -1,6 +1,4 @@
 """Schemas Pydantic para los request bodies del BC Competencia."""
-
-from decimal import Decimal
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -34,11 +32,3 @@ class IniciarCompetenciaBody(BaseModel):
 
     disciplina: Disciplina
     juez_id: str
-
-
-class RegistrarAPBody(BaseModel):
-    """Body del endpoint POST /{competencia_id}/registrar-ap."""
-
-    disciplina: Disciplina
-    valor_ap: Decimal
-    unidad: str

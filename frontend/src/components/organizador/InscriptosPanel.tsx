@@ -4,7 +4,7 @@ import {
   fetchGrillaCompetencia,
   type GrillaAtletaDto,
 } from '../../api/competencia'
-import { listarInscriptosDetalle } from '../../api/registro'
+import { fetchAtleta, listarInscriptos } from '../../api/registro'
 import { TablaInscriptos, type InscriptoRow } from './TablaInscriptos'
 
 interface InscriptosPanelProps {
@@ -26,9 +26,11 @@ function buildApMap(grillas: Array<{ disciplina: string; entradas: GrillaAtletaD
 
 async function loadInscriptos(torneoId: string) {
   const [inscriptos, competencias] = await Promise.all([
-    listarInscriptosDetalle(torneoId),
+    listarInscriptos(torneoId),
     fetchCompetenciasPorTorneo(torneoId),
   ])
+  const atletas = await Promise.all(inscriptos.map((inscripto) => fetchAtleta(inscripto.atleta_id)))
+  const atletaPorId = new Map(atletas.map((atleta) => [atleta.atleta_id, atleta]))
   const disciplinas = Array.from(
     new Set(inscriptos.flatMap((inscripto) => inscripto.disciplinas)),
   ).sort()
@@ -51,6 +53,7 @@ async function loadInscriptos(torneoId: string) {
   )
   const apMap = buildApMap(grillas)
   const rows: InscriptoRow[] = inscriptos.map((inscripto) => {
+    const atleta = atletaPorId.get(inscripto.atleta_id)
     const estadoApPorDisciplina = Object.fromEntries(
       inscripto.disciplinas.map((disciplina) => [
         disciplina,
@@ -61,9 +64,9 @@ async function loadInscriptos(torneoId: string) {
     return {
       inscripcionId: inscripto.inscripcion_id,
       atletaId: inscripto.atleta_id,
-      nombre: `${inscripto.apellido}, ${inscripto.nombre}`,
-      club: inscripto.club,
-      categoria: inscripto.categoria,
+      nombre: atleta ? `${atleta.apellido}, ${atleta.nombre}` : 'Atleta sin datos',
+      club: atleta?.club ?? 'Sin dato',
+      categoria: atleta?.categoria ?? 'Sin dato',
       genero: 'Sin dato',
       disciplinas: inscripto.disciplinas,
       estadoApPorDisciplina,
