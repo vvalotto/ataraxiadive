@@ -413,28 +413,3 @@ export async function resolverRevision(payload: {
 
   await parseResponse<void>(response)
 }
-
-export interface RegistrarAPParams {
-  competenciaId: string
-  disciplina: string
-  valorAp: number
-  unidad: string
-}
-
-export interface RegistrarAPResponse {
-  performance_id: string
-}
-
-export async function registrarAP(params: RegistrarAPParams): Promise<RegistrarAPResponse> {
-  const response = await fetch(`/competencia/${params.competenciaId}/registrar-ap`, {
-    method: 'POST',
-    headers: buildHeaders(),
-    body: JSON.stringify({
-      disciplina: params.disciplina,
-      valor_ap: params.valorAp,
-      unidad: params.unidad,
-    }),
-  })
-
-  return parseResponse<RegistrarAPResponse>(response)
-}

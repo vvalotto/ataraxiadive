@@ -49,14 +49,6 @@ from competencia.application.commands.llamar_atleta import (
     LlamarAtletaHandler,
     PerformanceNoEncontrada as PerformanceNoEncontradaLlamar,
 )
-from competencia.application.commands.registrar_ap import (
-    APYaRegistrado,
-    GrillaYaConfirmadaError,
-    PlazoAPVencidoError,
-    RegistrarAPCommand,
-    RegistrarAPHandler,
-)
-from competencia.domain.value_objects.ap import ValorAPInvalido
 from competencia.application.commands.registrar_resultado import (
     RegistrarResultadoCommand,
     RegistrarResultadoHandler,
@@ -145,7 +137,7 @@ from competencia.infrastructure.repositories.sqlite_competencias_por_torneo impo
 )
 from competencia.infrastructure.repositories.atleta_nombre_adapter import AtletaNombreAdapter
 from competencia.domain.exceptions import DomainError
-from shared.api.dependencies import AtletaDep, JuezDep, OrganizadorDep
+from shared.api.dependencies import JuezDep, OrganizadorDep
 
 router = APIRouter(prefix="/competencia", tags=["competencia"])
 
@@ -290,14 +282,6 @@ class ResolverRevisionBody(BaseModel):
         return self.tipo or self.resolucion or TipoTarjeta.Blanca
 
 
-class RegistrarAPBody(BaseModel):
-    """Body del endpoint POST /competencia/{id}/registrar-ap."""
-
-    disciplina: Disciplina
-    valor_ap: Decimal
-    unidad: UnidadMedida
-
-
 # ── Dependency providers ──────────────────────────────────────────────────────
 
 
@@ -357,18 +341,6 @@ def get_llamar_atleta_handler(
     )
 
 
-def get_registrar_ap_handler(
-    event_store: EventStoreDep,
-    disciplina_descriptor: DisciplinaDescriptorDep,
-) -> RegistrarAPHandler:
-    """Dependency: handler para registrar AP del atleta."""
-    return RegistrarAPHandler(
-        event_store,
-        CompetenciaEstadoAdapter(event_store),
-        disciplina_descriptor,
-    )
-
-
 def get_registrar_resultado_handler(
     event_store: EventStoreDep,
     disciplina_descriptor: DisciplinaDescriptorDep,
@@ -423,7 +395,6 @@ PerformancesEstadoAdapterDep = Annotated[
     PerformancesEstadoAdapter, Depends(get_performances_estado_adapter)
 ]
 LlamarAtletaHandlerDep = Annotated[LlamarAtletaHandler, Depends(get_llamar_atleta_handler)]
-RegistrarAPHandlerDep = Annotated[RegistrarAPHandler, Depends(get_registrar_ap_handler)]
 RegistrarResultadoHandlerDep = Annotated[
     RegistrarResultadoHandler, Depends(get_registrar_resultado_handler)
 ]
@@ -1154,39 +1125,3 @@ async def get_andariveles_activos(
         ],
         status_code=200,
     )
-
-
-@router.post("/{competencia_id}/registrar-ap", response_class=JSONResponse)
-async def registrar_ap(
-    competencia_id: UUID,
-    body: RegistrarAPBody,
-    handler: RegistrarAPHandlerDep,
-    user: AtletaDep,
-) -> JSONResponse:
-    """POST /{competencia_id}/registrar-ap — el atleta declara su AP.
-
-    El participante_id se extrae del JWT (INV-5.5.1-05): el atleta no puede
-    registrar un AP a nombre de otro.
-    """
-    try:
-        participante_id = UUID(user["sub"])
-    except (ValueError, KeyError):
-        return JSONResponse(
-            status_code=422, content={"detail": "Token inválido: sub no es un UUID"}
-        )
-
-    command = RegistrarAPCommand(
-        competencia_id=competencia_id,
-        participante_id=participante_id,
-        disciplina=body.disciplina,
-        valor_ap=body.valor_ap,
-        unidad=body.unidad,
-    )
-    try:
-        performance_id = await handler.handle(command)
-    except (ValorAPInvalido, UnidadIncompatible) as exc:
-        return JSONResponse(status_code=422, content={"detail": str(exc)})
-    except (APYaRegistrado, GrillaYaConfirmadaError, PlazoAPVencidoError) as exc:
-        return JSONResponse(status_code=409, content={"detail": str(exc)})
-
-    return JSONResponse(status_code=201, content={"performance_id": str(performance_id)})
