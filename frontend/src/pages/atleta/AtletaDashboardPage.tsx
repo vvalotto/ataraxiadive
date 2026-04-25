@@ -3,6 +3,11 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { Link, useLocation } from 'react-router-dom'
 import { ApiError, inscribirAtleta } from '../../api/registro'
 import {
+  fetchCompetenciasPorTorneo,
+  registrarAP,
+  type CompetenciaResumenDto,
+} from '../../api/competencia'
+import {
   fetchTorneos,
   listarDisciplinasTorneo,
   type DisciplinaCodigo,
@@ -42,6 +47,141 @@ function getInscripcionError(error: unknown): string {
   }
   if (error instanceof Error) return error.message
   return 'No se pudo completar la inscripcion'
+}
+
+const UNIDAD_POR_DISCIPLINA: Record<string, string> = {
+  STA: 'Segundos',
+  DNF: 'Metros',
+  DYN: 'Metros',
+  DBF: 'Metros',
+  SPE_2X50: 'Segundos',
+  SPE_4X50: 'Segundos',
+  SPE_8X50: 'Segundos',
+  SPE_16X50: 'Segundos',
+}
+
+interface APRegistrado {
+  valorAp: number
+  unidad: string
+}
+
+interface APFormProps {
+  competencia: CompetenciaResumenDto
+}
+
+function APForm({ competencia }: APFormProps) {
+  const [valorAp, setValorAp] = useState('')
+  const [apRegistrado, setApRegistrado] = useState<APRegistrado | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  const unidad = UNIDAD_POR_DISCIPLINA[competencia.disciplina] ?? 'Metros'
+  const unidadLabel = unidad === 'Metros' ? 'm' : 's'
+
+  const mutation = useMutation({
+    mutationFn: () =>
+      registrarAP({
+        competenciaId: competencia.competencia_id,
+        disciplina: competencia.disciplina,
+        valorAp: parseFloat(valorAp),
+        unidad,
+      }),
+    onSuccess: () => {
+      setApRegistrado({ valorAp: parseFloat(valorAp), unidad })
+      setError(null)
+    },
+    onError: (err: unknown) => {
+      if (err instanceof Error) {
+        if (err.message.includes('ya existe') || err.message.includes('409')) {
+          setApRegistrado({ valorAp: parseFloat(valorAp), unidad })
+        } else {
+          setError(err.message)
+        }
+      }
+    },
+  })
+
+  if (apRegistrado) {
+    return (
+      <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
+        <span className="font-semibold">
+          {competencia.disciplina}
+        </span>
+        <span className="text-emerald-700">
+          AP registrado: {apRegistrado.valorAp} {unidadLabel}
+        </span>
+      </div>
+    )
+  }
+
+  return (
+    <div className="rounded-xl border border-stone-200 bg-white p-3">
+      <p className="mb-2 text-xs font-semibold uppercase tracking-[0.15em] text-stone-500">
+        {competencia.disciplina}
+      </p>
+      <div className="flex items-center gap-2">
+        <input
+          type="number"
+          min="0.01"
+          step="0.01"
+          placeholder={`AP en ${unidadLabel}`}
+          value={valorAp}
+          onChange={(e) => setValorAp(e.target.value)}
+          className="w-28 rounded-lg border border-stone-300 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+        />
+        <span className="text-xs text-stone-500">{unidadLabel}</span>
+        <button
+          type="button"
+          onClick={() => {
+            setError(null)
+            mutation.mutate()
+          }}
+          disabled={mutation.isPending || !valorAp || parseFloat(valorAp) <= 0}
+          className="rounded-lg bg-teal-700 px-3 py-1.5 text-xs font-semibold text-white disabled:cursor-not-allowed disabled:bg-stone-300"
+        >
+          {mutation.isPending ? 'Registrando...' : 'Registrar AP'}
+        </button>
+      </div>
+      {error ? (
+        <p className="mt-2 text-xs text-red-700">{error}</p>
+      ) : null}
+    </div>
+  )
+}
+
+interface MisAPsPanelProps {
+  torneo: TorneoDto
+}
+
+function MisAPsPanel({ torneo }: MisAPsPanelProps) {
+  const competenciasQuery = useQuery({
+    queryKey: ['competencias-torneo-atleta', torneo.torneo_id],
+    queryFn: () => fetchCompetenciasPorTorneo(torneo.torneo_id),
+  })
+
+  if (competenciasQuery.isLoading) {
+    return (
+      <div className="mt-4 rounded-xl border border-stone-200 bg-stone-50 p-3 text-xs text-stone-500">
+        Cargando APs...
+      </div>
+    )
+  }
+
+  if (competenciasQuery.isError || !competenciasQuery.data?.length) {
+    return null
+  }
+
+  return (
+    <div className="mt-5 rounded-[1.25rem] border border-sky-200/80 bg-sky-50/60 p-4">
+      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">
+        Mis APs
+      </p>
+      <div className="grid gap-2 sm:grid-cols-2">
+        {competenciasQuery.data.map((competencia) => (
+          <APForm key={competencia.competencia_id} competencia={competencia} />
+        ))}
+      </div>
+    </div>
+  )
 }
 
 interface InscripcionPanelProps {
@@ -306,6 +446,7 @@ export function AtletaDashboardPage() {
                       {formatearFecha(torneo.fecha_inicio)} al {formatearFecha(torneo.fecha_fin)}
                     </p>
                     <InscripcionPanel torneo={torneo} atletaId={atletaId} />
+                    <MisAPsPanel torneo={torneo} />
                   </article>
                 ))}
               </div>
