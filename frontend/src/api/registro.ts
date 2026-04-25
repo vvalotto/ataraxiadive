@@ -30,6 +30,17 @@ export interface AtletaDto {
   brevet: string | null
 }
 
+export interface InscriptoDetalleDto {
+  inscripcion_id: string
+  atleta_id: string
+  nombre: string
+  apellido: string
+  categoria: string
+  club: string
+  disciplinas: string[]
+  estado: string
+}
+
 export interface InscribirAtletaPayload {
   atletaId: string
   torneoId: string
@@ -82,6 +93,13 @@ export async function listarInscriptos(torneoId: string): Promise<InscriptoDto[]
     headers: buildHeaders(),
   })
   return parseResponse<InscriptoDto[]>(response)
+}
+
+export async function listarInscriptosDetalle(torneoId: string): Promise<InscriptoDetalleDto[]> {
+  const response = await fetch(`/registro/torneos/${torneoId}/inscriptos-detalle`, {
+    headers: buildHeaders(),
+  })
+  return parseResponse<InscriptoDetalleDto[]>(response)
 }
 
 export async function fetchAtleta(atletaId: string): Promise<AtletaDto> {
