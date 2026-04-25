@@ -6,7 +6,7 @@
 | **Baseline** | BL-005 |
 | **Tag git** | `v1.0.0` |
 | **Fecha** | 2026-04-18 |
-| **Estado** | ⏳ En progreso (INC-5.1..5.3 ✅) |
+| **Estado** | ⏳ En progreso (INC-5.1..5.3 ✅ · INC-5.5 reiniciado 2026-04-25) |
 
 ---
 
@@ -222,6 +222,13 @@ recuperar su contraseña vía email (Resend + JWT temporal con expiración 1h).
 
 ### INC-5.5 — Inscripción completa
 
+**Estado:** 🔄 Reiniciado 2026-04-25
+
+> **Nota de control:** la primera especificación e implementación de `US-5.5.1`
+> y `US-5.5.2` fueron revertidas porque no respetaban la UX aprobada en
+> `docs/design/ux/`. `INC-5.5` debe redefinirse y reimplementarse desde esa
+> fuente de verdad antes de volver a desarrollo.
+
 **DoD:** el atleta puede registrar sus APs por disciplina. El organizador ve la lista de
 inscriptos actualizada con nombre/apellido (del modelo extendido en INC-5.4). La
 transición Inscripción → Preparación cierra el período y bloquea nuevos anuncios.
@@ -231,8 +238,8 @@ transición Inscripción → Preparación cierra el período y bloquea nuevos an
 
 | US | Descripción | Área |
 |----|-------------|------|
-| US-5.5.1 | Registro de APs — atleta ingresa Performance Anunciada por cada disciplina inscripta | `frontend/`, `competencia/api/` |
-| US-5.5.2 | Vista del organizador — lista de inscriptos con nombre, disciplinas y estado AP (registrado / sin AP) | `frontend/`, `registro/api/` |
+| US-5.5.1 | Registro de APs — atleta ingresa Performance Anunciada por cada disciplina inscripta | `frontend/`, `competencia/api/` · `REDEFINIR` |
+| US-5.5.2 | Vista del organizador — lista de inscriptos con nombre, disciplinas y estado AP (registrado / sin AP) | `frontend/`, `registro/api/` · `REDEFINIR` |
 
 ---
 

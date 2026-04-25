@@ -4,9 +4,9 @@
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-04-24 |
+| **Fecha** | 2026-04-25 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.25 — INC-5.4 cerrado (US-5.4.1..5.4.3 · DesignReviewer 0 CRITICAL · 222 WARNING) |
+| **Estado** | ✅ v1.26 — INC-5.4 cerrado · INC-5.5 reiniciado por reversión documental/funcional el 2026-04-25 |
 
 ---
 
@@ -43,7 +43,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP5 INC-5.2 / SP-ADJ-08 | Frontend organizador + Competencia | Ejecución por disciplina, cierre manual, cancelación fuerte |
 | SP5 INC-5.3 | Identidad + Frontend | RF-US-01..05 (gestión UI de usuarios/roles + vista atleta con inscripción básica) |
 | SP5 INC-5.4 (pendiente) | Registro + Competencia + Frontend | RF-IN-05/06 y flujo UI de inscripción/APs — inscripción básica adelantada en US-5.3.2 |
-| SP5 INC-5.5 (pendiente) | Resultados + Torneo + Frontend | RF-PM-01/02/05/06 como producto final con puntaje FAAS y podios |
+| SP5 INC-5.5 (reinicio) | Registro + Competencia + Frontend | Flujo de inscripción completa y APs a redefinir desde `docs/design/ux` tras revertir US-5.5.1/US-5.5.2 |
 | SP5 INC-5.6 (pendiente) | Frontend atleta + Resultados | Portal del atleta |
 | SP5 INC-5.7 (pendiente) | Demo/UAT | Seed BA 2025, verificación oficial, polish |
 | Futuro / fuera de scope SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
