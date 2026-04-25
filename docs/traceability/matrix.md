@@ -6,7 +6,7 @@
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
 | **Fecha** | 2026-04-24 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.26 — INC-5.5 parcial: US-5.5.1 (PR #115) + US-5.5.2 Done · DesignReviewer pendiente |
+| **Estado** | ✅ v1.25 — INC-5.4 cerrado (US-5.4.1..5.4.3 · DesignReviewer 0 CRITICAL · 222 WARNING) |
 
 ---
 
@@ -572,8 +572,6 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-5.4.1 | unit/identidad/application (`registrar_usuario`) · integration/identidad · `tests/features/US-5.4.1` · frontend (build + eslint) | ✅ Done (PR #112) |
 | US-5.4.2 | unit/identidad/application (`test_handlers.py` CambiarPassword) · integration/identidad · `tests/features/US-5.4.2` | ✅ Done (PR #113) |
 | US-5.4.3 | unit/identidad/api (`test_reset_password.py`) · unit/identidad/application (`test_handlers.py` Reset) · `tests/features/US-5.4.3-recuperar-password.feature` · frontend (build + eslint) | ✅ Done (PR #114) |
-| US-5.5.1 | unit/competencia/application (`test_registrar_ap_handler.py`) · integration/competencia (`test_registrar_ap_endpoint.py`) · `tests/features/US-5.5.1-registro-aps.feature` · frontend (build) | ✅ Done (PR #115) |
-| US-5.5.2 | unit/registro/application (`test_listar_inscriptos_detalle_handler.py`) · integration/registro (`test_inscriptos_detalle_endpoint.py`) · `tests/features/US-5.5.2-vista-organizador-inscriptos.feature` · frontend (build) | ✅ Done |
 
 ---
 
@@ -606,7 +604,6 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.19 — 2026-04-20: US-5.1.2 implementada · trazabilidad frontend de gestion de fases agregada*
 *v1.20 — 2026-04-20: US-5.1.3 implementada · trazabilidad frontend de inscriptos/AP agregada*
 *v1.22 — 2026-04-22: INC-5.2 cerrado (§21 nuevo · DesignReviewer 0 CRITICAL · 215 WARNING) · SP-ADJ-08 §22 · §§ renumerados 23..26 · US→Tests US-5.2.1..5.2.2 · US-ADJ-8.1..8.3*
-*v1.26 — 2026-04-25: INC-5.5 parcial: US-5.5.1 (PR #115) + US-5.5.2 Done · §27 US→Tests actualizado*
 *v1.25 — 2026-04-24: INC-5.4 cerrado (§24 nuevo · DesignReviewer 0 CRITICAL · 222 WARNING) · §§ renumerados 25..28 · US→Tests US-5.4.1..5.4.3 · PRs #112..#114*
 *v1.24 — 2026-04-23: INC-5.3 cerrado (§23 nuevo · DesignReviewer 0 CRITICAL · 215 WARNING) · §§ renumerados 24..27 · US→Tests US-5.3.1..5.3.2 · nota scope adelantado INC-5.4 en US-5.3.2*
 *v1.23 — 2026-04-23: matriz reconciliada contra PLAN-SP5 vigente · RF-IG/RF-IN-07 movidos a futuro fuera de scope SP5 · RF-PM y RF-IN-05/06 marcados como parciales con exposición final en INC-5.4/5.5*
