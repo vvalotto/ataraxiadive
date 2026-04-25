@@ -1,6 +1,6 @@
 # US-5.5.2: Vista del organizador — inscriptos con estado AP
 
-**Estado**: `To Do`
+**Estado**: `Done`
 **Sprint**: SP5 — La Puesta en Marcha
 **Incremento**: INC-5.5
 **Bounded Context**: `registro` (endpoint) + `frontend`

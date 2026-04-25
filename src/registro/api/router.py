@@ -22,6 +22,7 @@ from registro.application.commands.registrar_atleta import (
     RegistrarAtletaHandler,
 )
 from registro.application.queries.listar_inscriptos import ListarInscriptosHandler
+from registro.application.queries.listar_inscriptos_detalle import ListarInscriptosDetalleHandler
 from registro.application.queries.obtener_atleta import ObtenerAtletaHandler
 from registro.domain.aggregates.inscripcion import Inscripcion
 from registro.domain.exceptions import (
@@ -103,6 +104,17 @@ class InscripcionResponse(BaseModel):
     disciplinas: list[str]
     estado: EstadoInscripcion
     fecha_inscripcion: datetime
+
+
+class InscriptoDetalleResponse(BaseModel):
+    inscripcion_id: UUID
+    atleta_id: UUID
+    nombre: str
+    apellido: str
+    categoria: str
+    club: str
+    disciplinas: list[str]
+    estado: str
 
 
 # ── Helpers de dependencias ───────────────────────────────────────────────────
@@ -211,6 +223,28 @@ async def cancelar_inscripcion(inscripcion_id: UUID, _: AtletaDep) -> JSONRespon
     except PlazoCancelacionVencido as exc:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
     return JSONResponse(status_code=200, content={"ok": True})
+
+
+@router.get("/torneos/{torneo_id}/inscriptos-detalle", status_code=200)
+async def listar_inscriptos_detalle(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse:
+    handler = ListarInscriptosDetalleHandler(_inscripcion_repo(), _repo())
+    inscriptos = await handler.handle(torneo_id)
+    return JSONResponse(
+        status_code=200,
+        content=[
+            InscriptoDetalleResponse(
+                inscripcion_id=i.inscripcion_id,
+                atleta_id=i.atleta_id,
+                nombre=i.nombre,
+                apellido=i.apellido,
+                categoria=i.categoria,
+                club=i.club,
+                disciplinas=i.disciplinas,
+                estado=i.estado,
+            ).model_dump(mode="json")
+            for i in inscriptos
+        ],
+    )
 
 
 @router.get("/torneos/{torneo_id}/inscriptos", status_code=200)
