@@ -1,0 +1,282 @@
+{
+  "summary": {
+    "total_files": 4,
+    "checks_executed": 6,
+    "elapsed_seconds": 2.48,
+    "timestamp": "2026-04-26T15:58:57.715855",
+    "total_issues": 12,
+    "errors": 0,
+    "warnings": 0,
+    "infos": 12
+  },
+  "results": [
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/torneo/domain/value_objects/tipo_reglamento.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/torneo/domain/value_objects/tipo_reglamento.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/torneo/domain/value_objects/tipo_reglamento.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/torneo/domain/aggregates/torneo.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/torneo/domain/aggregates/torneo.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/torneo/domain/aggregates/torneo.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "Security [B110]: Try, Except, Pass detected.",
+      "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+      "line": 51
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/application/commands/calcular_ranking.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/application/commands/calcular_ranking.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/application/commands/calcular_ranking.py",
+      "line": null
+    }
+  ],
+  "by_severity": {
+    "errors": [],
+    "warnings": [],
+    "infos": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/torneo/domain/value_objects/tipo_reglamento.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/torneo/domain/value_objects/tipo_reglamento.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/torneo/domain/value_objects/tipo_reglamento.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/torneo/domain/aggregates/torneo.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/torneo/domain/aggregates/torneo.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/torneo/domain/aggregates/torneo.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B110]: Try, Except, Pass detected.",
+        "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+        "line": 51
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/commands/calcular_ranking.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/commands/calcular_ranking.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/application/commands/calcular_ranking.py",
+        "line": null
+      }
+    ]
+  },
+  "by_package": {
+    "aggregates": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/torneo/domain/aggregates/torneo.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/torneo/domain/aggregates/torneo.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/torneo/domain/aggregates/torneo.py",
+        "line": null
+      }
+    ],
+    "commands": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/commands/calcular_ranking.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/commands/calcular_ranking.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/application/commands/calcular_ranking.py",
+        "line": null
+      }
+    ],
+    "repositories": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "Security [B110]: Try, Except, Pass detected.",
+        "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+        "line": 51
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+        "line": null
+      }
+    ],
+    "value_objects": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/torneo/domain/value_objects/tipo_reglamento.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/torneo/domain/value_objects/tipo_reglamento.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/torneo/domain/value_objects/tipo_reglamento.py",
+        "line": null
+      }
+    ]
+  }
+}
