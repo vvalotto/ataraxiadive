@@ -14,6 +14,7 @@ from resultados.infrastructure.repositories.disciplina_descriptor_adapter import
     DisciplinaDescriptorAdapter,
 )
 from resultados.domain.aggregates.ranking_competencia import RankingCompetencia
+from resultados.domain.ports.algoritmo_puntaje import AlgoritmoPuntaje
 from resultados.domain.ports.resultados_competencia_port import (
     AtletaCategoriaPort,
     ResultadoFinal,
@@ -59,11 +60,13 @@ class CalcularRankingHandler:
         resultados_port: ResultadosCompetenciaPort,
         atleta_categoria_port: AtletaCategoriaPort | None = None,
         descriptor: DisciplinaDescriptor | None = None,
+        algoritmo: AlgoritmoPuntaje | None = None,
     ) -> None:
         self._ranking_store = ranking_store
         self._resultados_port = resultados_port
         self._atleta_categoria_port = atleta_categoria_port or _CategoriaFallbackPort()
         self._descriptor = descriptor or DisciplinaDescriptorAdapter()
+        self._algoritmo = algoritmo
 
     async def handle(self, command: CalcularRankingCommand) -> None:
         """Ejecuta el comando CalcularRanking.
