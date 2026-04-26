@@ -44,8 +44,9 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP5 INC-5.3 | Identidad + Frontend | RF-US-01..05 (gestión UI de usuarios/roles + vista atleta con inscripción básica) |
 | SP5 INC-5.4 (pendiente) | Registro + Competencia + Frontend | RF-IN-05/06 y flujo UI de inscripción/APs — inscripción básica adelantada en US-5.3.2 |
 | SP5 INC-5.5 | Registro + Competencia + Frontend | Portal atleta completo (shell dark, wizard inscripción, declarar AP) + vista organizador con inscriptos y estado AP (US-5.5.1..5.5.2) — PRs #120, #121, #122 |
-| SP5 INC-5.6 (pendiente) | Frontend atleta + Resultados | Portal del atleta |
-| SP5 INC-5.7 (pendiente) | Demo/UAT | Seed BA 2025, verificación oficial, polish |
+| SP5 INC-5.6 | Resultados + Torneo + Frontend | Algoritmo FAAS (puerto + implementación) + TipoReglamento + ranking por categoría/género con puntos + UI tabla ejecución + podios 6 divisiones (US-5.6.1..5.6.6) |
+| SP5 INC-5.7 (pendiente) | Portal Atleta + Resultados | Mis torneos, mi grilla, mis resultados, rankings/podios desde la vista del atleta |
+| SP5 INC-5.8 (pendiente) | Demo/UAT | Seed BA 2025, verificación contra resultados oficiales, UX fixes |
 | Futuro / fuera de scope SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
 
 ---
