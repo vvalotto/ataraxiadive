@@ -84,6 +84,21 @@ class SQLiteInscripcionRepository(InscripcionRepositoryPort):
                 rows = await cursor.fetchall()
                 return [self._row_to_inscripcion(row) for row in rows]
 
+    async def find_active_by_torneo(self, torneo_id: UUID) -> list[Inscripcion]:
+        async with aiosqlite.connect(self._db_path) as conn:
+            await self._ensure_table(conn)
+            conn.row_factory = aiosqlite.Row
+            async with conn.execute(
+                """
+                SELECT * FROM inscripciones
+                WHERE torneo_id = ? AND estado != ?
+                ORDER BY fecha_inscripcion ASC
+                """,
+                (str(torneo_id), EstadoInscripcion.CANCELADA.value),
+            ) as cursor:
+                rows = await cursor.fetchall()
+                return [self._row_to_inscripcion(row) for row in rows]
+
     async def find_by_atleta(self, atleta_id: UUID) -> list[Inscripcion]:
         async with aiosqlite.connect(self._db_path) as conn:
             await self._ensure_table(conn)

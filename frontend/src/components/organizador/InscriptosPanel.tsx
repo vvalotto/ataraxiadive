@@ -1,74 +1,48 @@
 import { useQuery } from '@tanstack/react-query'
-import {
-  fetchCompetenciasPorTorneo,
-  fetchGrillaCompetencia,
-  type GrillaAtletaDto,
-} from '../../api/competencia'
-import { fetchAtleta, listarInscriptos } from '../../api/registro'
+import { listarInscriptosDetalle } from '../../api/registro'
+import type { EstadoTorneo } from '../../api/torneo'
 import { TablaInscriptos, type InscriptoRow } from './TablaInscriptos'
 
 interface InscriptosPanelProps {
   torneoId: string
+  torneoEstado: EstadoTorneo
 }
 
-function buildApMap(grillas: Array<{ disciplina: string; entradas: GrillaAtletaDto[] }>) {
-  const map = new Map<string, { ap: string | null; unidad: string | null }>()
-  for (const grilla of grillas) {
-    for (const entrada of grilla.entradas) {
-      map.set(`${entrada.atleta_id}:${grilla.disciplina}`, {
-        ap: entrada.ap_declarado,
-        unidad: entrada.unidad,
-      })
-    }
+function buildEstadoAp(
+  torneoEstado: EstadoTorneo,
+  ap: string | null,
+): 'pendiente' | 'declarado' | 'cerrado' {
+  if (torneoEstado !== 'INSCRIPCION_ABIERTA') {
+    return 'cerrado'
   }
-  return map
+  return ap?.trim() ? 'declarado' : 'pendiente'
 }
 
-async function loadInscriptos(torneoId: string) {
-  const [inscriptos, competencias] = await Promise.all([
-    listarInscriptos(torneoId),
-    fetchCompetenciasPorTorneo(torneoId),
-  ])
-  const atletas = await Promise.all(inscriptos.map((inscripto) => fetchAtleta(inscripto.atleta_id)))
-  const atletaPorId = new Map(atletas.map((atleta) => [atleta.atleta_id, atleta]))
+async function loadInscriptos(torneoId: string, torneoEstado: EstadoTorneo) {
+  const inscriptos = await listarInscriptosDetalle(torneoId)
   const disciplinas = Array.from(
-    new Set(inscriptos.flatMap((inscripto) => inscripto.disciplinas)),
+    new Set(inscriptos.flatMap((inscripto) => inscripto.disciplinas.map((item) => item.disciplina))),
   ).sort()
-  const competenciasPorDisciplina = new Map(
-    competencias.map((competencia) => [competencia.disciplina, competencia]),
-  )
-  const grillas = await Promise.all(
-    disciplinas.map(async (disciplina) => {
-      const competencia = competenciasPorDisciplina.get(disciplina)
-      if (!competencia) {
-        return { disciplina, entradas: [] }
-      }
-      try {
-        const entradas = await fetchGrillaCompetencia(competencia.competencia_id, disciplina)
-        return { disciplina, entradas }
-      } catch {
-        return { disciplina, entradas: [] }
-      }
-    }),
-  )
-  const apMap = buildApMap(grillas)
   const rows: InscriptoRow[] = inscriptos.map((inscripto) => {
-    const atleta = atletaPorId.get(inscripto.atleta_id)
     const estadoApPorDisciplina = Object.fromEntries(
       inscripto.disciplinas.map((disciplina) => [
-        disciplina,
-        apMap.get(`${inscripto.atleta_id}:${disciplina}`) ?? { ap: null, unidad: null },
+        disciplina.disciplina,
+        {
+          estado: buildEstadoAp(torneoEstado, disciplina.ap),
+          ap: disciplina.ap,
+          unidad: disciplina.unidad,
+        },
       ]),
     )
 
     return {
       inscripcionId: inscripto.inscripcion_id,
       atletaId: inscripto.atleta_id,
-      nombre: atleta ? `${atleta.apellido}, ${atleta.nombre}` : 'Atleta sin datos',
-      club: atleta?.club ?? 'Sin dato',
-      categoria: atleta?.categoria ?? 'Sin dato',
-      genero: 'Sin dato',
-      disciplinas: inscripto.disciplinas,
+      nombre: `${inscripto.apellido}, ${inscripto.nombre}`.trim(),
+      club: inscripto.club || 'Sin dato',
+      categoria: inscripto.categoria || 'Sin dato',
+      estadoInscripcion: inscripto.estado,
+      disciplinas: inscripto.disciplinas.map((item) => item.disciplina),
       estadoApPorDisciplina,
     }
   })
@@ -76,10 +50,10 @@ async function loadInscriptos(torneoId: string) {
   return { rows, disciplinas }
 }
 
-export function InscriptosPanel({ torneoId }: InscriptosPanelProps) {
+export function InscriptosPanel({ torneoId, torneoEstado }: InscriptosPanelProps) {
   const query = useQuery({
-    queryKey: ['torneo-inscriptos-ap', torneoId],
-    queryFn: () => loadInscriptos(torneoId),
+    queryKey: ['torneo-inscriptos-ap', torneoId, torneoEstado],
+    queryFn: () => loadInscriptos(torneoId, torneoEstado),
   })
 
   if (query.isLoading) {
