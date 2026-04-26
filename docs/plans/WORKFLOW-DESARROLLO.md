@@ -1,7 +1,7 @@
 # Workflow de Desarrollo — AtaraxiaDive
 
-**Versión:** 1.7
-**Fecha:** 2026-04-23
+**Versión:** 1.8
+**Fecha:** 2026-04-26
 **Alcance:** Convenciones de branching, PRs, quality gates y gestión administrativa para SP1 en adelante
 
 ---
@@ -67,7 +67,17 @@ Como <rol>, quiero <acción> para <valor>.
 2. Victor revisa y aprueba (con ajustes si corresponde)
 3. Por cada US aprobada:
    a. Crear GitHub Issue con template US-IEDD → asignar Milestone + Labels
-   b. Crear docs/specs/spN/US-X.Y.Z.md con la especificación US-IEDD completa
+   b. **[CONDICIONAL — si la US toca `frontend/`]:** consultar `docs/design/ux/` ANTES de escribir la spec
+      → Leer el wireframe y prototipo del rol afectado (`wireframes-atleta.md`, `wireframes-organizador.md`, etc.)
+      → Comparar con la implementación React actual (`frontend/src/pages/`, `frontend/src/components/`)
+      → Si hay gaps entre la UX aprobada y el código: incorporarlos al scope de esta US
+        o abrir una US previa de corrección. No especificar comportamiento nuevo sobre código
+        que ya diverge del diseño aprobado.
+      → La spec DEBE incluir un campo explícito `## Fuente de verdad UX` con referencias
+        a los artefactos consultados (`wireframes-X.md`, `prototipos/prototipo-X.html`).
+      Una spec de frontend sin ese campo no está completa — el campo es evidencia de que
+      la consulta se realizó. Ver HITO-29.
+   c. Crear docs/specs/spN/US-X.Y.Z.md con la especificación US-IEDD completa
 4. Las US quedan en estado "backlog" hasta iniciar su Incremento
 ```
 
@@ -173,6 +183,13 @@ max_god_object_lines = N
 ```
 1. Todas las US del Incremento mergeadas a develop (PR individual por US)
 2. Verificar DoD de integración (test end-to-end observable)
+2b. **[CONDICIONAL — si el INC incluyó artefactos UX en `docs/design/ux/prototipos/`]:**
+    verificar que la implementación React sigue el prototipo aprobado.
+    → El prototipo existir no es suficiente — la implementación debe implementarlo.
+    → Comparar pantalla a pantalla: shell, navegación, flujos críticos.
+    → Si hay divergencia: clasificar como gap (ver paso 7) y resolverlo antes de cerrar el INC.
+    → Un INC con prototipo UX no está Done hasta que el código implementa el diseño.
+    Ver HITO-29.
 3. [MANUAL] Correr DesignReviewer sobre el estado consolidado del incremento:
    designreviewer src/ --config pyproject.toml
    → Complementa el DesignReviewer automático (pre-push por US) — aquí se verifica
@@ -308,6 +325,7 @@ feature/US-1.2.3-registrar-resultado → /implement-us → /pr → merge develop
 
 ---
 
+*v1.8 — 2026-04-26. §3: gate de consulta UX obligatorio antes de specs de frontend; campo "Fuente de verdad UX" obligatorio en toda spec que toca frontend/. §6: verificación de prototipo al cerrar INCs con artefactos UX aprobados. Ver HITO-29.*
 *v1.7 — 2026-04-23. §6: clasificación de hallazgos UAT por track (frontend/ vs src/). §7: paso de clasificación en UAT post-SP. §8: nota de clasificación UAT. Ver HITO-28.*
 *v1.6 — 2026-04-23. §6: gate condicional de consistencia documental si hay ADRs nuevos. §7: SP-ADJ incluye barrido documental obligatorio (Gate 2). §8: dos nuevas filas de quality gate documental. Ver HITO-27.*
 *v1.5 — 2026-03-29. §5: orden de arranque, artefactos por fase, aprobaciones, bug tracker prefijo non-US-.*
