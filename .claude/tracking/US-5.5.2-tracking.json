@@ -1,0 +1,178 @@
+{
+  "metadata": {
+    "us_id": "US-5.5.2",
+    "us_title": "Vista del organizador de inscriptos con estado AP",
+    "us_points": 3,
+    "producto": "frontend + registro + competencia",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-26T13:04:47+00:00",
+    "completed_at": "2026-04-26T13:13:41+00:00",
+    "total_elapsed_seconds": 534,
+    "effective_seconds": 534,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validacion de Contexto",
+      "started_at": "2026-04-26T13:04:47+00:00",
+      "completed_at": "2026-04-26T13:04:47+00:00",
+      "elapsed_seconds": 0,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generacion de Escenarios BDD",
+      "started_at": "2026-04-26T13:04:47+00:00",
+      "completed_at": "2026-04-26T13:04:47+00:00",
+      "elapsed_seconds": 0,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generacion del Plan de Implementacion",
+      "started_at": "2026-04-26T13:04:47+00:00",
+      "completed_at": "2026-04-26T13:04:47+00:00",
+      "elapsed_seconds": 0,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementacion Guiada por Tareas",
+      "started_at": "2026-04-26T13:05:00+00:00",
+      "completed_at": "2026-04-26T13:10:00+00:00",
+      "elapsed_seconds": 300,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Endpoint enriquecido de inscriptos operativos",
+          "task_type": "backend",
+          "estimated_minutes": 45.0,
+          "started_at": "2026-04-26T13:05:00+00:00",
+          "completed_at": "2026-04-26T13:07:00+00:00",
+          "elapsed_seconds": 120,
+          "actual_minutes": 2.0,
+          "variance_minutes": -43.0,
+          "file_created": "src/registro/api/router.py",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_002",
+          "task_name": "Filtro de inscripciones activas",
+          "task_type": "backend",
+          "estimated_minutes": 20.0,
+          "started_at": "2026-04-26T13:07:00+00:00",
+          "completed_at": "2026-04-26T13:08:00+00:00",
+          "elapsed_seconds": 60,
+          "actual_minutes": 1.0,
+          "variance_minutes": -19.0,
+          "file_created": "src/registro/infrastructure/repositories/sqlite_inscripcion_repository.py",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_003",
+          "task_name": "Adaptar panel organizador a estados AP visibles",
+          "task_type": "frontend",
+          "estimated_minutes": 60.0,
+          "started_at": "2026-04-26T13:08:00+00:00",
+          "completed_at": "2026-04-26T13:10:00+00:00",
+          "elapsed_seconds": 120,
+          "actual_minutes": 2.0,
+          "variance_minutes": -58.0,
+          "file_created": "frontend/src/components/organizador/InscriptosPanel.tsx",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-26T13:10:00+00:00",
+      "completed_at": "2026-04-26T13:10:00+00:00",
+      "elapsed_seconds": 0,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integracion",
+      "started_at": "2026-04-26T13:10:00+00:00",
+      "completed_at": "2026-04-26T13:12:00+00:00",
+      "elapsed_seconds": 120,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validacion BDD",
+      "started_at": "2026-04-26T13:12:00+00:00",
+      "completed_at": "2026-04-26T13:13:00+00:00",
+      "elapsed_seconds": 60,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-26T13:12:00+00:00",
+      "completed_at": "2026-04-26T13:13:00+00:00",
+      "elapsed_seconds": 60,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Actualizacion de Documentacion",
+      "started_at": "2026-04-26T13:13:00+00:00",
+      "completed_at": "2026-04-26T13:13:41+00:00",
+      "elapsed_seconds": 41,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-04-26T13:13:00+00:00",
+      "completed_at": "2026-04-26T13:13:41+00:00",
+      "elapsed_seconds": 41,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 3,
+    "completed_tasks": 3,
+    "total_phases": 10,
+    "estimated_total_minutes": 180.0,
+    "actual_total_minutes": 8.9,
+    "variance_minutes": -171.1,
+    "variance_percent": -95.06
+  }
+}

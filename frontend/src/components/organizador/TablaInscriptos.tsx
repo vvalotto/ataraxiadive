@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { EstadoAPBadge } from './EstadoAPBadge'
 
 export interface EstadoAP {
+  estado: 'pendiente' | 'declarado' | 'cerrado'
   ap: string | null
   unidad: string | null
 }
@@ -12,7 +13,7 @@ export interface InscriptoRow {
   nombre: string
   club: string
   categoria: string
-  genero: string
+  estadoInscripcion: string
   disciplinas: string[]
   estadoApPorDisciplina: Record<string, EstadoAP>
 }
@@ -72,7 +73,7 @@ export function TablaInscriptos({ rows, disciplinas }: TablaInscriptosProps) {
                 <th className="px-4 py-3">Atleta</th>
                 <th className="px-4 py-3">Club</th>
                 <th className="px-4 py-3">Categoria</th>
-                <th className="px-4 py-3">Genero</th>
+                <th className="px-4 py-3">Inscripcion</th>
                 {disciplinasVisibles.map((disciplina) => (
                   <th key={disciplina} className="px-4 py-3">
                     {disciplina}
@@ -86,7 +87,7 @@ export function TablaInscriptos({ rows, disciplinas }: TablaInscriptosProps) {
                   <td className="px-4 py-3 font-semibold text-stone-950">{row.nombre}</td>
                   <td className="px-4 py-3 text-stone-700">{row.club}</td>
                   <td className="px-4 py-3 text-stone-700">{row.categoria}</td>
-                  <td className="px-4 py-3 text-stone-700">{row.genero}</td>
+                  <td className="px-4 py-3 text-stone-700">{row.estadoInscripcion}</td>
                   {disciplinasVisibles.map((disciplina) => {
                     if (!row.disciplinas.includes(disciplina)) {
                       return (
@@ -98,7 +99,11 @@ export function TablaInscriptos({ rows, disciplinas }: TablaInscriptosProps) {
                     const estado = row.estadoApPorDisciplina[disciplina]
                     return (
                       <td key={disciplina} className="px-4 py-3">
-                        <EstadoAPBadge ap={estado?.ap} unidad={estado?.unidad} />
+                        <EstadoAPBadge
+                          estado={estado?.estado ?? 'pendiente'}
+                          ap={estado?.ap}
+                          unidad={estado?.unidad}
+                        />
                       </td>
                     )
                   })}

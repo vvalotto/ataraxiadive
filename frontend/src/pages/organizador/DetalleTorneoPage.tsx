@@ -278,7 +278,13 @@ function TorneoOperativoPanel({ torneo }: TorneoOperativoPanelProps) {
 
       {activeTabActual === 'Inscriptos' && isTabHabilitada('Inscriptos') ? (
         <div className="mt-6">
-          <InscriptosPanel torneoId={torneo.torneo_id} />
+          {torneo.estado !== 'INSCRIPCION_ABIERTA' ? (
+            <div className="mb-4 rounded-lg border border-sky-200 bg-sky-50 p-4 text-sm text-sky-950">
+              El periodo de anuncios esta cerrado. La vista de inscriptos queda en solo lectura y
+              las disciplinas se muestran con estado visible `AP cerrado`.
+            </div>
+          ) : null}
+          <InscriptosPanel torneoId={torneo.torneo_id} torneoEstado={torneo.estado} />
         </div>
       ) : null}
 
