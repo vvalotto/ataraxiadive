@@ -98,4 +98,22 @@ La regla práctica: la spec de una US de frontend es incorrecta si no menciona l
 
 ---
 
+## Pregunta abierta — a conceptualizar al cierre del proyecto
+
+El análisis de este hito abrió una pregunta sobre la posición del UX Design en IEDD:
+el modelo actual trata el UX como un bloque global (INC-4.0), pero en proyectos reales
+aparecen al menos tres modos de temporalización:
+
+- **UX Discovery** — antes de cualquier backend (valida hipótesis con usuarios rápido)
+- **UX Post-Backend** — después de tener el dominio consolidado (lo que hizo AtaraxiaDive)
+- **UX Incremental** — por entrega, sincronizado con cada incremento de valor
+
+La hipótesis es que el tercer modo es el más sostenible y debería formalizarse como
+un mini-ciclo por incremento: UX Design del INC → aprobación → Specs US-IEDD → Implementación.
+
+**Decisión:** diferido al cierre de SP5. El experimento producirá evidencia empírica de
+los tres modos antes de terminar; mejor conceptualizar con datos que con hipótesis.
+
+---
+
 *Registrado al inicio de SP5 INC-5.5 reiniciado — la primera reversión completa de un INC por incompatibilidad con la UX aprobada*
