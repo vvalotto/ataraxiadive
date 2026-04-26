@@ -2,11 +2,11 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchTorneo, listarDisciplinasTorneo } from '../../api/torneo'
-import { fetchAtleta, inscribirAtleta } from '../../api/registro'
+import { fetchAtletaMe, inscribirAtleta } from '../../api/registro'
 import useAuthStore from '../../stores/useAuthStore'
 import { AtletaShell } from '../../components/atleta/AtletaShell'
 import { ApiError } from '../../api/registro'
-import { formatDisciplina, formatFecha } from './portalData'
+import { formatCategoria, formatDisciplina, formatFecha } from './portalData'
 import type { DisciplinaCodigo } from '../../api/torneo'
 
 type WizardStep = 1 | 2 | 3
@@ -42,7 +42,7 @@ export function AtletaInscripcionPage() {
       const [torneo, disciplinas, atleta] = await Promise.all([
         fetchTorneo(torneoId ?? ''),
         listarDisciplinasTorneo(torneoId ?? ''),
-        fetchAtleta(atletaId ?? ''),
+        fetchAtletaMe(),
       ])
       return { torneo, disciplinas, atleta }
     },
@@ -51,11 +51,12 @@ export function AtletaInscripcionPage() {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      if (!atletaId || !torneoId) {
+      const registroAtletaId = query.data?.atleta.atleta_id
+      if (!registroAtletaId || !torneoId) {
         throw new Error('No se pudo identificar al atleta o torneo para inscribirse.')
       }
       return inscribirAtleta({
-        atletaId,
+        atletaId: registroAtletaId,
         torneoId,
         disciplinas: disciplinasSeleccionadas as DisciplinaCodigo[],
       })
@@ -247,11 +248,24 @@ export function AtletaInscripcionPage() {
               </div>
               <label className="block text-sm text-slate-300">
                 Categoría *
-                <input
-                  value={categoriaValue}
-                  onChange={(event) => setCategoria(event.target.value)}
-                  className="mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100"
-                />
+                {categoriaValue === 'MASTER_MASCULINO' || categoriaValue === 'MASTER_FEMENINO' ? (
+                  <select
+                    value={categoria || categoriaValue}
+                    onChange={(event) => setCategoria(event.target.value)}
+                    className="mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100"
+                  >
+                    <option value={categoriaValue}>{formatCategoria(categoriaValue)}</option>
+                    <option value={categoriaValue === 'MASTER_MASCULINO' ? 'SENIOR_MASCULINO' : 'SENIOR_FEMENINO'}>
+                      {formatCategoria(categoriaValue === 'MASTER_MASCULINO' ? 'SENIOR_MASCULINO' : 'SENIOR_FEMENINO')}
+                    </option>
+                  </select>
+                ) : (
+                  <input
+                    value={formatCategoria(categoriaValue)}
+                    readOnly
+                    className="mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-400"
+                  />
+                )}
               </label>
               <label className="block text-sm text-slate-300">
                 Nº Brevet FAAS

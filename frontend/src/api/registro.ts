@@ -127,6 +127,13 @@ export async function listarInscriptosDetalle(
   return parseResponse<InscriptoDetalleDto[]>(response)
 }
 
+export async function fetchAtletaMe(): Promise<AtletaDto> {
+  const response = await fetch('/registro/atletas/me', {
+    headers: buildHeaders(),
+  })
+  return parseResponse<AtletaDto>(response)
+}
+
 export async function fetchAtleta(atletaId: string): Promise<AtletaDto> {
   const response = await fetch(`/registro/atletas/${atletaId}`, {
     headers: buildHeaders(),

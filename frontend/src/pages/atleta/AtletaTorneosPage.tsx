@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import { fetchTorneos } from '../../api/torneo'
+import { fetchTorneos, listarDisciplinasTorneo } from '../../api/torneo'
+import { fetchAtletaMe, listarInscripcionesDeAtleta } from '../../api/registro'
 import { AtletaShell } from '../../components/atleta/AtletaShell'
 import {
   formatDisciplina,
@@ -9,7 +10,6 @@ import {
   isTorneoAbierto,
   isTorneoProximo,
 } from './portalData'
-import { listarDisciplinasTorneo } from '../../api/torneo'
 
 function sortDetalleByFecha<T extends { torneo: { fecha_inicio: string } }>(items: T[]): T[] {
   return [...items].sort(
@@ -19,7 +19,14 @@ function sortDetalleByFecha<T extends { torneo: { fecha_inicio: string } }>(item
 }
 
 async function loadTorneos() {
-  const torneos = await fetchTorneos()
+  const atleta = await fetchAtletaMe()
+  const [torneos, inscripciones] = await Promise.all([
+    fetchTorneos(),
+    listarInscripcionesDeAtleta(atleta.atleta_id),
+  ])
+
+  const torneosInscriptos = new Set(inscripciones.map((i) => i.torneo_id))
+
   const detalle = await Promise.all(
     torneos.map(async (torneo) => {
       try {
@@ -32,7 +39,11 @@ async function loadTorneos() {
   )
 
   return {
-    abiertos: sortDetalleByFecha(detalle.filter((item) => isTorneoAbierto(item.torneo.estado))),
+    abiertos: sortDetalleByFecha(
+      detalle.filter(
+        (item) => isTorneoAbierto(item.torneo.estado) && !torneosInscriptos.has(item.torneo.torneo_id),
+      ),
+    ),
     proximos: sortDetalleByFecha(detalle.filter((item) => isTorneoProximo(item.torneo.estado))),
   }
 }

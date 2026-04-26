@@ -12,14 +12,20 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel
 
-from competencia.application.commands.asignar_tarjeta import (
-    AsignarTarjetaCommand,
-    AsignarTarjetaHandler,
-    PerformanceNoEncontrada as PerformanceNoEncontradaAsignarTarjeta,
-)
 from competencia.application.commands.ajustar_grilla import (
     AjustarGrillaCommand,
     AjustarGrillaHandler,
+)
+from competencia.application.commands.asignar_tarjeta import (
+    AsignarTarjetaCommand,
+    AsignarTarjetaHandler,
+)
+from competencia.application.commands.asignar_tarjeta import (
+    PerformanceNoEncontrada as PerformanceNoEncontradaAsignarTarjeta,
+)
+from competencia.application.commands.configurar_intervalo_ot import (
+    ConfigurarIntervaloOTCommand,
+    ConfigurarIntervaloOTHandler,
 )
 from competencia.application.commands.confirmar_grilla import (
     ConfirmarGrillaCommand,
@@ -28,37 +34,30 @@ from competencia.application.commands.confirmar_grilla import (
 from competencia.application.commands.corregir_resultado_tras_dns import (
     CorregirResultadoTrasDNSCommand,
     CorregirResultadoTrasDNSHandler,
+)
+from competencia.application.commands.corregir_resultado_tras_dns import (
     PerformanceNoEncontrada as PerformanceNoEncontradaCorregirTrasDns,
 )
-from competencia.application.commands.configurar_intervalo_ot import (
-    ConfigurarIntervaloOTCommand,
-    ConfigurarIntervaloOTHandler,
+from competencia.application.commands.finalizar_competencia_manual import (
+    FinalizarCompetenciaManualCommand,
+    FinalizarCompetenciaManualHandler,
 )
 from competencia.application.commands.generar_grilla import (
     GenerarGrillaCommand,
     GenerarGrillaHandler,
 )
-from competencia.application.commands.finalizar_competencia_manual import (
-    FinalizarCompetenciaManualCommand,
-    FinalizarCompetenciaManualHandler,
+from competencia.application.commands.iniciar_competencia import (
+    IniciarCompetenciaCommand,
+    IniciarCompetenciaHandler,
 )
 from competencia.application.commands.llamar_atleta import (
     AndarivelesConflicto,
     CompetenciaNoEnEjecucion,
     LlamarAtletaCommand,
     LlamarAtletaHandler,
+)
+from competencia.application.commands.llamar_atleta import (
     PerformanceNoEncontrada as PerformanceNoEncontradaLlamar,
-)
-from competencia.application.commands.registrar_resultado import (
-    RegistrarResultadoCommand,
-    RegistrarResultadoHandler,
-    PerformanceNoEncontrada as PerformanceNoEncontradaRegistrarResultado,
-    UnidadIncompatible,
-)
-from competencia.application.commands.registrar_dns import (
-    RegistrarDNSCommand,
-    RegistrarDNSHandler,
-    PerformanceNoEncontrada as PerformanceNoEncontradaRegistrarDns,
 )
 from competencia.application.commands.registrar_ap import (
     APYaRegistrado,
@@ -67,18 +66,42 @@ from competencia.application.commands.registrar_ap import (
     RegistrarAPCommand,
     RegistrarAPHandler,
 )
+from competencia.application.commands.registrar_dns import (
+    PerformanceNoEncontrada as PerformanceNoEncontradaRegistrarDns,
+)
+from competencia.application.commands.registrar_dns import (
+    RegistrarDNSCommand,
+    RegistrarDNSHandler,
+)
+from competencia.application.commands.registrar_resultado import (
+    PerformanceNoEncontrada as PerformanceNoEncontradaRegistrarResultado,
+)
+from competencia.application.commands.registrar_resultado import (
+    RegistrarResultadoCommand,
+    RegistrarResultadoHandler,
+    UnidadIncompatible,
+)
+from competencia.application.commands.resolver_revision import (
+    PerformanceNoEncontrada as PerformanceNoEncontradaResolverRevision,
+)
 from competencia.application.commands.resolver_revision import (
     ResolverRevisionCommand,
     ResolverRevisionHandler,
-    PerformanceNoEncontrada as PerformanceNoEncontradaResolverRevision,
+)
+from competencia.application.queries.obtener_andariveles_activos import (
+    ObtenerAndarivelesActivosHandler,
+    ObtenerAndarivelesActivosQuery,
+)
+from competencia.application.queries.obtener_audit_log import (
+    ObtenerAuditLogHandler,
+    ObtenerAuditLogQuery,
+)
+from competencia.application.queries.obtener_audit_log import (
+    PerformanceNoEncontrada as PerformanceNoEncontradaAuditLog,
 )
 from competencia.application.queries.obtener_competencias_por_torneo import (
     ObtenerCompetenciasPorTorneoHandler,
     ObtenerCompetenciasPorTorneoQuery,
-)
-from competencia.application.commands.iniciar_competencia import (
-    IniciarCompetenciaCommand,
-    IniciarCompetenciaHandler,
 )
 from competencia.application.queries.obtener_estado_competencia import (
     ObtenerEstadoCompetenciaHandler,
@@ -97,25 +120,20 @@ from competencia.application.queries.obtener_performance_actual import (
     ObtenerPerformanceActualQuery,
     PerformanceActualDTO,
 )
-from competencia.application.queries.obtener_proximas_performances import (
-    ObtenerProximasPerformancesHandler,
-    ObtenerProximasPerformancesQuery,
-    ProximoAtletaDTO,
-)
-from competencia.application.queries.obtener_andariveles_activos import (
-    ObtenerAndarivelesActivosHandler,
-    ObtenerAndarivelesActivosQuery,
-)
-from competencia.application.queries.obtener_audit_log import (
-    ObtenerAuditLogHandler,
-    ObtenerAuditLogQuery,
-    PerformanceNoEncontrada as PerformanceNoEncontradaAuditLog,
-)
 from competencia.application.queries.obtener_progreso import (
     ObtenerProgresoHandler,
     ObtenerProgresoQuery,
     ProgresoCompetenciaDTO,
 )
+from competencia.application.queries.obtener_proximas_performances import (
+    ObtenerProximasPerformancesHandler,
+    ObtenerProximasPerformancesQuery,
+    ProximoAtletaDTO,
+)
+from competencia.domain.aggregates.performance import Performance
+from competencia.domain.exceptions import DomainError
+from competencia.domain.ports.competencias_por_torneo_port import CompetenciasPorTorneoPort
+from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.cambio_grilla import CambioGrilla
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.motivo_dq import MotivoDQ
@@ -123,27 +141,24 @@ from competencia.domain.value_objects.penalizacion_tecnica import PenalizacionTe
 from competencia.domain.value_objects.tipo_penalizacion import TipoPenalizacion
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
-from competencia.domain.ports.competencias_por_torneo_port import CompetenciasPorTorneoPort
-from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.competencia_estado_adapter import (
-    CompetenciaEstadoAdapter,
-)
 from competencia.infrastructure.repositories.andariveles_activos_adapter import (
     AndarivelesActivosAdapter,
+)
+from competencia.infrastructure.repositories.atleta_nombre_adapter import AtletaNombreAdapter
+from competencia.infrastructure.repositories.competencia_estado_adapter import (
+    CompetenciaEstadoAdapter,
 )
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
+from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
 from competencia.infrastructure.repositories.performances_estado_adapter import (
     PerformancesEstadoAdapter,
 )
-from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
 from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
     SQLiteCompetenciasPorTorneo,
 )
-from competencia.infrastructure.repositories.atleta_nombre_adapter import AtletaNombreAdapter
-from competencia.domain.exceptions import DomainError
 from shared.api.dependencies import AtletaDep, JuezDep, OrganizadorDep
 
 router = APIRouter(prefix="/competencia", tags=["competencia"])
@@ -614,6 +629,37 @@ async def get_competencias_por_torneo(
             for c in competencias
         ],
         status_code=200,
+    )
+
+
+@router.get("/{competencia_id}/ap/{atleta_id}", response_class=JSONResponse)
+async def get_ap_atleta(
+    competencia_id: UUID,
+    atleta_id: UUID,
+    disciplina: str,
+    event_store: EventStoreDep,
+) -> JSONResponse:
+    """Retorna el AP declarado por un atleta en una competencia/disciplina."""
+    try:
+        disc = Disciplina(disciplina)
+    except ValueError:
+        return JSONResponse(
+            status_code=400, content={"detail": f"Disciplina inválida: {disciplina}"}
+        )
+
+    stream_id = f"performance-{competencia_id}-{atleta_id}-{disc.value}"
+    events = await event_store.load(stream_id)
+    if not events:
+        return JSONResponse(status_code=200, content={"ap_declarado": None, "unidad": None})
+
+    performance = Performance.reconstitute(events)
+    ap = performance.ap
+    return JSONResponse(
+        status_code=200,
+        content={
+            "ap_declarado": str(ap.valor) if ap else None,
+            "unidad": ap.unidad.value if ap else None,
+        },
     )
 
 

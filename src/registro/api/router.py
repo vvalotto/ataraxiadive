@@ -208,6 +208,28 @@ async def registrar_atleta(body: RegistrarAtletaRequest, _: AtletaDep) -> JSONRe
     return JSONResponse(status_code=201, content={"atleta_id": str(atleta_id)})
 
 
+@router.get("/atletas/me", status_code=200)
+async def obtener_atleta_me(current_user: AtletaDep) -> JSONResponse:
+    email: str = current_user["email"]
+    repo = _repo()
+    atleta = await repo.find_by_email(email)
+    if atleta is None:
+        return JSONResponse(status_code=404, content={"detail": "Atleta no encontrado"})
+    return JSONResponse(
+        status_code=200,
+        content=AtletaResponse(
+            atleta_id=atleta.atleta_id,
+            nombre=atleta.nombre,
+            apellido=atleta.apellido,
+            email=atleta.email,
+            fecha_nacimiento=atleta.fecha_nacimiento,
+            categoria=atleta.categoria,
+            club=atleta.club,
+            brevet=atleta.brevet,
+        ).model_dump(mode="json"),
+    )
+
+
 @router.get("/atletas/{atleta_id}", status_code=200)
 async def obtener_atleta(atleta_id: UUID) -> JSONResponse:
     repo = _repo()

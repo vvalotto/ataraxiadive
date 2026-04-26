@@ -85,7 +85,7 @@ export interface RegistrarAPPayload {
   participanteId: string
   disciplina: string
   valorAp: string
-  unidad: 'METROS' | 'SEGUNDOS'
+  unidad: 'Metros' | 'Segundos'
 }
 
 export interface PenalizacionPayload {
@@ -136,15 +136,38 @@ async function parseResponse<T>(response: Response): Promise<T> {
   let detail = `Error de API: ${response.status}`
 
   try {
-    const payload = (await response.json()) as { detail?: string }
+    const payload = (await response.json()) as { detail?: unknown }
     if (payload.detail) {
-      detail = payload.detail
+      if (typeof payload.detail === 'string') {
+        detail = payload.detail
+      } else if (Array.isArray(payload.detail)) {
+        detail = payload.detail.map((e: { msg?: string }) => e.msg ?? JSON.stringify(e)).join('; ')
+      } else {
+        detail = JSON.stringify(payload.detail)
+      }
     }
   } catch {
     // sin body JSON util
   }
 
   throw new ApiError(response.status, detail)
+}
+
+export interface ApAtletaDto {
+  ap_declarado: string | null
+  unidad: string | null
+}
+
+export async function fetchApAtleta(
+  competenciaId: string,
+  atletaId: string,
+  disciplina: string,
+): Promise<ApAtletaDto> {
+  const response = await fetch(
+    `/competencia/${competenciaId}/ap/${atletaId}?disciplina=${disciplina}`,
+    { headers: buildHeaders() },
+  )
+  return parseResponse<ApAtletaDto>(response)
 }
 
 export async function fetchCompetenciasPorTorneo(

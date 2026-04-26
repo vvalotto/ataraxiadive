@@ -1,11 +1,12 @@
 import {
+  fetchApAtleta,
   fetchCompetenciasPorTorneo,
   fetchGrillaCompetencia,
   type CompetenciaResumenDto,
   type GrillaAtletaDto,
 } from '../../api/competencia'
 import {
-  fetchAtleta,
+  fetchAtletaMe,
   listarInscripcionesDeAtleta,
   type AtletaDto,
   type InscriptoDto,
@@ -30,6 +31,19 @@ export interface AtletaPortalSnapshot {
   inscripciones: InscriptoDto[]
   torneos: TorneoDto[]
   entries: AtletaPortalEntry[]
+}
+
+export const CATEGORIA_LABELS: Record<string, string> = {
+  SENIOR_MASCULINO: 'Senior Masculino',
+  SENIOR_FEMENINO: 'Senior Femenino',
+  MASTER_MASCULINO: 'Master Masculino',
+  MASTER_FEMENINO: 'Master Femenino',
+  JUNIOR_MASCULINO: 'Junior Masculino',
+  JUNIOR_FEMENINO: 'Junior Femenino',
+}
+
+export function formatCategoria(categoria: string): string {
+  return CATEGORIA_LABELS[categoria] ?? categoria
 }
 
 export const DISCIPLINA_LABELS: Record<string, string> = {
@@ -84,8 +98,8 @@ export function getEstadoTorneoLabel(estado: EstadoTorneo): string {
   }
 }
 
-export function getUnidadEsperada(disciplina: string): 'METROS' | 'SEGUNDOS' {
-  return disciplina === 'STA' ? 'SEGUNDOS' : 'METROS'
+export function getUnidadEsperada(disciplina: string): 'Metros' | 'Segundos' {
+  return disciplina === 'STA' ? 'Segundos' : 'Metros'
 }
 
 export function getUnidadLabel(unidad: string | null): string {
@@ -103,12 +117,10 @@ function buildApEstado(
   return grilla?.ap_declarado?.trim() ? 'declarado' : 'pendiente'
 }
 
-export async function loadAtletaPortalSnapshot(atletaId: string): Promise<AtletaPortalSnapshot> {
-  const [atleta, inscripciones, torneos] = await Promise.all([
-    fetchAtleta(atletaId),
-    listarInscripcionesDeAtleta(atletaId),
-    fetchTorneos(),
-  ])
+export async function loadAtletaPortalSnapshot(_userId: string): Promise<AtletaPortalSnapshot> {
+  const [atleta, torneos] = await Promise.all([fetchAtletaMe(), fetchTorneos()])
+  const atletaId = atleta.atleta_id
+  const inscripciones = await listarInscripcionesDeAtleta(atletaId)
 
   const torneosById = new Map(torneos.map((torneo) => [torneo.torneo_id, torneo]))
   const torneosInscriptos = inscripciones
@@ -144,34 +156,53 @@ export async function loadAtletaPortalSnapshot(atletaId: string): Promise<Atleta
       }),
   )
 
-  const entries: AtletaPortalEntry[] = inscripciones.flatMap((inscripcion) => {
-    const torneo = torneosById.get(inscripcion.torneo_id)
-    if (!torneo) return []
+  const entries: AtletaPortalEntry[] = (
+    await Promise.all(
+      inscripciones.flatMap((inscripcion) => {
+        const torneo = torneosById.get(inscripcion.torneo_id)
+        if (!torneo) return []
 
-    return inscripcion.disciplinas.map((disciplina) => {
-      const competencia = (competenciasPorTorneo.get(inscripcion.torneo_id) ?? []).find(
-        (item) => item.disciplina === disciplina,
-      )
-      const grilla = competencia
-        ? (grillasPorCompetencia.get(competencia.competencia_id) ?? []).find(
-            (entry) => entry.atleta_id === atletaId,
-          ) ?? null
-        : null
+        return inscripcion.disciplinas.map(async (disciplina) => {
+          const competencia = (competenciasPorTorneo.get(inscripcion.torneo_id) ?? []).find(
+            (item) => item.disciplina === disciplina,
+          )
+          const grillaEntry = competencia
+            ? (grillasPorCompetencia.get(competencia.competencia_id) ?? []).find(
+                (entry) => entry.atleta_id === atletaId,
+              ) ?? null
+            : null
 
-      return {
-        torneo,
-        inscripcion,
-        disciplina,
-        competenciaId: competencia?.competencia_id ?? null,
-        ap: grilla?.ap_declarado ?? null,
-        unidad: grilla?.unidad ?? null,
-        apEstado: buildApEstado(torneo.estado, grilla),
-        ot: grilla?.ot_programado ?? null,
-        andarivel: grilla?.andarivel ?? null,
-        posicion: grilla?.posicion ?? null,
-      }
-    })
-  })
+          let ap: string | null = grillaEntry?.ap_declarado ?? null
+          let unidad: string | null = grillaEntry?.unidad ?? null
+
+          if (!grillaEntry && competencia && torneo.estado === 'INSCRIPCION_ABIERTA') {
+            try {
+              const apDto = await fetchApAtleta(competencia.competencia_id, atletaId, disciplina)
+              ap = apDto.ap_declarado
+              unidad = apDto.unidad
+            } catch {
+              // sin AP declarado
+            }
+          }
+
+          const syntheticGrilla = ap ? ({ ap_declarado: ap } as GrillaAtletaDto) : null
+
+          return {
+            torneo,
+            inscripcion,
+            disciplina,
+            competenciaId: competencia?.competencia_id ?? null,
+            ap,
+            unidad,
+            apEstado: buildApEstado(torneo.estado, syntheticGrilla),
+            ot: grillaEntry?.ot_programado ?? null,
+            andarivel: grillaEntry?.andarivel ?? null,
+            posicion: grillaEntry?.posicion ?? null,
+          }
+        })
+      }),
+    )
+  ).filter((e): e is AtletaPortalEntry => e !== undefined)
 
   return { atleta, inscripciones, torneos, entries }
 }
