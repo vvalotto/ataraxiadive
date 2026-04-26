@@ -77,7 +77,7 @@ export function RegistroPage() {
 
   if (rol === 'juez') return <Navigate to="/juez/disciplinas" replace />
   if (rol === 'organizador') return <Navigate to="/organizador/dashboard" replace />
-  if (rol === 'atleta') return <Navigate to="/atleta/dashboard" replace />
+  if (rol === 'atleta') return <Navigate to="/atleta" replace />
 
   function updateField<T extends keyof FormState>(field: T, value: FormState[T]) {
     setForm((current) => ({ ...current, [field]: value }))

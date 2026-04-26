@@ -56,6 +56,7 @@ export type DisciplinaCodigo =
   | 'STA'
   | 'DNF'
   | 'DYN'
+  | 'DYNB'
   | 'DBF'
   | 'SPE_2X50'
   | 'SPE_4X50'

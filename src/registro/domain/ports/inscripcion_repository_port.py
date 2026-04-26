@@ -20,3 +20,6 @@ class InscripcionRepositoryPort(ABC):
 
     @abstractmethod
     async def find_by_torneo(self, torneo_id: UUID) -> list[Inscripcion]: ...
+
+    @abstractmethod
+    async def find_by_atleta(self, atleta_id: UUID) -> list[Inscripcion]: ...

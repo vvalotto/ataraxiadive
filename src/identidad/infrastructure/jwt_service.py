@@ -29,6 +29,8 @@ class JWTService(TokenServicePort):
         payload = {
             "sub": str(usuario.usuario_id),
             "email": usuario.email,
+            "nombre": usuario.nombre,
+            "apellido": usuario.apellido,
             "rol": usuario.rol.value,
             "exp": datetime.now(tz=timezone.utc) + timedelta(hours=self._expiry_hours),
         }

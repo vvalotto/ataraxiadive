@@ -40,6 +40,21 @@ export interface InscribirAtletaResponse {
   inscripcion_id: string
 }
 
+export interface RegistroPasoUnoPayload {
+  nombre_completo: string
+  fecha_nacimiento: string
+  genero: string
+  documento_tipo: string
+  documento_numero: string
+  telefono: string
+}
+
+export interface RegistroPasoDosPayload {
+  disciplinas: DisciplinaCodigo[]
+  categoria: string
+  brevet: string
+}
+
 function buildHeaders(): Record<string, string> {
   const token = getToken()
   const headers: Record<string, string> = {
@@ -89,6 +104,13 @@ export async function fetchAtleta(atletaId: string): Promise<AtletaDto> {
     headers: buildHeaders(),
   })
   return parseResponse<AtletaDto>(response)
+}
+
+export async function listarInscripcionesDeAtleta(atletaId: string): Promise<InscriptoDto[]> {
+  const response = await fetch(`/registro/atletas/${atletaId}/inscripciones`, {
+    headers: buildHeaders(),
+  })
+  return parseResponse<InscriptoDto[]>(response)
 }
 
 export async function inscribirAtleta(

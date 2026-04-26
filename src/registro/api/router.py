@@ -231,3 +231,22 @@ async def listar_inscriptos(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse:
             for i in inscripciones
         ],
     )
+
+
+@router.get("/atletas/{atleta_id}/inscripciones", status_code=200)
+async def listar_inscripciones_de_atleta(atleta_id: UUID, _: AtletaDep) -> JSONResponse:
+    inscripciones = await _inscripcion_repo().find_by_atleta(atleta_id)
+    return JSONResponse(
+        status_code=200,
+        content=[
+            InscripcionResponse(
+                inscripcion_id=i.inscripcion_id,
+                atleta_id=i.atleta_id,
+                torneo_id=i.torneo_id,
+                disciplinas=[d.value for d in i.disciplinas],
+                estado=i.estado,
+                fecha_inscripcion=i.fecha_inscripcion,
+            ).model_dump(mode="json")
+            for i in inscripciones
+        ],
+    )

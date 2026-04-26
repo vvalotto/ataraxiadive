@@ -80,6 +80,14 @@ export interface ProximoAtletaDto {
   posicion: number
 }
 
+export interface RegistrarAPPayload {
+  competenciaId: string
+  participanteId: string
+  disciplina: string
+  valorAp: string
+  unidad: 'METROS' | 'SEGUNDOS'
+}
+
 export interface PenalizacionPayload {
   tipo: string
   deduccion: string
@@ -321,6 +329,21 @@ export async function llamarAtleta(payload: {
       ot_programado: payload.otProgramado,
       posicion_grilla: payload.posicionGrilla,
       andarivel: payload.andarivel,
+    }),
+  })
+
+  await parseResponse<void>(response)
+}
+
+export async function registrarAP(payload: RegistrarAPPayload): Promise<void> {
+  const response = await fetch(`/competencia/${payload.competenciaId}/registrar-ap`, {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      participante_id: payload.participanteId,
+      disciplina: payload.disciplina,
+      valor_ap: payload.valorAp,
+      unidad: payload.unidad,
     }),
   })
 

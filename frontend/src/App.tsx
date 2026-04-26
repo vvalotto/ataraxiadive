@@ -12,7 +12,13 @@ import { RequireRole } from './components/RequireRole'
 import { DisciplinasPage } from './pages/juez/DisciplinasPage'
 import { GrillaPage } from './pages/juez/GrillaPage'
 import { PerformanceFlowPage } from './pages/juez/PerformanceFlowPage'
-import { AtletaDashboardPage } from './pages/atleta/AtletaDashboardPage'
+import { AtletaHomePage } from './pages/atleta/AtletaHomePage'
+import { AtletaTorneosPage } from './pages/atleta/AtletaTorneosPage'
+import { AtletaTorneoDetallePage } from './pages/atleta/AtletaTorneoDetallePage'
+import { AtletaInscripcionPage } from './pages/atleta/AtletaInscripcionPage'
+import { AtletaMisInscripcionesPage } from './pages/atleta/AtletaMisInscripcionesPage'
+import { AtletaDeclararAPPage } from './pages/atleta/AtletaDeclararAPPage'
+import { AtletaResultadosPage } from './pages/atleta/AtletaResultadosPage'
 import { DashboardPage } from './pages/organizador/DashboardPage'
 import { CrearTorneoPage } from './pages/organizador/CrearTorneoPage'
 import { DetalleTorneoPage } from './pages/organizador/DetalleTorneoPage'
@@ -26,7 +32,7 @@ function RootRedirect() {
   const rol = useAuthStore((s) => s.rol)
   if (rol === 'juez') return <Navigate to="/juez/disciplinas" replace />
   if (rol === 'organizador') return <Navigate to="/organizador/dashboard" replace />
-  if (rol === 'atleta') return <Navigate to="/atleta/dashboard" replace />
+  if (rol === 'atleta') return <Navigate to="/atleta" replace />
   return <Navigate to="/login" replace />
 }
 
@@ -78,10 +84,62 @@ function App() {
           }
         />
         <Route
-          path="/atleta/dashboard"
+          path="/atleta"
           element={
             <RequireRole role="atleta">
-              <AtletaDashboardPage />
+              <AtletaHomePage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/atleta/dashboard"
+          element={<Navigate to="/atleta" replace />}
+        />
+        <Route
+          path="/atleta/torneos"
+          element={
+            <RequireRole role="atleta">
+              <AtletaTorneosPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/atleta/torneos/:torneoId"
+          element={
+            <RequireRole role="atleta">
+              <AtletaTorneoDetallePage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/atleta/torneos/:torneoId/inscripcion"
+          element={
+            <RequireRole role="atleta">
+              <AtletaInscripcionPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/atleta/mis-inscripciones"
+          element={
+            <RequireRole role="atleta">
+              <AtletaMisInscripcionesPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/atleta/ap/:torneoId/:disciplina"
+          element={
+            <RequireRole role="atleta">
+              <AtletaDeclararAPPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/atleta/resultados"
+          element={
+            <RequireRole role="atleta">
+              <AtletaResultadosPage />
             </RequireRole>
           }
         />
