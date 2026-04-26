@@ -4,6 +4,7 @@ import useAuthStore from '../../stores/useAuthStore'
 import { AtletaShell } from '../../components/atleta/AtletaShell'
 import {
   buildNombreCorto,
+  formatCategoria,
   formatDisciplina,
   formatFecha,
   formatHora,
@@ -76,7 +77,7 @@ export function AtletaHomePage() {
             <dl className="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-300">
               <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-3">
                 <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">Categoría</dt>
-                <dd className="mt-1 font-semibold text-white">{query.data.atleta.categoria}</dd>
+                <dd className="mt-1 font-semibold text-white">{formatCategoria(query.data.atleta.categoria)}</dd>
               </div>
               <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-3">
                 <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">Club</dt>
