@@ -1,0 +1,153 @@
+{
+  "summary": {
+    "total_files": 2,
+    "checks_executed": 6,
+    "elapsed_seconds": 1.37,
+    "timestamp": "2026-04-26T15:39:20.800960",
+    "total_issues": 6,
+    "errors": 0,
+    "warnings": 1,
+    "infos": 5
+  },
+  "results": [
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/services/algoritmo_faas.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/domain/services/algoritmo_faas.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "warning",
+      "message": "Complexity: AlgoritmoPuntajeFAAS._calcular_tiempo has cyclomatic complexity 11 (grade C). Consider refactoring into smaller functions.",
+      "file": "src/resultados/domain/services/algoritmo_faas.py",
+      "line": 57
+    }
+  ],
+  "by_severity": {
+    "errors": [],
+    "warnings": [
+      {
+        "check": "Complexity",
+        "severity": "warning",
+        "message": "Complexity: AlgoritmoPuntajeFAAS._calcular_tiempo has cyclomatic complexity 11 (grade C). Consider refactoring into smaller functions.",
+        "file": "src/resultados/domain/services/algoritmo_faas.py",
+        "line": 57
+      }
+    ],
+    "infos": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/services/algoritmo_faas.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/services/algoritmo_faas.py",
+        "line": null
+      }
+    ]
+  },
+  "by_package": {
+    "ports": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+        "line": null
+      }
+    ],
+    "services": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/services/algoritmo_faas.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/services/algoritmo_faas.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "warning",
+        "message": "Complexity: AlgoritmoPuntajeFAAS._calcular_tiempo has cyclomatic complexity 11 (grade C). Consider refactoring into smaller functions.",
+        "file": "src/resultados/domain/services/algoritmo_faas.py",
+        "line": 57
+      }
+    ]
+  }
+}
