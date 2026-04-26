@@ -31,7 +31,7 @@ export function ResetPasswordPage() {
 
   if (rol === 'juez') return <Navigate to="/juez/disciplinas" replace />
   if (rol === 'organizador') return <Navigate to="/organizador/dashboard" replace />
-  if (rol === 'atleta') return <Navigate to="/atleta/dashboard" replace />
+  if (rol === 'atleta') return <Navigate to="/atleta" replace />
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()

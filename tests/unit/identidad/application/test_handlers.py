@@ -413,6 +413,8 @@ def test_jwt_generate_y_verify_payload(jwt_service: JWTService) -> None:
     payload = jwt_service.verify(token)
     assert payload["sub"] == str(u.usuario_id)
     assert payload["email"] == "admin@test.com"
+    assert payload["nombre"] == "Test"
+    assert payload["apellido"] == "Usuario"
     assert payload["rol"] == "ADMIN"
 
 

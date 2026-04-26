@@ -84,6 +84,21 @@ class SQLiteInscripcionRepository(InscripcionRepositoryPort):
                 rows = await cursor.fetchall()
                 return [self._row_to_inscripcion(row) for row in rows]
 
+    async def find_by_atleta(self, atleta_id: UUID) -> list[Inscripcion]:
+        async with aiosqlite.connect(self._db_path) as conn:
+            await self._ensure_table(conn)
+            conn.row_factory = aiosqlite.Row
+            async with conn.execute(
+                """
+                SELECT * FROM inscripciones
+                WHERE atleta_id = ?
+                ORDER BY fecha_inscripcion DESC
+                """,
+                (str(atleta_id),),
+            ) as cursor:
+                rows = await cursor.fetchall()
+                return [self._row_to_inscripcion(row) for row in rows]
+
     def _row_to_inscripcion(self, row: aiosqlite.Row) -> Inscripcion:
         return Inscripcion(
             inscripcion_id=UUID(row["inscripcion_id"]),

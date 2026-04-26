@@ -12,6 +12,8 @@ export interface AuthState {
   token: string | null
   userId: string | null
   email: string | null
+  nombre: string | null
+  apellido: string | null
   rol: RolUsuario | null
   login: (token: string) => void
   logout: () => void

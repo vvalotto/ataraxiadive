@@ -9,6 +9,8 @@ const useAuthStore = create<AuthState>()(
       token: null,
       userId: null,
       email: null,
+      nombre: null,
+      apellido: null,
       rol: null,
 
       login: (token: string) => {
@@ -17,12 +19,21 @@ const useAuthStore = create<AuthState>()(
           token,
           userId: payload.sub,
           email: payload.email,
+          nombre: payload.nombre,
+          apellido: payload.apellido,
           rol: payload.rol.toLowerCase() as RolUsuario,
         })
       },
 
       logout: () => {
-        set({ token: null, userId: null, email: null, rol: null })
+        set({
+          token: null,
+          userId: null,
+          email: null,
+          nombre: null,
+          apellido: null,
+          rol: null,
+        })
       },
     }),
     {
@@ -32,6 +43,8 @@ const useAuthStore = create<AuthState>()(
         token: state.token,
         userId: state.userId,
         email: state.email,
+        nombre: state.nombre,
+        apellido: state.apellido,
         rol: state.rol,
       }),
     },

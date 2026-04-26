@@ -28,7 +28,7 @@ export function LoginPage() {
     return <Navigate to="/organizador/dashboard" replace />
   }
   if (rol === 'atleta') {
-    return <Navigate to="/atleta/dashboard" replace />
+    return <Navigate to="/atleta" replace />
   }
 
   const handleSubmit = (e: React.FormEvent) => {
