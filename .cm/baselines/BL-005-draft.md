@@ -41,7 +41,7 @@ gestionable desde el panel del organizador, con ejecución por disciplina y resu
 | SP-ADJ-08 | Ajuste post-UAT INC-5.2 — reglas operativas, UX/lenguaje, cancelación fuerte (US-ADJ-8.1..8.3) | ✅ Cerrado 2026-04-22 | #107, #108, #109 |
 | INC-5.3 | Gestión de usuarios y roles — crear usuarios, asignar roles, vista atleta con inscripción básica (US-5.3.1..5.3.2) | ✅ Cerrado 2026-04-23 | #110, #111 |
 | INC-5.4 | Identidad Extendida — auto-registro público, cambiar contraseña, recuperar contraseña JWT+Resend (US-5.4.1..5.4.3) | ✅ Cerrado 2026-04-24 | #112, #113, #114 |
-| INC-5.5 | Algoritmo de puntaje y rankings por categoría/género — FAAS, tabla OT, podios y overall (US-5.5.1..5.5.6) | ⏳ Pendiente | — |
+| INC-5.5 | Portal atleta completo (shell dark, wizard inscripción, declarar AP) + vista organizador inscriptos con estado AP — scope redefinido post-reversión (US-5.5.1..5.5.2) | ✅ Cerrado 2026-04-26 | #120, #121, #122 |
 | INC-5.6 | Portal del Atleta — mis torneos, mi grilla, mis resultados, rankings/podios (US-5.6.1..5.6.4) | ⏳ Pendiente | — |
 | INC-5.7 | Polish y demo-readiness — seed BA 2025, verificación contra resultados oficiales, UX fixes (US-5.7.1..5.7.3) | ⏳ Pendiente | — |
 
@@ -59,6 +59,7 @@ gestionable desde el panel del organizador, con ejecución por disciplina y resu
 | DesignReviewer INC-5.2 + SP-ADJ-08 | designreviewer | 0 CRITICAL · 215 WARNING | `quality/reports/designreviewer/INC-5.2-report.txt` |
 | DesignReviewer INC-5.3 | designreviewer | 0 CRITICAL · 215 WARNING | `quality/reports/designreviewer/INC-5.3-report.txt` |
 | DesignReviewer INC-5.4 | designreviewer | 0 CRITICAL · 222 WARNING | `quality/reports/designreviewer/INC-5.4-report.txt` |
+| DesignReviewer INC-5.5 | designreviewer | 0 CRITICAL · 227 WARNING (+5 vs INC-5.4) | `quality/reports/designreviewer/INC-5.5-report.txt` |
 | ArchitectAnalyst BL-005 | architectanalyst | ⏳ pendiente (al cerrar SP5) | — |
 | UAT SP5 | funcional | ⏳ pendiente (INC-5.7 / cierre BL-005) | — |
 
@@ -93,9 +94,11 @@ gestionable desde el panel del organizador, con ejecución por disciplina y resu
 - UAT SP5 debe cubrir ciclo completo: crear torneo → inscribir → grilla → ejecución → resultados
 - Integración FAAS / importación CSV queda fuera de alcance SP5; el MVP usa formulario manual.
 - Antes del tag `v1.0.0`: merge develop→main, ArchitectAnalyst, retrospectiva SP5
+- INC-5.5 scope redefinido: el scope original (FAAS, rankings por categoría/género) fue desplazado a INC-5.6 tras la reversión del 2026-04-25. WARNINGs: 222→227 (+5 vs INC-5.4).
 
 ---
 
+*2026-04-26 — INC-5.5 cerrado (US-5.5.1..5.5.2 mergeadas + fix UAT · PRs #120, #121, #122 · DesignReviewer 0 CRITICAL · 227 WARNING · scope redefinido: portal atleta + AP)*
 *2026-04-23 — INC-5.3 cerrado (US-5.3.1..5.3.2 mergeadas · DesignReviewer 0 CRITICAL · 215 WARNING · nota: US-5.3.2 adelantó scope inscripción básica de INC-5.4)*
 *2026-04-22 — INC-5.2 cerrado + SP-ADJ-08 (UAT-5.2-01..08 resueltos · DesignReviewer 0 CRITICAL · 215 WARNING)*
 *Draft creado: 2026-04-22 — INC-5.1 cerrado*

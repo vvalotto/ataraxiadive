@@ -4,9 +4,9 @@
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-04-25 |
+| **Fecha** | 2026-04-26 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.26 — INC-5.4 cerrado · INC-5.5 reiniciado por reversión documental/funcional el 2026-04-25 |
+| **Estado** | ✅ v1.27 — INC-5.5 cerrado (portal atleta + AP · PRs #120, #121, #122) |
 
 ---
 
@@ -43,7 +43,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP5 INC-5.2 / SP-ADJ-08 | Frontend organizador + Competencia | Ejecución por disciplina, cierre manual, cancelación fuerte |
 | SP5 INC-5.3 | Identidad + Frontend | RF-US-01..05 (gestión UI de usuarios/roles + vista atleta con inscripción básica) |
 | SP5 INC-5.4 (pendiente) | Registro + Competencia + Frontend | RF-IN-05/06 y flujo UI de inscripción/APs — inscripción básica adelantada en US-5.3.2 |
-| SP5 INC-5.5 (reinicio) | Registro + Competencia + Frontend | Flujo de inscripción completa y APs a redefinir desde `docs/design/ux` tras revertir US-5.5.1/US-5.5.2 |
+| SP5 INC-5.5 | Registro + Competencia + Frontend | Portal atleta completo (shell dark, wizard inscripción, declarar AP) + vista organizador con inscriptos y estado AP (US-5.5.1..5.5.2) — PRs #120, #121, #122 |
 | SP5 INC-5.6 (pendiente) | Frontend atleta + Resultados | Portal del atleta |
 | SP5 INC-5.7 (pendiente) | Demo/UAT | Seed BA 2025, verificación oficial, polish |
 | Futuro / fuera de scope SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
@@ -463,7 +463,22 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 
 ---
 
-## 25. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §24 -->
+## 25. US-IEDD SP5 INC-5.5 — Portal Atleta e Inscripción con AP
+
+> Estado al 2026-04-26: 2/2 US mergeadas a `develop` + fix UAT (PR #122).
+> Scope redefinido post-reversión 2026-04-25: US-5.5.1/US-5.5.2 cubren portal atleta completo y vista del organizador (inscriptos + estado AP), no rankings/FAAS.
+> DesignReviewer INC-5.5: **0 CRITICAL · 227 WARNING** (`quality/reports/designreviewer/INC-5.5-report.txt`).
+> +5 WARNING respecto a INC-5.4 (222→227); todos son WARNING estructurales conocidos (LongMethod, DataClumps, LCOM).
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-5.5.1 | 5.5 | Portal atleta completo: shell dark + bottom tab bar + wizard inscripción 3 pasos + S-05 Mis inscripciones + S-06 Declarar/Modificar AP por disciplina | ✅ Done (PR #120) |
+| US-5.5.2 | 5.5 | Vista del organizador — inscriptos con datos completos (nombre, disciplinas, estado AP) integrada en la navegación UX aprobada del panel organizador | ✅ Done (PR #121) |
+| fix/uat-portal-atleta-ap | 5.5 | 13 hallazgos UAT corregidos: cross-BC identity (nombre/apellido desde identidad), AP flow (fechas, estados, carga/consulta), sync frontend | ✅ Done (PR #122) |
+
+---
+
+## 26. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §25 -->
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -482,7 +497,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 26. Cobertura Total
+## 27. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -502,7 +517,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 27. US → Tests
+## 28. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
