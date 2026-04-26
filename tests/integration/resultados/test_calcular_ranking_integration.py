@@ -1,4 +1,4 @@
-"""Tests de integración — CalcularRankingHandler + ObtenerRankingHandler (US-2.4.2)."""
+"""Tests de integración — CalcularRankingHandler + ObtenerRankingHandler (US-2.4.2 / US-5.6.3)."""
 
 from __future__ import annotations
 
@@ -46,6 +46,7 @@ from resultados.application.queries.obtener_ranking import (
 from resultados.infrastructure.repositories.atleta_categoria_adapter import (
     AtletaCategoriaAdapter,
 )
+from resultados.domain.services.algoritmo_faas import AlgoritmoPuntajeFAAS
 from resultados.infrastructure.repositories.resultados_competencia_adapter import (
     ResultadosCompetenciaAdapter,
 )
@@ -579,3 +580,46 @@ async def test_calcular_ranking_spe_2x50_no_incluye_performances_spe_8x50(
 
     assert len(rankings[0].entradas) == 1
     assert rankings[0].entradas[0].atleta_id == str(atleta_spe_2)
+
+
+@pytest.mark.asyncio
+async def test_calcular_ranking_con_algoritmo_faas_incluye_puntos(
+    comp_store: SQLiteEventStore,
+    ranking_store: SQLiteEventStore,
+    stub: StubCompetenciaEstadoAdapter,
+    descriptor: DisciplinaDescriptorAdapter,
+) -> None:
+    """Con AlgoritmoPuntajeFAAS: el ranking incluye puntos y ordena por ellos."""
+    cid = uuid4()
+    pid_1 = uuid4()  # 70m → 100.00 pts
+    pid_2 = uuid4()  # 56m → 80.00 pts
+
+    await _performance_ejecutada(
+        comp_store, stub, descriptor, cid, pid_1, "70", disciplina=Disciplina.DNF, ot=OT_A
+    )
+    await _performance_ejecutada(
+        comp_store, stub, descriptor, cid, pid_2, "56", disciplina=Disciplina.DNF, ot=OT_B
+    )
+
+    handler = CalcularRankingHandler(
+        ranking_store=ranking_store,
+        resultados_port=ResultadosCompetenciaAdapter(comp_store),
+        descriptor=descriptor,
+        algoritmo=AlgoritmoPuntajeFAAS(),
+    )
+    await handler.handle(CalcularRankingCommand(competencia_id=cid, disciplina=Disciplina.DNF))
+
+    query_handler = ObtenerRankingHandler(ranking_store=ranking_store)
+    rankings = await query_handler.handle(
+        ObtenerRankingQuery(competencia_id=cid, disciplina=Disciplina.DNF)
+    )
+
+    assert len(rankings) == 1
+    entradas = rankings[0].entradas
+    assert len(entradas) == 2
+    assert entradas[0].atleta_id == str(pid_1)
+    assert entradas[0].posicion == 1
+    assert entradas[0].puntos == "100.00"
+    assert entradas[1].atleta_id == str(pid_2)
+    assert entradas[1].posicion == 2
+    assert entradas[1].puntos == "80.00"

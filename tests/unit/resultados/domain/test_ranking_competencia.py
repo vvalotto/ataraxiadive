@@ -1,4 +1,4 @@
-"""Tests unitarios del aggregate RankingCompetencia — US-2.4.2."""
+"""Tests unitarios del aggregate RankingCompetencia — US-2.4.2 / US-5.6.3."""
 
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ from shared.domain.value_objects.disciplina import Disciplina
 from resultados.domain.aggregates.ranking_competencia import RankingCompetencia
 from resultados.domain.exceptions import ResultadosIncompletos
 from resultados.domain.ports.resultados_competencia_port import ResultadoFinal
+from resultados.domain.services.algoritmo_faas import AlgoritmoPuntajeFAAS
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -349,3 +350,218 @@ def test_calcular_blanca_con_penalizaciones_es_valida_y_ordena_por_rp() -> None:
 
     assert ranking.entries[0].atleta_id == atleta_valido
     assert ranking.entries[1].atleta_id == atleta_penalizado
+
+
+# ── US-5.6.3 — path FAAS con puntos ──────────────────────────────────────────
+
+
+def _make_ranking_dnf(competencia_id: UUID | None = None) -> RankingCompetencia:
+    return RankingCompetencia(
+        competencia_id=competencia_id or uuid4(),
+        disciplina=Disciplina.DNF,
+    )
+
+
+def _resultado_dnf(
+    rp: str,
+    tarjeta: str = "Blanca",
+    atleta_id: UUID | None = None,
+    categoria: Categoria = Categoria.SENIOR_MASCULINO,
+) -> ResultadoFinal:
+    return ResultadoFinal(
+        atleta_id=atleta_id or uuid4(),
+        rp=Decimal(rp),
+        unidad="Metros",
+        tarjeta=tarjeta,
+        es_dns=False,
+        categoria=categoria,
+    )
+
+
+def _dns_dnf(
+    atleta_id: UUID | None = None,
+    categoria: Categoria = Categoria.SENIOR_MASCULINO,
+) -> ResultadoFinal:
+    return ResultadoFinal(
+        atleta_id=atleta_id or uuid4(),
+        rp=None,
+        unidad=None,
+        tarjeta=None,
+        es_dns=True,
+        categoria=categoria,
+    )
+
+
+def test_calcular_con_faas_incluye_puntos_en_entradas() -> None:
+    """Ana (70m) → 100.00 pts; Luis (56m) → 80.00 pts (INV-5.6.3-01)."""
+    ana = uuid4()
+    luis = uuid4()
+    resultados = [
+        _resultado_dnf("70", atleta_id=ana, categoria=Categoria.SENIOR_FEMENINO),
+        _resultado_dnf("56", atleta_id=luis, categoria=Categoria.SENIOR_MASCULINO),
+    ]
+
+    ranking = _make_ranking_dnf()
+    ranking.calcular(resultados, AlgoritmoPuntajeFAAS())
+
+    by_id = {e.atleta_id: e for e in ranking.entries}
+    assert by_id[ana].puntos == Decimal("100.00")
+    assert by_id[luis].puntos == Decimal("80.00")
+
+
+def test_calcular_con_faas_ordena_por_puntos_desc_dentro_de_categoria() -> None:
+    """Dentro de cada categoría, la posición se asigna por puntos desc."""
+    atleta_a = uuid4()  # 80m → 100 pts
+    atleta_b = uuid4()  # 60m → 75 pts
+    resultados = [
+        _resultado_dnf("60", atleta_id=atleta_b),
+        _resultado_dnf("80", atleta_id=atleta_a),
+    ]
+
+    ranking = _make_ranking_dnf()
+    ranking.calcular(resultados, AlgoritmoPuntajeFAAS())
+
+    entries = ranking.entries
+    assert entries[0].atleta_id == atleta_a
+    assert entries[0].posicion == 1
+    assert entries[1].atleta_id == atleta_b
+    assert entries[1].posicion == 2
+
+
+def test_calcular_con_faas_empate_puntos_comparte_posicion() -> None:
+    """Dos atletas con mismo RP → mismo puntos → comparten posición (INV-5.6.3-02)."""
+    atleta_a = uuid4()
+    atleta_b = uuid4()
+    resultados = [
+        _resultado_dnf("70", atleta_id=atleta_a),
+        _resultado_dnf("70", atleta_id=atleta_b),
+    ]
+
+    ranking = _make_ranking_dnf()
+    ranking.calcular(resultados, AlgoritmoPuntajeFAAS())
+
+    assert ranking.entries[0].posicion == 1
+    assert ranking.entries[1].posicion == 1
+    assert ranking.entries[0].puntos == Decimal("100.00")
+    assert ranking.entries[1].puntos == Decimal("100.00")
+
+
+def test_calcular_con_faas_dns_puntos_cero_sin_podio() -> None:
+    """DNS → puntos=0.00, en_podio=False (INV-5.6.3-03)."""
+    pedro = uuid4()
+    luis = uuid4()
+    resultados = [
+        _dns_dnf(atleta_id=pedro),
+        _resultado_dnf("60", atleta_id=luis),
+    ]
+
+    ranking = _make_ranking_dnf()
+    ranking.calcular(resultados, AlgoritmoPuntajeFAAS())
+
+    by_id = {e.atleta_id: e for e in ranking.entries}
+    assert by_id[pedro].puntos == Decimal("0.00")
+    assert by_id[pedro].en_podio is False
+    assert by_id[luis].puntos == Decimal("100.00")
+
+
+def test_calcular_con_faas_roja_puntos_cero_sin_podio() -> None:
+    """Tarjeta roja → puntos=0.00, en_podio=False (INV-5.6.3-03)."""
+    rojo = uuid4()
+    blanco = uuid4()
+    resultados = [
+        _resultado_dnf("50", tarjeta="Roja", atleta_id=rojo),
+        _resultado_dnf("70", atleta_id=blanco),
+    ]
+
+    ranking = _make_ranking_dnf()
+    ranking.calcular(resultados, AlgoritmoPuntajeFAAS())
+
+    by_id = {e.atleta_id: e for e in ranking.entries}
+    assert by_id[rojo].puntos == Decimal("0.00")
+    assert by_id[rojo].en_podio is False
+
+
+def test_calcular_legacy_sin_algoritmo_puntos_son_cero() -> None:
+    """Path legacy (algoritmo=None): puntos siempre 0.00, ordenamiento por RP."""
+    atleta_a = uuid4()
+    atleta_b = uuid4()
+    resultados = [
+        _resultado_dnf("50", atleta_id=atleta_b),
+        _resultado_dnf("80", atleta_id=atleta_a),
+    ]
+
+    ranking = _make_ranking_dnf()
+    ranking.calcular(resultados, None)
+
+    assert all(e.puntos == Decimal("0.00") for e in ranking.entries)
+    assert ranking.entries[0].atleta_id == atleta_a  # mayor RP = primero
+
+
+def test_serializar_entrada_incluye_puntos() -> None:
+    """La serialización del evento incluye el campo puntos (INV-5.6.3-05)."""
+    ana = uuid4()
+    resultados = [_resultado_dnf("70", atleta_id=ana, categoria=Categoria.SENIOR_FEMENINO)]
+
+    ranking = _make_ranking_dnf()
+    ranking.calcular(resultados, AlgoritmoPuntajeFAAS())
+    events = ranking.pull_events()
+
+    payload = events[0].to_payload()
+    assert "puntos" in payload["entries"][0]
+    assert payload["entries"][0]["puntos"] == "100.00"
+
+
+def test_reconstitute_restaura_puntos_del_evento() -> None:
+    """Reconstitución desde event store recupera puntos sin recalcular."""
+    cid = uuid4()
+    ana = uuid4()
+    resultados = [_resultado_dnf("70", atleta_id=ana, categoria=Categoria.SENIOR_FEMENINO)]
+
+    ranking = RankingCompetencia(competencia_id=cid, disciplina=Disciplina.DNF)
+    ranking.calcular(resultados, AlgoritmoPuntajeFAAS())
+    events = ranking.pull_events()
+
+    raw = [{"event_type": e.event_type, "payload": e.to_payload()} for e in events]
+    ranking2 = RankingCompetencia.reconstitute(
+        competencia_id=cid, disciplina=Disciplina.DNF, events=raw
+    )
+
+    assert ranking2.entries[0].puntos == Decimal("100.00")
+
+
+def test_deserializacion_legacy_sin_puntos_usa_fallback_cero() -> None:
+    """Eventos legacy sin campo puntos se deserializan con puntos=0.00."""
+    cid = uuid4()
+    ana = uuid4()
+
+    # Construir evento legacy sin campo puntos
+    raw = [
+        {
+            "event_type": "ResultadosCalculados",
+            "payload": {
+                "competencia_id": str(cid),
+                "disciplina": "DNF",
+                "total": 1,
+                "entries": [
+                    {
+                        "posicion": 1,
+                        "atleta_id": str(ana),
+                        "categoria": "SENIOR_FEMENINO",
+                        "rp": "70",
+                        "unidad": "Metros",
+                        "tarjeta": "Blanca",
+                        "es_dns": False,
+                        "en_podio": True,
+                        # sin campo "puntos"
+                    }
+                ],
+                "calculado_en": "2026-04-26T10:00:00",
+                "occurred_at": "2026-04-26T10:00:00",
+            },
+        }
+    ]
+
+    ranking = RankingCompetencia.reconstitute(
+        competencia_id=cid, disciplina=Disciplina.DNF, events=raw
+    )
+    assert ranking.entries[0].puntos == Decimal("0.00")

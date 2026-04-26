@@ -1,6 +1,6 @@
 # US-5.6.3: RankingCompetencia con puntaje FAAS por categoría
 
-**Estado**: `To Do`
+**Estado**: `Done`
 **Sprint**: SP5 — La Puesta en Marcha
 **Incremento**: INC-5.6
 **Bounded Context**: `resultados`

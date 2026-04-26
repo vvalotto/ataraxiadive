@@ -146,6 +146,7 @@ async def get_ranking(
                             "tarjeta": e.tarjeta,
                             "es_dns": e.es_dns,
                             "en_podio": e.en_podio,
+                            "puntos": e.puntos,
                         }
                         for e in grupo.entradas
                     ],
@@ -211,7 +212,7 @@ async def get_export_resultados(
     except TorneoNoEncontrado as exc:
         return JSONResponse(status_code=404, content={"detail": str(exc)})
 
-    filename = f'resultados-{torneo_id}.{format}'
+    filename = f"resultados-{torneo_id}.{format}"
     headers = {"Content-Disposition": f'attachment; filename="{filename}"'}
 
     if format == "json":

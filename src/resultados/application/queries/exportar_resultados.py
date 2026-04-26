@@ -224,7 +224,7 @@ class ExportarResultadosHandler:
 
         ranking = RankingCompetencia.reconstitute(competencia_id, disciplina, events=[])
         try:
-            ranking.calcular(resultados, self._descriptor.describe(disciplina))
+            ranking.calcular(resultados)
         except ResultadosIncompletos:
             return []
 

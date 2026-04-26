@@ -85,7 +85,10 @@ def test_export_json_devuelve_attachment_y_secciones() -> None:
     response = client.get(f"/resultados/{torneo_id}/export?format=json")
 
     assert response.status_code == 200
-    assert response.headers["content-disposition"] == f'attachment; filename="resultados-{torneo_id}.json"'
+    assert (
+        response.headers["content-disposition"]
+        == f'attachment; filename="resultados-{torneo_id}.json"'
+    )
     payload = response.json()
     assert "disciplinas" in payload
     assert "overall" in payload
@@ -99,9 +102,15 @@ def test_export_csv_devuelve_attachment_y_header_con_punto_y_coma() -> None:
     response = client.get(f"/resultados/{torneo_id}/export?format=csv")
 
     assert response.status_code == 200
-    assert response.headers["content-disposition"] == f'attachment; filename="resultados-{torneo_id}.csv"'
+    assert (
+        response.headers["content-disposition"]
+        == f'attachment; filename="resultados-{torneo_id}.csv"'
+    )
     primera_linea = response.text.splitlines()[0]
-    assert primera_linea == "disciplina;posicion;atleta_nombre;categoria;club;ap;rp;tarjeta;penalizaciones;puntos"
+    assert (
+        primera_linea
+        == "disciplina;posicion;atleta_nombre;categoria;club;ap;rp;tarjeta;penalizaciones;puntos"
+    )
 
 
 def test_export_format_invalido_devuelve_400() -> None:

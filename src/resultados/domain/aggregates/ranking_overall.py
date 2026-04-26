@@ -120,9 +120,7 @@ def _filtrar_rankings_validos(
 def _categorias_presentes(
     rankings_validos: dict[Disciplina, list[EntradaRanking]],
 ) -> set[Categoria]:
-    return {
-        entry.categoria for entries in rankings_validos.values() for entry in entries
-    }
+    return {entry.categoria for entries in rankings_validos.values() for entry in entries}
 
 
 def _acumular_puntajes_categoria(
@@ -189,10 +187,7 @@ def _ordenar_puntuados(
     acumulado: dict[UUID, dict[str, int]],
 ) -> list[tuple[UUID, dict[str, int], int]]:
     return sorted(
-        (
-            (atleta_id, detalle, sum(detalle.values()))
-            for atleta_id, detalle in acumulado.items()
-        ),
+        ((atleta_id, detalle, sum(detalle.values())) for atleta_id, detalle in acumulado.items()),
         key=lambda item: (item[2], str(item[0])),
     )
 
