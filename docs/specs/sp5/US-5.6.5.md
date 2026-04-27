@@ -1,6 +1,6 @@
 # US-5.6.5: UI tabla de ejecución — resultados por disciplina ordenados por OT
 
-**Estado**: `To Do`
+**Estado**: `Done`
 **Sprint**: SP5 — La Puesta en Marcha
 **Incremento**: INC-5.6
 **Bounded Context**: `frontend`

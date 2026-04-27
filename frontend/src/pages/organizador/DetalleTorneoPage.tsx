@@ -219,12 +219,20 @@ function TorneoOperativoPanel({ torneo }: TorneoOperativoPanelProps) {
             {torneo.fecha_inicio} a {torneo.fecha_fin}
           </p>
         </div>
-        <Link
-          to={`/organizador/torneos/${torneo.torneo_id}/competencias`}
-          className="rounded-lg bg-stone-900 px-4 py-2 text-center text-sm font-semibold text-white"
-        >
-          Ver competencias
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            to={`/organizador/torneos/${torneo.torneo_id}/competencias`}
+            className="rounded-lg bg-stone-900 px-4 py-2 text-center text-sm font-semibold text-white"
+          >
+            Ver competencias
+          </Link>
+          <Link
+            to={`/organizador/resultados?torneo_id=${torneo.torneo_id}`}
+            className="rounded-lg border border-stone-900 px-4 py-2 text-center text-sm font-semibold text-stone-900"
+          >
+            Resultados
+          </Link>
+        </div>
       </div>
 
       <div className="mt-6 flex gap-2 overflow-x-auto border-b border-stone-200 pb-2">

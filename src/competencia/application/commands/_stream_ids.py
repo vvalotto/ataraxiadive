@@ -4,6 +4,7 @@ Fuente única de verdad para el formato de los stream IDs del Event Store.
 Un error de formato es silencioso (load retorna lista vacía), por lo que
 centralizar aquí previene divergencias entre handlers.
 """
+
 from uuid import UUID
 
 from competencia.domain.value_objects.disciplina import Disciplina

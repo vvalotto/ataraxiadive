@@ -62,9 +62,7 @@ class ResolucionTarjeta:
         )
         rp_medido = Decimal(payload["rp_medido"]) if payload.get("rp_medido") is not None else None
         rp_penalizado = (
-            Decimal(payload["rp_penalizado"])
-            if payload.get("rp_penalizado") is not None
-            else None
+            Decimal(payload["rp_penalizado"]) if payload.get("rp_penalizado") is not None else None
         )
 
         return cls(

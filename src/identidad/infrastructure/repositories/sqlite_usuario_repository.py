@@ -99,13 +99,11 @@ class SQLiteUsuarioRepository(UsuarioRepositoryPort):
     async def list_all(self) -> list[Usuario]:
         async with aiosqlite.connect(self._db_path) as conn:
             await self._ensure_table(conn)
-            async with conn.execute(
-                """
+            async with conn.execute("""
                 SELECT usuario_id, nombre, apellido, email, password_hash, rol, activo
                 FROM usuarios
                 ORDER BY rol, email
-                """
-            ) as cursor:
+                """) as cursor:
                 rows = await cursor.fetchall()
         return [_row_to_usuario(row) for row in rows]
 
