@@ -17,3 +17,7 @@ class RankingYaCalculado(DomainError):
 
 class TorneoNoEncontrado(DomainError):
     """El torneo solicitado no existe en la base de datos de Torneo."""
+
+
+class DisciplinasNoFinalizadas(DomainError):
+    """El overall no puede calcularse porque hay disciplinas sin ranking calculado."""

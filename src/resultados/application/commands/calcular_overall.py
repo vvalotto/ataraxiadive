@@ -1,12 +1,12 @@
-"""Command y Handler para CalcularOverall — US-3.5.1."""
+"""Command y Handler para CalcularOverall — US-3.5.1 / US-5.6.4."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from uuid import UUID
 
-from resultados.domain.aggregates.ranking_overall import RankingOverall
 from resultados.domain.aggregates.ranking_competencia import RankingCompetencia
+from resultados.domain.aggregates.ranking_overall import RankingOverall
 from shared.domain.ports.event_store_port import EventStorePort
 from shared.domain.value_objects.disciplina import Disciplina
 
@@ -37,7 +37,11 @@ class CalcularOverallHandler:
         self._competencia_store = competencia_store
 
     async def handle(self, command: CalcularOverallCommand) -> list:
-        """Calcula y persiste el overall del torneo."""
+        """Calcula y persiste el overall del torneo.
+
+        Raises:
+            DisciplinasNoFinalizadas: si alguna disciplina no tiene ranking calculado.
+        """
         competencias = await _mapear_competencias_por_torneo(
             self._competencia_store, command.torneo_id, command.disciplinas
         )
@@ -46,8 +50,7 @@ class CalcularOverallHandler:
             stream_id = f"ranking-{competencia_id}-{disciplina.value}"
             events = await self._ranking_store.load(stream_id)
             ranking = RankingCompetencia.reconstitute(competencia_id, disciplina, events)
-            if ranking.entries:
-                rankings_por_disciplina[disciplina] = ranking.entries
+            rankings_por_disciplina[disciplina] = ranking.entries
 
         overall_stream = _build_stream_id(command.torneo_id)
         existing = await self._ranking_store.load(overall_stream)

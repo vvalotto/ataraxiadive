@@ -1,6 +1,6 @@
 # US-5.6.4: RankingOverall por categoría con puntos acumulados
 
-**Estado**: `To Do`
+**Estado**: `Done`
 **Sprint**: SP5 — La Puesta en Marcha
 **Incremento**: INC-5.6
 **Bounded Context**: `resultados`

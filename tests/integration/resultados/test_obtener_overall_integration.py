@@ -1,7 +1,8 @@
-"""Tests de integración de consulta overall — US-3.5.3."""
+"""Tests de integración de consulta overall — US-3.5.3 / US-5.6.4."""
 
 from __future__ import annotations
 
+from decimal import Decimal
 from uuid import uuid4
 
 import aiosqlite
@@ -66,16 +67,16 @@ async def test_obtener_overall_reconstituye_ultima_version(tmp_path) -> None:
                 "posicion": 1,
                 "atleta_id": str(atleta_a),
                 "categoria": Categoria.SENIOR_MASCULINO.value,
-                "puntaje": 3,
-                "detalle": {"STA": 1, "DNF": 2},
+                "puntos_overall": "175.00",
+                "detalle": {"STA": "100.00", "DNF": "75.00"},
                 "en_podio": True,
             },
             {
                 "posicion": 2,
                 "atleta_id": str(atleta_b),
                 "categoria": Categoria.SENIOR_MASCULINO.value,
-                "puntaje": 4,
-                "detalle": {"STA": 2, "DNF": 2},
+                "puntos_overall": "140.00",
+                "detalle": {"STA": "80.00", "DNF": "60.00"},
                 "en_podio": True,
             },
         ],
@@ -87,5 +88,9 @@ async def test_obtener_overall_reconstituye_ultima_version(tmp_path) -> None:
     assert len(entries) == 1
     assert entries[0].categoria == Categoria.SENIOR_MASCULINO.value
     assert len(entries[0].entradas) == 2
-    assert entries[0].entradas[0].detalle == {"STA": 1, "DNF": 2}
+    assert entries[0].entradas[0].puntos_overall == Decimal("175.00")
+    assert entries[0].entradas[0].detalle == {
+        "STA": Decimal("100.00"),
+        "DNF": Decimal("75.00"),
+    }
     assert entries[0].entradas[0].en_podio is True
