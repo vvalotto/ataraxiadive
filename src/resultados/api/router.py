@@ -179,8 +179,8 @@ async def get_overall(
                         {
                             "posicion": e.posicion,
                             "atleta_id": e.atleta_id,
-                            "puntaje": e.puntaje,
-                            "detalle": e.detalle,
+                            "puntos_overall": str(e.puntos_overall),
+                            "detalle": {k: str(v) for k, v in e.detalle.items()},
                             "en_podio": e.en_podio,
                         }
                         for e in grupo.entradas
@@ -268,7 +268,7 @@ def _exportacion_a_json(exportacion: ExportResultadosDTO) -> dict[str, object]:
                 "atleta_nombre": entry.atleta_nombre,
                 "categoria": entry.categoria,
                 "club": entry.club,
-                "puntos_totales": entry.puntos_totales,
+                "puntos_totales": str(entry.puntos_totales),
             }
             for entry in exportacion.overall
         ],

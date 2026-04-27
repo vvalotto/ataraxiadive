@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from decimal import Decimal
 from uuid import UUID
 
 from registro.domain.value_objects.categoria import Categoria
@@ -16,14 +17,14 @@ class EntradaOverall:
         posicion: Posición overall (1-based). Empates comparten posición.
         atleta_id: Identificador del atleta.
         categoria: Categoría competitiva del atleta.
-        puntaje: Suma de posiciones por disciplina (menor es mejor).
-        detalle: Mapa disciplina -> posición utilizada en la suma.
+        puntos_overall: Suma de puntos FAAS de todas las disciplinas (INV-5.6.4-01).
+        detalle: Mapa disciplina → puntos FAAS aportados.
         en_podio: True si la posición overall está en el podio.
     """
 
     posicion: int
     atleta_id: UUID
     categoria: Categoria
-    puntaje: int
-    detalle: dict[str, int]
+    puntos_overall: Decimal
+    detalle: dict[str, Decimal]
     en_podio: bool

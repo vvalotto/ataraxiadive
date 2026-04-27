@@ -1,9 +1,10 @@
-"""Query y Handler para ObtenerOverall — US-3.5.3."""
+"""Query y Handler para ObtenerOverall — US-3.5.3 / US-5.6.4."""
 
 from __future__ import annotations
 
 from collections import defaultdict
 from dataclasses import dataclass
+from decimal import Decimal
 from uuid import UUID
 
 from resultados.domain.aggregates.ranking_overall import RankingOverall
@@ -23,8 +24,8 @@ class OverallEntradaDTO:
 
     posicion: int
     atleta_id: str
-    puntaje: int
-    detalle: dict[str, int]
+    puntos_overall: Decimal
+    detalle: dict[str, Decimal]
     en_podio: bool
 
 
@@ -50,7 +51,7 @@ class ObtenerOverallHandler:
         """Retorna las entradas calculadas del overall.
 
         Returns:
-            Lista ordenada por posición.
+            Lista ordenada por categoría.
             Lista vacía si el overall aún no fue calculado.
         """
         stream_id = f"ranking-overall-{query.torneo_id}"
@@ -62,7 +63,7 @@ class ObtenerOverallHandler:
                 OverallEntradaDTO(
                     posicion=entry.posicion,
                     atleta_id=str(entry.atleta_id),
-                    puntaje=entry.puntaje,
+                    puntos_overall=entry.puntos_overall,
                     detalle=dict(entry.detalle),
                     en_podio=entry.en_podio,
                 )
