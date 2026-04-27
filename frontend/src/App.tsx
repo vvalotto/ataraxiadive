@@ -26,6 +26,7 @@ import { TorneoCompetenciasPage } from './pages/organizador/TorneoCompetenciasPa
 import { UsuariosPage } from './pages/organizador/UsuariosPage'
 import { AuditoriaCompetenciaPage } from './pages/organizador/AuditoriaCompetenciaPage'
 import { AuditoriaPerformancePage } from './pages/organizador/AuditoriaPerformancePage'
+import { ResultadosPage } from './pages/organizador/ResultadosPage'
 import { HealthCheck } from './components/HealthCheck'
 
 function RootRedirect() {
@@ -196,6 +197,14 @@ function App() {
           element={
             <RequireRole role="organizador">
               <AuditoriaPerformancePage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/organizador/resultados"
+          element={
+            <RequireRole role="organizador">
+              <ResultadosPage />
             </RequireRole>
           }
         />

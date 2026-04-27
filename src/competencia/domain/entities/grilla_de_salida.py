@@ -249,7 +249,8 @@ class GrillaDeSalida:
                 atleta_id=entrada.atleta_id,
                 posicion=entrada.posicion,
                 andarivel=entrada.andarivel,
-                ot_programado=ot_inicio + timedelta(minutes=(entrada.posicion - 1) * intervalo.minutos),
+                ot_programado=ot_inicio
+                + timedelta(minutes=(entrada.posicion - 1) * intervalo.minutos),
             )
             for entrada in entradas
         ]

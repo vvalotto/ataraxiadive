@@ -400,8 +400,7 @@ def build_premiacion_precondition(
             cantidad = len(pendientes)
             etiqueta = "disciplina" if cantidad == 1 else "disciplinas"
             raise PremiacionNoPermitida(
-                f"No se puede pasar a premiacion: falta cerrar {cantidad} {etiqueta}: "
-                f"{detalle}"
+                f"No se puede pasar a premiacion: falta cerrar {cantidad} {etiqueta}: " f"{detalle}"
             )
 
     return _precondition

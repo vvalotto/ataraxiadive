@@ -4,7 +4,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { fetchApAtleta, fetchCompetenciasPorTorneo, fetchGrillaCompetencia, registrarAP } from '../../api/competencia'
 import { fetchAtletaMe } from '../../api/registro'
 import { fetchTorneo } from '../../api/torneo'
-import useAuthStore from '../../stores/useAuthStore'
 import { AtletaShell } from '../../components/atleta/AtletaShell'
 import { ApiError } from '../../api/competencia'
 import { formatDisciplina, formatFecha, getUnidadEsperada, getUnidadLabel } from './portalData'
@@ -45,7 +44,6 @@ function getApError(error: unknown): string {
 
 export function AtletaDeclararAPPage() {
   const { torneoId, disciplina } = useParams<{ torneoId: string; disciplina: string }>()
-  const _userId = useAuthStore((state) => state.userId)
   const navigate = useNavigate()
   const [valorAp, setValorAp] = useState('')
   const query = useQuery({
@@ -113,7 +111,7 @@ export function AtletaDeclararAPPage() {
 
           <section className="rounded-[1.75rem] border border-slate-800 bg-slate-900 p-5">
             <label className="block text-sm text-slate-300">
-              AP — {unidadEsperada === 'SEGUNDOS' ? 'Tiempo anunciado' : 'Distancia anunciada'} *
+              AP — {unidadEsperada === 'Segundos' ? 'Tiempo anunciado' : 'Distancia anunciada'} *
               <div className="mt-3 flex items-center gap-3 rounded-3xl border border-sky-500/40 bg-sky-500/10 px-4 py-4">
                 <input
                   value={valorApValue}

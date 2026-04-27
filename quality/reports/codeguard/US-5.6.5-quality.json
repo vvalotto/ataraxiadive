@@ -1,0 +1,21 @@
+{
+  "us_id": "US-5.6.5",
+  "titulo": "UI tabla de ejecución — resultados por disciplina ordenados por OT",
+  "fecha": "2026-04-27",
+  "tipo": "frontend",
+  "build_result": "PASS",
+  "typescript_errors": 0,
+  "typescript_strict": true,
+  "notas": "Build TypeScript limpio. 2 errores preexistentes corregidos en AtletaDeclararAPPage.tsx (unused _userId, tipo SEGUNDOS vs Segundos). Backend src/ sin cambios — CodeGuard N/A.",
+  "archivos_nuevos": [
+    "frontend/src/api/resultados.ts (modificado: puntos + fetchOverall)",
+    "frontend/src/components/organizador/FilaResultado.tsx",
+    "frontend/src/components/organizador/TablaDisciplinaResultados.tsx",
+    "frontend/src/pages/organizador/ResultadosPage.tsx"
+  ],
+  "archivos_modificados": [
+    "frontend/src/App.tsx (ruta /organizador/resultados)",
+    "frontend/src/pages/organizador/DetalleTorneoPage.tsx (botón Resultados)",
+    "frontend/src/pages/atleta/AtletaDeclararAPPage.tsx (fix preexistente)"
+  ]
+}

@@ -1,4 +1,5 @@
 """Schemas Pydantic para los request bodies del BC Competencia."""
+
 from uuid import UUID
 
 from pydantic import BaseModel
