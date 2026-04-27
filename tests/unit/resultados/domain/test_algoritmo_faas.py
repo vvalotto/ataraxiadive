@@ -16,7 +16,9 @@ LUIS = uuid4()
 PEDRO = uuid4()
 
 
-def _resultado(atleta_id: UUID, rp: float | None, tarjeta: str | None, es_dns: bool = False) -> ResultadoFinal:
+def _resultado(
+    atleta_id: UUID, rp: float | None, tarjeta: str | None, es_dns: bool = False
+) -> ResultadoFinal:
     return ResultadoFinal(
         atleta_id=atleta_id,
         rp=Decimal(str(rp)) if rp is not None else None,

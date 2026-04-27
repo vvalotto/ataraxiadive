@@ -91,8 +91,7 @@ class CalcularRankingHandler:
             events=existing,
         )
 
-        descriptor = self._descriptor.describe(command.disciplina)
-        ranking.calcular(resultados, descriptor)
+        ranking.calcular(resultados, self._algoritmo)
 
         for event in ranking.pull_events():
             await self._ranking_store.append(

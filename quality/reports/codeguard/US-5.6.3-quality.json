@@ -1,0 +1,19 @@
+************* Module src.resultados.domain.aggregates.ranking_competencia
+src/resultados/domain/aggregates/ranking_competencia.py:85:12: C0415: Import outside toplevel (resultados.domain.exceptions.ResultadosIncompletos) (import-outside-toplevel)
+************* Module src.resultados.domain.value_objects.entrada_ranking
+src/resultados/domain/value_objects/entrada_ranking.py:13:0: R0902: Too many instance attributes (9/7) (too-many-instance-attributes)
+************* Module src.resultados.application.commands.calcular_ranking
+src/resultados/application/commands/calcular_ranking.py:57:4: R0913: Too many arguments (6/5) (too-many-arguments)
+src/resultados/application/commands/calcular_ranking.py:57:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+src/resultados/application/commands/calcular_ranking.py:43:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+src/resultados/application/commands/calcular_ranking.py:114:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+************* Module src.resultados.application.queries.obtener_ranking
+src/resultados/application/queries/obtener_ranking.py:33:0: R0902: Too many instance attributes (8/7) (too-many-instance-attributes)
+src/resultados/application/queries/obtener_ranking.py:68:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+************* Module src.resultados.api.router
+src/resultados/api/router.py:199:4: W0622: Redefining built-in 'format' (redefined-builtin)
+src/resultados/api/router.py:26:0: C0412: Imports from package resultados are not grouped (ungrouped-imports)
+
+-----------------------------------
+Your code has been rated at 9.65/10
+

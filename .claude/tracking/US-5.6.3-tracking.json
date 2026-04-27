@@ -1,0 +1,204 @@
+{
+  "metadata": {
+    "us_id": "US-5.6.3",
+    "us_title": "RankingCompetencia con puntaje FAAS por categoria",
+    "us_points": 5,
+    "producto": "resultados",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-26T21:37:26.133158+00:00",
+    "completed_at": "2026-04-26T23:21:12.709985+00:00",
+    "total_elapsed_seconds": 6226,
+    "effective_seconds": 6226,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-04-26T21:37:30.629028+00:00",
+      "completed_at": "2026-04-26T21:38:41.784064+00:00",
+      "elapsed_seconds": 71,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-26T21:42:48.786643+00:00",
+      "completed_at": "2026-04-26T21:44:38.888160+00:00",
+      "elapsed_seconds": 110,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de Implementación",
+      "started_at": "2026-04-26T21:44:44.232885+00:00",
+      "completed_at": "2026-04-26T21:46:08.252940+00:00",
+      "elapsed_seconds": 84,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-04-26T21:46:09.056319+00:00",
+      "completed_at": "2026-04-26T22:55:48.436404+00:00",
+      "elapsed_seconds": 4179,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "T1",
+          "task_name": "EntradaRanking puntos",
+          "task_type": "domain",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-04-26T21:46:18.533089+00:00",
+          "completed_at": "2026-04-26T21:46:41.464587+00:00",
+          "elapsed_seconds": 22,
+          "actual_minutes": 0.37,
+          "variance_minutes": -9.63,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T2",
+          "task_name": "RankingCompetencia calcular con puntos",
+          "task_type": "domain",
+          "estimated_minutes": 25.0,
+          "started_at": "2026-04-26T21:46:42.097526+00:00",
+          "completed_at": "2026-04-26T22:52:09.895585+00:00",
+          "elapsed_seconds": 3927,
+          "actual_minutes": 65.45,
+          "variance_minutes": 40.45,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T3",
+          "task_name": "CalcularRankingHandler pasar algoritmo",
+          "task_type": "application",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-04-26T22:52:12.932402+00:00",
+          "completed_at": "2026-04-26T22:52:46.757099+00:00",
+          "elapsed_seconds": 33,
+          "actual_minutes": 0.55,
+          "variance_minutes": -9.45,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T4",
+          "task_name": "ObtenerRankingHandler DTO puntos",
+          "task_type": "application",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-04-26T22:53:02.840255+00:00",
+          "completed_at": "2026-04-26T22:54:46.170091+00:00",
+          "elapsed_seconds": 103,
+          "actual_minutes": 1.72,
+          "variance_minutes": -8.28,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T5",
+          "task_name": "API router puntos en respuesta",
+          "task_type": "api",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-04-26T22:54:49.819442+00:00",
+          "completed_at": "2026-04-26T22:55:19.686971+00:00",
+          "elapsed_seconds": 29,
+          "actual_minutes": 0.48,
+          "variance_minutes": -4.52,
+          "file_created": null,
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-26T22:56:03.202001+00:00",
+      "completed_at": "2026-04-26T22:58:26.470257+00:00",
+      "elapsed_seconds": 143,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-04-26T22:58:37.250062+00:00",
+      "completed_at": "2026-04-26T23:00:47.747806+00:00",
+      "elapsed_seconds": 130,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-04-26T23:00:55.853773+00:00",
+      "completed_at": "2026-04-26T23:03:27.827560+00:00",
+      "elapsed_seconds": 151,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-26T23:03:37.375660+00:00",
+      "completed_at": "2026-04-26T23:18:29.955885+00:00",
+      "elapsed_seconds": 892,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-04-26T23:20:05.518288+00:00",
+      "completed_at": "2026-04-26T23:20:54.665798+00:00",
+      "elapsed_seconds": 49,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-04-26T23:21:02.164780+00:00",
+      "completed_at": null,
+      "elapsed_seconds": 0,
+      "status": "in_progress",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 5,
+    "completed_tasks": 5,
+    "total_phases": 10,
+    "estimated_total_minutes": 60.0,
+    "actual_total_minutes": 68.57,
+    "variance_minutes": 8.57,
+    "variance_percent": 14.28
+  }
+}

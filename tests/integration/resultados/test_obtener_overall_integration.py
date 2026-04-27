@@ -34,9 +34,7 @@ async def _init_db(db_path: str) -> None:
         await db.commit()
 
 
-async def _append_overall(
-    store: SQLiteEventStore, torneo_id, entries: list[dict]
-) -> None:
+async def _append_overall(store: SQLiteEventStore, torneo_id, entries: list[dict]) -> None:
     await store.append(
         stream_id=f"ranking-overall-{torneo_id}",
         event_type="RankingOverallCalculado",

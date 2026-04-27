@@ -41,6 +41,7 @@ class RankingEntradaDTO:
         tarjeta: Tipo de tarjeta, o None.
         es_dns: True si el atleta no se presentó.
         en_podio: True si está en el podio (posición 1, 2 o 3).
+        puntos: Puntaje FAAS del atleta (2 decimales). "0.00" sin algoritmo.
     """
 
     posicion: int
@@ -50,6 +51,7 @@ class RankingEntradaDTO:
     tarjeta: str | None
     es_dns: bool
     en_podio: bool
+    puntos: str = "0.00"
 
 
 @dataclass(frozen=True)
@@ -106,6 +108,7 @@ class ObtenerRankingHandler:
                     tarjeta=entry.tarjeta,
                     es_dns=entry.es_dns,
                     en_podio=entry.en_podio,
+                    puntos=str(entry.puntos),
                 )
             )
         return [

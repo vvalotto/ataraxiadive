@@ -64,9 +64,7 @@ class TestObtenerOverallHandler:
         atleta_id_2 = uuid4()
         ranking_store = AsyncMock()
         ranking_store.load = AsyncMock(
-            return_value=[
-                _raw_event_ranking_overall_calculado(torneo_id, atleta_id_1, atleta_id_2)
-            ]
+            return_value=[_raw_event_ranking_overall_calculado(torneo_id, atleta_id_1, atleta_id_2)]
         )
 
         handler = ObtenerOverallHandler(ranking_store=ranking_store)
