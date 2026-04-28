@@ -20,6 +20,7 @@ import { AtletaMisInscripcionesPage } from './pages/atleta/AtletaMisInscripcione
 import { AtletaDeclararAPPage } from './pages/atleta/AtletaDeclararAPPage'
 import { AtletaResultadosPage } from './pages/atleta/AtletaResultadosPage'
 import { DashboardPage } from './pages/organizador/DashboardPage'
+import { DashboardOperativoPage } from './pages/organizador/DashboardOperativoPage'
 import { CrearTorneoPage } from './pages/organizador/CrearTorneoPage'
 import { DetalleTorneoPage } from './pages/organizador/DetalleTorneoPage'
 import { OrganizadorGrillaPage } from './pages/organizador/OrganizadorGrillaPage'
@@ -178,7 +179,7 @@ function App() {
           path="/organizador/panel"
           element={
             <RequireRole role="organizador">
-              <DetalleTorneoPage />
+              <DashboardOperativoPage />
             </RequireRole>
           }
         />
