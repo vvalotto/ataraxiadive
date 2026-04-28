@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { useConnectionSync } from './stores/useConnectionStore'
 import { useSyncQueue } from './hooks/useSyncQueue'
 import useAuthStore from './stores/useAuthStore'
@@ -37,15 +37,27 @@ function RootRedirect() {
   return <Navigate to="/login" replace />
 }
 
+function GlobalHealthCheck() {
+  const location = useLocation()
+
+  if (location.pathname.startsWith('/organizador')) {
+    return null
+  }
+
+  return (
+    <div className="fixed top-3 right-3 z-50">
+      <HealthCheck />
+    </div>
+  )
+}
+
 function App() {
   useConnectionSync()
   useSyncQueue()
 
   return (
     <>
-      <div className="fixed top-3 right-3 z-50">
-        <HealthCheck />
-      </div>
+      <GlobalHealthCheck />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registro" element={<RegistroPage />} />

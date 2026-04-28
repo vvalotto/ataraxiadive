@@ -68,26 +68,26 @@ export function DashboardPage() {
         <>
           <Link
             to="/cambiar-password"
-            className="rounded-lg border border-stone-900 px-4 py-2 text-sm font-semibold text-stone-900"
+            className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
           >
             Password
           </Link>
           <Link
             to="/organizador/usuarios"
-            className="rounded-lg border border-stone-900 px-4 py-2 text-sm font-semibold text-stone-900"
+            className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
           >
             Usuarios
           </Link>
           <Link
             to="/organizador/torneos/nuevo"
-            className="rounded-lg bg-emerald-800 px-4 py-2 text-sm font-semibold text-white"
+            className="rounded-full bg-sky-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950"
           >
             Nuevo torneo
           </Link>
           <button
             type="button"
             onClick={logout}
-            className="rounded-lg bg-stone-900 px-4 py-2 text-sm font-semibold text-stone-50"
+            className="rounded-full border border-slate-600 bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
           >
             Cerrar sesion
           </button>
@@ -101,13 +101,13 @@ export function DashboardPage() {
       ) : null}
 
       {torneosQuery.isLoading ? (
-        <section className="rounded-[2rem] border border-stone-300/80 bg-white/80 p-5 text-sm text-stone-600">
+        <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando torneos...
         </section>
       ) : null}
 
       {torneosQuery.isError ? (
-        <section className="rounded-[2rem] border border-red-300/60 bg-red-50 p-5 text-sm text-red-900">
+        <section className="rounded-[2rem] border border-red-500/40 bg-red-950/50 p-5 text-sm text-red-100">
           No se pudieron cargar los torneos.
         </section>
       ) : null}
@@ -123,8 +123,8 @@ export function DashboardPage() {
                 onClick={() => setFiltro(item.value)}
                 className={
                   isActive
-                    ? 'rounded-lg bg-stone-900 px-4 py-2 text-sm font-semibold text-white'
-                    : 'rounded-lg border border-stone-300 bg-white/80 px-4 py-2 text-sm font-semibold text-stone-700'
+                    ? 'rounded-full border border-sky-400 bg-sky-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-sky-300'
+                    : 'rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-300'
                 }
               >
                 {item.label}
@@ -135,7 +135,7 @@ export function DashboardPage() {
       ) : null}
 
       {!torneosQuery.isLoading && !torneosQuery.isError && torneosFiltrados.length === 0 ? (
-        <section className="rounded-[2rem] border border-stone-300/80 bg-white/80 p-5 text-sm text-stone-600">
+        <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           {emptyMessage(filtro)}
         </section>
       ) : null}
@@ -144,21 +144,21 @@ export function DashboardPage() {
         ? torneosFiltrados.map((torneo) => (
             <article
               key={torneo.torneo_id}
-              className="rounded-[2rem] border border-stone-300/80 bg-white/85 p-5 shadow-[0_20px_60px_rgba(120,93,54,0.08)]"
+              className="rounded-[2rem] border border-slate-700 bg-slate-900/80 p-5 shadow-[0_20px_60px_rgba(2,6,23,0.32)]"
             >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                     Torneo
                   </p>
-                  <h2 className="mt-2 text-xl font-semibold text-stone-900">{torneo.nombre}</h2>
-                  <p className="mt-2 text-sm text-stone-600">
+                  <h2 className="mt-2 text-xl font-semibold text-white">{torneo.nombre}</h2>
+                  <p className="mt-2 text-sm text-slate-300">
                     {torneo.sede.nombre}, {torneo.sede.ciudad} · {formatEstadoTorneo(torneo.estado)}
                   </p>
                 </div>
                 <Link
                   to={`/organizador/torneo/${torneo.torneo_id}`}
-                  className="rounded-lg border border-stone-900 px-4 py-2 text-sm font-semibold text-stone-900"
+                  className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
                 >
                   Gestionar
                 </Link>
