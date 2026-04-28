@@ -14,6 +14,8 @@ export function OrganizadorGrillaPage() {
       <OrganizadorLayout
         title="Grilla"
         subtitle="Seleccionar torneo para generar, ajustar o confirmar la grilla"
+        showTournamentNavigation={false}
+        simpleHeader
       >
         <TorneoRouteSelector
           description="La grilla es una sección primaria del shell. Seleccioná un torneo para operar la disciplina desde esta vista."

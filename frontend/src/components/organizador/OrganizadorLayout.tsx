@@ -8,6 +8,8 @@ interface OrganizadorLayoutProps {
   subtitle: string
   actions?: ReactNode
   children: ReactNode
+  showTournamentNavigation?: boolean
+  simpleHeader?: boolean
 }
 
 interface NavItem {
@@ -57,6 +59,8 @@ export function OrganizadorLayout({
   subtitle,
   actions,
   children,
+  showTournamentNavigation = true,
+  simpleHeader = false,
 }: OrganizadorLayoutProps) {
   const location = useLocation()
   const email = useAuthStore((s) => s.email)
@@ -71,34 +75,38 @@ export function OrganizadorLayout({
         <div className="mx-auto flex max-w-[1100px] flex-col gap-4 px-5 py-4 lg:px-8">
           <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
             <div className="flex items-center gap-6">
-              <span className="text-lg font-black tracking-tight text-sky-400">
-                AtaraxiaDive
-              </span>
-              <nav className="flex flex-wrap items-center gap-2">
-                {NAV_ITEMS.map((item) => {
-                  const isActive = seccionActiva === item.key
-                  const baseClass =
-                    'rounded-full border px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition'
+              {!simpleHeader ? (
+                <span className="text-lg font-black tracking-tight text-sky-400">
+                  AtaraxiaDive
+                </span>
+              ) : null}
+              {showTournamentNavigation ? (
+                <nav className="flex flex-wrap items-center gap-2">
+                  {NAV_ITEMS.map((item) => {
+                    const isActive = seccionActiva === item.key
+                    const baseClass =
+                      'rounded-full border px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition'
 
-                  return (
-                    <Link
-                      key={item.key}
-                      to={item.to}
-                      className={
-                        isActive
-                          ? `${baseClass} border-sky-400 bg-sky-400/10 text-sky-300`
-                          : `${baseClass} border-slate-700 bg-slate-800 text-slate-300 hover:border-slate-500 hover:text-white`
-                      }
-                    >
-                      {item.label}
-                    </Link>
-                  )
-                })}
-              </nav>
+                    return (
+                      <Link
+                        key={item.key}
+                        to={item.to}
+                        className={
+                          isActive
+                            ? `${baseClass} border-sky-400 bg-sky-400/10 text-sky-300`
+                            : `${baseClass} border-slate-700 bg-slate-800 text-slate-300 hover:border-slate-500 hover:text-white`
+                        }
+                      >
+                        {item.label}
+                      </Link>
+                    )
+                  })}
+                </nav>
+              ) : null}
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
-              <HealthCheck compact />
+              {!simpleHeader ? <HealthCheck compact /> : null}
               <span className="rounded-full border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-slate-300">
                 {usuarioLabel}
               </span>
@@ -107,11 +115,13 @@ export function OrganizadorLayout({
 
           <div className="flex flex-col gap-3 xl:flex-row xl:items-end xl:justify-between">
             <div className="max-w-3xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-300/80">
-                Organizador
-              </p>
+              {!simpleHeader ? (
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-300/80">
+                  Organizador
+                </p>
+              ) : null}
               <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white">{title}</h1>
-              <p className="mt-2 text-sm text-slate-300">{subtitle}</p>
+              {subtitle ? <p className="mt-2 text-sm text-slate-300">{subtitle}</p> : null}
             </div>
             {actions ? <div className="flex flex-wrap gap-2">{actions}</div> : null}
           </div>

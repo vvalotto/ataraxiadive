@@ -39,8 +39,10 @@ const INITIAL_FORM: FormState = {
 
 function inputClass(hasError: boolean): string {
   return [
-    'mt-2 w-full rounded-lg border bg-white px-3 py-2 text-sm text-stone-900 outline-none transition',
-    hasError ? 'border-red-400 focus:border-red-600' : 'border-stone-300 focus:border-emerald-700',
+    'mt-2 w-full rounded-lg border bg-slate-900 px-3 py-2 text-sm text-slate-100 outline-none transition placeholder:text-slate-500',
+    hasError
+      ? 'border-red-500/60 focus:border-red-400'
+      : 'border-slate-700 focus:border-sky-400',
   ].join(' ')
 }
 
@@ -127,10 +129,12 @@ export function CrearTorneoPage() {
     <OrganizadorLayout
       title="Nuevo torneo"
       subtitle="Alta del torneo y configuracion inicial de disciplinas"
+      showTournamentNavigation={false}
+      simpleHeader
       actions={
         <Link
           to="/organizador/torneo"
-          className="rounded-lg border border-stone-900 px-4 py-2 text-sm font-semibold text-stone-900"
+          className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
         >
           Volver
         </Link>
@@ -138,15 +142,15 @@ export function CrearTorneoPage() {
     >
       <form
         onSubmit={handleSubmit}
-        className="rounded-lg border border-stone-300 bg-white p-5 shadow-[0_20px_60px_rgba(120,93,54,0.08)]"
+        className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-6 shadow-[0_20px_60px_rgba(2,6,23,0.24)]"
       >
         {errors.general ? (
-          <div className="mb-5 rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-900">
+          <div className="mb-5 rounded-[1.5rem] border border-red-500/40 bg-red-950/40 p-4 text-sm text-red-100">
             <p>{errors.general}</p>
             {torneoCreadoSinDisciplinas ? (
               <Link
                 to={`/organizador/torneo/${torneoCreadoSinDisciplinas}`}
-                className="mt-3 inline-flex rounded-lg border border-red-800 px-3 py-2 text-sm font-semibold text-red-900"
+                className="mt-3 inline-flex rounded-full border border-red-400/40 bg-red-950/40 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-red-100"
               >
                 Ir al detalle del torneo
               </Link>
@@ -155,7 +159,7 @@ export function CrearTorneoPage() {
         ) : null}
 
         <div className="grid gap-5 lg:grid-cols-2">
-          <label className="block text-sm font-semibold text-stone-900">
+          <label className="block text-sm font-semibold text-slate-100">
             Nombre
             <input
               value={form.nombre}
@@ -163,10 +167,10 @@ export function CrearTorneoPage() {
               className={inputClass(Boolean(errors.nombre))}
               placeholder="BA 2026"
             />
-            {errors.nombre ? <span className="mt-1 block text-sm text-red-700">{errors.nombre}</span> : null}
+            {errors.nombre ? <span className="mt-1 block text-sm text-red-300">{errors.nombre}</span> : null}
           </label>
 
-          <label className="block text-sm font-semibold text-stone-900">
+          <label className="block text-sm font-semibold text-slate-100">
             Descripcion
             <input
               value={form.descripcion}
@@ -176,7 +180,7 @@ export function CrearTorneoPage() {
             />
           </label>
 
-          <label className="block text-sm font-semibold text-stone-900">
+          <label className="block text-sm font-semibold text-slate-100">
             Fecha de inicio
             <input
               type="date"
@@ -187,7 +191,7 @@ export function CrearTorneoPage() {
             />
           </label>
 
-          <label className="block text-sm font-semibold text-stone-900">
+          <label className="block text-sm font-semibold text-slate-100">
             Fecha de fin
             <input
               type="date"
@@ -197,13 +201,13 @@ export function CrearTorneoPage() {
               required
             />
             {errors.fechaFin ? (
-              <span className="mt-1 block text-sm text-red-700">{errors.fechaFin}</span>
+              <span className="mt-1 block text-sm text-red-300">{errors.fechaFin}</span>
             ) : null}
           </label>
         </div>
 
         <div className="mt-6 grid gap-5 lg:grid-cols-3">
-          <label className="block text-sm font-semibold text-stone-900">
+          <label className="block text-sm font-semibold text-slate-100">
             Sede
             <input
               value={form.sedeNombre}
@@ -214,7 +218,7 @@ export function CrearTorneoPage() {
             />
           </label>
 
-          <label className="block text-sm font-semibold text-stone-900">
+          <label className="block text-sm font-semibold text-slate-100">
             Ciudad
             <input
               value={form.sedeCiudad}
@@ -225,7 +229,7 @@ export function CrearTorneoPage() {
             />
           </label>
 
-          <label className="block text-sm font-semibold text-stone-900">
+          <label className="block text-sm font-semibold text-slate-100">
             Pais
             <input
               value={form.sedePais}
@@ -237,7 +241,7 @@ export function CrearTorneoPage() {
         </div>
 
         <div className="mt-6 grid gap-5 lg:grid-cols-2">
-          <label className="block text-sm font-semibold text-stone-900">
+          <label className="block text-sm font-semibold text-slate-100">
             Entidad organizadora
             <input
               value={form.entidadNombre}
@@ -248,7 +252,7 @@ export function CrearTorneoPage() {
             />
           </label>
 
-          <label className="block text-sm font-semibold text-stone-900">
+          <label className="block text-sm font-semibold text-slate-100">
             Tipo de entidad
             <input
               value={form.entidadTipo}
@@ -274,14 +278,14 @@ export function CrearTorneoPage() {
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
           <Link
             to="/organizador/torneo"
-            className="rounded-lg border border-stone-300 px-4 py-2 text-center text-sm font-semibold text-stone-800"
+            className="rounded-full border border-slate-700 bg-slate-950 px-4 py-2 text-center text-xs font-semibold uppercase tracking-[0.16em] text-slate-200"
           >
             Cancelar
           </Link>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="rounded-lg bg-stone-900 px-5 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-stone-500"
+            className="rounded-full bg-sky-500 px-5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950 disabled:cursor-not-allowed disabled:bg-slate-600 disabled:text-slate-300"
           >
             {isSubmitting ? 'Creando...' : 'Crear Torneo'}
           </button>

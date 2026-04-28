@@ -28,6 +28,7 @@ function formatEstadoTorneo(estado: string): string {
 
 function esTorneoVigente(estado: EstadoTorneo): boolean {
   return (
+    estado === 'CREADO' ||
     estado === 'INSCRIPCION_ABIERTA' ||
     estado === 'PREPARACION' ||
     estado === 'EJECUCION' ||
@@ -37,10 +38,6 @@ function esTorneoVigente(estado: EstadoTorneo): boolean {
 
 function esTorneoHistorico(estado: EstadoTorneo): boolean {
   return estado === 'CERRADO' || estado === 'CANCELADO'
-}
-
-function esTorneoPendienteActivacion(estado: EstadoTorneo): boolean {
-  return estado === 'CREADO'
 }
 
 function filtrarTorneos(torneos: TorneoDto[], filtro: FiltroTorneos): TorneoDto[] {
@@ -53,10 +50,61 @@ function emptyMessage(filtro: FiltroTorneos): string {
   return 'No hay torneos en el histórico.'
 }
 
+function historicalCardClass(estado: EstadoTorneo): string {
+  if (estado === 'EJECUCION') {
+    return 'border-emerald-500/40 bg-emerald-950/25 shadow-[0_20px_60px_rgba(6,78,59,0.22)]'
+  }
+
+  if (estado === 'INSCRIPCION_ABIERTA') {
+    return 'border-amber-500/40 bg-amber-950/25 shadow-[0_20px_60px_rgba(120,53,15,0.22)]'
+  }
+
+  if (estado === 'CANCELADO') {
+    return 'border-red-500/40 bg-red-950/30 shadow-[0_20px_60px_rgba(127,29,29,0.22)]'
+  }
+
+  if (estado === 'CERRADO') {
+    return 'border-sky-500/40 bg-sky-950/25 shadow-[0_20px_60px_rgba(12,74,110,0.22)]'
+  }
+
+  return 'border-slate-700 bg-slate-900/80 shadow-[0_20px_60px_rgba(2,6,23,0.32)]'
+}
+
+function historicalTextClass(estado: EstadoTorneo): string {
+  if (estado === 'EJECUCION') return 'text-emerald-100'
+  if (estado === 'INSCRIPCION_ABIERTA') return 'text-amber-100'
+  if (estado === 'CANCELADO') return 'text-red-100'
+  if (estado === 'CERRADO') return 'text-sky-100'
+  return 'text-slate-300'
+}
+
+function stateAccentClass(estado: EstadoTorneo): string {
+  if (estado === 'EJECUCION') return 'text-emerald-300'
+  if (estado === 'INSCRIPCION_ABIERTA') return 'text-amber-300'
+  if (estado === 'CANCELADO') return 'text-red-300'
+  if (estado === 'CERRADO') return 'text-sky-300'
+  return 'text-slate-400'
+}
+
+function actionClass(estado: EstadoTorneo): string {
+  if (estado === 'EJECUCION') {
+    return 'border-emerald-400/40 bg-emerald-950/40 text-emerald-100'
+  }
+  if (estado === 'INSCRIPCION_ABIERTA') {
+    return 'border-amber-400/40 bg-amber-950/40 text-amber-100'
+  }
+  if (estado === 'CANCELADO') {
+    return 'border-red-400/40 bg-red-950/40 text-red-100'
+  }
+  if (estado === 'CERRADO') {
+    return 'border-sky-400/40 bg-sky-950/40 text-sky-100'
+  }
+  return 'border-slate-600 bg-slate-800 text-slate-100'
+}
+
 export function DashboardPage() {
   const location = useLocation()
   const logout = useAuthStore((s) => s.logout)
-  const email = useAuthStore((s) => s.email)
   const [filtro, setFiltro] = useState<FiltroTorneos>('vigentes')
   const torneosQuery = useQuery({
     queryKey: ['torneos-organizador'],
@@ -66,19 +114,13 @@ export function DashboardPage() {
     () => filtrarTorneos(torneosQuery.data ?? [], filtro),
     [filtro, torneosQuery.data],
   )
-  const torneosPendientesActivacion = useMemo(
-    () => (torneosQuery.data ?? []).filter((torneo) => esTorneoPendienteActivacion(torneo.estado)),
-    [torneosQuery.data],
-  )
 
   return (
     <OrganizadorLayout
-      title="Home de torneos"
-      subtitle={
-        email
-          ? `Torneos bajo tu responsabilidad · Sesion activa: ${email}`
-          : 'Acceso a torneos vigentes e histórico'
-      }
+      title="Home del Organizador"
+      subtitle=""
+      showTournamentNavigation={false}
+      simpleHeader
       actions={
         <>
           <Link
@@ -118,7 +160,7 @@ export function DashboardPage() {
       {!torneosQuery.isLoading && !torneosQuery.isError ? (
         <>
           <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
-            Esta pantalla es la home del organizador. Prioriza torneos vigentes y permite consultar el histórico sin reemplazar el dashboard operativo del torneo.
+            Esta pantalla muestra los torneos que organizas. La navegación del torneo aparece cuando seleccionas uno para gestionarlo.
           </section>
 
           <section className="flex flex-wrap items-center gap-2">
@@ -143,18 +185,6 @@ export function DashboardPage() {
         </>
       ) : null}
 
-      {!torneosQuery.isLoading &&
-      !torneosQuery.isError &&
-      filtro === 'vigentes' &&
-      torneosPendientesActivacion.length > 0 ? (
-        <section className="rounded-[2rem] border border-amber-500/40 bg-amber-950/30 p-5 text-sm text-amber-100">
-          {torneosPendientesActivacion.length}{' '}
-          {torneosPendientesActivacion.length === 1
-            ? 'torneo permanece en estado Creado y no aparece como vigente hasta abrir inscripción.'
-            : 'torneos permanecen en estado Creado y no aparecen como vigentes hasta abrir inscripción.'}
-        </section>
-      ) : null}
-
       {!torneosQuery.isLoading && !torneosQuery.isError && torneosFiltrados.length === 0 ? (
         <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           {emptyMessage(filtro)}
@@ -165,21 +195,35 @@ export function DashboardPage() {
         ? torneosFiltrados.map((torneo) => (
             <article
               key={torneo.torneo_id}
-              className="rounded-[2rem] border border-slate-700 bg-slate-900/80 p-5 shadow-[0_20px_60px_rgba(2,6,23,0.32)]"
+              className={`rounded-[2rem] border p-5 ${
+                filtro === 'historico' ||
+                torneo.estado === 'EJECUCION' ||
+                torneo.estado === 'INSCRIPCION_ABIERTA'
+                  ? historicalCardClass(torneo.estado)
+                  : 'border-slate-700 bg-slate-900/80 shadow-[0_20px_60px_rgba(2,6,23,0.32)]'
+              }`}
             >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  <p
+                    className={`text-xs font-semibold uppercase tracking-[0.18em] ${stateAccentClass(
+                      torneo.estado,
+                    )}`}
+                  >
                     {filtro === 'vigentes' ? 'Torneo vigente' : 'Torneo histórico'}
                   </p>
                   <h2 className="mt-2 text-xl font-semibold text-white">{torneo.nombre}</h2>
-                  <p className="mt-2 text-sm text-slate-300">
+                  <p
+                    className={`mt-2 text-sm ${historicalTextClass(torneo.estado)}`}
+                  >
                     {torneo.sede.nombre}, {torneo.sede.ciudad} · {formatEstadoTorneo(torneo.estado)}
                   </p>
                 </div>
                 <Link
                   to={`/organizador/panel?torneo_id=${torneo.torneo_id}`}
-                  className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
+                  className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] ${actionClass(
+                    torneo.estado,
+                  )}`}
                 >
                   Gestionar
                 </Link>

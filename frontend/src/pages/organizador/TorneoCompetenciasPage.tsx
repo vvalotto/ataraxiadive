@@ -28,6 +28,8 @@ export function TorneoCompetenciasPage() {
       <OrganizadorLayout
         title="Audit Log"
         subtitle="Seleccionar torneo para inspeccionar competencias y trazas"
+        showTournamentNavigation={false}
+        simpleHeader
       >
         <TorneoRouteSelector
           description="El audit log ahora es una sección primaria. Seleccioná un torneo para revisar las competencias y abrir la trazabilidad por atleta."
