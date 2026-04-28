@@ -5,7 +5,7 @@ import { fetchTorneos, type EstadoTorneo, type TorneoDto } from '../../api/torne
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
 import useAuthStore from '../../stores/useAuthStore'
 
-const ESTADO_TORNEO_LABELS: Record<string, string> = {
+const ESTADO_TORNEO_LABELS: Record<EstadoTorneo, string> = {
   CREADO: 'Creado',
   INSCRIPCION_ABIERTA: 'Inscripción abierta',
   PREPARACION: 'Preparación',
@@ -15,42 +15,49 @@ const ESTADO_TORNEO_LABELS: Record<string, string> = {
   CANCELADO: 'Cancelado',
 }
 
-type FiltroTorneos = 'abiertos' | 'todos' | 'cerrados' | 'cancelados'
+type FiltroTorneos = 'vigentes' | 'historico'
 
 const FILTROS_TORNEOS: Array<{ value: FiltroTorneos; label: string }> = [
-  { value: 'todos', label: 'Todos' },
-  { value: 'abiertos', label: 'Abiertos' },
-  { value: 'cerrados', label: 'Cerrados' },
-  { value: 'cancelados', label: 'Cancelados' },
+  { value: 'vigentes', label: 'Vigentes' },
+  { value: 'historico', label: 'Histórico' },
 ]
 
 function formatEstadoTorneo(estado: string): string {
-  return ESTADO_TORNEO_LABELS[estado] ?? estado
+  return ESTADO_TORNEO_LABELS[estado as EstadoTorneo] ?? estado
 }
 
-function esTorneoAbierto(estado: EstadoTorneo): boolean {
-  return estado !== 'CERRADO' && estado !== 'CANCELADO'
+function esTorneoVigente(estado: EstadoTorneo): boolean {
+  return (
+    estado === 'INSCRIPCION_ABIERTA' ||
+    estado === 'PREPARACION' ||
+    estado === 'EJECUCION' ||
+    estado === 'PREMIACION'
+  )
+}
+
+function esTorneoHistorico(estado: EstadoTorneo): boolean {
+  return estado === 'CERRADO' || estado === 'CANCELADO'
+}
+
+function esTorneoPendienteActivacion(estado: EstadoTorneo): boolean {
+  return estado === 'CREADO'
 }
 
 function filtrarTorneos(torneos: TorneoDto[], filtro: FiltroTorneos): TorneoDto[] {
-  if (filtro === 'todos') return torneos
-  if (filtro === 'abiertos') return torneos.filter((torneo) => esTorneoAbierto(torneo.estado))
-  if (filtro === 'cerrados') return torneos.filter((torneo) => torneo.estado === 'CERRADO')
-  return torneos.filter((torneo) => torneo.estado === 'CANCELADO')
+  if (filtro === 'vigentes') return torneos.filter((torneo) => esTorneoVigente(torneo.estado))
+  return torneos.filter((torneo) => esTorneoHistorico(torneo.estado))
 }
 
 function emptyMessage(filtro: FiltroTorneos): string {
-  if (filtro === 'abiertos') return 'No hay torneos abiertos.'
-  if (filtro === 'cerrados') return 'No hay torneos cerrados.'
-  if (filtro === 'cancelados') return 'No hay torneos cancelados.'
-  return 'No hay torneos disponibles.'
+  if (filtro === 'vigentes') return 'No hay torneos vigentes.'
+  return 'No hay torneos en el histórico.'
 }
 
 export function DashboardPage() {
   const location = useLocation()
   const logout = useAuthStore((s) => s.logout)
   const email = useAuthStore((s) => s.email)
-  const [filtro, setFiltro] = useState<FiltroTorneos>('abiertos')
+  const [filtro, setFiltro] = useState<FiltroTorneos>('vigentes')
   const torneosQuery = useQuery({
     queryKey: ['torneos-organizador'],
     queryFn: fetchTorneos,
@@ -59,12 +66,18 @@ export function DashboardPage() {
     () => filtrarTorneos(torneosQuery.data ?? [], filtro),
     [filtro, torneosQuery.data],
   )
+  const torneosPendientesActivacion = useMemo(
+    () => (torneosQuery.data ?? []).filter((torneo) => esTorneoPendienteActivacion(torneo.estado)),
+    [torneosQuery.data],
+  )
 
   return (
     <OrganizadorLayout
-      title="Torneos"
+      title="Home de torneos"
       subtitle={
-        email ? `Torneos bajo tu responsabilidad · Sesion activa: ${email}` : 'Gestion de torneos'
+        email
+          ? `Torneos bajo tu responsabilidad · Sesion activa: ${email}`
+          : 'Acceso a torneos vigentes e histórico'
       }
       actions={
         <>
@@ -103,24 +116,42 @@ export function DashboardPage() {
       ) : null}
 
       {!torneosQuery.isLoading && !torneosQuery.isError ? (
-        <section className="flex flex-wrap items-center gap-2">
-          {FILTROS_TORNEOS.map((item) => {
-            const isActive = filtro === item.value
-            return (
-              <button
-                key={item.value}
-                type="button"
-                onClick={() => setFiltro(item.value)}
-                className={
-                  isActive
-                    ? 'rounded-full border border-sky-400 bg-sky-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-sky-300'
-                    : 'rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-300'
-                }
-              >
-                {item.label}
-              </button>
-            )
-          })}
+        <>
+          <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
+            Esta pantalla es la home del organizador. Prioriza torneos vigentes y permite consultar el histórico sin reemplazar el dashboard operativo del torneo.
+          </section>
+
+          <section className="flex flex-wrap items-center gap-2">
+            {FILTROS_TORNEOS.map((item) => {
+              const isActive = filtro === item.value
+              return (
+                <button
+                  key={item.value}
+                  type="button"
+                  onClick={() => setFiltro(item.value)}
+                  className={
+                    isActive
+                      ? 'rounded-full border border-sky-400 bg-sky-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-sky-300'
+                      : 'rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-300'
+                  }
+                >
+                  {item.label}
+                </button>
+              )
+            })}
+          </section>
+        </>
+      ) : null}
+
+      {!torneosQuery.isLoading &&
+      !torneosQuery.isError &&
+      filtro === 'vigentes' &&
+      torneosPendientesActivacion.length > 0 ? (
+        <section className="rounded-[2rem] border border-amber-500/40 bg-amber-950/30 p-5 text-sm text-amber-100">
+          {torneosPendientesActivacion.length}{' '}
+          {torneosPendientesActivacion.length === 1
+            ? 'torneo permanece en estado Creado y no aparece como vigente hasta abrir inscripción.'
+            : 'torneos permanecen en estado Creado y no aparecen como vigentes hasta abrir inscripción.'}
         </section>
       ) : null}
 
@@ -139,7 +170,7 @@ export function DashboardPage() {
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                    Torneo
+                    {filtro === 'vigentes' ? 'Torneo vigente' : 'Torneo histórico'}
                   </p>
                   <h2 className="mt-2 text-xl font-semibold text-white">{torneo.nombre}</h2>
                   <p className="mt-2 text-sm text-slate-300">
