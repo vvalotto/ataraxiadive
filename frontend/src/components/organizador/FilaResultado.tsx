@@ -21,7 +21,7 @@ interface FilaResultadoProps {
 function ChipTarjeta({ tarjeta }: { tarjeta: string | null }) {
   if (!tarjeta) {
     return (
-      <span className="rounded-full bg-stone-200 px-2 py-0.5 text-xs font-semibold text-stone-500">
+      <span className="rounded-full border border-slate-700 bg-slate-800 px-2 py-0.5 text-xs font-semibold text-slate-300">
         PENDIENTE
       </span>
     )
@@ -29,7 +29,7 @@ function ChipTarjeta({ tarjeta }: { tarjeta: string | null }) {
 
   if (tarjeta === 'DNS' || tarjeta === 'Dns') {
     return (
-      <span className="rounded-full bg-slate-500 px-2 py-0.5 text-xs font-semibold text-white">
+      <span className="rounded-full border border-slate-500/40 bg-slate-500/20 px-2 py-0.5 text-xs font-semibold text-slate-100">
         DNS
       </span>
     )
@@ -37,7 +37,7 @@ function ChipTarjeta({ tarjeta }: { tarjeta: string | null }) {
 
   if (tarjeta === 'Roja' || tarjeta === 'ROJA') {
     return (
-      <span className="rounded-full bg-red-500 px-2 py-0.5 text-xs font-semibold text-white">
+      <span className="rounded-full border border-red-500/40 bg-red-500/20 px-2 py-0.5 text-xs font-semibold text-red-100">
         ROJA
       </span>
     )
@@ -45,7 +45,7 @@ function ChipTarjeta({ tarjeta }: { tarjeta: string | null }) {
 
   if (tarjeta === 'Blanca' || tarjeta === 'BlancaConPenalizaciones') {
     return (
-      <span className="rounded-full bg-emerald-500 px-2 py-0.5 text-xs font-semibold text-white">
+      <span className="rounded-full border border-emerald-500/40 bg-emerald-500/20 px-2 py-0.5 text-xs font-semibold text-emerald-100">
         BLANCA
       </span>
     )
@@ -53,14 +53,14 @@ function ChipTarjeta({ tarjeta }: { tarjeta: string | null }) {
 
   if (tarjeta === 'Amarilla') {
     return (
-      <span className="rounded-full bg-amber-400 px-2 py-0.5 text-xs font-semibold text-stone-900">
-        REVISIÓN
+      <span className="rounded-full border border-amber-500/40 bg-amber-500/20 px-2 py-0.5 text-xs font-semibold text-amber-100">
+        EN REVISION
       </span>
     )
   }
 
   return (
-    <span className="rounded-full bg-stone-200 px-2 py-0.5 text-xs font-semibold text-stone-500">
+    <span className="rounded-full border border-slate-700 bg-slate-800 px-2 py-0.5 text-xs font-semibold text-slate-300">
       {tarjeta}
     </span>
   )
@@ -71,22 +71,22 @@ export function FilaResultado({ fila }: FilaResultadoProps) {
   const puntosDisplay = fila.puntos ?? '—'
 
   return (
-    <tr className="border-b border-stone-200 text-sm hover:bg-stone-50">
-      <td className="px-3 py-2 text-center font-mono text-xs text-stone-500">
+    <tr className="border-b border-slate-800 text-sm transition hover:bg-slate-800/60">
+      <td className="px-3 py-3 text-center font-mono text-xs text-slate-400">
         {fila.posicion_ot}
       </td>
-      <td className="px-3 py-2 font-medium text-stone-900">{fila.nombre}</td>
-      <td className="px-3 py-2 text-center text-stone-700">{fila.genero}</td>
-      <td className="px-3 py-2 text-stone-700">{fila.categoria_corta}</td>
-      <td className="px-3 py-2 text-stone-600">{fila.club || '—'}</td>
-      <td className="px-3 py-2 font-mono text-stone-700">{fila.ap}</td>
-      <td className="px-3 py-2 font-mono text-xs text-stone-500">{fila.ot}</td>
-      <td className="px-3 py-2 text-center text-stone-500">{fila.linea}</td>
-      <td className="px-3 py-2 font-mono font-semibold text-stone-900">{rpDisplay}</td>
-      <td className="px-3 py-2">
+      <td className="px-3 py-3 font-medium text-slate-100">{fila.nombre}</td>
+      <td className="px-3 py-3 text-center text-slate-300">{fila.genero}</td>
+      <td className="px-3 py-3 text-slate-300">{fila.categoria_corta}</td>
+      <td className="px-3 py-3 text-slate-400">{fila.club || '—'}</td>
+      <td className="px-3 py-3 font-mono text-slate-300">{fila.ap}</td>
+      <td className="px-3 py-3 font-mono text-xs text-slate-400">{fila.ot}</td>
+      <td className="px-3 py-3 text-center text-slate-400">{fila.linea}</td>
+      <td className="px-3 py-3 font-mono font-semibold text-white">{rpDisplay}</td>
+      <td className="px-3 py-3">
         <ChipTarjeta tarjeta={fila.tarjeta} />
       </td>
-      <td className="px-3 py-2 text-right font-mono font-bold text-emerald-800">
+      <td className="px-3 py-3 text-right font-mono font-bold text-sky-300">
         {puntosDisplay}
       </td>
     </tr>

@@ -45,10 +45,12 @@ function SelectorTorneo() {
     queryFn: fetchTorneos,
   })
 
-  return (
-    <OrganizadorLayout
+    return (
+      <OrganizadorLayout
       title="Resultados"
       subtitle="Seleccionar torneo para ver los resultados"
+      showTournamentNavigation={false}
+      simpleHeader
       actions={
         <Link
           to="/organizador/torneo"
@@ -290,70 +292,109 @@ function ResultadosTorneo({ torneoId }: ResultadosTorneoProps) {
   const subtitulo = torneo
     ? `${torneo.nombre} · ${torneo.sede.ciudad}`
     : 'Resultados por disciplina'
+  const estadoRankingLabel = overallDisponible ? 'Ranking final' : 'Ranking parcial'
+  const progresoLabel =
+    totalDisciplinas > 0 ? `${disciplinasCerradas} de ${totalDisciplinas} disciplinas cerradas` : null
 
   return (
     <OrganizadorLayout
       title="Resultados"
-      subtitle={subtitulo}
+      subtitle={
+        disciplinaActiva
+          ? `${subtitulo} · ${disciplinaActiva} · ${estadoRankingLabel}${progresoLabel ? ` · ${progresoLabel}` : ''}`
+          : `${subtitulo} · ${estadoRankingLabel}${progresoLabel ? ` · ${progresoLabel}` : ''}`
+      }
       actions={
-        <Link
-          to="/organizador/torneo"
-          className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
-        >
-          Volver
-        </Link>
+        <>
+          <button
+            type="button"
+            disabled={!overallDisponible}
+            className={
+              overallDisponible
+                ? 'rounded-full border border-sky-400 bg-sky-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-sky-300'
+                : 'cursor-not-allowed rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500'
+            }
+          >
+            Publicar resultados
+          </button>
+          <Link
+            to="/organizador/resultados"
+            className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
+          >
+            Cambiar torneo
+          </Link>
+        </>
       }
     >
       {competenciasQuery.isLoading ? (
-        <section className="rounded-[2rem] border border-stone-300/80 bg-white/80 p-5 text-sm text-stone-600">
+        <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">
           Cargando disciplinas...
         </section>
       ) : null}
 
       {competenciasQuery.isError ? (
-        <section className="rounded-[2rem] border border-red-300/60 bg-red-50 p-5 text-sm text-red-900">
+        <section className="rounded-[2rem] border border-red-500/40 bg-red-950/40 p-5 text-sm text-red-100">
           No se pudieron cargar las disciplinas del torneo.
         </section>
       ) : null}
 
       {!competenciasQuery.isLoading && !competenciasQuery.isError && disciplinas.length === 0 ? (
-        <section className="rounded-[2rem] border border-stone-300/80 bg-white/80 p-5 text-sm text-stone-600">
+        <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">
           Este torneo aún no tiene competencias generadas.
         </section>
       ) : null}
 
       {disciplinas.length > 0 ? (
-        <section className="rounded-[2rem] border border-stone-300/80 bg-white/85 p-5 shadow-[0_20px_60px_rgba(120,93,54,0.08)]">
-          <div className="flex flex-wrap gap-2 border-b border-stone-200 pb-4">
-            {disciplinas.map((comp) => (
-              <button
-                key={comp.disciplina}
-                type="button"
-                onClick={() => setDisciplinaSeleccionada(comp.disciplina)}
-                className={
-                  disciplinaActiva === comp.disciplina
-                    ? 'rounded-full bg-stone-900 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-white'
-                    : 'rounded-full border border-stone-300 bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-stone-700 hover:bg-stone-50'
-                }
-              >
-                {comp.disciplina}
-              </button>
-            ))}
+        <section className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-5 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
+          <div className="flex flex-col gap-4 border-b border-slate-800 pb-4">
+            <div className="flex flex-wrap items-center gap-2">
+              {disciplinas.map((comp) => (
+                <button
+                  key={comp.disciplina}
+                  type="button"
+                  onClick={() => setDisciplinaSeleccionada(comp.disciplina)}
+                  className={
+                    disciplinaActiva === comp.disciplina
+                      ? 'rounded-full border border-sky-400 bg-sky-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-sky-300'
+                      : 'rounded-full border border-slate-700 bg-slate-950 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-slate-300 hover:border-slate-500 hover:text-white'
+                  }
+                >
+                  {comp.disciplina}
+                </button>
+              ))}
+            </div>
+
+            {disciplinaActiva ? (
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                    Ranking por disciplina
+                  </p>
+                  <h2 className="mt-2 text-2xl font-semibold text-white">{disciplinaActiva}</h2>
+                  <p className="mt-2 text-sm text-slate-300">
+                    Tabla de ejecucion ordenada por OT con AP, RP, tarjeta y puntos FAAS.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.16em] text-slate-400">
+                  <span className="rounded-full border border-slate-700 bg-slate-950 px-3 py-1.5">
+                    {disciplinaActivaFinalizada ? 'Disciplina finalizada' : 'Disciplina en seguimiento'}
+                  </span>
+                  {isLoading ? (
+                    <span className="rounded-full border border-slate-700 bg-slate-950 px-3 py-1.5">
+                      Actualizando
+                    </span>
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
           </div>
 
           {disciplinaActiva ? (
             <div className="mt-4">
-              <div className="mb-3 flex items-center justify-between">
-                <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-stone-500">
-                  Tabla de ejecución — {disciplinaActiva}
-                </h2>
-                {isLoading ? (
-                  <span className="text-xs text-stone-400">Actualizando...</span>
-                ) : null}
-              </div>
-
               {grillaQuery.isError ? (
-                <p className="text-sm text-red-700">Error al cargar la grilla.</p>
+                <p className="rounded-[1.5rem] border border-red-500/40 bg-red-950/30 p-4 text-sm text-red-100">
+                  Error al cargar la grilla.
+                </p>
               ) : null}
 
               {!grillaQuery.isLoading && !grillaQuery.isError ? (
@@ -365,68 +406,74 @@ function ResultadosTorneo({ torneoId }: ResultadosTorneoProps) {
               ) : null}
 
               {grillaQuery.isLoading ? (
-                <p className="py-6 text-center text-sm text-stone-400">Cargando tabla...</p>
+                <p className="py-6 text-center text-sm text-slate-400">Cargando tabla...</p>
               ) : null}
             </div>
           ) : null}
         </section>
       ) : null}
 
-      {disciplinas.length > 0 && disciplinaActiva ? (
-        <PodiosSection
-          title={`Podios — ${disciplinaActiva}`}
-          subtitle="Resultados agrupados por categoria y genero con puntaje FAAS."
-          groups={podioDisciplina}
-          emptyState={
-            !disciplinaActivaFinalizada
-              ? {
-                  title: 'Podios disponibles al cerrar la disciplina',
-                  detail: 'La disciplina seleccionada todavia no esta finalizada.',
-                }
-              : rankingQuery.isError
-                ? {
-                    title: 'No se pudo cargar el ranking de la disciplina',
-                    detail: 'Volve a intentar cuando el calculo de resultados este disponible.',
-                  }
-                : rankingQuery.data && !rankingQuery.data.calculado
-                  ? {
-                      title: 'Ranking aun no calculado',
-                      detail: 'Los podios se publican cuando la disciplina finaliza con ranking calculado.',
-                    }
-                  : null
-          }
-        />
-      ) : null}
-
       {disciplinas.length > 0 ? (
-        <PodiosSection
-          title="Overall"
-          subtitle="Acumulado del torneo por categoria y genero."
-          groups={podioOverall}
-          emptyState={
-            estadosLoading
-              ? {
-                  title: 'Verificando cierre de disciplinas',
-                  detail: 'Estamos comprobando el estado operativo del torneo.',
-                }
-              : !overallDisponible
-                ? {
-                    title: 'Disponible al cerrar todas las disciplinas',
-                    detail: `(${disciplinasCerradas} de ${totalDisciplinas} disciplinas cerradas)`,
-                  }
-                : overallQuery.isError
-                  ? {
-                      title: 'No se pudo cargar el overall del torneo',
-                      detail: 'El calculo acumulado todavia no esta disponible.',
-                    }
-                  : overallQuery.data && !overallQuery.data.calculado
+        <section className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+          <div className="flex flex-col gap-4">
+            {disciplinaActiva ? (
+              <PodiosSection
+                title={`Podios — ${disciplinaActiva}`}
+                subtitle="Resultados agrupados por categoria y genero con puntaje FAAS."
+                groups={podioDisciplina}
+                emptyState={
+                  !disciplinaActivaFinalizada
                     ? {
-                        title: 'Overall aun no calculado',
-                        detail: 'El acumulado se habilita cuando el backend publica el ranking overall.',
+                        title: 'Podios disponibles al cerrar la disciplina',
+                        detail: 'La disciplina seleccionada todavia no esta finalizada.',
                       }
-                    : null
-          }
-        />
+                    : rankingQuery.isError
+                      ? {
+                          title: 'No se pudo cargar el ranking de la disciplina',
+                          detail: 'Volve a intentar cuando el calculo de resultados este disponible.',
+                        }
+                      : rankingQuery.data && !rankingQuery.data.calculado
+                        ? {
+                            title: 'Ranking aun no calculado',
+                            detail: 'Los podios se publican cuando la disciplina finaliza con ranking calculado.',
+                          }
+                        : null
+                }
+              />
+            ) : null}
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <PodiosSection
+              title="Overall"
+              subtitle="Acumulado del torneo por categoria y genero."
+              groups={podioOverall}
+              emptyState={
+                estadosLoading
+                  ? {
+                      title: 'Verificando cierre de disciplinas',
+                      detail: 'Estamos comprobando el estado operativo del torneo.',
+                    }
+                  : !overallDisponible
+                    ? {
+                        title: 'Disponible al cerrar todas las disciplinas',
+                        detail: `(${disciplinasCerradas} de ${totalDisciplinas} disciplinas cerradas)`,
+                      }
+                    : overallQuery.isError
+                      ? {
+                          title: 'No se pudo cargar el overall del torneo',
+                          detail: 'El calculo acumulado todavia no esta disponible.',
+                        }
+                      : overallQuery.data && !overallQuery.data.calculado
+                        ? {
+                            title: 'Overall aun no calculado',
+                            detail: 'El acumulado se habilita cuando el backend publica el ranking overall.',
+                          }
+                        : null
+              }
+            />
+          </div>
+        </section>
       ) : null}
     </OrganizadorLayout>
   )

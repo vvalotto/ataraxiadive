@@ -14,6 +14,8 @@ export function OrganizadorJuecesPage() {
       <OrganizadorLayout
         title="Jueces"
         subtitle="Seleccionar torneo para asignar jueces por disciplina"
+        showTournamentNavigation={false}
+        simpleHeader
       >
         <TorneoRouteSelector
           description="La asignación de jueces ya cuelga de una ruta primaria propia. Seleccioná un torneo para operar esta sección sin pasar por tabs internas."

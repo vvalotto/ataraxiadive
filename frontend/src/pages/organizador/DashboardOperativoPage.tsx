@@ -268,6 +268,8 @@ export function DashboardOperativoPage() {
       <OrganizadorLayout
         title="Panel"
         subtitle="Seleccionar torneo para abrir el dashboard operativo del torneo activo"
+        showTournamentNavigation={false}
+        simpleHeader
       >
         <TorneoRouteSelector
           description="El Panel es la vista ejecutiva del torneo operativo. Selecciona un torneo para cargar KPIs, disciplina activa, alertas y proximos atletas."
