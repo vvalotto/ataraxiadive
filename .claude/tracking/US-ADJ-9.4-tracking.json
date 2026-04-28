@@ -1,0 +1,152 @@
+{
+  "metadata": {
+    "us_id": "US-ADJ-9.4",
+    "us_title": "Dashboard operativo del organizador alineado a S-01",
+    "us_points": 3,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-28T17:34:19.414074+00:00",
+    "completed_at": "2026-04-28T17:50:29.553910+00:00",
+    "total_elapsed_seconds": 970,
+    "effective_seconds": 970,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validacion de Contexto",
+      "started_at": "2026-04-28T17:34:22.637497+00:00",
+      "completed_at": "2026-04-28T17:35:52.056015+00:00",
+      "elapsed_seconds": 89,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generacion de Escenarios BDD",
+      "started_at": "2026-04-28T17:36:05.117940+00:00",
+      "completed_at": "2026-04-28T17:36:39.328511+00:00",
+      "elapsed_seconds": 34,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de Implementacion",
+      "started_at": "2026-04-28T17:36:42.842040+00:00",
+      "completed_at": "2026-04-28T17:37:36.549557+00:00",
+      "elapsed_seconds": 53,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementacion",
+      "started_at": "2026-04-28T17:37:40.266518+00:00",
+      "completed_at": "2026-04-28T17:42:30.738858+00:00",
+      "elapsed_seconds": 290,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Crear dashboard operativo",
+          "task_type": "frontend",
+          "estimated_minutes": 90.0,
+          "started_at": "2026-04-28T17:37:55.368403+00:00",
+          "completed_at": "2026-04-28T17:42:17.439904+00:00",
+          "elapsed_seconds": 262,
+          "actual_minutes": 4.37,
+          "variance_minutes": -85.63,
+          "file_created": "frontend/src/pages/organizador/DashboardOperativoPage.tsx",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-28T17:42:34.027945+00:00",
+      "completed_at": "2026-04-28T17:42:37.406839+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integracion",
+      "started_at": "2026-04-28T17:42:41.282670+00:00",
+      "completed_at": "2026-04-28T17:42:45.954419+00:00",
+      "elapsed_seconds": 4,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validacion BDD",
+      "started_at": "2026-04-28T17:42:49.460838+00:00",
+      "completed_at": "2026-04-28T17:42:53.183511+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-28T17:42:57.609303+00:00",
+      "completed_at": "2026-04-28T17:43:01.858813+00:00",
+      "elapsed_seconds": 4,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentacion",
+      "started_at": "2026-04-28T17:43:11.520900+00:00",
+      "completed_at": "2026-04-28T17:49:43.774642+00:00",
+      "elapsed_seconds": 392,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-04-28T17:49:48.451552+00:00",
+      "completed_at": "2026-04-28T17:50:26.261580+00:00",
+      "elapsed_seconds": 37,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 1,
+    "completed_tasks": 1,
+    "total_phases": 10,
+    "estimated_total_minutes": 90.0,
+    "actual_total_minutes": 4.37,
+    "variance_minutes": -85.63,
+    "variance_percent": -95.15
+  }
+}
