@@ -115,7 +115,7 @@ export function CrearTorneoPage() {
         setErrors({ general: `Torneo creado sin disciplinas: ${getErrorMessage(error)}` })
         return
       }
-      navigate(`/organizador/torneo/${response.torneo_id}`)
+      navigate(`/organizador/panel?torneo_id=${response.torneo_id}`)
     } catch (error) {
       setErrors({ general: getErrorMessage(error) })
     } finally {
@@ -129,7 +129,7 @@ export function CrearTorneoPage() {
       subtitle="Alta del torneo y configuracion inicial de disciplinas"
       actions={
         <Link
-          to="/organizador/dashboard"
+          to="/organizador/torneo"
           className="rounded-lg border border-stone-900 px-4 py-2 text-sm font-semibold text-stone-900"
         >
           Volver
@@ -273,7 +273,7 @@ export function CrearTorneoPage() {
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
           <Link
-            to="/organizador/dashboard"
+            to="/organizador/torneo"
             className="rounded-lg border border-stone-300 px-4 py-2 text-center text-sm font-semibold text-stone-800"
           >
             Cancelar

@@ -22,6 +22,8 @@ import { AtletaResultadosPage } from './pages/atleta/AtletaResultadosPage'
 import { DashboardPage } from './pages/organizador/DashboardPage'
 import { CrearTorneoPage } from './pages/organizador/CrearTorneoPage'
 import { DetalleTorneoPage } from './pages/organizador/DetalleTorneoPage'
+import { OrganizadorGrillaPage } from './pages/organizador/OrganizadorGrillaPage'
+import { OrganizadorJuecesPage } from './pages/organizador/OrganizadorJuecesPage'
 import { TorneoCompetenciasPage } from './pages/organizador/TorneoCompetenciasPage'
 import { UsuariosPage } from './pages/organizador/UsuariosPage'
 import { AuditoriaCompetenciaPage } from './pages/organizador/AuditoriaCompetenciaPage'
@@ -32,7 +34,7 @@ import { HealthCheck } from './components/HealthCheck'
 function RootRedirect() {
   const rol = useAuthStore((s) => s.rol)
   if (rol === 'juez') return <Navigate to="/juez/disciplinas" replace />
-  if (rol === 'organizador') return <Navigate to="/organizador/dashboard" replace />
+  if (rol === 'organizador') return <Navigate to="/organizador/torneo" replace />
   if (rol === 'atleta') return <Navigate to="/atleta" replace />
   return <Navigate to="/login" replace />
 }
@@ -157,10 +159,42 @@ function App() {
           }
         />
         <Route
+          path="/organizador"
+          element={<Navigate to="/organizador/torneo" replace />}
+        />
+        <Route
           path="/organizador/dashboard"
+          element={<Navigate to="/organizador/torneo" replace />}
+        />
+        <Route
+          path="/organizador/torneo"
           element={
             <RequireRole role="organizador">
               <DashboardPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/organizador/panel"
+          element={
+            <RequireRole role="organizador">
+              <DetalleTorneoPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/organizador/grilla"
+          element={
+            <RequireRole role="organizador">
+              <OrganizadorGrillaPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/organizador/jueces"
+          element={
+            <RequireRole role="organizador">
+              <OrganizadorJuecesPage />
             </RequireRole>
           }
         />
@@ -190,6 +224,14 @@ function App() {
         />
         <Route
           path="/organizador/torneos/:torneoId/competencias"
+          element={
+            <RequireRole role="organizador">
+              <TorneoCompetenciasPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/organizador/audit-log"
           element={
             <RequireRole role="organizador">
               <TorneoCompetenciasPage />

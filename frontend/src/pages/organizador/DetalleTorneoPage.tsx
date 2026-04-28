@@ -1,6 +1,6 @@
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import {
   fetchCompetenciasPorTorneo,
   fetchEstadoCompetencia,
@@ -14,26 +14,51 @@ import {
 import { AccionesPanel } from '../../components/organizador/AccionesPanel'
 import { EjecucionPanel } from '../../components/organizador/EjecucionPanel'
 import { FaseBadge } from '../../components/organizador/FaseBadge'
-import { GrillaPanel } from '../../components/organizador/GrillaPanel'
 import { InscriptosPanel } from '../../components/organizador/InscriptosPanel'
-import { JuecesPanel } from '../../components/organizador/JuecesPanel'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
+import { TorneoRouteSelector } from '../../components/organizador/TorneoRouteSelector'
 
-const TABS = ['Detalle', 'Inscriptos', 'Grilla', 'Jueces', 'Ejecucion'] as const
+const TABS = ['Detalle', 'Inscriptos', 'Ejecucion'] as const
 type TabTorneo = (typeof TABS)[number]
 
 const TABS_POR_ESTADO: Record<EstadoTorneo, readonly TabTorneo[]> = {
   CREADO: ['Detalle'],
   INSCRIPCION_ABIERTA: ['Detalle', 'Inscriptos'],
-  PREPARACION: ['Detalle', 'Inscriptos', 'Grilla', 'Jueces'],
-  EJECUCION: ['Detalle', 'Inscriptos', 'Grilla', 'Jueces', 'Ejecucion'],
-  PREMIACION: ['Detalle', 'Inscriptos', 'Grilla', 'Jueces', 'Ejecucion'],
-  CERRADO: ['Detalle', 'Inscriptos', 'Grilla', 'Jueces', 'Ejecucion'],
+  PREPARACION: ['Detalle', 'Inscriptos'],
+  EJECUCION: ['Detalle', 'Inscriptos', 'Ejecucion'],
+  PREMIACION: ['Detalle', 'Inscriptos', 'Ejecucion'],
+  CERRADO: ['Detalle', 'Inscriptos', 'Ejecucion'],
   CANCELADO: [],
 }
 
 export function DetalleTorneoPage() {
-  const { torneoId } = useParams<{ torneoId: string }>()
+  const { torneoId: torneoIdParam } = useParams<{ torneoId: string }>()
+  const [searchParams] = useSearchParams()
+  const torneoId = torneoIdParam ?? searchParams.get('torneo_id') ?? undefined
+
+  if (!torneoId) {
+    return (
+      <OrganizadorLayout
+        title="Panel"
+        subtitle="Seleccionar torneo para operar el panel principal"
+      >
+        <TorneoRouteSelector
+          description="El panel operativo ahora vive en una ruta primaria propia. Seleccioná un torneo para mantener la navegación del shell mientras revisás estado, inscriptos y ejecución."
+          ctaLabel="Abrir panel"
+          buildHref={(nextTorneoId) => `/organizador/panel?torneo_id=${nextTorneoId}`}
+        />
+      </OrganizadorLayout>
+    )
+  }
+
+  return <DetalleTorneoContent torneoId={torneoId} />
+}
+
+interface DetalleTorneoContentProps {
+  torneoId: string
+}
+
+function DetalleTorneoContent({ torneoId }: DetalleTorneoContentProps) {
   const [transitionError, setTransitionError] = useState('')
   const torneoQuery = useQuery({
     queryKey: ['torneo', torneoId],
@@ -102,10 +127,10 @@ export function DetalleTorneoPage() {
       subtitle="Detalle del torneo y punto de partida del panel organizador"
       actions={
         <Link
-          to="/organizador/dashboard"
-          className="rounded-lg border border-stone-900 px-4 py-2 text-sm font-semibold text-stone-900"
+          to="/organizador/torneo"
+          className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
         >
-          Volver
+          Torneos
         </Link>
       }
     >
@@ -221,10 +246,22 @@ function TorneoOperativoPanel({ torneo }: TorneoOperativoPanelProps) {
         </div>
         <div className="flex flex-wrap gap-2">
           <Link
-            to={`/organizador/torneos/${torneo.torneo_id}/competencias`}
-            className="rounded-lg bg-stone-900 px-4 py-2 text-center text-sm font-semibold text-white"
+            to={`/organizador/grilla?torneo_id=${torneo.torneo_id}`}
+            className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-center text-sm font-semibold text-slate-100"
           >
-            Ver competencias
+            Grilla
+          </Link>
+          <Link
+            to={`/organizador/jueces?torneo_id=${torneo.torneo_id}`}
+            className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-center text-sm font-semibold text-slate-100"
+          >
+            Jueces
+          </Link>
+          <Link
+            to={`/organizador/audit-log?torneo_id=${torneo.torneo_id}`}
+            className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-center text-sm font-semibold text-slate-100"
+          >
+            Audit Log
           </Link>
           <Link
             to={`/organizador/resultados?torneo_id=${torneo.torneo_id}`}
@@ -293,18 +330,6 @@ function TorneoOperativoPanel({ torneo }: TorneoOperativoPanelProps) {
             </div>
           ) : null}
           <InscriptosPanel torneoId={torneo.torneo_id} torneoEstado={torneo.estado} />
-        </div>
-      ) : null}
-
-      {activeTabActual === 'Grilla' && isTabHabilitada('Grilla') ? (
-        <div className="mt-6">
-          <GrillaPanel torneoId={torneo.torneo_id} />
-        </div>
-      ) : null}
-
-      {activeTabActual === 'Jueces' && isTabHabilitada('Jueces') ? (
-        <div className="mt-6">
-          <JuecesPanel torneoId={torneo.torneo_id} />
         </div>
       ) : null}
 

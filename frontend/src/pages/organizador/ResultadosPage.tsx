@@ -51,8 +51,8 @@ function SelectorTorneo() {
       subtitle="Seleccionar torneo para ver los resultados"
       actions={
         <Link
-          to="/organizador/dashboard"
-          className="rounded-full border border-stone-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-stone-700"
+          to="/organizador/torneo"
+          className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
         >
           Volver
         </Link>
@@ -297,8 +297,8 @@ function ResultadosTorneo({ torneoId }: ResultadosTorneoProps) {
       subtitle={subtitulo}
       actions={
         <Link
-          to="/organizador/dashboard"
-          className="rounded-full border border-stone-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-stone-700"
+          to="/organizador/torneo"
+          className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
         >
           Volver
         </Link>

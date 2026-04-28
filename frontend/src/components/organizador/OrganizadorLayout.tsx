@@ -18,21 +18,32 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { key: 'panel', label: '📊 Panel', to: '/organizador/dashboard' },
-  { key: 'grilla', label: '📋 Grilla', to: '/organizador/dashboard', disabled: true },
-  { key: 'resultados', label: '🏆 Resultados', to: '/organizador/resultados' },
-  { key: 'jueces', label: '👥 Jueces', to: '/organizador/dashboard', disabled: true },
-  { key: 'torneo', label: '📝 Torneo', to: '/organizador/dashboard' },
-  { key: 'audit', label: '🔍 Audit Log', to: '/organizador/dashboard', disabled: true },
+  { key: 'panel', label: 'Panel', to: '/organizador/panel' },
+  { key: 'grilla', label: 'Grilla', to: '/organizador/grilla' },
+  { key: 'resultados', label: 'Resultados', to: '/organizador/resultados' },
+  { key: 'jueces', label: 'Jueces', to: '/organizador/jueces' },
+  { key: 'torneo', label: 'Torneo', to: '/organizador/torneo' },
+  { key: 'audit', label: 'Audit Log', to: '/organizador/audit-log' },
 ]
 
 function currentSection(pathname: string): NavItem['key'] {
+  if (pathname === '/organizador' || pathname === '/organizador/dashboard') return 'torneo'
+  if (pathname.startsWith('/organizador/panel')) return 'panel'
+  if (pathname.startsWith('/organizador/grilla')) return 'grilla'
   if (pathname.startsWith('/organizador/resultados')) return 'resultados'
+  if (pathname.startsWith('/organizador/jueces')) return 'jueces'
+  if (pathname.startsWith('/organizador/audit-log')) return 'audit'
+  if (pathname.startsWith('/organizador/torneos/') && pathname.endsWith('/competencias')) {
+    return 'audit'
+  }
   if (pathname.startsWith('/organizador/competencias/') && pathname.includes('/auditoria')) {
     return 'audit'
   }
+  if (pathname.startsWith('/organizador/torneo/')) {
+    return 'panel'
+  }
   if (
-    pathname.startsWith('/organizador/torneo/') ||
+    pathname === '/organizador/torneo' ||
     pathname.startsWith('/organizador/torneos/') ||
     pathname.startsWith('/organizador/usuarios')
   ) {
@@ -68,19 +79,6 @@ export function OrganizadorLayout({
                   const isActive = seccionActiva === item.key
                   const baseClass =
                     'rounded-full border px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition'
-
-                  if (item.disabled) {
-                    return (
-                      <span
-                        key={item.key}
-                        className={`${baseClass} cursor-not-allowed border-slate-700 bg-slate-800 text-slate-500`}
-                        aria-disabled="true"
-                        title="Seccion a normalizar en siguientes US de SP-ADJ-09"
-                      >
-                        {item.label}
-                      </span>
-                    )
-                  }
 
                   return (
                     <Link

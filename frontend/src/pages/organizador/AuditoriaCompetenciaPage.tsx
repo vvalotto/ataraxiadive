@@ -87,8 +87,8 @@ export function AuditoriaCompetenciaPage() {
         subtitle="Faltan parametros de navegacion"
         actions={
           <Link
-            to="/organizador/dashboard"
-            className="rounded-full border border-stone-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-stone-700"
+            to="/organizador/audit-log"
+            className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
           >
             Volver
           </Link>
@@ -108,16 +108,16 @@ export function AuditoriaCompetenciaPage() {
       actions={
         <>
           <Link
-            to={torneoId ? `/organizador/torneos/${torneoId}/competencias` : '/organizador/dashboard'}
-            className="rounded-full border border-stone-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-stone-700"
+            to={torneoId ? `/organizador/audit-log?torneo_id=${torneoId}` : '/organizador/audit-log'}
+            className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
           >
             Volver
           </Link>
           <Link
-            to="/organizador/dashboard"
-            className="rounded-full bg-stone-900 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-stone-50"
+            to="/organizador/audit-log"
+            className="rounded-full bg-sky-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950"
           >
-            Dashboard
+            Audit Log
           </Link>
         </>
       }

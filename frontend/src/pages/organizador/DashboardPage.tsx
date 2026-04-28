@@ -62,22 +62,12 @@ export function DashboardPage() {
 
   return (
     <OrganizadorLayout
-      title="Panel del organizador"
-      subtitle={email ? `Sesion activa: ${email}` : 'Gestion de auditoria y seguimiento'}
+      title="Torneos"
+      subtitle={
+        email ? `Torneos bajo tu responsabilidad · Sesion activa: ${email}` : 'Gestion de torneos'
+      }
       actions={
         <>
-          <Link
-            to="/cambiar-password"
-            className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
-          >
-            Password
-          </Link>
-          <Link
-            to="/organizador/usuarios"
-            className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
-          >
-            Usuarios
-          </Link>
           <Link
             to="/organizador/torneos/nuevo"
             className="rounded-full bg-sky-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950"
@@ -157,7 +147,7 @@ export function DashboardPage() {
                   </p>
                 </div>
                 <Link
-                  to={`/organizador/torneo/${torneo.torneo_id}`}
+                  to={`/organizador/panel?torneo_id=${torneo.torneo_id}`}
                   className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
                 >
                   Gestionar
