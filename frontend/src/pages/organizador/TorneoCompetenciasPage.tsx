@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import {
   fetchCompetenciasPorTorneo,
   type CompetenciaResumenDto,
@@ -11,6 +11,7 @@ import {
   type DisciplinaTorneoDto,
 } from '../../api/torneo'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
+import { TorneoRouteSelector } from '../../components/organizador/TorneoRouteSelector'
 
 interface DisciplinaCompetenciaCard {
   disciplina: string
@@ -18,8 +19,33 @@ interface DisciplinaCompetenciaCard {
 }
 
 export function TorneoCompetenciasPage() {
-  const { torneoId } = useParams()
+  const { torneoId: torneoIdParam } = useParams()
+  const [searchParams] = useSearchParams()
+  const torneoId = torneoIdParam ?? searchParams.get('torneo_id') ?? undefined
 
+  if (!torneoId) {
+    return (
+      <OrganizadorLayout
+        title="Audit Log"
+        subtitle="Seleccionar torneo para inspeccionar competencias y trazas"
+      >
+        <TorneoRouteSelector
+          description="El audit log ahora es una sección primaria. Seleccioná un torneo para revisar las competencias y abrir la trazabilidad por atleta."
+          ctaLabel="Abrir audit log"
+          buildHref={(nextTorneoId) => `/organizador/audit-log?torneo_id=${nextTorneoId}`}
+        />
+      </OrganizadorLayout>
+    )
+  }
+
+  return <TorneoCompetenciasContent torneoId={torneoId} />
+}
+
+interface TorneoCompetenciasContentProps {
+  torneoId: string
+}
+
+function TorneoCompetenciasContent({ torneoId }: TorneoCompetenciasContentProps) {
   const torneosQuery = useQuery({
     queryKey: ['torneos-organizador'],
     queryFn: fetchTorneos,
@@ -51,12 +77,20 @@ export function TorneoCompetenciasPage() {
       title="Competencias del torneo"
       subtitle={torneo ? `${torneo.nombre} · ${torneo.sede.ciudad}` : 'Seleccion de competencias'}
       actions={
-        <Link
-          to="/organizador/dashboard"
-          className="rounded-full border border-stone-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-stone-700"
-        >
-          Volver
-        </Link>
+        <>
+          <Link
+            to="/organizador/audit-log"
+            className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
+          >
+            Cambiar torneo
+          </Link>
+          <Link
+            to={`/organizador/panel?torneo_id=${torneoId}`}
+            className="rounded-full border border-slate-600 bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
+          >
+            Panel
+          </Link>
+        </>
       }
     >
       {isLoading ? (
@@ -94,7 +128,7 @@ export function TorneoCompetenciasPage() {
                   <p className="mt-2 text-sm text-stone-600">
                     {item.competencia
                       ? `Competencia ${item.competencia.competencia_id}`
-                      : 'Competencia pendiente: generar grilla desde el tab Grilla'}
+                      : 'Competencia pendiente: generar grilla desde la sección Grilla'}
                   </p>
                 </div>
                 {item.competencia ? (

@@ -151,7 +151,7 @@ export function UsuariosPage() {
       subtitle="Alta de jueces, atletas y organizadores para operar el torneo"
       actions={
         <Link
-          to="/organizador/dashboard"
+          to="/organizador/torneo"
           className="rounded-lg border border-stone-900 px-4 py-2 text-sm font-semibold text-stone-900"
         >
           Volver

@@ -77,7 +77,7 @@ export function AuditoriaPerformancePage() {
       actions={
         <Link
           to={`/organizador/competencias/${competenciaId}/auditoria?disciplina=${encodeURIComponent(disciplina ?? '')}&torneo_id=${encodeURIComponent(torneoId ?? '')}`}
-          className="rounded-full border border-stone-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-stone-700"
+          className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
         >
           Volver
         </Link>
