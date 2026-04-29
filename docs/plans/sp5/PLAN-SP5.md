@@ -6,7 +6,7 @@
 | **Baseline** | BL-005 |
 | **Tag git** | `v1.0.0` |
 | **Fecha** | 2026-04-18 |
-| **Estado** | ⏳ En progreso (INC-5.1..5.3 ✅ · INC-5.5 reiniciado 2026-04-25) |
+| **Estado** | ⏳ En progreso (INC-5.1..5.6 ✅ · SP-ADJ-09 ✅ · INC-5.7/5.8 pendientes) |
 
 ---
 
@@ -220,45 +220,47 @@ recuperar su contraseña vía email (Resend + JWT temporal con expiración 1h).
 
 ---
 
-### INC-5.5 — Inscripción completa
+### INC-5.5 — Inscripción completa ✅ Cerrado 2026-04-26
 
-**Estado:** 🔄 Reiniciado 2026-04-25
+> Scope redefinido post-reversión 2026-04-25: portal atleta completo (shell dark, tab bar, wizard inscripción, declarar AP) + vista organizador con inscriptos y estado AP.
+> DesignReviewer: 0 CRITICAL · 227 WARNING (`quality/reports/designreviewer/INC-5.5-report.txt`).
 
-> **Nota de control:** la primera especificación e implementación de `US-5.5.1`
-> y `US-5.5.2` fueron revertidas porque no respetaban la UX aprobada en
-> `docs/design/ux/`. `INC-5.5` debe redefinirse y reimplementarse desde esa
-> fuente de verdad antes de volver a desarrollo.
-
-**DoD:** el atleta puede registrar sus APs por disciplina. El organizador ve la lista de
-inscriptos actualizada con nombre/apellido (del modelo extendido en INC-5.4). La
-transición Inscripción → Preparación cierra el período y bloquea nuevos anuncios.
-
-> **Nota:** la inscripción básica (selección de disciplinas) fue adelantada en US-5.3.2.
-> Este INC agrega APs y la vista completa del organizador.
-
-| US | Descripción | Área |
-|----|-------------|------|
-| US-5.5.1 | Registro de APs — atleta ingresa Performance Anunciada por cada disciplina inscripta | `frontend/`, `competencia/api/` · `REDEFINIR` |
-| US-5.5.2 | Vista del organizador — lista de inscriptos con nombre, disciplinas y estado AP (registrado / sin AP) | `frontend/`, `registro/api/` · `REDEFINIR` |
+| US | Descripción | Estado |
+|----|-------------|--------|
+| US-5.5.1 | Portal atleta completo: shell dark + bottom tab bar + wizard inscripción 3 pasos + S-05 Mis inscripciones + S-06 Declarar/Modificar AP | ✅ PR #120 |
+| US-5.5.2 | Vista del organizador — inscriptos con datos completos (nombre, disciplinas, estado AP) integrada en navegación UX aprobada | ✅ PR #121 |
 
 ---
 
-### INC-5.6 — Algoritmo de puntaje y rankings por categoría/género
+### INC-5.6 — Algoritmo de puntaje y rankings por categoría/género ✅ Cerrado 2026-04-28
 
-**DoD:** al cerrar una disciplina, el sistema calcula y muestra instantáneamente:
-(1) tabla de ejecución con género, categoría, AP, RP, tarjeta y puntos ordenada por OT;
-(2) podios separados por las 6 divisiones (SENIOR M/F, MASTER M/F, JUNIOR M/F) con
-puntaje calculado según la fórmula FAAS. El Overall del torneo suma puntos de todas
-las disciplinas por división.
+> DesignReviewer INC-5.6: ⏳ pendiente.
 
-| US | Descripción | Área |
-|----|-------------|------|
-| US-5.6.1 | Puerto `AlgoritmoPuntaje` + `AlgoritmoPuntajeFAAS` — fórmulas distancia y tiempo | `resultados/domain/ports/`, `resultados/domain/services/` |
-| US-5.6.2 | `TipoReglamento` en `Torneo` — VO extensible (FAAS / CMAS / AIDA); DI en `CalcularRanking` | `torneo/domain/`, `resultados/application/` |
-| US-5.6.3 | Ranking por categoría/género — `RankingCompetencia` genera 6 sub-rankings con puntaje | `resultados/domain/`, `resultados/application/` |
-| US-5.6.4 | `RankingOverall` por categoría/género — suma algebraica de puntos por división | `resultados/domain/`, `resultados/application/` |
-| US-5.6.5 | UI tabla de ejecución — vista ordenada por OT con columna género y puntos | `frontend/` |
-| US-5.6.6 | UI podios — 6 divisiones con posición, nombre, club, puntos, RP | `frontend/` |
+| US | Descripción | Estado |
+|----|-------------|--------|
+| US-5.6.1 | Puerto `AlgoritmoPuntaje` + `AlgoritmoPuntajeFAAS` — fórmulas distancia y tiempo | ✅ PR #123 |
+| US-5.6.2 | `TipoReglamento` en `Torneo` — VO extensible (FAAS/CMAS/AIDA); DI en `CalcularRanking` | ✅ PR #124 |
+| US-5.6.3 | Ranking por categoría/género — `RankingCompetencia` con puntaje, agrupado por `Categoria` | ✅ PR #125 |
+| US-5.6.4 | `RankingOverall` por categoría/género — `puntos_overall = Σ puntos_disciplina` | ✅ PR #126 |
+| US-5.6.5 | UI `ResultadosPage` — tabla de ejecución ordenada por OT con género, categoría, AP, RP, tarjeta y puntos | ✅ PR #127 |
+| US-5.6.6 | UI podios — 6 divisiones fijas (SENIOR M/F, MASTER M/F, JUNIOR M/F); overall bloqueado hasta cerrar todas las disciplinas | ✅ PR #128 |
+
+---
+
+### SP-ADJ-09 — Refactoring UX Organizador ✅ Cerrado 2026-04-29
+
+> Resuelve gaps de navegación y consistencia visual del portal organizador identificados post-INC-5.6.
+> DesignReviewer SP-ADJ-09: ⏳ pendiente.
+
+| US | Descripción | Estado |
+|----|-------------|--------|
+| US-ADJ-9.1 | Shell dark del organizador — layout base con sidebar y header consistente | ✅ PR #129 |
+| US-ADJ-9.2 | Routing organizador reestructurado — rutas anidadas y navegación coherente | ✅ PR #130 |
+| US-ADJ-9.3 | Home del organizador formalizado — vista de entrada con torneos activos | ✅ PR #131 |
+| US-ADJ-9.4 | Dashboard operativo — resumen de estado del torneo en ejecución | ✅ PR #132 |
+| US-ADJ-9.5 | Resultados y shell organizador reencuadrados — integración de `ResultadosPage` en el panel | ✅ PR #133 |
+| US-ADJ-9.6 | Arquitectura UX organizador formalizada — separación de shell, layout y páginas | ✅ develop |
+| US-ADJ-9.7 | Declarar AP en inscripción — atleta puede declarar/modificar AP desde el wizard | ✅ PR #136 |
 
 ---
 
@@ -300,11 +302,12 @@ SP-ADJ-07 (deuda SP4)                         ✅
         └── INC-5.1-ADJ (Ajuste post-UAT)    ✅
               └── INC-5.2 (Ejecución)         ✅
                     └── INC-5.3 (Usuarios)    ✅
-                          └── INC-5.4 (Identidad Extendida — auto-registro, cambiar pw, olvidé pw)
-                                └── INC-5.5 (Inscripción completa — APs + vista organizador)
-                                      └── INC-5.6 (Puntaje + Rankings)
-                                            └── INC-5.7 (Portal del Atleta)
-                                                  └── INC-5.8 (Polish + BA 2025)
+                          └── INC-5.4 (Identidad Extendida)  ✅
+                                └── INC-5.5 (Inscripción completa — APs + vista organizador)  ✅
+                                      └── INC-5.6 (Puntaje + Rankings)  ✅
+                                            ├── SP-ADJ-09 (Refactoring UX Organizador)  ✅
+                                            └── INC-5.7 (Portal del Atleta)  ⏳
+                                                  └── INC-5.8 (Polish + BA 2025)  ⏳
 ```
 
 ---
@@ -334,6 +337,7 @@ SP-ADJ-07 (deuda SP4)                         ✅
 
 ---
 
+*2026-04-29 — INC-5.5 ✅, INC-5.6 ✅, SP-ADJ-09 ✅ · árbol dependencias actualizado · INC-5.7/5.8 ⏳ pendientes*
+*2026-04-23 — INC-5.3 marcado ✅ · INC-5.4 redefinido como "Identidad Extendida" (auto-registro, cambiar/olvidé pw, modelo nombre/apellido) · INC-5.5..5.8 renumerados desde INC-5.4..5.7 original*
 *Redactado: 2026-04-18 — SP5 La Puesta en Marcha (MVP Demo)*
 *Algoritmo de puntaje FAAS definido en sesión de planificación 2026-04-18*
-*2026-04-23 — INC-5.3 marcado ✅ · INC-5.4 redefinido como "Identidad Extendida" (auto-registro, cambiar/olvidé pw, modelo nombre/apellido) · INC-5.5..5.8 renumerados desde INC-5.4..5.7 original*

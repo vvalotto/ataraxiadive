@@ -4,9 +4,9 @@
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-04-26 |
+| **Fecha** | 2026-04-29 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.27 — INC-5.5 cerrado (portal atleta + AP · PRs #120, #121, #122) |
+| **Estado** | ✅ v1.29 — INC-5.6 + SP-ADJ-09 cerrados (algoritmo FAAS + rankings · PRs #123–#128 · refactoring UX organizador · PRs #129–#136) |
 
 ---
 
@@ -42,9 +42,10 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP5 INC-5.1 / INC-5.1-ADJ | Frontend organizador (panel completo) | RF-GT-01..07, RF-PR-04..08, RF-EJ-01..10 (UI organizador) |
 | SP5 INC-5.2 / SP-ADJ-08 | Frontend organizador + Competencia | Ejecución por disciplina, cierre manual, cancelación fuerte |
 | SP5 INC-5.3 | Identidad + Frontend | RF-US-01..05 (gestión UI de usuarios/roles + vista atleta con inscripción básica) |
-| SP5 INC-5.4 (pendiente) | Registro + Competencia + Frontend | RF-IN-05/06 y flujo UI de inscripción/APs — inscripción básica adelantada en US-5.3.2 |
+| SP5 INC-5.4 | Identidad + Frontend | RF-IN-05/06 y flujo UI de inscripción/APs — auto-registro, cambiar/olvidé pw (US-5.4.1..5.4.3) — PRs #112–#114 |
 | SP5 INC-5.5 | Registro + Competencia + Frontend | Portal atleta completo (shell dark, wizard inscripción, declarar AP) + vista organizador con inscriptos y estado AP (US-5.5.1..5.5.2) — PRs #120, #121, #122 |
-| SP5 INC-5.6 | Resultados + Torneo + Frontend | Algoritmo FAAS (puerto + implementación) + TipoReglamento + ranking por categoría/género con puntos + UI tabla ejecución + podios 6 divisiones (US-5.6.1..5.6.6) |
+| SP5 INC-5.6 | Resultados + Torneo + Frontend | Algoritmo FAAS + TipoReglamento + ranking por categoría/género con puntos + UI tabla ejecución + podios 6 divisiones (US-5.6.1..5.6.6) — PRs #123–#128 |
+| SP5 SP-ADJ-09 | Frontend organizador | Refactoring UX organizador: shell dark, routing, home, dashboard, resultados, arquitectura + declarar AP en inscripción (US-ADJ-9.1..9.7) — PRs #129–#136 |
 | SP5 INC-5.7 (pendiente) | Portal Atleta + Resultados | Mis torneos, mi grilla, mis resultados, rankings/podios desde la vista del atleta |
 | SP5 INC-5.8 (pendiente) | Demo/UAT | Seed BA 2025, verificación contra resultados oficiales, UX fixes |
 | Futuro / fuera de scope SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
@@ -479,7 +480,41 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 
 ---
 
-## 26. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §25 -->
+## 26. US-IEDD SP5 INC-5.6 — Algoritmo de Puntaje y Rankings por Categoría/Género
+
+> Estado al 2026-04-28: 6/6 US mergeadas a `develop`.
+> DesignReviewer INC-5.6: ⏳ pendiente.
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-5.6.1 | 5.6 | Puerto `AlgoritmoPuntaje` (ABC) + `AlgoritmoPuntajeFAAS` con fórmulas FAAS para distancia (DNF/DYN/DBF) y tiempo (STA/SPE) — 23 tests | ✅ Done (PR #123) |
+| US-5.6.2 | 5.6 | `TipoReglamento` VO (FAAS/CMAS/AIDA) en `Torneo` + migración SQLite + DI en `CalcularRankingHandler` — 15 tests | ✅ Done (PR #124) |
+| US-5.6.3 | 5.6 | `RankingCompetencia` extendido: calcula y almacena `puntos: Decimal` por atleta usando `AlgoritmoPuntaje`, agrupado por `Categoria` — 84 tests | ✅ Done (PR #125) |
+| US-5.6.4 | 5.6 | `RankingOverall` por categoría/género — `puntos_overall = Σ puntos_disciplina`; `penalizacion_ausente=0` (FAAS) — 91 tests | ✅ Done (PR #126) |
+| US-5.6.5 | 5.6 | UI `ResultadosPage` (`/organizador/resultados`): selector torneo/disciplina + tabla por OT con género, categoría, AP, RP, tarjeta y puntos | ✅ Done (PR #127) |
+| US-5.6.6 | 5.6 | UI podios — 6 divisiones fijas (SENIOR M/F, MASTER M/F, JUNIOR M/F); overall bloqueado hasta cerrar todas las disciplinas | ✅ Done (PR #128) |
+
+---
+
+## 27. SP-ADJ-09 — Refactoring UX Organizador
+
+> SP-ADJ-09 resuelve gaps de navegación y consistencia visual del portal organizador post-INC-5.6.
+> Plan: `docs/plans/sp-adj-09/PLAN-SP-ADJ-09.md`.
+> DesignReviewer SP-ADJ-09: ⏳ pendiente.
+
+| US | Área | Descripción | Estado |
+|----|------|-------------|--------|
+| US-ADJ-9.1 | `frontend/` | Shell dark del organizador — layout base con sidebar y header consistente | ✅ Done (PR #129) |
+| US-ADJ-9.2 | `frontend/` | Routing organizador reestructurado — rutas anidadas y navegación coherente entre secciones | ✅ Done (PR #130) |
+| US-ADJ-9.3 | `frontend/` | Home del organizador formalizado — vista de entrada con acceso a torneos activos | ✅ Done (PR #131) |
+| US-ADJ-9.4 | `frontend/` | Dashboard operativo — resumen de estado del torneo en ejecución | ✅ Done (PR #132) |
+| US-ADJ-9.5 | `frontend/` | Resultados y shell organizador reencuadrados — integración de `ResultadosPage` en la navegación del panel | ✅ Done (PR #133) |
+| US-ADJ-9.6 | `frontend/` | Arquitectura UX organizador formalizada — separación de shell, layout y páginas | ✅ Done (develop) |
+| US-ADJ-9.7 | `registro/`, `frontend/` | Declarar AP en inscripción — atleta puede declarar/modificar AP desde el wizard de inscripción | ✅ Done (PR #136) |
+
+---
+
+## 28. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §26 -->
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -498,7 +533,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 27. Cobertura Total
+## 29. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -518,7 +553,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 28. US → Tests
+## 30. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -588,10 +623,20 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-5.4.1 | unit/identidad/application (`registrar_usuario`) · integration/identidad · `tests/features/US-5.4.1` · frontend (build + eslint) | ✅ Done (PR #112) |
 | US-5.4.2 | unit/identidad/application (`test_handlers.py` CambiarPassword) · integration/identidad · `tests/features/US-5.4.2` | ✅ Done (PR #113) |
 | US-5.4.3 | unit/identidad/api (`test_reset_password.py`) · unit/identidad/application (`test_handlers.py` Reset) · `tests/features/US-5.4.3-recuperar-password.feature` · frontend (build + eslint) | ✅ Done (PR #114) |
+| US-5.5.1 | frontend (build + eslint) · UAT funcional INC-5.5 2026-04-26 (BDD waiver — frontend puro) | ✅ Done (PR #120) |
+| US-5.5.2 | unit/registro/application (`inscriptos_detalle`) · integration/registro · frontend (build + eslint) · UAT INC-5.5 2026-04-26 | ✅ Done (PR #121) |
+| US-5.6.1 | unit/resultados/domain (`AlgoritmoPuntajeFAAS`) · integration/resultados · 23 tests | ✅ Done (PR #123) |
+| US-5.6.2 | unit/torneo/domain (`TipoReglamento`) · integration/torneo (migración SQLite) · `tests/features/US-5.6.2` · 15 tests | ✅ Done (PR #124) |
+| US-5.6.3 | unit/resultados/domain + unit/resultados/application + integration/resultados + `tests/features/US-5.6.3` · 84 tests | ✅ Done (PR #125) |
+| US-5.6.4 | unit/resultados/domain + unit/resultados/application + integration/resultados + `tests/features/US-5.6.4` · 91 tests | ✅ Done (PR #126) |
+| US-5.6.5 | frontend (build + eslint) · UAT INC-5.6 (BDD waiver — frontend puro) | ✅ Done (PR #127) |
+| US-5.6.6 | frontend (build + eslint) · UAT INC-5.6 (BDD waiver — frontend puro) | ✅ Done (PR #128) |
+| US-ADJ-9.1..9.6 | frontend (build + eslint) · UAT regresión SP-ADJ-09 (BDD waiver — frontend puro) | ✅ Done (PRs #129–#133, develop) |
+| US-ADJ-9.7 | unit/registro/application + integration/registro · frontend (build + eslint) | ✅ Done (PR #136) |
 
 ---
 
-## 28. US → ADR
+## 31. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -606,6 +651,8 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
+*v1.29 — 2026-04-29: INC-5.6 cerrado (§26 nuevo · 6/6 US ✅ · PRs #123–#128 · DesignReviewer ⏳ pendiente) · SP-ADJ-09 cerrado (§27 nuevo · 7/7 US ✅ · PRs #129–#136) · §§ renumerados 28..31 · US→Tests US-5.5.x + US-5.6.x + US-ADJ-9.x · §2 cobertura actualizada*
+*v1.27 — 2026-04-26: INC-5.5 cerrado (§25 nuevo · 2/2 US ✅ + fix UAT · PRs #120–#122 · DesignReviewer 0 CRITICAL · 227 WARNING)*
 *Documento creado: 2026-03-19 — Semana 0, Fase 0*
 *v1.1 — 2026-03-20: US-1.1.1 actualizada a BC-first · ADR-006 agregado · FAZ → FAAS*
 *v1.2 — 2026-03-28: SP-ADJ-01 agregado (§7) · secciones SP1 renumeradas · numeración de §§ corregida*
