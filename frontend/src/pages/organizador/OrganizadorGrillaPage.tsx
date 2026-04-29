@@ -44,14 +44,10 @@ function GrillaTorneoPage({ torneoId }: GrillaTorneoPageProps) {
     <OrganizadorLayout
       title="Grilla"
       activeTournamentId={torneoId}
+      activeTournamentState={torneo?.estado}
       subtitle={torneo ? `${torneo.nombre} · ${torneo.sede.ciudad}` : 'Configuración de grilla'}
     >
-      <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">
-        La navegación primaria se mantiene fija. Los cambios de grilla ya no dependen del detalle de torneo como tab local.
-      </section>
-      <section className="rounded-[2rem] border border-slate-700 bg-white/95 p-5 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
-        <GrillaPanel torneoId={torneoId} />
-      </section>
+      <GrillaPanel torneoId={torneoId} />
     </OrganizadorLayout>
   )
 }

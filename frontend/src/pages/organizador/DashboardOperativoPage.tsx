@@ -16,6 +16,7 @@ import {
   type ProximoAtletaDto,
 } from '../../api/competencia'
 import { fetchTorneo, type EstadoTorneo } from '../../api/torneo'
+import { EmptyStateCard } from '../../components/organizador/EmptyStateCard'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
 import { TorneoRouteSelector } from '../../components/organizador/TorneoRouteSelector'
 
@@ -384,6 +385,7 @@ function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
     <OrganizadorLayout
       title="Panel"
       activeTournamentId={torneoId}
+      activeTournamentState={torneoQuery.data?.estado}
       subtitle={
         torneoQuery.data
           ? `${torneoQuery.data.nombre} · ${torneoQuery.data.sede.ciudad} · ${formatTorneoEstado(torneoQuery.data.estado)}`
@@ -407,10 +409,7 @@ function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
       !competenciasQuery.isLoading &&
       !competenciasQuery.isError &&
       competenciasOperativas.length === 0 ? (
-        <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
-          El torneo seleccionado todavia no tiene competencias operativas para mostrar en el
-          Panel.
-        </section>
+        <EmptyStateCard message="Este torneo todavía no tiene competencias operativas." />
       ) : null}
 
       {competenciaActiva ? (
@@ -501,9 +500,6 @@ function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
                             <div>
                               <p className="text-sm font-semibold text-white">
                                 {item.competencia.disciplina}
-                              </p>
-                              <p className="mt-1 text-xs text-slate-400">
-                                Estado backend: {item.estadoRaw ?? 'Sin datos'}
                               </p>
                             </div>
                             <span

@@ -1,3 +1,4 @@
+import type { EstadoTorneo } from '../../api/torneo'
 import type { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { HealthCheck } from '../HealthCheck'
@@ -11,18 +12,20 @@ interface OrganizadorLayoutProps {
   showTournamentNavigation?: boolean
   simpleHeader?: boolean
   activeTournamentId?: string
+  activeTournamentState?: EstadoTorneo
 }
 
 interface NavItem {
   icon: string
   label: string
   to: string
-  key: 'inicio' | 'panel' | 'grilla' | 'resultados' | 'jueces' | 'torneo' | 'audit'
+  key: 'inicio' | 'inscriptos' | 'panel' | 'grilla' | 'resultados' | 'jueces' | 'torneo' | 'audit'
   disabled?: boolean
 }
 
 const NAV_ITEMS: NavItem[] = [
   { key: 'inicio', icon: '🏠', label: 'Inicio', to: '/organizador/torneo' },
+  { key: 'inscriptos', icon: '🧾', label: 'Inscriptos', to: '/organizador/inscriptos' },
   { key: 'panel', icon: '📊', label: 'Panel', to: '/organizador/panel' },
   { key: 'grilla', icon: '📋', label: 'Grilla', to: '/organizador/grilla' },
   { key: 'resultados', icon: '🏆', label: 'Resultados', to: '/organizador/resultados' },
@@ -33,6 +36,7 @@ const NAV_ITEMS: NavItem[] = [
 
 function currentSection(pathname: string): NavItem['key'] {
   if (pathname === '/organizador' || pathname === '/organizador/dashboard') return 'inicio'
+  if (pathname.startsWith('/organizador/inscriptos')) return 'inscriptos'
   if (pathname.startsWith('/organizador/panel')) return 'panel'
   if (pathname.startsWith('/organizador/grilla')) return 'grilla'
   if (pathname.startsWith('/organizador/resultados')) return 'resultados'
@@ -65,6 +69,7 @@ export function OrganizadorLayout({
   showTournamentNavigation = true,
   simpleHeader = false,
   activeTournamentId,
+  activeTournamentState,
 }: OrganizadorLayoutProps) {
   const location = useLocation()
   const email = useAuthStore((s) => s.email)
@@ -72,6 +77,14 @@ export function OrganizadorLayout({
   const apellido = useAuthStore((s) => s.apellido)
   const seccionActiva = currentSection(location.pathname)
   const usuarioLabel = [nombre, apellido].filter(Boolean).join(' ').trim() || email || 'Organizador'
+
+  function shouldShowNavItem(item: NavItem): boolean {
+    if (item.key === 'torneo') return Boolean(activeTournamentId)
+    if (item.key === 'inscriptos') {
+      return Boolean(activeTournamentId) || seccionActiva === 'inscriptos'
+    }
+    return true
+  }
 
   function navHref(item: NavItem): string {
     if (item.key === 'inicio') return item.to
@@ -94,7 +107,7 @@ export function OrganizadorLayout({
             <div className="flex min-w-0 flex-1 items-center">
               {showTournamentNavigation ? (
                 <nav className="flex min-w-0 flex-1 flex-wrap items-center gap-x-0.5 gap-y-1">
-                  {NAV_ITEMS.map((item) => {
+                  {NAV_ITEMS.filter((item) => shouldShowNavItem(item)).map((item) => {
                     const isActive = seccionActiva === item.key
                     const baseClass =
                       'flex h-14 items-center gap-2 border-b-2 border-transparent px-3.5 text-[13px] font-semibold transition whitespace-nowrap'

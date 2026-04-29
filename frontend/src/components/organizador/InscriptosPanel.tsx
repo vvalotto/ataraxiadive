@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { listarInscriptosDetalle } from '../../api/registro'
 import type { EstadoTorneo } from '../../api/torneo'
+import { EmptyStateCard } from './EmptyStateCard'
 import { TablaInscriptos, type InscriptoRow } from './TablaInscriptos'
 
 interface InscriptosPanelProps {
@@ -54,23 +55,50 @@ export function InscriptosPanel({ torneoId, torneoEstado }: InscriptosPanelProps
   const query = useQuery({
     queryKey: ['torneo-inscriptos-ap', torneoId, torneoEstado],
     queryFn: () => loadInscriptos(torneoId, torneoEstado),
+    enabled: torneoEstado === 'INSCRIPCION_ABIERTA',
   })
+
+  if (torneoEstado !== 'INSCRIPCION_ABIERTA') {
+    return <EmptyStateCard message="La inscripción todavía no está habilitada para este torneo." />
+  }
 
   if (query.isLoading) {
     return (
-      <div className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
+      <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
         Cargando inscriptos...
-      </div>
+      </section>
     )
   }
 
   if (query.isError) {
     return (
-      <div className="rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-900">
+      <section className="rounded-[2rem] border border-red-500/40 bg-red-950/40 p-5 text-sm text-red-100">
         No se pudieron cargar los inscriptos del torneo.
-      </div>
+      </section>
     )
   }
 
-  return <TablaInscriptos rows={query.data?.rows ?? []} disciplinas={query.data?.disciplinas ?? []} />
+  if ((query.data?.rows ?? []).length === 0) {
+    return <EmptyStateCard message="Todavía no hay inscriptos para este torneo." />
+  }
+
+  return (
+    <article className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-6 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+            Gestión de inscriptos
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold text-white">Atletas del torneo</h2>
+          <p className="mt-2 text-sm text-slate-300">
+            Revisa inscripciones, disciplinas activas y el estado de AP por atleta.
+          </p>
+        </div>
+      </div>
+
+      <div className="rounded-[1.5rem] border border-slate-700 bg-slate-950/70 p-4">
+        <TablaInscriptos rows={query.data?.rows ?? []} disciplinas={query.data?.disciplinas ?? []} />
+      </div>
+    </article>
+  )
 }

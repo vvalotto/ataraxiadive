@@ -117,10 +117,9 @@ export function DashboardPage() {
 
   return (
     <OrganizadorLayout
-      title="Home del Organizador"
+      title="Inicio"
       subtitle=""
       showTournamentNavigation={false}
-      simpleHeader
       actions={
         <>
           <Link
