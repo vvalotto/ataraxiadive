@@ -23,10 +23,10 @@ export function HealthCheck({ compact = false }: HealthCheckProps) {
   if (compact) {
     return (
       <div
-        className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em]"
+        className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12px] font-semibold"
         style={{
-          backgroundColor: isPending ? '#334155' : isOnline ? '#052e16' : '#450a0a',
-          color: isPending ? '#cbd5e1' : isOnline ? '#86efac' : '#fca5a5',
+          backgroundColor: isPending ? 'rgba(51, 65, 85, 0.9)' : isOnline ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.16)',
+          color: isPending ? '#cbd5e1' : isOnline ? '#4ade80' : '#fca5a5',
         }}
       >
         <span

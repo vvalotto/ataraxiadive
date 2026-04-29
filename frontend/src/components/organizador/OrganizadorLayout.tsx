@@ -10,26 +10,29 @@ interface OrganizadorLayoutProps {
   children: ReactNode
   showTournamentNavigation?: boolean
   simpleHeader?: boolean
+  activeTournamentId?: string
 }
 
 interface NavItem {
+  icon: string
   label: string
   to: string
-  key: 'panel' | 'grilla' | 'resultados' | 'jueces' | 'torneo' | 'audit'
+  key: 'inicio' | 'panel' | 'grilla' | 'resultados' | 'jueces' | 'torneo' | 'audit'
   disabled?: boolean
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { key: 'panel', label: 'Panel', to: '/organizador/panel' },
-  { key: 'grilla', label: 'Grilla', to: '/organizador/grilla' },
-  { key: 'resultados', label: 'Resultados', to: '/organizador/resultados' },
-  { key: 'jueces', label: 'Jueces', to: '/organizador/jueces' },
-  { key: 'torneo', label: 'Torneo', to: '/organizador/torneo' },
-  { key: 'audit', label: 'Audit Log', to: '/organizador/audit-log' },
+  { key: 'inicio', icon: '🏠', label: 'Inicio', to: '/organizador/torneo' },
+  { key: 'panel', icon: '📊', label: 'Panel', to: '/organizador/panel' },
+  { key: 'grilla', icon: '📋', label: 'Grilla', to: '/organizador/grilla' },
+  { key: 'resultados', icon: '🏆', label: 'Resultados', to: '/organizador/resultados' },
+  { key: 'jueces', icon: '👥', label: 'Jueces', to: '/organizador/jueces' },
+  { key: 'torneo', icon: '📝', label: 'Torneo', to: '/organizador/torneo' },
+  { key: 'audit', icon: '🔍', label: 'Audit Log', to: '/organizador/audit-log' },
 ]
 
 function currentSection(pathname: string): NavItem['key'] {
-  if (pathname === '/organizador' || pathname === '/organizador/dashboard') return 'torneo'
+  if (pathname === '/organizador' || pathname === '/organizador/dashboard') return 'inicio'
   if (pathname.startsWith('/organizador/panel')) return 'panel'
   if (pathname.startsWith('/organizador/grilla')) return 'grilla'
   if (pathname.startsWith('/organizador/resultados')) return 'resultados'
@@ -42,14 +45,14 @@ function currentSection(pathname: string): NavItem['key'] {
     return 'audit'
   }
   if (pathname.startsWith('/organizador/torneo/')) {
-    return 'panel'
+    return 'torneo'
   }
   if (
     pathname === '/organizador/torneo' ||
     pathname.startsWith('/organizador/torneos/') ||
     pathname.startsWith('/organizador/usuarios')
   ) {
-    return 'torneo'
+    return 'inicio'
   }
   return 'panel'
 }
@@ -61,6 +64,7 @@ export function OrganizadorLayout({
   children,
   showTournamentNavigation = true,
   simpleHeader = false,
+  activeTournamentId,
 }: OrganizadorLayoutProps) {
   const location = useLocation()
   const email = useAuthStore((s) => s.email)
@@ -69,34 +73,45 @@ export function OrganizadorLayout({
   const seccionActiva = currentSection(location.pathname)
   const usuarioLabel = [nombre, apellido].filter(Boolean).join(' ').trim() || email || 'Organizador'
 
+  function navHref(item: NavItem): string {
+    if (item.key === 'inicio') return item.to
+    if (!activeTournamentId) return item.to
+    if (item.key === 'torneo') return `/organizador/torneo/${activeTournamentId}`
+    return `${item.to}?torneo_id=${encodeURIComponent(activeTournamentId)}`
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <header className="sticky top-0 z-40 border-b border-slate-700/80 bg-slate-900/95 backdrop-blur">
-        <div className="mx-auto flex max-w-[1100px] flex-col gap-4 px-5 py-4 lg:px-8">
-          <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
-            <div className="flex items-center gap-6">
-              {!simpleHeader ? (
-                <span className="text-lg font-black tracking-tight text-sky-400">
-                  AtaraxiaDive
-                </span>
-              ) : null}
+        <div className="mx-auto flex max-w-[1100px] flex-col px-5 lg:px-8">
+          <div
+            className={
+              showTournamentNavigation && !simpleHeader
+                ? 'flex min-h-14 flex-col gap-3 py-3 xl:flex-row xl:items-center'
+                : 'flex flex-col gap-3 py-4 xl:flex-row xl:items-center xl:justify-between'
+            }
+          >
+            <div className="flex min-w-0 flex-1 items-center">
               {showTournamentNavigation ? (
-                <nav className="flex flex-wrap items-center gap-2">
+                <nav className="flex min-w-0 flex-1 flex-wrap items-center gap-x-0.5 gap-y-1">
                   {NAV_ITEMS.map((item) => {
                     const isActive = seccionActiva === item.key
                     const baseClass =
-                      'rounded-full border px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition'
+                      'flex h-14 items-center gap-2 border-b-2 border-transparent px-3.5 text-[13px] font-semibold transition whitespace-nowrap'
 
                     return (
                       <Link
                         key={item.key}
-                        to={item.to}
+                        to={navHref(item)}
                         className={
                           isActive
-                            ? `${baseClass} border-sky-400 bg-sky-400/10 text-sky-300`
-                            : `${baseClass} border-slate-700 bg-slate-800 text-slate-300 hover:border-slate-500 hover:text-white`
+                            ? `${baseClass} text-sky-300 border-sky-400`
+                            : `${baseClass} text-slate-400 hover:text-white`
                         }
                       >
+                        <span className="text-[15px]" aria-hidden="true">
+                          {item.icon}
+                        </span>
                         {item.label}
                       </Link>
                     )
@@ -105,15 +120,15 @@ export function OrganizadorLayout({
               ) : null}
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="ml-auto flex flex-wrap items-center gap-3">
               {!simpleHeader ? <HealthCheck compact /> : null}
-              <span className="rounded-full border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-slate-300">
+              <span className="text-[13px] text-slate-400">
                 {usuarioLabel}
               </span>
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 xl:flex-row xl:items-end xl:justify-between">
+          <div className="flex flex-col gap-3 py-4 xl:flex-row xl:items-end xl:justify-between">
             <div className="max-w-3xl">
               {!simpleHeader ? (
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-300/80">

@@ -76,39 +76,28 @@ function TorneoCompetenciasContent({ torneoId }: TorneoCompetenciasContentProps)
 
   return (
     <OrganizadorLayout
-      title="Competencias del torneo"
-      subtitle={torneo ? `${torneo.nombre} · ${torneo.sede.ciudad}` : 'Seleccion de competencias'}
-      actions={
-        <>
-          <Link
-            to="/organizador/audit-log"
-            className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
-          >
-            Cambiar torneo
-          </Link>
-          <Link
-            to={`/organizador/panel?torneo_id=${torneoId}`}
-            className="rounded-full border border-slate-600 bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
-          >
-            Panel
-          </Link>
-        </>
-      }
+      title="Audit Log"
+      activeTournamentId={torneoId}
+      subtitle={torneo ? `${torneo.nombre} · ${torneo.sede.ciudad} · trazabilidad por disciplina` : 'Trazabilidad del torneo'}
     >
+      <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">
+        El audit log es una seccion primaria del shell. Desde aqui se inspecciona la traza por disciplina sin salir del contexto del torneo activo.
+      </section>
+
       {isLoading ? (
-        <section className="rounded-[2rem] border border-stone-300/80 bg-white/80 p-5 text-sm text-stone-600">
+        <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando competencias...
         </section>
       ) : null}
 
       {isError ? (
-        <section className="rounded-[2rem] border border-red-300/60 bg-red-50 p-5 text-sm text-red-900">
+        <section className="rounded-[2rem] border border-red-500/40 bg-red-950/40 p-5 text-sm text-red-100">
           No se pudieron cargar las disciplinas o competencias del torneo.
         </section>
       ) : null}
 
       {!isLoading && !isError && disciplinasCompetencias.length === 0 ? (
-        <section className="rounded-[2rem] border border-stone-300/80 bg-white/80 p-5 text-sm text-stone-600">
+        <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Este torneo no tiene disciplinas configuradas.
         </section>
       ) : null}
@@ -117,17 +106,17 @@ function TorneoCompetenciasContent({ torneoId }: TorneoCompetenciasContentProps)
         ? disciplinasCompetencias.map((item) => (
             <article
               key={item.disciplina}
-              className="rounded-[2rem] border border-stone-300/80 bg-white/85 p-5 shadow-[0_20px_60px_rgba(120,93,54,0.08)]"
+              className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-5 shadow-[0_20px_60px_rgba(2,6,23,0.24)]"
             >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                     Disciplina
                   </p>
-                  <h2 className="mt-2 text-xl font-semibold text-stone-900">
+                  <h2 className="mt-2 text-xl font-semibold text-white">
                     {item.disciplina}
                   </h2>
-                  <p className="mt-2 text-sm text-stone-600">
+                  <p className="mt-2 text-sm text-slate-300">
                     {item.competencia
                       ? `Competencia ${item.competencia.competencia_id}`
                       : 'Competencia pendiente: generar grilla desde la sección Grilla'}
@@ -136,7 +125,7 @@ function TorneoCompetenciasContent({ torneoId }: TorneoCompetenciasContentProps)
                 {item.competencia ? (
                   <Link
                     to={`/organizador/competencias/${item.competencia.competencia_id}/auditoria?disciplina=${encodeURIComponent(item.disciplina)}&torneo_id=${encodeURIComponent(item.competencia.torneo_id)}`}
-                    className="rounded-full bg-stone-900 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-stone-50"
+                    className="rounded-full border border-sky-400 bg-sky-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-sky-300"
                   >
                     Ver auditoria
                   </Link>
@@ -144,7 +133,7 @@ function TorneoCompetenciasContent({ torneoId }: TorneoCompetenciasContentProps)
                   <button
                     type="button"
                     disabled
-                    className="cursor-not-allowed rounded-full border border-stone-300 bg-stone-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-stone-400"
+                    className="cursor-not-allowed rounded-full border border-slate-700 bg-slate-950 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500"
                   >
                     Ver auditoria
                   </button>
