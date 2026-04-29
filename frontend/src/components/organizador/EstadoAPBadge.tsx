@@ -1,3 +1,5 @@
+import { formatMarca } from '../../utils/marca'
+
 interface EstadoAPBadgeProps {
   estado: 'pendiente' | 'declarado' | 'cerrado'
   ap?: string | null
@@ -6,7 +8,7 @@ interface EstadoAPBadgeProps {
 
 function formatAp(ap?: string | null, unidad?: string | null): string | null {
   if (!ap?.trim()) return null
-  return `${ap}${unidad ? ` ${unidad}` : ''}`
+  return formatMarca(ap, unidad ?? 'Metros')
 }
 
 export function EstadoAPBadge({ estado, ap, unidad }: EstadoAPBadgeProps) {

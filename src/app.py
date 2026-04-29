@@ -13,6 +13,11 @@ from competencia.application.queries.obtener_competencias_por_torneo import (
     ObtenerCompetenciasPorTorneoHandler,
     ObtenerCompetenciasPorTorneoQuery,
 )
+from competencia.application.commands.iniciar_competencia import (
+    IniciarCompetenciaCommand,
+    IniciarCompetenciaHandler,
+)
+from competencia.domain.aggregates.competencia import Competencia
 from competencia.api.exception_handlers import register_exception_handlers
 from competencia.api.router import (
     configure_ap_registrado_callback,
@@ -72,10 +77,12 @@ from registro.infrastructure.repositories.sqlite_inscripcion_repository import (
 from torneo.api.exception_handlers import register_torneo_exception_handlers
 from torneo.api.router import (
     configure_cierre_inscripcion_precondition,
+    configure_ejecucion_precondition,
+    configure_ejecucion_post_action,
     configure_premiacion_precondition,
     router as torneo_router,
 )
-from torneo.domain.exceptions import PremiacionNoPermitida
+from torneo.domain.exceptions import EjecucionNoPermitida, PremiacionNoPermitida
 from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTorneoRepository
 from resultados.application.commands.calcular_ranking import (
     CalcularRankingCommand,
@@ -420,6 +427,93 @@ def build_premiacion_precondition(
     return _precondition
 
 
+def build_ejecucion_precondition(
+    competencia_event_store: SQLiteEventStore | None = None,
+    torneo_db_path: str | None = None,
+    competencia_db_path: str | None = None,
+) -> Callable[[UUID], Awaitable[None]]:
+    """Construye la precondición para pasar un torneo a ejecución."""
+    event_store = competencia_event_store or SQLiteEventStore(
+        os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db")
+    )
+    torneos_path = torneo_db_path or os.getenv("TORNEO_DB_PATH", "data/torneo.db")
+    competencias_path = competencia_db_path or os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db")
+
+    async def _precondition(torneo_id: UUID) -> None:
+        pendientes = await _obtener_disciplinas_pendientes_ejecucion(
+            torneo_id,
+            event_store,
+            torneos_path,
+            competencias_path,
+        )
+        if pendientes:
+            raise EjecucionNoPermitida(
+                "No se puede pasar a ejecucion: " + "; ".join(pendientes)
+            )
+
+    return _precondition
+
+
+def build_ejecucion_post_action(
+    competencia_event_store: SQLiteEventStore | None = None,
+    torneo_db_path: str | None = None,
+    competencia_db_path: str | None = None,
+) -> Callable[[UUID], Awaitable[None]]:
+    """Inicia las competencias listas cuando el torneo entra en ejecución."""
+    event_store = competencia_event_store or SQLiteEventStore(
+        os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db")
+    )
+    torneos_path = torneo_db_path or os.getenv("TORNEO_DB_PATH", "data/torneo.db")
+    competencias_path = competencia_db_path or os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db")
+
+    async def _post_action(torneo_id: UUID) -> None:
+        disciplinas = await _obtener_disciplinas_torneo(torneo_id, torneos_path)
+        if not disciplinas:
+            return
+
+        competencias = await ObtenerCompetenciasPorTorneoHandler(
+            SQLiteCompetenciasPorTorneo(competencias_path)
+        ).handle(ObtenerCompetenciasPorTorneoQuery(torneo_id=torneo_id))
+        competencias_por_disciplina = {
+            competencia.disciplina: competencia.competencia_id for competencia in competencias
+        }
+        iniciar_handler = IniciarCompetenciaHandler(event_store)
+
+        for disciplina in disciplinas:
+            competencia_id = competencias_por_disciplina.get(disciplina.value)
+            if competencia_id is None:
+                continue
+
+            events = await event_store.load(f"competencia-{competencia_id}")
+            if not events:
+                continue
+
+            competencia = Competencia.reconstitute(
+                competencia_id=competencia_id,
+                disciplina=disciplina,
+                events=events,
+            )
+            if competencia.estado.value != "Confirmada":
+                continue
+
+            juez_referencia = next(
+                (entrada.juez_id for entrada in competencia.grilla if entrada.juez_id),
+                None,
+            )
+            if juez_referencia is None:
+                continue
+
+            await iniciar_handler.handle(
+                IniciarCompetenciaCommand(
+                    competencia_id=competencia_id,
+                    disciplina=disciplina,
+                    juez_id=juez_referencia,
+                )
+            )
+
+    return _post_action
+
+
 async def _obtener_disciplinas_pendientes_premiacion(
     torneo_id: UUID,
     competencia_event_store: SQLiteEventStore,
@@ -451,6 +545,54 @@ async def _obtener_disciplinas_pendientes_premiacion(
     return pendientes
 
 
+async def _obtener_disciplinas_pendientes_ejecucion(
+    torneo_id: UUID,
+    competencia_event_store: SQLiteEventStore,
+    torneo_db_path: str,
+    competencia_db_path: str,
+) -> list[str]:
+    disciplinas = await _obtener_disciplinas_torneo(torneo_id, torneo_db_path)
+    if not disciplinas:
+        return []
+
+    competencias = await ObtenerCompetenciasPorTorneoHandler(
+        SQLiteCompetenciasPorTorneo(competencia_db_path)
+    ).handle(ObtenerCompetenciasPorTorneoQuery(torneo_id=torneo_id))
+    competencias_por_disciplina = {
+        competencia.disciplina: competencia.competencia_id for competencia in competencias
+    }
+
+    pendientes: list[str] = []
+    for disciplina in disciplinas:
+        competencia_id = competencias_por_disciplina.get(disciplina.value)
+        if competencia_id is None:
+            pendientes.append(f"{disciplina.value}: falta crear la competencia")
+            continue
+
+        events = await competencia_event_store.load(f"competencia-{competencia_id}")
+        if not events:
+            pendientes.append(f"{disciplina.value}: competencia sin configuracion operativa")
+            continue
+
+        competencia = Competencia.reconstitute(
+            competencia_id=competencia_id,
+            disciplina=disciplina,
+            events=events,
+        )
+        if not competencia.grilla_confirmada:
+            pendientes.append(f"{disciplina.value}: falta confirmar la grilla")
+            continue
+
+        sin_juez = sum(1 for entrada in competencia.grilla if not entrada.juez_id)
+        if sin_juez > 0:
+            etiqueta = "performance" if sin_juez == 1 else "performances"
+            pendientes.append(
+                f"{disciplina.value}: faltan jueces en {sin_juez} {etiqueta} de la grilla"
+            )
+
+    return pendientes
+
+
 async def _obtener_disciplinas_torneo(
     torneo_id: UUID,
     torneo_db_path: str,
@@ -464,6 +606,8 @@ async def _obtener_disciplinas_torneo(
 
 
 configure_premiacion_precondition(build_premiacion_precondition())
+configure_ejecucion_precondition(build_ejecucion_precondition())
+configure_ejecucion_post_action(build_ejecucion_post_action())
 
 
 def build_on_ap_registrado_callback(

@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom'
 import useAuthStore from '../../stores/useAuthStore'
 import { AtletaShell } from '../../components/atleta/AtletaShell'
 import {
+  formatAp,
   formatDisciplina,
   formatFecha,
   formatHora,
-  getUnidadLabel,
   loadAtletaPortalSnapshot,
 } from './portalData'
 
@@ -72,7 +72,7 @@ export function AtletaMisInscripcionesPage() {
                     <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-3">
                       <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">AP</dt>
                       <dd className="mt-1 font-semibold text-white">
-                        {entry.ap ? `${entry.ap} ${getUnidadLabel(entry.unidad)}` : 'Sin dato'}
+                        {formatAp(entry.ap, entry.unidad)}
                       </dd>
                     </div>
                     <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-3">
@@ -132,14 +132,20 @@ export function AtletaMisInscripcionesPage() {
                   </p>
                   <div className="mt-4 flex items-center justify-between gap-3">
                     <p className="text-sm text-slate-300">
-                      {entry.ap ? `AP actual ${entry.ap} ${getUnidadLabel(entry.unidad)}` : '⚠ Sin AP declarado'}
+                      {entry.ap ? `AP actual ${formatAp(entry.ap, entry.unidad)}` : '⚠ Sin AP declarado'}
                     </p>
-                    <Link
-                      to={`/atleta/ap/${entry.torneo.torneo_id}/${entry.disciplina}`}
-                      className="rounded-2xl bg-sky-500 px-4 py-2 text-sm font-semibold text-slate-950"
-                    >
-                      {entry.ap ? 'Modificar AP' : 'Declarar AP'}
-                    </Link>
+                    {!entry.ap ? (
+                      <Link
+                        to={`/atleta/ap/${entry.torneo.torneo_id}/${entry.disciplina}`}
+                        className="rounded-2xl bg-sky-500 px-4 py-2 text-sm font-semibold text-slate-950"
+                      >
+                        Declarar AP
+                      </Link>
+                    ) : (
+                      <span className="rounded-2xl border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-300">
+                        AP bloqueado
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}

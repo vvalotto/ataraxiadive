@@ -6,7 +6,7 @@ import { fetchApInscripcion, fetchAtletaMe, guardarApInscripcion, listarInscripc
 import { fetchTorneo } from '../../api/torneo'
 import { AtletaShell } from '../../components/atleta/AtletaShell'
 import { ApiError } from '../../api/registro'
-import { formatDisciplina, formatFecha, getUnidadEsperada, getUnidadLabel } from './portalData'
+import { esDisciplinaTiempo, formatAp, formatDisciplina, formatFecha, getUnidadEsperada, getUnidadLabel, isApInputValido, normalizeApInput } from './portalData'
 
 async function loadApContext(torneoId: string, disciplina: string) {
   const [torneo, competencias, atleta] = await Promise.all([
@@ -66,7 +66,7 @@ export function AtletaDeclararAPPage() {
       return guardarApInscripcion({
         inscripcionId,
         disciplina,
-        valorAp: valorApValue,
+        valorAp: normalizeApInput(valorApValue, disciplina),
       })
     },
     onSuccess: () => {
@@ -78,6 +78,8 @@ export function AtletaDeclararAPPage() {
   const unidadLabel = getUnidadLabel(unidadEsperada)
   const currentAp = query.data?.apActual ?? ''
   const valorApValue = valorAp || currentAp
+  const apBloqueado = Boolean(currentAp)
+  const puedeGuardar = isApInputValido(valorApValue, disciplina ?? '')
 
   return (
     <AtletaShell title="Declarar AP" subtitle="Cargá o corregí tu announced performance antes del cierre." showBack>
@@ -114,13 +116,14 @@ export function AtletaDeclararAPPage() {
 
           <section className="rounded-[1.75rem] border border-slate-800 bg-slate-900 p-5">
             <label className="block text-sm text-slate-300">
-              AP — {unidadEsperada === 'Segundos' ? 'Tiempo anunciado' : 'Distancia anunciada'} *
+              AP — {unidadEsperada === 'Segundos' ? 'Tiempo anunciado (mm:ss)' : 'Distancia anunciada'} *
               <div className="mt-3 flex items-center gap-3 rounded-3xl border border-sky-500/40 bg-sky-500/10 px-4 py-4">
                 <input
                   value={valorApValue}
                   onChange={(event) => setValorAp(event.target.value)}
-                  inputMode="decimal"
-                  placeholder="0"
+                  inputMode={esDisciplinaTiempo(disciplina ?? '') ? 'text' : 'decimal'}
+                  placeholder={esDisciplinaTiempo(disciplina ?? '') ? 'mm:ss' : '0'}
+                  disabled={apBloqueado}
                   className="w-full bg-transparent text-3xl font-semibold text-white outline-none"
                 />
                 <span className="text-sm font-semibold uppercase tracking-[0.18em] text-sky-300">
@@ -130,7 +133,12 @@ export function AtletaDeclararAPPage() {
             </label>
             {currentAp ? (
               <p className="mt-3 text-sm text-slate-400">
-                AP actual guardado: {currentAp} {getUnidadLabel(query.data.athleteEntry?.unidad ?? unidadEsperada)}
+                AP actual guardado: {formatAp(currentAp, query.data.athleteEntry?.unidad ?? unidadEsperada)}
+              </p>
+            ) : null}
+            {apBloqueado ? (
+              <p className="mt-3 text-sm text-amber-300">
+                El AP ya fue declarado y no puede volver a editarse.
               </p>
             ) : null}
           </section>
@@ -152,10 +160,10 @@ export function AtletaDeclararAPPage() {
             <button
               type="button"
               onClick={() => mutation.mutate()}
-              disabled={mutation.isPending || !(parseFloat(valorApValue) > 0)}
+              disabled={apBloqueado || mutation.isPending || !puedeGuardar}
               className="flex-1 rounded-2xl bg-sky-500 px-4 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-slate-950 disabled:opacity-60"
             >
-              {mutation.isPending ? 'Guardando...' : 'Guardar AP'}
+              {apBloqueado ? 'AP bloqueado' : mutation.isPending ? 'Guardando...' : 'Guardar AP'}
             </button>
           </div>
         </div>

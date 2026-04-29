@@ -54,6 +54,7 @@ export interface GrillaAtletaDto {
   performance?: string | null
   estado: EstadoPerformance
   tarjeta_asignada: string | null
+  juez_id: string | null
 }
 
 export interface PerformanceActualDto {
@@ -226,6 +227,27 @@ export async function fetchGrillaCompetencia(
     `/competencia/${competenciaId}/grilla?disciplina=${encodeURIComponent(disciplina)}`,
   )
   return parseResponse<GrillaAtletaDto[]>(response)
+}
+
+export async function asignarJuezPerformance(payload: {
+  competenciaId: string
+  performanceId: string
+  disciplina: string
+  juezId: string
+}): Promise<void> {
+  const response = await fetch(
+    `/competencia/${payload.competenciaId}/grilla/${payload.performanceId}/juez`,
+    {
+      method: 'PUT',
+      headers: buildHeaders(),
+      body: JSON.stringify({
+        disciplina: payload.disciplina,
+        juez_id: payload.juezId,
+      }),
+    },
+  )
+
+  await parseResponse<void>(response)
 }
 
 export async function generarGrilla(payload: {

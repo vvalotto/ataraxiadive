@@ -62,6 +62,39 @@ def _make_competencia_con_grilla() -> Competencia:
     return c
 
 
+def _make_competencia_con_grilla_dos_andariveles() -> Competencia:
+    c = Competencia(competencia_id=COMPETENCIA_ID, disciplina=Disciplina.STA)
+    c.configurar_intervalo_ot(9, "org-01")
+    performances = [
+        PerformancesAPData(
+            performance_id=P_A001,
+            atleta_id=A001,
+            valor_ap=Decimal("330"),
+            unidad=UnidadMedida.Segundos,
+        ),
+        PerformancesAPData(
+            performance_id=P_A002,
+            atleta_id=A002,
+            valor_ap=Decimal("360"),
+            unidad=UnidadMedida.Segundos,
+        ),
+        PerformancesAPData(
+            performance_id=P_A003,
+            atleta_id=A003,
+            valor_ap=Decimal("285"),
+            unidad=UnidadMedida.Segundos,
+        ),
+    ]
+    c.generar_grilla(
+        OT_INICIO,
+        performances,
+        DisciplinaDescriptor.para(Disciplina.STA),
+        andariveles=2,
+    )
+    c.pull_events()
+    return c
+
+
 def _find_entrada(competencia: Competencia, performance_id: UUID):  # type: ignore[return]
     for e in competencia.grilla:
         if e.performance_id == performance_id:
@@ -126,6 +159,16 @@ class TestAjustePosicion:
         entry = _find_entrada(c, P_A002)
         assert entry.posicion == 3
         assert entry.ot_programado == OT_INICIO + timedelta(minutes=18)
+
+    def test_con_dos_andariveles_recalcula_ots_por_tanda(self) -> None:
+        c = _make_competencia_con_grilla_dos_andariveles()
+        c.ajustar_grilla([CambioGrilla(performance_id=P_A001, campo="posicion", valor_nuevo=1)])
+        entry_a001 = _find_entrada(c, P_A001)
+        entry_a002 = _find_entrada(c, P_A002)
+        entry_a003 = _find_entrada(c, P_A003)
+        assert entry_a001.ot_programado == OT_INICIO
+        assert entry_a003.ot_programado == OT_INICIO
+        assert entry_a002.ot_programado == OT_INICIO + timedelta(minutes=9)
 
 
 # ── Ajuste de andarivel ───────────────────────────────────────────────────────

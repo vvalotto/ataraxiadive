@@ -1,11 +1,21 @@
 import { useState } from 'react'
 import type { CambioGrillaPayload, GrillaAtletaDto } from '../../api/competencia'
+import { formatMarca } from '../../utils/marca'
 
 interface TablaGrillaProps {
   rows: GrillaAtletaDto[]
   readOnly: boolean
   isSaving: boolean
   onReorder: (rows: GrillaAtletaDto[], cambios: CambioGrillaPayload[]) => void
+}
+
+const ESTADO_PERFORMANCE_LABELS: Record<string, string> = {
+  AnunciadaAP: 'AP anunciada',
+  Llamada: 'Llamada',
+  ResultadoRegistrado: 'Resultado registrado',
+  EnRevision: 'En revisión',
+  Ejecutada: 'Ejecutada',
+  DNS: 'DNS',
 }
 
 function formatOt(value: string) {
@@ -25,6 +35,10 @@ function moveRow(rows: GrillaAtletaDto[], fromIndex: number, toIndex: number) {
   const [moved] = next.splice(fromIndex, 1)
   next.splice(toIndex, 0, moved)
   return next.map((row, index) => ({ ...row, posicion: index + 1 }))
+}
+
+function formatEstadoPerformance(estado: string): string {
+  return ESTADO_PERFORMANCE_LABELS[estado] ?? estado
 }
 
 export function TablaGrilla({ rows, readOnly, isSaving, onReorder }: TablaGrillaProps) {
@@ -101,13 +115,13 @@ export function TablaGrilla({ rows, readOnly, isSaving, onReorder }: TablaGrilla
               <td className="px-4 py-3 font-semibold text-white">{row.posicion}</td>
               <td className="px-4 py-3 text-slate-100">{row.nombre_atleta}</td>
               <td className="px-4 py-3 text-slate-300">
-                {row.ap_declarado} {row.unidad}
+                {formatMarca(row.ap_declarado, row.unidad)}
               </td>
               <td className="px-4 py-3 text-slate-300">{row.andarivel}</td>
               <td className="px-4 py-3 font-semibold text-slate-100">
                 {formatOt(row.ot_programado)}
               </td>
-              <td className="px-4 py-3 text-slate-300">{row.estado}</td>
+              <td className="px-4 py-3 text-slate-300">{formatEstadoPerformance(row.estado)}</td>
             </tr>
           ))}
         </tbody>

@@ -32,3 +32,7 @@ class DisciplinaNoInscripta(Exception):
 
 class APIncompletoParaPreparacion(Exception):
     pass
+
+
+class APYaDeclarado(Exception):
+    pass

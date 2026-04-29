@@ -36,6 +36,7 @@ from registro.application.queries.verificar_completitud_ap import (
 from registro.domain.aggregates.inscripcion import Inscripcion
 from registro.domain.exceptions import (
     APIncompletoParaPreparacion,
+    APYaDeclarado,
     AtletaNoEncontrado,
     AtletaYaInscripto,
     AtletaYaRegistrado,
@@ -433,6 +434,8 @@ async def declarar_ap_inscripcion(
     except InscripcionNoEncontrada as exc:
         return JSONResponse(status_code=404, content={"detail": str(exc)})
     except DisciplinaNoInscripta as exc:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+    except APYaDeclarado as exc:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
     except ValueError as exc:
         return JSONResponse(status_code=422, content={"detail": str(exc)})

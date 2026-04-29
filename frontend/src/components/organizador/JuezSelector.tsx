@@ -22,7 +22,7 @@ export function JuezSelector({ jueces, value, disabled, onChange }: JuezSelector
       <option value="">Sin juez asignado</option>
       {jueces.map((juez) => (
         <option key={juez.usuario_id} value={juez.usuario_id}>
-          {juez.email}
+          {[juez.nombre, juez.apellido].filter(Boolean).join(' ').trim() || juez.email}
         </option>
       ))}
     </select>

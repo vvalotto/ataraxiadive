@@ -47,7 +47,12 @@ function GrillaTorneoPage({ torneoId }: GrillaTorneoPageProps) {
       activeTournamentState={torneo?.estado}
       subtitle={torneo ? `${torneo.nombre} · ${torneo.sede.ciudad}` : 'Configuración de grilla'}
     >
-      <GrillaPanel torneoId={torneoId} />
+      <GrillaPanel
+        torneoId={torneoId}
+        torneoEstado={torneo?.estado}
+        fechaInicioTorneo={torneo?.fecha_inicio}
+        fechaFinTorneo={torneo?.fecha_fin}
+      />
     </OrganizadorLayout>
   )
 }

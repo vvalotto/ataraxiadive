@@ -81,6 +81,20 @@ async def test_iniciar_ejecucion_ok() -> None:
 
 
 @pytest.mark.asyncio
+async def test_iniciar_ejecucion_ejecuta_post_action() -> None:
+    torneo = _torneo(EstadoTorneo.PREPARACION)
+    repo = _repo(torneo)
+    post_action = AsyncMock()
+
+    await IniciarEjecucionHandler(repo, post_action=post_action).handle(
+        TransicionarTorneoCommand(torneo.torneo_id)
+    )
+
+    post_action.assert_awaited_once_with(torneo.torneo_id)
+    assert torneo.estado == EstadoTorneo.EJECUCION
+
+
+@pytest.mark.asyncio
 async def test_volver_preparacion_ok() -> None:
     torneo = _torneo(EstadoTorneo.EJECUCION)
     repo = _repo(torneo)

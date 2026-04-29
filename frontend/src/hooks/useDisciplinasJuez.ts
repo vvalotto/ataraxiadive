@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import { fetchCompetenciasPorTorneo, fetchEstadoCompetencia } from '../api/competencia'
-import { fetchDisciplinasDeJuez, fetchTorneos } from '../api/torneo'
+import { fetchCompetenciasPorTorneo, fetchEstadoCompetencia, fetchGrillaCompetencia } from '../api/competencia'
+import { fetchTorneos } from '../api/torneo'
 import useAuthStore from '../stores/useAuthStore'
 
 export interface DisciplinaViewModel {
@@ -26,7 +26,17 @@ export function useDisciplinasJuez() {
 
   const disciplinasQuery = useQuery({
     queryKey: ['disciplinas-juez', torneoActivoQuery.data?.torneo_id, userId],
-    queryFn: () => fetchDisciplinasDeJuez(torneoActivoQuery.data!.torneo_id, userId!),
+    queryFn: async (): Promise<string[]> => {
+      const torneoId = torneoActivoQuery.data!.torneo_id
+      const competencias = await fetchCompetenciasPorTorneo(torneoId)
+      const disciplinas = await Promise.all(
+        competencias.map(async (competencia) => {
+          const grilla = await fetchGrillaCompetencia(competencia.competencia_id, competencia.disciplina)
+          return grilla.some((row) => row.juez_id === userId) ? competencia.disciplina : null
+        }),
+      )
+      return disciplinas.filter((item): item is string => item !== null)
+    },
     enabled: Boolean(torneoActivoQuery.data?.torneo_id && userId),
   })
 

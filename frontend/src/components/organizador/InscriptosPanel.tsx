@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { guardarApInscripcion, listarInscriptosDetalle } from '../../api/registro'
 import type { EstadoTorneo } from '../../api/torneo'
+import { normalizeApInput } from '../../pages/atleta/portalData'
 import { EmptyStateCard } from './EmptyStateCard'
 import { TablaInscriptos, type InscriptoRow } from './TablaInscriptos'
 
@@ -61,7 +62,10 @@ export function InscriptosPanel({ torneoId, torneoEstado }: InscriptosPanelProps
   const editable = torneoEstado === 'INSCRIPCION_ABIERTA'
   const saveMutation = useMutation({
     mutationFn: async (payload: { inscripcionId: string; disciplina: string; valorAp: string }) => {
-      await guardarApInscripcion(payload)
+      await guardarApInscripcion({
+        ...payload,
+        valorAp: normalizeApInput(payload.valorAp, payload.disciplina),
+      })
       return payload
     },
     onSuccess: async () => {

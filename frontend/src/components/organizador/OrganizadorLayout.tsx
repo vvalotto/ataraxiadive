@@ -16,7 +16,6 @@ interface OrganizadorLayoutProps {
 }
 
 interface NavItem {
-  icon: string
   label: string
   to: string
   key: 'inicio' | 'inscriptos' | 'panel' | 'grilla' | 'resultados' | 'jueces' | 'torneo' | 'audit'
@@ -24,14 +23,14 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { key: 'inicio', icon: '🏠', label: 'Inicio', to: '/organizador/torneo' },
-  { key: 'inscriptos', icon: '🧾', label: 'Inscriptos', to: '/organizador/inscriptos' },
-  { key: 'panel', icon: '📊', label: 'Panel', to: '/organizador/panel' },
-  { key: 'grilla', icon: '📋', label: 'Grilla', to: '/organizador/grilla' },
-  { key: 'resultados', icon: '🏆', label: 'Resultados', to: '/organizador/resultados' },
-  { key: 'jueces', icon: '👥', label: 'Jueces', to: '/organizador/jueces' },
-  { key: 'torneo', icon: '📝', label: 'Torneo', to: '/organizador/torneo' },
-  { key: 'audit', icon: '🔍', label: 'Audit Log', to: '/organizador/audit-log' },
+  { key: 'inicio', label: 'Inicio', to: '/organizador/torneo' },
+  { key: 'panel', label: 'Panel', to: '/organizador/panel' },
+  { key: 'inscriptos', label: 'Inscriptos', to: '/organizador/inscriptos' },
+  { key: 'grilla', label: 'Grilla', to: '/organizador/grilla' },
+  { key: 'resultados', label: 'Resultados', to: '/organizador/resultados' },
+  { key: 'jueces', label: 'Jueces', to: '/organizador/jueces' },
+  { key: 'torneo', label: 'Torneo', to: '/organizador/torneo' },
+  { key: 'audit', label: 'Audit Log', to: '/organizador/audit-log' },
 ]
 
 function currentSection(pathname: string): NavItem['key'] {
@@ -101,17 +100,17 @@ export function OrganizadorLayout({
           <div
             className={
               showTournamentNavigation && !simpleHeader
-                ? 'flex min-h-14 flex-col gap-3 py-3 xl:flex-row xl:items-center'
-                : 'flex flex-col gap-3 py-4 xl:flex-row xl:items-center xl:justify-between'
+                ? 'flex flex-col gap-2 py-2 xl:flex-row xl:items-center xl:justify-between'
+                : 'flex flex-col gap-2 py-3 xl:flex-row xl:items-center xl:justify-between'
             }
           >
             <div className="flex min-w-0 flex-1 items-center">
               {showTournamentNavigation ? (
-                <nav className="flex min-w-0 flex-1 flex-wrap items-center gap-x-0.5 gap-y-1">
+                <nav className="-mx-1 flex min-w-0 flex-1 items-center gap-1 overflow-x-auto px-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-700">
                   {NAV_ITEMS.filter((item) => shouldShowNavItem(item)).map((item) => {
                     const isActive = seccionActiva === item.key
                     const baseClass =
-                      'flex h-14 items-center gap-2 border-b-2 border-transparent px-3.5 text-[13px] font-semibold transition whitespace-nowrap'
+                      'inline-flex h-10 items-center rounded-full border border-transparent px-3 text-xs font-semibold tracking-[0.02em] transition whitespace-nowrap'
 
                     return (
                       <Link
@@ -119,13 +118,10 @@ export function OrganizadorLayout({
                         to={navHref(item)}
                         className={
                           isActive
-                            ? `${baseClass} text-sky-300 border-sky-400`
-                            : `${baseClass} text-slate-400 hover:text-white`
+                            ? `${baseClass} border-sky-400/40 bg-sky-400/10 text-sky-200`
+                            : `${baseClass} text-slate-400 hover:border-slate-700 hover:bg-slate-800/70 hover:text-white`
                         }
                       >
-                        <span className="text-[15px]" aria-hidden="true">
-                          {item.icon}
-                        </span>
                         {item.label}
                       </Link>
                     )
@@ -134,23 +130,23 @@ export function OrganizadorLayout({
               ) : null}
             </div>
 
-            <div className="ml-auto flex flex-wrap items-center gap-3">
+            <div className="ml-auto flex flex-wrap items-center gap-2">
               {!simpleHeader ? <HealthCheck compact /> : null}
-              <span className="text-[13px] text-slate-400">
+              <span className="text-xs text-slate-400">
                 {usuarioLabel}
               </span>
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 py-4 xl:flex-row xl:items-end xl:justify-between">
+          <div className="flex flex-col gap-2 border-t border-slate-800/80 py-3 xl:flex-row xl:items-end xl:justify-between">
             <div className="max-w-3xl">
               {!simpleHeader ? (
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-300/80">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-300/75">
                   Organizador
                 </p>
               ) : null}
-              <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white">{title}</h1>
-              {subtitle ? <p className="mt-2 text-sm text-slate-300">{subtitle}</p> : null}
+              <h1 className="mt-1 text-2xl font-semibold tracking-tight text-white">{title}</h1>
+              {subtitle ? <p className="mt-1 text-sm text-slate-300">{subtitle}</p> : null}
             </div>
             {actions ? <div className="flex flex-wrap gap-2">{actions}</div> : null}
           </div>

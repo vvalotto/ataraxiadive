@@ -12,6 +12,7 @@ import {
   type InscriptoDto,
 } from '../../api/registro'
 import { fetchTorneos, type EstadoTorneo, type TorneoDto } from '../../api/torneo'
+import { formatMarca } from '../../utils/marca'
 
 export interface AtletaPortalEntry {
   torneo: TorneoDto
@@ -51,7 +52,7 @@ export const DISCIPLINA_LABELS: Record<string, string> = {
   DNF: 'DNF',
   DYN: 'DYN',
   DBF: 'DBF',
-  DYNB: 'DYNB',
+  DYNB: 'DBF',
   SPE_2X50: 'SPE 2x50',
   SPE_4X50: 'SPE 4x50',
   SPE_8X50: 'SPE 8x50',
@@ -98,13 +99,63 @@ export function getEstadoTorneoLabel(estado: EstadoTorneo): string {
   }
 }
 
+export function esDisciplinaTiempo(disciplina: string): boolean {
+  return ['STA', 'SPE_2X50', 'SPE_4X50', 'SPE_8X50', 'SPE_16X50'].includes(disciplina)
+}
+
 export function getUnidadEsperada(disciplina: string): 'Metros' | 'Segundos' {
-  return disciplina === 'STA' ? 'Segundos' : 'Metros'
+  return esDisciplinaTiempo(disciplina) ? 'Segundos' : 'Metros'
 }
 
 export function getUnidadLabel(unidad: string | null): string {
-  if (unidad === 'SEGUNDOS') return 'seg'
+  if (unidad?.toLowerCase() === 'segundos') return 'mm:ss'
   return 'm'
+}
+
+export function formatAp(value: string | null, unidad: string | null): string {
+  if (!value?.trim()) return 'Sin dato'
+  return formatMarca(value, unidad ?? 'Metros')
+}
+
+export function normalizeApInput(value: string, disciplina: string): string {
+  const trimmed = value.trim()
+  if (!esDisciplinaTiempo(disciplina)) {
+    return trimmed
+  }
+  if (!trimmed.includes(':')) {
+    return trimmed
+  }
+  if (!/^\d+:\d{1,2}$/.test(trimmed)) {
+    return trimmed
+  }
+  const [minutosRaw, segundosRaw] = trimmed.split(':', 2)
+  const minutos = Number(minutosRaw)
+  const segundos = Number(segundosRaw)
+  if (!Number.isFinite(minutos) || !Number.isFinite(segundos)) {
+    return trimmed
+  }
+  if (!Number.isInteger(minutos) || !Number.isInteger(segundos) || segundos < 0 || segundos >= 60) {
+    return trimmed
+  }
+  return String(minutos * 60 + segundos)
+}
+
+export function isApInputValido(value: string, disciplina: string): boolean {
+  const trimmed = value.trim()
+  if (!trimmed) {
+    return false
+  }
+  if (!esDisciplinaTiempo(disciplina)) {
+    return Number(trimmed) > 0
+  }
+  if (trimmed.includes(':')) {
+    if (!/^\d+:\d{1,2}$/.test(trimmed)) {
+      return false
+    }
+    const normalizado = normalizeApInput(trimmed, disciplina)
+    return Number(normalizado) > 0 && !normalizado.includes(':')
+  }
+  return Number(trimmed) > 0
 }
 
 function buildApEstado(

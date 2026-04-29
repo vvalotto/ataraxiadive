@@ -17,6 +17,10 @@ from competencia.application.commands.ajustar_grilla import (
     AjustarGrillaCommand,
     AjustarGrillaHandler,
 )
+from competencia.application.commands.asignar_juez_performance import (
+    AsignarJuezPerformanceCommand,
+    AsignarJuezPerformanceHandler,
+)
 from competencia.application.commands.asignar_tarjeta import (
     AsignarTarjetaCommand,
     AsignarTarjetaHandler,
@@ -201,6 +205,13 @@ class ConfirmarGrillaBody(BaseModel):
 
 class IniciarCompetenciaBody(BaseModel):
     """Body del endpoint POST /iniciar."""
+
+    disciplina: Disciplina
+    juez_id: str
+
+
+class AsignarJuezPerformanceBody(BaseModel):
+    """Body del endpoint PUT /grilla/{performance_id}/juez."""
 
     disciplina: Disciplina
     juez_id: str
@@ -434,6 +445,13 @@ def get_resolver_revision_handler(
     return ResolverRevisionHandler(event_store, performances_estado)
 
 
+def get_asignar_juez_performance_handler(
+    event_store: EventStoreDep,
+) -> AsignarJuezPerformanceHandler:
+    """Dependency: handler para asignar juez a una performance."""
+    return AsignarJuezPerformanceHandler(event_store)
+
+
 EventStoreDep = Annotated[EventStorePort, Depends(get_event_store)]
 DisciplinaDescriptorDep = Annotated[DisciplinaDescriptorAdapter, Depends(get_disciplina_descriptor)]
 CompetenciasPorTorneoProjectionDep = Annotated[
@@ -462,6 +480,9 @@ CorregirResultadoTrasDNSHandlerDep = Annotated[
 ResolverRevisionHandlerDep = Annotated[
     ResolverRevisionHandler, Depends(get_resolver_revision_handler)
 ]
+AsignarJuezPerformanceHandlerDep = Annotated[
+    AsignarJuezPerformanceHandler, Depends(get_asignar_juez_performance_handler)
+]
 
 
 def get_obtener_eventos_handler(
@@ -483,7 +504,7 @@ def get_obtener_proximas_performances_handler(
     event_store: EventStoreDep,
 ) -> ObtenerProximasPerformancesHandler:
     """Dependency: handler de próximas performances."""
-    return ObtenerProximasPerformancesHandler(event_store)
+    return ObtenerProximasPerformancesHandler(event_store, AtletaNombreAdapter())
 
 
 def get_obtener_progreso_handler(
@@ -1136,6 +1157,25 @@ async def post_iniciar_competencia(
     return Response(status_code=204)
 
 
+@router.put("/{competencia_id}/grilla/{performance_id}/juez", response_class=JSONResponse)
+async def put_asignar_juez_performance(
+    competencia_id: UUID,
+    performance_id: UUID,
+    body: AsignarJuezPerformanceBody,
+    handler: AsignarJuezPerformanceHandlerDep,
+    _: OrganizadorDep,
+) -> JSONResponse:
+    await handler.handle(
+        AsignarJuezPerformanceCommand(
+            competencia_id=competencia_id,
+            disciplina=body.disciplina,
+            performance_id=performance_id,
+            juez_id=body.juez_id,
+        )
+    )
+    return JSONResponse(status_code=200, content={"ok": True, "juez_id": body.juez_id})
+
+
 @router.post("/{competencia_id}/finalizar", response_class=JSONResponse)
 async def post_finalizar_competencia(
     competencia_id: UUID,
@@ -1183,6 +1223,7 @@ async def get_grilla(
                 "performance": e.performance,
                 "estado": e.estado,
                 "tarjeta_asignada": e.tarjeta_asignada,
+                "juez_id": e.juez_id,
             }
             for e in entradas
         ],

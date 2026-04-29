@@ -5,7 +5,7 @@ from datetime import date, datetime
 from decimal import Decimal
 from uuid import UUID, uuid4
 
-from registro.domain.exceptions import DisciplinaNoInscripta, PlazoCancelacionVencido
+from registro.domain.exceptions import APYaDeclarado, DisciplinaNoInscripta, PlazoCancelacionVencido
 from registro.domain.value_objects.ap_declarado import APDeclarado
 from registro.domain.value_objects.estado_inscripcion import EstadoInscripcion
 from shared.domain.value_objects.disciplina import Disciplina
@@ -30,6 +30,8 @@ class Inscripcion:
     def declarar_ap(self, disciplina: Disciplina, valor: Decimal) -> APDeclarado:
         if disciplina not in self.disciplinas:
             raise DisciplinaNoInscripta(f"La disciplina {disciplina.value} no pertenece a la inscripción")
+        if self.obtener_ap(disciplina) is not None:
+            raise APYaDeclarado(f"El AP para {disciplina.value} ya fue declarado y no puede editarse")
         ap = APDeclarado.desde_disciplina(disciplina, valor)
         self.ap_por_disciplina[disciplina] = ap
         return ap

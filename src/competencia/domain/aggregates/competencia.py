@@ -15,6 +15,7 @@ from competencia.domain.events.grilla_confirmada import GrillaConfirmada
 from competencia.domain.events.grilla_de_salida_ajustada import GrillaDeSalidaAjustada
 from competencia.domain.events.grilla_de_salida_generada import GrillaDeSalidaGenerada
 from competencia.domain.events.intervalo_ot_configurado import IntervaloOTConfigurado
+from competencia.domain.events.juez_performance_asignado import JuezPerformanceAsignado
 from competencia.domain.exceptions import (
     CompetenciaNoConfirmada,
     CompetenciaNoFinalizable,
@@ -267,6 +268,34 @@ class Competencia(AggregateRoot):
         )
         self._record(event)
 
+    def asignar_juez_performance(self, performance_id: UUID, juez_id: str) -> None:
+        """Asigna un juez a una performance específica dentro de la grilla."""
+        if not self._grilla.esta_generada:
+            raise GrillaNoGenerada(
+                f"Competencia {self._competencia_id}: grilla no generada — "
+                "no se puede asignar juez por performance"
+            )
+
+        if performance_id not in {entrada.performance_id for entrada in self._grilla.entradas}:
+            raise PerformanceNoEncontrada(
+                f"Competencia {self._competencia_id}: performance "
+                f"{performance_id} no encontrada en la grilla"
+            )
+
+        now = JuezPerformanceAsignado.now()
+        event = JuezPerformanceAsignado(
+            event_type="JuezPerformanceAsignado",
+            aggregate_id=str(self._competencia_id),
+            occurred_at=now,
+            competencia_id=str(self._competencia_id),
+            disciplina=self._disciplina.value,
+            performance_id=str(performance_id),
+            juez_id=juez_id,
+            asignado_en=now.isoformat(),
+        )
+        self._grilla.asignar_juez(performance_id, juez_id)
+        self._record(event)
+
     def confirmar_grilla(self) -> None:
         """Confirma la Grilla de Salida, congelándola de forma irreversible (INV-C-02).
 
@@ -413,6 +442,7 @@ class Competencia(AggregateRoot):
             "GrillaDeSalidaGenerada": self._apply_grilla_de_salida_generada,
             "GrillaDeSalidaAjustada": self._apply_grilla_de_salida_ajustada,
             "GrillaConfirmada": self._apply_grilla_confirmada,
+            "JuezPerformanceAsignado": self._apply_juez_performance_asignado,
             "CompetenciaIniciada": self._apply_competencia_iniciada,
             "CompetenciaFinalizada": self._apply_competencia_finalizada,
         }
@@ -440,6 +470,9 @@ class Competencia(AggregateRoot):
         self._grilla_confirmada = True
         self._estado = EstadoCompetencia.Confirmada
 
+    def _apply_juez_performance_asignado(self, payload: dict[str, Any]) -> None:
+        self._grilla.asignar_juez(UUID(payload["performance_id"]), payload["juez_id"])
+
     def _apply_competencia_iniciada(self, payload: dict[str, Any]) -> None:  # noqa: ARG002
         self._estado = EstadoCompetencia.EnEjecucion
 
@@ -463,6 +496,7 @@ class Competencia(AggregateRoot):
                 "posicion": entrada.posicion,
                 "andarivel": entrada.andarivel,
                 "ot_programado": entrada.ot_programado.isoformat(),
+                "juez_id": entrada.juez_id,
             }
             for entrada in entradas
         ]

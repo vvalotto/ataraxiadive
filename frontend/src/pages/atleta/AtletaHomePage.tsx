@@ -4,12 +4,12 @@ import useAuthStore from '../../stores/useAuthStore'
 import { AtletaShell } from '../../components/atleta/AtletaShell'
 import {
   buildNombreCorto,
+  formatAp,
   formatCategoria,
   formatDisciplina,
   formatFecha,
   formatHora,
   getEstadoTorneoLabel,
-  getUnidadLabel,
   loadAtletaPortalSnapshot,
 } from './portalData'
 
@@ -115,7 +115,7 @@ export function AtletaHomePage() {
                   Andarivel {nextOt.andarivel ?? '—'} · Posición {nextOt.posicion ?? '—'}
                 </p>
                 <p className="mt-1 text-sm text-slate-300">
-                  AP {nextOt.ap ?? 'sin declarar'} {getUnidadLabel(nextOt.unidad)}
+                  AP {formatAp(nextOt.ap, nextOt.unidad)}
                 </p>
               </div>
             ) : (

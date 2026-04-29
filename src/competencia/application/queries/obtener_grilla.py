@@ -34,6 +34,7 @@ class EntradaGrillaDTO:
     performance: str | None
     estado: str
     tarjeta_asignada: str | None
+    juez_id: str | None
 
 
 @dataclass(frozen=True)  # pylint: disable=too-few-public-methods
@@ -81,6 +82,7 @@ class ObtenerGrillaHandler:
                 performance=performance.performance,
                 estado=performance.estado,
                 tarjeta_asignada=performance.tarjeta_asignada,
+                juez_id=e.juez_id,
             )
             for e in competencia.grilla
             for performance in [

@@ -114,7 +114,7 @@ def get_obtener_proximas_performances_handler(
     event_store: EventStoreDep,
 ) -> ObtenerProximasPerformancesHandler:
     """Dependency: handler de próximas performances."""
-    return ObtenerProximasPerformancesHandler(event_store)
+    return ObtenerProximasPerformancesHandler(event_store, AtletaNombreAdapter())
 
 
 def get_obtener_progreso_handler(
@@ -161,7 +161,7 @@ def get_iniciar_competencia_handler(event_store: EventStoreDep) -> IniciarCompet
 
 def get_obtener_grilla_handler(event_store: EventStoreDep) -> ObtenerGrillaHandler:
     """Dependency: handler de consulta de la grilla."""
-    return ObtenerGrillaHandler(event_store)
+    return ObtenerGrillaHandler(event_store, AtletaNombreAdapter())
 
 
 def get_obtener_estado_competencia_handler(

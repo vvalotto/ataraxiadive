@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 from registro.domain.exceptions import APIncompletoParaPreparacion
 from torneo.domain.exceptions import (
     DisciplinaObsoleta,
+    EjecucionNoPermitida,
     PremiacionNoPermitida,
     TorneoCerrado,
     TorneoNoEncontrado,
@@ -65,6 +66,20 @@ def register_torneo_exception_handlers(app: FastAPI) -> None:
             content={
                 "type": "https://ataraxiadive.com/errors/premiacion-no-permitida",
                 "title": "Premiación no permitida",
+                "status": 409,
+                "detail": str(exc),
+            },
+        )
+
+    @app.exception_handler(EjecucionNoPermitida)
+    async def ejecucion_no_permitida_handler(
+        request: Request, exc: EjecucionNoPermitida
+    ) -> JSONResponse:
+        return JSONResponse(
+            status_code=409,
+            content={
+                "type": "https://ataraxiadive.com/errors/ejecucion-no-permitida",
+                "title": "Ejecución no permitida",
                 "status": 409,
                 "detail": str(exc),
             },

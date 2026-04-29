@@ -42,8 +42,12 @@ from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTo
 router = APIRouter(prefix="/torneos", tags=["torneos"])
 PremiacionPrecondition = Callable[[UUID], Awaitable[None]]
 CierreInscripcionPrecondition = Callable[[UUID], Awaitable[None]]
+EjecucionPrecondition = Callable[[UUID], Awaitable[None]]
+EjecucionPostAction = Callable[[UUID], Awaitable[None]]
 _premiacion_precondition: PremiacionPrecondition | None = None
 _cierre_inscripcion_precondition: CierreInscripcionPrecondition | None = None
+_ejecucion_precondition: EjecucionPrecondition | None = None
+_ejecucion_post_action: EjecucionPostAction | None = None
 
 
 def configure_premiacion_precondition(precondition: PremiacionPrecondition | None) -> None:
@@ -57,6 +61,16 @@ def configure_cierre_inscripcion_precondition(
 ) -> None:
     global _cierre_inscripcion_precondition  # noqa: PLW0603
     _cierre_inscripcion_precondition = precondition
+
+
+def configure_ejecucion_precondition(precondition: EjecucionPrecondition | None) -> None:
+    global _ejecucion_precondition  # noqa: PLW0603
+    _ejecucion_precondition = precondition
+
+
+def configure_ejecucion_post_action(post_action: EjecucionPostAction | None) -> None:
+    global _ejecucion_post_action  # noqa: PLW0603
+    _ejecucion_post_action = post_action
 
 
 # ── Schemas ───────────────────────────────────────────────────────────────────
@@ -187,7 +201,11 @@ async def cerrar_inscripcion(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse
 
 @router.put("/{torneo_id}/iniciar-ejecucion", status_code=200)
 async def iniciar_ejecucion(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse:
-    await IniciarEjecucionHandler(_repo()).handle(TransicionarTorneoCommand(torneo_id))
+    await IniciarEjecucionHandler(
+        _repo(),
+        precondition=_ejecucion_precondition,
+        post_action=_ejecucion_post_action,
+    ).handle(TransicionarTorneoCommand(torneo_id))
     return JSONResponse(status_code=200, content={"ok": True})
 
 

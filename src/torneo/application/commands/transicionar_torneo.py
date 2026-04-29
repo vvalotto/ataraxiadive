@@ -47,7 +47,21 @@ class CerrarInscripcionHandler(_TransicionHandler):
 
 
 class IniciarEjecucionHandler(_TransicionHandler):
+    def __init__(
+        self,
+        repo: TorneoRepositoryPort,
+        precondition: Callable[[UUID], Awaitable[None]] | None = None,
+        post_action: Callable[[UUID], Awaitable[None]] | None = None,
+    ) -> None:
+        super().__init__(repo)
+        self._precondition = precondition
+        self._post_action = post_action
+
     async def handle(self, cmd: TransicionarTorneoCommand) -> None:
+        if self._precondition is not None:
+            await self._precondition(cmd.torneo_id)
+        if self._post_action is not None:
+            await self._post_action(cmd.torneo_id)
         await self._ejecutar(cmd.torneo_id, "iniciar_ejecucion")
 
 

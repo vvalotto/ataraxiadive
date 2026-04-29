@@ -1,5 +1,10 @@
 import { useMemo, useState } from 'react'
+import { isApInputValido } from '../../pages/atleta/portalData'
 import { EstadoAPBadge } from './EstadoAPBadge'
+
+function esDisciplinaTiempo(disciplina: string): boolean {
+  return ['STA', 'SPE_2X50', 'SPE_4X50', 'SPE_8X50', 'SPE_16X50'].includes(disciplina)
+}
 
 export interface EstadoAP {
   estado: 'pendiente' | 'declarado' | 'cerrado'
@@ -24,6 +29,10 @@ interface TablaInscriptosProps {
   editable?: boolean
   onGuardarAp?: (payload: { inscripcionId: string; disciplina: string; valorAp: string }) => void
   savingKey?: string | null
+}
+
+function puedeDeclararAp(estado?: EstadoAP): boolean {
+  return !estado?.ap?.trim()
 }
 
 export function TablaInscriptos({
@@ -109,6 +118,7 @@ export function TablaInscriptos({
                     const estado = row.estadoApPorDisciplina[disciplina]
                     const cellKey = `${row.inscripcionId}:${disciplina}`
                     const draft = drafts[cellKey] ?? estado?.ap ?? ''
+                    const editableCell = editable && puedeDeclararAp(estado)
                     return (
                       <td key={disciplina} className="px-4 py-3">
                         <div className="space-y-2">
@@ -117,7 +127,7 @@ export function TablaInscriptos({
                             ap={estado?.ap}
                             unidad={estado?.unidad}
                           />
-                          {editable ? (
+                          {editableCell ? (
                             <div className="flex min-w-44 flex-col gap-2">
                               <input
                                 value={draft}
@@ -127,13 +137,13 @@ export function TablaInscriptos({
                                     [cellKey]: event.target.value,
                                   }))
                                 }
-                                inputMode="decimal"
-                                placeholder={estado?.unidad === 'Segundos' ? 'Segundos' : 'Metros'}
+                                inputMode={esDisciplinaTiempo(disciplina) ? 'text' : 'decimal'}
+                                placeholder={esDisciplinaTiempo(disciplina) ? 'mm:ss' : 'Metros'}
                                 className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
                               />
                               <button
                                 type="button"
-                                disabled={savingKey === cellKey || !(parseFloat(draft) > 0)}
+                                disabled={savingKey === cellKey || !isApInputValido(draft, disciplina)}
                                 onClick={() =>
                                   onGuardarAp?.({
                                     inscripcionId: row.inscripcionId,

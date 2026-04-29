@@ -5,13 +5,11 @@ import {
   fetchCompetenciasPorTorneo,
   fetchEstadoCompetencia,
   fetchGrillaCompetencia,
-  fetchPerformanceActual,
   fetchProgresoCompetencia,
   fetchProximasPerformances,
   type CompetenciaResumenDto,
   type EstadoCompetenciaDto,
   type GrillaAtletaDto,
-  type PerformanceActualDto,
   type ProgresoCompetenciaDto,
   type ProximoAtletaDto,
 } from '../../api/competencia'
@@ -19,6 +17,7 @@ import { fetchTorneo, type EstadoTorneo } from '../../api/torneo'
 import { EmptyStateCard } from '../../components/organizador/EmptyStateCard'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
 import { TorneoRouteSelector } from '../../components/organizador/TorneoRouteSelector'
+import { formatMarca } from '../../utils/marca'
 
 type EstadoCompetenciaNormalizado = 'EN_EJECUCION' | 'PENDIENTE' | 'CERRADA' | 'DESCONOCIDO'
 
@@ -120,6 +119,23 @@ function formatDurationMinutes(totalMinutes: number | null): string {
   return `${totalMinutes}'`
 }
 
+function formatOtHora(ot: string | null | undefined): string {
+  if (!ot) return '—'
+
+  const match = ot.match(/T(\d{2}:\d{2})/)
+  if (match) return match[1]
+
+  const timeMatch = ot.match(/^(\d{2}:\d{2})/)
+  if (timeMatch) return timeMatch[1]
+
+  const date = new Date(ot)
+  if (!Number.isNaN(date.getTime())) {
+    return date.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: false })
+  }
+
+  return ot
+}
+
 function formatKpiCompletados(progreso: ProgresoCompetenciaDto | undefined): string {
   if (!progreso) return 'Sin datos'
   return `${progreso.completadas} de ${progreso.total}`
@@ -170,7 +186,7 @@ function buildAlertas(
     .map((fila) => ({
       atleta: fila.nombre_atleta,
       disciplina: competenciaActiva.competencia.disciplina,
-      descripcion: `Performance en revision en OT ${fila.ot_programado} con AP ${fila.ap_declarado} ${fila.unidad}`,
+      descripcion: `Performance en revision en OT ${formatOtHora(fila.ot_programado)} con AP ${formatMarca(fila.ap_declarado, fila.unidad)}`,
       href: `/organizador/grilla?torneo_id=${competenciaActiva.competencia.torneo_id}`,
     }))
 }
@@ -179,35 +195,52 @@ function buildProximos(
   grilla: GrillaAtletaDto[],
   proximas: ProximoAtletaDto[],
 ): Array<{
-  posicion: number
   atleta: string
+  andarivel: number | string
   ap: string
-  estado: string
   ot: string
 }> {
   if (proximas.length > 0) {
-    return proximas.slice(0, 5).map((item) => {
-      const match = grilla.find((fila) => fila.posicion === item.posicion)
+    const filasProximas = proximas.map((item) => {
+      const match =
+        grilla.find((fila) => fila.posicion === item.posicion) ??
+        grilla.find((fila) => fila.nombre_atleta === item.nombre_atleta)
       return {
-        posicion: item.posicion,
         atleta: item.nombre_atleta,
-        ap: `${item.ap_declarado} ${item.unidad}`,
-        estado: match?.estado ?? 'Pendiente',
-        ot: match?.ot_programado ?? '—',
+        andarivel: match?.andarivel ?? '—',
+        ap: formatMarca(item.ap_declarado, item.unidad),
+        ot: formatOtHora(match?.ot_programado),
       }
     })
+
+    const atletasIncluidos = new Set(filasProximas.map((fila) => fila.atleta))
+    const filasRestantes = grilla
+      .filter(
+        (fila) =>
+          !isPerformanceFinalizada(fila.estado) &&
+          fila.estado !== 'EnRevision' &&
+          !atletasIncluidos.has(fila.nombre_atleta),
+      )
+      .sort((a, b) => a.posicion - b.posicion)
+      .map((fila) => ({
+        atleta: fila.nombre_atleta,
+        andarivel: fila.andarivel,
+        ap: formatMarca(fila.ap_declarado, fila.unidad),
+        ot: formatOtHora(fila.ot_programado),
+      }))
+
+    return [...filasProximas, ...filasRestantes].slice(0, 6)
   }
 
   return grilla
     .filter((fila) => !isPerformanceFinalizada(fila.estado) && fila.estado !== 'EnRevision')
     .sort((a, b) => a.posicion - b.posicion)
-    .slice(0, 5)
+    .slice(0, 6)
     .map((fila) => ({
-      posicion: fila.posicion,
       atleta: fila.nombre_atleta,
-      ap: `${fila.ap_declarado} ${fila.unidad}`,
-      estado: fila.estado,
-      ot: fila.ot_programado,
+      andarivel: fila.andarivel,
+      ap: formatMarca(fila.ap_declarado, fila.unidad),
+      ot: formatOtHora(fila.ot_programado),
     }))
 }
 
@@ -324,12 +357,6 @@ function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
     enabled: Boolean(competenciaActiva),
   })
 
-  const performanceActualQuery = useQuery({
-    queryKey: ['panel-performance-actual', competenciaActiva?.competencia.competencia_id],
-    queryFn: () => fetchPerformanceActual(competenciaActiva!.competencia.competencia_id),
-    enabled: Boolean(competenciaActiva),
-  })
-
   const grillaActivaQuery = useQuery({
     queryKey: [
       'panel-grilla-activa',
@@ -374,9 +401,6 @@ function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
   const totalAtletas = progresoQuery.data?.total ?? grillaActiva.length
   const tiempoEstimado = formatDurationMinutes(
     estimateRemainingMinutes(progresoQuery.data, competenciaActiva),
-  )
-  const otrasDisciplinas = competenciasOperativas.filter(
-    (item) => item.competencia.competencia_id !== competenciaActiva?.competencia.competencia_id,
   )
   const atletasDisciplinaActiva =
     grillaActiva.length > 0 ? grillaActiva.length : progresoQuery.data?.total ?? 0
@@ -442,87 +466,86 @@ function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
 
           <section className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
             <article className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-6 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                    Disciplina activa
-                  </p>
-                  <h2 className="mt-2 text-2xl font-semibold text-white">
-                    {competenciaActiva.competencia.disciplina}
-                  </h2>
-                  <p className="mt-2 text-sm text-slate-300">
-                    {atletasDisciplinaActiva} atletas · intervalo{' '}
-                    {competenciaActiva.intervaloMinutos ?? '—'} min
-                  </p>
-                </div>
-                <span
-                  className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] ${badgeClass(
-                    competenciaActiva.estado,
-                  )}`}
-                >
-                  {labelEstadoCompetencia(competenciaActiva.estado)}
-                </span>
-              </div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                Proximos atletas
+              </p>
+              <h3 className="mt-2 text-xl font-semibold text-white">
+                Cola operativa de la disciplina activa
+              </h3>
 
-              <div className="mt-6">
-                <DisciplinaProgress
-                  completadas={progresoQuery.data?.completadas ?? 0}
-                  total={progresoQuery.data?.total ?? atletasDisciplinaActiva}
-                />
-              </div>
-
-              <div className="mt-6 grid gap-4 md:grid-cols-2">
-                <div className="rounded-[1.5rem] border border-slate-700 bg-slate-950/70 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                    Performance actual
-                  </p>
-                  {performanceActualQuery.data ? (
-                    <DisciplinaActualCard performance={performanceActualQuery.data} />
-                  ) : (
-                    <p className="mt-3 text-sm text-slate-300">
-                      No hay una performance en curso informada en este momento.
-                    </p>
-                  )}
-                </div>
-
-                <div className="rounded-[1.5rem] border border-slate-700 bg-slate-950/70 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                    Otras disciplinas del torneo
-                  </p>
-                  <div className="mt-3 space-y-3">
-                    {otrasDisciplinas.length > 0 ? (
-                      otrasDisciplinas.map((item) => (
-                        <div
-                          key={item.competencia.competencia_id}
-                          className="rounded-[1.25rem] border border-slate-700 bg-slate-900/80 p-4"
+              <div className="mt-4 overflow-hidden rounded-[1.25rem] border border-slate-700">
+                <table className="min-w-full divide-y divide-slate-700 text-sm">
+                  <thead className="bg-slate-950/70 text-slate-400">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-semibold">Atleta</th>
+                      <th className="px-4 py-3 text-left font-semibold">Andarivel</th>
+                      <th className="px-4 py-3 text-left font-semibold">OT</th>
+                      <th className="px-4 py-3 text-left font-semibold">AP</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800 bg-slate-900/70 text-slate-200">
+                    {proximos.length > 0 ? (
+                      proximos.map((fila, index) => (
+                        <tr
+                          key={`${fila.atleta}-${fila.ot}-${index}`}
+                          className={
+                            index === 0
+                              ? 'bg-emerald-500/20 ring-1 ring-emerald-400/50 text-white'
+                              : index < 3
+                                ? 'bg-emerald-500/10 text-slate-50'
+                              : 'bg-slate-900/40 text-slate-200'
+                          }
                         >
-                          <div className="flex items-center justify-between gap-3">
-                            <div>
-                              <p className="text-sm font-semibold text-white">
-                                {item.competencia.disciplina}
-                              </p>
-                            </div>
-                            <span
-                              className={`rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] ${badgeClass(
-                                item.estado,
-                              )}`}
-                            >
-                              {labelEstadoCompetencia(item.estado)}
-                            </span>
-                          </div>
-                        </div>
+                          <td className="px-4 py-3 font-medium">{fila.atleta}</td>
+                          <td className="px-4 py-3 text-slate-300">{fila.andarivel}</td>
+                          <td className="px-4 py-3 text-slate-300">{fila.ot}</td>
+                          <td className="px-4 py-3 text-slate-300">{fila.ap}</td>
+                        </tr>
                       ))
                     ) : (
-                      <p className="text-sm text-slate-300">
-                        No hay otras disciplinas informativas para este torneo.
-                      </p>
+                      <tr>
+                        <td colSpan={4} className="px-4 py-4 text-slate-300">
+                          No hay proximos atletas listados para la disciplina activa.
+                        </td>
+                      </tr>
                     )}
-                  </div>
-                </div>
+                  </tbody>
+                </table>
               </div>
             </article>
 
             <div className="grid gap-4">
+              <article className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-6 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                      Disciplina activa
+                    </p>
+                    <h2 className="mt-2 text-2xl font-semibold text-white">
+                      {competenciaActiva.competencia.disciplina}
+                    </h2>
+                    <p className="mt-2 text-sm text-slate-300">
+                      {atletasDisciplinaActiva} atletas · intervalo{' '}
+                      {competenciaActiva.intervaloMinutos ?? '—'} min
+                    </p>
+                  </div>
+                  <span
+                    className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] ${badgeClass(
+                      competenciaActiva.estado,
+                    )}`}
+                  >
+                    {labelEstadoCompetencia(competenciaActiva.estado)}
+                  </span>
+                </div>
+
+                <div className="mt-6">
+                  <DisciplinaProgress
+                    completadas={progresoQuery.data?.completadas ?? 0}
+                    total={progresoQuery.data?.total ?? atletasDisciplinaActiva}
+                  />
+                </div>
+              </article>
+
               <article className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-6 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
                 <div className="flex items-center justify-between gap-3">
                   <div>
@@ -561,87 +584,10 @@ function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
                   )}
                 </div>
               </article>
-
-              <article className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-6 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Proximos atletas
-                </p>
-                <h3 className="mt-2 text-xl font-semibold text-white">
-                  Cola operativa de la disciplina activa
-                </h3>
-
-                <div className="mt-4 overflow-hidden rounded-[1.25rem] border border-slate-700">
-                  <table className="min-w-full divide-y divide-slate-700 text-sm">
-                    <thead className="bg-slate-950/70 text-slate-400">
-                      <tr>
-                        <th className="px-4 py-3 text-left font-semibold">#</th>
-                        <th className="px-4 py-3 text-left font-semibold">Atleta</th>
-                        <th className="px-4 py-3 text-left font-semibold">OT</th>
-                        <th className="px-4 py-3 text-left font-semibold">AP</th>
-                        <th className="px-4 py-3 text-left font-semibold">Estado</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-800 bg-slate-900/70 text-slate-200">
-                      {proximos.length > 0 ? (
-                        proximos.map((fila, index) => (
-                          <tr
-                            key={`${fila.posicion}-${fila.atleta}`}
-                            className={index === 0 ? 'bg-sky-400/10' : undefined}
-                          >
-                            <td className="px-4 py-3 font-semibold text-slate-100">
-                              {fila.posicion}
-                            </td>
-                            <td className="px-4 py-3">
-                              <div className="flex items-center gap-2">
-                                <span>{fila.atleta}</span>
-                                {index === 0 ? (
-                                  <span className="rounded-full border border-sky-400/40 bg-sky-400/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-sky-200">
-                                    SIGUIENTE
-                                  </span>
-                                ) : null}
-                              </div>
-                            </td>
-                            <td className="px-4 py-3 text-slate-300">{fila.ot}</td>
-                            <td className="px-4 py-3 text-slate-300">{fila.ap}</td>
-                            <td className="px-4 py-3 text-slate-300">{fila.estado}</td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan={5} className="px-4 py-4 text-slate-300">
-                            No hay proximos atletas listados para la disciplina activa.
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </article>
             </div>
           </section>
         </>
       ) : null}
     </OrganizadorLayout>
-  )
-}
-
-function DisciplinaActualCard({ performance }: { performance: PerformanceActualDto }) {
-  return (
-    <div className="mt-3 space-y-3">
-      <div>
-        <p className="text-lg font-semibold text-white">{performance.nombre_atleta}</p>
-        <p className="mt-1 text-sm text-slate-300">
-          AP {performance.ap_declarado} {performance.unidad} · andarivel {performance.andarivel}
-        </p>
-      </div>
-      <div className="flex flex-wrap gap-2">
-        <span className="rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-emerald-200">
-          {performance.estado}
-        </span>
-        <span className="rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-300">
-          Unidad {performance.unidad_esperada}
-        </span>
-      </div>
-    </div>
   )
 }

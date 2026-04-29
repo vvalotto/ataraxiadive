@@ -23,7 +23,7 @@ const DISCIPLINA_LABELS: Record<DisciplinaCodigo, string> = {
   STA: 'STA',
   DNF: 'DNF',
   DYN: 'DYN',
-  DYNB: 'DYNB',
+  DYNB: 'DBF',
   DBF: 'DBF',
   SPE_2X50: 'SPE 2x50',
   SPE_4X50: 'SPE 4x50',
