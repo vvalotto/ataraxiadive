@@ -483,7 +483,8 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 ## 26. US-IEDD SP5 INC-5.6 — Algoritmo de Puntaje y Rankings por Categoría/Género
 
 > Estado al 2026-04-28: 6/6 US mergeadas a `develop`.
-> DesignReviewer INC-5.6: ⏳ pendiente.
+> DesignReviewer INC-5.6 + SP-ADJ-09: **0 CRITICAL · 252 WARNING** (+25 vs INC-5.5 · `quality/reports/designreviewer/INC-5.6-report.txt`).
+> +25 WARNING: LCOM/FanOut en RankingCompetencia/RankingOverall/AlgoritmoPuntajeFAAS (INC-5.6) + FeatureEnvy DeclararAPInscripcionHandler (SP-ADJ-09). Hallazgos en `.work/revision-sp5/designreviewer-hallazgos-pendientes.md`.
 
 | US | Inc. | Contenido principal | Estado |
 |----|------|---------------------|--------|

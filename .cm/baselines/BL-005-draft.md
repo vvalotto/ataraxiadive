@@ -62,8 +62,7 @@ gestionable desde el panel del organizador, con ejecución por disciplina y resu
 | DesignReviewer INC-5.3 | designreviewer | 0 CRITICAL · 215 WARNING | `quality/reports/designreviewer/INC-5.3-report.txt` |
 | DesignReviewer INC-5.4 | designreviewer | 0 CRITICAL · 222 WARNING | `quality/reports/designreviewer/INC-5.4-report.txt` |
 | DesignReviewer INC-5.5 | designreviewer | 0 CRITICAL · 227 WARNING (+5 vs INC-5.4) | `quality/reports/designreviewer/INC-5.5-report.txt` |
-| DesignReviewer INC-5.6 | designreviewer | ⏳ pendiente | — |
-| DesignReviewer SP-ADJ-09 | designreviewer | ⏳ pendiente | — |
+| DesignReviewer INC-5.6 + SP-ADJ-09 | designreviewer | 0 CRITICAL · 252 WARNING (+25 vs INC-5.5) | `quality/reports/designreviewer/INC-5.6-report.txt` |
 | ArchitectAnalyst BL-005 | architectanalyst | ⏳ pendiente (al cerrar SP5) | — |
 | UAT SP5 | funcional | ⏳ pendiente (INC-5.7 / cierre BL-005) | — |
 

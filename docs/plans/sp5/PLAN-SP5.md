@@ -234,7 +234,7 @@ recuperar su contraseña vía email (Resend + JWT temporal con expiración 1h).
 
 ### INC-5.6 — Algoritmo de puntaje y rankings por categoría/género ✅ Cerrado 2026-04-28
 
-> DesignReviewer INC-5.6: ⏳ pendiente.
+> DesignReviewer INC-5.6 + SP-ADJ-09: **0 CRITICAL · 252 WARNING** (+25 vs INC-5.5) — `quality/reports/designreviewer/INC-5.6-report.txt`.
 
 | US | Descripción | Estado |
 |----|-------------|--------|
@@ -250,7 +250,7 @@ recuperar su contraseña vía email (Resend + JWT temporal con expiración 1h).
 ### SP-ADJ-09 — Refactoring UX Organizador ✅ Cerrado 2026-04-29
 
 > Resuelve gaps de navegación y consistencia visual del portal organizador identificados post-INC-5.6.
-> DesignReviewer SP-ADJ-09: ⏳ pendiente.
+> DesignReviewer SP-ADJ-09: incluido en INC-5.6-report.txt (misma ejecución).
 
 | US | Descripción | Estado |
 |----|-------------|--------|
