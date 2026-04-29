@@ -60,16 +60,16 @@ export function TablaGrilla({ rows, readOnly, isSaving, onReorder }: TablaGrilla
 
   if (rows.length === 0) {
     return (
-      <div className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
+      <div className="rounded-xl border border-slate-700 bg-slate-950/70 p-4 text-sm text-slate-300">
         No hay atletas en la grilla de esta disciplina.
       </div>
     )
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-stone-200">
-      <table className="min-w-full divide-y divide-stone-200 text-left text-sm">
-        <thead className="bg-stone-50 text-xs font-semibold uppercase text-stone-500">
+    <div className="overflow-x-auto rounded-xl border border-slate-700">
+      <table className="min-w-full divide-y divide-slate-700 text-left text-sm">
+        <thead className="bg-slate-950/80 text-xs font-semibold uppercase text-slate-400">
           <tr>
             <th className="px-4 py-3">Posicion</th>
             <th className="px-4 py-3">Atleta</th>
@@ -79,7 +79,7 @@ export function TablaGrilla({ rows, readOnly, isSaving, onReorder }: TablaGrilla
             <th className="px-4 py-3">Estado</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-stone-200 bg-white">
+        <tbody className="divide-y divide-slate-800 bg-slate-900/70">
           {rows.map((row) => (
             <tr
               key={row.performance_id}
@@ -95,19 +95,19 @@ export function TablaGrilla({ rows, readOnly, isSaving, onReorder }: TablaGrilla
               onDrop={() => handleDrop(row.performance_id)}
               className={[
                 !readOnly ? 'cursor-grab active:cursor-grabbing' : '',
-                overId === row.performance_id ? 'bg-emerald-50' : '',
+                overId === row.performance_id ? 'bg-emerald-500/10' : '',
               ].join(' ')}
             >
-              <td className="px-4 py-3 font-semibold text-stone-950">{row.posicion}</td>
-              <td className="px-4 py-3 text-stone-900">{row.nombre_atleta}</td>
-              <td className="px-4 py-3 text-stone-700">
+              <td className="px-4 py-3 font-semibold text-white">{row.posicion}</td>
+              <td className="px-4 py-3 text-slate-100">{row.nombre_atleta}</td>
+              <td className="px-4 py-3 text-slate-300">
                 {row.ap_declarado} {row.unidad}
               </td>
-              <td className="px-4 py-3 text-stone-700">{row.andarivel}</td>
-              <td className="px-4 py-3 font-semibold text-stone-900">
+              <td className="px-4 py-3 text-slate-300">{row.andarivel}</td>
+              <td className="px-4 py-3 font-semibold text-slate-100">
                 {formatOt(row.ot_programado)}
               </td>
-              <td className="px-4 py-3 text-stone-700">{row.estado}</td>
+              <td className="px-4 py-3 text-slate-300">{row.estado}</td>
             </tr>
           ))}
         </tbody>

@@ -12,6 +12,7 @@ import {
   listarDisciplinasTorneo,
   type DisciplinaTorneoDto,
 } from '../../api/torneo'
+import { EmptyStateCard } from './EmptyStateCard'
 import { TablaJueces } from './TablaJueces'
 
 interface JuecesPanelProps {
@@ -82,6 +83,7 @@ export function JuecesPanel({ torneoId }: JuecesPanelProps) {
     disciplinas.length > 0 && disciplinas.every((disciplina) => Boolean(disciplina.juez_id))
   const sinJuecesAsignados =
     disciplinas.length > 0 && disciplinas.every((disciplina) => !disciplina.juez_id)
+  const hayCompetenciasOperativas = (competenciasQuery.data?.length ?? 0) > 0
 
   const asignarMutation = useMutation({
     mutationFn: async (payload: { disciplina: DisciplinaTorneoDto; juezId: string }) => {
@@ -104,57 +106,91 @@ export function JuecesPanel({ torneoId }: JuecesPanelProps) {
 
   if (disciplinasQuery.isLoading || juecesQuery.isLoading || competenciasQuery.isLoading) {
     return (
-      <div className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
+      <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
         Cargando jueces...
-      </div>
+      </section>
     )
   }
 
   if (disciplinasQuery.isError || juecesQuery.isError || competenciasQuery.isError) {
     return (
-      <div className="rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-900">
+      <section className="rounded-[2rem] border border-red-500/40 bg-red-950/40 p-5 text-sm text-red-100">
         No se pudieron cargar los jueces.
-      </div>
+      </section>
     )
+  }
+
+  if (disciplinas.length > 0 && !hayCompetenciasOperativas) {
+    return <EmptyStateCard message="Este torneo todavía no tiene competencias operativas." />
   }
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-stone-600">
-          {disciplinas.length} disciplinas · {jueces.length} jueces disponibles
-        </p>
-        <span
-          className={[
-            'rounded-lg border px-3 py-2 text-sm font-semibold',
-            todasAsignadas
-              ? 'border-emerald-700 bg-emerald-50 text-emerald-900'
-              : 'border-stone-300 bg-white text-stone-700',
-          ].join(' ')}
-        >
-          {todasAsignadas ? 'Asignacion completa' : 'Asignacion pendiente'}
-        </span>
-      </div>
-
       {error ? (
-        <div className="rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-900">
+        <section className="rounded-[2rem] border border-red-500/40 bg-red-950/40 p-5 text-sm text-red-100">
           {error}
-        </div>
+        </section>
       ) : null}
 
-      {sinJuecesAsignados ? (
-        <div className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-600">
-          Todavia no hay jueces asignados
+      <article className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-6 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+              Asignación por disciplina
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold text-white">Jueces del torneo</h2>
+            <p className="mt-2 text-sm text-slate-300">
+              Vincula cada disciplina operativa con un juez habilitado antes de iniciar la ejecución.
+            </p>
+          </div>
+          <span
+            className={[
+              'rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em]',
+              todasAsignadas
+                ? 'border-emerald-500/40 bg-emerald-950/40 text-emerald-200'
+                : 'border-slate-700 bg-slate-950 text-slate-300',
+            ].join(' ')}
+          >
+            {todasAsignadas ? 'Asignación completa' : 'Asignación pendiente'}
+          </span>
         </div>
-      ) : null}
 
-      <TablaJueces
-        disciplinas={disciplinas}
-        jueces={jueces}
-        savingDisciplina={savingDisciplina}
-        asignablePorDisciplina={asignablePorDisciplina}
-        onAsignar={(disciplina, juezId) => asignarMutation.mutate({ disciplina, juezId })}
-      />
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <div className="rounded-[1.5rem] border border-slate-700 bg-slate-950/70 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+              Cobertura operativa
+            </p>
+            <p className="mt-3 text-3xl font-semibold tracking-tight text-white">
+              {disciplinas.length}
+            </p>
+            <p className="mt-2 text-sm text-slate-300">
+              disciplinas · {jueces.length} jueces disponibles
+            </p>
+          </div>
+
+          <div className="rounded-[1.5rem] border border-slate-700 bg-slate-950/70 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+              Estado de asignación
+            </p>
+            <p className="mt-3 text-lg font-semibold text-white">
+              {sinJuecesAsignados ? 'Todavía no hay jueces asignados' : 'Asignaciones en curso'}
+            </p>
+            <p className="mt-2 text-sm text-slate-300">
+              La tabla inferior se habilita por disciplina cuando la competencia ya tiene grilla disponible.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-6 rounded-[1.5rem] border border-slate-700 bg-slate-950/70 p-4">
+          <TablaJueces
+            disciplinas={disciplinas}
+            jueces={jueces}
+            savingDisciplina={savingDisciplina}
+            asignablePorDisciplina={asignablePorDisciplina}
+            onAsignar={(disciplina, juezId) => asignarMutation.mutate({ disciplina, juezId })}
+          />
+        </div>
+      </article>
     </div>
   )
 }

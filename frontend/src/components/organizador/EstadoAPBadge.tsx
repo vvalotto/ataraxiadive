@@ -14,7 +14,7 @@ export function EstadoAPBadge({ estado, ap, unidad }: EstadoAPBadgeProps) {
 
   if (estado === 'pendiente') {
     return (
-      <span className="inline-flex min-h-8 items-center rounded-lg border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-900">
+      <span className="inline-flex min-h-8 items-center rounded-xl border border-amber-500/40 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-200">
         AP pendiente
       </span>
     )
@@ -22,14 +22,14 @@ export function EstadoAPBadge({ estado, ap, unidad }: EstadoAPBadgeProps) {
 
   if (estado === 'cerrado') {
     return (
-      <span className="inline-flex min-h-8 items-center rounded-lg border border-slate-300 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-800">
+      <span className="inline-flex min-h-8 items-center rounded-xl border border-slate-700 bg-slate-950 px-3 py-1 text-xs font-semibold text-slate-300">
         {apLabel ? `AP cerrado · ${apLabel}` : 'AP cerrado'}
       </span>
     )
   }
 
   return (
-    <span className="inline-flex min-h-8 items-center rounded-lg border border-emerald-300 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-900">
+    <span className="inline-flex min-h-8 items-center rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-200">
       {apLabel ? `AP declarado · ${apLabel}` : 'AP declarado'}
     </span>
   )

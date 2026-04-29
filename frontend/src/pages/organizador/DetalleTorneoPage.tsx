@@ -141,6 +141,7 @@ function DetalleTorneoContent({ torneoId }: DetalleTorneoContentProps) {
     <OrganizadorLayout
       title={torneoQuery.data?.nombre ?? 'Torneo'}
       activeTournamentId={torneoId}
+      activeTournamentState={torneoQuery.data?.estado}
       subtitle="Gestión del torneo activo"
       actions={
         <>

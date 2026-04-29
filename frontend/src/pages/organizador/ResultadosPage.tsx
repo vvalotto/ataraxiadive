@@ -13,6 +13,7 @@ import {
   fetchRankingCompetencia,
 } from '../../api/resultados'
 import { fetchTorneos } from '../../api/torneo'
+import { EmptyStateCard } from '../../components/organizador/EmptyStateCard'
 import { PodiosSection, type PodioCategoriaGroup } from '../../components/organizador/PodiosSection'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
 import { TablaDisciplinaResultados } from '../../components/organizador/TablaDisciplinaResultados'
@@ -61,19 +62,19 @@ function SelectorTorneo() {
       }
     >
       {torneosQuery.isLoading ? (
-        <section className="rounded-[2rem] border border-stone-300/80 bg-white/80 p-5 text-sm text-stone-600">
+        <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando torneos...
         </section>
       ) : null}
 
       {torneosQuery.isError ? (
-        <section className="rounded-[2rem] border border-red-300/60 bg-red-50 p-5 text-sm text-red-900">
+        <section className="rounded-[2rem] border border-red-500/40 bg-red-950/50 p-5 text-sm text-red-100">
           No se pudieron cargar los torneos.
         </section>
       ) : null}
 
       {!torneosQuery.isLoading && !torneosQuery.isError && torneosQuery.data?.length === 0 ? (
-        <section className="rounded-[2rem] border border-stone-300/80 bg-white/80 p-5 text-sm text-stone-600">
+        <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           No hay torneos disponibles.
         </section>
       ) : null}
@@ -82,21 +83,21 @@ function SelectorTorneo() {
         ? (torneosQuery.data ?? []).map((torneo) => (
             <article
               key={torneo.torneo_id}
-              className="rounded-[2rem] border border-stone-300/80 bg-white/85 p-5 shadow-[0_20px_60px_rgba(120,93,54,0.08)]"
+              className="rounded-[2rem] border border-slate-700 bg-slate-900/80 p-5 shadow-[0_20px_60px_rgba(2,6,23,0.32)]"
             >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                     Torneo
                   </p>
-                  <h2 className="mt-2 text-xl font-semibold text-stone-900">{torneo.nombre}</h2>
-                  <p className="mt-2 text-sm text-stone-600">
+                  <h2 className="mt-2 text-xl font-semibold text-white">{torneo.nombre}</h2>
+                  <p className="mt-2 text-sm text-slate-300">
                     {torneo.sede.nombre}, {torneo.sede.ciudad}
                   </p>
                 </div>
                 <Link
                   to={`/organizador/resultados?torneo_id=${torneo.torneo_id}`}
-                  className="rounded-full bg-stone-900 px-4 py-2 text-center text-xs font-semibold uppercase tracking-[0.18em] text-stone-50"
+                  className="rounded-full border border-sky-400 bg-sky-400/10 px-4 py-2 text-center text-xs font-semibold uppercase tracking-[0.16em] text-sky-300"
                 >
                   Ver resultados
                 </Link>
@@ -300,6 +301,7 @@ function ResultadosTorneo({ torneoId }: ResultadosTorneoProps) {
     <OrganizadorLayout
       title="Resultados"
       activeTournamentId={torneoId}
+      activeTournamentState={torneo?.estado}
       subtitle={
         disciplinaActiva
           ? `${subtitulo} · ${disciplinaActiva} · ${estadoRankingLabel}${progresoLabel ? ` · ${progresoLabel}` : ''}`
@@ -334,9 +336,7 @@ function ResultadosTorneo({ torneoId }: ResultadosTorneoProps) {
       ) : null}
 
       {!competenciasQuery.isLoading && !competenciasQuery.isError && disciplinas.length === 0 ? (
-        <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">
-          Este torneo aún no tiene competencias generadas.
-        </section>
+        <EmptyStateCard message="Este torneo todavía no tiene competencias operativas." />
       ) : null}
 
       {disciplinas.length > 0 ? (

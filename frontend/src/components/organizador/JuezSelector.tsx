@@ -17,7 +17,7 @@ export function JuezSelector({ jueces, value, disabled, onChange }: JuezSelector
           onChange(event.target.value)
         }
       }}
-      className="min-h-10 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 disabled:cursor-not-allowed disabled:bg-stone-100 disabled:text-stone-500"
+      className="min-h-10 w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 disabled:cursor-not-allowed disabled:bg-slate-900 disabled:text-slate-500"
     >
       <option value="">Sin juez asignado</option>
       {jueces.map((juez) => (

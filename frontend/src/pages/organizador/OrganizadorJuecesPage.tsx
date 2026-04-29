@@ -44,14 +44,10 @@ function JuecesTorneoPage({ torneoId }: JuecesTorneoPageProps) {
     <OrganizadorLayout
       title="Jueces"
       activeTournamentId={torneoId}
+      activeTournamentState={torneo?.estado}
       subtitle={torneo ? `${torneo.nombre} · ${torneo.sede.ciudad}` : 'Asignación de jueces'}
     >
-      <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">
-        Esta sección mantiene visible la navegación primaria mientras se opera la asignación de jueces por disciplina.
-      </section>
-      <section className="rounded-[2rem] border border-slate-700 bg-white/95 p-5 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
-        <JuecesPanel torneoId={torneoId} />
-      </section>
+      <JuecesPanel torneoId={torneoId} />
     </OrganizadorLayout>
   )
 }

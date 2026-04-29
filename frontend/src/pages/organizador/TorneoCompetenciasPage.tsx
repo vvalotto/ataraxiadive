@@ -78,6 +78,7 @@ function TorneoCompetenciasContent({ torneoId }: TorneoCompetenciasContentProps)
     <OrganizadorLayout
       title="Audit Log"
       activeTournamentId={torneoId}
+      activeTournamentState={torneo?.estado}
       subtitle={torneo ? `${torneo.nombre} · ${torneo.sede.ciudad} · trazabilidad por disciplina` : 'Trazabilidad del torneo'}
     >
       <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">
