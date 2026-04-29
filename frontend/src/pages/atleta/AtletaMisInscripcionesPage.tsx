@@ -14,7 +14,7 @@ export function AtletaMisInscripcionesPage() {
   const atletaId = useAuthStore((state) => state.userId)
   const query = useQuery({
     queryKey: ['atleta-mis-inscripciones', atletaId],
-    queryFn: () => loadAtletaPortalSnapshot(atletaId ?? ''),
+    queryFn: () => loadAtletaPortalSnapshot(),
     enabled: Boolean(atletaId),
   })
 

@@ -7,16 +7,18 @@ from decimal import Decimal
 from uuid import UUID
 
 from fastapi import APIRouter
+from fastapi import Depends
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, field_validator
 
-from competencia.domain.aggregates.performance import Performance
-from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
-    SQLiteCompetenciasPorTorneo,
-)
+from identidad.api.dependencies import get_current_user
 from registro.application.commands.cancelar_inscripcion import (
     CancelarInscripcionCommand,
     CancelarInscripcionHandler,
+)
+from registro.application.commands.declarar_ap_inscripcion import (
+    DeclararAPInscripcionCommand,
+    DeclararAPInscripcionHandler,
 )
 from registro.application.commands.inscribir_atleta import (
     InscribirAtletaCommand,
@@ -28,11 +30,16 @@ from registro.application.commands.registrar_atleta import (
 )
 from registro.application.queries.listar_inscriptos import ListarInscriptosHandler
 from registro.application.queries.obtener_atleta import ObtenerAtletaHandler
+from registro.application.queries.verificar_completitud_ap import (
+    VerificarCompletitudAPHandler,
+)
 from registro.domain.aggregates.inscripcion import Inscripcion
 from registro.domain.exceptions import (
+    APIncompletoParaPreparacion,
     AtletaNoEncontrado,
     AtletaYaInscripto,
     AtletaYaRegistrado,
+    DisciplinaNoInscripta,
     DisciplinaNoDisponible,
     InscripcionNoEncontrada,
     PlazoCancelacionVencido,
@@ -47,7 +54,6 @@ from registro.infrastructure.repositories.sqlite_inscripcion_repository import (
 )
 from shared.api.dependencies import AtletaDep, OrganizadorDep
 from shared.domain.value_objects.disciplina import Disciplina
-from shared.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 
 router = APIRouter(prefix="/registro", tags=["registro"])
 
@@ -130,6 +136,11 @@ class InscriptoDetalleResponse(BaseModel):
     disciplinas: list[EstadoAPDisciplinaResponse]
 
 
+class DeclararAPInscripcionRequest(BaseModel):
+    disciplina: Disciplina
+    valor_ap: Decimal
+
+
 # ── Helpers de dependencias ───────────────────────────────────────────────────
 
 
@@ -145,14 +156,6 @@ def _torneo_consulta() -> SQLiteTorneoConsulta:
     return SQLiteTorneoConsulta()
 
 
-def _competencias_por_torneo_repo() -> SQLiteCompetenciasPorTorneo:
-    return SQLiteCompetenciasPorTorneo()
-
-
-def _competencia_event_store() -> SQLiteEventStore:
-    return SQLiteEventStore(os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db"))
-
-
 def _format_decimal(value: Decimal | None) -> str | None:
     if value is None:
         return None
@@ -163,23 +166,38 @@ def _format_decimal(value: Decimal | None) -> str | None:
 async def _load_ap_por_torneo(
     torneo_id: UUID,
 ) -> dict[tuple[UUID, str], tuple[str | None, str | None]]:
-    competencias = await _competencias_por_torneo_repo().listar_por_torneo(torneo_id)
-    event_store = _competencia_event_store()
     ap_por_clave: dict[tuple[UUID, str], tuple[str | None, str | None]] = {}
-
-    for competencia in competencias:
-        prefix = f"performance-{competencia.competencia_id}-"
-        for stream_events in await event_store.load_all_streams_with_prefix(prefix):
-            if not stream_events:
-                continue
-            performance = Performance.reconstitute(stream_events)
-            ap = performance.ap
-            ap_por_clave[(performance.participante_id, competencia.disciplina)] = (
-                _format_decimal(ap.valor) if ap else None,
-                ap.unidad.value if ap else None,
+    for inscripcion in await _inscripcion_repo().find_active_by_torneo(torneo_id):
+        for disciplina, ap in inscripcion.ap_por_disciplina.items():
+            ap_por_clave[(inscripcion.atleta_id, disciplina.value)] = (
+                _format_decimal(ap.valor),
+                ap.unidad.value,
             )
-
     return ap_por_clave
+
+
+def build_cierre_inscripcion_precondition(
+    inscripcion_repo: SQLiteInscripcionRepository | None = None,
+    atleta_repo: SQLiteAtletaRepository | None = None,
+) -> Callable[[UUID], Awaitable[None]]:
+    async def _precondition(torneo_id: UUID) -> None:
+        handler = VerificarCompletitudAPHandler(
+            inscripcion_repo or _inscripcion_repo(),
+            atleta_repo or _repo(),
+        )
+        faltantes = await handler.obtener_faltantes(torneo_id)
+        if not faltantes:
+            return
+        detalle = ", ".join(
+            f"{faltante.atleta_nombre} ({faltante.disciplina})" for faltante in faltantes[:5]
+        )
+        if len(faltantes) > 5:
+            detalle = f"{detalle}, y {len(faltantes) - 5} más"
+        raise APIncompletoParaPreparacion(
+            f"Faltan AP por completar para cerrar inscripción: {detalle}"
+        )
+
+    return _precondition
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
@@ -375,3 +393,58 @@ async def listar_inscriptos_detalle(torneo_id: UUID, _: OrganizadorDep) -> JSONR
         )
 
     return JSONResponse(status_code=200, content=content)
+
+
+@router.get("/inscripciones/{inscripcion_id}/ap", status_code=200)
+async def obtener_ap_inscripcion(
+    inscripcion_id: UUID,
+    disciplina: Disciplina,
+    _: dict = Depends(get_current_user),
+) -> JSONResponse:
+    inscripcion = await _inscripcion_repo().find_by_id(inscripcion_id)
+    if inscripcion is None:
+        return JSONResponse(status_code=404, content={"detail": "Inscripción no encontrada"})
+    ap = inscripcion.obtener_ap(disciplina)
+    return JSONResponse(
+        status_code=200,
+        content={
+            "disciplina": disciplina.value,
+            "ap": _format_decimal(ap.valor) if ap else None,
+            "unidad": ap.unidad.value if ap else None,
+        },
+    )
+
+
+@router.put("/inscripciones/{inscripcion_id}/ap", status_code=200)
+async def declarar_ap_inscripcion(
+    inscripcion_id: UUID,
+    body: DeclararAPInscripcionRequest,
+    _: dict = Depends(get_current_user),
+) -> JSONResponse:
+    handler = DeclararAPInscripcionHandler(_inscripcion_repo())
+    try:
+        await handler.handle(
+            DeclararAPInscripcionCommand(
+                inscripcion_id=inscripcion_id,
+                disciplina=body.disciplina,
+                valor_ap=body.valor_ap,
+            )
+        )
+    except InscripcionNoEncontrada as exc:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
+    except DisciplinaNoInscripta as exc:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+    except ValueError as exc:
+        return JSONResponse(status_code=422, content={"detail": str(exc)})
+
+    inscripcion = await _inscripcion_repo().find_by_id(inscripcion_id)
+    assert inscripcion is not None
+    ap = inscripcion.obtener_ap(body.disciplina)
+    return JSONResponse(
+        status_code=200,
+        content={
+            "disciplina": body.disciplina.value,
+            "ap": _format_decimal(ap.valor) if ap else None,
+            "unidad": ap.unidad.value if ap else None,
+        },
+    )

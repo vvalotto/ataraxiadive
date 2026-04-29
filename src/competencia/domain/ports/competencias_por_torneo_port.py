@@ -31,3 +31,9 @@ class CompetenciasPorTorneoPort(ABC):
     @abstractmethod
     async def listar_por_torneo(self, torneo_id: UUID) -> list[CompetenciaPorTorneoRecord]:
         """Retorna los registros materializados para el torneo indicado."""
+
+    @abstractmethod
+    async def obtener_por_competencia_id(
+        self, competencia_id: UUID
+    ) -> CompetenciaPorTorneoRecord | None:
+        """Retorna el registro materializado de una competencia puntual."""

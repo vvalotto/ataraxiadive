@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from uuid import UUID
 
+from collections.abc import Awaitable, Callable
+
 from torneo.domain.exceptions import TorneoNoEncontrado
 from torneo.domain.ports.torneo_repository_port import TorneoRepositoryPort
 
@@ -30,7 +32,17 @@ class AbrirInscripcionHandler(_TransicionHandler):
 
 
 class CerrarInscripcionHandler(_TransicionHandler):
+    def __init__(
+        self,
+        repo: TorneoRepositoryPort,
+        precondition: Callable[[UUID], Awaitable[None]] | None = None,
+    ) -> None:
+        super().__init__(repo)
+        self._precondition = precondition
+
     async def handle(self, cmd: TransicionarTorneoCommand) -> None:
+        if self._precondition is not None:
+            await self._precondition(cmd.torneo_id)
         await self._ejecutar(cmd.torneo_id, "cerrar_inscripcion")
 
 

@@ -1,11 +1,11 @@
 import {
-  fetchApAtleta,
   fetchCompetenciasPorTorneo,
   fetchGrillaCompetencia,
   type CompetenciaResumenDto,
   type GrillaAtletaDto,
 } from '../../api/competencia'
 import {
+  fetchApInscripcion,
   fetchAtletaMe,
   listarInscripcionesDeAtleta,
   type AtletaDto,
@@ -117,7 +117,7 @@ function buildApEstado(
   return grilla?.ap_declarado?.trim() ? 'declarado' : 'pendiente'
 }
 
-export async function loadAtletaPortalSnapshot(_userId: string): Promise<AtletaPortalSnapshot> {
+export async function loadAtletaPortalSnapshot(): Promise<AtletaPortalSnapshot> {
   const [atleta, torneos] = await Promise.all([fetchAtletaMe(), fetchTorneos()])
   const atletaId = atleta.atleta_id
   const inscripciones = await listarInscripcionesDeAtleta(atletaId)
@@ -175,10 +175,10 @@ export async function loadAtletaPortalSnapshot(_userId: string): Promise<AtletaP
           let ap: string | null = grillaEntry?.ap_declarado ?? null
           let unidad: string | null = grillaEntry?.unidad ?? null
 
-          if (!grillaEntry && competencia && torneo.estado === 'INSCRIPCION_ABIERTA') {
+          if (!grillaEntry && torneo.estado === 'INSCRIPCION_ABIERTA') {
             try {
-              const apDto = await fetchApAtleta(competencia.competencia_id, atletaId, disciplina)
-              ap = apDto.ap_declarado
+              const apDto = await fetchApInscripcion(inscripcion.inscripcion_id, disciplina)
+              ap = apDto.ap
               unidad = apDto.unidad
             } catch {
               // sin AP declarado

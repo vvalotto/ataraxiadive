@@ -2,6 +2,7 @@
 
 import logging
 import os
+from decimal import Decimal
 from typing import Awaitable, Callable
 from uuid import UUID
 
@@ -13,7 +14,10 @@ from competencia.application.queries.obtener_competencias_por_torneo import (
     ObtenerCompetenciasPorTorneoQuery,
 )
 from competencia.api.exception_handlers import register_exception_handlers
-from competencia.api.router import router as competencia_router
+from competencia.api.router import (
+    configure_ap_registrado_callback,
+    router as competencia_router,
+)
 from resultados.api.router import router as resultados_router
 from resultados.application.commands.calcular_overall import (
     CalcularOverallCommand,
@@ -52,13 +56,22 @@ from notificaciones.infrastructure.templates.resultados_publicados_template impo
     ResultadosPublicadosTemplate,
 )
 from registro.api.router import (
+    build_cierre_inscripcion_precondition,
     configure_inscripcion_notificaciones,
     router as registro_router,
 )
+from registro.application.commands.declarar_ap_inscripcion import (
+    DeclararAPInscripcionCommand,
+    DeclararAPInscripcionHandler,
+)
 from registro.domain.aggregates.inscripcion import Inscripcion
 from registro.infrastructure.repositories.sqlite_atleta_repository import SQLiteAtletaRepository
+from registro.infrastructure.repositories.sqlite_inscripcion_repository import (
+    SQLiteInscripcionRepository,
+)
 from torneo.api.exception_handlers import register_torneo_exception_handlers
 from torneo.api.router import (
+    configure_cierre_inscripcion_precondition,
     configure_premiacion_precondition,
     router as torneo_router,
 )
@@ -158,6 +171,7 @@ def build_on_inscripcion_confirmada_callback(
 
 
 configure_inscripcion_notificaciones(build_on_inscripcion_confirmada_callback())
+configure_cierre_inscripcion_precondition(build_cierre_inscripcion_precondition())
 
 
 def build_p11_handler() -> PoliticaP11Handler:
@@ -450,6 +464,40 @@ async def _obtener_disciplinas_torneo(
 
 
 configure_premiacion_precondition(build_premiacion_precondition())
+
+
+def build_on_ap_registrado_callback(
+    *,
+    competencias_repo: SQLiteCompetenciasPorTorneo | None = None,
+    inscripcion_repo: SQLiteInscripcionRepository | None = None,
+) -> Callable[[UUID, UUID, Disciplina, Decimal], Awaitable[None]]:
+    async def _callback(
+        competencia_id: UUID,
+        atleta_id: UUID,
+        disciplina: Disciplina,
+        valor_ap: Decimal,
+    ) -> None:
+        competencias = competencias_repo or SQLiteCompetenciasPorTorneo()
+        inscripciones = inscripcion_repo or SQLiteInscripcionRepository()
+        handler = DeclararAPInscripcionHandler(inscripciones)
+        record = await competencias.obtener_por_competencia_id(competencia_id)
+        if record is None:
+            return
+        inscripcion = await inscripciones.find_by_atleta_y_torneo(atleta_id, record.torneo_id)
+        if inscripcion is None:
+            return
+        await handler.handle(
+            DeclararAPInscripcionCommand(
+                inscripcion_id=inscripcion.inscripcion_id,
+                disciplina=disciplina,
+                valor_ap=valor_ap,
+            )
+        )
+
+    return _callback
+
+
+configure_ap_registrado_callback(build_on_ap_registrado_callback())
 
 
 @app.get("/health", response_class=JSONResponse)

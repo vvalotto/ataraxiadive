@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
-import { listarInscriptosDetalle } from '../../api/registro'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { guardarApInscripcion, listarInscriptosDetalle } from '../../api/registro'
 import type { EstadoTorneo } from '../../api/torneo'
 import { EmptyStateCard } from './EmptyStateCard'
 import { TablaInscriptos, type InscriptoRow } from './TablaInscriptos'
@@ -52,15 +52,22 @@ async function loadInscriptos(torneoId: string, torneoEstado: EstadoTorneo) {
 }
 
 export function InscriptosPanel({ torneoId, torneoEstado }: InscriptosPanelProps) {
+  const queryClient = useQueryClient()
   const query = useQuery({
     queryKey: ['torneo-inscriptos-ap', torneoId, torneoEstado],
     queryFn: () => loadInscriptos(torneoId, torneoEstado),
-    enabled: torneoEstado === 'INSCRIPCION_ABIERTA',
   })
 
-  if (torneoEstado !== 'INSCRIPCION_ABIERTA') {
-    return <EmptyStateCard message="La inscripción todavía no está habilitada para este torneo." />
-  }
+  const editable = torneoEstado === 'INSCRIPCION_ABIERTA'
+  const saveMutation = useMutation({
+    mutationFn: async (payload: { inscripcionId: string; disciplina: string; valorAp: string }) => {
+      await guardarApInscripcion(payload)
+      return payload
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['torneo-inscriptos-ap', torneoId] })
+    },
+  })
 
   if (query.isLoading) {
     return (
@@ -84,6 +91,11 @@ export function InscriptosPanel({ torneoId, torneoEstado }: InscriptosPanelProps
 
   return (
     <article className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-6 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
+      {saveMutation.isError ? (
+        <section className="mb-4 rounded-2xl border border-red-500/40 bg-red-950/40 p-4 text-sm text-red-100">
+          No se pudo guardar el AP para la inscripción seleccionada.
+        </section>
+      ) : null}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
@@ -94,10 +106,25 @@ export function InscriptosPanel({ torneoId, torneoEstado }: InscriptosPanelProps
             Revisa inscripciones, disciplinas activas y el estado de AP por atleta.
           </p>
         </div>
+        <div className="max-w-sm rounded-2xl border border-slate-700 bg-slate-950/70 px-4 py-3 text-xs text-slate-300">
+          {editable
+            ? 'La edición de AP está habilitada. El torneo solo puede pasar a preparación cuando no queden pendientes.'
+            : 'El torneo ya no está en inscripción abierta. Los AP se muestran en solo lectura como referencia operativa.'}
+        </div>
       </div>
 
       <div className="rounded-[1.5rem] border border-slate-700 bg-slate-950/70 p-4">
-        <TablaInscriptos rows={query.data?.rows ?? []} disciplinas={query.data?.disciplinas ?? []} />
+        <TablaInscriptos
+          rows={query.data?.rows ?? []}
+          disciplinas={query.data?.disciplinas ?? []}
+          editable={editable}
+          savingKey={
+            saveMutation.isPending && saveMutation.variables
+              ? `${saveMutation.variables.inscripcionId}:${saveMutation.variables.disciplina}`
+              : null
+          }
+          onGuardarAp={(payload) => saveMutation.mutate(payload)}
+        />
       </div>
     </article>
   )

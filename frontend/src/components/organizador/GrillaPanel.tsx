@@ -153,6 +153,9 @@ export function GrillaPanel({ torneoId }: GrillaPanelProps) {
               <p className="mt-2 text-sm text-slate-300">
                 Reordena performances, revisa OT y confirma la grilla de la disciplina activa.
               </p>
+              <p className="mt-2 text-xs uppercase tracking-[0.16em] text-sky-300">
+                La grilla usa los AP declarados durante la inscripción.
+              </p>
             </div>
             <div className="flex flex-col gap-2 sm:items-end">
               <label className="text-sm font-semibold text-slate-200">

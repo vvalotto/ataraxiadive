@@ -1,62 +1,66 @@
-"""Adaptador PerformancesAPAdapter — implementación de PerformancesAPPort sobre Event Store."""
+"""Adaptador PerformancesAPAdapter — lee AP primario desde Registro."""
 
 from __future__ import annotations
 
-from uuid import UUID
+from uuid import NAMESPACE_URL, UUID, uuid5
 
 from competencia.domain.aggregates.performance import Performance
+from competencia.domain.ports.competencias_por_torneo_port import CompetenciasPorTorneoPort
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.ports.performances_ap_port import (
     PerformancesAPData,
     PerformancesAPPort,
 )
-from competencia.domain.value_objects.estado_performance import EstadoPerformance
+from registro.domain.ports.inscripcion_repository_port import InscripcionRepositoryPort
+from shared.domain.value_objects.disciplina import Disciplina
 
 
 class PerformancesAPAdapter(PerformancesAPPort):
-    """Implementación de PerformancesAPPort que lee del Event Store.
+    """Implementación de PerformancesAPPort usando AP declarados en inscripción."""
 
-    Carga todos los streams `performance-{competencia_id}-*`, reconstruye
-    cada Performance y retorna las que están en estado AnunciadaAP.
-
-    Args:
-        event_store: Puerto de persistencia de eventos.
-    """
-
-    def __init__(self, event_store: EventStorePort) -> None:
+    def __init__(
+        self,
+        event_store: EventStorePort,
+        competencias_por_torneo: CompetenciasPorTorneoPort,
+        inscripcion_repo: InscripcionRepositoryPort,
+    ) -> None:
         self._event_store = event_store
+        self._competencias_por_torneo = competencias_por_torneo
+        self._inscripcion_repo = inscripcion_repo
 
     async def get_performances_con_ap(self, competencia_id: UUID) -> list[PerformancesAPData]:
-        """Retorna las performances en estado AnunciadaAP para la competencia.
+        record = await self._competencias_por_torneo.obtener_por_competencia_id(competencia_id)
+        if record is None:
+            return []
 
-        Args:
-            competencia_id: Identificador de la competencia.
-
-        Returns:
-            Lista de PerformancesAPData ordenada por registro de inserción
-            (orden natural del Event Store).
-        """
-        prefix = f"performance-{competencia_id}-"
-        all_streams = await self._event_store.load_all_streams_with_prefix(prefix)
-
+        disciplina = Disciplina(record.disciplina)
         result: list[PerformancesAPData] = []
-        for stream_events in all_streams:
-            if not stream_events:
+        for inscripcion in await self._inscripcion_repo.find_active_by_torneo(record.torneo_id):
+            ap = inscripcion.obtener_ap(disciplina)
+            if ap is None:
                 continue
-
-            performance = Performance.reconstitute(stream_events)
-            if performance.estado != EstadoPerformance.AnunciadaAP:
-                continue
-            if performance.ap is None:
-                continue
-
             result.append(
                 PerformancesAPData(
-                    performance_id=performance.performance_id,
-                    atleta_id=performance.participante_id,
-                    valor_ap=performance.ap.valor,
-                    unidad=performance.ap.unidad,
+                    performance_id=await self._resolver_performance_id(
+                        competencia_id,
+                        inscripcion.atleta_id,
+                        disciplina,
+                    ),
+                    atleta_id=inscripcion.atleta_id,
+                    valor_ap=ap.valor,
+                    unidad=ap.unidad,
                 )
             )
-
         return result
+
+    async def _resolver_performance_id(
+        self,
+        competencia_id: UUID,
+        atleta_id: UUID,
+        disciplina: Disciplina,
+    ) -> UUID:
+        stream_id = f"performance-{competencia_id}-{atleta_id}-{disciplina.value}"
+        events = await self._event_store.load(stream_id)
+        if events:
+            return Performance.reconstitute(events).performance_id
+        return uuid5(NAMESPACE_URL, f"{competencia_id}:{atleta_id}:{disciplina.value}")

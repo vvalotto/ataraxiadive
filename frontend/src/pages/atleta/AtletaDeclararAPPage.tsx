@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { fetchApAtleta, fetchCompetenciasPorTorneo, fetchGrillaCompetencia, registrarAP } from '../../api/competencia'
-import { fetchAtletaMe } from '../../api/registro'
+import { fetchCompetenciasPorTorneo, fetchGrillaCompetencia } from '../../api/competencia'
+import { fetchApInscripcion, fetchAtletaMe, guardarApInscripcion, listarInscripcionesDeAtleta } from '../../api/registro'
 import { fetchTorneo } from '../../api/torneo'
 import { AtletaShell } from '../../components/atleta/AtletaShell'
-import { ApiError } from '../../api/competencia'
+import { ApiError } from '../../api/registro'
 import { formatDisciplina, formatFecha, getUnidadEsperada, getUnidadLabel } from './portalData'
 
 async function loadApContext(torneoId: string, disciplina: string) {
@@ -14,6 +14,11 @@ async function loadApContext(torneoId: string, disciplina: string) {
     fetchCompetenciasPorTorneo(torneoId),
     fetchAtletaMe(),
   ])
+  const inscripciones = await listarInscripcionesDeAtleta(atleta.atleta_id)
+  const inscripcion =
+    inscripciones.find(
+      (item) => item.torneo_id === torneoId && item.disciplinas.includes(disciplina),
+    ) ?? null
   const competencia = competencias.find((item) => item.disciplina === disciplina) ?? null
   const grilla = competencia
     ? await fetchGrillaCompetencia(competencia.competencia_id, competencia.disciplina).catch(() => [])
@@ -21,16 +26,16 @@ async function loadApContext(torneoId: string, disciplina: string) {
   const athleteEntry = grilla.find((entry) => entry.atleta_id === atleta.atleta_id) ?? null
 
   let apActual: string | null = athleteEntry?.ap_declarado ?? null
-  if (!apActual && competencia) {
+  if (!apActual && inscripcion) {
     try {
-      const apDto = await fetchApAtleta(competencia.competencia_id, atleta.atleta_id, disciplina)
-      apActual = apDto.ap_declarado
+      const apDto = await fetchApInscripcion(inscripcion.inscripcion_id, disciplina)
+      apActual = apDto.ap
     } catch {
       // sin AP previo
     }
   }
 
-  return { torneo, competencia, athleteEntry, atletaId: atleta.atleta_id, apActual }
+  return { torneo, competencia, athleteEntry, apActual, inscripcion }
 }
 
 function getApError(error: unknown): string {
@@ -54,16 +59,14 @@ export function AtletaDeclararAPPage() {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const atletaId = query.data?.atletaId
-      if (!query.data?.competencia || !atletaId || !disciplina) {
-        throw new Error('La disciplina todavía no está preparada para anunciar AP.')
+      const inscripcionId = query.data?.inscripcion?.inscripcion_id
+      if (!inscripcionId || !disciplina) {
+        throw new Error('No se encontró la inscripción activa para esta disciplina.')
       }
-      return registrarAP({
-        competenciaId: query.data.competencia.competencia_id,
-        participanteId: atletaId,
+      return guardarApInscripcion({
+        inscripcionId,
         disciplina,
         valorAp: valorApValue,
-        unidad: getUnidadEsperada(disciplina),
       })
     },
     onSuccess: () => {
@@ -132,12 +135,6 @@ export function AtletaDeclararAPPage() {
             ) : null}
           </section>
 
-          {!query.data.competencia ? (
-            <div className="rounded-3xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-100">
-              El organizador aún no configuró la competencia de esta disciplina. El AP estará disponible cuando la grilla sea publicada.
-            </div>
-          ) : null}
-
           {mutation.isError ? (
             <div className="rounded-3xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-100">
               {getApError(mutation.error)}
@@ -155,7 +152,7 @@ export function AtletaDeclararAPPage() {
             <button
               type="button"
               onClick={() => mutation.mutate()}
-              disabled={mutation.isPending || !(parseFloat(valorApValue) > 0) || !query.data.competencia}
+              disabled={mutation.isPending || !(parseFloat(valorApValue) > 0)}
               className="flex-1 rounded-2xl bg-sky-500 px-4 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-slate-950 disabled:opacity-60"
             >
               {mutation.isPending ? 'Guardando...' : 'Guardar AP'}

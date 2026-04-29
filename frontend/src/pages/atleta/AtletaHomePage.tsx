@@ -18,7 +18,7 @@ export function AtletaHomePage() {
   const logout = useAuthStore((state) => state.logout)
   const query = useQuery({
     queryKey: ['atleta-portal-home', atletaId],
-    queryFn: () => loadAtletaPortalSnapshot(atletaId ?? ''),
+    queryFn: () => loadAtletaPortalSnapshot(),
     enabled: Boolean(atletaId),
   })
 

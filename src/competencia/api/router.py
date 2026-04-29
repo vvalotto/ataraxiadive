@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 from datetime import datetime
 from decimal import Decimal
+from collections.abc import Awaitable, Callable
 from typing import Annotated
 from uuid import UUID
 
@@ -159,9 +160,19 @@ from competencia.infrastructure.repositories.performances_estado_adapter import 
 from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
     SQLiteCompetenciasPorTorneo,
 )
+from registro.infrastructure.repositories.sqlite_inscripcion_repository import (
+    SQLiteInscripcionRepository,
+)
 from shared.api.dependencies import AtletaDep, JuezDep, OrganizadorDep
 
 router = APIRouter(prefix="/competencia", tags=["competencia"])
+APRegistradoCallback = Callable[[UUID, UUID, Disciplina, Decimal], Awaitable[None]]
+_ap_registrado_callback: APRegistradoCallback | None = None
+
+
+def configure_ap_registrado_callback(callback: APRegistradoCallback | None) -> None:
+    global _ap_registrado_callback  # noqa: PLW0603
+    _ap_registrado_callback = callback
 
 
 # ── Request body schemas ───────────────────────────────────────────────────────
@@ -530,7 +541,11 @@ def get_generar_grilla_handler(
     """Dependency: handler para generar la grilla."""
     return GenerarGrillaHandler(
         event_store,
-        PerformancesAPAdapter(event_store),
+        PerformancesAPAdapter(
+            event_store,
+            SQLiteCompetenciasPorTorneo(),
+            SQLiteInscripcionRepository(os.getenv("REGISTRO_DB_PATH", "data/registro.db")),
+        ),
         disciplina_descriptor,
     )
 
@@ -916,6 +931,13 @@ async def post_registrar_ap(
         return JSONResponse(status_code=409, content={"detail": str(exc)})
     except DomainError as exc:
         return JSONResponse(status_code=422, content={"detail": str(exc)})
+    if _ap_registrado_callback is not None:
+        await _ap_registrado_callback(
+            competencia_id,
+            body.participante_id,
+            body.disciplina,
+            body.valor_ap,
+        )
     return Response(status_code=204)
 
 
