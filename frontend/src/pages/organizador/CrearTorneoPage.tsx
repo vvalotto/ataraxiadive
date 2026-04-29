@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   ApiError,
   asignarDisciplinas,
   crearTorneo,
+  fetchTorneo,
+  listarDisciplinasTorneo,
   type CrearTorneoPayload,
   type DisciplinaCodigo,
 } from '../../api/torneo'
@@ -54,11 +56,64 @@ function getErrorMessage(error: unknown): string {
 
 export function CrearTorneoPage() {
   const navigate = useNavigate()
+  const { torneoId } = useParams<{ torneoId: string }>()
+  const isEditingDisciplinas = Boolean(torneoId)
   const [form, setForm] = useState<FormState>(INITIAL_FORM)
   const [disciplinas, setDisciplinas] = useState<DisciplinaCodigo[]>([])
   const [errors, setErrors] = useState<FormErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isLoading, setIsLoading] = useState(isEditingDisciplinas)
   const [torneoCreadoSinDisciplinas, setTorneoCreadoSinDisciplinas] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!torneoId) return
+    const currentTorneoId = torneoId
+
+    let cancelled = false
+
+    async function loadTorneo() {
+      setIsLoading(true)
+      try {
+        const [torneo, disciplinasActuales] = await Promise.all([
+          fetchTorneo(currentTorneoId),
+          listarDisciplinasTorneo(currentTorneoId),
+        ])
+
+        if (cancelled) return
+
+        setForm({
+          nombre: torneo.nombre,
+          descripcion: torneo.descripcion,
+          fechaInicio: torneo.fecha_inicio,
+          fechaFin: torneo.fecha_fin,
+          sedeNombre: torneo.sede.nombre,
+          sedeCiudad: torneo.sede.ciudad,
+          sedePais: torneo.sede.pais,
+          entidadNombre: torneo.entidad_organizadora.nombre,
+          entidadTipo: torneo.entidad_organizadora.tipo,
+        })
+        setDisciplinas(disciplinasActuales.map((item) => item.disciplina))
+
+        if (torneo.estado !== 'CREADO') {
+          setErrors({
+            general:
+              'Solo se pueden modificar disciplinas mientras el torneo este en estado Creado.',
+          })
+        }
+      } catch (error) {
+        if (cancelled) return
+        setErrors({ general: getErrorMessage(error) })
+      } finally {
+        if (!cancelled) setIsLoading(false)
+      }
+    }
+
+    void loadTorneo()
+
+    return () => {
+      cancelled = true
+    }
+  }, [torneoId])
 
   function updateField(field: keyof FormState, value: string) {
     setForm((current) => ({ ...current, [field]: value }))
@@ -109,6 +164,12 @@ export function CrearTorneoPage() {
 
     setIsSubmitting(true)
     try {
+      if (isEditingDisciplinas && torneoId) {
+        await asignarDisciplinas(torneoId, disciplinas)
+        navigate(`/organizador/torneo/${torneoId}`)
+        return
+      }
+
       const response = await crearTorneo(buildPayload())
       try {
         await asignarDisciplinas(response.torneo_id, disciplinas)
@@ -127,13 +188,17 @@ export function CrearTorneoPage() {
 
   return (
     <OrganizadorLayout
-      title="Nuevo torneo"
-      subtitle="Alta del torneo y configuracion inicial de disciplinas"
+      title={isEditingDisciplinas ? 'Editar disciplinas' : 'Nuevo torneo'}
+      subtitle={
+        isEditingDisciplinas
+          ? 'Mismo formulario de alta reutilizado para ajustar disciplinas mientras el torneo sigue en estado Creado'
+          : 'Alta del torneo y configuracion inicial de disciplinas'
+      }
       showTournamentNavigation={false}
       simpleHeader
       actions={
         <Link
-          to="/organizador/torneo"
+          to={torneoId ? `/organizador/torneo/${torneoId}` : '/organizador/torneo'}
           className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
         >
           Volver
@@ -144,6 +209,12 @@ export function CrearTorneoPage() {
         onSubmit={handleSubmit}
         className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-6 shadow-[0_20px_60px_rgba(2,6,23,0.24)]"
       >
+        {isLoading ? (
+          <div className="mb-5 rounded-[1.5rem] border border-slate-700 bg-slate-950/40 p-4 text-sm text-slate-300">
+            Cargando torneo...
+          </div>
+        ) : null}
+
         {errors.general ? (
           <div className="mb-5 rounded-[1.5rem] border border-red-500/40 bg-red-950/40 p-4 text-sm text-red-100">
             <p>{errors.general}</p>
@@ -166,6 +237,7 @@ export function CrearTorneoPage() {
               onChange={(event) => updateField('nombre', event.target.value)}
               className={inputClass(Boolean(errors.nombre))}
               placeholder="BA 2026"
+              disabled={isEditingDisciplinas}
             />
             {errors.nombre ? <span className="mt-1 block text-sm text-red-300">{errors.nombre}</span> : null}
           </label>
@@ -177,6 +249,7 @@ export function CrearTorneoPage() {
               onChange={(event) => updateField('descripcion', event.target.value)}
               className={inputClass(Boolean(errors.descripcion))}
               placeholder="Torneo nacional indoor"
+              disabled={isEditingDisciplinas}
             />
           </label>
 
@@ -188,6 +261,7 @@ export function CrearTorneoPage() {
               onChange={(event) => updateField('fechaInicio', event.target.value)}
               className={inputClass(Boolean(errors.fechaInicio))}
               required
+              disabled={isEditingDisciplinas}
             />
           </label>
 
@@ -199,6 +273,7 @@ export function CrearTorneoPage() {
               onChange={(event) => updateField('fechaFin', event.target.value)}
               className={inputClass(Boolean(errors.fechaFin))}
               required
+              disabled={isEditingDisciplinas}
             />
             {errors.fechaFin ? (
               <span className="mt-1 block text-sm text-red-300">{errors.fechaFin}</span>
@@ -215,6 +290,7 @@ export function CrearTorneoPage() {
               className={inputClass(Boolean(errors.sedeNombre))}
               placeholder="Club Nautico"
               required
+              disabled={isEditingDisciplinas}
             />
           </label>
 
@@ -226,6 +302,7 @@ export function CrearTorneoPage() {
               className={inputClass(Boolean(errors.sedeCiudad))}
               placeholder="Buenos Aires"
               required
+              disabled={isEditingDisciplinas}
             />
           </label>
 
@@ -236,6 +313,7 @@ export function CrearTorneoPage() {
               onChange={(event) => updateField('sedePais', event.target.value)}
               className={inputClass(Boolean(errors.sedePais))}
               required
+              disabled={isEditingDisciplinas}
             />
           </label>
         </div>
@@ -249,6 +327,7 @@ export function CrearTorneoPage() {
               className={inputClass(Boolean(errors.entidadNombre))}
               placeholder="FAAS"
               required
+              disabled={isEditingDisciplinas}
             />
           </label>
 
@@ -260,6 +339,7 @@ export function CrearTorneoPage() {
               className={inputClass(Boolean(errors.entidadTipo))}
               placeholder="Federacion"
               required
+              disabled={isEditingDisciplinas}
             />
           </label>
         </div>
@@ -277,17 +357,23 @@ export function CrearTorneoPage() {
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
           <Link
-            to="/organizador/torneo"
+            to={torneoId ? `/organizador/torneo/${torneoId}` : '/organizador/torneo'}
             className="rounded-full border border-slate-700 bg-slate-950 px-4 py-2 text-center text-xs font-semibold uppercase tracking-[0.16em] text-slate-200"
           >
             Cancelar
           </Link>
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isLoading || Boolean(errors.general)}
             className="rounded-full bg-sky-500 px-5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950 disabled:cursor-not-allowed disabled:bg-slate-600 disabled:text-slate-300"
           >
-            {isSubmitting ? 'Creando...' : 'Crear Torneo'}
+            {isSubmitting
+              ? isEditingDisciplinas
+                ? 'Guardando...'
+                : 'Creando...'
+              : isEditingDisciplinas
+                ? 'Guardar disciplinas'
+                : 'Crear Torneo'}
           </button>
         </div>
       </form>

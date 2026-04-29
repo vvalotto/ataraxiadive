@@ -6,7 +6,6 @@ import {
   cerrarTorneo,
   iniciarEjecucion,
   iniciarPremiacion,
-  volverPreparacion,
   type EstadoTorneo,
 } from '../../api/torneo'
 
@@ -22,10 +21,7 @@ const ACCIONES_POR_ESTADO: Partial<Record<EstadoTorneo, AccionFase[]>> = {
     { label: 'Cerrar inscripcion', run: cerrarInscripcion, variant: 'primary' },
   ],
   PREPARACION: [{ label: 'Iniciar ejecucion', run: iniciarEjecucion, variant: 'primary' }],
-  EJECUCION: [
-    { label: 'Volver a preparacion', run: volverPreparacion, variant: 'secondary' },
-    { label: 'Premiación', run: iniciarPremiacion, variant: 'primary' },
-  ],
+  EJECUCION: [{ label: 'Premiación', run: iniciarPremiacion, variant: 'primary' }],
   PREMIACION: [{ label: 'Cerrar torneo', run: cerrarTorneo, variant: 'primary' }],
 }
 
@@ -37,14 +33,14 @@ interface AccionesPanelProps {
   estado: EstadoTorneo
   premiacionPendientes?: string[] | null
   isPremiacionStatusLoading?: boolean
-  hayDisciplinasEnCurso?: boolean
   onSuccess: () => Promise<void>
   onError: (message: string) => void
+  showPhaseActions?: boolean
 }
 
 function buttonClass(variant: 'primary' | 'secondary' | 'danger'): string {
   if (variant === 'danger') {
-    return 'rounded-lg border border-red-700 px-4 py-2 text-sm font-semibold text-red-800 disabled:cursor-not-allowed disabled:opacity-60'
+    return 'rounded-xl border border-red-500/70 bg-red-950 px-4 py-2 text-sm font-semibold text-red-100 shadow-[0_0_0_1px_rgba(239,68,68,0.18)] disabled:cursor-not-allowed disabled:opacity-60'
   }
   if (variant === 'secondary') {
     return 'rounded-lg border border-stone-700 px-4 py-2 text-sm font-semibold text-stone-900 disabled:cursor-not-allowed disabled:opacity-60'
@@ -63,9 +59,9 @@ export function AccionesPanel({
   estado,
   premiacionPendientes,
   isPremiacionStatusLoading = false,
-  hayDisciplinasEnCurso = false,
   onSuccess,
   onError,
+  showPhaseActions = true,
 }: AccionesPanelProps) {
   const [runningAction, setRunningAction] = useState<string | null>(null)
   const [showCancelDialog, setShowCancelDialog] = useState(false)
@@ -75,12 +71,7 @@ export function AccionesPanel({
   const bloqueoPremiacion =
     estado === 'EJECUCION' &&
     (isPremiacionStatusLoading || (premiacionPendientes?.length ?? 0) > 0)
-  const acciones = (ACCIONES_POR_ESTADO[estado] ?? []).filter((action) => {
-    if (action.label === 'Volver a preparacion' && hayDisciplinasEnCurso) {
-      return false
-    }
-    return true
-  })
+  const acciones = ACCIONES_POR_ESTADO[estado] ?? []
 
   async function runAction(action: AccionFase) {
     if (action.label === 'Premiación' && bloqueoPremiacion) {
@@ -124,57 +115,63 @@ export function AccionesPanel({
     setShowCancelDialog(false)
   }
 
-  if (acciones.length === 0 && !puedeCancelar) {
+  if ((showPhaseActions ? acciones.length === 0 : true) && !puedeCancelar) {
     return null
   }
 
   return (
-    <section className="rounded-lg border border-stone-300 bg-white p-5 shadow-[0_20px_60px_rgba(120,93,54,0.08)]">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h3 className="text-lg font-semibold text-stone-950">Acciones de fase</h3>
-          <p className="mt-1 text-sm text-stone-600">
-            Ejecuta transiciones permitidas por el ciclo de vida del torneo.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {acciones.map((action) => (
-            <button
-              key={action.label}
-              type="button"
-              onClick={() => void runAction(action)}
-              disabled={
-                runningAction !== null ||
-                (action.label === 'Premiación' && bloqueoPremiacion)
-              }
-              className={buttonClass(action.variant ?? 'primary')}
-            >
-              {runningAction === action.label ? 'Procesando...' : action.label}
-            </button>
-          ))}
-        </div>
-      </div>
+    <section className="rounded-[1.75rem] border border-red-500/50 bg-slate-950 p-5 shadow-[0_20px_60px_rgba(127,29,29,0.32)]">
+      {showPhaseActions ? (
+        <>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-white">Acciones de fase</h3>
+              <p className="mt-1 text-sm text-slate-300">
+                Ejecuta transiciones permitidas por el ciclo de vida del torneo.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {acciones.map((action) => (
+                <button
+                  key={action.label}
+                  type="button"
+                  onClick={() => void runAction(action)}
+                  disabled={
+                    runningAction !== null ||
+                    (action.label === 'Premiación' && bloqueoPremiacion)
+                  }
+                  className={buttonClass(action.variant ?? 'primary')}
+                >
+                  {runningAction === action.label ? 'Procesando...' : action.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
-      {estado === 'EJECUCION' && isPremiacionStatusLoading ? (
-        <p className="mt-3 text-sm font-semibold text-stone-600">
-          Verificando cierre de disciplinas antes de pasar a premiacion...
-        </p>
-      ) : null}
+          {estado === 'EJECUCION' && isPremiacionStatusLoading ? (
+            <p className="mt-3 text-sm font-semibold text-slate-300">
+              Verificando cierre de disciplinas antes de pasar a premiacion...
+            </p>
+          ) : null}
 
-      {estado === 'EJECUCION' && premiacionPendientes && premiacionPendientes.length > 0 ? (
-        <p className="mt-3 text-sm font-semibold text-amber-800">
-          Falta cerrar {premiacionPendientes.length}{' '}
-          {premiacionPendientes.length === 1 ? 'disciplina' : 'disciplinas'}:{' '}
-          {premiacionPendientes.join(', ')}.
-        </p>
+          {estado === 'EJECUCION' && premiacionPendientes && premiacionPendientes.length > 0 ? (
+            <p className="mt-3 text-sm font-semibold text-amber-300">
+              Falta cerrar {premiacionPendientes.length}{' '}
+              {premiacionPendientes.length === 1 ? 'disciplina' : 'disciplinas'}:{' '}
+              {premiacionPendientes.join(', ')}.
+            </p>
+          ) : null}
+        </>
       ) : null}
 
       {puedeCancelar ? (
-        <div className="mt-5 border-t border-red-200 pt-4">
+        <div className={`${showPhaseActions ? 'mt-5 border-t border-red-500/35 pt-4' : ''}`}>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-sm font-semibold text-red-950">Zona de peligro</p>
-              <p className="mt-1 text-sm text-red-800">
+              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-red-200">
+                Zona de peligro
+              </p>
+              <p className="mt-1 text-sm text-red-100/80">
                 Cancelar el torneo detiene el flujo operativo.
               </p>
             </div>
@@ -191,7 +188,7 @@ export function AccionesPanel({
       ) : null}
 
       {showCancelDialog ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/40 px-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 px-4">
           <form
             role="dialog"
             aria-modal="true"
@@ -200,23 +197,23 @@ export function AccionesPanel({
               event.preventDefault()
               void confirmCancel()
             }}
-            className="w-full max-w-md rounded-lg bg-white p-5 shadow-2xl"
+            className="w-full max-w-md rounded-[1.5rem] border border-red-500/40 bg-slate-950 p-5 shadow-2xl"
           >
-            <h3 id="cancelar-torneo-title" className="text-lg font-semibold text-stone-950">
+            <h3 id="cancelar-torneo-title" className="text-lg font-semibold text-white">
               Cancelar torneo {torneoNombre}
             </h3>
-            <p className="mt-2 text-sm text-stone-600">
+            <p className="mt-2 text-sm text-red-100/80">
               Esta accion no se puede deshacer. Escribi el nombre exacto del torneo para
               confirmar.
             </p>
-            <label className="mt-5 block text-sm font-semibold text-stone-900">
+            <label className="mt-5 block text-sm font-semibold text-slate-200">
               Nombre del torneo
               <input
                 value={cancelConfirmation}
                 onChange={(event) => setCancelConfirmation(event.target.value)}
                 disabled={runningAction !== null}
                 autoFocus
-                className="mt-2 min-h-10 w-full rounded-lg border border-stone-300 px-3 py-2 text-sm"
+                className="mt-2 min-h-10 w-full rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white"
                 placeholder={torneoNombre}
               />
             </label>
@@ -225,14 +222,14 @@ export function AccionesPanel({
                 type="button"
                 onClick={closeCancelDialog}
                 disabled={runningAction !== null}
-                className="rounded-lg border border-stone-300 px-4 py-2 text-sm font-semibold text-stone-800"
+                className="rounded-xl border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-200"
               >
                 Mantener torneo
               </button>
               <button
                 type="submit"
                 disabled={runningAction !== null || !canConfirmCancel}
-                className="rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white disabled:bg-red-400"
+                className="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white disabled:bg-red-900/60"
               >
                 {runningAction === 'Cancelar torneo' ? 'Cancelando...' : 'Confirmar cancelacion'}
               </button>

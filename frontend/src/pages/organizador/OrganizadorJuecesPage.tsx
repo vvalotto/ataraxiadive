@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { fetchTorneos } from '../../api/torneo'
 import { JuecesPanel } from '../../components/organizador/JuecesPanel'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
@@ -43,23 +43,8 @@ function JuecesTorneoPage({ torneoId }: JuecesTorneoPageProps) {
   return (
     <OrganizadorLayout
       title="Jueces"
+      activeTournamentId={torneoId}
       subtitle={torneo ? `${torneo.nombre} · ${torneo.sede.ciudad}` : 'Asignación de jueces'}
-      actions={
-        <>
-          <Link
-            to="/organizador/jueces"
-            className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
-          >
-            Cambiar torneo
-          </Link>
-          <Link
-            to={`/organizador/panel?torneo_id=${torneoId}`}
-            className="rounded-full border border-slate-600 bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
-          >
-            Panel
-          </Link>
-        </>
-      }
     >
       <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">
         Esta sección mantiene visible la navegación primaria mientras se opera la asignación de jueces por disciplina.

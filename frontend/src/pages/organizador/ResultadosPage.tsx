@@ -299,6 +299,7 @@ function ResultadosTorneo({ torneoId }: ResultadosTorneoProps) {
   return (
     <OrganizadorLayout
       title="Resultados"
+      activeTournamentId={torneoId}
       subtitle={
         disciplinaActiva
           ? `${subtitulo} · ${disciplinaActiva} · ${estadoRankingLabel}${progresoLabel ? ` · ${progresoLabel}` : ''}`
@@ -317,12 +318,6 @@ function ResultadosTorneo({ torneoId }: ResultadosTorneoProps) {
           >
             Publicar resultados
           </button>
-          <Link
-            to="/organizador/resultados"
-            className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
-          >
-            Cambiar torneo
-          </Link>
         </>
       }
     >

@@ -383,26 +383,11 @@ function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
   return (
     <OrganizadorLayout
       title="Panel"
+      activeTournamentId={torneoId}
       subtitle={
         torneoQuery.data
           ? `${torneoQuery.data.nombre} · ${torneoQuery.data.sede.ciudad} · ${formatTorneoEstado(torneoQuery.data.estado)}`
           : 'Dashboard operativo del torneo activo'
-      }
-      actions={
-        <>
-          <Link
-            to="/organizador/panel"
-            className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
-          >
-            Cambiar torneo
-          </Link>
-          <Link
-            to={`/organizador/grilla?torneo_id=${torneoId}`}
-            className="rounded-full border border-sky-400 bg-sky-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-sky-300"
-          >
-            Ver grilla completa
-          </Link>
-        </>
       }
     >
       {torneoQuery.isLoading || loadingCompetencias ? (

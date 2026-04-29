@@ -85,6 +85,7 @@ export function AuditoriaCompetenciaPage() {
       <OrganizadorLayout
         title="Auditoria"
         subtitle="Faltan parametros de navegacion"
+        activeTournamentId={torneoId}
         actions={
           <Link
             to="/organizador/audit-log"
@@ -104,57 +105,54 @@ export function AuditoriaCompetenciaPage() {
   return (
     <OrganizadorLayout
       title={`Auditoria - ${disciplina}`}
+      activeTournamentId={torneoId}
       subtitle={`Disciplina ${disciplina}`}
       actions={
-        <>
-          <Link
-            to={torneoId ? `/organizador/audit-log?torneo_id=${torneoId}` : '/organizador/audit-log'}
-            className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
-          >
-            Volver
-          </Link>
-          <Link
-            to="/organizador/audit-log"
-            className="rounded-full bg-sky-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950"
-          >
-            Audit Log
-          </Link>
-        </>
+        <Link
+          to={torneoId ? `/organizador/audit-log?torneo_id=${torneoId}` : '/organizador/audit-log'}
+          className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
+        >
+          Volver a Audit Log
+        </Link>
       }
     >
+      <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">
+        Vista contextual de auditoria por disciplina. La navegacion principal del organizador se mantiene disponible en el shell superior.
+      </section>
+
       {isLoading ? (
-        <section className="rounded-[2rem] border border-stone-300/80 bg-white/80 p-5 text-sm text-stone-600">
+        <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando auditoria de competencia...
         </section>
       ) : null}
 
       {hasError ? (
-        <section className="rounded-[2rem] border border-red-300/60 bg-red-50 p-5 text-sm text-red-900">
+        <section className="rounded-[2rem] border border-red-500/40 bg-red-950/40 p-5 text-sm text-red-100">
           No se pudo cargar la auditoria de la competencia.
         </section>
       ) : null}
 
       {!isLoading && !hasError && estado ? (
-        <section className="rounded-[2rem] border border-stone-300/80 bg-white/85 p-5 shadow-[0_20px_60px_rgba(120,93,54,0.08)]">
+        <section className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-5 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                 Estado de disciplina
               </p>
-              <h2 className="mt-2 text-2xl font-semibold text-stone-900">
+              <h2 className="mt-2 text-2xl font-semibold text-white">
                 {formatEstado(estado.estado)}
               </h2>
             </div>
 
             {estado.estado === 'Finalizada' && estado.hash_sha256 ? (
-              <div className="rounded-[1.5rem] border border-emerald-200 bg-emerald-50 px-4 py-3">
+              <div className="rounded-[1.5rem] border border-emerald-500/40 bg-emerald-500/10 px-4 py-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-800">
                   Hash SHA-256
                 </p>
                 <div className="mt-2 flex flex-wrap items-center gap-3">
                   <code
                     title={estado.hash_sha256}
-                    className="rounded-full bg-white px-3 py-2 text-sm text-emerald-950"
+                    className="rounded-full bg-slate-950 px-3 py-2 text-sm text-emerald-200"
                   >
                     {truncateHash(estado.hash_sha256)}
                   </code>
@@ -178,7 +176,7 @@ export function AuditoriaCompetenciaPage() {
       ) : null}
 
       {!isLoading && !hasError && (grilla?.length ?? 0) === 0 ? (
-        <section className="rounded-[2rem] border border-stone-300/80 bg-white/80 p-5 text-sm text-stone-600">
+        <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           No hay atletas registrados para esta competencia.
         </section>
       ) : null}

@@ -69,6 +69,7 @@ export function AuditoriaPerformancePage() {
   return (
     <OrganizadorLayout
       title="Traza de performance"
+      activeTournamentId={torneoId ?? undefined}
       subtitle={
         auditLogQuery.data
           ? `${auditLogQuery.data.atleta_nombre} · ${auditLogQuery.data.disciplina}`
@@ -79,32 +80,36 @@ export function AuditoriaPerformancePage() {
           to={`/organizador/competencias/${competenciaId}/auditoria?disciplina=${encodeURIComponent(disciplina ?? '')}&torneo_id=${encodeURIComponent(torneoId ?? '')}`}
           className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
         >
-          Volver
+          Volver a disciplina
         </Link>
       }
     >
+      <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">
+        Vista contextual de eventos por atleta. El shell principal permanece visible para volver a cualquier seccion primaria del organizador.
+      </section>
+
       {auditLogQuery.isLoading ? (
-        <section className="rounded-[2rem] border border-stone-300/80 bg-white/80 p-5 text-sm text-stone-600">
+        <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando traza de eventos...
         </section>
       ) : null}
 
       {auditLogQuery.isError ? (
-        <section className="rounded-[2rem] border border-red-300/60 bg-red-50 p-5 text-sm text-red-900">
+        <section className="rounded-[2rem] border border-red-500/40 bg-red-950/40 p-5 text-sm text-red-100">
           No se pudo cargar la traza de auditoria de la performance.
         </section>
       ) : null}
 
       {!auditLogQuery.isLoading && !auditLogQuery.isError && auditLogQuery.data ? (
         <>
-          <section className="rounded-[2rem] border border-stone-300/80 bg-white/85 p-5 shadow-[0_20px_60px_rgba(120,93,54,0.08)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
+          <section className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-5 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
               Performance
             </p>
-            <h2 className="mt-2 text-2xl font-semibold text-stone-900">
+            <h2 className="mt-2 text-2xl font-semibold text-white">
               {auditLogQuery.data.atleta_nombre}
             </h2>
-            <p className="mt-2 text-sm text-stone-600">
+            <p className="mt-2 text-sm text-slate-300">
               {auditLogQuery.data.disciplina}
             </p>
           </section>
@@ -112,18 +117,18 @@ export function AuditoriaPerformancePage() {
           {auditLogQuery.data.eventos.map((evento) => (
             <article
               key={`${evento.sequence}-${evento.tipo}`}
-              className="rounded-[2rem] border border-stone-300/80 bg-white/85 p-5 shadow-[0_20px_60px_rgba(120,93,54,0.08)]"
+              className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-5 shadow-[0_20px_60px_rgba(2,6,23,0.24)]"
             >
               <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                     Evento #{evento.sequence}
                   </p>
-                  <h3 className="mt-2 text-xl font-semibold text-stone-900">{formatTipoEvento(evento.tipo)}</h3>
+                  <h3 className="mt-2 text-xl font-semibold text-white">{formatTipoEvento(evento.tipo)}</h3>
                 </div>
-                <p className="text-sm text-stone-600">{formatTimestamp(evento.timestamp)}</p>
+                <p className="text-sm text-slate-400">{formatTimestamp(evento.timestamp)}</p>
               </div>
-              <p className="mt-4 text-sm leading-6 text-stone-700">{formatDatos(evento)}</p>
+              <p className="mt-4 text-sm leading-6 text-slate-300">{formatDatos(evento)}</p>
             </article>
           ))}
         </>
