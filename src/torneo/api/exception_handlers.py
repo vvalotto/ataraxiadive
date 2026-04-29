@@ -3,6 +3,7 @@ from __future__ import annotations
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
+from registro.domain.exceptions import APIncompletoParaPreparacion
 from torneo.domain.exceptions import (
     DisciplinaObsoleta,
     PremiacionNoPermitida,
@@ -13,6 +14,20 @@ from torneo.domain.exceptions import (
 
 
 def register_torneo_exception_handlers(app: FastAPI) -> None:
+    @app.exception_handler(APIncompletoParaPreparacion)
+    async def ap_incompleto_para_preparacion_handler(
+        request: Request, exc: APIncompletoParaPreparacion
+    ) -> JSONResponse:
+        return JSONResponse(
+            status_code=409,
+            content={
+                "type": "https://ataraxiadive.com/errors/ap-incompleto-para-preparacion",
+                "title": "No se puede cerrar inscripción",
+                "status": 409,
+                "detail": str(exc),
+            },
+        )
+
     @app.exception_handler(TorneoNoEncontrado)
     async def torneo_no_encontrado_handler(
         request: Request, exc: TorneoNoEncontrado

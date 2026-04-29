@@ -1,5 +1,5 @@
-import type { EstadoTorneo } from '../../api/torneo'
 import type { ReactNode } from 'react'
+import type { EstadoTorneo } from '../../api/torneo'
 import { Link, useLocation } from 'react-router-dom'
 import { HealthCheck } from '../HealthCheck'
 import useAuthStore from '../../stores/useAuthStore'
@@ -71,6 +71,7 @@ export function OrganizadorLayout({
   activeTournamentId,
   activeTournamentState,
 }: OrganizadorLayoutProps) {
+  void activeTournamentState
   const location = useLocation()
   const email = useAuthStore((s) => s.email)
   const nombre = useAuthStore((s) => s.nombre)

@@ -105,7 +105,7 @@ class TestGenerarGrillaHandlerExitoso:
     ) -> None:
         handler = GenerarGrillaHandler(mock_event_store, mock_performances_ap, _DESCRIPTOR_ADAPTER)
         await handler.handle(_command())
-        mock_event_store.load.assert_called_once_with(_build_stream_id(COMPETENCIA_ID))
+        assert mock_event_store.load.call_args_list[0].args == (_build_stream_id(COMPETENCIA_ID),)
 
 
 class TestGenerarGrillaHandlerErrores:

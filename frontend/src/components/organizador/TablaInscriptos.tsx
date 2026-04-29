@@ -21,10 +21,20 @@ export interface InscriptoRow {
 interface TablaInscriptosProps {
   rows: InscriptoRow[]
   disciplinas: string[]
+  editable?: boolean
+  onGuardarAp?: (payload: { inscripcionId: string; disciplina: string; valorAp: string }) => void
+  savingKey?: string | null
 }
 
-export function TablaInscriptos({ rows, disciplinas }: TablaInscriptosProps) {
+export function TablaInscriptos({
+  rows,
+  disciplinas,
+  editable = false,
+  onGuardarAp,
+  savingKey = null,
+}: TablaInscriptosProps) {
   const [disciplinaFiltro, setDisciplinaFiltro] = useState('TODAS')
+  const [drafts, setDrafts] = useState<Record<string, string>>({})
   const disciplinasVisibles =
     disciplinaFiltro === 'TODAS' ? disciplinas : disciplinas.filter((d) => d === disciplinaFiltro)
   const rowsFiltradas = useMemo(() => {
@@ -97,13 +107,47 @@ export function TablaInscriptos({ rows, disciplinas }: TablaInscriptosProps) {
                       )
                     }
                     const estado = row.estadoApPorDisciplina[disciplina]
+                    const cellKey = `${row.inscripcionId}:${disciplina}`
+                    const draft = drafts[cellKey] ?? estado?.ap ?? ''
                     return (
                       <td key={disciplina} className="px-4 py-3">
-                        <EstadoAPBadge
-                          estado={estado?.estado ?? 'pendiente'}
-                          ap={estado?.ap}
-                          unidad={estado?.unidad}
-                        />
+                        <div className="space-y-2">
+                          <EstadoAPBadge
+                            estado={estado?.estado ?? 'pendiente'}
+                            ap={estado?.ap}
+                            unidad={estado?.unidad}
+                          />
+                          {editable ? (
+                            <div className="flex min-w-44 flex-col gap-2">
+                              <input
+                                value={draft}
+                                onChange={(event) =>
+                                  setDrafts((current) => ({
+                                    ...current,
+                                    [cellKey]: event.target.value,
+                                  }))
+                                }
+                                inputMode="decimal"
+                                placeholder={estado?.unidad === 'Segundos' ? 'Segundos' : 'Metros'}
+                                className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
+                              />
+                              <button
+                                type="button"
+                                disabled={savingKey === cellKey || !(parseFloat(draft) > 0)}
+                                onClick={() =>
+                                  onGuardarAp?.({
+                                    inscripcionId: row.inscripcionId,
+                                    disciplina,
+                                    valorAp: draft,
+                                  })
+                                }
+                                className="rounded-xl bg-sky-500 px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-950 disabled:cursor-not-allowed disabled:opacity-50"
+                              >
+                                {savingKey === cellKey ? 'Guardando...' : 'Guardar AP'}
+                              </button>
+                            </div>
+                          ) : null}
+                        </div>
                       </td>
                     )
                   })}

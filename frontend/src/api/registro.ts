@@ -25,6 +25,12 @@ export interface InscriptoDisciplinaDetalleDto {
   unidad: string | null
 }
 
+export interface InscripcionApDto {
+  disciplina: string
+  ap: string | null
+  unidad: string | null
+}
+
 export interface InscriptoDetalleDto {
   inscripcion_id: string
   atleta_id: string
@@ -161,4 +167,33 @@ export async function inscribirAtleta(
     }),
   })
   return parseResponse<InscribirAtletaResponse>(response)
+}
+
+export async function fetchApInscripcion(
+  inscripcionId: string,
+  disciplina: string,
+): Promise<InscripcionApDto> {
+  const response = await fetch(
+    `/registro/inscripciones/${inscripcionId}/ap?disciplina=${encodeURIComponent(disciplina)}`,
+    {
+      headers: buildHeaders(),
+    },
+  )
+  return parseResponse<InscripcionApDto>(response)
+}
+
+export async function guardarApInscripcion(payload: {
+  inscripcionId: string
+  disciplina: string
+  valorAp: string
+}): Promise<InscripcionApDto> {
+  const response = await fetch(`/registro/inscripciones/${payload.inscripcionId}/ap`, {
+    method: 'PUT',
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      disciplina: payload.disciplina,
+      valor_ap: payload.valorAp,
+    }),
+  })
+  return parseResponse<InscripcionApDto>(response)
 }

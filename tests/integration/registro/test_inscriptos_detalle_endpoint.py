@@ -8,22 +8,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app import app
-from competencia.application.commands.registrar_ap import (
-    RegistrarAPCommand,
-    RegistrarAPHandler,
-)
 from competencia.domain.value_objects.disciplina import Disciplina
-from competencia.domain.value_objects.unidad_medida import UnidadMedida
-from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from competencia.infrastructure.repositories.competencia_estado_adapter import (
-    CompetenciaEstadoAdapter,
-)
-from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
-    DisciplinaDescriptorAdapter,
-)
-from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
-    SQLiteCompetenciasPorTorneo,
-)
 from identidad.api.dependencies import get_current_user
 from registro.domain.aggregates.atleta import Atleta
 from registro.domain.aggregates.inscripcion import Inscripcion
@@ -38,25 +23,15 @@ from registro.infrastructure.repositories.sqlite_inscripcion_repository import (
 @pytest.fixture
 def inscriptos_detalle_context(tmp_path, monkeypatch):
     registro_db = tmp_path / "registro.db"
-    competencia_db = tmp_path / "competencia.db"
     monkeypatch.setenv("REGISTRO_DB_PATH", str(registro_db))
-    monkeypatch.setenv("COMPETENCIA_DB_PATH", str(competencia_db))
 
     torneo_id = uuid4()
-    competencia_id = uuid4()
     ana_id = uuid4()
     carlos_id = uuid4()
     pepe_id = uuid4()
 
     atleta_repo = SQLiteAtletaRepository(str(registro_db))
     inscripcion_repo = SQLiteInscripcionRepository(str(registro_db))
-    competencias_repo = SQLiteCompetenciasPorTorneo(str(competencia_db))
-    event_store = SQLiteEventStore(str(competencia_db))
-    registrar_ap = RegistrarAPHandler(
-        event_store=event_store,
-        competencia_estado=CompetenciaEstadoAdapter(event_store),
-        disciplina_descriptor=DisciplinaDescriptorAdapter(),
-    )
 
     async def _seed() -> None:
         await atleta_repo.save(
@@ -93,13 +68,13 @@ def inscriptos_detalle_context(tmp_path, monkeypatch):
             )
         )
 
-        await inscripcion_repo.save(
-            Inscripcion(
-                atleta_id=ana_id,
-                torneo_id=torneo_id,
-                disciplinas=frozenset({Disciplina.DNF}),
-            )
+        ana_inscripcion = Inscripcion(
+            atleta_id=ana_id,
+            torneo_id=torneo_id,
+            disciplinas=frozenset({Disciplina.DNF}),
         )
+        ana_inscripcion.declarar_ap(Disciplina.DNF, Decimal("72"))
+        await inscripcion_repo.save(ana_inscripcion)
         await inscripcion_repo.save(
             Inscripcion(
                 atleta_id=carlos_id,
@@ -113,21 +88,6 @@ def inscriptos_detalle_context(tmp_path, monkeypatch):
                 torneo_id=torneo_id,
                 disciplinas=frozenset({Disciplina.DNF}),
                 estado=EstadoInscripcion.CANCELADA,
-            )
-        )
-
-        await competencias_repo.guardar(
-            competencia_id=competencia_id,
-            disciplina=Disciplina.DNF.value,
-            torneo_id=torneo_id,
-        )
-        await registrar_ap.handle(
-            RegistrarAPCommand(
-                competencia_id=competencia_id,
-                participante_id=ana_id,
-                disciplina=Disciplina.DNF,
-                valor_ap=Decimal("72"),
-                unidad=UnidadMedida.Metros,
             )
         )
 
@@ -198,3 +158,28 @@ def test_get_inscriptos_detalle_rechaza_rol_atleta(inscriptos_detalle_context) -
     )
 
     assert response.status_code == 403
+
+
+def test_put_ap_inscripcion_actualiza_fuente_primaria(inscriptos_detalle_context) -> None:
+    app.dependency_overrides[get_current_user] = lambda: {
+        "sub": str(uuid4()),
+        "email": "orga@ataraxiadive.io",
+        "rol": "ORGANIZADOR",
+    }
+    client = TestClient(app)
+
+    detalle_response = client.get(
+        f"/registro/torneos/{inscriptos_detalle_context['torneo_id']}/inscriptos-detalle"
+    )
+    inscripcion_carlos = next(
+        item["inscripcion_id"] for item in detalle_response.json() if item["apellido"] == "Lopez"
+    )
+
+    put_response = client.put(
+        f"/registro/inscripciones/{inscripcion_carlos}/ap",
+        json={"disciplina": "DYN", "valor_ap": "88"},
+    )
+
+    assert put_response.status_code == 200
+    assert put_response.json()["ap"] == "88"
+    assert put_response.json()["unidad"] == "Metros"

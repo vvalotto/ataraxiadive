@@ -293,6 +293,7 @@ function TorneoOperativoPanel({
   onTransitionSuccess,
   onTransitionError,
 }: TorneoOperativoPanelProps) {
+  void hayDisciplinasEnCurso
   const [selectedEstado, setSelectedEstado] = useState<EstadoTorneo>(torneo.estado)
   const [isSavingState, setIsSavingState] = useState(false)
   const estadosPorDisciplina = new Map(
@@ -302,7 +303,6 @@ function TorneoOperativoPanel({
     torneo.estado,
     premiacionPendientes,
     isPremiacionStatusLoading,
-    hayDisciplinasEnCurso,
   )
   const selectedTransition = transitionOptions.find((option) => option.value === selectedEstado) ?? null
 
@@ -420,7 +420,6 @@ function buildEstadoOptions(
   estadoActual: EstadoTorneo,
   premiacionPendientes: string[] | null,
   isPremiacionStatusLoading: boolean,
-  _hayDisciplinasEnCurso: boolean,
 ): EstadoOption[] {
   const options: EstadoOption[] = [
     { value: estadoActual, label: ESTADO_LABELS[estadoActual] },

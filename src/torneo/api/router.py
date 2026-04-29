@@ -41,13 +41,22 @@ from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTo
 
 router = APIRouter(prefix="/torneos", tags=["torneos"])
 PremiacionPrecondition = Callable[[UUID], Awaitable[None]]
+CierreInscripcionPrecondition = Callable[[UUID], Awaitable[None]]
 _premiacion_precondition: PremiacionPrecondition | None = None
+_cierre_inscripcion_precondition: CierreInscripcionPrecondition | None = None
 
 
 def configure_premiacion_precondition(precondition: PremiacionPrecondition | None) -> None:
     """Configura validacion externa antes de pasar un torneo a premiacion."""
     global _premiacion_precondition  # noqa: PLW0603
     _premiacion_precondition = precondition
+
+
+def configure_cierre_inscripcion_precondition(
+    precondition: CierreInscripcionPrecondition | None,
+) -> None:
+    global _cierre_inscripcion_precondition  # noqa: PLW0603
+    _cierre_inscripcion_precondition = precondition
 
 
 # ── Schemas ───────────────────────────────────────────────────────────────────
@@ -169,7 +178,10 @@ async def abrir_inscripcion(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse:
 
 @router.put("/{torneo_id}/cerrar-inscripcion", status_code=200)
 async def cerrar_inscripcion(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse:
-    await CerrarInscripcionHandler(_repo()).handle(TransicionarTorneoCommand(torneo_id))
+    await CerrarInscripcionHandler(
+        _repo(),
+        precondition=_cierre_inscripcion_precondition,
+    ).handle(TransicionarTorneoCommand(torneo_id))
     return JSONResponse(status_code=200, content={"ok": True})
 
 

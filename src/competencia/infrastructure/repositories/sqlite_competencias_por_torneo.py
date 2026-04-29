@@ -79,3 +79,26 @@ class SQLiteCompetenciasPorTorneo(CompetenciasPorTorneoPort):
             )
             for row in rows
         ]
+
+    async def obtener_por_competencia_id(
+        self, competencia_id: UUID
+    ) -> CompetenciaPorTorneoRecord | None:
+        async with aiosqlite.connect(self._db_path) as conn:
+            await self._ensure_table(conn)
+            conn.row_factory = aiosqlite.Row
+            async with conn.execute(
+                """
+                SELECT competencia_id, disciplina, torneo_id
+                FROM competencias_por_torneo
+                WHERE competencia_id = ?
+                """,
+                (str(competencia_id),),
+            ) as cursor:
+                row = await cursor.fetchone()
+        if row is None:
+            return None
+        return CompetenciaPorTorneoRecord(
+            competencia_id=UUID(row["competencia_id"]),
+            disciplina=row["disciplina"],
+            torneo_id=UUID(row["torneo_id"]),
+        )
