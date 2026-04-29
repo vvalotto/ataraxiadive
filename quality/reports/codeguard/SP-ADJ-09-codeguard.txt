@@ -1,0 +1,25 @@
+# CodeGuard — SP-ADJ-09 Refactoring UX Organizador
+# Fecha: 2026-04-29
+# Ejecutado por: Victor Valotto
+# Herramienta: codeguard v0.2.0
+
+## US-ADJ-9.1..9.6 — frontend/
+# No aplica (CodeGuard es análisis Python)
+
+## US-ADJ-9.7 — registro/
+# Archivos analizados: 33 | 0 errores | 3 advertencias
+
+src/registro/domain/aggregates/inscripcion.py: E501 line too long (106 > 100 characters)
+src/registro/domain/aggregates/inscripcion.py: E501 line too long (102 > 100 characters)
+src/registro/api/router.py:3: F401 'os' imported but unused
+
+---
+## Resumen SP-ADJ-09
+
+| ID       | Tipo      | Archivo                               | Detalle                    | Prioridad |
+|----------|-----------|---------------------------------------|----------------------------|-----------|
+| CG-04    | PEP8 E501 | registro/domain/aggregates/inscripcion.py | 2 líneas (106, 102 chars)  | Baja      |
+| CG-05    | PEP8 F401 | registro/api/router.py:3              | 'os' imported but unused   | Media     |
+
+CG-05 es un import residual — probablemente introducido en US-ADJ-9.7.
+Resolución: eliminar `import os` de registro/api/router.py.

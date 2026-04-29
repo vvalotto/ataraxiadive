@@ -1,0 +1,38 @@
+# CodeGuard — INC-5.6 Algoritmo de Puntaje y Rankings
+# Fecha: 2026-04-29
+# Ejecutado por: Victor Valotto
+# Herramienta: codeguard v0.2.0
+
+## US-5.6.1 — resultados/domain/ports/ + resultados/domain/services/
+# Archivos analizados: 5 | 0 errores | 2 advertencias
+
+src/resultados/domain/ports/resultado_puerto.py: E501 line too long (106 > 100 characters)
+src/resultados/domain/services/algoritmo_faas.py: AlgoritmoPuntajeFAAS._calcular_puntos cyclomatic complexity 11 (grade C, umbral ≤10)
+
+## US-5.6.2 — torneo/domain/ + resultados/application/
+# Archivos analizados: 21 | 0 errores | 0 advertencias
+# LIMPIO
+
+## US-5.6.3 + US-5.6.4 — resultados/domain/ + resultados/application/
+# Archivos analizados: 24 | 0 errores | 3 advertencias
+# (incluye carry-over de US-5.6.1: E501 ports + complexity services)
+
+src/resultados/domain/aggregates/<ranking>.py: E501 line too long (101 > 100 characters)  [NUEVO en US-5.6.3/5.6.4]
+src/resultados/domain/ports/resultado_puerto.py: E501 line too long (106 > 100 characters)  [carry-over US-5.6.1]
+src/resultados/domain/services/algoritmo_faas.py: AlgoritmoPuntajeFAAS._calcular_puntos cyclomatic complexity 11  [carry-over US-5.6.1]
+
+## US-5.6.5 + US-5.6.6 — frontend/
+# No aplica (CodeGuard es análisis Python)
+
+---
+## Resumen INC-5.6
+
+| ID     | Tipo        | Archivo                                              | Detalle                               | Prioridad |
+|--------|-------------|------------------------------------------------------|---------------------------------------|-----------|
+| CG-01  | PEP8 E501   | resultados/domain/ports/resultado_puerto.py          | línea 106 chars                       | Baja      |
+| CG-02  | Complexity  | resultados/domain/services/algoritmo_faas.py         | _calcular_puntos C=11 (umbral ≤10)    | Media     |
+| CG-03  | PEP8 E501   | resultados/domain/aggregates/<ranking>.py            | línea 101 chars                       | Baja      |
+
+Hallazgos pendientes para US de ajuste en INC-5.7 o SP-ADJ-10.
+CG-02 es el único candidato a refactoring real (dispatch por tipo de disciplina).
+CG-01 y CG-03 se resuelven con black.
