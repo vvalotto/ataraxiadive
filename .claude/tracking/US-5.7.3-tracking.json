@@ -1,0 +1,110 @@
+{
+  "metadata": {
+    "us_id": "US-5.7.3",
+    "us_title": "Mis Resultados - RP tarjeta y puntos por disciplina",
+    "us_points": 5,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-30T16:29:21.562757+00:00",
+    "completed_at": null,
+    "total_elapsed_seconds": 301,
+    "effective_seconds": 301,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-04-30T16:29:35.251284+00:00",
+      "completed_at": "2026-04-30T16:30:28.132739+00:00",
+      "elapsed_seconds": 52,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-30T16:30:33.312940+00:00",
+      "completed_at": "2026-04-30T16:30:50.146844+00:00",
+      "elapsed_seconds": 16,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-04-30T16:30:57.767700+00:00",
+      "completed_at": "2026-04-30T16:31:23.524582+00:00",
+      "elapsed_seconds": 25,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-04-30T16:31:49.971532+00:00",
+      "completed_at": "2026-04-30T16:34:13.150358+00:00",
+      "elapsed_seconds": 143,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Crear componentes ResultHero y Pendiente",
+          "task_type": "frontend",
+          "estimated_minutes": 45.0,
+          "started_at": "2026-04-30T16:31:55.901052+00:00",
+          "completed_at": "2026-04-30T16:32:30.883669+00:00",
+          "elapsed_seconds": 34,
+          "actual_minutes": 0.57,
+          "variance_minutes": -44.43,
+          "file_created": "frontend/src/components/atleta/ResultHero.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_002",
+          "task_name": "Implementar AtletaResultadosPage",
+          "task_type": "frontend",
+          "estimated_minutes": 60.0,
+          "started_at": "2026-04-30T16:32:38.794099+00:00",
+          "completed_at": "2026-04-30T16:34:06.688927+00:00",
+          "elapsed_seconds": 87,
+          "actual_minutes": 1.45,
+          "variance_minutes": -58.55,
+          "file_created": "frontend/src/pages/atleta/AtletaResultadosPage.tsx",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-30T16:34:22.683940+00:00",
+      "completed_at": null,
+      "elapsed_seconds": 0,
+      "status": "in_progress",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 2,
+    "completed_tasks": 2,
+    "total_phases": 5,
+    "estimated_total_minutes": 105.0,
+    "actual_total_minutes": 2.02,
+    "variance_minutes": -102.98,
+    "variance_percent": -98.08
+  }
+}
