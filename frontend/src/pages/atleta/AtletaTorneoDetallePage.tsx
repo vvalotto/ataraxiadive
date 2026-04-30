@@ -1,15 +1,20 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
 import { fetchTorneo, listarDisciplinasTorneo } from '../../api/torneo'
+import { fetchAtletaMe, listarInscripcionesDeAtleta } from '../../api/registro'
 import { AtletaShell } from '../../components/atleta/AtletaShell'
 import { formatDisciplina, formatFecha, getEstadoTorneoLabel } from './portalData'
 
 async function loadTorneoDetalle(torneoId: string) {
-  const [torneo, disciplinas] = await Promise.all([
+  const [torneo, disciplinas, atleta] = await Promise.all([
     fetchTorneo(torneoId),
     listarDisciplinasTorneo(torneoId),
+    fetchAtletaMe(),
   ])
-  return { torneo, disciplinas }
+  const inscripciones = await listarInscripcionesDeAtleta(atleta.atleta_id)
+  const inscripcion = inscripciones.find((item) => item.torneo_id === torneoId) ?? null
+
+  return { torneo, disciplinas, inscripcion }
 }
 
 export function AtletaTorneoDetallePage() {
@@ -81,12 +86,29 @@ export function AtletaTorneoDetallePage() {
             </div>
           </section>
 
-          <Link
-            to={`/atleta/torneos/${query.data.torneo.torneo_id}/inscripcion`}
-            className="flex min-h-11 items-center justify-center rounded-2xl bg-sky-500 px-4 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950"
-          >
-            Inscribirme en este torneo
-          </Link>
+          {query.data.inscripcion ? (
+            <div className="rounded-3xl border border-emerald-500/30 bg-emerald-500/10 p-4">
+              <p className="text-sm font-semibold text-emerald-100">Ya estás inscripto en este torneo.</p>
+              <p className="mt-2 text-sm text-emerald-50/80">
+                Disciplinas: {query.data.inscripcion.disciplinas.map(formatDisciplina).join(' · ') || 'Por definir'}
+              </p>
+            </div>
+          ) : null}
+
+          {!query.data.inscripcion && query.data.torneo.estado === 'INSCRIPCION_ABIERTA' ? (
+            <Link
+              to={`/atleta/torneos/${query.data.torneo.torneo_id}/inscripcion`}
+              className="flex min-h-11 items-center justify-center rounded-2xl bg-sky-500 px-4 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950"
+            >
+              Inscribirme en este torneo
+            </Link>
+          ) : null}
+
+          {!query.data.inscripcion && query.data.torneo.estado !== 'INSCRIPCION_ABIERTA' ? (
+            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-400">
+              La inscripción no está disponible en el estado actual del torneo.
+            </div>
+          ) : null}
         </div>
       ) : null}
     </AtletaShell>
