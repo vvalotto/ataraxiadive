@@ -1,0 +1,23 @@
+US-5.7.1 - Quality Gates
+
+Fecha: 2026-04-30
+Producto: frontend
+
+Comandos ejecutados:
+
+1. npm run build
+   Resultado: PASS
+   Observacion: Vite informa warning de chunk > 500 kB. No bloquea build.
+
+2. npm run lint
+   Resultado: FAIL por hallazgos preexistentes fuera del scope de US-5.7.1:
+   - frontend/src/pages/juez/GrillaPage.tsx: useMemo sin dependencia `juezId`
+   - frontend/src/components/organizador/JuecesPanel.tsx: warning de dependencia useMemo
+
+3. npx eslint src/pages/atleta/AtletaTorneosPage.tsx
+   Resultado: PASS
+
+Conclusión:
+
+El archivo modificado por US-5.7.1 compila y pasa lint focalizado. El lint global queda
+bloqueado por deuda existente en archivos no modificados por esta US.
