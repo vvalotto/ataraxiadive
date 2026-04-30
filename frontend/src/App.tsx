@@ -18,6 +18,7 @@ import { AtletaTorneoDetallePage } from './pages/atleta/AtletaTorneoDetallePage'
 import { AtletaInscripcionPage } from './pages/atleta/AtletaInscripcionPage'
 import { AtletaMisInscripcionesPage } from './pages/atleta/AtletaMisInscripcionesPage'
 import { AtletaDeclararAPPage } from './pages/atleta/AtletaDeclararAPPage'
+import { AtletaMiGrillaPage } from './pages/atleta/AtletaMiGrillaPage'
 import { AtletaResultadosPage } from './pages/atleta/AtletaResultadosPage'
 import { DashboardPage } from './pages/organizador/DashboardPage'
 import { DashboardOperativoPage } from './pages/organizador/DashboardOperativoPage'
@@ -149,6 +150,14 @@ function App() {
           element={
             <RequireRole role="atleta">
               <AtletaDeclararAPPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/atleta/grilla/:competenciaId"
+          element={
+            <RequireRole role="atleta">
+              <AtletaMiGrillaPage />
             </RequireRole>
           }
         />

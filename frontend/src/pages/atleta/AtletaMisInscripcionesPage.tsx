@@ -85,6 +85,14 @@ export function AtletaMisInscripcionesPage() {
                   <p className="mt-3 text-sm text-slate-400">
                     Andarivel {entry.andarivel ?? '—'} · Posición {entry.posicion ?? '—'}
                   </p>
+                  {entry.competenciaId ? (
+                    <Link
+                      to={`/atleta/grilla/${entry.competenciaId}?disciplina=${encodeURIComponent(entry.disciplina)}`}
+                      className="mt-4 flex min-h-10 items-center justify-center rounded-2xl border border-sky-500/40 bg-sky-500/10 px-4 py-2 text-sm font-semibold text-sky-200"
+                    >
+                      Ver grilla
+                    </Link>
+                  ) : null}
                 </div>
               ))}
             </div>

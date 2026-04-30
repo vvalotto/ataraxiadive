@@ -96,7 +96,11 @@ export function AtletaHomePage() {
               </div>
               {nextOt?.torneo ? (
                 <Link
-                  to="/atleta/mis-inscripciones"
+                  to={
+                    nextOt.competenciaId
+                      ? `/atleta/grilla/${nextOt.competenciaId}?disciplina=${encodeURIComponent(nextOt.disciplina)}`
+                      : '/atleta/mis-inscripciones'
+                  }
                   className="text-sm font-semibold text-sky-300"
                 >
                   Ver grilla

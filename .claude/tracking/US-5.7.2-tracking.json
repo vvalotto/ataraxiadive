@@ -1,0 +1,178 @@
+{
+  "metadata": {
+    "us_id": "US-5.7.2",
+    "us_title": "Mi Grilla - posicion OT y orden de salida",
+    "us_points": 5,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-30T11:45:37.978910+00:00",
+    "completed_at": "2026-04-30T16:19:58.933318+00:00",
+    "total_elapsed_seconds": 16460,
+    "effective_seconds": 16460,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-04-30T11:45:42.890600+00:00",
+      "completed_at": "2026-04-30T11:46:35.171200+00:00",
+      "elapsed_seconds": 52,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-30T11:46:45.001112+00:00",
+      "completed_at": "2026-04-30T11:47:10.716864+00:00",
+      "elapsed_seconds": 25,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-04-30T11:47:16.210217+00:00",
+      "completed_at": "2026-04-30T11:47:54.988793+00:00",
+      "elapsed_seconds": 38,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-04-30T11:48:32.609032+00:00",
+      "completed_at": "2026-04-30T11:52:11.684077+00:00",
+      "elapsed_seconds": 219,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Crear componentes OtHero y GrillaRow",
+          "task_type": "frontend",
+          "estimated_minutes": 40.0,
+          "started_at": "2026-04-30T11:48:42.714076+00:00",
+          "completed_at": "2026-04-30T11:49:29.097750+00:00",
+          "elapsed_seconds": 46,
+          "actual_minutes": 0.77,
+          "variance_minutes": -39.23,
+          "file_created": "frontend/src/components/atleta/OtHero.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_002",
+          "task_name": "Crear pagina Mi Grilla y ruta",
+          "task_type": "frontend",
+          "estimated_minutes": 40.0,
+          "started_at": "2026-04-30T11:49:37.633488+00:00",
+          "completed_at": "2026-04-30T11:50:43.229420+00:00",
+          "elapsed_seconds": 65,
+          "actual_minutes": 1.08,
+          "variance_minutes": -38.92,
+          "file_created": "frontend/src/pages/atleta/AtletaMiGrillaPage.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_003",
+          "task_name": "Actualizar links de entrada",
+          "task_type": "frontend",
+          "estimated_minutes": 25.0,
+          "started_at": "2026-04-30T11:50:57.737937+00:00",
+          "completed_at": "2026-04-30T11:51:27.763932+00:00",
+          "elapsed_seconds": 30,
+          "actual_minutes": 0.5,
+          "variance_minutes": -24.5,
+          "file_created": "frontend/src/pages/atleta/AtletaHomePage.tsx",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-30T11:52:17.039206+00:00",
+      "completed_at": "2026-04-30T11:52:34.399383+00:00",
+      "elapsed_seconds": 17,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-04-30T11:52:43.713911+00:00",
+      "completed_at": "2026-04-30T11:52:56.149060+00:00",
+      "elapsed_seconds": 12,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-04-30T11:53:05.540094+00:00",
+      "completed_at": "2026-04-30T11:53:12.807725+00:00",
+      "elapsed_seconds": 7,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-30T11:53:19.453468+00:00",
+      "completed_at": "2026-04-30T11:55:06.352006+00:00",
+      "elapsed_seconds": 106,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-04-30T11:55:11.677993+00:00",
+      "completed_at": "2026-04-30T11:55:33.184110+00:00",
+      "elapsed_seconds": 21,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-04-30T16:19:11.640222+00:00",
+      "completed_at": "2026-04-30T16:19:54.286011+00:00",
+      "elapsed_seconds": 42,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 3,
+    "completed_tasks": 3,
+    "total_phases": 10,
+    "estimated_total_minutes": 105.0,
+    "actual_total_minutes": 2.35,
+    "variance_minutes": -102.65,
+    "variance_percent": -97.76
+  }
+}
