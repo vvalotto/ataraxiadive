@@ -1,0 +1,17 @@
+US-5.7.2 - Quality Gates
+
+Fecha: 2026-04-30
+Producto: frontend
+
+Comandos ejecutados:
+
+1. npm run build
+   Resultado: PASS
+   Observacion: Vite informa warning de chunk > 500 kB. No bloquea build.
+
+2. npx eslint src/components/atleta/OtHero.tsx src/components/atleta/GrillaRow.tsx src/pages/atleta/AtletaMiGrillaPage.tsx src/pages/atleta/AtletaHomePage.tsx src/pages/atleta/AtletaMisInscripcionesPage.tsx src/App.tsx
+   Resultado: PASS
+
+Conclusión:
+
+Los archivos modificados por US-5.7.2 compilan y pasan lint focalizado.
