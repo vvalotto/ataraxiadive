@@ -472,11 +472,6 @@ Diferido: SP4 se inició directamente después del tag `v0.4.0`. Absorbido parci
 
 **ArchitectAnalyst BL-004:** `competencia` D=0.62 estable (no superó umbral 0.70) · `should_block=false`
 
-**Pendiente SP5 (deuda BUG-SP4):**
-- BUG-SP4-003: corrección de resultado tras DNS — requiere nuevo comando de dominio
-- BUG-SP4-004: colores por tarjeta en grilla de auditoría — requiere `tarjeta_asignada` en endpoint `/grilla`
-- SCOPE-SP4-001: P-11 wiring (`CompetenciaFinalizada` → email)
-
 ---
 
 ## 15. Los Tres Horizontes del Experimento
