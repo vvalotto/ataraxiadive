@@ -31,7 +31,7 @@ function findMiResultado(
   ranking: RankingCompetenciaDto | null,
   atletaId: string,
 ): RankingEntradaDto | null {
-  if (!ranking?.calculado) return null
+  if (!ranking || ranking.rankings.length === 0) return null
   return (
     ranking.rankings
       .flatMap((categoria) => categoria.entradas)
@@ -43,7 +43,7 @@ function findMiCategoriaEntradas(
   ranking: RankingCompetenciaDto | null,
   atletaId: string,
 ): { entradas: RankingEntradaDto[]; categoria: string } | null {
-  if (!ranking?.calculado) return null
+  if (!ranking || ranking.rankings.length === 0) return null
   const cat = ranking.rankings.find((c) =>
     c.entradas.some((e) => e.atleta_id === atletaId),
   )

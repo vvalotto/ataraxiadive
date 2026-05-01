@@ -27,11 +27,16 @@ from resultados.application.queries.obtener_ranking import (
     ObtenerRankingHandler,
     ObtenerRankingQuery,
 )
+from resultados.application.queries.obtener_ranking_provisional import (
+    ObtenerRankingProvisionalHandler,
+    ObtenerRankingProvisionalQuery,
+)
 from resultados.application.queries.obtener_overall import (
     ObtenerOverallHandler,
     ObtenerOverallQuery,
 )
 from resultados.domain.exceptions import TorneoNoEncontrado
+from resultados.infrastructure.repositories.atleta_categoria_adapter import AtletaCategoriaAdapter
 from resultados.infrastructure.repositories.atleta_info_adapter import AtletaInfoAdapter
 
 router = APIRouter(prefix="/resultados", tags=["resultados"])
@@ -77,6 +82,21 @@ def get_obtener_ranking_handler(
 ObtenerRankingHandlerDep = Annotated[ObtenerRankingHandler, Depends(get_obtener_ranking_handler)]
 
 
+def get_obtener_ranking_provisional_handler(
+    competencia_store: Annotated[SQLiteEventStore, Depends(get_competencia_store)],
+) -> ObtenerRankingProvisionalHandler:
+    """Dependency: handler de ranking provisional (lee competencia.db en tiempo real)."""
+    return ObtenerRankingProvisionalHandler(
+        competencia_store=competencia_store,
+        atleta_categoria_port=AtletaCategoriaAdapter(),
+    )
+
+
+ObtenerRankingProvisionalHandlerDep = Annotated[
+    ObtenerRankingProvisionalHandler, Depends(get_obtener_ranking_provisional_handler)
+]
+
+
 def get_obtener_overall_handler(
     ranking_store: Annotated[SQLiteEventStore, Depends(get_ranking_store)],
 ) -> ObtenerOverallHandler:
@@ -119,11 +139,13 @@ async def get_ranking(
     competencia_id: UUID,
     disciplina: Disciplina,
     handler: ObtenerRankingHandlerDep,
+    provisional_handler: ObtenerRankingProvisionalHandlerDep,
 ) -> JSONResponse:
-    """Retorna el ranking calculado de la disciplina para la competencia.
+    """Retorna el ranking de la disciplina para la competencia.
 
-    El ranking incluye posición, marca efectiva, tarjeta y flag de podio
-    para cada atleta. Las performances DNS y tarjeta roja aparecen al final.
+    Si el ranking definitivo ya fue calculado (CompetenciaFinalizada), retorna ese
+    con calculado=true.  En caso contrario, retorna un ranking provisional en tiempo
+    real construido desde los eventos del BC Competencia, con calculado=false.
 
     Returns:
         JSON agrupado por categoría.
@@ -131,9 +153,18 @@ async def get_ranking(
     rankings = await handler.handle(
         ObtenerRankingQuery(competencia_id=competencia_id, disciplina=disciplina)
     )
+    calculado = len(rankings) > 0
+
+    if not calculado:
+        rankings = await provisional_handler.handle(
+            ObtenerRankingProvisionalQuery(
+                competencia_id=competencia_id, disciplina=disciplina
+            )
+        )
+
     return JSONResponse(
         content={
-            "calculado": len(rankings) > 0,
+            "calculado": calculado,
             "rankings": [
                 {
                     "categoria": grupo.categoria,

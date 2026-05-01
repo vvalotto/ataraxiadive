@@ -44,8 +44,8 @@ gestionable desde el panel del organizador, con ejecución por disciplina y resu
 | INC-5.5 | Portal atleta completo (shell dark, wizard inscripción, declarar AP) + vista organizador inscriptos con estado AP — scope redefinido post-reversión (US-5.5.1..5.5.2) | ✅ Cerrado 2026-04-26 | #120, #121, #122 |
 | INC-5.6 | Algoritmo FAAS (puerto + implementación) + `TipoReglamento` VO + ranking por categoría/género con puntos + UI tabla ejecución + podios 6 divisiones (US-5.6.1..5.6.6) | ✅ Cerrado 2026-04-28 | #123..#128 |
 | SP-ADJ-09 | Refactoring UX organizador: shell dark, routing, home, dashboard, resultados, arquitectura + declarar AP en inscripción (US-ADJ-9.1..9.7) | ✅ Cerrado 2026-04-29 | #129..#133, #136 |
-| INC-5.7 | Portal del Atleta — mis torneos, mi grilla, mis resultados, rankings/podios (US-5.7.1..5.7.4) | ⏳ Pendiente | — |
-| INC-5.8 | Polish y demo-readiness — seed BA 2025, verificación contra resultados oficiales, UX fixes (US-5.8.1..5.8.3) | ⏳ Pendiente | — |
+| INC-5.7 | Portal del Atleta — mis torneos, mi grilla, mis resultados, rankings/podios + fix resultados provisionales (US-5.7.1..5.7.4) | ✅ Cerrado 2026-05-01 | #137..#140 |
+| INC-5.8 | Desestimado — contenido absorbido en SP6 | — | — |
 
 > Fuente de alcance vigente: `docs/plans/sp5/PLAN-SP5.md`.
 
@@ -63,8 +63,9 @@ gestionable desde el panel del organizador, con ejecución por disciplina y resu
 | DesignReviewer INC-5.4 | designreviewer | 0 CRITICAL · 222 WARNING | `quality/reports/designreviewer/INC-5.4-report.txt` |
 | DesignReviewer INC-5.5 | designreviewer | 0 CRITICAL · 227 WARNING (+5 vs INC-5.4) | `quality/reports/designreviewer/INC-5.5-report.txt` |
 | DesignReviewer INC-5.6 + SP-ADJ-09 | designreviewer | 0 CRITICAL · 252 WARNING (+25 vs INC-5.5) | `quality/reports/designreviewer/INC-5.6-report.txt` |
+| DesignReviewer INC-5.7 | designreviewer | 0 CRITICAL · 256 WARNING (+4 vs INC-5.6) | `quality/reports/designreviewer/INC-5.7-report.txt` |
 | ArchitectAnalyst BL-005 | architectanalyst | ⏳ pendiente (al cerrar SP5) | — |
-| UAT SP5 | funcional | ⏳ pendiente (INC-5.7 / cierre BL-005) | — |
+| UAT SP5 | funcional | ✅ aprobado (UAT visual INC-5.7 · 2026-05-01) | — |
 
 ---
 

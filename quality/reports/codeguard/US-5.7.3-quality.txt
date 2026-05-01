@@ -1,0 +1,9 @@
+CodeGuard US-5.7.3 — Mis Resultados del Atleta
+Fecha: 2026-05-01
+Archivos analizados:
+  - frontend/src/components/atleta/ResultHero.tsx
+  - frontend/src/components/atleta/DisciplinaPendienteCard.tsx
+  - frontend/src/pages/atleta/AtletaResultadosPage.tsx
+
+Resultado: 0 errores · 0 advertencias (archivos TypeScript — CodeGuard analiza solo Python)
+Estado: PASS

@@ -4,9 +4,9 @@
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-04-29 |
+| **Fecha** | 2026-05-01 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.29 — INC-5.6 + SP-ADJ-09 cerrados (algoritmo FAAS + rankings · PRs #123–#128 · refactoring UX organizador · PRs #129–#136) |
+| **Estado** | ✅ v1.30 — INC-5.7 cerrado (Portal del Atleta · PRs #137–#140 · fix resultados provisionales · DesignReviewer 0 CRITICAL · 256 WARNING) |
 
 ---
 
@@ -46,8 +46,8 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP5 INC-5.5 | Registro + Competencia + Frontend | Portal atleta completo (shell dark, wizard inscripción, declarar AP) + vista organizador con inscriptos y estado AP (US-5.5.1..5.5.2) — PRs #120, #121, #122 |
 | SP5 INC-5.6 | Resultados + Torneo + Frontend | Algoritmo FAAS + TipoReglamento + ranking por categoría/género con puntos + UI tabla ejecución + podios 6 divisiones (US-5.6.1..5.6.6) — PRs #123–#128 |
 | SP5 SP-ADJ-09 | Frontend organizador | Refactoring UX organizador: shell dark, routing, home, dashboard, resultados, arquitectura + declarar AP en inscripción (US-ADJ-9.1..9.7) — PRs #129–#136 |
-| SP5 INC-5.7 (pendiente) | Portal Atleta + Resultados | Mis torneos, mi grilla, mis resultados, rankings/podios desde la vista del atleta |
-| SP5 INC-5.8 (pendiente) | Demo/UAT | Seed BA 2025, verificación contra resultados oficiales, UX fixes |
+| SP5 INC-5.7 | Portal Atleta + Resultados | Portal del atleta: mis torneos, mi grilla, mis resultados, rankings/podios + fix resultados provisionales (US-5.7.1..5.7.4) — PRs #137–#140 |
+| SP5 INC-5.8 | — | Desestimado — contenido absorbido en SP6 |
 | Futuro / fuera de scope SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
 
 ---
@@ -515,7 +515,24 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 
 ---
 
-## 28. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §26 -->
+## 28. US-IEDD SP5 INC-5.7 — Portal del Atleta
+
+> Estado al 2026-05-01: 4/4 US mergeadas a `develop`. UAT visual aprobado.
+> DesignReviewer INC-5.7: **0 CRITICAL · 256 WARNING** (+4 vs INC-5.6 · `quality/reports/designreviewer/INC-5.7-report.txt`).
+> +4 WARNING: complejidad `_rankear_categoria` en `ObtenerRankingProvisionalHandler` — aceptado como conocido.
+> Fix incluido: resultados provisionales via fallback en `GET /resultados/{id}/ranking` — lee `competencia.db` en tiempo real cuando `resultados.db` está vacío.
+> INC-5.8 desestimado — contenido absorbido en SP6.
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-5.7.1 | 5.7 | Mis torneos — lista de torneos inscriptos del atleta con estado actual + fix inscripción condicional | ✅ Done (PR #137) |
+| US-5.7.2 | 5.7 | Mi grilla — posición del atleta (OT + línea) por disciplina inscripta | ✅ Done (PR #138) |
+| US-5.7.3 | 5.7 | Mis resultados — ResultHero (RP, tarjeta, puntos) + DisciplinaPendienteCard por disciplina | ✅ Done (PR #139) |
+| US-5.7.4 | 5.7 | Rankings y podios — tabla de ejecución + podio por disciplina en la que participó el atleta | ✅ Done (PR #140) |
+
+---
+
+## 30. Trazabilidad: Discrepancias → US → Documentos a actualizar
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -534,7 +551,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 29. Cobertura Total
+## 31. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -554,7 +571,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 30. US → Tests
+## 32. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -634,10 +651,14 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-5.6.6 | frontend (build + eslint) · UAT INC-5.6 (BDD waiver — frontend puro) | ✅ Done (PR #128) |
 | US-ADJ-9.1..9.6 | frontend (build + eslint) · UAT regresión SP-ADJ-09 (BDD waiver — frontend puro) | ✅ Done (PRs #129–#133, develop) |
 | US-ADJ-9.7 | unit/registro/application + integration/registro · frontend (build + eslint) | ✅ Done (PR #136) |
+| US-5.7.1 | frontend (build + eslint) · UAT visual INC-5.7 (BDD waiver — frontend puro) | ✅ Done (PR #137) |
+| US-5.7.2 | frontend (build + eslint) · UAT visual INC-5.7 (BDD waiver — frontend puro) | ✅ Done (PR #138) |
+| US-5.7.3 | frontend (build + eslint) · UAT visual INC-5.7 (BDD waiver — frontend puro) | ✅ Done (PR #139) |
+| US-5.7.4 | frontend (build + eslint) · UAT visual INC-5.7 (BDD waiver — frontend puro) | ✅ Done (PR #140) |
 
 ---
 
-## 31. US → ADR
+## 33. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -652,7 +673,8 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-*v1.29 — 2026-04-29: INC-5.6 cerrado (§26 nuevo · 6/6 US ✅ · PRs #123–#128 · DesignReviewer ⏳ pendiente) · SP-ADJ-09 cerrado (§27 nuevo · 7/7 US ✅ · PRs #129–#136) · §§ renumerados 28..31 · US→Tests US-5.5.x + US-5.6.x + US-ADJ-9.x · §2 cobertura actualizada*
+*v1.30 — 2026-05-01: INC-5.7 cerrado (§28 nuevo · 4/4 US ✅ · PRs #137–#140 · DesignReviewer 0 CRITICAL · 256 WARNING) · INC-5.8 desestimado (absorbido SP6) · §§ renumerados 29..33 · US→Tests US-5.7.x · §2 cobertura actualizada*
+*v1.29 — 2026-04-29: INC-5.6 cerrado (§26 nuevo · 6/6 US ✅ · PRs #123–#128 · DesignReviewer 0 CRITICAL · 252 WARNING) · SP-ADJ-09 cerrado (§27 nuevo · 7/7 US ✅ · PRs #129–#136) · §§ renumerados 28..31 · US→Tests US-5.5.x + US-5.6.x + US-ADJ-9.x · §2 cobertura actualizada*
 *v1.27 — 2026-04-26: INC-5.5 cerrado (§25 nuevo · 2/2 US ✅ + fix UAT · PRs #120–#122 · DesignReviewer 0 CRITICAL · 227 WARNING)*
 *Documento creado: 2026-03-19 — Semana 0, Fase 0*
 *v1.1 — 2026-03-20: US-1.1.1 actualizada a BC-first · ADR-006 agregado · FAZ → FAAS*

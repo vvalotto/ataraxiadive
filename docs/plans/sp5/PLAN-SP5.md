@@ -6,7 +6,7 @@
 | **Baseline** | BL-005 |
 | **Tag git** | `v1.0.0` |
 | **Fecha** | 2026-04-18 |
-| **Estado** | ⏳ En progreso (INC-5.1..5.6 ✅ · SP-ADJ-09 ✅ · INC-5.7/5.8 pendientes) |
+| **Estado** | ✅ Completo — pendiente cierre formal (INC-5.1..5.7 ✅ · SP-ADJ-09 ✅ · INC-5.8 desestimado · ArchitectAnalyst + merge→main pendientes) |
 
 ---
 
@@ -306,8 +306,8 @@ SP-ADJ-07 (deuda SP4)                         ✅
                                 └── INC-5.5 (Inscripción completa — APs + vista organizador)  ✅
                                       └── INC-5.6 (Puntaje + Rankings)  ✅
                                             ├── SP-ADJ-09 (Refactoring UX Organizador)  ✅
-                                            └── INC-5.7 (Portal del Atleta)  ⏳
-                                                  └── INC-5.8 (Polish + BA 2025)  ⏳
+                                            └── INC-5.7 (Portal del Atleta)  ✅
+                                                  └── INC-5.8 (desestimado → SP6)
 ```
 
 ---
@@ -337,6 +337,7 @@ SP-ADJ-07 (deuda SP4)                         ✅
 
 ---
 
+*2026-05-01 — INC-5.7 ✅ cerrado · INC-5.8 desestimado (absorbido SP6) · estado SP5: pendiente ArchitectAnalyst + merge develop→main + tag v1.0.0*
 *2026-04-29 — INC-5.5 ✅, INC-5.6 ✅, SP-ADJ-09 ✅ · árbol dependencias actualizado · INC-5.7/5.8 ⏳ pendientes*
 *2026-04-23 — INC-5.3 marcado ✅ · INC-5.4 redefinido como "Identidad Extendida" (auto-registro, cambiar/olvidé pw, modelo nombre/apellido) · INC-5.5..5.8 renumerados desde INC-5.4..5.7 original*
 *Redactado: 2026-04-18 — SP5 La Puesta en Marcha (MVP Demo)*

@@ -1,0 +1,13 @@
+CodeGuard INC-5.7 — Fix backend resultados provisionales
+Fecha: 2026-05-01
+Archivos analizados:
+  - src/resultados/api/router.py
+  - src/resultados/application/queries/obtener_ranking_provisional.py
+
+Resultado: 0 errores · 1 advertencia
+Hallazgos:
+  [WARNING] Complexity: _rankear_categoria — cyclomatic complexity 11 (grade C)
+  Decisión: aceptado como conocido — lógica cohesiva de ranking provisorio
+  (misma estructura que RankingCompetencia handler; no justifica refactoring en módulo transitorio)
+
+Estado: PASS (0 errores)
