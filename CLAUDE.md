@@ -271,7 +271,8 @@ SP-ADJ (ajuste entre SPs)          → opcional, antes de cerrar la Baseline
 | SP2 | La Competencia | BL-002 | `v0.3.0` | ✅ Cerrado 2026-03-28 |
 | SP3 | El Torneo | BL-003 | `v0.4.0` | ✅ Cerrado 2026-04-04 |
 | SP4 | La Plataforma | BL-004 | `v0.5.0` | ✅ Cerrado 2026-04-18 |
-| SP5 | La Puesta en Marcha | BL-005 | `v1.0.0` | ⏳ Pendiente |
+| SP5 | La Puesta en Marcha | BL-005 | `v0.6.0` | ✅ Cerrado 2026-05-01 |
+| SP6 | Validación, Ajustes y Despliegue | BL-006 | `v1.0.0` | ⏳ Pendiente |
 
 > **SP-ADJ:** sub-sprint de ajuste técnico o documental entre SPs. Se ejecuta antes de
 > cerrar la baseline cuando hay deuda acumulada que no conviene arrastrar al siguiente SP.
@@ -474,6 +475,34 @@ Diferido: SP4 se inició directamente después del tag `v0.4.0`. Absorbido parci
 
 ---
 
+**SP5 — La Puesta en Marcha — ✅ COMPLETO (2026-05-01) — tag `v0.6.0`**
+
+| Incremento | Descripción | Estado |
+|-----------|-------------|--------|
+| INC-5.1 — Panel del Organizador | Ciclo de vida del torneo, fases, inscriptos, grilla, jueces, monitor de ejecución | ✅ PRs #92–#103 |
+| INC-5.1-ADJ — Ajuste post-UAT | Correcciones post-UAT INC-5.1 | ✅ PRs #104 |
+| INC-5.2 — Ejecución por Disciplina | Vista maestro-detalle, habilitar disciplina, cierre manual | ✅ PRs #105, #106 |
+| INC-5.3 — Gestión de Usuarios y Roles | Crear usuarios, asignar roles, vista atleta con inscripción básica | ✅ PRs #110, #111 |
+| INC-5.4 — Identidad Extendida | Auto-registro público, cambiar/recuperar contraseña JWT+Resend | ✅ PRs #112–#114 |
+| INC-5.5 — Inscripción Completa | Portal atleta (shell dark, wizard, declarar AP) + vista organizador inscriptos | ✅ PRs #120–#122 |
+| INC-5.6 — Algoritmo FAAS | Puerto AlgoritmoPuntaje + implementación FAAS + ranking por categoría/género + UI podios | ✅ PRs #123–#128 |
+| INC-5.7 — Portal del Atleta | Mis torneos, mi grilla, mis resultados, rankings/podios + fix resultados provisionales | ✅ PRs #137–#140 |
+| INC-5.8 | Desestimado — contenido absorbido en SP6 | — |
+| SP-ADJ-07 | Deuda técnica post-SP4 | ✅ |
+| SP-ADJ-08 | Ajuste post-UAT INC-5.2 | ✅ |
+| SP-ADJ-09 | Refactoring UX organizador + declarar AP en inscripción | ✅ PRs #129–#136 |
+| DesignReviewer INC-5.7 | 0 CRITICAL · 256 WARNING | ✅ |
+| ArchitectAnalyst BL-005 | should_block=false · `competencia` D=0.46 ↓ (mejora vs 0.62 BL-004) | ✅ |
+| UAT SP5 | Aprobado — flujo E2E completo funcional | ✅ |
+| BL-005 | `.cm/baselines/BL-005-draft.md` | ✅ |
+
+**ArchitectAnalyst BL-005 — hallazgos a monitorear en BL-006:**
+- `registro` D=0.59 ↑ (leve degradación vs 0.56 BL-004): monitorear en SP6
+- `identidad` D=0.67 / `shared` D=0.64: Zone of Pain esperada en BCs CRUD — sin cambio previsto
+- DependencyCycle en `competencia/domain/aggregates`: ciclo interno conocido, estable
+
+---
+
 ## 15. Los Tres Horizontes del Experimento
 
 | Horizonte | Duración estimada | SPs | Criterio de éxito |
@@ -538,7 +567,8 @@ Los dos no son excluyentes: un aprendizaje puede vivir en ambos si tiene valor a
 
 ---
 
-*Última actualización: 2026-04-18 — §14 actualizado: SP4 ✅ cerrado v0.5.0 (INC-4.0..4.6 + SP-ADJ-06 · UAT PASS · BL-004); §9 SP4 marcado ✅*
+*Última actualización: 2026-05-01 — §14 actualizado: SP5 ✅ cerrado v0.6.0 (INC-5.1..5.7 + SP-ADJ-07/08/09 · UAT PASS · BL-005 · ArchitectAnalyst); §9 SP5 marcado ✅ · SP6 agregado*
+*2026-04-18 — §14 actualizado: SP4 ✅ cerrado v0.5.0 (INC-4.0..4.6 + SP-ADJ-06 · UAT PASS · BL-004); §9 SP4 marcado ✅*
 *2026-04-13 — §14 actualizado: SP3 ✅ cerrado v0.4.0; SP-ADJ-05 diferido; SP4 en progreso (INC-4.0..4.3 ✅, HITOs 18–20)*
 *2026-03-29 — §12 WORKFLOW-DESARROLLO.md como fuente autoritativa del workflow; §11 UAT post-SP agregado a quality gates*
 *2026-03-28 — SP-ADJ-02-doc: §14 actualizado (SP1+SP2+ADJ), §9 patrón SP-ADJ, §5 HITOs*

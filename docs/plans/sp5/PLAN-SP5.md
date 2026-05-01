@@ -4,9 +4,9 @@
 |-------|-------|
 | **Sprint** | SP5 |
 | **Baseline** | BL-005 |
-| **Tag git** | `v1.0.0` |
+| **Tag git** | `v0.6.0` |
 | **Fecha** | 2026-04-18 |
-| **Estado** | ✅ Completo — pendiente cierre formal (INC-5.1..5.7 ✅ · SP-ADJ-09 ✅ · INC-5.8 desestimado · ArchitectAnalyst + merge→main pendientes) |
+| **Estado** | ✅ Cerrado 2026-05-01 — INC-5.1..5.7 + SP-ADJ-07/08/09 · INC-5.8 desestimado · ArchitectAnalyst PASS · tag v0.6.0 asignado |
 
 ---
 
@@ -333,11 +333,11 @@ SP-ADJ-07 (deuda SP4)                         ✅
 - [ ] Rankings instantáneos al cerrar disciplina — sin acción manual
 - [ ] 6 divisiones de podio correctas (SENIOR M/F, MASTER M/F, JUNIOR M/F)
 - [ ] `designreviewer src/` — cero CRITICAL
-- [ ] `CLAUDE.md §14` actualizado con SP5 completo
+- [x] `CLAUDE.md §14` actualizado con SP5 completo
 
 ---
 
-*2026-05-01 — INC-5.7 ✅ cerrado · INC-5.8 desestimado (absorbido SP6) · estado SP5: pendiente ArchitectAnalyst + merge develop→main + tag v1.0.0*
+*2026-05-01 — SP5 ✅ cerrado · INC-5.7 mergeado · INC-5.8 desestimado · ArchitectAnalyst PASS (should_block=false) · merge develop→main completado · tag v0.6.0 asignado · CLAUDE.md §14 actualizado*
 *2026-04-29 — INC-5.5 ✅, INC-5.6 ✅, SP-ADJ-09 ✅ · árbol dependencias actualizado · INC-5.7/5.8 ⏳ pendientes*
 *2026-04-23 — INC-5.3 marcado ✅ · INC-5.4 redefinido como "Identidad Extendida" (auto-registro, cambiar/olvidé pw, modelo nombre/apellido) · INC-5.5..5.8 renumerados desde INC-5.4..5.7 original*
 *Redactado: 2026-04-18 — SP5 La Puesta en Marcha (MVP Demo)*
