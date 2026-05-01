@@ -64,7 +64,7 @@ gestionable desde el panel del organizador, con ejecución por disciplina y resu
 | DesignReviewer INC-5.5 | designreviewer | 0 CRITICAL · 227 WARNING (+5 vs INC-5.4) | `quality/reports/designreviewer/INC-5.5-report.txt` |
 | DesignReviewer INC-5.6 + SP-ADJ-09 | designreviewer | 0 CRITICAL · 252 WARNING (+25 vs INC-5.5) | `quality/reports/designreviewer/INC-5.6-report.txt` |
 | DesignReviewer INC-5.7 | designreviewer | 0 CRITICAL · 256 WARNING (+4 vs INC-5.6) | `quality/reports/designreviewer/INC-5.7-report.txt` |
-| ArchitectAnalyst BL-005 | architectanalyst | ⏳ pendiente (al cerrar SP5) | — |
+| ArchitectAnalyst BL-005 | architectanalyst | should_block=false · 4 CRITICAL (DistanceAnalyzer: identidad↓/registro↑/shared= · DependencyCycles competencia=) · competencia D=0.46 ↓ (mejora vs 0.62 BL-004) | `quality/reports/architectanalyst/BL-005-report.json` |
 | UAT SP5 | funcional | ✅ aprobado (UAT visual INC-5.7 · 2026-05-01) | — |
 
 ---
@@ -80,29 +80,30 @@ gestionable desde el panel del organizador, con ejecución por disciplina y resu
 
 ## Métricas
 
-*(a completar al cerrar SP5 con ArchitectAnalyst)*
-
-| BC | D (distancia) | Tendencia vs BL-004 |
-|----|:---:|:---:|
-| competencia | — | — |
-| torneo | — | — |
-| registro | — | — |
-| identidad | — | — |
-| shared | — | — |
+| BC | D (distancia) | Tendencia vs BL-004 | Severidad |
+|----|:---:|:---:|:---:|
+| competencia | 0.46 | ↓ mejora | WARNING |
+| torneo | 0.48 | ↓ mejora | WARNING |
+| registro | 0.59 | ↑ leve degradación | CRITICAL |
+| identidad | 0.67 | ↓ mejora | CRITICAL |
+| shared | 0.64 | = estable | CRITICAL |
+| notificaciones | 0.45 | — (nuevo) | WARNING |
 
 ---
 
 ## Notas para el cierre
 
-- `competencia` D=0.62 en BL-004 — monitorear si supera 0.70 con INC-5.2 (nuevo frontend)
-- UAT SP5 debe cubrir ciclo completo: crear torneo → inscribir → grilla → ejecución → resultados
-- Integración FAAS / importación CSV queda fuera de alcance SP5; el MVP usa formulario manual.
-- Antes del tag `v1.0.0`: merge develop→main, ArchitectAnalyst, retrospectiva SP5
-- INC-5.5 scope redefinido: el scope original (FAAS, rankings por categoría/género) fue desplazado a INC-5.6 tras la reversión del 2026-04-25. WARNINGs: 222→227 (+5 vs INC-5.4).
+- `competencia` D=0.46 en BL-005 — mejoró significativamente vs 0.62 en BL-004 (no superó umbral 0.70)
+- `registro` D=0.59 ↑ — leve degradación respecto a BL-004 (0.56); monitorear en SP6
+- `identidad` / `shared` / `notificaciones`: Zone of Pain esperada en BCs CRUD y tipos cross-BC; sin cambio arquitectónico previsto
+- DependencyCycle en `competencia/domain/aggregates` — ciclo interno conocido, estable, no bloquea
+- INC-5.8 desestimado — contenido absorbido en SP6
+- Tag del cierre: `v0.6.0` (SP6 llevará `v1.0.0` al completar validación y despliegue)
 
 ---
 
-*2026-04-29 — INC-5.6 cerrado (US-5.6.1..5.6.6 mergeadas · PRs #123–#128 · DesignReviewer ⏳ pendiente) · SP-ADJ-09 cerrado (US-ADJ-9.1..9.7 · PRs #129–#136 · DesignReviewer ⏳ pendiente)*
+*2026-05-01 — INC-5.7 cerrado · INC-5.8 desestimado · ArchitectAnalyst BL-005 ejecutado (should_block=false) · métricas completadas · tag v0.6.0 pendiente*
+*2026-04-29 — INC-5.6 cerrado (US-5.6.1..5.6.6 mergeadas · PRs #123–#128 · DesignReviewer 0 CRITICAL · 252 WARNING) · SP-ADJ-09 cerrado (US-ADJ-9.1..9.7 · PRs #129–#136)*
 *2026-04-26 — INC-5.5 cerrado (US-5.5.1..5.5.2 mergeadas + fix UAT · PRs #120, #121, #122 · DesignReviewer 0 CRITICAL · 227 WARNING · scope redefinido: portal atleta + AP)*
 *2026-04-23 — INC-5.3 cerrado (US-5.3.1..5.3.2 mergeadas · DesignReviewer 0 CRITICAL · 215 WARNING · nota: US-5.3.2 adelantó scope inscripción básica de INC-5.4)*
 *2026-04-22 — INC-5.2 cerrado + SP-ADJ-08 (UAT-5.2-01..08 resueltos · DesignReviewer 0 CRITICAL · 215 WARNING)*
