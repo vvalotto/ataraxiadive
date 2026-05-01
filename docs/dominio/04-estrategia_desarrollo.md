@@ -7,7 +7,9 @@ Estrategia de Desarrollo --- Subproyectos e Incrementos
 > **Estado documental:** histórico — planificación inicial de Febrero 2026.
 > Las DoDs de SP1/SP2 mencionan PostgreSQL y docker-compose, que fueron reemplazados
 > por SQLite por BC (ADR-007) y desarrollo sin Docker (ADR-010) antes de iniciar la implementación.
-> La estructura de subproyectos e incrementos sigue vigente. Ver `CLAUDE.md §9` para el estado actual.
+> El alcance real de cada SP divergió parcialmente de lo descrito aquí (especialmente SP5).
+> Para el estado de cada SP y los incrementos realmente implementados, ver `CLAUDE.md §14`.
+> Para los planes de implementación específicos, ver `docs/plans/sp{N}/PLAN-SP{N}.md`.
 
   **Proyecto:**            Ataraxiadive
   ------------------------ ------------------------------------------------------------------

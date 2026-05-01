@@ -6,7 +6,7 @@
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
 | **Fecha** | 2026-05-01 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.30 — INC-5.7 cerrado (Portal del Atleta · PRs #137–#140 · fix resultados provisionales · DesignReviewer 0 CRITICAL · 256 WARNING) |
+| **Estado** | ✅ v1.30 — SP5 cerrado · INC-5.7 ✅ · INC-5.8 desestimado (absorbido SP6) · versioning SP5=`v0.6.0` / SP6=`v1.0.0` (decisión 2026-05-01) |
 
 ---
 
