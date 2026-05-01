@@ -13,5 +13,9 @@ class TokenServicePort(ABC):
         """Genera un token para el usuario autenticado."""
 
     @abstractmethod
+    def generate_reset_token(self, email: str) -> str:
+        """Genera un token de recuperacion de password asociado a un email."""
+
+    @abstractmethod
     def verify(self, token: str) -> dict:
         """Verifica el token y retorna su payload."""

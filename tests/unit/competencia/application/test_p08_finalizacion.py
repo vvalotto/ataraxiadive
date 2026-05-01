@@ -252,6 +252,8 @@ async def test_asignar_con_port_finalizado_persiste_hash_sha256(
     )
     assert "hash_sha256" in competencia_finalizada
     assert len(competencia_finalizada["hash_sha256"]) == 64
+    assert competencia_finalizada["origen"] == "automatico"
+    assert competencia_finalizada["finalizada_por"] is None
 
 
 # ── Tests RegistrarDNSHandler + P-08 ──────────────────────────────────────────

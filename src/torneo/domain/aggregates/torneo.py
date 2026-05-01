@@ -16,6 +16,7 @@ from torneo.domain.value_objects.disciplina_torneo import DisciplinaTorneo
 from torneo.domain.value_objects.entidad_organizadora import EntidadOrganizadora
 from torneo.domain.value_objects.estado_torneo import EstadoTorneo
 from torneo.domain.value_objects.sede import Sede
+from torneo.domain.value_objects.tipo_reglamento import TipoReglamento
 
 _TRANSICIONES_VALIDAS: dict[EstadoTorneo, set[EstadoTorneo]] = {
     EstadoTorneo.CREADO: {EstadoTorneo.INSCRIPCION_ABIERTA},
@@ -36,6 +37,7 @@ _ESTADOS_ASIGNACION_VALIDOS = {
     EstadoTorneo.PREPARACION,
 }
 
+
 @dataclass
 class Torneo:
     nombre: str
@@ -47,6 +49,7 @@ class Torneo:
     torneo_id: UUID = field(default_factory=uuid4)
     estado: EstadoTorneo = EstadoTorneo.CREADO
     disciplinas_torneo: list[DisciplinaTorneo] = field(default_factory=list)
+    tipo_reglamento: TipoReglamento = TipoReglamento.FAAS
 
     def __post_init__(self) -> None:
         self._validar_nombre()
@@ -79,7 +82,10 @@ class Torneo:
         self.estado = EstadoTorneo.CANCELADO
 
     def asignar_disciplinas(self, disciplinas: frozenset[Disciplina]) -> None:
-        """Configura las disciplinas disponibles. Solo en estados CREADO, INSCRIPCION_ABIERTA o PREPARACION."""
+        """Configura las disciplinas disponibles.
+
+        Solo en estados CREADO, INSCRIPCION_ABIERTA o PREPARACION.
+        """
         self._validar_estado_asignacion()
         self._validar_disciplinas(disciplinas)
         self.disciplinas_torneo = [DisciplinaTorneo(disciplina=d) for d in sorted(disciplinas)]

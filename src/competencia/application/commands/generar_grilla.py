@@ -8,9 +8,11 @@ from uuid import UUID
 
 from competencia.application.commands._handler_utils import (
     build_competencia_stream_id,
+    build_performance_stream_id,
     persistir_eventos_pendientes,
     reconstruir_competencia,
 )
+from competencia.domain.aggregates.performance import Performance
 from competencia.domain.aggregates.competencia import Competencia
 from competencia.domain.ports.disciplina_descriptor_port import DisciplinaDescriptorPort
 from competencia.domain.ports.event_store_port import EventStorePort
@@ -84,6 +86,7 @@ class GenerarGrillaHandler:
             events=events,
         )
         performances = await self._performances_ap.get_performances_con_ap(command.competencia_id)
+        await self._bootstrap_performances_faltantes(command, performances)
         descriptor = self._disciplina_descriptor.describe(command.disciplina)
         competencia.generar_grilla(
             ot_inicio=command.ot_inicio,
@@ -96,6 +99,32 @@ class GenerarGrillaHandler:
             stream_id=stream_id,
             aggregate=competencia,
         )
+
+    async def _bootstrap_performances_faltantes(
+        self,
+        command: GenerarGrillaCommand,
+        performances: list[PerformancesAPData],
+    ) -> None:
+        for performance_data in performances:
+            stream_id = build_performance_stream_id(
+                command.competencia_id,
+                performance_data.atleta_id,
+                command.disciplina,
+            )
+            if await self._event_store.load(stream_id):
+                continue
+            performance = Performance(
+                performance_id=performance_data.performance_id,
+                competencia_id=command.competencia_id,
+                participante_id=performance_data.atleta_id,
+                disciplina=command.disciplina,
+            )
+            performance.registrar_ap(performance_data.valor_ap, performance_data.unidad)
+            await persistir_eventos_pendientes(
+                event_store=self._event_store,
+                stream_id=stream_id,
+                aggregate=performance,
+            )
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────

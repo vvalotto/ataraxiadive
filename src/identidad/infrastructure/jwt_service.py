@@ -10,6 +10,7 @@ from identidad.domain.exceptions import TokenInvalido
 from identidad.domain.ports.token_service_port import TokenServicePort
 
 _DEFAULT_EXPIRY_HOURS = 24
+_RESET_TOKEN_EXPIRY_HOURS = 1
 
 
 class JWTService(TokenServicePort):
@@ -28,8 +29,18 @@ class JWTService(TokenServicePort):
         payload = {
             "sub": str(usuario.usuario_id),
             "email": usuario.email,
+            "nombre": usuario.nombre,
+            "apellido": usuario.apellido,
             "rol": usuario.rol.value,
             "exp": datetime.now(tz=timezone.utc) + timedelta(hours=self._expiry_hours),
+        }
+        return jwt.encode(payload, self._secret, algorithm=self._algorithm)
+
+    def generate_reset_token(self, email: str) -> str:
+        payload = {
+            "sub": email,
+            "type": "password_reset",
+            "exp": datetime.now(tz=timezone.utc) + timedelta(hours=_RESET_TOKEN_EXPIRY_HOURS),
         }
         return jwt.encode(payload, self._secret, algorithm=self._algorithm)
 

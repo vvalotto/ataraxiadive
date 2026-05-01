@@ -63,8 +63,7 @@ class ResultadosPublicadosTemplate:
 
     def _render_podio(self, podio: tuple[PodioPublicadoLike, ...]) -> str:
         return "\n".join(
-            f"  #{item.posicion} {item.atleta_nombre} - {item.rp}"
-            for item in podio[:3]
+            f"  #{item.posicion} {item.atleta_nombre} - {item.rp}" for item in podio[:3]
         )
 
     def _ranking_url(self, torneo_id: str | None) -> str:

@@ -4,9 +4,9 @@
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-04-15 |
+| **Fecha** | 2026-05-01 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.16 — INC-4.4 ✅ (3 US offline-first · PRs #77 + fix); INC-4.5 ✅ (4 US BC Notificaciones · PRs #79–82) |
+| **Estado** | ✅ v1.30 — INC-5.7 cerrado (Portal del Atleta · PRs #137–#140 · fix resultados provisionales · DesignReviewer 0 CRITICAL · 256 WARNING) |
 
 ---
 
@@ -21,6 +21,8 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
   de elicitación — deben resolverse antes del SP que los involucra.
 - Los RFs marcados `— fuera de alcance v1` están documentados pero excluidos
   del horizonte actual del proyecto.
+- Los RFs marcados como `parcial` tienen definición o soporte técnico previo,
+  pero todavía no están expuestos como producto final en el incremento vigente.
 
 ---
 
@@ -36,7 +38,17 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP4 INC-4.2/4.3 | Frontend (scaffold + juez) | RF-EJ-01..10 (UI juez completa) |
 | SP4 INC-4.4 | Frontend (offline-first) | RF-EJ-03 (tarjetas), RF-EJ-06 (corrección con ventana) — operación sin red |
 | SP4 INC-4.5/4.6 | Notificaciones + Auditoría + Exportación | RF-NT-01..04, RF-EJ-06 |
-| SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
+| SP-ADJ-06 | FAZ→FAAS (código + docs) + refactoring técnico + UAT SP4 | — (deuda técnica + validación) |
+| SP5 INC-5.1 / INC-5.1-ADJ | Frontend organizador (panel completo) | RF-GT-01..07, RF-PR-04..08, RF-EJ-01..10 (UI organizador) |
+| SP5 INC-5.2 / SP-ADJ-08 | Frontend organizador + Competencia | Ejecución por disciplina, cierre manual, cancelación fuerte |
+| SP5 INC-5.3 | Identidad + Frontend | RF-US-01..05 (gestión UI de usuarios/roles + vista atleta con inscripción básica) |
+| SP5 INC-5.4 | Identidad + Frontend | RF-IN-05/06 y flujo UI de inscripción/APs — auto-registro, cambiar/olvidé pw (US-5.4.1..5.4.3) — PRs #112–#114 |
+| SP5 INC-5.5 | Registro + Competencia + Frontend | Portal atleta completo (shell dark, wizard inscripción, declarar AP) + vista organizador con inscriptos y estado AP (US-5.5.1..5.5.2) — PRs #120, #121, #122 |
+| SP5 INC-5.6 | Resultados + Torneo + Frontend | Algoritmo FAAS + TipoReglamento + ranking por categoría/género con puntos + UI tabla ejecución + podios 6 divisiones (US-5.6.1..5.6.6) — PRs #123–#128 |
+| SP5 SP-ADJ-09 | Frontend organizador | Refactoring UX organizador: shell dark, routing, home, dashboard, resultados, arquitectura + declarar AP en inscripción (US-ADJ-9.1..9.7) — PRs #129–#136 |
+| SP5 INC-5.7 | Portal Atleta + Resultados | Portal del atleta: mis torneos, mi grilla, mis resultados, rankings/podios + fix resultados provisionales (US-5.7.1..5.7.4) — PRs #137–#140 |
+| SP5 INC-5.8 | — | Desestimado — contenido absorbido en SP6 |
+| Futuro / fuera de scope SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
 
 ---
 
@@ -64,9 +76,9 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-IN-02 | Brevet no obligatorio | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 | RF-IN-03 | Sin límite de atletas por torneo o disciplina | Registro | SP3 | 3.2 | US-3.2.3 | ✅ implementado |
 | RF-IN-04 | Cancelar inscripción hasta el día anterior | Registro | SP3 | 3.2 | US-3.2.3 | ✅ implementado |
-| RF-IN-05 | Apto médico como requisito de inscripción | Registro | SP4 | 4.5 | US-4.5.x | ✅ definido |
-| RF-IN-06 | Constancia de pago como requisito | Registro | SP4 | 4.5 | US-4.5.x | ✅ definido |
-| RF-IN-07 | Conflicto de datos con BD FAAS | Registro | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
+| RF-IN-05 | Apto médico como requisito de inscripción | Registro | SP5 | 5.4 | US-5.4.1 | 🟡 definido conceptualmente; exposición en producto pendiente en INC-5.4 |
+| RF-IN-06 | Constancia de pago como requisito | Registro | SP5 | 5.4 | US-5.4.1 | 🟡 definido conceptualmente; exposición en producto pendiente en INC-5.4 |
+| RF-IN-07 | Conflicto de datos con BD FAAS | Registro | Futuro | — | — | — fuera de scope SP5/v1.0; depende de integración FAAS |
 | RF-IN-08 | Género solo para categorización — sin otro efecto | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 | RF-IN-09 | Atleta no puede cambiar categoría por disciplina | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 | RF-IN-10 | Club obligatorio del atleta y visible en grillas/reportes | Registro | SP-ADJ-04 | — | US-ADJ-4.4 | ✅ implementado |
@@ -109,12 +121,12 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-PM-01 | Fórmula de puntos configurable por torneo (HS-19 ✅) | Resultados / Torneo | SP3 | 3.5 | US-3.5.x | ✅ definido |
-| RF-PM-02 | Overall = ranking general multi-disciplina por categoría | Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
+| RF-PM-01 | Fórmula de puntos configurable por torneo (HS-19 ✅) | Resultados / Torneo | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.1..5.5.2 | 🟡 definido; algoritmo FAAS y exposición final pendientes en INC-5.5 |
+| RF-PM-02 | Overall = ranking general multi-disciplina por categoría | Resultados | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.4 | 🟡 base implementada; overall por categoría/género con puntos pendiente en INC-5.5 |
 | RF-PM-03 | Empates = mismo puesto y mismos puntos | Resultados | SP2 | 2.4 | US-2.4.2 | ✅ Implementado |
 | RF-PM-04 | Certificados/diplomas | — | — | — | — | — fuera de alcance v1 |
-| RF-PM-05 | Rankings por categoría y género | Resultados | SP-ADJ-04 | — | US-ADJ-4.5 | ✅ implementado en SP-ADJ-04 — ranking y overall segmentados por categoría |
-| RF-PM-06 | Publicación en plataforma + descarga | Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
+| RF-PM-05 | Rankings por categoría y género | Resultados | SP-ADJ-04/SP5 | — / 5.5 | US-ADJ-4.5 / US-5.5.3..5.5.6 | 🟡 soporte parcial; rankings/podios por categoría y género como producto final pendientes en INC-5.5 |
+| RF-PM-06 | Publicación en plataforma + descarga | Resultados | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.5..5.5.6 | 🟡 definido; vistas finales tabla OT + podios pendientes en INC-5.5 |
 
 ---
 
@@ -141,27 +153,28 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 ---
 
-### 3.8 RF-IG — Integración con Sistemas Externos → BC Registro / SP5
+### 3.8 RF-IG — Integración con Sistemas Externos → Futuro / fuera de scope SP5
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-IG-01 | Integración con BD FAAS (protocolo/formato) | Registro | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
-| RF-IG-02 | Consulta a BD externa: solo lectura o lectura/escritura | Registro | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
-| RF-IG-03 | BD externa no disponible al inscribir atleta | Registro | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
-| RF-IG-04 | Exportación a sistemas de rankings (AIDA, CMAS) | Resultados | SP5 | 5.1 | US-5.1.x | ⏳ pendiente |
+| RF-IG-01 | Integración con BD FAAS (protocolo/formato) | Registro | Futuro | — | — | — fuera de scope SP5/v1.0 |
+| RF-IG-02 | Consulta a BD externa: solo lectura o lectura/escritura | Registro | Futuro | — | — | — fuera de scope SP5/v1.0 |
+| RF-IG-03 | BD externa no disponible al inscribir atleta | Registro | Futuro | — | — | — fuera de scope SP5/v1.0 |
+| RF-IG-04 | Exportación a sistemas de rankings (AIDA, CMAS) | Resultados | Futuro | — | — | — fuera de scope SP5/v1.0 |
 
 ---
 
 ## 4. RFs Pendientes de Definición
 
-Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
+Deben resolverse antes del incremento futuro que los involucre. No bloquean el
+alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 
 | RF | Descripción | Bloquea | Resolver antes de |
 |----|-------------|---------|-------------------|
-| RF-IN-07 | ¿Qué pasa si los datos del atleta difieren de la BD FAAS? | SP5 inc. 5.1 | SP5 |
-| RF-EJ-04 | Códigos de penalización (AIDA/CMAS u otra federación) | SP4 inc. 4.4 | SP4 |
-| RF-NT-03 | ¿Juez u organizador reciben notificaciones durante ejecución? | SP4 inc. 4.5 | SP4 |
-| RF-IG-01..04 | Integración completa con BD FAAS / exportación a rankings | SP5 inc. 5.1 | SP5 |
+| RF-IN-07 | ¿Qué pasa si los datos del atleta difieren de la BD FAAS? | Futuro | Post-SP5 |
+| RF-EJ-04 | Códigos de penalización (AIDA/CMAS u otra federación) | Futuro | Post-SP5 |
+| RF-NT-03 | ¿Juez u organizador reciben notificaciones durante ejecución? | Futuro | Post-SP5 |
+| RF-IG-01..04 | Integración completa con BD FAAS / exportación a rankings | Futuro | Post-SP5 |
 
 ---
 
@@ -355,7 +368,171 @@ Deben resolverse antes del SP que los involucra. No bloquean SP1 ni SP2.
 
 ---
 
-## 18. Trazabilidad: Discrepancias → US → Documentos a actualizar  <!-- was §16 -->
+## 18. US-IEDD SP-ADJ-06 — Ajuste técnico y documental post-SP4 (pre-BL-004)
+
+| US | Issues | Área | Descripción | Estado |
+|----|--------|------|-------------|--------|
+| US-ADJ-6.1 | FAZ→FAAS | `shared/`, `notificaciones/`, `competencia/` código | Renombrar acrónimo FAZ → FAAS en código (enum `Disciplina`, eventos, handlers, ports) | ✅ 2026-04-18 |
+| US-ADJ-6.2 | FAZ→FAAS | `tests/` | Renombrar FAZ → FAAS en todos los tests y fixtures | ✅ 2026-04-18 |
+| US-ADJ-6.3 | SOLID | `competencia/application/` | Eliminar `inspect.signature`; callback `on_finalizada` unificado en composition root | ✅ 2026-04-18 |
+| US-ADJ-6.4 | DRY | `notificaciones/application/` | Eliminar duplicación P-10/P-11 y `@staticmethod` innecesario | ✅ 2026-04-18 |
+| US-ADJ-6.5 | Arq. capas | `frontend/` | Corregir violaciones de capa en `GrillaPage` (imports directos API → hooks) | ✅ 2026-04-18 |
+| US-ADJ-6.6 | FAZ→FAAS | `docs/` | Corrección acrónimo en 8 archivos de documentación (ubiquitous language) | ✅ 2026-04-18 (PR #90) |
+| US-ADJ-6.7 | UAT | `tests/uat/`, `src/shared/`, `frontend/` | UAT SP4 (INC-4.4/4.5/4.6) · BUG-SP4-001/002 resueltos · UX fixes organizador | ✅ 2026-04-18 (PR #91) |
+
+---
+
+## 19. US-IEDD SP5 INC-5.1 — Panel del Organizador
+
+> Estado al 2026-04-21: 6/6 US mergeadas a `develop`. UAT funcional ejecutada — 5 hallazgos resueltos en INC-5.1-ADJ.
+> DesignReviewer consolidado INC-5.1: **0 CRITICAL · 208 WARNING** (`quality/reports/designreviewer/INC-5.1-report.txt`).
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-5.1.1 | 5.1 | `CrearTorneoPage` + formulario + `POST /torneos` + `useAuthStore` organizador | ✅ Done (PR #95) |
+| US-5.1.2 | 5.1 | `DetalleTorneoPage` + tabs (`Detalle`, `Inscriptos`, `Grilla`, `Jueces`, `Ejecucion`) + `AccionesPanel` (transiciones de fase) + `FaseBadge` | ✅ Done (PR #96) |
+| US-5.1.3 | 5.1 | `InscriptosPanel` — lista de atletas inscriptos con estado AP (`AnunciadaAP` / `NoCompite`) | ✅ Done (PR #97) |
+| US-5.1.4 | 5.1 | `GrillaPanel` — lista de disciplinas con botón generar/confirmar grilla por disciplina + estado `GrillaGenerada` / `GrillaConfirmada` | ✅ Done (PR #98) |
+| US-5.1.5 | 5.1 | `JuecesPanel` + `TablaJueces` + `JuezSelector` — asignación de juez por disciplina (`PUT /torneos/{id}/disciplinas/{disc}/juez`) | ✅ Done (PR #99) |
+| US-5.1.6 | 5.1 | `EjecucionPanel` — monitor de competencias activas con estado por disciplina + `GET /competencia?torneo_id={id}` | ✅ Done (PR #100) |
+
+---
+
+## 20. US-IEDD INC-5.1-ADJ — Ajuste post-UAT Panel del Organizador
+
+> INC-5.1-ADJ resuelve 5 hallazgos funcionales detectados en la UAT de INC-5.1.
+> Patrón SP-ADJ: plan en `docs/plans/inc-5.1-adj/PLAN-INC-5.1-ADJ.md`.
+> HITO-26: cobertura asimétrica del Event Storming como causa de los hallazgos.
+
+| US | Hallazgo UAT | Área | Descripción | Estado |
+|----|-------------|------|-------------|--------|
+| US-5.1.7 | UAT-5.1-03, UAT-5.1-05 | `DetalleTorneoPage` | Política de tabs por fase: `CREADO`→solo Detalle, `INSCRIPCION_ABIERTA`→+Inscriptos, `PREPARACION`→+Grilla+Jueces, `EJECUCION/PREMIACION/CERRADO`→todas; `CANCELADO`→resumen + mensaje, sin tabs operativas | ✅ Done (PR #101) |
+| US-5.1.8 | UAT-5.1-01 | `TorneoCompetenciasPage` | Composición disciplinas + competencias: `GET /torneos/{id}/disciplinas` como fuente primaria; cruzar con competencias materializadas; card por disciplina aunque no exista `competencia_id` | ✅ Done (PR #102) |
+| US-5.1.9 | UAT-5.1-02 | `JuecesPanel`, `TablaJueces` | Precondición grilla en asignación de jueces: selector habilitado solo si disciplina tiene `Competencia` en estado `GrillaGenerada`, `GrillaConfirmada`, `EnEjecucion` o `Finalizada` | ✅ Done (PR #103) |
+| US-5.1.10 | UAT-5.1-04 | `AccionesPanel` | Normalización del campo `estado` en `fetchTorneo` — fix mismatch entre valor HTTP y enum `EstadoTorneo`; `EJECUCION` muestra `Iniciar premiacion`, nunca `Iniciar ejecucion` | ✅ Done (PR #104) |
+
+---
+
+## 21. US-IEDD SP5 INC-5.2 — Ejecución por Disciplina
+
+> Estado al 2026-04-22: 2/2 US mergeadas a `develop`. SP-ADJ-08 resuelve hallazgos UAT.
+> DesignReviewer consolidado INC-5.2: **0 CRITICAL · 215 WARNING** (`quality/reports/designreviewer/INC-5.2-report.txt`).
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-5.2.1 | 5.2 | `TorneoCompetenciasPage` — vista maestro-detalle: lista todas las disciplinas del torneo con estado, juez asignado y progreso; al seleccionar una disciplina, abre detalle con acción `Habilitar disciplina` (`POST /competencia/{id}/iniciar`) | ✅ Done (PR #105) |
+| US-5.2.2 | 5.2 | Acción `Finalizar prueba` por disciplina — habilitada solo si no hay performances pendientes; `PATCH /competencia/{id}/finalizar`; distingue cierre manual vs. automático (P-08) | ✅ Done (PR #106) |
+
+---
+
+## 22. SP-ADJ-08 — Ajuste post-UAT INC-5.2
+
+> SP-ADJ-08 resuelve 8 hallazgos (UAT-5.2-01..08) detectados en la UAT de cierre de INC-5.2.
+> Plan: `docs/plans/sp-adj-08/PLAN-SP-ADJ-08.md`.
+
+| US | Hallazgo UAT | Área | Descripción | Estado |
+|----|-------------|------|-------------|--------|
+| US-ADJ-8.2 | UAT-5.2-02, UAT-5.2-05, UAT-5.2-07 | `TorneoCompetenciasPage`, `AccionesPanel` | Selector de grilla filtrado por `GET /torneos/{id}/disciplinas`; `Pasar a premiacion` habilitado solo si todas las competencias esperadas están `Finalizada` | ✅ Done (PR #107) |
+| US-ADJ-8.1 | UAT-5.2-01, UAT-5.2-03, UAT-5.2-04, UAT-5.2-06, UAT-5.2-07 | Paneles del organizador | Estados vacío/loading/error claros; mensajes de ejecución accionables; disciplina seleccionada destacada; lenguaje de fase preciso (`Pasar a premiacion` / `Cerrar torneo`) | ✅ Done (PR #108) |
+| US-ADJ-8.3 | UAT-5.2-08 | `AccionesPanel` | Cancelar torneo en zona de peligro con modal de confirmación fuerte — habilita acción solo si el usuario escribe el nombre exacto del torneo | ✅ Done (PR #109) |
+
+---
+
+## 23. US-IEDD SP5 INC-5.3 — Gestión de usuarios y roles
+
+> Estado al 2026-04-23: 2/2 US mergeadas a `develop`.
+> DesignReviewer INC-5.3: **0 CRITICAL · 215 WARNING** (`quality/reports/designreviewer/INC-5.3-report.txt`).
+> Nota: US-5.3.2 adelantó scope de INC-5.4 — `InscripcionPanel` con mutación implementado dentro de `AtletaDashboardPage`.
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-5.3.1 | 5.3 | `UsuariosPage` (organizador) — listar todos los usuarios del sistema + formulario de creación con rol; backend: `GET /auth/usuarios` con `rol` opcional | ✅ Done (PR #110) |
+| US-5.3.2 | 5.3 | `AtletaDashboardPage` — perfil (email/rol del JWT) + torneos en `INSCRIPCION_ABIERTA` + `InscripcionPanel` con selección de disciplinas (`POST /registro/inscripciones`) | ✅ Done (PR #111) |
+
+---
+
+## 24. US-IEDD SP5 INC-5.4 — Identidad Extendida
+
+> Estado al 2026-04-24: 3/3 US mergeadas a `develop`.
+> DesignReviewer INC-5.4: **0 CRITICAL · 222 WARNING** (`quality/reports/designreviewer/INC-5.4-report.txt`).
+> +7 WARNING respecto a INC-5.3 (215→222), atribuidos a nuevos endpoints en `identidad/api/router.py`.
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-5.4.1 | 5.4 | Auto-registro público — extensión modelo `Usuario` (nombre/apellido) + `POST /auth/registro` (rol ≠ ADMIN) + página `/registro` en frontend | ✅ Done (PR #112) |
+| US-5.4.2 | 5.4 | Cambiar contraseña — `POST /auth/cambiar-password` (usuario autenticado) + handler `CambiarPasswordHandler` | ✅ Done (PR #113) |
+| US-5.4.3 | 5.4 | Recuperar contraseña — `TokenServicePort` + JWT firmado exp 1h + `POST /auth/forgot-password` + `POST /auth/reset-password` + email Resend + páginas `/recuperar-password` y `/reset-password` | ✅ Done (PR #114) |
+
+---
+
+## 25. US-IEDD SP5 INC-5.5 — Portal Atleta e Inscripción con AP
+
+> Estado al 2026-04-26: 2/2 US mergeadas a `develop` + fix UAT (PR #122).
+> Scope redefinido post-reversión 2026-04-25: US-5.5.1/US-5.5.2 cubren portal atleta completo y vista del organizador (inscriptos + estado AP), no rankings/FAAS.
+> DesignReviewer INC-5.5: **0 CRITICAL · 227 WARNING** (`quality/reports/designreviewer/INC-5.5-report.txt`).
+> +5 WARNING respecto a INC-5.4 (222→227); todos son WARNING estructurales conocidos (LongMethod, DataClumps, LCOM).
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-5.5.1 | 5.5 | Portal atleta completo: shell dark + bottom tab bar + wizard inscripción 3 pasos + S-05 Mis inscripciones + S-06 Declarar/Modificar AP por disciplina | ✅ Done (PR #120) |
+| US-5.5.2 | 5.5 | Vista del organizador — inscriptos con datos completos (nombre, disciplinas, estado AP) integrada en la navegación UX aprobada del panel organizador | ✅ Done (PR #121) |
+| fix/uat-portal-atleta-ap | 5.5 | 13 hallazgos UAT corregidos: cross-BC identity (nombre/apellido desde identidad), AP flow (fechas, estados, carga/consulta), sync frontend | ✅ Done (PR #122) |
+
+---
+
+## 26. US-IEDD SP5 INC-5.6 — Algoritmo de Puntaje y Rankings por Categoría/Género
+
+> Estado al 2026-04-28: 6/6 US mergeadas a `develop`.
+> DesignReviewer INC-5.6 + SP-ADJ-09: **0 CRITICAL · 252 WARNING** (+25 vs INC-5.5 · `quality/reports/designreviewer/INC-5.6-report.txt`).
+> +25 WARNING: LCOM/FanOut en RankingCompetencia/RankingOverall/AlgoritmoPuntajeFAAS (INC-5.6) + FeatureEnvy DeclararAPInscripcionHandler (SP-ADJ-09). Hallazgos en `.work/revision-sp5/designreviewer-hallazgos-pendientes.md`.
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-5.6.1 | 5.6 | Puerto `AlgoritmoPuntaje` (ABC) + `AlgoritmoPuntajeFAAS` con fórmulas FAAS para distancia (DNF/DYN/DBF) y tiempo (STA/SPE) — 23 tests | ✅ Done (PR #123) |
+| US-5.6.2 | 5.6 | `TipoReglamento` VO (FAAS/CMAS/AIDA) en `Torneo` + migración SQLite + DI en `CalcularRankingHandler` — 15 tests | ✅ Done (PR #124) |
+| US-5.6.3 | 5.6 | `RankingCompetencia` extendido: calcula y almacena `puntos: Decimal` por atleta usando `AlgoritmoPuntaje`, agrupado por `Categoria` — 84 tests | ✅ Done (PR #125) |
+| US-5.6.4 | 5.6 | `RankingOverall` por categoría/género — `puntos_overall = Σ puntos_disciplina`; `penalizacion_ausente=0` (FAAS) — 91 tests | ✅ Done (PR #126) |
+| US-5.6.5 | 5.6 | UI `ResultadosPage` (`/organizador/resultados`): selector torneo/disciplina + tabla por OT con género, categoría, AP, RP, tarjeta y puntos | ✅ Done (PR #127) |
+| US-5.6.6 | 5.6 | UI podios — 6 divisiones fijas (SENIOR M/F, MASTER M/F, JUNIOR M/F); overall bloqueado hasta cerrar todas las disciplinas | ✅ Done (PR #128) |
+
+---
+
+## 27. SP-ADJ-09 — Refactoring UX Organizador
+
+> SP-ADJ-09 resuelve gaps de navegación y consistencia visual del portal organizador post-INC-5.6.
+> Plan: `docs/plans/sp-adj-09/PLAN-SP-ADJ-09.md`.
+> DesignReviewer SP-ADJ-09: ⏳ pendiente.
+
+| US | Área | Descripción | Estado |
+|----|------|-------------|--------|
+| US-ADJ-9.1 | `frontend/` | Shell dark del organizador — layout base con sidebar y header consistente | ✅ Done (PR #129) |
+| US-ADJ-9.2 | `frontend/` | Routing organizador reestructurado — rutas anidadas y navegación coherente entre secciones | ✅ Done (PR #130) |
+| US-ADJ-9.3 | `frontend/` | Home del organizador formalizado — vista de entrada con acceso a torneos activos | ✅ Done (PR #131) |
+| US-ADJ-9.4 | `frontend/` | Dashboard operativo — resumen de estado del torneo en ejecución | ✅ Done (PR #132) |
+| US-ADJ-9.5 | `frontend/` | Resultados y shell organizador reencuadrados — integración de `ResultadosPage` en la navegación del panel | ✅ Done (PR #133) |
+| US-ADJ-9.6 | `frontend/` | Arquitectura UX organizador formalizada — separación de shell, layout y páginas | ✅ Done (develop) |
+| US-ADJ-9.7 | `registro/`, `frontend/` | Declarar AP en inscripción — atleta puede declarar/modificar AP desde el wizard de inscripción | ✅ Done (PR #136) |
+
+---
+
+## 28. US-IEDD SP5 INC-5.7 — Portal del Atleta
+
+> Estado al 2026-05-01: 4/4 US mergeadas a `develop`. UAT visual aprobado.
+> DesignReviewer INC-5.7: **0 CRITICAL · 256 WARNING** (+4 vs INC-5.6 · `quality/reports/designreviewer/INC-5.7-report.txt`).
+> +4 WARNING: complejidad `_rankear_categoria` en `ObtenerRankingProvisionalHandler` — aceptado como conocido.
+> Fix incluido: resultados provisionales via fallback en `GET /resultados/{id}/ranking` — lee `competencia.db` en tiempo real cuando `resultados.db` está vacío.
+> INC-5.8 desestimado — contenido absorbido en SP6.
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-5.7.1 | 5.7 | Mis torneos — lista de torneos inscriptos del atleta con estado actual + fix inscripción condicional | ✅ Done (PR #137) |
+| US-5.7.2 | 5.7 | Mi grilla — posición del atleta (OT + línea) por disciplina inscripta | ✅ Done (PR #138) |
+| US-5.7.3 | 5.7 | Mis resultados — ResultHero (RP, tarjeta, puntos) + DisciplinaPendienteCard por disciplina | ✅ Done (PR #139) |
+| US-5.7.4 | 5.7 | Rankings y podios — tabla de ejecución + podio por disciplina en la que participó el atleta | ✅ Done (PR #140) |
+
+---
+
+## 30. Trazabilidad: Discrepancias → US → Documentos a actualizar
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -374,25 +551,27 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 19. Cobertura Total
+## 31. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
 | Gestión del Torneo (RF-GT) | 7 | 7 | 0 | 0 |
-| Inscripción (RF-IN) | 10 | 9 | 1 | 0 |
+| Inscripción (RF-IN) | 10 | 9 | 0 | 1 |
 | Preparación (RF-PR) | 8 | 8 | 0 | 0 |
 | Ejecución (RF-EJ) | 10 | 9 | 1 | 1 |
 | Resultados (RF-PM) | 6 | 5 | 0 | 1 |
 | Usuarios (RF-US) | 5 | 5 | 0 | 0 |
 | Notificaciones (RF-NT) | 4 | 3 | 1 | 0 |
-| Integración (RF-IG) | 4 | 0 | 4 | 0 |
-| **Total** | **54** | **45** | **7** | **2** |
+| Integración (RF-IG) | 4 | 0 | 0 | 4 |
+| **Total** | **54** | **45** | **2** | **7** |
 
-> **85% de RFs completamente definidos.** Los 7 pendientes están en SP4+ — no bloquean SP1/SP2.
+> **85% de RFs completamente definidos.** Los pendientes reales son decisiones
+> funcionales abiertas. La integración FAAS/importación CSV está diferida fuera
+> de SP5/v1.0 según `docs/plans/sp5/PLAN-SP5.md`.
 
 ---
 
-## 19. US → Tests
+## 32. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -430,10 +609,56 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-4.3.3 | integration/competencia (smoke TestClient) · frontend (build + lint) · validación manual navegador | ✅ UAT INC-4.3 2026-04-12 |
 | US-4.3.4 | unit/competencia/domain (EnRevision + ResolverRevision) · integration/competencia · frontend (build + lint) · validación manual navegador | ✅ UAT INC-4.3 2026-04-12 |
 | US-4.3.5 | frontend (build + lint) · validación manual navegador (BDD waiver — frontend solo) | ✅ UAT INC-4.3 2026-04-12 |
+| US-4.4.1 | frontend (build + lint) · UAT INC-4.4 iPhone (BDD waiver — frontend offline-first) | ✅ UAT SP4 2026-04-18 |
+| US-4.4.2 | frontend (build + lint) · UAT INC-4.4 iPhone | ✅ UAT SP4 2026-04-18 |
+| US-4.4.3 | frontend (build + lint) · UAT INC-4.4 iPhone (Background Sync) | ✅ UAT SP4 2026-04-18 |
+| US-4.5.1 | unit/notificaciones/domain + integration/notificaciones | ✅ Done (PR #79) |
+| US-4.5.2 | unit/notificaciones/infrastructure (ResendEmailAdapter) | ✅ Done (PR #80) |
+| US-4.5.3 | unit/notificaciones/application (P-10) + UAT SP4 email real | ✅ UAT SP4 2026-04-18 |
+| US-4.5.4 | unit/notificaciones/application (P-11) | ✅ Done (PR #82) |
+| US-4.5.5 | integration (cableado P-10 en composition root) | ✅ Done (PR #83) |
+| US-4.6.1 | unit/competencia/application (ObtenerAuditLog) + integration/competencia | ✅ Done |
+| US-4.6.2 | unit/competencia/domain (CalculadorHashCompetencia) + integration/competencia | ✅ Done |
+| US-4.6.3 | frontend (build + lint) · UAT INC-4.6 iPad organizador | ✅ UAT SP4 2026-04-18 |
+| US-4.6.4 | unit/resultados/application (ExportarResultados) + integration/resultados · UAT INC-4.6 | ✅ UAT SP4 2026-04-18 |
+| US-5.1.1 | frontend (build + eslint src) · UAT INC-5.1 2026-04-21 | ✅ Done (PR #95) |
+| US-5.1.2 | frontend (build + eslint src) · UAT INC-5.1 2026-04-21 | ✅ Done (PR #96) |
+| US-5.1.3 | frontend (build + eslint src) · UAT INC-5.1 2026-04-21 | ✅ Done (PR #97) |
+| US-5.1.4 | frontend (build + eslint src) · UAT INC-5.1 2026-04-21 | ✅ Done (PR #98) |
+| US-5.1.5 | frontend (build + eslint src) · UAT INC-5.1 2026-04-21 | ✅ Done (PR #99) |
+| US-5.1.6 | frontend (build + eslint src) · UAT INC-5.1 2026-04-21 | ✅ Done (PR #100) |
+| US-5.1.7 | frontend (build + eslint src) · UAT regresión INC-5.1-ADJ 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #101) |
+| US-5.1.8 | frontend (build + eslint src) · UAT regresión INC-5.1-ADJ 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #102) |
+| US-5.1.9 | frontend (build + eslint src) · UAT regresión INC-5.1-ADJ 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #103) |
+| US-5.1.10 | frontend (build + eslint src) · UAT regresión INC-5.1-ADJ 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #104) |
+| US-5.2.1 | frontend (build + eslint src) · integration/competencia (`GET /competencia?torneo_id`) · UAT INC-5.2 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #105) |
+| US-5.2.2 | frontend (build + eslint src) · integration/competencia (`PATCH /competencia/{id}/finalizar`) · UAT INC-5.2 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #106) |
+| US-ADJ-8.2 | frontend (build + eslint src) · UAT regresión SP-ADJ-08 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #107) |
+| US-ADJ-8.1 | frontend (build + eslint src) · UAT regresión SP-ADJ-08 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #108) |
+| US-ADJ-8.3 | frontend (build + eslint src) · UAT regresión SP-ADJ-08 2026-04-22 (BDD waiver — frontend) | ✅ Done (PR #109) |
+| US-5.3.1 | unit/identidad/api (`test_listar_usuarios.py`) · integration/identidad (`test_sqlite_usuario_repository.py`) · `tests/features/US-5.3.1-gestion-usuarios.feature` · frontend (build + eslint) | ✅ Done (PR #110) |
+| US-5.3.2 | `tests/features/US-5.3.2-vista-atleta.feature` · frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #111) |
+| US-5.4.1 | unit/identidad/application (`registrar_usuario`) · integration/identidad · `tests/features/US-5.4.1` · frontend (build + eslint) | ✅ Done (PR #112) |
+| US-5.4.2 | unit/identidad/application (`test_handlers.py` CambiarPassword) · integration/identidad · `tests/features/US-5.4.2` | ✅ Done (PR #113) |
+| US-5.4.3 | unit/identidad/api (`test_reset_password.py`) · unit/identidad/application (`test_handlers.py` Reset) · `tests/features/US-5.4.3-recuperar-password.feature` · frontend (build + eslint) | ✅ Done (PR #114) |
+| US-5.5.1 | frontend (build + eslint) · UAT funcional INC-5.5 2026-04-26 (BDD waiver — frontend puro) | ✅ Done (PR #120) |
+| US-5.5.2 | unit/registro/application (`inscriptos_detalle`) · integration/registro · frontend (build + eslint) · UAT INC-5.5 2026-04-26 | ✅ Done (PR #121) |
+| US-5.6.1 | unit/resultados/domain (`AlgoritmoPuntajeFAAS`) · integration/resultados · 23 tests | ✅ Done (PR #123) |
+| US-5.6.2 | unit/torneo/domain (`TipoReglamento`) · integration/torneo (migración SQLite) · `tests/features/US-5.6.2` · 15 tests | ✅ Done (PR #124) |
+| US-5.6.3 | unit/resultados/domain + unit/resultados/application + integration/resultados + `tests/features/US-5.6.3` · 84 tests | ✅ Done (PR #125) |
+| US-5.6.4 | unit/resultados/domain + unit/resultados/application + integration/resultados + `tests/features/US-5.6.4` · 91 tests | ✅ Done (PR #126) |
+| US-5.6.5 | frontend (build + eslint) · UAT INC-5.6 (BDD waiver — frontend puro) | ✅ Done (PR #127) |
+| US-5.6.6 | frontend (build + eslint) · UAT INC-5.6 (BDD waiver — frontend puro) | ✅ Done (PR #128) |
+| US-ADJ-9.1..9.6 | frontend (build + eslint) · UAT regresión SP-ADJ-09 (BDD waiver — frontend puro) | ✅ Done (PRs #129–#133, develop) |
+| US-ADJ-9.7 | unit/registro/application + integration/registro · frontend (build + eslint) | ✅ Done (PR #136) |
+| US-5.7.1 | frontend (build + eslint) · UAT visual INC-5.7 (BDD waiver — frontend puro) | ✅ Done (PR #137) |
+| US-5.7.2 | frontend (build + eslint) · UAT visual INC-5.7 (BDD waiver — frontend puro) | ✅ Done (PR #138) |
+| US-5.7.3 | frontend (build + eslint) · UAT visual INC-5.7 (BDD waiver — frontend puro) | ✅ Done (PR #139) |
+| US-5.7.4 | frontend (build + eslint) · UAT visual INC-5.7 (BDD waiver — frontend puro) | ✅ Done (PR #140) |
 
 ---
 
-## 20. US → ADR
+## 33. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -448,6 +673,9 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
+*v1.30 — 2026-05-01: INC-5.7 cerrado (§28 nuevo · 4/4 US ✅ · PRs #137–#140 · DesignReviewer 0 CRITICAL · 256 WARNING) · INC-5.8 desestimado (absorbido SP6) · §§ renumerados 29..33 · US→Tests US-5.7.x · §2 cobertura actualizada*
+*v1.29 — 2026-04-29: INC-5.6 cerrado (§26 nuevo · 6/6 US ✅ · PRs #123–#128 · DesignReviewer 0 CRITICAL · 252 WARNING) · SP-ADJ-09 cerrado (§27 nuevo · 7/7 US ✅ · PRs #129–#136) · §§ renumerados 28..31 · US→Tests US-5.5.x + US-5.6.x + US-ADJ-9.x · §2 cobertura actualizada*
+*v1.27 — 2026-04-26: INC-5.5 cerrado (§25 nuevo · 2/2 US ✅ + fix UAT · PRs #120–#122 · DesignReviewer 0 CRITICAL · 227 WARNING)*
 *Documento creado: 2026-03-19 — Semana 0, Fase 0*
 *v1.1 — 2026-03-20: US-1.1.1 actualizada a BC-first · ADR-006 agregado · FAZ → FAAS*
 *v1.2 — 2026-03-28: SP-ADJ-01 agregado (§7) · secciones SP1 renumeradas · numeración de §§ corregida*
@@ -457,6 +685,15 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 *v1.6 — 2026-04-02: SP3 completado a nivel US — §9 y tabla US→Tests actualizadas hasta US-3.5.3*
 *v1.10 — 2026-04-03: SP-ADJ-04 completado (§2, §11), US-ADJ-4.6 implementada, RF-IN-10 incorporado a cobertura total (§14)*
 *v1.16 — 2026-04-15: INC-4.4 ✅ (US-4.4.1..3 Done · fix robustez) · INC-4.5 ✅ §16 agregado (4 US · PRs #79–82) · §§ renumerados 17..20 · US→ADR ADR-016*
+*v1.17 — 2026-04-18: SP4 cerrado (v0.5.0 · BL-004) · SP-ADJ-06 §18 agregado (7 US) · US→Tests completado (INC-4.4/4.5/4.6) · §§ renumerados 18..22 · §2 cobertura actualizada*
+*v1.18 — 2026-04-20: SP5 iniciado · US-5.1.1 implementada · trazabilidad frontend de creacion de torneo agregada*
+*v1.19 — 2026-04-20: US-5.1.2 implementada · trazabilidad frontend de gestion de fases agregada*
+*v1.20 — 2026-04-20: US-5.1.3 implementada · trazabilidad frontend de inscriptos/AP agregada*
+*v1.22 — 2026-04-22: INC-5.2 cerrado (§21 nuevo · DesignReviewer 0 CRITICAL · 215 WARNING) · SP-ADJ-08 §22 · §§ renumerados 23..26 · US→Tests US-5.2.1..5.2.2 · US-ADJ-8.1..8.3*
+*v1.25 — 2026-04-24: INC-5.4 cerrado (§24 nuevo · DesignReviewer 0 CRITICAL · 222 WARNING) · §§ renumerados 25..28 · US→Tests US-5.4.1..5.4.3 · PRs #112..#114*
+*v1.24 — 2026-04-23: INC-5.3 cerrado (§23 nuevo · DesignReviewer 0 CRITICAL · 215 WARNING) · §§ renumerados 24..27 · US→Tests US-5.3.1..5.3.2 · nota scope adelantado INC-5.4 en US-5.3.2*
+*v1.23 — 2026-04-23: matriz reconciliada contra PLAN-SP5 vigente · RF-IG/RF-IN-07 movidos a futuro fuera de scope SP5 · RF-PM y RF-IN-05/06 marcados como parciales con exposición final en INC-5.4/5.5*
+*v1.21 — 2026-04-22: INC-5.1 cerrado (§19 nuevo · DesignReviewer 0 CRITICAL · 208 WARNING) · INC-5.1-ADJ §20 · §§ renumerados 21..24 · US→Tests US-5.1.1..5.1.10 · §2 cobertura actualizada · HITO-26*
 *v1.15 — 2026-04-13: INC-4.4 especificado (§15 nuevo — 3 US offline-first) · §§ renumerados 16..19 · §2 cobertura actualizada*
 *v1.14 — 2026-04-13: INC-4.3 completado (§14 — 5/5 US ✅, UAT BA 2025) · RF-NT §3.7 INC corregido (4.2→4.5) · US-4.3.x en §18*
 *v1.13 — 2026-04-11: US-4.2.2 implementada y mergeada · DesignReviewer consolidado INC-4.2 OK · validación manual pendiente*

@@ -10,6 +10,7 @@ from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.application.commands._stream_ids import competencia_stream_id
 
+
 @dataclass(frozen=True)
 class ConfirmarGrillaCommand:
     """Comando para confirmar la Grilla de Salida.

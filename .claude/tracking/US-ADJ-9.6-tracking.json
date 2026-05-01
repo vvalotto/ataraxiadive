@@ -1,0 +1,138 @@
+{
+  "metadata": {
+    "us_id": "US-ADJ-9.6",
+    "us_title": "Reubicar Grilla, Jueces, Torneo y Audit Log en la arquitectura UX correcta",
+    "us_points": 3,
+    "producto": "ataraxiadive",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-28T18:51:52.047067+00:00",
+    "completed_at": "2026-04-28T22:37:14.349974+00:00",
+    "total_elapsed_seconds": 13522,
+    "effective_seconds": 13522,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-04-28T18:51:55.171314+00:00",
+      "completed_at": "2026-04-28T18:52:40.246858+00:00",
+      "elapsed_seconds": 45,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-28T18:52:43.571543+00:00",
+      "completed_at": "2026-04-28T22:28:32.482199+00:00",
+      "elapsed_seconds": 12948,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de Implementación",
+      "started_at": "2026-04-28T22:28:36.506246+00:00",
+      "completed_at": "2026-04-28T22:30:56.829199+00:00",
+      "elapsed_seconds": 140,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-04-28T22:30:59.933543+00:00",
+      "completed_at": "2026-04-28T22:35:23.783967+00:00",
+      "elapsed_seconds": 263,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Testing",
+      "started_at": "2026-04-28T22:35:30.145986+00:00",
+      "completed_at": "2026-04-28T22:35:33.421123+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Integración",
+      "started_at": "2026-04-28T22:35:37.634746+00:00",
+      "completed_at": "2026-04-28T22:35:40.635714+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Refactor y Limpieza",
+      "started_at": "2026-04-28T22:35:44.398741+00:00",
+      "completed_at": "2026-04-28T22:35:47.482276+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-28T22:35:53.551160+00:00",
+      "completed_at": "2026-04-28T22:35:56.680882+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación y Notas de Implementación",
+      "started_at": "2026-04-28T22:35:59.905065+00:00",
+      "completed_at": "2026-04-28T22:36:44.082584+00:00",
+      "elapsed_seconds": 44,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final y Cierre",
+      "started_at": "2026-04-28T22:36:47.284534+00:00",
+      "completed_at": "2026-04-28T22:37:09.192096+00:00",
+      "elapsed_seconds": 21,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 0,
+    "completed_tasks": 0,
+    "total_phases": 10,
+    "estimated_total_minutes": 0,
+    "actual_total_minutes": 0,
+    "variance_minutes": 0,
+    "variance_percent": 0.0
+  }
+}

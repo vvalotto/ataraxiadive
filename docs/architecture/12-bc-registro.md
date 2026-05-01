@@ -253,14 +253,16 @@ dominio.
 
 En el diseño estratégico, `Registro` es upstream de `Competencia`.
 
-La integración prevista es:
+La integración objetivo prevista es:
 
 - `AtletaInscripto` como evento de salida;
 - ACL en `Competencia` que traduce `Atleta` a `Participante`.
 
-Esa relación ya está fijada arquitectónicamente aunque todavía no se vea
-materializada dentro del código de `Registro` como publicación explícita de
-eventos.
+La implementación vigente no publica explícitamente `AtletaInscripto` ni
+materializa una entidad `Participante` local en `Competencia`. Hoy `Competencia`
+opera con referencias `participante_id` / `atleta_id` y resuelve datos
+descriptivos mediante puertos/adaptadores como `AtletaNombrePort` y
+`AtletaNombreAdapter`.
 
 ## Diferencias entre implementación actual y modelo de referencia
 

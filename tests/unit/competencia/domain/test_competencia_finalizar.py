@@ -95,8 +95,28 @@ def test_finalizar_payload_correcto() -> None:
     assert evento.ejecutadas == 3
     assert evento.dns_count == 1
     assert evento.hash_sha256 == "c" * 64
+    assert evento.origen == "automatico"
+    assert evento.finalizada_por is None
     assert evento.competencia_id == str(_CID)
     assert evento.disciplina == _DISC.value
+
+
+def test_finalizar_payload_manual() -> None:
+    """El cierre manual deja origen y solicitante en el evento."""
+    competencia = _competencia_en_ejecucion()
+    competencia.finalizar(
+        total_performances=4,
+        ejecutadas=3,
+        dns_count=1,
+        hash_sha256="m" * 64,
+        origen="manual",
+        finalizada_por="org@ataraxia.com",
+    )
+
+    evento = competencia.pull_events()[0]
+    assert isinstance(evento, CompetenciaFinalizada)
+    assert evento.origen == "manual"
+    assert evento.finalizada_por == "org@ataraxia.com"
 
 
 def test_finalizar_rechaza_si_quedan_pendientes() -> None:
@@ -164,6 +184,25 @@ def test_reconstitute_aplica_competencia_finalizada() -> None:
     competencia = Competencia.reconstitute(competencia_id=_CID, disciplina=_DISC, events=events)
 
     assert competencia.estado == EstadoCompetencia.Finalizada
+
+
+def test_competencia_finalizada_from_payload_backward_compatible() -> None:
+    """Eventos historicos sin origen se leen como cierre automatico."""
+    event = CompetenciaFinalizada.from_payload(
+        {
+            "competencia_id": str(_CID),
+            "disciplina": _DISC.value,
+            "total_performances": 2,
+            "ejecutadas": 1,
+            "dns_count": 1,
+            "finalizada_en": datetime(2026, 3, 22, 12, 0, 0).isoformat(),
+            "hash_sha256": "f" * 64,
+            "occurred_at": datetime(2026, 3, 22, 12, 0, 0).isoformat(),
+        }
+    )
+
+    assert event.origen == "automatico"
+    assert event.finalizada_por is None
 
 
 def test_finalizar_acepta_hash_del_conjunto_vacio() -> None:

@@ -1,13 +1,13 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, Navigate, useSearchParams } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { loginApi } from '../api/auth'
 import useAuthStore from '../stores/useAuthStore'
 
 export function LoginPage() {
+  const [searchParams] = useSearchParams()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const navigate = useNavigate()
   const login = useAuthStore((s) => s.login)
   const rol = useAuthStore((s) => s.rol)
 
@@ -17,15 +17,18 @@ export function LoginPage() {
       login(data.access_token)
     },
   })
+  const registered = searchParams.get('registered') === '1'
+  const resetDone = searchParams.get('reset') === '1'
 
   // Redirect si ya tiene sesión activa
   if (rol === 'juez') {
-    void navigate('/juez/disciplinas', { replace: true })
-    return null
+    return <Navigate to="/juez/disciplinas" replace />
   }
   if (rol === 'organizador') {
-    void navigate('/organizador/dashboard', { replace: true })
-    return null
+    return <Navigate to="/organizador/dashboard" replace />
+  }
+  if (rol === 'atleta') {
+    return <Navigate to="/atleta" replace />
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -44,45 +47,69 @@ export function LoginPage() {
             Iniciar sesión
           </h1>
           <p className="mb-6 text-center text-sm text-slate-400">
-            Portal del juez y organizador
+            Portal del juez, organizador y atleta
           </p>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div>
-            <label className="mb-1 block text-sm font-medium text-slate-300">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-slate-300">Contraseña</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
-            />
-          </div>
-
-          {mutation.isError && (
-            <p className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-center text-sm text-red-100">
-              {mutation.error instanceof Error ? mutation.error.message : 'Error al iniciar sesión'}
+          {registered ? (
+            <p className="mb-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-center text-sm text-emerald-100">
+              Cuenta creada. Inicia sesion.
             </p>
-          )}
+          ) : null}
+          {resetDone ? (
+            <p className="mb-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-center text-sm text-emerald-100">
+              Contrasena actualizada. Inicia sesion con tu nueva clave.
+            </p>
+          ) : null}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div>
+              <label className="mb-1 block text-sm font-medium text-slate-300">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-slate-300">Contraseña</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
+              />
+            </div>
+            <div className="text-right">
+              <Link
+                to="/recuperar-password"
+                className="text-sm font-medium text-sky-300 hover:text-sky-200"
+              >
+                Olvidaste tu contrasena?
+              </Link>
+            </div>
 
-          <button
-            type="submit"
-            disabled={mutation.isPending}
-            className="rounded-2xl bg-sky-500 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950 transition-colors hover:bg-sky-400 disabled:opacity-50"
-          >
-            {mutation.isPending ? 'Iniciando sesión...' : 'Iniciar sesión'}
-          </button>
-        </form>
-      </div>
+            {mutation.isError && (
+              <p className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-center text-sm text-red-100">
+                {mutation.error instanceof Error ? mutation.error.message : 'Error al iniciar sesión'}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={mutation.isPending}
+              className="rounded-2xl bg-sky-500 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950 transition-colors hover:bg-sky-400 disabled:opacity-50"
+            >
+              {mutation.isPending ? 'Iniciando sesión...' : 'Iniciar sesión'}
+            </button>
+          </form>
+          <p className="mt-5 text-center text-sm text-slate-400">
+            No tenes cuenta?{' '}
+            <Link to="/registro" className="font-semibold text-sky-300 hover:text-sky-200">
+              Registrate
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   )

@@ -105,7 +105,48 @@ class TestGenerarGrillaHandlerExitoso:
     ) -> None:
         handler = GenerarGrillaHandler(mock_event_store, mock_performances_ap, _DESCRIPTOR_ADAPTER)
         await handler.handle(_command())
-        mock_event_store.load.assert_called_once_with(_build_stream_id(COMPETENCIA_ID))
+        assert mock_event_store.load.call_args_list[0].args == (_build_stream_id(COMPETENCIA_ID),)
+
+    @pytest.mark.asyncio
+    async def test_con_dos_andariveles_comparte_ot_por_tanda(
+        self, mock_event_store: AsyncMock, mock_performances_ap: AsyncMock
+    ) -> None:
+        mock_performances_ap.get_performances_con_ap.return_value = [
+            PerformancesAPData(
+                performance_id=uuid4(),
+                atleta_id=UUID("00000000-0000-0000-0000-000000000011"),
+                valor_ap=Decimal("360"),
+                unidad=UnidadMedida.Segundos,
+            ),
+            PerformancesAPData(
+                performance_id=uuid4(),
+                atleta_id=UUID("00000000-0000-0000-0000-000000000012"),
+                valor_ap=Decimal("330"),
+                unidad=UnidadMedida.Segundos,
+            ),
+            PerformancesAPData(
+                performance_id=uuid4(),
+                atleta_id=UUID("00000000-0000-0000-0000-000000000013"),
+                valor_ap=Decimal("285"),
+                unidad=UnidadMedida.Segundos,
+            ),
+        ]
+        handler = GenerarGrillaHandler(mock_event_store, mock_performances_ap, _DESCRIPTOR_ADAPTER)
+        await handler.handle(
+            GenerarGrillaCommand(
+                competencia_id=COMPETENCIA_ID,
+                disciplina=Disciplina.STA,
+                ot_inicio=OT_INICIO,
+                andariveles=2,
+            )
+        )
+        payload = mock_event_store.append.call_args.kwargs["payload"]
+        performances = payload["performances"]
+        assert performances[0]["ot_programado"] == OT_INICIO.isoformat()
+        assert performances[1]["ot_programado"] == OT_INICIO.isoformat()
+        assert performances[2]["ot_programado"] == (
+            OT_INICIO.replace(minute=OT_INICIO.minute + 9).isoformat()
+        )
 
 
 class TestGenerarGrillaHandlerErrores:

@@ -18,7 +18,8 @@ La documentación de esta carpeta describe:
 - la descomposición en contenedores y bounded contexts;
 - las interacciones relevantes entre contextos y componentes;
 - las preocupaciones transversales de arquitectura;
-- la arquitectura objetivo para capacidades críticas como offline-first.
+- la arquitectura implementada o explícitamente objetivo para capacidades
+  críticas como offline-first.
 
 No documenta en detalle la exploración de dominio ni el razonamiento histórico
 de cada decisión. Esos artefactos viven en otras carpetas.
@@ -47,22 +48,31 @@ La arquitectura vigente, según ADRs actuales, se basa en:
 - `Event Sourcing` en `Competencia` y `Notificaciones`;
 - `React PWA` offline-first para la interfaz del juez.
 
-## Estructura objetivo de esta carpeta
+## Estructura actual de esta carpeta
 
-Esta carpeta crecerá de forma incremental. La estructura inicial prevista es:
+La estructura vigente es:
 
 ```text
 docs/architecture/
   README.md
+  STATUS.md
   01-system-context.md
   02-container-view.md
   03-bounded-contexts.md
-  04-runtime-interactions.md
-  05-deployment-view.md
-  06-cross-cutting-concerns.md
-  07-offline-sync.md
+  10-bc-competencia.md
+  11-bc-torneo.md
+  12-bc-registro.md
+  13-bc-resultados.md
+  14-bc-identidad.md
+  15-bc-notificaciones.md
+  20-context-map-integrations.md
+  30-runtime-interactions.md
+  40-cross-cutting-concerns.md
+  50-offline-sync.md
   diagrams/
 ```
+
+`STATUS.md` registra el estado de creación y mantenimiento de cada documento.
 
 ## Principios de documentación
 
@@ -99,7 +109,13 @@ Cada especificación de arquitectura debería incluir, como mínimo:
 - vista o vistas arquitectónicas que describe;
 - impactos o implicancias sobre implementación.
 
-## Siguiente paso
+## Mantenimiento
 
-El siguiente documento a crear es `01-system-context.md`, como vista de más alto
-nivel del sistema, sus actores y sus integraciones externas.
+No hay documentos pendientes registrados en `STATUS.md`.
+
+Cuando cambie la estructura de esta carpeta, actualizar en conjunto:
+
+1. este índice;
+2. `docs/architecture/STATUS.md`;
+3. los enlaces cruzados desde documentos canónicos como `README.md` y
+   `CLAUDE.md`, si corresponde.

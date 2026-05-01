@@ -60,10 +60,37 @@ async def test_cerrar_inscripcion_ok() -> None:
 
 
 @pytest.mark.asyncio
+async def test_cerrar_inscripcion_ejecuta_precondicion() -> None:
+    torneo = _torneo(EstadoTorneo.INSCRIPCION_ABIERTA)
+    repo = _repo(torneo)
+    precondition = AsyncMock()
+
+    await CerrarInscripcionHandler(repo, precondition=precondition).handle(
+        TransicionarTorneoCommand(torneo.torneo_id)
+    )
+
+    precondition.assert_awaited_once_with(torneo.torneo_id)
+
+
+@pytest.mark.asyncio
 async def test_iniciar_ejecucion_ok() -> None:
     torneo = _torneo(EstadoTorneo.PREPARACION)
     repo = _repo(torneo)
     await IniciarEjecucionHandler(repo).handle(TransicionarTorneoCommand(torneo.torneo_id))
+    assert torneo.estado == EstadoTorneo.EJECUCION
+
+
+@pytest.mark.asyncio
+async def test_iniciar_ejecucion_ejecuta_post_action() -> None:
+    torneo = _torneo(EstadoTorneo.PREPARACION)
+    repo = _repo(torneo)
+    post_action = AsyncMock()
+
+    await IniciarEjecucionHandler(repo, post_action=post_action).handle(
+        TransicionarTorneoCommand(torneo.torneo_id)
+    )
+
+    post_action.assert_awaited_once_with(torneo.torneo_id)
     assert torneo.estado == EstadoTorneo.EJECUCION
 
 

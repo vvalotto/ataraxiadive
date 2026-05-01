@@ -6,6 +6,7 @@ export interface RankingEntradaDto {
   tarjeta: string | null
   es_dns: boolean
   en_podio: boolean
+  puntos: string | null
 }
 
 export interface RankingCategoriaDto {
@@ -16,6 +17,24 @@ export interface RankingCategoriaDto {
 export interface RankingCompetenciaDto {
   calculado: boolean
   rankings: RankingCategoriaDto[]
+}
+
+export interface OverallEntradaDto {
+  posicion: number
+  atleta_id: string
+  puntos_overall: string
+  detalle: Record<string, string>
+  en_podio: boolean
+}
+
+export interface OverallCategoriaDto {
+  categoria: string
+  entradas: OverallEntradaDto[]
+}
+
+export interface OverallDto {
+  calculado: boolean
+  rankings: OverallCategoriaDto[]
 }
 
 export async function fetchRankingCompetencia(
@@ -31,4 +50,14 @@ export async function fetchRankingCompetencia(
   }
 
   return response.json() as Promise<RankingCompetenciaDto>
+}
+
+export async function fetchOverall(torneoId: string): Promise<OverallDto> {
+  const response = await fetch(`/resultados/${torneoId}/overall`)
+
+  if (!response.ok) {
+    throw new Error(`Error al obtener overall: ${response.status}`)
+  }
+
+  return response.json() as Promise<OverallDto>
 }

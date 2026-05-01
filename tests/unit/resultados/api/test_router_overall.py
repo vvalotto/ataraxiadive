@@ -1,4 +1,4 @@
-"""Tests HTTP del router de resultados para Overall — US-3.5.3."""
+"""Tests HTTP del router de resultados para Overall — US-3.5.3 / US-5.6.4."""
 
 from __future__ import annotations
 
@@ -42,7 +42,7 @@ def test_get_overall_devuelve_calculado_false_sin_eventos(tmp_path) -> None:
     }
 
 
-def test_get_overall_devuelve_detalle_y_podio(tmp_path) -> None:
+def test_get_overall_devuelve_puntos_overall_y_detalle(tmp_path) -> None:
     db_path = tmp_path / "resultados.db"
     store = SQLiteEventStore(str(db_path))
     from tests.integration.resultados.test_obtener_overall_integration import (
@@ -64,8 +64,8 @@ def test_get_overall_devuelve_detalle_y_podio(tmp_path) -> None:
                     "posicion": 1,
                     "atleta_id": str(atleta_id),
                     "categoria": Categoria.SENIOR_MASCULINO.value,
-                    "puntaje": 3,
-                    "detalle": {"STA": 1, "DNF": 2},
+                    "puntos_overall": "175.00",
+                    "detalle": {"DNF": "100.00", "STA": "75.00"},
                     "en_podio": True,
                 }
             ],
@@ -85,8 +85,8 @@ def test_get_overall_devuelve_detalle_y_podio(tmp_path) -> None:
                     {
                         "posicion": 1,
                         "atleta_id": str(atleta_id),
-                        "puntaje": 3,
-                        "detalle": {"STA": 1, "DNF": 2},
+                        "puntos_overall": "175.00",
+                        "detalle": {"DNF": "100.00", "STA": "75.00"},
                         "en_podio": True,
                     }
                 ],

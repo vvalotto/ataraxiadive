@@ -18,7 +18,7 @@ Incluye:
 - aggregates y entidades principales;
 - puertos y adaptadores relevantes;
 - uso de Event Sourcing;
-- integración mediante ACL desde `Registro`.
+- integración con `Registro` mediante puertos/adaptadores y referencias por ID.
 
 No detalla el comportamiento completo de cada caso de uso ni el contrato HTTP de
 cada endpoint.
@@ -89,9 +89,6 @@ flowchart TB
             RegistrarResultado · AsignarTarjeta
             RegistrarDNS · CorregirResultado"]
 
-            participante_acl["Participante ACL
-            Traduce AtletaInscripto
-            a Participante local"]
         end
 
         subgraph domain["Domain Layer"]
@@ -101,27 +98,33 @@ flowchart TB
             performance_agg["Aggregate Performance
             AP · RP · Tarjeta · Estado"]
 
-            participante_entity["Entidad Participante
-            Modelo local derivado
-            desde Registro"]
+            participante_ref["Referencia participante
+            participante_id / atleta_id
+            sin entidad local materializada"]
 
             competencia_repo_port["Port
             CompetenciaRepository"]
 
             performance_repo_port["Port
             PerformanceRepository"]
+
+            registro_ports["Port
+            AtletaNombrePort
+            datos externos por ID"]
         end
 
         subgraph infrastructure["Infrastructure Layer"]
             competencia_repo["Competencia Event Store Repository"]
             performance_repo["Performance Event Store Repository"]
+            registro_adapters["Adaptadores Registro
+            AtletaNombreAdapter"]
             read_projection["Competencia Read Projection
             Tablas de consulta"]
         end
     end
 
-    registro_event["Evento externo
-    Registro.AtletaInscripto"]
+    registro_db["registro.db
+    Atletas / inscripciones"]
 
     competencia_db["competencia.db
     SQLite
@@ -135,6 +138,8 @@ flowchart TB
 
     competencia_handlers --> competencia_repo_port
     performance_handlers --> performance_repo_port
+    competencia_handlers --> registro_ports
+    performance_handlers --> registro_ports
 
     competencia_repo --> competencia_repo_port
     performance_repo --> performance_repo_port
@@ -146,10 +151,10 @@ flowchart TB
     competencia_handlers --> read_projection
     performance_handlers --> read_projection
 
-    registro_event --> participante_acl
-    participante_acl --> participante_entity
-    competencia_agg --> participante_entity
-    performance_agg --> participante_entity
+    registro_ports --> registro_adapters
+    registro_adapters --> registro_db
+    competencia_agg --> participante_ref
+    performance_agg --> participante_ref
 ```
 
 ## Componentes principales
@@ -176,7 +181,8 @@ Sus responsabilidades son:
 - ejecutar operaciones del dominio;
 - persistir eventos resultantes;
 - actualizar proyecciones de lectura;
-- coordinar ACLs o políticas de aplicación cuando corresponda.
+- coordinar puertos de integración o políticas de aplicación cuando
+  corresponda.
 
 ### Domain Layer
 
@@ -186,7 +192,8 @@ Sus elementos centrales son:
 
 - `Competencia` como aggregate root de la disciplina en ejecución;
 - `Performance` como aggregate root de cada performance individual;
-- `Participante` como entidad local derivada desde `Registro`;
+- referencias a participante/atleta por ID dentro de `Performance`, grilla y
+  eventos;
 - value objects e invariantes del dominio;
 - puertos que abstraen persistencia y acceso externo.
 
@@ -201,7 +208,7 @@ Sus responsabilidades son:
 - mantener el read model usado por queries;
 - materializar la integración de infraestructura requerida por el BC.
 
-## Aggregates y entidad principal
+## Aggregates y conceptos principales
 
 ### Competencia
 
@@ -227,27 +234,40 @@ Responsable de:
 - registrar DNS;
 - corregir resultados con trazabilidad explícita.
 
-### Participante
+### Referencia a participante
 
-Entidad local del BC, no aggregate root.
+Concepto de identidad local del BC, pero no entidad materializada en código.
 
-Existe para desacoplar `Competencia` del modelo de `Registro`. Solo conserva los
-datos necesarios para operar la competencia y se alimenta mediante ACL.
+La implementación actual opera con `participante_id` / `atleta_id` como
+referencia estable dentro de:
 
-## ACL con Registro
+- `Performance`;
+- `EntradaGrilla`;
+- eventos de dominio;
+- queries y read models.
 
-La integración `Registro -> Competencia` se implementa mediante un
-Anti-Corruption Layer.
+Los datos descriptivos del atleta, como nombre completo, se obtienen mediante
+puertos de dominio y adaptadores de infraestructura.
 
-El BC `Competencia` no consume el modelo de atleta o inscripción de `Registro`
-de forma directa. En cambio:
+## Integración con Registro
 
-- recibe el evento `AtletaInscripto`;
-- traduce ese evento a su propio modelo local;
-- crea o actualiza un `Participante` dentro de su frontera.
+La integración entre `Competencia` y `Registro` se implementa como puertos de
+dominio y adaptadores de infraestructura, no como una entidad `Participante`
+persistida dentro de `Competencia`.
 
-Esto protege al core domain frente a cambios conceptuales o estructurales en
-`Registro`.
+El BC `Competencia` no incorpora el modelo completo de atleta o inscripción de
+`Registro`. En cambio:
+
+- conserva IDs estables en streams y eventos (`participante_id` / `atleta_id`);
+- usa `PerformancesAPPort` para obtener las performances con AP registrado
+  desde su propio event store;
+- usa `AtletaNombrePort` para resolver datos descriptivos del atleta cuando una
+  query lo necesita;
+- implementa `AtletaNombreAdapter` en infraestructura consultando `registro.db`.
+
+Esto mantiene el dominio de `Competencia` desacoplado del modelo interno de
+`Registro`, aunque la integración actual es más liviana que el ACL conceptual
+original.
 
 ## Event Sourcing en Competencia
 
@@ -290,8 +310,9 @@ Esto permite:
 
 ### Entrada desde Registro
 
-- evento `AtletaInscripto`;
-- traducción por ACL a `Participante`.
+- referencias por `atleta_id` / `participante_id`;
+- resolución de datos descriptivos mediante `AtletaNombrePort`;
+- adaptación concreta mediante `AtletaNombreAdapter`.
 
 ### Salida hacia Resultados
 

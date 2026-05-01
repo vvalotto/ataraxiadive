@@ -1,0 +1,2128 @@
+{
+  "summary": {
+    "total_files": 33,
+    "checks_executed": 6,
+    "elapsed_seconds": 25.56,
+    "timestamp": "2026-04-27T10:23:42.979868",
+    "total_issues": 99,
+    "errors": 0,
+    "warnings": 3,
+    "infos": 96
+  },
+  "results": [
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/__init__.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ No complex functions detected",
+      "file": "src/resultados/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/api/__init__.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/api/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ No complex functions detected",
+      "file": "src/resultados/api/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/api/router.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/api/router.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/api/router.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/application/__init__.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/application/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ No complex functions detected",
+      "file": "src/resultados/application/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/infrastructure/__init__.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/infrastructure/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ No complex functions detected",
+      "file": "src/resultados/infrastructure/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/__init__.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/domain/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ No complex functions detected",
+      "file": "src/resultados/domain/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/exceptions.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/domain/exceptions.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/domain/exceptions.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/aggregates/__init__.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/domain/aggregates/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ No complex functions detected",
+      "file": "src/resultados/domain/aggregates/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/aggregates/ranking_overall.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "warning",
+      "message": "PEP8: E501 line too long (101 > 100 characters)",
+      "file": "src/resultados/domain/aggregates/ranking_overall.py",
+      "line": 62
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/domain/aggregates/ranking_overall.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/aggregates/ranking_competencia.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/domain/aggregates/ranking_competencia.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/domain/aggregates/ranking_competencia.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/value_objects/entrada_overall.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/domain/value_objects/entrada_overall.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/domain/value_objects/entrada_overall.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/value_objects/__init__.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/domain/value_objects/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ No complex functions detected",
+      "file": "src/resultados/domain/value_objects/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/value_objects/entrada_ranking.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/domain/value_objects/entrada_ranking.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/domain/value_objects/entrada_ranking.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/events/__init__.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/domain/events/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ No complex functions detected",
+      "file": "src/resultados/domain/events/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/events/ranking_overall_calculado.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/domain/events/ranking_overall_calculado.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/domain/events/ranking_overall_calculado.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/events/resultados_calculados.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/domain/events/resultados_calculados.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/domain/events/resultados_calculados.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/ports/__init__.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/domain/ports/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ No complex functions detected",
+      "file": "src/resultados/domain/ports/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/ports/resultados_competencia_port.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "warning",
+      "message": "PEP8: E501 line too long (106 > 100 characters)",
+      "file": "src/resultados/domain/ports/resultados_competencia_port.py",
+      "line": 27
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/domain/ports/resultados_competencia_port.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/services/__init__.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/domain/services/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ No complex functions detected",
+      "file": "src/resultados/domain/services/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/domain/services/algoritmo_faas.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/domain/services/algoritmo_faas.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "warning",
+      "message": "Complexity: AlgoritmoPuntajeFAAS._calcular_tiempo has cyclomatic complexity 11 (grade C). Consider refactoring into smaller functions.",
+      "file": "src/resultados/domain/services/algoritmo_faas.py",
+      "line": 57
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/infrastructure/repositories/atleta_categoria_adapter.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/infrastructure/repositories/atleta_categoria_adapter.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/infrastructure/repositories/atleta_categoria_adapter.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/infrastructure/repositories/resultados_competencia_adapter.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/infrastructure/repositories/resultados_competencia_adapter.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/infrastructure/repositories/resultados_competencia_adapter.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/infrastructure/repositories/__init__.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/infrastructure/repositories/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ No complex functions detected",
+      "file": "src/resultados/infrastructure/repositories/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/infrastructure/repositories/atleta_info_adapter.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/infrastructure/repositories/atleta_info_adapter.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/infrastructure/repositories/atleta_info_adapter.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/infrastructure/repositories/disciplina_descriptor_adapter.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/infrastructure/repositories/disciplina_descriptor_adapter.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/infrastructure/repositories/disciplina_descriptor_adapter.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/application/queries/obtener_overall.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/application/queries/obtener_overall.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/application/queries/obtener_overall.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/application/queries/exportar_resultados.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/application/queries/exportar_resultados.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/application/queries/exportar_resultados.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/application/queries/__init__.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/application/queries/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ No complex functions detected",
+      "file": "src/resultados/application/queries/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/application/queries/obtener_ranking.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/application/queries/obtener_ranking.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/application/queries/obtener_ranking.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/application/commands/calcular_ranking.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/application/commands/calcular_ranking.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/application/commands/calcular_ranking.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/application/commands/__init__.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/application/commands/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ No complex functions detected",
+      "file": "src/resultados/application/commands/__init__.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/resultados/application/commands/calcular_overall.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/resultados/application/commands/calcular_overall.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/resultados/application/commands/calcular_overall.py",
+      "line": null
+    }
+  ],
+  "by_severity": {
+    "errors": [],
+    "warnings": [
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: E501 line too long (101 > 100 characters)",
+        "file": "src/resultados/domain/aggregates/ranking_overall.py",
+        "line": 62
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: E501 line too long (106 > 100 characters)",
+        "file": "src/resultados/domain/ports/resultados_competencia_port.py",
+        "line": 27
+      },
+      {
+        "check": "Complexity",
+        "severity": "warning",
+        "message": "Complexity: AlgoritmoPuntajeFAAS._calcular_tiempo has cyclomatic complexity 11 (grade C). Consider refactoring into smaller functions.",
+        "file": "src/resultados/domain/services/algoritmo_faas.py",
+        "line": 57
+      }
+    ],
+    "infos": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/api/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/api/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/api/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/api/router.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/api/router.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/api/router.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/application/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/infrastructure/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/infrastructure/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/infrastructure/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/domain/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/exceptions.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/exceptions.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/exceptions.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/aggregates/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/aggregates/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/domain/aggregates/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/aggregates/ranking_overall.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/aggregates/ranking_overall.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/aggregates/ranking_competencia.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/aggregates/ranking_competencia.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/aggregates/ranking_competencia.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/value_objects/entrada_overall.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/value_objects/entrada_overall.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/value_objects/entrada_overall.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/value_objects/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/value_objects/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/domain/value_objects/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/value_objects/entrada_ranking.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/value_objects/entrada_ranking.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/value_objects/entrada_ranking.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/events/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/events/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/domain/events/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/events/ranking_overall_calculado.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/events/ranking_overall_calculado.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/events/ranking_overall_calculado.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/events/resultados_calculados.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/events/resultados_calculados.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/events/resultados_calculados.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/ports/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/ports/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/domain/ports/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/ports/resultados_competencia_port.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/ports/resultados_competencia_port.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/services/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/services/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/domain/services/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/services/algoritmo_faas.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/services/algoritmo_faas.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/infrastructure/repositories/atleta_categoria_adapter.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/infrastructure/repositories/atleta_categoria_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/infrastructure/repositories/atleta_categoria_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/infrastructure/repositories/resultados_competencia_adapter.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/infrastructure/repositories/resultados_competencia_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/infrastructure/repositories/resultados_competencia_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/infrastructure/repositories/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/infrastructure/repositories/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/infrastructure/repositories/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/infrastructure/repositories/atleta_info_adapter.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/infrastructure/repositories/atleta_info_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/infrastructure/repositories/atleta_info_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/infrastructure/repositories/disciplina_descriptor_adapter.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/infrastructure/repositories/disciplina_descriptor_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/infrastructure/repositories/disciplina_descriptor_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/queries/obtener_overall.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/queries/obtener_overall.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/application/queries/obtener_overall.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/queries/exportar_resultados.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/queries/exportar_resultados.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/application/queries/exportar_resultados.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/queries/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/queries/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/application/queries/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/queries/obtener_ranking.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/queries/obtener_ranking.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/application/queries/obtener_ranking.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/commands/calcular_ranking.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/commands/calcular_ranking.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/application/commands/calcular_ranking.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/commands/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/commands/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/application/commands/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/commands/calcular_overall.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/commands/calcular_overall.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/application/commands/calcular_overall.py",
+        "line": null
+      }
+    ]
+  },
+  "by_package": {
+    "aggregates": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/aggregates/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/aggregates/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/domain/aggregates/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/aggregates/ranking_overall.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: E501 line too long (101 > 100 characters)",
+        "file": "src/resultados/domain/aggregates/ranking_overall.py",
+        "line": 62
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/aggregates/ranking_overall.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/aggregates/ranking_competencia.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/aggregates/ranking_competencia.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/aggregates/ranking_competencia.py",
+        "line": null
+      }
+    ],
+    "api": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/api/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/api/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/api/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/api/router.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/api/router.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/api/router.py",
+        "line": null
+      }
+    ],
+    "application": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/application/__init__.py",
+        "line": null
+      }
+    ],
+    "commands": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/commands/calcular_ranking.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/commands/calcular_ranking.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/application/commands/calcular_ranking.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/commands/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/commands/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/application/commands/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/commands/calcular_overall.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/commands/calcular_overall.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/application/commands/calcular_overall.py",
+        "line": null
+      }
+    ],
+    "domain": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/domain/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/exceptions.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/exceptions.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/exceptions.py",
+        "line": null
+      }
+    ],
+    "events": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/events/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/events/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/domain/events/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/events/ranking_overall_calculado.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/events/ranking_overall_calculado.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/events/ranking_overall_calculado.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/events/resultados_calculados.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/events/resultados_calculados.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/events/resultados_calculados.py",
+        "line": null
+      }
+    ],
+    "infrastructure": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/infrastructure/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/infrastructure/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/infrastructure/__init__.py",
+        "line": null
+      }
+    ],
+    "ports": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/ports/algoritmo_puntaje.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/ports/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/ports/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/domain/ports/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/ports/resultados_competencia_port.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "warning",
+        "message": "PEP8: E501 line too long (106 > 100 characters)",
+        "file": "src/resultados/domain/ports/resultados_competencia_port.py",
+        "line": 27
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/ports/resultados_competencia_port.py",
+        "line": null
+      }
+    ],
+    "queries": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/queries/obtener_overall.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/queries/obtener_overall.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/application/queries/obtener_overall.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/queries/exportar_resultados.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/queries/exportar_resultados.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/application/queries/exportar_resultados.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/queries/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/queries/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/application/queries/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/application/queries/obtener_ranking.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/application/queries/obtener_ranking.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/application/queries/obtener_ranking.py",
+        "line": null
+      }
+    ],
+    "repositories": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/infrastructure/repositories/atleta_categoria_adapter.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/infrastructure/repositories/atleta_categoria_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/infrastructure/repositories/atleta_categoria_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/infrastructure/repositories/resultados_competencia_adapter.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/infrastructure/repositories/resultados_competencia_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/infrastructure/repositories/resultados_competencia_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/infrastructure/repositories/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/infrastructure/repositories/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/infrastructure/repositories/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/infrastructure/repositories/atleta_info_adapter.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/infrastructure/repositories/atleta_info_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/infrastructure/repositories/atleta_info_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/infrastructure/repositories/disciplina_descriptor_adapter.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/infrastructure/repositories/disciplina_descriptor_adapter.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/infrastructure/repositories/disciplina_descriptor_adapter.py",
+        "line": null
+      }
+    ],
+    "resultados": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/__init__.py",
+        "line": null
+      }
+    ],
+    "services": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/services/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/services/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/domain/services/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/services/algoritmo_faas.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/services/algoritmo_faas.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "warning",
+        "message": "Complexity: AlgoritmoPuntajeFAAS._calcular_tiempo has cyclomatic complexity 11 (grade C). Consider refactoring into smaller functions.",
+        "file": "src/resultados/domain/services/algoritmo_faas.py",
+        "line": 57
+      }
+    ],
+    "value_objects": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/value_objects/entrada_overall.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/value_objects/entrada_overall.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/value_objects/entrada_overall.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/value_objects/__init__.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/value_objects/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ No complex functions detected",
+        "file": "src/resultados/domain/value_objects/__init__.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/resultados/domain/value_objects/entrada_ranking.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/resultados/domain/value_objects/entrada_ranking.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/resultados/domain/value_objects/entrada_ranking.py",
+        "line": null
+      }
+    ]
+  }
+}

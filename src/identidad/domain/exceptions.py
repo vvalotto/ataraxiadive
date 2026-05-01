@@ -23,9 +23,31 @@ class UsuarioInactivo(Exception):
 
 class PasswordDemasiadoCorto(Exception):
     def __init__(self) -> None:
-        super().__init__("La contraseña debe tener al menos 8 caracteres")
+        super().__init__(
+            "La contraseña debe tener al menos 10 caracteres, una mayúscula y un número"
+        )
+
+
+class CampoRequerido(Exception):
+    def __init__(self, campo: str) -> None:
+        super().__init__(f"El {campo} es requerido")
+
+
+class RolNoPermitido(Exception):
+    def __init__(self) -> None:
+        super().__init__("El rol ADMIN no está permitido en el auto-registro")
+
+
+class PasswordActualIncorrecto(Exception):
+    def __init__(self) -> None:
+        super().__init__("La contraseña actual es incorrecta")
 
 
 class TokenInvalido(Exception):
     def __init__(self) -> None:
         super().__init__("Token JWT inválido o expirado")
+
+
+class TokenResetInvalido(Exception):
+    def __init__(self) -> None:
+        super().__init__("Token de recuperación inválido o expirado")

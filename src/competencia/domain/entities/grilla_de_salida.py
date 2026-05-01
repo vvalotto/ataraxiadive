@@ -46,7 +46,12 @@ class GrillaDeSalida:
                 atleta_id=perf.atleta_id,
                 posicion=posicion,
                 andarivel=((posicion - 1) % andariveles) + 1,
-                ot_programado=ot_inicio + timedelta(minutes=(posicion - 1) * intervalo.minutos),
+                ot_programado=ot_inicio
+                + timedelta(
+                    minutes=self._grupo_salida_para_posicion(posicion, andariveles)
+                    * intervalo.minutos
+                ),
+                juez_id=None,
             )
             for posicion, perf in enumerate(ordenadas, start=1)
         ]
@@ -85,6 +90,7 @@ class GrillaDeSalida:
                 posicion=performance["posicion"],
                 andarivel=performance["andarivel"],
                 ot_programado=datetime.fromisoformat(performance["ot_programado"]),
+                juez_id=performance.get("juez_id"),
             )
             for performance in performances
         ]
@@ -164,6 +170,14 @@ class GrillaDeSalida:
             cambio.valor_nuevo,
         )
 
+    def asignar_juez(self, performance_id: UUID, juez_id: str) -> None:
+        self._entradas = [
+            self._reemplazar_entrada(entrada, juez_id=juez_id)
+            if entrada.performance_id == performance_id
+            else entrada
+            for entrada in self._entradas
+        ]
+
     def _aplicar_cambio_persistido(
         self,
         grilla_mutable: dict[UUID, EntradaGrilla],
@@ -214,6 +228,7 @@ class GrillaDeSalida:
         *,
         posicion: int | None = None,
         andarivel: int | None = None,
+        juez_id: str | None = None,
     ) -> EntradaGrilla:
         return EntradaGrilla(
             performance_id=entrada.performance_id,
@@ -221,6 +236,7 @@ class GrillaDeSalida:
             posicion=entrada.posicion if posicion is None else posicion,
             andarivel=entrada.andarivel if andarivel is None else andarivel,
             ot_programado=entrada.ot_programado,
+            juez_id=entrada.juez_id if juez_id is None else juez_id,
         )
 
     @staticmethod
@@ -243,13 +259,23 @@ class GrillaDeSalida:
         intervalo: IntervaloDisciplina,
     ) -> list[EntradaGrilla]:
         ot_inicio = min(entrada.ot_programado for entrada in self._entradas)
+        andariveles = max(entrada.andarivel for entrada in self._entradas)
         return [
             EntradaGrilla(
                 performance_id=entrada.performance_id,
                 atleta_id=entrada.atleta_id,
                 posicion=entrada.posicion,
                 andarivel=entrada.andarivel,
-                ot_programado=ot_inicio + timedelta(minutes=(entrada.posicion - 1) * intervalo.minutos),
+                ot_programado=ot_inicio
+                + timedelta(
+                    minutes=self._grupo_salida_para_posicion(entrada.posicion, andariveles)
+                    * intervalo.minutos
+                ),
+                juez_id=entrada.juez_id,
             )
             for entrada in entradas
         ]
+
+    @staticmethod
+    def _grupo_salida_para_posicion(posicion: int, andariveles: int) -> int:
+        return (posicion - 1) // andariveles

@@ -117,6 +117,7 @@ def test_get_ranking_devuelve_agrupado_por_categoria(tmp_path) -> None:
                         "tarjeta": "Blanca",
                         "es_dns": False,
                         "en_podio": True,
+                        "puntos": "0.00",
                     }
                 ],
             },
@@ -131,6 +132,7 @@ def test_get_ranking_devuelve_agrupado_por_categoria(tmp_path) -> None:
                         "tarjeta": "Blanca",
                         "es_dns": False,
                         "en_podio": True,
+                        "puntos": "0.00",
                     }
                 ],
             },

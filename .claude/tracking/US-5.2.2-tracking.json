@@ -1,0 +1,149 @@
+{
+  "metadata": {
+    "us_id": "US-5.2.2",
+    "us_title": "Finalizacion manual de prueba por disciplina",
+    "us_points": 3,
+    "producto": "AtaraxiaDive",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-22T15:04:59.383254+00:00",
+    "completed_at": "2026-04-22T15:12:31.825104+00:00",
+    "total_elapsed_seconds": 452,
+    "effective_seconds": 452,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Fase 0 - Contexto",
+      "started_at": "2026-04-22T15:05:09.341468+00:00",
+      "completed_at": "2026-04-22T15:05:52.684555+00:00",
+      "elapsed_seconds": 43,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Fase 1 - Diseno",
+      "started_at": "2026-04-22T15:05:55.971763+00:00",
+      "completed_at": "2026-04-22T15:06:43.895117+00:00",
+      "elapsed_seconds": 47,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Fase 2 - Plan",
+      "started_at": "2026-04-22T15:06:46.786488+00:00",
+      "completed_at": "2026-04-22T15:06:49.721893+00:00",
+      "elapsed_seconds": 2,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Fase 3 - Implementacion",
+      "started_at": "2026-04-22T15:06:53.086536+00:00",
+      "completed_at": "2026-04-22T15:11:18.063241+00:00",
+      "elapsed_seconds": 264,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Fase 4 - Tests",
+      "started_at": "2026-04-22T15:11:22.239114+00:00",
+      "completed_at": "2026-04-22T15:11:26.586891+00:00",
+      "elapsed_seconds": 4,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Fase 5 - Refactor",
+      "started_at": "2026-04-22T15:11:31.357473+00:00",
+      "completed_at": "2026-04-22T15:11:35.437159+00:00",
+      "elapsed_seconds": 4,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Fase 6 - Integracion",
+      "started_at": "2026-04-22T15:11:41.902776+00:00",
+      "completed_at": "2026-04-22T15:11:46.620432+00:00",
+      "elapsed_seconds": 4,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Fase 7 - Validacion",
+      "started_at": "2026-04-22T15:11:51.437769+00:00",
+      "completed_at": "2026-04-22T15:11:57.367058+00:00",
+      "elapsed_seconds": 5,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Fase 8 - Documentacion",
+      "started_at": "2026-04-22T15:12:00.950235+00:00",
+      "completed_at": "2026-04-22T15:12:04.276056+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Fase 9 - Reporte",
+      "started_at": "2026-04-22T15:12:07.858003+00:00",
+      "completed_at": "2026-04-22T15:12:14.503929+00:00",
+      "elapsed_seconds": 6,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 10,
+      "phase_name": "Fase 10 - Cierre",
+      "started_at": "2026-04-22T15:12:18.447331+00:00",
+      "completed_at": "2026-04-22T15:12:23.281823+00:00",
+      "elapsed_seconds": 4,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 0,
+    "completed_tasks": 0,
+    "total_phases": 11,
+    "estimated_total_minutes": 0,
+    "actual_total_minutes": 0,
+    "variance_minutes": 0,
+    "variance_percent": 0.0
+  }
+}

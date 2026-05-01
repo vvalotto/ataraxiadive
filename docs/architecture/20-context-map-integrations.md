@@ -101,8 +101,8 @@ flowchart LR
     torneo -->|"Customer-Supplier
     Evento: InscripcionHabilitada"| registro
 
-    registro -->|"ACL en Competencia
-    AtletaInscripto -> Participante"| competencia
+    registro -->|"Referencia por ID + adaptadores
+    objetivo: AtletaInscripto"| competencia
 
     competencia -->|"Customer-Supplier
     Evento: CompetenciaFinalizada"| resultados
@@ -155,20 +155,29 @@ de que exista un torneo habilitado para aceptar inscripciones.
 
 ### Registro -> Competencia
 
-**Patrón:** Anti-Corruption Layer en el downstream.
+**Patrón:** referencia por ID + adaptadores de infraestructura; ACL de dominio
+como evolución objetivo.
 
-`Competencia` no reutiliza el modelo de `Registro` de forma directa. Traduce los
-conceptos necesarios a su propio lenguaje ubicuo mediante un ACL.
+`Competencia` no reutiliza el modelo de `Registro` de forma directa. La
+implementación actual conserva IDs estables (`participante_id` / `atleta_id`) y
+resuelve datos descriptivos mediante puertos/adaptadores.
 
-**Mecanismo principal:**
+**Mecanismo actual:**
+
+- referencias `participante_id` / `atleta_id` en streams y eventos;
+- `AtletaNombrePort` como puerto de dominio;
+- `AtletaNombreAdapter` consultando `registro.db`.
+
+**Evolución objetivo:**
 
 - evento `AtletaInscripto`;
-- traducción a `Participante` local dentro de `Competencia`.
+- traducción a un modelo local si el BC necesita más datos que una referencia por
+  ID.
 
-**Objetivo del ACL:**
+**Objetivo de la frontera:**
 
 - desacoplar `Competencia` de cambios en el modelo de `Registro`;
-- copiar solo los datos relevantes para la competencia;
+- copiar o resolver solo los datos relevantes para la competencia;
 - evitar dependencia semántica directa entre los dos modelos.
 
 ### Competencia -> Resultados
@@ -231,7 +240,7 @@ notificación.
 | `Identidad` | `Registro` | Conformist | JWT / claims |
 | `Identidad` | `Competencia` | Conformist | JWT / claims |
 | `Torneo` | `Registro` | Customer-Supplier | Evento `InscripcionHabilitada` |
-| `Registro` | `Competencia` | ACL | Evento `AtletaInscripto` + traducción a `Participante` |
+| `Registro` | `Competencia` | Referencia por ID + adaptadores | `participante_id` / `atleta_id`; objetivo futuro: `AtletaInscripto` |
 | `Competencia` | `Resultados` | Customer-Supplier | Evento `CompetenciaFinalizada` |
 | `Torneo` | `Resultados` | Customer-Supplier | Consulta read-only por `torneoId` |
 | `Torneo` | `Notificaciones` | Customer-Supplier | Eventos de dominio |

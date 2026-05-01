@@ -28,6 +28,8 @@ class CompetenciaFinalizada(DomainEvent):
         ejecutadas: Cantidad en estado Ejecutada (tarjeta asignada).
         dns_count: Cantidad en estado DNS.
         finalizada_en: Timestamp de finalización.
+        origen: Origen auditable del cierre: automatico o manual.
+        finalizada_por: Identificador opcional del usuario que solicito el cierre manual.
     """
 
     competencia_id: str
@@ -37,6 +39,8 @@ class CompetenciaFinalizada(DomainEvent):
     dns_count: int
     finalizada_en: str
     hash_sha256: str | None = None
+    origen: str = "automatico"
+    finalizada_por: str | None = None
 
     def to_payload(self) -> dict[str, Any]:
         """Serializa el evento a payload JSON-serializable para el Event Store."""
@@ -48,6 +52,8 @@ class CompetenciaFinalizada(DomainEvent):
             "dns_count": self.dns_count,
             "finalizada_en": self.finalizada_en,
             "hash_sha256": self.hash_sha256,
+            "origen": self.origen,
+            "finalizada_por": self.finalizada_por,
             "occurred_at": self.occurred_at.isoformat(),
         }
 
@@ -65,4 +71,6 @@ class CompetenciaFinalizada(DomainEvent):
             dns_count=payload["dns_count"],
             finalizada_en=payload["finalizada_en"],
             hash_sha256=payload.get("hash_sha256"),
+            origen=payload.get("origen", "automatico"),
+            finalizada_por=payload.get("finalizada_por"),
         )

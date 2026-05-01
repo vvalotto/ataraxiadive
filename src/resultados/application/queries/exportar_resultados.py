@@ -76,7 +76,7 @@ class ExportOverallEntradaDTO:
     atleta_nombre: str
     categoria: str
     club: str
-    puntos_totales: int
+    puntos_totales: Decimal
 
 
 @dataclass(frozen=True)
@@ -224,7 +224,7 @@ class ExportarResultadosHandler:
 
         ranking = RankingCompetencia.reconstitute(competencia_id, disciplina, events=[])
         try:
-            ranking.calcular(resultados, self._descriptor.describe(disciplina))
+            ranking.calcular(resultados)
         except ResultadosIncompletos:
             return []
 
@@ -251,7 +251,7 @@ class ExportarResultadosHandler:
                         atleta_nombre=atleta_info.nombre_completo,
                         categoria=grupo.categoria,
                         club=atleta_info.club,
-                        puntos_totales=entry.puntaje,
+                        puntos_totales=entry.puntos_overall,
                     )
                 )
         return filas

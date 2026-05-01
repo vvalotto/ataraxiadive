@@ -12,6 +12,8 @@ from identidad.domain.value_objects.rol import Rol
 _CREATE_TABLE = """
 CREATE TABLE IF NOT EXISTS usuarios (
     usuario_id    TEXT PRIMARY KEY,
+    nombre        TEXT NOT NULL DEFAULT '',
+    apellido      TEXT NOT NULL DEFAULT '',
     email         TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
     rol           TEXT NOT NULL,
@@ -26,6 +28,8 @@ class SQLiteUsuarioRepository(UsuarioRepositoryPort):
 
     async def _ensure_table(self, conn: aiosqlite.Connection) -> None:
         await conn.execute(_CREATE_TABLE)
+        await _ensure_column(conn, "nombre", "TEXT NOT NULL DEFAULT ''")
+        await _ensure_column(conn, "apellido", "TEXT NOT NULL DEFAULT ''")
         await conn.commit()
 
     async def save(self, usuario: Usuario) -> None:
@@ -34,11 +38,13 @@ class SQLiteUsuarioRepository(UsuarioRepositoryPort):
             await conn.execute(
                 """
                 INSERT OR REPLACE INTO usuarios
-                    (usuario_id, email, password_hash, rol, activo)
-                VALUES (?, ?, ?, ?, ?)
+                    (usuario_id, nombre, apellido, email, password_hash, rol, activo)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     str(usuario.usuario_id),
+                    usuario.nombre,
+                    usuario.apellido,
                     usuario.email,
                     usuario.password_hash,
                     usuario.rol.value,
@@ -51,7 +57,11 @@ class SQLiteUsuarioRepository(UsuarioRepositoryPort):
         async with aiosqlite.connect(self._db_path) as conn:
             await self._ensure_table(conn)
             async with conn.execute(
-                "SELECT usuario_id, email, password_hash, rol, activo FROM usuarios WHERE usuario_id = ?",
+                """
+                SELECT usuario_id, nombre, apellido, email, password_hash, rol, activo
+                FROM usuarios
+                WHERE usuario_id = ?
+                """,
                 (str(usuario_id),),
             ) as cursor:
                 row = await cursor.fetchone()
@@ -61,19 +71,59 @@ class SQLiteUsuarioRepository(UsuarioRepositoryPort):
         async with aiosqlite.connect(self._db_path) as conn:
             await self._ensure_table(conn)
             async with conn.execute(
-                "SELECT usuario_id, email, password_hash, rol, activo FROM usuarios WHERE email = ?",
+                """
+                SELECT usuario_id, nombre, apellido, email, password_hash, rol, activo
+                FROM usuarios
+                WHERE email = ?
+                """,
                 (email,),
             ) as cursor:
                 row = await cursor.fetchone()
         return _row_to_usuario(row) if row else None
 
+    async def list_by_rol(self, rol: Rol) -> list[Usuario]:
+        async with aiosqlite.connect(self._db_path) as conn:
+            await self._ensure_table(conn)
+            async with conn.execute(
+                """
+                SELECT usuario_id, nombre, apellido, email, password_hash, rol, activo
+                FROM usuarios
+                WHERE rol = ?
+                ORDER BY email
+                """,
+                (rol.value,),
+            ) as cursor:
+                rows = await cursor.fetchall()
+        return [_row_to_usuario(row) for row in rows]
+
+    async def list_all(self) -> list[Usuario]:
+        async with aiosqlite.connect(self._db_path) as conn:
+            await self._ensure_table(conn)
+            async with conn.execute("""
+                SELECT usuario_id, nombre, apellido, email, password_hash, rol, activo
+                FROM usuarios
+                ORDER BY rol, email
+                """) as cursor:
+                rows = await cursor.fetchall()
+        return [_row_to_usuario(row) for row in rows]
+
 
 def _row_to_usuario(row: tuple) -> Usuario:  # type: ignore[type-arg]
-    usuario_id, email, password_hash, rol, activo = row
+    usuario_id, nombre, apellido, email, password_hash, rol, activo = row
     return Usuario(
         usuario_id=UUID(usuario_id),
+        nombre=nombre,
+        apellido=apellido,
         email=email,
         password_hash=password_hash,
         rol=Rol(rol),
         activo=bool(activo),
     )
+
+
+async def _ensure_column(conn: aiosqlite.Connection, column: str, definition: str) -> None:
+    async with conn.execute("PRAGMA table_info(usuarios)") as cursor:
+        rows = await cursor.fetchall()
+    if any(row[1] == column for row in rows):
+        return
+    await conn.execute(f"ALTER TABLE usuarios ADD COLUMN {column} {definition}")

@@ -7,9 +7,17 @@ from uuid import UUID
 
 from competencia.domain.aggregates.competencia import Competencia
 from competencia.domain.aggregates.performance import Performance
+from competencia.domain.ports.atleta_nombre_port import AtletaNombrePort
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
+
+
+class _FallbackAtletaNombre(AtletaNombrePort):
+    """Implementación nula: retorna el ID parcial como nombre."""
+
+    async def get_nombre(self, atleta_id: UUID) -> str:
+        return f"Atleta-{str(atleta_id)[:8]}"
 
 
 @dataclass
@@ -42,8 +50,13 @@ class ObtenerProximasPerformancesHandler:  # pylint: disable=too-few-public-meth
         event_store: Puerto de lectura de eventos.
     """
 
-    def __init__(self, event_store: EventStorePort) -> None:
+    def __init__(
+        self,
+        event_store: EventStorePort,
+        atleta_nombre: AtletaNombrePort | None = None,
+    ) -> None:
         self._event_store = event_store
+        self._atleta_nombre = atleta_nombre or _FallbackAtletaNombre()
 
     async def handle(self, query: ObtenerProximasPerformancesQuery) -> list[ProximoAtletaDTO]:
         """Ejecuta la query y retorna los próximos atletas ordenados por posicion_grilla."""
@@ -64,10 +77,10 @@ class ObtenerProximasPerformancesHandler:  # pylint: disable=too-few-public-meth
         result = []
         for posicion_grilla, performance in candidatos[: query.limit]:
             ap = performance.ap
-            participante_id = str(performance.participante_id)
+            nombre = await self._atleta_nombre.get_nombre(performance.participante_id)
             result.append(
                 ProximoAtletaDTO(
-                    nombre_atleta=f"Atleta-{participante_id[:8]}",
+                    nombre_atleta=nombre,
                     ap_declarado=str(ap.valor) if ap else "",
                     unidad=ap.unidad.value if ap else "",
                     posicion=posicion_grilla,

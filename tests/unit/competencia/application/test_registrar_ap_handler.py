@@ -10,7 +10,7 @@ from uuid import uuid4
 import pytest
 
 from competencia.application.commands.registrar_ap import (
-    APYaRegistrado,
+    APNoModificableError,
     GrillaYaConfirmadaError,
     PlazoAPVencidoError,
     RegistrarAPCommand,
@@ -129,23 +129,78 @@ async def test_handle_stream_id_contiene_natural_key(
     assert "DNF" in stream_id
 
 
-# ── INV-P-02: AP ya registrado ────────────────────────────────────────────────
+# ── INV-P-02 actualizado: AP modificable mientras siga Anunciada ─────────────
 
 
-async def test_handle_ap_ya_registrado_lanza_excepcion(
+async def test_handle_ap_existente_actualiza_valor_mientras_sigue_anunciada(
     handler: RegistrarAPHandler,
     mock_event_store: AsyncMock,
     competencia_id: Any,
     participante_id: Any,
 ) -> None:
-    """INV-P-02: stream no vacío lanza APYaRegistrado."""
-    mock_event_store.load.return_value = [{"event_type": "APRegistrado", "payload": {}}]
+    """La spec de US-5.5.1 permite modificar AP si la performance sigue AnunciadaAP."""
+    performance_id = str(uuid4())
+    mock_event_store.load.return_value = [
+        {
+            "event_type": "APRegistrado",
+            "payload": {
+                "performance_id": performance_id,
+                "competencia_id": str(competencia_id),
+                "participante_id": str(participante_id),
+                "disciplina": Disciplina.STA.value,
+                "valor_ap": "330",
+                "unidad": UnidadMedida.Segundos.value,
+                "occurred_at": "2026-04-26T12:00:00+00:00",
+            },
+        }
+    ]
 
-    cmd = make_command(competencia_id, participante_id)
-    with pytest.raises(APYaRegistrado):
+    cmd = make_command(competencia_id, participante_id, valor="345")
+    result = await handler.handle(cmd)
+
+    assert str(result) == performance_id
+    assert mock_event_store.append.call_count == 1
+    assert mock_event_store.append.call_args.kwargs["event_type"] == "APRegistrado"
+
+
+async def test_handle_ap_no_modificable_si_la_performance_ya_avanzo(
+    handler: RegistrarAPHandler,
+    mock_event_store: AsyncMock,
+    competencia_id: Any,
+    participante_id: Any,
+) -> None:
+    """Si la performance ya fue llamada, el AP deja de ser editable."""
+    performance_id = str(uuid4())
+    mock_event_store.load.return_value = [
+        {
+            "event_type": "APRegistrado",
+            "payload": {
+                "performance_id": performance_id,
+                "competencia_id": str(competencia_id),
+                "participante_id": str(participante_id),
+                "disciplina": Disciplina.STA.value,
+                "valor_ap": "330",
+                "unidad": UnidadMedida.Segundos.value,
+                "occurred_at": "2026-04-26T12:00:00+00:00",
+            },
+        },
+        {
+            "event_type": "AtletaLlamado",
+            "payload": {
+                "performance_id": performance_id,
+                "participante_id": str(participante_id),
+                "disciplina": Disciplina.STA.value,
+                "ot_programado": "2026-04-26T12:05:00+00:00",
+                "posicion_grilla": 1,
+                "andarivel": 1,
+                "occurred_at": "2026-04-26T12:01:00+00:00",
+            },
+        },
+    ]
+
+    cmd = make_command(competencia_id, participante_id, valor="345")
+    with pytest.raises(APNoModificableError):
         await handler.handle(cmd)
-
-    mock_event_store.append.assert_not_called()
 
 
 # ── INV-P-03: plazo vencido ───────────────────────────────────────────────────

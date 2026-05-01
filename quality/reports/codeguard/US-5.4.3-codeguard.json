@@ -1,0 +1,30 @@
+{
+  "us_id": "US-5.4.3",
+  "date": "2026-04-24",
+  "scope": "recuperar contraseña (JWT + Resend) — BC Identidad",
+  "files_analyzed": [
+    "src/app.py",
+    "src/identidad/api/dependencies.py",
+    "src/identidad/api/router.py",
+    "src/identidad/application/commands/reset_password.py",
+    "src/identidad/application/commands/solicitar_reset_password.py",
+    "src/identidad/domain/exceptions.py",
+    "src/identidad/domain/ports/token_service_port.py",
+    "src/identidad/infrastructure/jwt_service.py"
+  ],
+  "checks": [
+    { "check": "Security", "result": "OK", "issues": 0 },
+    { "check": "PEP8",     "result": "OK (post-fix)", "issues": 0 },
+    { "check": "Complexity","result": "OK", "issues": 0 }
+  ],
+  "warnings_fixed": [
+    {
+      "file": "src/identidad/application/commands/solicitar_reset_password.py",
+      "lines": [39],
+      "rule": "E501 line too long",
+      "fix": "Expandir constructor Destinatario en múltiples líneas"
+    }
+  ],
+  "result": "PASS",
+  "notes": []
+}

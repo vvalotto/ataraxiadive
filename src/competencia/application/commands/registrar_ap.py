@@ -12,15 +12,23 @@ from competencia.application.commands._handler_utils import (
 )
 from competencia.application.commands.registrar_resultado import UnidadIncompatible
 from competencia.domain.aggregates.performance import Performance
+from competencia.domain.exceptions import DomainError
 from competencia.domain.ports.competencia_estado_port import CompetenciaEstadoPort
 from competencia.domain.ports.disciplina_descriptor_port import DisciplinaDescriptorPort
 from competencia.domain.ports.event_store_port import EventStorePort
 from competencia.domain.value_objects.disciplina import Disciplina
+from competencia.domain.value_objects.estado_performance import EstadoPerformance
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
 # ── Re-export para uso externo ─────────────────────────────────────────────────
 
-__all__ = ["UnidadIncompatible", "APYaRegistrado", "PlazoAPVencidoError", "GrillaYaConfirmadaError"]
+__all__ = [
+    "UnidadIncompatible",
+    "APYaRegistrado",
+    "PlazoAPVencidoError",
+    "GrillaYaConfirmadaError",
+    "APNoModificableError",
+]
 
 
 # ── Excepciones de aplicación ─────────────────────────────────────────────────
@@ -36,6 +44,10 @@ class PlazoAPVencidoError(Exception):
 
 class GrillaYaConfirmadaError(Exception):
     """INV-P-04: la grilla fue confirmada — no se permiten nuevos APs."""
+
+
+class APNoModificableError(DomainError):
+    """La performance ya avanzó y el AP no puede modificarse."""
 
 
 # ── Command ───────────────────────────────────────────────────────────────────
@@ -106,14 +118,7 @@ class RegistrarAPHandler:
         stream_id = build_performance_stream_id(
             command.competencia_id, command.participante_id, command.disciplina
         )
-        await self._validar_ap_duplicado(command, stream_id)
-        performance_id = uuid4()
-        performance = Performance(
-            performance_id=performance_id,
-            competencia_id=command.competencia_id,
-            participante_id=command.participante_id,
-            disciplina=command.disciplina,
-        )
+        performance = await self._cargar_o_crear_performance(command, stream_id)
         performance.registrar_ap(command.valor_ap, command.unidad)
         await persistir_eventos_pendientes(
             event_store=self._event_store,
@@ -121,7 +126,7 @@ class RegistrarAPHandler:
             aggregate=performance,
         )
 
-        return performance_id
+        return performance.performance_id
 
     def _validar_unidad(self, command: RegistrarAPCommand) -> None:
         descriptor = self._disciplina_descriptor.describe(command.disciplina)
@@ -146,14 +151,26 @@ class RegistrarAPHandler:
                 f"INV-P-04: grilla confirmada para competencia={command.competencia_id}"
             )
 
-    async def _validar_ap_duplicado(self, command: RegistrarAPCommand, stream_id: str) -> None:
+    async def _cargar_o_crear_performance(
+        self, command: RegistrarAPCommand, stream_id: str
+    ) -> Performance:
         existing_events = await self._event_store.load(stream_id)
-        if existing_events:
-            raise APYaRegistrado(
-                f"INV-P-02: ya existe un AP para participante={command.participante_id} "
-                f"disciplina={command.disciplina.value} "
-                f"competencia={command.competencia_id}"
+        if not existing_events:
+            return Performance(
+                performance_id=uuid4(),
+                competencia_id=command.competencia_id,
+                participante_id=command.participante_id,
+                disciplina=command.disciplina,
             )
+
+        performance = Performance.reconstitute(existing_events)
+        if performance.estado != EstadoPerformance.AnunciadaAP:
+            raise APNoModificableError(
+                f"El AP de participante={command.participante_id} para "
+                f"{command.disciplina.value} ya no puede modificarse"
+            )
+
+        return performance
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────

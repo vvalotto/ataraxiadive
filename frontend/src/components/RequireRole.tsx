@@ -2,15 +2,11 @@ import type { ReactNode } from 'react'
 import { Navigate } from 'react-router-dom'
 import useAuthStore from '../stores/useAuthStore'
 import type { RolUsuario } from '../types/auth'
+import { HOME_BY_ROL } from '../utils/auth'
 
 interface RequireRoleProps {
   role: RolUsuario
   children: ReactNode
-}
-
-const HOME_BY_ROL: Record<RolUsuario, string> = {
-  juez: '/juez/disciplinas',
-  organizador: '/organizador/dashboard',
 }
 
 export function RequireRole({ role, children }: RequireRoleProps) {

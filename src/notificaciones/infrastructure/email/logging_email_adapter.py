@@ -40,7 +40,9 @@ class LoggingEmailAdapter(EmailPort):
             contenido.asunto[:47],
             "".join(
                 f"║  {line:<57}║\n"
-                for line in (contenido.cuerpo_texto or contenido.cuerpo_html or "").splitlines()[:15]
+                for line in (contenido.cuerpo_texto or contenido.cuerpo_html or "").splitlines()[
+                    :15
+                ]
             ),
             provider_id,
         )

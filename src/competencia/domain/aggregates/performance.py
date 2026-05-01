@@ -13,6 +13,7 @@ from competencia.domain.aggregates.performance_events import (
     crear_atleta_llamado,
     crear_dns_registrado,
     crear_resultado_corregido,
+    crear_resultado_corregido_tras_dns,
     crear_resultado_registrado,
     crear_revision_resuelta,
     crear_tarjeta_asignada,
@@ -24,6 +25,7 @@ from competencia.domain.exceptions import (
     DistanciaBlackoutNoAplica,  # noqa: F401 - re-export por compatibilidad
     EstadoInvalidoParaAsignarTarjeta,
     EstadoInvalidoParaCorregirResultado,
+    EstadoInvalidoParaCorregirResultadoTrasDNS,
     EstadoInvalidoParaLlamar,
     EstadoInvalidoParaRegistrarDNS,
     EstadoInvalidoParaRegistrarResultado,
@@ -50,6 +52,7 @@ __all__ = [
     "DisciplinaNoAdmitePenalizaciones",
     "DistanciaBlackoutObligatoria",
     "DistanciaBlackoutNoAplica",
+    "EstadoInvalidoParaCorregirResultadoTrasDNS",
     "MotivoDQObligatorio",
     "PenalizacionesObligatorias",
 ]
@@ -348,6 +351,46 @@ class Performance(AggregateRoot):
             registrado_por=registrado_por,
         )
         self._aplicar_rp_final(RPFinal.desde_medicion(valor_rp, self._penalizaciones))
+        self._record(event)
+
+    def corregir_resultado_tras_dns(
+        self,
+        valor_rp: Decimal,
+        unidad: UnidadMedida,
+        registrado_por: str,
+        motivo_correccion: str,
+    ) -> None:
+        """Corrige un DNS registrado por error y registra el RP real del atleta.
+
+        Solo permitido desde estado DNS. Luego de la correccion la performance
+        vuelve al flujo normal en estado ResultadoRegistrado, lista para
+        AsignarTarjeta.
+        """
+        if self._estado != EstadoPerformance.DNS:
+            raise EstadoInvalidoParaCorregirResultadoTrasDNS(
+                f"Performance {self._performance_id} en estado {self._estado} "
+                "— solo se puede corregir resultado tras DNS desde DNS"
+            )
+        if valor_rp < 0:
+            raise ValueError("valor_rp debe ser mayor o igual a 0")
+        if not motivo_correccion.strip():
+            raise MotivoObligatorio(
+                "La corrección de resultado tras DNS requiere motivo obligatorio"
+            )
+
+        event = crear_resultado_corregido_tras_dns(
+            performance_id=self._performance_id,
+            participante_id=self._participante_id,
+            disciplina=self._disciplina,
+            valor_rp=valor_rp,
+            unidad=unidad,
+            registrado_por=registrado_por,
+            motivo_correccion=motivo_correccion.strip(),
+        )
+        self._rp = valor_rp
+        self._rp_medido = valor_rp
+        self._rp_penalizado = None
+        self._estado = EstadoPerformance.ResultadoRegistrado
         self._record(event)
 
     def asignar_tarjeta(

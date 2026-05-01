@@ -1,0 +1,49 @@
+{
+  "us_id": "US-ADJ-7.1",
+  "fecha": "2026-04-19T14:26:37-03:00",
+  "bc": "competencia",
+  "alcance": {
+    "criterio": "componentes modificados o agregados por la US",
+    "archivos_codeguard": [
+      "src/competencia/domain/events/resultado_corregido_tras_dns.py",
+      "src/competencia/domain/aggregates/performance_events.py",
+      "src/competencia/domain/exceptions.py",
+      "src/competencia/domain/aggregates/performance.py",
+      "src/competencia/domain/aggregates/performance_state.py",
+      "src/competencia/application/commands/corregir_resultado_tras_dns.py",
+      "src/competencia/api/router.py"
+    ],
+    "archivos_cobertura_us": [
+      "src/competencia/domain/events/resultado_corregido_tras_dns.py",
+      "src/competencia/domain/aggregates/performance_events.py",
+      "src/competencia/domain/exceptions.py",
+      "src/competencia/domain/aggregates/performance.py",
+      "src/competencia/domain/aggregates/performance_state.py",
+      "src/competencia/application/commands/corregir_resultado_tras_dns.py"
+    ]
+  },
+  "codeguard": {
+    "estado": "APROBADO",
+    "archivos_analizados": 7,
+    "checks_ejecutados": 6,
+    "issues_criticos": 0,
+    "errors": 0,
+    "warnings": 0,
+    "infos": 21,
+    "evidencia_raw": "quality/reports/codeguard/US-ADJ-7.1-codeguard-raw.json"
+  },
+  "coverage": {
+    "estado": "CON_WARNINGS",
+    "tests": "22 passed, 2 warnings pytest-bdd",
+    "porcentaje_total_domain_application": 73.85,
+    "porcentaje_archivos_us_no_api": 83.72,
+    "evidencia_raw": "quality/reports/codeguard/US-ADJ-7.1-coverage.json",
+    "observacion": "La cobertura total incluye modulos del BC fuera del alcance de la US. La cobertura por archivos tocados queda por debajo de 90% por deuda previa en Performance y replay state; los componentes nuevos quedan cubiertos por tests focalizados."
+  },
+  "estado_final": "CON_WARNINGS",
+  "observaciones": [
+    "CodeGuard acotado a componentes modificados/agregados no reporta errores ni warnings.",
+    "La suite focalizada de US-ADJ-7.1 pasa completa.",
+    "Las warnings de pytest provienen de pytest-bdd/gherkin y del tag no registrado @US-ADJ-7.1."
+  ]
+}

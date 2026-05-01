@@ -1,0 +1,152 @@
+{
+  "metadata": {
+    "us_id": "US-5.7.1",
+    "us_title": "Mis torneos inscriptos con estado actual",
+    "us_points": 3,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-30T11:05:12.341587+00:00",
+    "completed_at": "2026-04-30T11:13:02.608139+00:00",
+    "total_elapsed_seconds": 470,
+    "effective_seconds": 470,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-04-30T11:05:15.894408+00:00",
+      "completed_at": "2026-04-30T11:05:57.216143+00:00",
+      "elapsed_seconds": 41,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-30T11:06:02.461829+00:00",
+      "completed_at": "2026-04-30T11:06:28.181313+00:00",
+      "elapsed_seconds": 25,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-04-30T11:06:35.684545+00:00",
+      "completed_at": "2026-04-30T11:07:13.666166+00:00",
+      "elapsed_seconds": 37,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-04-30T11:07:46.148942+00:00",
+      "completed_at": "2026-04-30T11:08:35.567980+00:00",
+      "elapsed_seconds": 49,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Derivar y renderizar Mis torneos",
+          "task_type": "frontend",
+          "estimated_minutes": 55.0,
+          "started_at": "2026-04-30T11:07:50.889118+00:00",
+          "completed_at": "2026-04-30T11:08:31.919253+00:00",
+          "elapsed_seconds": 41,
+          "actual_minutes": 0.68,
+          "variance_minutes": -54.32,
+          "file_created": "frontend/src/pages/atleta/AtletaTorneosPage.tsx",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-30T11:08:41.492596+00:00",
+      "completed_at": "2026-04-30T11:08:54.937310+00:00",
+      "elapsed_seconds": 13,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-04-30T11:08:59.894516+00:00",
+      "completed_at": "2026-04-30T11:09:04.242814+00:00",
+      "elapsed_seconds": 4,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-04-30T11:09:08.057777+00:00",
+      "completed_at": "2026-04-30T11:09:13.482274+00:00",
+      "elapsed_seconds": 5,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-30T11:09:17.562391+00:00",
+      "completed_at": "2026-04-30T11:11:28.038560+00:00",
+      "elapsed_seconds": 130,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-04-30T11:11:34.201938+00:00",
+      "completed_at": "2026-04-30T11:11:52.716573+00:00",
+      "elapsed_seconds": 18,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-04-30T11:12:15.963376+00:00",
+      "completed_at": "2026-04-30T11:12:58.202689+00:00",
+      "elapsed_seconds": 42,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 1,
+    "completed_tasks": 1,
+    "total_phases": 10,
+    "estimated_total_minutes": 55.0,
+    "actual_total_minutes": 0.68,
+    "variance_minutes": -54.32,
+    "variance_percent": -98.76
+  }
+}

@@ -24,3 +24,15 @@ class DisciplinaNoDisponible(Exception):
 
 class PlazoCancelacionVencido(Exception):
     pass
+
+
+class DisciplinaNoInscripta(Exception):
+    pass
+
+
+class APIncompletoParaPreparacion(Exception):
+    pass
+
+
+class APYaDeclarado(Exception):
+    pass

@@ -8,6 +8,8 @@ interface LoginResponse {
 interface JwtPayload {
   sub: string
   email: string
+  nombre: string
+  apellido: string
   rol: RolUsuario
   [key: string]: unknown
 }

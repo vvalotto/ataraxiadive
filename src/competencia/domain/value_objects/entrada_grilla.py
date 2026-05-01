@@ -20,6 +20,7 @@ class EntradaGrilla:
         posicion: Número de orden en la grilla (1-based).
         andarivel: Carril asignado al atleta (1-based).
         ot_programado: Timestamp calculado del Official Top.
+        juez_id: Identificador del juez asignado a la performance, o None si aún no existe.
     """
 
     performance_id: UUID
@@ -27,3 +28,4 @@ class EntradaGrilla:
     posicion: int
     andarivel: int
     ot_programado: datetime
+    juez_id: str | None = None

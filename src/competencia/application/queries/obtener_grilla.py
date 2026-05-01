@@ -31,7 +31,10 @@ class EntradaGrillaDTO:
     ot_programado: str
     ap_declarado: str
     unidad: str
+    performance: str | None
     estado: str
+    tarjeta_asignada: str | None
+    juez_id: str | None
 
 
 @dataclass(frozen=True)  # pylint: disable=too-few-public-methods
@@ -76,7 +79,10 @@ class ObtenerGrillaHandler:
                 ot_programado=e.ot_programado.isoformat(),
                 ap_declarado=performance.ap_declarado,
                 unidad=performance.unidad,
+                performance=performance.performance,
                 estado=performance.estado,
+                tarjeta_asignada=performance.tarjeta_asignada,
+                juez_id=e.juez_id,
             )
             for e in competencia.grilla
             for performance in [
@@ -98,7 +104,9 @@ class ObtenerGrillaHandler:
                 nombre_atleta=nombre,
                 ap_declarado="",
                 unidad="",
+                performance=None,
                 estado="AnunciadaAP",
+                tarjeta_asignada=None,
             )
         performance = Performance.reconstitute(events)
         ap = performance.ap
@@ -106,7 +114,9 @@ class ObtenerGrillaHandler:
             nombre_atleta=nombre,
             ap_declarado=str(ap.valor) if ap else "",
             unidad=ap.unidad.value if ap else "",
+            performance=str(performance.rp) if performance.rp is not None else None,
             estado=performance.estado.value if performance.estado else "",
+            tarjeta_asignada=performance.tarjeta.value if performance.tarjeta else None,
         )
 
 
@@ -115,4 +125,6 @@ class _PerformanceProjection:
     nombre_atleta: str
     ap_declarado: str
     unidad: str
+    performance: str | None
     estado: str
+    tarjeta_asignada: str | None

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from decimal import Decimal
 from uuid import UUID
 
@@ -22,6 +22,7 @@ class EntradaRanking:
         tarjeta: Tipo de tarjeta asignada ("Blanca", "Amarilla", "Roja"). None para DNS.
         es_dns: True si el atleta no se presentó (Did Not Start).
         en_podio: True si la posición está en el podio (pos 1, 2 o 3).
+        puntos: Puntaje FAAS del atleta (INV-5.6.3-04). 0.00 para DNS/Roja o sin algoritmo.
     """
 
     posicion: int
@@ -32,3 +33,4 @@ class EntradaRanking:
     tarjeta: str | None
     es_dns: bool
     en_podio: bool
+    puntos: Decimal = field(default=Decimal("0.00"))

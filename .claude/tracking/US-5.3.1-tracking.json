@@ -1,0 +1,197 @@
+{
+  "metadata": {
+    "us_id": "US-5.3.1",
+    "us_title": "UI de gestion de usuarios",
+    "us_points": 3,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-04-23T13:47:26.163633+00:00",
+    "completed_at": "2026-04-24T11:47:33.465272+00:00",
+    "total_elapsed_seconds": 79207,
+    "effective_seconds": 79207,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-04-23T13:48:16.440916+00:00",
+      "completed_at": "2026-04-23T13:49:42.605869+00:00",
+      "elapsed_seconds": 86,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-04-23T13:50:41.933495+00:00",
+      "completed_at": "2026-04-23T13:51:02.998600+00:00",
+      "elapsed_seconds": 21,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-04-23T13:52:03.519440+00:00",
+      "completed_at": "2026-04-23T13:52:59.487758+00:00",
+      "elapsed_seconds": 55,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación Guiada por Tareas",
+      "started_at": "2026-04-23T13:53:22.774698+00:00",
+      "completed_at": "2026-04-23T13:55:50.442912+00:00",
+      "elapsed_seconds": 147,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Backend listado completo de usuarios",
+          "task_type": "backend",
+          "estimated_minutes": 55.0,
+          "started_at": "2026-04-23T13:53:33.822907+00:00",
+          "completed_at": "2026-04-23T13:53:48.667515+00:00",
+          "elapsed_seconds": 14,
+          "actual_minutes": 0.23,
+          "variance_minutes": -54.77,
+          "file_created": "src/identidad/api/router.py",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_002",
+          "task_name": "Cliente frontend identidad",
+          "task_type": "frontend",
+          "estimated_minutes": 25.0,
+          "started_at": "2026-04-23T13:53:51.873868+00:00",
+          "completed_at": "2026-04-23T13:54:07.105514+00:00",
+          "elapsed_seconds": 15,
+          "actual_minutes": 0.25,
+          "variance_minutes": -24.75,
+          "file_created": "frontend/src/api/identidad.ts",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_003",
+          "task_name": "Pagina gestion de usuarios",
+          "task_type": "frontend",
+          "estimated_minutes": 90.0,
+          "started_at": "2026-04-23T13:54:20.113364+00:00",
+          "completed_at": "2026-04-23T13:55:16.045197+00:00",
+          "elapsed_seconds": 55,
+          "actual_minutes": 0.92,
+          "variance_minutes": -89.08,
+          "file_created": "frontend/src/pages/organizador/UsuariosPage.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_004",
+          "task_name": "Routing y acceso organizador",
+          "task_type": "frontend",
+          "estimated_minutes": 30.0,
+          "started_at": "2026-04-23T13:55:19.000935+00:00",
+          "completed_at": "2026-04-23T13:55:33.864707+00:00",
+          "elapsed_seconds": 14,
+          "actual_minutes": 0.23,
+          "variance_minutes": -29.77,
+          "file_created": "frontend/src/App.tsx",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-04-23T13:55:55.211364+00:00",
+      "completed_at": "2026-04-23T13:56:35.493808+00:00",
+      "elapsed_seconds": 40,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_005",
+          "task_name": "Tests unitarios router usuarios",
+          "task_type": "test",
+          "estimated_minutes": 25.0,
+          "started_at": "2026-04-23T13:55:58.095154+00:00",
+          "completed_at": "2026-04-23T13:56:31.649884+00:00",
+          "elapsed_seconds": 33,
+          "actual_minutes": 0.55,
+          "variance_minutes": -24.45,
+          "file_created": "tests/unit/identidad/api/test_listar_usuarios.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-04-23T13:56:39.350835+00:00",
+      "completed_at": "2026-04-23T13:57:22.245423+00:00",
+      "elapsed_seconds": 42,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_006",
+          "task_name": "Test integracion repository list_all",
+          "task_type": "test",
+          "estimated_minutes": 20.0,
+          "started_at": "2026-04-23T13:56:42.444998+00:00",
+          "completed_at": "2026-04-23T13:57:12.455120+00:00",
+          "elapsed_seconds": 30,
+          "actual_minutes": 0.5,
+          "variance_minutes": -19.5,
+          "file_created": "tests/integration/identidad/test_sqlite_usuario_repository.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-04-23T13:57:27.003022+00:00",
+      "completed_at": "2026-04-23T13:57:37.498635+00:00",
+      "elapsed_seconds": 10,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-04-23T13:57:42.815238+00:00",
+      "completed_at": "2026-04-24T11:47:28.850112+00:00",
+      "elapsed_seconds": 78586,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 6,
+    "completed_tasks": 6,
+    "total_phases": 8,
+    "estimated_total_minutes": 245.0,
+    "actual_total_minutes": 2.68,
+    "variance_minutes": -242.32,
+    "variance_percent": -98.9
+  }
+}

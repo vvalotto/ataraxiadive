@@ -1,0 +1,473 @@
+{
+  "summary": {
+    "total_files": 7,
+    "checks_executed": 6,
+    "elapsed_seconds": 8.93,
+    "timestamp": "2026-04-19T14:26:25.931566",
+    "total_issues": 21,
+    "errors": 0,
+    "warnings": 0,
+    "infos": 21
+  },
+  "results": [
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/competencia/domain/events/resultado_corregido_tras_dns.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/competencia/domain/events/resultado_corregido_tras_dns.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/competencia/domain/events/resultado_corregido_tras_dns.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/competencia/domain/aggregates/performance_events.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/competencia/domain/aggregates/performance_events.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/competencia/domain/aggregates/performance_events.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/competencia/domain/exceptions.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/competencia/domain/exceptions.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/competencia/domain/exceptions.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/competencia/domain/aggregates/performance.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/competencia/domain/aggregates/performance.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/competencia/domain/aggregates/performance.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/competencia/domain/aggregates/performance_state.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/competencia/domain/aggregates/performance_state.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/competencia/domain/aggregates/performance_state.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/competencia/application/commands/corregir_resultado_tras_dns.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/competencia/application/commands/corregir_resultado_tras_dns.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/competencia/application/commands/corregir_resultado_tras_dns.py",
+      "line": null
+    },
+    {
+      "check": "Security",
+      "severity": "info",
+      "message": "✓ No security issues detected",
+      "file": "src/competencia/api/router.py",
+      "line": null
+    },
+    {
+      "check": "PEP8",
+      "severity": "info",
+      "message": "✓ PEP8 compliant",
+      "file": "src/competencia/api/router.py",
+      "line": null
+    },
+    {
+      "check": "Complexity",
+      "severity": "info",
+      "message": "✓ All functions below complexity threshold (≤10)",
+      "file": "src/competencia/api/router.py",
+      "line": null
+    }
+  ],
+  "by_severity": {
+    "errors": [],
+    "warnings": [],
+    "infos": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/events/resultado_corregido_tras_dns.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/events/resultado_corregido_tras_dns.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/events/resultado_corregido_tras_dns.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/aggregates/performance_events.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/aggregates/performance_events.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/aggregates/performance_events.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/exceptions.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/exceptions.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/exceptions.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/aggregates/performance.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/aggregates/performance.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/aggregates/performance.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/aggregates/performance_state.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/aggregates/performance_state.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/aggregates/performance_state.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/application/commands/corregir_resultado_tras_dns.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/application/commands/corregir_resultado_tras_dns.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/application/commands/corregir_resultado_tras_dns.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/api/router.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/api/router.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/api/router.py",
+        "line": null
+      }
+    ]
+  },
+  "by_package": {
+    "aggregates": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/aggregates/performance_events.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/aggregates/performance_events.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/aggregates/performance_events.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/aggregates/performance.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/aggregates/performance.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/aggregates/performance.py",
+        "line": null
+      },
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/aggregates/performance_state.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/aggregates/performance_state.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/aggregates/performance_state.py",
+        "line": null
+      }
+    ],
+    "api": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/api/router.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/api/router.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/api/router.py",
+        "line": null
+      }
+    ],
+    "commands": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/application/commands/corregir_resultado_tras_dns.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/application/commands/corregir_resultado_tras_dns.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/application/commands/corregir_resultado_tras_dns.py",
+        "line": null
+      }
+    ],
+    "domain": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/exceptions.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/exceptions.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/exceptions.py",
+        "line": null
+      }
+    ],
+    "events": [
+      {
+        "check": "Security",
+        "severity": "info",
+        "message": "✓ No security issues detected",
+        "file": "src/competencia/domain/events/resultado_corregido_tras_dns.py",
+        "line": null
+      },
+      {
+        "check": "PEP8",
+        "severity": "info",
+        "message": "✓ PEP8 compliant",
+        "file": "src/competencia/domain/events/resultado_corregido_tras_dns.py",
+        "line": null
+      },
+      {
+        "check": "Complexity",
+        "severity": "info",
+        "message": "✓ All functions below complexity threshold (≤10)",
+        "file": "src/competencia/domain/events/resultado_corregido_tras_dns.py",
+        "line": null
+      }
+    ]
+  }
+}

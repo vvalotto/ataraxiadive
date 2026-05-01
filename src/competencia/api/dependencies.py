@@ -1,4 +1,5 @@
 """Dependency providers de FastAPI para el BC Competencia."""
+
 from __future__ import annotations
 
 import os
@@ -113,7 +114,7 @@ def get_obtener_proximas_performances_handler(
     event_store: EventStoreDep,
 ) -> ObtenerProximasPerformancesHandler:
     """Dependency: handler de próximas performances."""
-    return ObtenerProximasPerformancesHandler(event_store)
+    return ObtenerProximasPerformancesHandler(event_store, AtletaNombreAdapter())
 
 
 def get_obtener_progreso_handler(
@@ -130,18 +131,14 @@ def get_configurar_intervalo_ot_handler(
     return ConfigurarIntervaloOTHandler(event_store)
 
 
-ObtenerEventosHandlerDep = Annotated[
-    ObtenerEventosHandler, Depends(get_obtener_eventos_handler)
-]
+ObtenerEventosHandlerDep = Annotated[ObtenerEventosHandler, Depends(get_obtener_eventos_handler)]
 ObtenerPerformanceActualHandlerDep = Annotated[
     ObtenerPerformanceActualHandler, Depends(get_obtener_performance_actual_handler)
 ]
 ObtenerProximasPerformancesHandlerDep = Annotated[
     ObtenerProximasPerformancesHandler, Depends(get_obtener_proximas_performances_handler)
 ]
-ObtenerProgresoHandlerDep = Annotated[
-    ObtenerProgresoHandler, Depends(get_obtener_progreso_handler)
-]
+ObtenerProgresoHandlerDep = Annotated[ObtenerProgresoHandler, Depends(get_obtener_progreso_handler)]
 ConfigurarIntervaloOTHandlerDep = Annotated[
     ConfigurarIntervaloOTHandler, Depends(get_configurar_intervalo_ot_handler)
 ]
@@ -164,7 +161,7 @@ def get_iniciar_competencia_handler(event_store: EventStoreDep) -> IniciarCompet
 
 def get_obtener_grilla_handler(event_store: EventStoreDep) -> ObtenerGrillaHandler:
     """Dependency: handler de consulta de la grilla."""
-    return ObtenerGrillaHandler(event_store)
+    return ObtenerGrillaHandler(event_store, AtletaNombreAdapter())
 
 
 def get_obtener_estado_competencia_handler(
@@ -174,18 +171,12 @@ def get_obtener_estado_competencia_handler(
     return ObtenerEstadoCompetenciaHandler(event_store)
 
 
-AjustarGrillaHandlerDep = Annotated[
-    AjustarGrillaHandler, Depends(get_ajustar_grilla_handler)
-]
-ConfirmarGrillaHandlerDep = Annotated[
-    ConfirmarGrillaHandler, Depends(get_confirmar_grilla_handler)
-]
+AjustarGrillaHandlerDep = Annotated[AjustarGrillaHandler, Depends(get_ajustar_grilla_handler)]
+ConfirmarGrillaHandlerDep = Annotated[ConfirmarGrillaHandler, Depends(get_confirmar_grilla_handler)]
 IniciarCompetenciaHandlerDep = Annotated[
     IniciarCompetenciaHandler, Depends(get_iniciar_competencia_handler)
 ]
-ObtenerGrillaHandlerDep = Annotated[
-    ObtenerGrillaHandler, Depends(get_obtener_grilla_handler)
-]
+ObtenerGrillaHandlerDep = Annotated[ObtenerGrillaHandler, Depends(get_obtener_grilla_handler)]
 ObtenerEstadoCompetenciaHandlerDep = Annotated[
     ObtenerEstadoCompetenciaHandler, Depends(get_obtener_estado_competencia_handler)
 ]

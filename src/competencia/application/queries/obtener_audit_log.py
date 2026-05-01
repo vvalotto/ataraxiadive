@@ -65,9 +65,7 @@ class ObtenerAuditLogHandler:  # pylint: disable=too-few-public-methods
 
         stream_id = raw_events[0]["stream_id"]
         eventos = [
-            self._to_evento_dto(event)
-            for event in raw_events
-            if event["stream_id"] == stream_id
+            self._to_evento_dto(event) for event in raw_events if event["stream_id"] == stream_id
         ]
         atleta_nombre = await self._atleta_nombre_port.get_nombre(query.atleta_id)
 

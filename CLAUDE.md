@@ -270,7 +270,7 @@ SP-ADJ (ajuste entre SPs)          → opcional, antes de cerrar la Baseline
 | SP1 | La Performance | BL-001 | `v0.2.0` | ✅ Cerrado 2026-03-24 |
 | SP2 | La Competencia | BL-002 | `v0.3.0` | ✅ Cerrado 2026-03-28 |
 | SP3 | El Torneo | BL-003 | `v0.4.0` | ✅ Cerrado 2026-04-04 |
-| SP4 | La Plataforma | BL-004 | `v0.5.0` | ⏳ Pendiente |
+| SP4 | La Plataforma | BL-004 | `v0.5.0` | ✅ Cerrado 2026-04-18 |
 | SP5 | La Puesta en Marcha | BL-005 | `v1.0.0` | ⏳ Pendiente |
 
 > **SP-ADJ:** sub-sprint de ajuste técnico o documental entre SPs. Se ejecuta antes de
@@ -444,11 +444,11 @@ Ver `docs/plans/sp-adj-02-code/PLAN-SP-ADJ-02-code.md` y `.work/revision-consist
 **SP-ADJ-05 — Ajuste Documental/Metodológico Post-BL-003 — ⏳ Diferido**
 
 Plan: `docs/plans/sp-adj-05/PLAN-SP-ADJ-05.md` — 5 US de poda metodológica (HITO-14).
-Diferido: SP4 se inició directamente después del tag `v0.4.0`. Se ejecutará como SP-ADJ-06 post-BL-004 si el scope sigue siendo relevante.
+Diferido: SP4 se inició directamente después del tag `v0.4.0`. Absorbido parcialmente en SP-ADJ-06.
 
 ---
 
-**SP4 — La Plataforma — ⏳ En progreso (BL-004 pendiente)**
+**SP4 — La Plataforma — ✅ COMPLETO (2026-04-18) — tag `v0.5.0`**
 
 | Incremento | Descripción | Estado |
 |-----------|-------------|--------|
@@ -456,15 +456,21 @@ Diferido: SP4 se inició directamente después del tag `v0.4.0`. Se ejecutará c
 | INC-4.1 — Correcciones dominio CMAS/FAAS | 8 US: motivos DQ, tarjeta blanca con penalizaciones, subdisciplinas SPE, orden grilla + 4 US técnicas (DesignReviewer) | ✅ 2026-04-08 — PR #65 |
 | INC-4.2 — Fundación Frontend | Vite 6 + React 19 + TypeScript strict + Tailwind v4 + PWA · autenticación JWT + rutas por rol | ✅ 2026-04-11 — PRs #67, #68 · DesignReviewer 0 CRITICAL, 142 WARNING |
 | INC-4.3 — Interfaz del Juez | 5 US: grilla de disciplinas, flujo 6 pasos, casos alternativos, tarjeta amarilla, adaptación STA · UAT con datos reales BA 2025 | ✅ 2026-04-12 — PRs #69–#75 · DesignReviewer 0 CRITICAL, 158 WARNING |
-| INC-4.4 — Offline-first | Service Worker + IndexedDB + Background Sync | ⏳ Pendiente |
-| INC-4.5 — BC Notificaciones | Aggregate Notificacion + email real + políticas P-10/P-11 | ⏳ Pendiente |
-| INC-4.6 — Auditoría y Exportación | Audit log UI + hash SHA-256 + exportación CSV/JSON | ⏳ Pendiente |
+| INC-4.4 — Offline-first | Service Worker + IndexedDB (Dexie.js) + Background Sync · UAT iPhone | ✅ 2026-04-18 — PR #77 · DesignReviewer 0 CRITICAL, 158 WARNING |
+| INC-4.5 — BC Notificaciones | Aggregate Notificacion + event store + email real Resend + políticas P-10/P-11 · UAT email real | ✅ 2026-04-18 — PRs #79–#83 · DesignReviewer 0 CRITICAL, 174 WARNING |
+| INC-4.6 — Auditoría y Exportación | Audit log UI + hash SHA-256 + exportación CSV/JSON · UAT iPad | ✅ 2026-04-18 — PRs #84–#89 |
+
+| SP-ADJ | Descripción | Estado |
+|--------|-------------|--------|
+| SP-ADJ-06 | 7 US: FAZ→FAAS (código+docs+tests), refactoring técnico, UAT SP4 + bugs BUG-SP4-001/002 + UX fixes | ✅ 2026-04-18 — PRs #90, #91 |
 
 | HITO | Descripción | Estado |
 |------|-------------|--------|
 | HITO-18 | UX design como incremento formal del SP — INC-4.0 | ✅ `docs/contexto/HITO-18-*.md` |
 | HITO-19 | Ajustes técnicos del DesignReviewer como US-IEDD dentro del INC (no como SP-ADJ) | ✅ `docs/contexto/HITO-19-*.md` |
 | HITO-20 | Invariantes de dominio que no cubren todas las variantes del deporte (STA, SPE) | ✅ `docs/contexto/HITO-20-*.md` |
+
+**ArchitectAnalyst BL-004:** `competencia` D=0.62 estable (no superó umbral 0.70) · `should_block=false`
 
 ---
 
@@ -532,7 +538,8 @@ Los dos no son excluyentes: un aprendizaje puede vivir en ambos si tiene valor a
 
 ---
 
-*Última actualización: 2026-04-13 — §14 actualizado: SP3 ✅ cerrado v0.4.0; SP-ADJ-05 diferido; SP4 en progreso (INC-4.0..4.3 ✅, HITOs 18–20)*
+*Última actualización: 2026-04-18 — §14 actualizado: SP4 ✅ cerrado v0.5.0 (INC-4.0..4.6 + SP-ADJ-06 · UAT PASS · BL-004); §9 SP4 marcado ✅*
+*2026-04-13 — §14 actualizado: SP3 ✅ cerrado v0.4.0; SP-ADJ-05 diferido; SP4 en progreso (INC-4.0..4.3 ✅, HITOs 18–20)*
 *2026-03-29 — §12 WORKFLOW-DESARROLLO.md como fuente autoritativa del workflow; §11 UAT post-SP agregado a quality gates*
 *2026-03-28 — SP-ADJ-02-doc: §14 actualizado (SP1+SP2+ADJ), §9 patrón SP-ADJ, §5 HITOs*
 *Mantenido por: Claude Cowork (decisiones estratégicas) + Claude Code (implementación)*

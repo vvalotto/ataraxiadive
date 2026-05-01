@@ -59,7 +59,15 @@ export default defineConfig(({ mode }) => {
           target: apiUrl,
           changeOrigin: true,
         },
+        '/registro': {
+          target: apiUrl,
+          changeOrigin: true,
+        },
         '/competencia': {
+          target: apiUrl,
+          changeOrigin: true,
+        },
+        '/resultados': {
           target: apiUrl,
           changeOrigin: true,
         },

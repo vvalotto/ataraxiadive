@@ -13,6 +13,7 @@ from torneo.domain.value_objects.disciplina_torneo import DisciplinaTorneo
 from torneo.domain.value_objects.entidad_organizadora import EntidadOrganizadora
 from torneo.domain.value_objects.estado_torneo import EstadoTorneo
 from torneo.domain.value_objects.sede import Sede
+from torneo.domain.value_objects.tipo_reglamento import TipoReglamento
 
 _CREATE_TABLE = """
 CREATE TABLE IF NOT EXISTS torneos (
@@ -24,12 +25,17 @@ CREATE TABLE IF NOT EXISTS torneos (
     sede               TEXT NOT NULL,
     entidad            TEXT NOT NULL,
     estado             TEXT NOT NULL,
-    disciplinas_torneo TEXT NOT NULL DEFAULT '[]'
+    disciplinas_torneo TEXT NOT NULL DEFAULT '[]',
+    tipo_reglamento    TEXT NOT NULL DEFAULT 'FAAS'
 )
 """
 
 _ADD_DISCIPLINAS_COLUMN = """
 ALTER TABLE torneos ADD COLUMN disciplinas_torneo TEXT NOT NULL DEFAULT '[]'
+"""
+
+_ADD_TIPO_REGLAMENTO_COLUMN = """
+ALTER TABLE torneos ADD COLUMN tipo_reglamento TEXT NOT NULL DEFAULT 'FAAS'
 """
 
 
@@ -39,11 +45,11 @@ class SQLiteTorneoRepository(TorneoRepositoryPort):
 
     async def _ensure_table(self, conn: aiosqlite.Connection) -> None:
         await conn.execute(_CREATE_TABLE)
-        # Migración: agregar columna si existe la tabla sin ella
-        try:
-            await conn.execute(_ADD_DISCIPLINAS_COLUMN)
-        except Exception:
-            pass  # La columna ya existe
+        for migration in (_ADD_DISCIPLINAS_COLUMN, _ADD_TIPO_REGLAMENTO_COLUMN):
+            try:
+                await conn.execute(migration)
+            except Exception:
+                pass  # columna ya existe
         await conn.commit()
 
     async def save(self, torneo: Torneo) -> None:
@@ -53,8 +59,8 @@ class SQLiteTorneoRepository(TorneoRepositoryPort):
                 """
                 INSERT OR REPLACE INTO torneos
                     (torneo_id, nombre, descripcion, fecha_inicio, fecha_fin,
-                     sede, entidad, estado, disciplinas_torneo)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     sede, entidad, estado, disciplinas_torneo, tipo_reglamento)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 self._torneo_to_row(torneo),
             )
@@ -91,9 +97,12 @@ class SQLiteTorneoRepository(TorneoRepositoryPort):
             entidad_organizadora=self._deserialize_entidad(row["entidad"]),
             estado=EstadoTorneo(row["estado"]),
             disciplinas_torneo=self._deserialize_disciplinas(row["disciplinas_torneo"]),
+            tipo_reglamento=TipoReglamento(row["tipo_reglamento"] or "FAAS"),
         )
 
-    def _torneo_to_row(self, torneo: Torneo) -> tuple[str, str, str, str, str, str, str, str, str]:
+    def _torneo_to_row(
+        self, torneo: Torneo
+    ) -> tuple[str, str, str, str, str, str, str, str, str, str]:
         return (
             str(torneo.torneo_id),
             torneo.nombre,
@@ -104,6 +113,7 @@ class SQLiteTorneoRepository(TorneoRepositoryPort):
             self._serialize_entidad(torneo.entidad_organizadora),
             torneo.estado.value,
             self._serialize_disciplinas(torneo.disciplinas_torneo),
+            torneo.tipo_reglamento.value,
         )
 
     @staticmethod

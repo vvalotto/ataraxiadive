@@ -11,6 +11,7 @@ import { usePrecarga } from '../../hooks/usePrecarga'
 import { JuezLayout } from '../../components/juez/JuezLayout'
 import useCompetenciaStore from '../../stores/useCompetenciaStore'
 import useConnectionStore from '../../stores/useConnectionStore'
+import useAuthStore from '../../stores/useAuthStore'
 
 type RowStatus = 'SIGUIENTE' | 'PENDIENTE' | 'EN_CURSO' | 'REVISION' | 'FINALIZADA'
 
@@ -81,6 +82,7 @@ export function GrillaPage() {
   const seleccionarAtleta = useCompetenciaStore((s) => s.seleccionarAtleta)
   const isOnline = useConnectionStore((s) => s.isOnline)
   const pendingCount = useConnectionStore((s) => s.pendingCount)
+  const juezId = useAuthStore((s) => s.userId)
 
   const precargaQuery = usePrecarga({
     competenciaId,
@@ -98,7 +100,9 @@ export function GrillaPage() {
   const { queueData, pendingByAtleta } = useGrillaQueue(competenciaId)
 
   const firstPendingPerformanceId = useMemo(() => {
-    const grillaBase = precargaQuery.payload?.grilla ?? []
+    const grillaBase = (precargaQuery.payload?.grilla ?? []).filter(
+      (atleta) => atleta.juez_id === juezId,
+    )
     const queue = queueData
     const grillaMap = new Map(grillaBase.map((atleta) => [atleta.atleta_id, { ...atleta }]))
 
@@ -118,7 +122,9 @@ export function GrillaPage() {
   }, [precargaQuery.payload?.grilla, queueData])
 
   const grillaOrdenada = useMemo(() => {
-    const grillaBase = precargaQuery.payload?.grilla ?? []
+    const grillaBase = (precargaQuery.payload?.grilla ?? []).filter(
+      (atleta) => atleta.juez_id === juezId,
+    )
     const queue = queueData
     const grillaMap = new Map(grillaBase.map((atleta) => [atleta.atleta_id, { ...atleta }]))
 
@@ -145,7 +151,7 @@ export function GrillaPage() {
       )
       return STATUS_ORDER[statusA] - STATUS_ORDER[statusB]
     })
-  }, [precargaQuery.payload?.grilla, queueData, performanceActualQuery.data, firstPendingPerformanceId])
+  }, [firstPendingPerformanceId, juezId, performanceActualQuery.data, precargaQuery.payload?.grilla, queueData])
 
   if (!competenciaId || !disciplinaActiva) {
     return (
@@ -257,6 +263,12 @@ export function GrillaPage() {
           </button>
         )
       })}
+
+      {!precargaQuery.isLoading && grillaOrdenada.length === 0 ? (
+        <section className="rounded-3xl border border-slate-800 bg-slate-900/70 p-5 text-sm text-slate-300">
+          No tienes atletas asignados en esta disciplina.
+        </section>
+      ) : null}
     </JuezLayout>
   )
 }
