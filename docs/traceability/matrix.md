@@ -1,5 +1,10 @@
 # Traceability Matrix — AtaraxiaDive
 
+> Estado documental: vigente  
+> Fuente de verdad para: trazabilidad RF → BC → incremento → US-IEDD · estados de implementación  
+> Última actualización: 2026-05-02  
+> Jerarquía de autoridad: [FUENTES-DE-VERDAD-DOCUMENTAL.md](../inventario/FUENTES-DE-VERDAD-DOCUMENTAL.md)
+
 | Campo | Valor |
 |-------|-------|
 | **Documento** | matrix.md |
@@ -23,6 +28,19 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
   del horizonte actual del proyecto.
 - Los RFs marcados como `parcial` tienen definición o soporte técnico previo,
   pero todavía no están expuestos como producto final en el incremento vigente.
+
+### Estados normalizados en esta matriz
+
+| Estado | Significado | Autoridad |
+|--------|------------|-----------|
+| **Planificado** | Existe intención en plan, sin especificación formal | Planes (docs/plans/) |
+| **Especificado** | Tiene US-IEDD con criterios de aceptación | US-IEDD en docs/specs/ |
+| **Implementado** | Código integrado en rama principal | Tests unitarios pass + revisión código |
+| **Validado** | Tests + UAT + baseline de cierre | Baselines (.cm/baselines/) |
+| `✅ definido` | Especificado (equivalente a "Especificado") | US-IEDD |
+| `✅ completado` / `✅ implementado` | Implementado + validado en SP cerrado | Baseline del SP |
+| `🟡` (naranja) | Especificado pero parcialmente implementado | US-IEDD + rama de trabajo |
+| `— fuera de alcance v1` | Planificado para SP futuro o descartado | Planes o decisión formal |
 
 ---
 
