@@ -179,7 +179,20 @@
       "Bash(uv run *)",
       "Bash(node -e \"const {loadEnv} = require\\('vite'\\); const e = loadEnv\\('development', '/Users/victor/PycharmProjects/ataraxiadive/frontend', ''\\); console.log\\('VITE_API_URL:', e.VITE_API_URL\\)\")",
       "Bash(designreviewer src/ --config pyproject.toml)",
-      "Bash(echo \"Exit code: $?\")"
+      "Bash(echo \"Exit code: $?\")",
+      "Bash(pkill -f \"uvicorn src.app:app\")",
+      "Bash(npm list *)",
+      "Bash(npm update *)",
+      "Bash(npm show *)",
+      "Bash(npm install *)",
+      "Bash(npx eslint *)",
+      "Bash(lsof -ti:8000)",
+      "Bash(xargs kill *)",
+      "Bash(lsof -ti:5173)",
+      "Bash(lsof -ti:8000,5173)",
+      "Bash(cat)",
+      "Bash(gh branch *)",
+      "Bash(xargs -I {} basename {})"
     ]
   }
 }

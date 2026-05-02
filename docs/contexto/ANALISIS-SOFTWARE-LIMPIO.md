@@ -1,5 +1,10 @@
 # Análisis: software_limpio y sus Sub-productos
 
+> Estado documental: histórico
+> Análisis técnico de dependencies externas realizado en Marzo 2026.
+> Conservado como evidencia del contexto de herramientas disponibles.
+> Fuente vigente relacionada: `pyproject.toml`, `frontend/package.json`
+
 **Fecha:** Marzo 2026
 **Versión analizada:** quality_agents v0.3.1
 
