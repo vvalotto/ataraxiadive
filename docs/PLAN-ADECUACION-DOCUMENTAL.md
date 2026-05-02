@@ -1,5 +1,9 @@
 # Plan de adecuación documental — AtaraxiaDive
 
+> Estado documental: vigente
+> Fuente de verdad para: estrategia de adecuación documental
+> Última actualización: 2026-05-02
+
 ## 1. Propósito del plan
 
 Este plan propone una estrategia de depuración documental para AtaraxiaDive, orientada a resolver inconsistencias entre lo documentado y lo implementado, reducir duplicaciones, aclarar el estado real del proyecto y presentar la información de la forma más simple posible.

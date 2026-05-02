@@ -1,5 +1,9 @@
 # Fuentes de verdad documental — AtaraxiaDive
 
+> Estado documental: vigente
+> Fuente de verdad para: jerarquía documental y autoridad por tema
+> Última actualización: 2026-05-02
+
 ## 1. Propósito
 
 Este documento corresponde a la Fase 2 del plan de adecuación documental. Define qué documento debe considerarse autoridad para cada tipo de información del proyecto y establece convenciones mínimas para distinguir documentación vigente, histórica, operativa, derivada y de evidencia.

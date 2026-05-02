@@ -1,5 +1,9 @@
 # Inventario documental — AtaraxiaDive
 
+> Estado documental: vigente
+> Fuente de verdad para: clasificación y auditoría inicial de documentación
+> Última actualización: 2026-05-02
+
 ## 1. Propósito
 
 Este inventario corresponde a la Fase 1 del plan de adecuación documental. Su objetivo es identificar los documentos principales del repositorio, clasificarlos según su función y vigencia, y registrar inconsistencias o duplicaciones iniciales que deberán resolverse en fases posteriores.
