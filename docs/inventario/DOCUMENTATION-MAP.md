@@ -46,7 +46,7 @@ Este documento corresponde a la Fase 3 del plan de adecuación documental. Su ob
 
 | Documento | Rol |
 |---|---|
-| `docs/contexto/PLAN-ADECUACION-DOCUMENTAL.md` | Plan general de depuración documental. |
+| `docs/PLAN-ADECUACION-DOCUMENTAL.md` | Plan general de depuración documental. |
 | `docs/inventario/INVENTARIO-DOCUMENTAL.md` | Inventario inicial y clasificación documental. |
 | `docs/inventario/FUENTES-DE-VERDAD-DOCUMENTAL.md` | Jerarquía documental y fuentes de verdad. |
 | `docs/DOCUMENTATION-MAP.md` | Mapa mínimo de navegación documental. |
