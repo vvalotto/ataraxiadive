@@ -94,8 +94,8 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-IN-02 | Brevet no obligatorio | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 | RF-IN-03 | Sin límite de atletas por torneo o disciplina | Registro | SP3 | 3.2 | US-3.2.3 | ✅ implementado |
 | RF-IN-04 | Cancelar inscripción hasta el día anterior | Registro | SP3 | 3.2 | US-3.2.3 | ✅ implementado |
-| RF-IN-05 | Apto médico como requisito de inscripción | Registro | SP5 | 5.4 | US-5.4.1 | 🟡 definido conceptualmente; exposición en producto pendiente en INC-5.4 |
-| RF-IN-06 | Constancia de pago como requisito | Registro | SP5 | 5.4 | US-5.4.1 | 🟡 definido conceptualmente; exposición en producto pendiente en INC-5.4 |
+| RF-IN-05 | Apto médico como requisito de inscripción | Registro | SP5 | 5.4 | US-5.4.1 | ⏳ Deuda técnica — UI implementado (frontend/src/pages/atleta/AtletaInscripcionPage.tsx step 3); persistencia backend pendiente. Evidencia: tests/features/US-5.5.1-inscripcion-atleta-ap.feature; docs/reports/US-5.5.1-report.md; docs/plans/sp5/US-5.5.1-implementation-notes.md; PRs #120–#122. Aceptación: adjuntos son validados en UI; almacenamiento backend pospuesto a SP6. |
+| RF-IN-06 | Constancia de pago como requisito | Registro | SP5 | 5.4 | US-5.4.1 | ⏳ Deuda técnica — UI implementado (frontend/src/pages/atleta/AtletaInscripcionPage.tsx step 3); persistencia backend pendiente. Evidencia: tests/features/US-5.5.1-inscripcion-atleta-ap.feature; docs/reports/US-5.5.1-report.md; docs/plans/sp5/US-5.5.1-implementation-notes.md; PRs #120–#122. Aceptación: adjuntos son validados en UI; almacenamiento backend pospuesto a SP6. |
 | RF-IN-07 | Conflicto de datos con BD FAAS | Registro | Futuro | — | — | — fuera de scope SP5/v1.0; depende de integración FAAS |
 | RF-IN-08 | Género solo para categorización — sin otro efecto | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 | RF-IN-09 | Atleta no puede cambiar categoría por disciplina | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
@@ -125,7 +125,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-EJ-01 | Más de un juez asignado a una disciplina | Identidad / Torneo | SP3 | 3.4 | US-3.4.x | ✅ definido |
 | RF-EJ-02 | DNS = descalificación inmediata, sin espera (P-07, INV-P-08) | Competencia | SP1 | 1.4 | US-P-05 | ✅ definido |
 | RF-EJ-03 | Tarjetas amarillas con penalizaciones configurables | Competencia | SP4 | 4.4 | US-4.4.x | ✅ definido |
-| RF-EJ-04 | Códigos de penalización (AIDA/CMAS) | Competencia | SP4 | 4.4 | US-4.4.x | ⏳ pendiente |
+| RF-EJ-04 | Códigos de penalización (AIDA/CMAS) | Competencia | SP4 | 4.4 | US-4.4.x | ✅ implementado — dominio: competencia/domain/value_objects/tipo_penalizacion.py; spec US-4.1.2 |
 | RF-EJ-05 | Cronometraje manual — juez ingresa el tiempo | Competencia | SP1 | 1.4 | US-P-03 | ✅ definido |
 | RF-EJ-06 | Corrección con ventana de impugnación (INV-P-15, HS-P2 ✅) | Competencia | SP4 | 4.4 | US-P-06 | ✅ definido |
 | RF-EJ-07 | Black-out registra el hecho y la distancia alcanzada | Competencia | SP1 | 1.4 | US-P-04 | ✅ definido |
@@ -190,7 +190,7 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 | RF | Descripción | Bloquea | Resolver antes de |
 |----|-------------|---------|-------------------|
 | RF-IN-07 | ¿Qué pasa si los datos del atleta difieren de la BD FAAS? | Futuro | Post-SP5 |
-| RF-EJ-04 | Códigos de penalización (AIDA/CMAS u otra federación) | Futuro | Post-SP5 |
+| RF-EJ-04 | Códigos de penalización (AIDA/CMAS u otra federación) | — | Resuelto (implementado) |
 | RF-NT-03 | ¿Juez u organizador reciben notificaciones durante ejecución? | Futuro | Post-SP5 |
 | RF-IG-01..04 | Integración completa con BD FAAS / exportación a rankings | Futuro | Post-SP5 |
 
