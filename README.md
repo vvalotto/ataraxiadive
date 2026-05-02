@@ -2,40 +2,25 @@
 
 Plataforma web para gestión de torneos de apnea (freediving).
 
-Repositorio del experimento IEDD + Software Limpio aplicado a un producto real.
+> **Inicio rápido:** Lee [CLAUDE.md](CLAUDE.md) para contexto operativo y decisiones del proyecto.  
+> **Navegación documental:** Consulta [Mapa de documentación](docs/inventario/DOCUMENTATION-MAP.md).
 
-## Estado del Proyecto
+## Estado Actual
 
 | Subproyecto | Tag | Estado |
-|-------------|-----|--------|
-| SP1 — La Performance | `v0.2.0` | ✅ Cerrado 2026-03-24 |
-| SP2 — La Competencia | `v0.3.0` | ✅ Cerrado 2026-03-28 |
-| SP3 — El Torneo | `v0.4.0` | ✅ Cerrado 2026-04-04 |
-| SP4 — La Plataforma | `v0.5.0` | ✅ Cerrado 2026-04-18 |
-| SP5 — La Puesta en Marcha | `v0.6.0` | ✅ Cerrado 2026-05-01 |
-| SP6 — Validación, Ajustes y Despliegue | `v1.0.0` | ⏳ Pendiente |
+|---|---|---|
+| SP1–SP5 (Fases 1-5) | v0.2.0–v0.6.0 | ✅ Completadas |
+| **SP6** (Validación, Ajustes, Despliegue) | v1.0.0 | ⏳ En definición |
 
-SP5 completó el ciclo funcional completo: portal del organizador, portal del atleta,
-algoritmo de puntaje FAAS, rankings por categoría/género con podios, inscripción
-con declaración de AP y resultados provisionales en tiempo real. Cerrado con tag `v0.6.0`.
-
-SP6 (próximo) se enfoca en validación funcional end-to-end, ajustes identificados
-durante el uso real y despliegue. Tag planificado: `v1.0.0`.
+**Última versión estable:** v0.6.0 (`main` branch) · SP5 completó ciclo funcional.  
+**Próxima entrega:** SP6 — validación funcional E2E, ajustes de defectos, despliegue.
 
 ## Stack
 
-- **Backend:** Python + FastAPI + SQLite (un archivo por Bounded Context)
-- **Frontend:** React 19 + TypeScript + Vite 6 + Tailwind v4 + PWA offline-first
-- **Arquitectura:** Hexagonal + Event Sourcing (BCs Competencia y Notificaciones)
-- **Tests:** pytest + pytest-bdd + Behave · cobertura ≥ 90% en domain/application
-
-## Documentación
-
-- [CLAUDE.md](CLAUDE.md) — memoria del proyecto, convenciones y estado actual
-- [Architecture Decision Records](docs/adr/)
-- [Arquitectura vigente](docs/architecture/)
-- [Trazabilidad RF → US](docs/traceability/matrix.md)
-- [Baselines y CM](.cm/baselines/)
+- **Backend:** Python + FastAPI · SQLite (modelo: BC por archivo)
+- **Frontend:** React 19 + TypeScript + Vite 6 + Tailwind v4 · PWA offline-first
+- **Arquitectura:** Hexagonal + Event Sourcing (Competencia, Notificaciones)
+- **Validación:** pytest + pytest-bdd · cobertura ≥ 90% (domain/ + application/)
 
 ## Desarrollo
 
@@ -51,3 +36,12 @@ pytest tests/unit/
 pytest tests/integration/
 pytest tests/features/
 ```
+
+## Documentación
+
+- [Contexto operativo y decisiones → CLAUDE.md](CLAUDE.md)
+- [Mapa de navegación documental](docs/inventario/DOCUMENTATION-MAP.md)
+- [Arquitectura vigente](docs/design/architecture.md)
+- [Decisiones arquitectónicas](docs/adr/)
+- [Trazabilidad RF → US](docs/traceability/matrix.md)
+- [Baselines y CM](.cm/baselines/)
