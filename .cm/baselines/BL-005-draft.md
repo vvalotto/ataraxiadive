@@ -1,14 +1,14 @@
-# BL-005 — Baseline La Puesta en Marcha (SP5) [DRAFT]
+# BL-005 — Baseline La Puesta en Marcha (SP5)
 
 | Campo | Valor |
 |-------|-------|
 | **Tipo** | Incremento mayor |
 | **Subproyecto** | SP5 — La Puesta en Marcha |
 | **Fecha apertura** | 2026-04-19 (post-tag v0.5.0) |
-| **Fecha cierre** | pendiente |
-| **Git tag** | pendiente — `v1.0.0` (planificado) |
-| **Branch base** | `develop` |
-| **Estado** | 🔄 En construcción |
+| **Fecha cierre** | 2026-05-01 |
+| **Git tag** | `v0.6.0` |
+| **Branch base** | `develop` → `main` |
+| **Estado** | 🔒 Cerrado |
 
 ---
 
@@ -102,7 +102,7 @@ gestionable desde el panel del organizador, con ejecución por disciplina y resu
 
 ---
 
-*2026-05-01 — INC-5.7 cerrado · INC-5.8 desestimado · ArchitectAnalyst BL-005 ejecutado (should_block=false) · métricas completadas · tag v0.6.0 pendiente*
+*2026-05-01 — BL-005 cerrado · tag v0.6.0 asignado · merge develop→main completado · CLAUDE.md §14 actualizado*
 *2026-04-29 — INC-5.6 cerrado (US-5.6.1..5.6.6 mergeadas · PRs #123–#128 · DesignReviewer 0 CRITICAL · 252 WARNING) · SP-ADJ-09 cerrado (US-ADJ-9.1..9.7 · PRs #129–#136)*
 *2026-04-26 — INC-5.5 cerrado (US-5.5.1..5.5.2 mergeadas + fix UAT · PRs #120, #121, #122 · DesignReviewer 0 CRITICAL · 227 WARNING · scope redefinido: portal atleta + AP)*
 *2026-04-23 — INC-5.3 cerrado (US-5.3.1..5.3.2 mergeadas · DesignReviewer 0 CRITICAL · 215 WARNING · nota: US-5.3.2 adelantó scope inscripción básica de INC-5.4)*
