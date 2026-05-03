@@ -65,16 +65,16 @@ const bkoPayload = {
 
 ### Tarea 2: Reordenar secuencia del flujo
 
-| | |
+| Concepto | Descripción |
 |---|---|
-| **Precondición** | Secuencia actual: RP → tarjeta → marca → confirmar |
-| **Postcondición** | Nueva secuencia: RP → **confirmar marca** → **asignar tarjeta** → confirmar |
-| **Invariante** | Una vez confirmada la marca, no puede cambiarse; la tarjeta se asigna después |
+| **Precondición** | Secuencia actual (Paso 4→5→6→7): Performance → **confirmar marca** → **asignar tarjeta** → revisión |
+| **Postcondición** | Nueva secuencia (Paso 4→5→6→7): Performance → **asignar tarjeta** → **confirmar marca** → revisión |
+| **Invariante** | Una vez asignada la tarjeta, se confirma la marca; ambos datos son definitivos al guardar |
 
 Cambios en `PerformanceFlowPage.tsx`:
-1. `step === 4` (confirmar marca) pasa a ser `step === 4`
-2. `step === 5` (asignar tarjeta) pasa a ser `step === 5`
-3. Swap: mover `StepMarca` antes que `StepTarjeta` en el flujo
+1. **Paso 5:** mover `StepTarjeta` (hoy en Paso 6)
+2. **Paso 6:** mover RpSelector + "CONFIRMAR MARCA" (hoy en Paso 5)
+3. El contenido de ambos pasos se intercambia — no cambia la lógica, solo el orden visual
 
 ### Tarea 3: Validación BKO en STA
 
@@ -104,16 +104,16 @@ Feature: US-6.1.1 — Fix BUG canSubmitBko + Secuencia tarjeta→marca
     Then el botón "Confirmar BKO" se habilita sin necesidad de ingresar distancia
     And la mutation envía { distancia_blackout: None, motivo_dq: "..." }
 
-  Scenario: Secuencia correcta: RP → confirmar marca → asignar tarjeta
+  Scenario: Secuencia correcta: Performance → asignar tarjeta → confirmar marca
     Given un flujo iniciado en una performance nueva
-    When el juez ingresa el RP y confirma la marca
-    Then se pasa a asignar tarjeta (paso 5)
-    And la marca no puede editarse de nuevo
+    When el juez termina la performance y asigna la tarjeta
+    Then se pasa a confirmar la marca / RP (paso 6)
+    And la tarjeta no puede editarse de nuevo
 
-  Scenario: Confirmar marca antes que tarjeta preserva datos
-    Given marca confirmada y tarjeta asignada
+  Scenario: Asignar tarjeta antes que marca preserva datos
+    Given tarjeta asignada y marca confirmada
     When se guarda la performance
-    Then el backend recibe { ..., rp: [confirmada], tarjeta: [asignada] } en orden correcto
+    Then el backend recibe { ..., tarjeta: [asignada], rp: [confirmada] } en orden correcto
 ```
 
 ---
