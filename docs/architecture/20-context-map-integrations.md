@@ -192,6 +192,15 @@ competencia como dato confiable.
 
 - evento `CompetenciaFinalizada`.
 
+**Mecanismo adicional (SP5 — ranking provisional):**
+
+`ObtenerRankingProvisionalHandler` lee `competencia.db` directamente cuando no
+existe ranking calculado en `resultados.db`. Esta lectura cross-BC queda
+contenida en infraestructura pero no pasa por un ACL formal: el handler accede
+al event store de `Competencia` para reconstituir performances en tiempo real y
+devolver un ranking provisional con `calculado=false`. Es una deuda técnica
+conocida respecto al patrón Customer-Supplier formal.
+
 **Datos que cruzan la frontera:**
 
 - disciplina;

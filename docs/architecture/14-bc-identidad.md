@@ -21,8 +21,9 @@ Incluye:
 - generación y verificación local de JWT;
 - relación upstream hacia otros bounded contexts.
 
-No detalla federación externa de identidad, recuperación de contraseña ni
-políticas avanzadas de autorización por recurso.
+No detalla federación externa de identidad ni políticas avanzadas de
+autorización por recurso. La funcionalidad de cambio de contraseña está
+implementada (`cambiar_password`) pero no se desarrolla aquí.
 
 ## Fuentes
 
@@ -228,6 +229,8 @@ El BC emite JWT con claims equivalentes a:
 
 - `sub`: `usuario_id`;
 - `email`;
+- `nombre`;
+- `apellido`;
 - `rol`;
 - `exp`.
 
