@@ -1,0 +1,14 @@
+{
+  "competition": "Apnea Indoor Buenos Aires 2025",
+  "source_dir": "data/datos_prueba",
+  "schedule_rows": 132,
+  "result_rows": 133,
+  "athlete_entries": 145,
+  "disciplines": [
+    "DBF",
+    "DNF",
+    "DYN",
+    "SPE",
+    "STA"
+  ]
+}

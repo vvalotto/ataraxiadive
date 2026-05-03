@@ -1,7 +1,12 @@
 # CLAUDE.md — AtaraxiaDive
 
-> Memoria operativa del proyecto. Leer antes de trabajar.
-> Experimento IEDD + Software Limpio — ver `docs/contexto/PLAN-EXPERIMENTO.md`.
+> Estado documental: vigente  
+> Fuente de verdad para: contexto operativo, decisiones y convenciones de trabajo  
+> Última actualización: 2026-05-02
+
+**Memoria operativa del proyecto.** Leer antes de trabajar.
+
+> **Navegación:** [Mapa documental](docs/inventario/DOCUMENTATION-MAP.md) · [Jerarquía de autoridad](docs/inventario/FUENTES-DE-VERDAD-DOCUMENTAL.md) · [Experimento IEDD](docs/contexto/PLAN-EXPERIMENTO.md)
 
 ---
 
@@ -179,5 +184,4 @@ memory/
 
 ---
 
-*Última actualización: 2026-05-01 — SP5 ✅ v0.6.0 · SP6 ⏳ definición · CLAUDE.md reescrito (reducción ~60%)*
-*Mantenido por: Claude Cowork (decisiones estratégicas) + Claude Code (implementación)*
+*Última actualización: 2026-05-02 — SP5 ✅ v0.6.0 · SP6 ⏳ definición*

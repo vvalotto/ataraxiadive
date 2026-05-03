@@ -1,5 +1,10 @@
 # Análisis e Integración: Claude Dev Kit en el Framework de Desarrollo con IA
 
+> Estado documental: histórico
+> Análisis técnico de integración realizado en Marzo 2026.
+> Conservado como evidencia del fundamento de la cadena de desarrollo automático.
+> Fuente vigente relacionada: `.claude/skills/implement-us/`, `docs/plans/WORKFLOW-DESARROLLO.md`
+
 **Fecha:** Marzo 2026
 **Contexto:** Integración de `claude-dev-kitc` v1.3.0 en el entorno de trabajo definido
 

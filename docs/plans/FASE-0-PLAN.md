@@ -1,5 +1,10 @@
 # Plan: Fase 0 — Diseño Estratégico
 
+> Estado documental: histórico
+> Conservado como evidencia de planificación inicial pre-SP1.
+> No usar como fuente de verdad para el ciclo de desarrollo actual.
+> Fuente vigente relacionada: `docs/plans/WORKFLOW-DESARROLLO.md`
+
 | Campo | Valor |
 |-------|-------|
 | **Fase** | 0 — Semana 0 / Arquitectura Estratégica |

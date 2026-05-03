@@ -1,5 +1,10 @@
 # Análisis: Ingeniería de Especificación Dirigida por el Dominio (IEDD)
 
+> Estado documental: histórico
+> Análisis metodológico de IEDD realizado en Fase 0.
+> Conservado como evidencia del fundamento teórico del experimento.
+> Fuente vigente relacionada: `docs/contexto/PLAN-EXPERIMENTO.md`, `docs/iedd/`
+
 **Fecha:** Marzo 2026
 **Documentos analizados:** 3 archivos — tesis central, marco de 5 capas, diagrama conceptual
 

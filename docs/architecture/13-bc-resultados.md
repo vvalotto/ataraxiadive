@@ -20,8 +20,8 @@ Incluye:
 - persistencia basada en stream de ranking;
 - integración de entrada desde `Competencia`.
 
-No detalla el futuro `OverallTorneo`, la publicación incremental completa ni el
-contrato externo de otros BCs consumidores.
+Este documento refleja la arquitectura hasta SP4. Las adiciones de SP5
+(ranking provisional, overall y exportación) están descritas al final del documento.
 
 ## Fuentes
 
@@ -256,3 +256,32 @@ La consulta HTTP no recalcula el ranking en runtime. En cambio:
   `ResultadosCalculados`.
 
 Esto mantiene separadas la fase de cálculo y la fase de lectura.
+
+---
+
+## Adiciones de SP5
+
+Los siguientes componentes fueron incorporados en SP5 y no están reflejados en
+el diagrama ni en las secciones anteriores.
+
+### Ranking provisional
+
+`ObtenerRankingProvisionalHandler` lee `competencia.db` directamente en tiempo
+real cuando aún no existe un `ResultadosCalculados` en `resultados.db`. El
+endpoint `GET /resultados/{competencia_id}/ranking` tiene un fallback que
+detecta `calculado=false` e invoca este handler.
+
+Esto introduce una lectura cross-BC fuera del ACL formal: el handler lee
+streams `performance-*` del event store de `Competencia` para construir un
+ranking provisional no persistido.
+
+### Overall y exportación
+
+`CalcularOverallHandler` y `ObtenerOverallHandler` calculan y exponen el
+ranking overall del torneo, accesible por `GET /resultados/{torneo_id}/overall`.
+
+`ExportarResultadosHandler` genera una exportación de resultados en CSV/JSON,
+accesible por `GET /resultados/{torneo_id}/export`.
+
+Estos handlers siguen la misma estructura hexagonal que los originales: puerto
+en dominio, handler en aplicación, adaptadores en infraestructura.

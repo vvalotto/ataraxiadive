@@ -1,5 +1,10 @@
 # Traceability Matrix — AtaraxiaDive
 
+> Estado documental: vigente  
+> Fuente de verdad para: trazabilidad RF → BC → incremento → US-IEDD · estados de implementación  
+> Última actualización: 2026-05-02  
+> Jerarquía de autoridad: [FUENTES-DE-VERDAD-DOCUMENTAL.md](../inventario/FUENTES-DE-VERDAD-DOCUMENTAL.md)
+
 | Campo | Valor |
 |-------|-------|
 | **Documento** | matrix.md |
@@ -23,6 +28,19 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
   del horizonte actual del proyecto.
 - Los RFs marcados como `parcial` tienen definición o soporte técnico previo,
   pero todavía no están expuestos como producto final en el incremento vigente.
+
+### Estados normalizados en esta matriz
+
+| Estado | Significado | Autoridad |
+|--------|------------|-----------|
+| **Planificado** | Existe intención en plan, sin especificación formal | Planes (docs/plans/) |
+| **Especificado** | Tiene US-IEDD con criterios de aceptación | US-IEDD en docs/specs/ |
+| **Implementado** | Código integrado en rama principal | Tests unitarios pass + revisión código |
+| **Validado** | Tests + UAT + baseline de cierre | Baselines (.cm/baselines/) |
+| `✅ definido` | Especificado (equivalente a "Especificado") | US-IEDD |
+| `✅ completado` / `✅ implementado` | Implementado + validado en SP cerrado | Baseline del SP |
+| `🟡` (naranja) | Especificado pero parcialmente implementado | US-IEDD + rama de trabajo |
+| `— fuera de alcance v1` | Planificado para SP futuro o descartado | Planes o decisión formal |
 
 ---
 
@@ -76,8 +94,8 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-IN-02 | Brevet no obligatorio | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 | RF-IN-03 | Sin límite de atletas por torneo o disciplina | Registro | SP3 | 3.2 | US-3.2.3 | ✅ implementado |
 | RF-IN-04 | Cancelar inscripción hasta el día anterior | Registro | SP3 | 3.2 | US-3.2.3 | ✅ implementado |
-| RF-IN-05 | Apto médico como requisito de inscripción | Registro | SP5 | 5.4 | US-5.4.1 | 🟡 definido conceptualmente; exposición en producto pendiente en INC-5.4 |
-| RF-IN-06 | Constancia de pago como requisito | Registro | SP5 | 5.4 | US-5.4.1 | 🟡 definido conceptualmente; exposición en producto pendiente en INC-5.4 |
+| RF-IN-05 | Apto médico como requisito de inscripción | Registro | SP5 | 5.4 | US-5.4.1 | ⏳ Deuda técnica — UI implementado (frontend/src/pages/atleta/AtletaInscripcionPage.tsx step 3); persistencia backend pendiente. Evidencia: tests/features/US-5.5.1-inscripcion-atleta-ap.feature; docs/reports/US-5.5.1-report.md; docs/plans/sp5/US-5.5.1-implementation-notes.md; PRs #120–#122. Aceptación: adjuntos son validados en UI; almacenamiento backend pospuesto a SP6. |
+| RF-IN-06 | Constancia de pago como requisito | Registro | SP5 | 5.4 | US-5.4.1 | ⏳ Deuda técnica — UI implementado (frontend/src/pages/atleta/AtletaInscripcionPage.tsx step 3); persistencia backend pendiente. Evidencia: tests/features/US-5.5.1-inscripcion-atleta-ap.feature; docs/reports/US-5.5.1-report.md; docs/plans/sp5/US-5.5.1-implementation-notes.md; PRs #120–#122. Aceptación: adjuntos son validados en UI; almacenamiento backend pospuesto a SP6. |
 | RF-IN-07 | Conflicto de datos con BD FAAS | Registro | Futuro | — | — | — fuera de scope SP5/v1.0; depende de integración FAAS |
 | RF-IN-08 | Género solo para categorización — sin otro efecto | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 | RF-IN-09 | Atleta no puede cambiar categoría por disciplina | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
@@ -107,7 +125,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-EJ-01 | Más de un juez asignado a una disciplina | Identidad / Torneo | SP3 | 3.4 | US-3.4.x | ✅ definido |
 | RF-EJ-02 | DNS = descalificación inmediata, sin espera (P-07, INV-P-08) | Competencia | SP1 | 1.4 | US-P-05 | ✅ definido |
 | RF-EJ-03 | Tarjetas amarillas con penalizaciones configurables | Competencia | SP4 | 4.4 | US-4.4.x | ✅ definido |
-| RF-EJ-04 | Códigos de penalización (AIDA/CMAS) | Competencia | SP4 | 4.4 | US-4.4.x | ⏳ pendiente |
+| RF-EJ-04 | Códigos de penalización (AIDA/CMAS) | Competencia | SP4 | 4.4 | US-4.4.x | ✅ implementado — dominio: competencia/domain/value_objects/tipo_penalizacion.py; spec US-4.1.2 |
 | RF-EJ-05 | Cronometraje manual — juez ingresa el tiempo | Competencia | SP1 | 1.4 | US-P-03 | ✅ definido |
 | RF-EJ-06 | Corrección con ventana de impugnación (INV-P-15, HS-P2 ✅) | Competencia | SP4 | 4.4 | US-P-06 | ✅ definido |
 | RF-EJ-07 | Black-out registra el hecho y la distancia alcanzada | Competencia | SP1 | 1.4 | US-P-04 | ✅ definido |
@@ -121,12 +139,12 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-PM-01 | Fórmula de puntos configurable por torneo (HS-19 ✅) | Resultados / Torneo | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.1..5.5.2 | 🟡 definido; algoritmo FAAS y exposición final pendientes en INC-5.5 |
-| RF-PM-02 | Overall = ranking general multi-disciplina por categoría | Resultados | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.4 | 🟡 base implementada; overall por categoría/género con puntos pendiente en INC-5.5 |
+| RF-PM-01 | Fórmula de puntos configurable por torneo (HS-19 ✅) | Resultados / Torneo | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.1..5.5.2 | ✅ completado (implementado en INC-5.6) |
+| RF-PM-02 | Overall = ranking general multi-disciplina por categoría | Resultados | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.4 | ✅ completado (implementado en INC-5.6) |
 | RF-PM-03 | Empates = mismo puesto y mismos puntos | Resultados | SP2 | 2.4 | US-2.4.2 | ✅ Implementado |
 | RF-PM-04 | Certificados/diplomas | — | — | — | — | — fuera de alcance v1 |
-| RF-PM-05 | Rankings por categoría y género | Resultados | SP-ADJ-04/SP5 | — / 5.5 | US-ADJ-4.5 / US-5.5.3..5.5.6 | 🟡 soporte parcial; rankings/podios por categoría y género como producto final pendientes en INC-5.5 |
-| RF-PM-06 | Publicación en plataforma + descarga | Resultados | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.5..5.5.6 | 🟡 definido; vistas finales tabla OT + podios pendientes en INC-5.5 |
+| RF-PM-05 | Rankings por categoría y género | Resultados | SP-ADJ-04/SP5 | — / 5.5 | US-ADJ-4.5 / US-5.5.3..5.5.6 | ✅ completado (implementado en INC-5.6) |
+| RF-PM-06 | Publicación en plataforma + descarga | Resultados | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.5..5.5.6 | ✅ completado (implementado en INC-5.7) |
 
 ---
 
@@ -172,7 +190,7 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 | RF | Descripción | Bloquea | Resolver antes de |
 |----|-------------|---------|-------------------|
 | RF-IN-07 | ¿Qué pasa si los datos del atleta difieren de la BD FAAS? | Futuro | Post-SP5 |
-| RF-EJ-04 | Códigos de penalización (AIDA/CMAS u otra federación) | Futuro | Post-SP5 |
+| RF-EJ-04 | Códigos de penalización (AIDA/CMAS u otra federación) | — | Resuelto (implementado) |
 | RF-NT-03 | ¿Juez u organizador reciben notificaciones durante ejecución? | Futuro | Post-SP5 |
 | RF-IG-01..04 | Integración completa con BD FAAS / exportación a rankings | Futuro | Post-SP5 |
 

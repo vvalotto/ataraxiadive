@@ -1,0 +1,2383 @@
+[
+  {
+    "discipline": "DBF",
+    "name": "Alejandro Alperin",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "115",
+    "official_slot": "11:31",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 1,
+        "result": "104,27",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Alina Di Lernia",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "90",
+    "official_slot": "10:56",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 3,
+        "result": "87,60",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Diego Calvo",
+    "category": "SENIOR",
+    "club": "BAJAU FREEDIVING",
+    "announced_performance": "75",
+    "official_slot": "10:35",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 12,
+        "result": "67,95",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Diego Martinez",
+    "category": "MASTER",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "50",
+    "official_slot": "10:07",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 4,
+        "result": "59,10",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Ezequiel Cuchiarelli",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "50",
+    "official_slot": "10:00",
+    "line": 1,
+    "results": []
+  },
+  {
+    "discipline": "DBF",
+    "name": "Guadalupe Fardi",
+    "category": "JUNIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "80",
+    "official_slot": "10:49",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": "78,52",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Hernán Fardi",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "80",
+    "official_slot": "10:49",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 2,
+        "result": "82,25",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Ignacio Saslavsky",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": "60",
+    "official_slot": "10:14",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 10,
+        "result": "79,38",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "José Clementi",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "100",
+    "official_slot": "11:10",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 3,
+        "result": "125,00",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "José Enjuto",
+    "category": "SENIOR",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "72",
+    "official_slot": "10:21",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 4,
+        "result": "111,07",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Juan Ignacio Catalano",
+    "category": "SENIOR",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "100",
+    "official_slot": "11:10",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 14,
+        "result": "24,10",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Karina Menchini",
+    "category": "SENIOR",
+    "club": "FREEDIVING SANTA TERESA",
+    "announced_performance": "100",
+    "official_slot": "11:17",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 2,
+        "result": "107,10",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Laura Iglesias",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "50",
+    "official_slot": "10:00",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 4,
+        "result": "64,10",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "María Laura Ortiz Fleury",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "90",
+    "official_slot": "10:56",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": "152,30",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "María de los Angeles Schneider",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "75",
+    "official_slot": "10:28",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 3,
+        "result": "100,00",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "María de los Milagros Montangie",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "75",
+    "official_slot": "10:35",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 5,
+        "result": "69,78",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Matias Gonzalez Courtois",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "75",
+    "official_slot": "10:28",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 11,
+        "result": "78,20",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Mauro Almada",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "60",
+    "official_slot": "10:14",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 8,
+        "result": "106,60",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Nicolas Stafforini",
+    "category": "SENIOR",
+    "club": "IAAS",
+    "announced_performance": "60",
+    "official_slot": "10:21",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 13,
+        "result": "61,13",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Nicolás Burgell",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "98",
+    "official_slot": "11:03",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 6,
+        "result": "109,70",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Nicolás Zimmermann",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": "105",
+    "official_slot": "11:24",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 9,
+        "result": "106,00",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Pablo De Celis",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "100",
+    "official_slot": "11:17",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 5,
+        "result": "110,90",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Pablo Durante",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "60",
+    "official_slot": "10:07",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 3,
+        "result": "66,60",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Pablo Sale",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "125",
+    "official_slot": "11:38",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 7,
+        "result": "109,18",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Sebastián Quintana",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "112",
+    "official_slot": "11:24",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 1,
+        "result": "140,00",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Shaojun Wang",
+    "category": "SENIOR",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "75",
+    "official_slot": "10:42",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 4,
+        "result": "79,15",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Silvia Maidana",
+    "category": "MASTER",
+    "club": "FREEDIVING PATAGONIA",
+    "announced_performance": "160",
+    "official_slot": "11:38",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": "110,46",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Thiago Stalldecker",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "120",
+    "official_slot": "11:31",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 2,
+        "result": "130,70",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Verónica Tufró",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "78",
+    "official_slot": "10:42",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 2,
+        "result": "102,20",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DBF",
+    "name": "Víctor Valotto",
+    "category": "MASTER",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "90",
+    "official_slot": "11:03",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 5,
+        "result": "52,40",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Alejandro Alperin",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "76",
+    "official_slot": "14:40",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 1,
+        "result": "79,75",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Alina Di Lernia",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "90",
+    "official_slot": "14:47",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 3,
+        "result": "43,80",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Diego Calvo",
+    "category": "SENIOR",
+    "club": "BAJAU FREEDIVING",
+    "announced_performance": "50",
+    "official_slot": "13:58",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 9,
+        "result": "43,30",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Diego Martinez",
+    "category": "MASTER",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "50",
+    "official_slot": "13:58",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 2,
+        "result": "63,15",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Ezequiel Cuchiarelli",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "25",
+    "official_slot": "13:30",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 4,
+        "result": "80,42",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Guadalupe Fardi",
+    "category": "JUNIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "35",
+    "official_slot": "13:37",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": "41,05",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Hernán Fardi",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "50",
+    "official_slot": "13:51",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 4,
+        "result": "54,12",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Ignacio Saslavsky",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": "50",
+    "official_slot": "14:05",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 6,
+        "result": "58,70",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "José Clementi",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "75",
+    "official_slot": "14:33",
+    "line": 1,
+    "results": []
+  },
+  {
+    "discipline": "DNF",
+    "name": "José Enjuto",
+    "category": "SENIOR",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "72",
+    "official_slot": "14:26",
+    "line": 1,
+    "results": []
+  },
+  {
+    "discipline": "DNF",
+    "name": "Juan Ignacio Catalano",
+    "category": "SENIOR",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "75",
+    "official_slot": "14:33",
+    "line": 2,
+    "results": []
+  },
+  {
+    "discipline": "DNF",
+    "name": "Karina Menchini",
+    "category": "SENIOR",
+    "club": "FREEDIVING SANTA TERESA",
+    "announced_performance": "100",
+    "official_slot": "14:47",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": "128,73",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Laura Iglesias",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "50",
+    "official_slot": "13:51",
+    "line": 1,
+    "results": []
+  },
+  {
+    "discipline": "DNF",
+    "name": "María Laura Ortiz Fleury",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "60",
+    "official_slot": "14:12",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 2,
+        "result": "92,00",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "María de los Angeles Schneider",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "50",
+    "official_slot": "13:44",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 3,
+        "result": "60,86",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Matias Gonzalez Courtois",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "50",
+    "official_slot": "13:44",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 7,
+        "result": "58,60",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Mauro Almada",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "60",
+    "official_slot": "14:19",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 2,
+        "result": "103,73",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Nicolas Stafforini",
+    "category": "SENIOR",
+    "club": "IAAS",
+    "announced_performance": "40",
+    "official_slot": "13:37",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 8,
+        "result": "43,96",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Nicolás Burgell",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "75",
+    "official_slot": "14:26",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 5,
+        "result": "80,40",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Nicolás Zimmermann",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": "70",
+    "official_slot": "14:19",
+    "line": 2,
+    "results": []
+  },
+  {
+    "discipline": "DNF",
+    "name": "Pablo De Celis",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "80",
+    "official_slot": "14:40",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 1,
+        "result": "126,32",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Pablo Sale",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "125",
+    "official_slot": "15:01",
+    "line": 1,
+    "results": []
+  },
+  {
+    "discipline": "DNF",
+    "name": "Sebastián Quintana",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "25",
+    "official_slot": "13:30",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 3,
+        "result": "85,20",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Silvia Maidana",
+    "category": "MASTER",
+    "club": "FREEDIVING PATAGONIA",
+    "announced_performance": "105",
+    "official_slot": "14:54",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": "95,50",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Thiago Stalldecker",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "110",
+    "official_slot": "14:54",
+    "line": 2,
+    "results": []
+  },
+  {
+    "discipline": "DNF",
+    "name": "Verónica Tufró",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "55",
+    "official_slot": "14:05",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 2,
+        "result": "58,25",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "DNF",
+    "name": "Víctor Valotto",
+    "category": "MASTER",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "60",
+    "official_slot": "14:12",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 3,
+        "result": "61,19",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Alejandro Alperin",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "115",
+    "official_slot": "16:30",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 1,
+        "result": "109,20",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Alina Di Lernia",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "100",
+    "official_slot": "16:16",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 3,
+        "result": "59,46",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Ezequiel Cuchiarelli",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "75",
+    "official_slot": "15:48",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 12,
+        "result": "17,70",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Guadalupe Fardi",
+    "category": "JUNIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "80",
+    "official_slot": "16:02",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": "76,20",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Hernán Fardi",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "80",
+    "official_slot": "16:02",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 3,
+        "result": "68,74",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Ignacio Saslavsky",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": "60",
+    "official_slot": "15:27",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 6,
+        "result": "93,75",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "José Clementi",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "100",
+    "official_slot": "16:09",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 5,
+        "result": "99,51",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "José Enjuto",
+    "category": "SENIOR",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "72",
+    "official_slot": "15:41",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 7,
+        "result": "84,20",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Juan Ignacio Catalano",
+    "category": "SENIOR",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "100",
+    "official_slot": "16:16",
+    "line": 1,
+    "results": []
+  },
+  {
+    "discipline": "DYN",
+    "name": "Karina Menchini",
+    "category": "SENIOR",
+    "club": "FREEDIVING SANTA TERESA",
+    "announced_performance": "125",
+    "official_slot": "16:37",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 4,
+        "result": "75,00",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "María Laura Ortiz Fleury",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "65",
+    "official_slot": "15:41",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": "105,00",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "María de los Angeles Schneider",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "75",
+    "official_slot": "15:48",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 3,
+        "result": "86,71",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "María de los Milagros Montangie",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "75",
+    "official_slot": "15:55",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 2,
+        "result": "100,00",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Matias Gonzalez Courtois",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "50",
+    "official_slot": "15:20",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 10,
+        "result": "64,20",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Mauro Almada",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "60",
+    "official_slot": "15:34",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 8,
+        "result": "80,15",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Nicolás Burgell",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "101",
+    "official_slot": "16:23",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 3,
+        "result": "103,84",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Nicolás Zimmermann",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": "105",
+    "official_slot": "16:30",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 2,
+        "result": "107,25",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Pablo De Celis",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "120",
+    "official_slot": "16:37",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": "113,12",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Pablo Durante",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "50",
+    "official_slot": "15:20",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 4,
+        "result": "50,00",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Pablo Sale",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "100",
+    "official_slot": "16:23",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 4,
+        "result": "100,00",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Raúl Urquiza",
+    "category": "MASTER",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "75",
+    "official_slot": "15:55",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 2,
+        "result": "82,00",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Sebastián Quintana",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "56",
+    "official_slot": "15:27",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 11,
+        "result": "55,50",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Silvia Maidana",
+    "category": "MASTER",
+    "club": "FREEDIVING PATAGONIA",
+    "announced_performance": "160",
+    "official_slot": "16:44",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": "101,75",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Thiago Stalldecker",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "95",
+    "official_slot": "16:09",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 9,
+        "result": "78,55",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "DYN",
+    "name": "Verónica Tufró",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "65",
+    "official_slot": "15:34",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 2,
+        "result": "63,94",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "discipline": "OVERALL",
+    "name": "Alejandro Alperin",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": null,
+    "official_slot": null,
+    "line": null,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 1,
+        "result": null,
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "OVERALL",
+    "name": "Alina Di Lernia",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": null,
+    "official_slot": null,
+    "line": null,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 2,
+        "result": null,
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "OVERALL",
+    "name": "Guadalupe Fardi",
+    "category": "JUNIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": null,
+    "official_slot": null,
+    "line": null,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": null,
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "OVERALL",
+    "name": "Hernán Fardi",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": null,
+    "official_slot": null,
+    "line": null,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 2,
+        "result": null,
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "OVERALL",
+    "name": "María Laura Ortiz Fleury",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": null,
+    "official_slot": null,
+    "line": null,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": null,
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "OVERALL",
+    "name": "María de los Angeles Schneider",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": null,
+    "official_slot": null,
+    "line": null,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 2,
+        "result": null,
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "OVERALL",
+    "name": "María de los Milagros Montangie",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": null,
+    "official_slot": null,
+    "line": null,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 3,
+        "result": null,
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "OVERALL",
+    "name": "Mauro Almada",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": null,
+    "official_slot": null,
+    "line": null,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 2,
+        "result": null,
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "OVERALL",
+    "name": "Nicolás Zimmermann",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": null,
+    "official_slot": null,
+    "line": null,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 3,
+        "result": null,
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "OVERALL",
+    "name": "Pablo De Celis",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": null,
+    "official_slot": null,
+    "line": null,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 1,
+        "result": null,
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "OVERALL",
+    "name": "Silvia Maidana",
+    "category": "MASTER",
+    "club": "FREEDIVING PATAGONIA",
+    "announced_performance": null,
+    "official_slot": null,
+    "line": null,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": null,
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "OVERALL",
+    "name": "Verónica Tufró",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": null,
+    "official_slot": null,
+    "line": null,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 3,
+        "result": null,
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "OVERALL",
+    "name": "Víctor Valotto",
+    "category": "MASTER",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": null,
+    "official_slot": null,
+    "line": null,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 3,
+        "result": null,
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "Alejandro Alperin",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "01:00",
+    "official_slot": "13:48",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 1,
+        "result": "00:59,00",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "Alina Di Lernia",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "01:45",
+    "official_slot": "13:13",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 3,
+        "result": "02:35,57",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "Diego Calvo",
+    "category": "SENIOR",
+    "club": "BAJAU FREEDIVING",
+    "announced_performance": "01:30",
+    "official_slot": "13:27",
+    "line": 1,
+    "results": []
+  },
+  {
+    "discipline": "SPE",
+    "name": "Ezequiel Cuchiarelli",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "02:00",
+    "official_slot": "12:59",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 7,
+        "result": "01:26,48",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "Guadalupe Fardi",
+    "category": "JUNIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "02:00",
+    "official_slot": "13:06",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": "02:29,39",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "Hernán Fardi",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "01:45",
+    "official_slot": "13:13",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 2,
+        "result": "01:46,73",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "José Clementi",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "01:40",
+    "official_slot": "13:20",
+    "line": 1,
+    "results": []
+  },
+  {
+    "discipline": "SPE",
+    "name": "José Enjuto",
+    "category": "SENIOR",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "03:00",
+    "official_slot": "12:45",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 8,
+        "result": "01:28,86",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "María Laura Ortiz Fleury",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "01:15",
+    "official_slot": "13:41",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": "01:40,88",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "María de los Angeles Schneider",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "02:15",
+    "official_slot": "12:52",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 2,
+        "result": "01:50,51",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "María de los Milagros Montangie",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "02:35",
+    "official_slot": "12:45",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 3,
+        "result": "01:55,28",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "Matias Gonzalez Courtois",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "02:00",
+    "official_slot": "12:59",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 10,
+        "result": "01:47,63",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "Mauro Almada",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "01:30",
+    "official_slot": "13:20",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 5,
+        "result": "01:14,66",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "Nicolás Burgell",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "01:30",
+    "official_slot": "13:27",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 9,
+        "result": "01:39,36",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "Nicolás Zimmermann",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": "01:05",
+    "official_slot": "13:41",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 2,
+        "result": "00:58,44",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "Pablo De Celis",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "00:58",
+    "official_slot": "13:48",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 1,
+        "result": "00:57,99",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "Pablo Sale",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "01:30",
+    "official_slot": "13:34",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 6,
+        "result": "01:18,74",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "Sebastián Quintana",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "00:50",
+    "official_slot": "13:55",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 4,
+        "result": "01:08,39",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "Shaojun Wang",
+    "category": "SENIOR",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "02:00",
+    "official_slot": "13:06",
+    "line": 1,
+    "results": []
+  },
+  {
+    "discipline": "SPE",
+    "name": "Silvia Maidana",
+    "category": "MASTER",
+    "club": "FREEDIVING PATAGONIA",
+    "announced_performance": "00:30",
+    "official_slot": "13:55",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": "01:14,32",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "Thiago Stalldecker",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "01:20",
+    "official_slot": "13:34",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 3,
+        "result": "01:05,35",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "SPE",
+    "name": "Verónica Tufró",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "02:10",
+    "official_slot": "12:52",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 2,
+        "result": "02:31,36",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Alejandro Alperin",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "04:01",
+    "official_slot": "13:07",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 2,
+        "result": "04:04.38",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Alina Di Lernia",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "04:00",
+    "official_slot": "12:59",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": "04:02.56",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Diego Calvo",
+    "category": "SENIOR",
+    "club": "BAJAU FREEDIVING",
+    "announced_performance": "05:30",
+    "official_slot": "13:15",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 7,
+        "result": "03:18.41",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Ezequiel Cuchiarelli",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "03:00",
+    "official_slot": "12:35",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 6,
+        "result": "03:32.50",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Guadalupe Fardi",
+    "category": "JUNIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "02:40",
+    "official_slot": "12:27",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": "03:16.29",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Hernán Fardi",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "04:00",
+    "official_slot": "12:59",
+    "line": 3,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 5,
+        "result": "02:55.84",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "José Clementi",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "03:30",
+    "official_slot": "12:51",
+    "line": 3,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 4,
+        "result": "05:19.70",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "José Enjuto",
+    "category": "SENIOR",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "02:00",
+    "official_slot": "12:00",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 1,
+        "result": "06:33.05",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Karina Menchini",
+    "category": "SENIOR",
+    "club": "FREEDIVING SANTA TERESA",
+    "announced_performance": "02:30",
+    "official_slot": "12:19",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 5,
+        "result": "02:11.72",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Laura Iglesias",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "04:00",
+    "official_slot": "12:59",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 2,
+        "result": "03:59.66",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "María Laura Ortiz Fleury",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "03:00",
+    "official_slot": "12:35",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 4,
+        "result": "02:12.86",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "María de los Angeles Schneider",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "02:30",
+    "official_slot": "12:19",
+    "line": 3,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 3,
+        "result": "03:18.45",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "María de los Milagros Montangie",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "03:00",
+    "official_slot": "12:43",
+    "line": 1,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 1,
+        "result": "04:37.14",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Matias Gonzalez Courtois",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "02:00",
+    "official_slot": "12:11",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 13,
+        "result": "02:01.74",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Mauro Almada",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "05:00",
+    "official_slot": "13:07",
+    "line": 3,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 2,
+        "result": "05:42.09",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Nicolas Stafforini",
+    "category": "SENIOR",
+    "club": "IAAS",
+    "announced_performance": "02:30",
+    "official_slot": "12:11",
+    "line": 3,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 8,
+        "result": "03:17.69",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Nicolás Burgell",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "03:30",
+    "official_slot": "12:51",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 9,
+        "result": "03:07.22",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Nicolás Zimmermann",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": "04:00",
+    "official_slot": "13:07",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 5,
+        "result": "05:04.52",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Pablo De Celis",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "03:30",
+    "official_slot": "12:51",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 10,
+        "result": "03:03.79",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Pablo Durante",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "02:00",
+    "official_slot": "12:11",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 4,
+        "result": "02:57.49",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Pablo Sale",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "00:30",
+    "official_slot": "12:00",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 3,
+        "result": "05:19.94",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Raúl Urquiza",
+    "category": "MASTER",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "03:00",
+    "official_slot": "12:43",
+    "line": 2,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 3,
+        "result": "03:39.62",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Sebastián Quintana",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "02:00",
+    "official_slot": "12:00",
+    "line": 3,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 11,
+        "result": "02:58.12",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Shaojun Wang",
+    "category": "SENIOR",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "03:00",
+    "official_slot": "12:35",
+    "line": 3,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 2,
+        "result": "03:45.94",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Silvia Maidana",
+    "category": "MASTER",
+    "club": "FREEDIVING PATAGONIA",
+    "announced_performance": "03:00",
+    "official_slot": "12:27",
+    "line": 2,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 3,
+        "result": "02:35.39",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Thiago Stalldecker",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "02:30",
+    "official_slot": "12:19",
+    "line": 1,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 12,
+        "result": "02:32.42",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Verónica Tufró",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "03:00",
+    "official_slot": "12:27",
+    "line": 3,
+    "results": [
+      {
+        "sex": "FEMENINO",
+        "rank": 4,
+        "result": "02:04.33",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "discipline": "STA",
+    "name": "Víctor Valotto",
+    "category": "MASTER",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "03:15",
+    "official_slot": "12:43",
+    "line": 3,
+    "results": [
+      {
+        "sex": "MASCULINO",
+        "rank": 1,
+        "result": "04:32.98",
+        "page": 1
+      }
+    ]
+  }
+]

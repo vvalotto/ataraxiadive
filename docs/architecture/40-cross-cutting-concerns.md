@@ -185,6 +185,38 @@ Esto deja una distinción importante:
 - **decisión arquitectónica aceptada**: logging estructurado;
 - **estado de implementación**: parcial o pendiente de adopción transversal.
 
+## Arquitectura frontend (SP4/SP5)
+
+La incorporación del frontend en SP4 introdujo preocupaciones transversales que
+no son exclusivas de un BC pero condicionan el sistema completo.
+
+**React PWA con Vite:**
+
+- SPA instalable como PWA (`vite-plugin-pwa`);
+- build estático servido independientemente del backend;
+- proxy Vite en desarrollo para `/api` y `/resultados` hacia FastAPI.
+
+**Portales por rol:**
+
+El frontend tiene tres portales diferenciados por `rol` del JWT:
+
+- `ORGANIZADOR`: gestión de torneos, competencias y grilla;
+- `JUEZ`: operación durante la competencia (tarjetas, OTs);
+- `ATLETA`: mis torneos, mi grilla, mis resultados, rankings (INC-5.7).
+
+La discriminación de portal ocurre en el frontend a partir del claim `rol` del
+JWT, sin consulta adicional al backend.
+
+**Preocupaciones transversales del frontend:**
+
+- el contrato JWT (especialmente `sub`, `rol`, `nombre`, `apellido`) es consumido
+  directamente por el frontend para rutas y vistas — cualquier cambio en claims
+  impacta la presentación;
+- el proxy Vite en desarrollo debe estar alineado con los prefijos de los routers
+  FastAPI — divergencia causa 404 silenciosos;
+- el build de producción es estático y no incluye variables de entorno de runtime
+  — la URL base del backend se fija en tiempo de build.
+
 ## Configuración por entorno
 
 Algunas decisiones transversales dependen de variables de entorno:
@@ -203,11 +235,12 @@ secretos o ubicaciones absolutas dentro del dominio.
 | Persistencia por BC | Un archivo SQLite por BC | Implementado |
 | Event Sourcing selectivo | Solo `Competencia` y `Notificaciones` | Parcialmente implementado |
 | Event store compartido | `shared.EventStorePort` + `SQLiteEventStore` | Implementado |
-| JWT cross-cutting | Claims locales consumidos por downstreams | Implementado |
+| JWT cross-cutting | Claims locales consumidos por downstreams y frontend | Implementado |
 | RFC 7807 | Convención estándar de errores HTTP | Parcialmente implementado |
 | Jerarquía de excepciones | `domain/exceptions.py` por BC | Parcialmente implementado |
 | Migraciones por BC | Un entorno de migración por contexto | Parcialmente implementado |
 | Logging estructurado | `structlog` | Mayormente pendiente |
+| Frontend PWA | React + Vite · portales por rol · proxy de desarrollo | Implementado (SP4/SP5) |
 
 ## Restricciones a preservar
 

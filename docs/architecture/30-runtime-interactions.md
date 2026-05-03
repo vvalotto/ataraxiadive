@@ -72,7 +72,7 @@ sequenceDiagram
 
     U->>BC_API: Request con Authorization: Bearer <token>
     BC_API->>JWT: verify(token)
-    JWT-->>BC_API: claims {sub, email, rol, exp}
+    JWT-->>BC_API: claims {sub, email, nombre, apellido, rol, exp}
     BC_API-->>U: operación autorizada o 401
 ```
 
@@ -252,6 +252,63 @@ Resumen de la naturaleza de las principales colaboraciones de runtime:
 | `Registro` | `Competencia` | Evento + ACL | Parcial / objetivo |
 | `Competencia` | `Resultados` | Evento / ACL de cierre | Parcialmente implementado |
 | BCs funcionales | `Notificaciones` | Evento asíncrono | Objetivo |
+
+## Escenario 6: ranking provisional (SP5)
+
+Este flujo muestra el comportamiento del endpoint de ranking cuando la competencia
+no ha cerrado aún y no existe un `ResultadosCalculados` en `resultados.db`.
+
+```mermaid
+sequenceDiagram
+    actor A as Atleta / Usuario
+    participant RES_API as Resultados API
+    participant RES_STORE as resultados.db
+    participant PROV as ObtenerRankingProvisionalHandler
+    participant COMP_DB as competencia.db
+
+    A->>RES_API: GET /resultados/{competencia_id}/ranking
+    RES_API->>RES_STORE: cargar stream ranking-{id}-{disciplina}
+    RES_STORE-->>RES_API: stream vacío (sin ResultadosCalculados)
+    RES_API->>PROV: handle(competencia_id, disciplina)
+    PROV->>COMP_DB: load_all_streams_with_prefix("performance-")
+    COMP_DB-->>PROV: streams de Performance
+    PROV-->>RES_API: ranking provisional (calculado=false)
+    RES_API-->>A: 200 OK con calculado=false
+```
+
+### Observaciones
+
+- Este flujo lee `competencia.db` directamente desde infraestructura de `Resultados`,
+  sin pasar por ACL formal.
+- Es una deuda técnica conocida: funcional pero fuera del patrón Customer-Supplier.
+- El campo `calculado=false` en la respuesta indica al cliente que el ranking es provisional.
+
+## Escenario 7: portal del atleta (SP5)
+
+El portal del atleta (INC-5.7) incorpora flujos que cruzan múltiples BCs.
+No se documentan como secuencias individuales aquí, pero los patrones de
+integración son los ya descritos en escenarios anteriores:
+
+- **Mis Torneos** (`AtletaTorneosPage`): consulta `Torneo` + verifica inscripción en `Registro`.
+- **Mi Grilla** (`AtletaMiGrillaPage`): consulta grilla en `Competencia`.
+- **Mis Resultados** (`AtletaResultadosPage`): consulta ranking en `Resultados` (provisional o calculado).
+- **Rankings y Podios** (`AtletaRankingCard`): consulta overall en `Resultados`.
+
+En todos los casos el frontend resuelve la identidad del atleta a partir del JWT
+(`sub`, `rol`) y no consulta a `Identidad` en runtime.
+
+## Tabla actualizada de dependencias síncronas y asíncronas
+
+| Origen | Destino | Tipo | Estado |
+|--------|---------|------|--------|
+| Usuario autenticado | `Identidad` | Síncrona HTTP | Implementado |
+| BC consumidor | `Identidad` claims | Verificación local JWT | Implementado |
+| `Registro` | `Torneo` | Lookup read-only vía ACL | Implementado |
+| `Registro` | `Competencia` | Evento + ACL | Parcial / objetivo |
+| `Competencia` | `Resultados` | Evento / ACL de cierre | Parcialmente implementado |
+| `Resultados` (provisional) | `Competencia` | Lectura directa event store | Implementado — deuda técnica |
+| BCs funcionales | `Notificaciones` | Evento asíncrono | Objetivo |
+| Frontend portal atleta | `Torneo`, `Registro`, `Competencia`, `Resultados` | Síncrona HTTP | Implementado (SP5) |
 
 ## Restricciones de runtime relevantes
 
