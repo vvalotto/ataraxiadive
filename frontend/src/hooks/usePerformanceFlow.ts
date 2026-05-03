@@ -46,7 +46,6 @@ export function usePerformanceFlow() {
   const [chronoStarted, setChronoStarted] = useState(false)
   const [selectedCard, setSelectedCard] = useState<TarjetaSeleccionada>(null)
   const [motivoDq, setMotivoDq] = useState('')
-  const [distanciaBlackout, setDistanciaBlackout] = useState('')
   const [penalizaciones, setPenalizaciones] = useState<PenalizacionPayload[]>([])
   const [isBkoMode, setIsBkoMode] = useState(false)
   const [completed, setCompleted] = useState(false)
@@ -191,7 +190,7 @@ export function usePerformanceFlow() {
 
   const resultadoMutation = useMutation({
     mutationFn: async () => {
-      return ejecutar(
+      const resultado = await ejecutar(
         'resultado',
         competenciaId!,
         {
@@ -209,14 +208,71 @@ export function usePerformanceFlow() {
             unidad: atletaActivo!.unidad || 'Metros',
           }),
       )
+      const tarjeta = await ejecutar(
+        'tarjeta',
+        competenciaId!,
+        {
+          participante_id: atletaActivo!.atletaId,
+          disciplina: disciplinaActiva!,
+          tarjeta: selectedCard!,
+          motivo_texto: selectedCard === 'Amarilla' ? 'Revision pendiente del juez' : undefined,
+          motivo_dq: selectedCard === 'Roja' ? motivoDq : undefined,
+          distancia_blackout:
+            selectedCard === 'Roja' && needsBlackoutDistance
+              ? buildRpValue(metros, centimetros)
+              : undefined,
+          penalizaciones: selectedCard === 'BlancaConPenalizaciones' ? penalizaciones : [],
+        },
+        () =>
+          asignarTarjeta({
+            competenciaId: competenciaId!,
+            participanteId: atletaActivo!.atletaId,
+            disciplina: disciplinaActiva!,
+            tarjeta: selectedCard!,
+            motivoTexto: selectedCard === 'Amarilla' ? 'Revision pendiente del juez' : undefined,
+            motivoDq: selectedCard === 'Roja' ? motivoDq : undefined,
+            distanciaBlackout:
+              selectedCard === 'Roja' && needsBlackoutDistance
+                ? buildRpValue(metros, centimetros)
+                : undefined,
+            penalizaciones: selectedCard === 'BlancaConPenalizaciones' ? penalizaciones : [],
+          }),
+      )
+      return { encolado: resultado.encolado || tarjeta.encolado }
     },
     onSuccess: async (result) => {
-      setInlineError(null)
-      if (!result.encolado) {
-        await refreshCompetencia()
+      if (result.encolado) {
+        setInlineError(null)
+        if (selectedCard === 'Amarilla') {
+          seleccionarAtleta({ ...atletaActivo!, estado: 'EnRevision' })
+          setResultKind('AMARILLA')
+          setCompleted(false)
+          setStep(7)
+          return
+        }
+        seleccionarAtleta({ ...atletaActivo!, estado: 'Ejecutada' })
+        setResultKind(
+          selectedCard === 'Roja'
+            ? 'ROJA'
+            : selectedCard === 'BlancaConPenalizaciones'
+              ? 'BLANCA_CON_PENALIZACIONES'
+              : 'BLANCA',
+        )
+        setCompleted(true)
+        return
       }
-      seleccionarAtleta({ ...atletaActivo!, estado: 'ResultadoRegistrado' })
-      setStep(6)
+      if (selectedCard === 'Amarilla') {
+        await finalizeResult('AMARILLA', 'EnRevision')
+        setStep(7)
+        return
+      }
+      const kind =
+        selectedCard === 'Roja'
+          ? 'ROJA'
+          : selectedCard === 'BlancaConPenalizaciones'
+            ? 'BLANCA_CON_PENALIZACIONES'
+            : 'BLANCA'
+      await finalizeResult(kind, 'Ejecutada')
     },
     onError: (error) => {
       setInlineError(error instanceof Error ? error.message : 'No se pudo registrar la marca')
@@ -404,7 +460,6 @@ export function usePerformanceFlow() {
     chronoStarted, setChronoStarted,
     selectedCard, setSelectedCard,
     motivoDq, setMotivoDq,
-    distanciaBlackout, setDistanciaBlackout,
     penalizaciones, setPenalizaciones,
     isBkoMode, setIsBkoMode,
     completed,
