@@ -489,6 +489,80 @@ correcciones UX detectadas en UAT. 5 USs implementadas.
 
 ---
 
+#### ───────────────────────────────────────────
+#### SP6 — Validación, Ajustes y Despliegue  ⏳  `v1.0.0`
+
+> **Objetivo:** cerrar el ciclo v1.0. Corregir defectos y mejoras UX identificados en validación SP5,
+> resolver deuda técnica crítica, ejecutar UAT completo con los tres roles y desplegar en producción.
+>
+> **Demo del SP:** torneo completo con los 3 roles (organizador, juez, atleta) sin bloqueos;
+> `v1.0.0` publicado y accesible en producción.
+
+##### INC-6.1 — Ajustes Juez  ⏳
+**DoD:** BUG MUX-04 corregido y verificado en móvil; flujo de 6 pasos con secuencia correcta tarjeta→marca;
+colores de tarjeta, grilla ordenada por estado y todos los ajustes UX del juez aplicados.
+
+| US | Descripción | Hallazgos |
+|----|-------------|-----------|
+| US-6.1.1 | Fix BUG canSubmitBko + corrección secuencia tarjeta→marca | MUX-04 + UI-JUE-02 |
+| US-6.1.2 | Colores tarjeta + pantalla completada según resultado | MUX-02 + MUX-05 |
+| US-6.1.3 | Grilla ordenada por estado + keypad visible en móvil | MUX-03 + MUX-01 |
+| US-6.1.4 | Rediseño inicio juez + STA mm:ss + tarjeta amarilla | UI-JUE-01 + MUX-08 + MUX-07 |
+| US-6.1.5 | AtletaCard compacta en paso 5 | MUX-06 |
+
+##### INC-6.2 — Ajustes Organizador  ⏳
+**DoD:** portal organizador con torneos ordenados por fecha, columnas renombradas, nueva página de Podios
+separada de Resultados, y formulario de nuevo torneo con categorías.
+
+| US | Descripción | Hallazgos |
+|----|-------------|-----------|
+| US-6.2.1 | Inicio: ordenar torneos por fecha + mostrar fecha | UI-ORG-01 |
+| US-6.2.2 | Inscriptos + Grilla: renombrar columnas AP→Anuncios + categoría legible | UI-ORG-03 + UI-ORG-04 |
+| US-6.2.3 | Resultados: reordenar contenido + quitar PTS FAAS + andarivel | UI-ORG-05 |
+| US-6.2.4 | Panel torneo: alertas sin "Resolver" + jueces sin texto nombre | UI-ORG-02 + UI-ORG-06 |
+| US-6.2.5 | Nuevo torneo: selección categorías JUNIOR/SENIOR/MASTER | UI-ORG-07 |
+| US-6.2.6 | Crear página de Podios | UI-ORG-08 |
+
+##### INC-6.3 — Ajustes Atleta  ⏳
+**DoD:** portal atleta con UX corregida; inscripción incluye declaración de AP; backend persiste
+apto médico y constancia de pago.
+
+| US | Descripción | Hallazgos |
+|----|-------------|-----------|
+| US-6.3.1 | Inicio atleta: en línea en header + sin "Hola" + torneos en curso ordenados | UI-ATL-01 |
+| US-6.3.2 | Inscripción: declarar AP en formulario | UI-ATL-02 |
+| US-6.3.3 | Backend inscripción: persistir apto médico | RF-IN-05 |
+| US-6.3.4 | Backend inscripción: persistir constancia de pago | RF-IN-06 |
+
+##### INC-6.4 — Deuda Técnica Sistema  ⏳
+**DoD:** ciclo ADP en `competencia/domain/aggregates` eliminado; proyección `competencias_por_torneo`
+materializada; violación D-05 corregida en routers; refactoring FAAS e Inscripción aplicados.
+
+| US | Descripción | Hallazgos |
+|----|-------------|-----------|
+| US-6.4.1 | Romper ciclo ADP en `competencia/domain/aggregates` | AA-01 |
+| US-6.4.2 | Materializar proyección `competencias_por_torneo` (O(n) → O(1)) | ARCH-01 |
+| US-6.4.3 | Corregir violación hexagonal D-05 (routers → composition root) + reducir `registro` D↑ | ARCH-02 + AA-03 |
+| US-6.4.4 | Refactoring `AlgoritmoPuntajeFAAS` dispatch por TipoDisciplina + black/lint | DR-02 + CG-01/03/04/05 |
+| US-6.4.5 | Refactoring `DeclararAPInscripcionHandler` + `SQLiteInscripcionRepository` | DR-06 + DR-07 |
+| US-6.4.6 | Decisión formal ARCH-03 + SRP `RankingCompetencia` + monitoreo `identidad`/`shared` | ARCH-03 + DR-01 + AA-02 + AA-04 |
+
+##### INC-6.5 — Validación E2E + Despliegue  ⏳
+**DoD:** UAT completo con los 3 roles sin bloqueos críticos; entorno productivo configurado y accesible;
+`v1.0.0` tageado en `main` con ArchitectAnalyst BL-006 `should_block=false`.
+
+| US | Descripción |
+|----|-------------|
+| US-6.5.1 | UAT E2E rol Juez — flujo completo de competencia con datos reales |
+| US-6.5.2 | UAT E2E rol Organizador — ciclo completo torneo → grilla → resultados |
+| US-6.5.3 | UAT E2E rol Atleta — inscripción → AP → consulta resultados |
+| US-6.5.4 | Configuración entorno productivo (servidor, SSL, dominio, backup) |
+| US-6.5.5 | Despliegue `v1.0.0` + tag BL-006 + ArchitectAnalyst final |
+
+**Hito SP6:** `BL-006` · tag `v1.0.0` · ⏳ pendiente
+
+---
+
 ## 3. Tabla de Hitos y Baselines
 
 | Hito | Descripción | Tag git | Fecha | Estado |
@@ -512,7 +586,8 @@ correcciones UX detectadas en UAT. 5 USs implementadas.
 | SP2 | La Competencia | BC Competencia (aggregate Competencia) + BC Resultados + API grilla | HITO-10 a HITO-13 (CQRS, quality gates, deuda técnica formal) |
 | SP3 | El Torneo | BC Torneo + BC Registro + BC Identidad + extensiones + UAT BA 2025 | HITO-14 a HITO-17 (secuencialidad IEDD, CQRS/ES, oráculo real) |
 | SP4 | La Plataforma | Frontend PWA completo + offline-first + BC Notificaciones + auditoría | HITO-18 a HITO-25 (UX formal, Event Sourcing criptográfico, offline) |
-| SP5 | La Puesta en Marcha | Sistema en producción real | Paper IEDD + capítulos libro DDD + caso estudio IS |
+| SP5 | La Puesta en Marcha | Portal organizador + portal atleta + algoritmo FAAS + rankings por categoría/género | HITO-26+ (UX formal, FAAS, portales completos) |
+| SP6 | Validación, Ajustes y Despliegue | Sistema corregido y desplegado en producción (`v1.0.0`) | Paper IEDD + capítulos libro DDD + caso estudio IS |
 
 ---
 
@@ -520,16 +595,16 @@ correcciones UX detectadas en UAT. 5 USs implementadas.
 
 | Métrica | Valor |
 |---------|-------|
-| Subproyectos | 5 + Fase 0 |
-| Incrementos planificados | 22 |
-| Incrementos completados | 18 de 18 SP1–SP4 (100%) |
-| US-IEDD completadas | ~87 |
-| Sprints de ajuste (SP-ADJ) | 6 (ADJ-01 a ADJ-06) |
-| Hitos (Baselines) | 6 (BL-000 a BL-005) |
+| Subproyectos | 6 + Fase 0 |
+| Incrementos planificados | 27 (22 SP1–SP5 + 5 SP6) |
+| Incrementos completados | 22 de 22 SP1–SP5 (100%) + 0 de 5 SP6 |
+| US-IEDD completadas | ~87 (SP1–SP5) + 26 planificadas SP6 |
+| Sprints de ajuste (SP-ADJ) | 6 completados (ADJ-01 a ADJ-09, numeración no correlativa) |
+| Hitos (Baselines) | 6 cerrados (BL-000 a BL-005) + BL-006 pendiente |
 | Bounded Contexts | 6 (Competencia, Torneo, Registro, Resultados, Identidad, Notificaciones) |
 | ADRs documentados | 14 |
-| HITOs de aprendizaje | 25 |
-| Tests totales (al cerrar SP4) | 500+ |
+| HITOs de aprendizaje | 25+ |
+| Tests totales (al cerrar SP5) | 500+ |
 | Cobertura dominio/aplicación | ≥ 90% en todos los BCs |
 
 ---
@@ -589,6 +664,6 @@ son materia prima directa para los productos intelectuales.
 
 ---
 
-*Versión 1.0 — 2026-04-19*
+*Versión 1.1 — 2026-05-03*
 *Generado a partir de: PLAN-EXPERIMENTO.md · 04-estrategia_desarrollo.md · docs/plans/ · quality/reports/*
 *Para uso académico — Ingeniería de Software · Gestión de Proyectos — FIUNER*
