@@ -11,7 +11,7 @@
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
 | **Fecha** | 2026-05-01 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.31 — SP6 iniciado · INC-6.1 en curso · US-6.1.1 ✅ (PR #143) |
+| **Estado** | ✅ v1.32 — SP6 INC-6.1 en curso · US-6.1.1 ✅ · US-6.1.2 ✅ |
 
 ---
 
@@ -558,7 +558,7 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 | US | Inc. | Contenido principal | Estado |
 |----|------|---------------------|--------|
 | US-6.1.1 | 6.1 | Fix `canSubmitBko` (limpieza remanente) + reorden flujo juez: tarjeta (paso 5) → marca (paso 6) · `usePerformanceFlow.ts` + `PerformanceFlowPage.tsx` | ✅ Done (PR #143) |
-| US-6.1.2 | 6.1 | Colores tarjeta + pantalla completada según resultado (MUX-02 + MUX-05) | ⏳ Pendiente |
+| US-6.1.2 | 6.1 | Colores tarjeta outline/filled (MUX-02) + heading paso 5 corregido · MUX-05 ya estaba resuelto en PerformanceFlowPage · `StepTarjeta.tsx` | ✅ Done (PR #144) |
 | US-6.1.3 | 6.1 | Grilla ordenada por estado + keypad visible móvil (MUX-03 + MUX-01) | ⏳ Pendiente |
 | US-6.1.4 | 6.1 | Rediseño inicio juez + STA mm:ss + tarjeta amarilla (UI-JUE-01 + MUX-08 + MUX-07) | ⏳ Pendiente |
 | US-6.1.5 | 6.1 | AtletaCard compacta en paso 5 (MUX-06) | ⏳ Pendiente |
@@ -689,6 +689,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-5.7.3 | frontend (build + eslint) · UAT visual INC-5.7 (BDD waiver — frontend puro) | ✅ Done (PR #139) |
 | US-5.7.4 | frontend (build + eslint) · UAT visual INC-5.7 (BDD waiver — frontend puro) | ✅ Done (PR #140) |
 | US-6.1.1 | frontend (build) · `tests/features/US-6.1.1-flow-juez.feature` · 362 unit/competencia sin regresiones (BDD waiver — frontend puro) | ✅ Done (PR #143) |
+| US-6.1.2 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #144) |
 
 ---
 
@@ -707,6 +708,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
+*v1.32 — 2026-05-03: US-6.1.2 ✅ (PR #144) · §29 y US→Tests actualizados*
 *v1.31 — 2026-05-03: SP6 iniciado · §29 INC-6.1 agregado · US-6.1.1 ✅ (PR #143) · US→Tests US-6.1.1 agregado · header actualizado*
 *v1.30 — 2026-05-01: INC-5.7 cerrado (§28 nuevo · 4/4 US ✅ · PRs #137–#140 · DesignReviewer 0 CRITICAL · 256 WARNING) · INC-5.8 desestimado (absorbido SP6) · §§ renumerados 29..33 · US→Tests US-5.7.x · §2 cobertura actualizada*
 *v1.29 — 2026-04-29: INC-5.6 cerrado (§26 nuevo · 6/6 US ✅ · PRs #123–#128 · DesignReviewer 0 CRITICAL · 252 WARNING) · SP-ADJ-09 cerrado (§27 nuevo · 7/7 US ✅ · PRs #129–#136) · §§ renumerados 28..31 · US→Tests US-5.5.x + US-5.6.x + US-ADJ-9.x · §2 cobertura actualizada*
