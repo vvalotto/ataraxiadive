@@ -117,6 +117,7 @@ SP6
 ├── INC-6.2  Ajustes Organizador (UI + nueva página Podios)
 ├── INC-6.3  Ajustes Atleta (UX + backend inscripción)
 ├── INC-6.4  Deuda técnica sistema (DR + ARCH)
+├── INC-6.6  Portal Público (vista sin autenticación + acciones contextuales)
 └── INC-6.5  Validación E2E + Despliegue (UAT completo + deploy)
 ```
 
@@ -172,6 +173,22 @@ Foco: resolver hallazgos DesignReviewer + correcciones arquitectónicas crítica
 
 > INC-6.4 puede ejecutarse en paralelo con INC-6.2/6.3 si el contexto lo permite.
 
+### INC-6.6 — Portal Público
+
+Foco: vista pública sin autenticación que lista torneos según estado y ofrece acciones contextuales.
+El visitante puede navegar sin login; se le pide autenticación solo al iniciar una acción que lo requiera.
+
+**Decisión de diseño:** Organizadores = Administradores (Opción 1) — sin rol Admin separado.
+Los organizadores crean y administran sus propios torneos directamente. Decisión válida para v1.0.
+
+| US | Descripción | Detalle |
+|----|-------------|---------|
+| US-6.6.1 | Endpoint público `GET /api/torneos` — lista torneos con estado y datos básicos, sin autenticación | Backend: eliminar o condicionar auth guard en el endpoint de listado; incluir campos: nombre, fecha, estado, sede |
+| US-6.6.2 | Página pública de torneos — lista con tarjetas por torneo y acciones contextuales según estado | Frontend: ruta pública `/torneos` sin auth guard; acciones: *Abierto* → Ver detalles · *Inscripción* → Inscribirse · *En ejecución* → Ver panel |
+| US-6.6.3 | Navegación contextual — redirección al login/registro → destino según rol y estado del torneo | Frontend: si el usuario no está autenticado al pulsar una acción, redirigir a login guardando el destino; post-login ir directamente al destino según rol |
+
+> Fuente: `.work/portal_torneos_apnea.md`
+
 ### INC-6.5 — Validación E2E + Despliegue
 
 Foco: UAT final con los tres roles + configuración y publicación del entorno productivo.
@@ -194,6 +211,7 @@ Foco: UAT final con los tres roles + configuración y publicación del entorno p
 - [ ] RF-IN-05/06 implementados — persistencia de adjuntos verificada E2E
 - [ ] ARCH-01 implementado — grilla carga O(1) verificado con dataset real
 - [ ] ARCH-02 corregido — 0 imports directos de infraestructura en routers
+- [ ] INC-6.6: portal público accesible sin login; acciones contextuales verificadas por estado de torneo
 - [ ] INC-6.5: UAT E2E completado con los 3 roles sin bloqueos críticos
 - [ ] `v1.0.0` tageado en `main` + BL-006 registrado
 - [ ] ArchitectAnalyst BL-006: `should_block=false`

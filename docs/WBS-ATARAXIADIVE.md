@@ -547,6 +547,16 @@ materializada; violación D-05 corregida en routers; refactoring FAAS e Inscripc
 | US-6.4.5 | Refactoring `DeclararAPInscripcionHandler` + `SQLiteInscripcionRepository` | DR-06 + DR-07 |
 | US-6.4.6 | Decisión formal ARCH-03 + SRP `RankingCompetencia` + monitoreo `identidad`/`shared` | ARCH-03 + DR-01 + AA-02 + AA-04 |
 
+##### INC-6.6 — Portal Público  ⏳
+**DoD:** ruta `/torneos` accesible sin login; cada torneo muestra acción contextual según estado
+(Ver detalles / Inscribirse / Ver panel); navegación post-login redirige al destino correcto según rol.
+
+| US | Descripción |
+|----|-------------|
+| US-6.6.1 | Endpoint público `GET /api/torneos` sin autenticación (nombre, fecha, estado, sede) |
+| US-6.6.2 | Página pública de torneos: lista con tarjetas y acciones contextuales por estado |
+| US-6.6.3 | Navegación contextual: redirige a login guardando destino → post-login va al destino por rol |
+
 ##### INC-6.5 — Validación E2E + Despliegue  ⏳
 **DoD:** UAT completo con los 3 roles sin bloqueos críticos; entorno productivo configurado y accesible;
 `v1.0.0` tageado en `main` con ArchitectAnalyst BL-006 `should_block=false`.
@@ -596,9 +606,9 @@ materializada; violación D-05 corregida en routers; refactoring FAAS e Inscripc
 | Métrica | Valor |
 |---------|-------|
 | Subproyectos | 6 + Fase 0 |
-| Incrementos planificados | 27 (22 SP1–SP5 + 5 SP6) |
-| Incrementos completados | 22 de 22 SP1–SP5 (100%) + 0 de 5 SP6 |
-| US-IEDD completadas | ~87 (SP1–SP5) + 26 planificadas SP6 |
+| Incrementos planificados | 28 (22 SP1–SP5 + 6 SP6) |
+| Incrementos completados | 22 de 22 SP1–SP5 (100%) + 0 de 6 SP6 |
+| US-IEDD completadas | ~87 (SP1–SP5) + 29 planificadas SP6 |
 | Sprints de ajuste (SP-ADJ) | 6 completados (ADJ-01 a ADJ-09, numeración no correlativa) |
 | Hitos (Baselines) | 6 cerrados (BL-000 a BL-005) + BL-006 pendiente |
 | Bounded Contexts | 6 (Competencia, Torneo, Registro, Resultados, Identidad, Notificaciones) |
