@@ -225,7 +225,15 @@ export function PerformanceFlowPage() {
       {/* Paso 6 — Registrar RP y confirmar marca */}
       {!flow.completed && flow.step === 6 ? (
         <section className="space-y-3">
-          <p className="px-1 text-lg font-semibold text-white">{flow.atletaActivo.nombreAtleta}</p>
+          <AtletaCard
+            variant="compact"
+            nombreAtleta={flow.atletaActivo.nombreAtleta}
+            apDeclarado={flow.atletaActivo.apDeclarado}
+            unidad={flow.atletaActivo.unidad}
+            andarivel={flow.atletaActivo.andarivel}
+            otProgramado={flow.atletaActivo.otProgramado}
+            estado="EN CURSO"
+          />
           <RpSelector
             metros={flow.metros}
             centimetros={flow.centimetros}
