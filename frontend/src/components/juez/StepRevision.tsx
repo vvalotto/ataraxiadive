@@ -38,11 +38,11 @@ export function StepRevision({
           const colorClasses =
             card === 'Blanca'
               ? isSelected
-                ? 'border-white bg-white ring-4 ring-white/50'
-                : 'border-white bg-white opacity-60'
+                ? 'border-white bg-white/15 ring-2 ring-white text-white'
+                : 'border-white/30 bg-white/5 text-white/60'
               : isSelected
-                ? 'border-red-500 bg-red-500 ring-4 ring-red-400/50'
-                : 'border-red-500 bg-red-500 opacity-60'
+                ? 'border-red-300 bg-red-400/15 ring-2 ring-red-300 text-red-200'
+                : 'border-red-300/30 bg-red-500/5 text-red-300/60'
           return (
             <button
               key={card}
@@ -52,8 +52,10 @@ export function StepRevision({
                 onSelectCard(card)
                 if (card === 'Blanca') onMotivoDqChange('')
               }}
-              className={`h-40 w-full rounded-2xl border transition ${colorClasses}`}
-            />
+              className={`h-24 w-full rounded-2xl border text-sm font-semibold uppercase tracking-[0.18em] transition ${colorClasses}`}
+            >
+              {card.toUpperCase()}
+            </button>
           )
         })}
       </div>

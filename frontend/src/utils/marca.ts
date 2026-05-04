@@ -19,7 +19,7 @@ export function formatMarca(value: string, unidad: string): string {
     const totalSeconds = Number.isFinite(parsedSeconds) ? Math.max(0, Math.round(parsedSeconds)) : 0
     const minutos = Math.floor(totalSeconds / 60)
     const segundos = totalSeconds % 60
-    return `${minutos}:${String(segundos).padStart(2, '0')}`
+    return `${minutos}:${String(segundos).padStart(2, '0')} min`
   }
   return `${value} m`
 }
