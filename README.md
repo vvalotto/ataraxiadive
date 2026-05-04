@@ -2,49 +2,46 @@
 
 Plataforma web para gestión de torneos de apnea (freediving).
 
-Repositorio del experimento IEDD + Software Limpio aplicado a un producto real.
+> **Inicio rápido:** Lee [CLAUDE.md](CLAUDE.md) para contexto operativo y decisiones del proyecto.  
+> **Navegación documental:** Consulta [Mapa de documentación](docs/inventario/DOCUMENTATION-MAP.md).
 
-## Estado del Proyecto
+## Estado Actual
 
-| Subproyecto | Estado | Baseline |
-|-------------|--------|----------|
-| SP1 — La Performance | ✅ Cerrado | BL-001 |
-| SP2 — La Competencia | ✅ Cerrado | BL-002 |
-| SP3 — El Torneo | ✅ Cerrado | BL-003 |
-| SP4 — La Plataforma | ✅ Cerrado | BL-004 |
-| SP5 — La Puesta en Marcha | 🔄 En construcción | BL-005 draft |
+| Subproyecto | Tag | Estado |
+|---|---|---|
+| SP1–SP5 (Fases 1-5) | v0.2.0–v0.6.0 | ✅ Completadas |
+| **SP6** (Validación, Ajustes, Despliegue) | v1.0.0 | ⏳ En definición |
 
-SP4 transformó el sistema de API-only a plataforma completa: frontend React PWA
-offline-first para jueces, BC Notificaciones con email real, auditoría con hash
-SHA-256 y exportación CSV/JSON. Cerrado el 2026-04-18 con tag `v0.5.0`.
-
-SP5 está en curso con objetivo MVP Demo (`v1.0.0` planificado): ciclo completo
-crear torneo → inscribir atletas → generar grilla → ejecutar disciplina →
-publicar resultados y podios. El alcance vigente está en
-[`docs/plans/sp5/PLAN-SP5.md`](docs/plans/sp5/PLAN-SP5.md) y el estado operativo
-en [`.cm/baselines/BL-005-draft.md`](.cm/baselines/BL-005-draft.md).
+**Última versión estable:** v0.6.0 (`main` branch) · SP5 completó ciclo funcional.  
+**Próxima entrega:** SP6 — validación funcional E2E, ajustes de defectos, despliegue.
 
 ## Stack
 
-- **Backend:** FastAPI + SQLite
-- **Frontend:** React PWA (offline-first para interfaz del juez)
-- **Arquitectura:** Hexagonal + Event Sourcing en BCs que lo requieren
-
-## Documentación
-
-- [Fuentes canónicas](docs/CANONICAL-SOURCES.md)
-- [Estado y baselines](.cm/baselines/)
-- [Plan vigente SP5](docs/plans/sp5/PLAN-SP5.md)
-- [Arquitectura vigente](docs/architecture/)
-- [Architecture Decision Records](docs/adr/)
-- [Estrategia de Desarrollo](docs/plans/)
-- [Gestión de la Configuración](.cm/)
+- **Backend:** Python + FastAPI · SQLite (modelo: BC por archivo)
+- **Frontend:** React 19 + TypeScript + Vite 6 + Tailwind v4 · PWA offline-first
+- **Arquitectura:** Hexagonal + Event Sourcing (Competencia, Notificaciones)
+- **Validación:** pytest + pytest-bdd · cobertura ≥ 90% (domain/ + application/)
 
 ## Desarrollo
 
 ```bash
-uv run fastapi dev src/app.py
-./.venv/bin/pytest
+# Backend
+uv run uvicorn src.app:app --reload --env-file .env
+
+# Frontend
+cd frontend && npm run dev
+
+# Tests
+pytest tests/unit/
+pytest tests/integration/
+pytest tests/features/
 ```
 
-Ver [CLAUDE.md](CLAUDE.md) para convenciones completas.
+## Documentación
+
+- [Contexto operativo y decisiones → CLAUDE.md](CLAUDE.md)
+- [Mapa de navegación documental](docs/inventario/DOCUMENTATION-MAP.md)
+- [Arquitectura vigente](docs/design/architecture.md)
+- [Decisiones arquitectónicas](docs/adr/)
+- [Trazabilidad RF → US](docs/traceability/matrix.md)
+- [Baselines y CM](.cm/baselines/)

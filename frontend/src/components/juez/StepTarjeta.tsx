@@ -51,7 +51,7 @@ export function StepTarjeta({
 
   return (
     <section className="space-y-4 rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5">
-      <h3 className="text-xl font-semibold text-white">Paso 6 · Tarjeta</h3>
+      <h3 className="text-xl font-semibold text-white">Paso 5 · Tarjeta</h3>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {(['Blanca', 'Roja', 'Amarilla'] as const).map((card) => {
           const isSelected =
@@ -60,15 +60,15 @@ export function StepTarjeta({
           const colorClasses =
             card === 'Blanca'
               ? isSelected
-                ? 'border-white bg-white ring-4 ring-white/50'
-                : 'border-white bg-white opacity-60'
+                ? 'border-white bg-white/15 ring-2 ring-white'
+                : 'border-white/30 bg-white/5'
               : card === 'Roja'
                 ? isSelected
-                  ? 'border-red-500 bg-red-500 ring-4 ring-red-400/50'
-                  : 'border-red-500 bg-red-500 opacity-60'
+                  ? 'border-red-300 bg-red-400/15 ring-2 ring-red-300'
+                  : 'border-red-300/30 bg-red-500/5'
                 : isSelected
-                  ? 'border-amber-400 bg-amber-400 ring-4 ring-amber-300/50'
-                  : 'border-amber-400 bg-amber-400 opacity-60'
+                  ? 'border-amber-300 bg-amber-400/15 ring-2 ring-amber-300'
+                  : 'border-amber-300/30 bg-amber-400/5'
           return (
             <button
               key={card}

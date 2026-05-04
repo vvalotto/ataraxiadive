@@ -1,0 +1,1322 @@
+[
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Ezequiel Cuchiarelli",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "50",
+    "official_slot": "10:00",
+    "line": 1
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Laura Iglesias",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "50",
+    "official_slot": "10:00",
+    "line": 2
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Diego Martinez",
+    "category": "MASTER",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "50",
+    "official_slot": "10:07",
+    "line": 1
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Pablo Durante",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "60",
+    "official_slot": "10:07",
+    "line": 2
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Ignacio Saslavsky",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": "60",
+    "official_slot": "10:14",
+    "line": 1
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Mauro Almada",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "60",
+    "official_slot": "10:14",
+    "line": 2
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Nicolas Stafforini",
+    "category": "SENIOR",
+    "club": "IAAS",
+    "announced_performance": "60",
+    "official_slot": "10:21",
+    "line": 1
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "José Enjuto",
+    "category": "SENIOR",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "72",
+    "official_slot": "10:21",
+    "line": 2
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Matias Gonzalez Courtois",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "75",
+    "official_slot": "10:28",
+    "line": 1
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "María de los Angeles Schneider",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "75",
+    "official_slot": "10:28",
+    "line": 2
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "María de los Milagros Montangie",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "75",
+    "official_slot": "10:35",
+    "line": 1
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Diego Calvo",
+    "category": "SENIOR",
+    "club": "BAJAU FREEDIVING",
+    "announced_performance": "75",
+    "official_slot": "10:35",
+    "line": 2
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Shaojun Wang",
+    "category": "SENIOR",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "75",
+    "official_slot": "10:42",
+    "line": 1
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Verónica Tufró",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "78",
+    "official_slot": "10:42",
+    "line": 2
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Guadalupe Fardi",
+    "category": "JUNIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "80",
+    "official_slot": "10:49",
+    "line": 1
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Hernán Fardi",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "80",
+    "official_slot": "10:49",
+    "line": 2
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "María Laura Ortiz Fleury",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "90",
+    "official_slot": "10:56",
+    "line": 1
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Alina Di Lernia",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "90",
+    "official_slot": "10:56",
+    "line": 2
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Víctor Valotto",
+    "category": "MASTER",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "90",
+    "official_slot": "11:03",
+    "line": 1
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Nicolás Burgell",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "98",
+    "official_slot": "11:03",
+    "line": 2
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "José Clementi",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "100",
+    "official_slot": "11:10",
+    "line": 1
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Juan Ignacio Catalano",
+    "category": "SENIOR",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "100",
+    "official_slot": "11:10",
+    "line": 2
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Pablo De Celis",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "100",
+    "official_slot": "11:17",
+    "line": 1
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Karina Menchini",
+    "category": "SENIOR",
+    "club": "FREEDIVING SANTA TERESA",
+    "announced_performance": "100",
+    "official_slot": "11:17",
+    "line": 2
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Nicolás Zimmermann",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": "105",
+    "official_slot": "11:24",
+    "line": 1
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Sebastián Quintana",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "112",
+    "official_slot": "11:24",
+    "line": 2
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Alejandro Alperin",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "115",
+    "official_slot": "11:31",
+    "line": 1
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Thiago Stalldecker",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "120",
+    "official_slot": "11:31",
+    "line": 2
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Pablo Sale",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "125",
+    "official_slot": "11:38",
+    "line": 1
+  },
+  {
+    "discipline": "DBF",
+    "source_pdf": "DBF (Buenos Aires 2025).pdf",
+    "name": "Silvia Maidana",
+    "category": "MASTER",
+    "club": "FREEDIVING PATAGONIA",
+    "announced_performance": "160",
+    "official_slot": "11:38",
+    "line": 2
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Sebastián Quintana",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "25",
+    "official_slot": "13:30",
+    "line": 1
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Ezequiel Cuchiarelli",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "25",
+    "official_slot": "13:30",
+    "line": 2
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Guadalupe Fardi",
+    "category": "JUNIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "35",
+    "official_slot": "13:37",
+    "line": 1
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Nicolas Stafforini",
+    "category": "SENIOR",
+    "club": "IAAS",
+    "announced_performance": "40",
+    "official_slot": "13:37",
+    "line": 2
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Matias Gonzalez Courtois",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "50",
+    "official_slot": "13:44",
+    "line": 1
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "María de los Angeles Schneider",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "50",
+    "official_slot": "13:44",
+    "line": 2
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Laura Iglesias",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "50",
+    "official_slot": "13:51",
+    "line": 1
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Hernán Fardi",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "50",
+    "official_slot": "13:51",
+    "line": 2
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Diego Calvo",
+    "category": "SENIOR",
+    "club": "BAJAU FREEDIVING",
+    "announced_performance": "50",
+    "official_slot": "13:58",
+    "line": 1
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Diego Martinez",
+    "category": "MASTER",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "50",
+    "official_slot": "13:58",
+    "line": 2
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Ignacio Saslavsky",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": "50",
+    "official_slot": "14:05",
+    "line": 1
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Verónica Tufró",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "55",
+    "official_slot": "14:05",
+    "line": 2
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "María Laura Ortiz Fleury",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "60",
+    "official_slot": "14:12",
+    "line": 1
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Víctor Valotto",
+    "category": "MASTER",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "60",
+    "official_slot": "14:12",
+    "line": 2
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Mauro Almada",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "60",
+    "official_slot": "14:19",
+    "line": 1
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Nicolás Zimmermann",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": "70",
+    "official_slot": "14:19",
+    "line": 2
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "José Enjuto",
+    "category": "SENIOR",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "72",
+    "official_slot": "14:26",
+    "line": 1
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Nicolás Burgell",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "75",
+    "official_slot": "14:26",
+    "line": 2
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "José Clementi",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "75",
+    "official_slot": "14:33",
+    "line": 1
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Juan Ignacio Catalano",
+    "category": "SENIOR",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "75",
+    "official_slot": "14:33",
+    "line": 2
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Alejandro Alperin",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "76",
+    "official_slot": "14:40",
+    "line": 1
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Pablo De Celis",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "80",
+    "official_slot": "14:40",
+    "line": 2
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Alina Di Lernia",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "90",
+    "official_slot": "14:47",
+    "line": 1
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Karina Menchini",
+    "category": "SENIOR",
+    "club": "FREEDIVING SANTA TERESA",
+    "announced_performance": "100",
+    "official_slot": "14:47",
+    "line": 2
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Silvia Maidana",
+    "category": "MASTER",
+    "club": "FREEDIVING PATAGONIA",
+    "announced_performance": "105",
+    "official_slot": "14:54",
+    "line": 1
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Thiago Stalldecker",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "110",
+    "official_slot": "14:54",
+    "line": 2
+  },
+  {
+    "discipline": "DNF",
+    "source_pdf": "DNF (Buenos Aires 2025).pdf",
+    "name": "Pablo Sale",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "125",
+    "official_slot": "15:01",
+    "line": 1
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Matias Gonzalez Courtois",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "50",
+    "official_slot": "15:20",
+    "line": 1
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Pablo Durante",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "50",
+    "official_slot": "15:20",
+    "line": 2
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Sebastián Quintana",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "56",
+    "official_slot": "15:27",
+    "line": 1
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Ignacio Saslavsky",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": "60",
+    "official_slot": "15:27",
+    "line": 2
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Mauro Almada",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "60",
+    "official_slot": "15:34",
+    "line": 1
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Verónica Tufró",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "65",
+    "official_slot": "15:34",
+    "line": 2
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "María Laura Ortiz Fleury",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "65",
+    "official_slot": "15:41",
+    "line": 1
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "José Enjuto",
+    "category": "SENIOR",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "72",
+    "official_slot": "15:41",
+    "line": 2
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Ezequiel Cuchiarelli",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "75",
+    "official_slot": "15:48",
+    "line": 1
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "María de los Angeles Schneider",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "75",
+    "official_slot": "15:48",
+    "line": 2
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "María de los Milagros Montangie",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "75",
+    "official_slot": "15:55",
+    "line": 1
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Raúl Urquiza",
+    "category": "MASTER",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "75",
+    "official_slot": "15:55",
+    "line": 2
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Guadalupe Fardi",
+    "category": "JUNIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "80",
+    "official_slot": "16:02",
+    "line": 1
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Hernán Fardi",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "80",
+    "official_slot": "16:02",
+    "line": 2
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Thiago Stalldecker",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "95",
+    "official_slot": "16:09",
+    "line": 1
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "José Clementi",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "100",
+    "official_slot": "16:09",
+    "line": 2
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Juan Ignacio Catalano",
+    "category": "SENIOR",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "100",
+    "official_slot": "16:16",
+    "line": 1
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Alina Di Lernia",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "100",
+    "official_slot": "16:16",
+    "line": 2
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Pablo Sale",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "100",
+    "official_slot": "16:23",
+    "line": 1
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Nicolás Burgell",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "101",
+    "official_slot": "16:23",
+    "line": 2
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Nicolás Zimmermann",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": "105",
+    "official_slot": "16:30",
+    "line": 1
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Alejandro Alperin",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "115",
+    "official_slot": "16:30",
+    "line": 2
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Pablo De Celis",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "120",
+    "official_slot": "16:37",
+    "line": 1
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Karina Menchini",
+    "category": "SENIOR",
+    "club": "FREEDIVING SANTA TERESA",
+    "announced_performance": "125",
+    "official_slot": "16:37",
+    "line": 2
+  },
+  {
+    "discipline": "DYN",
+    "source_pdf": "DYN (Buenos Aires 2025).pdf",
+    "name": "Silvia Maidana",
+    "category": "MASTER",
+    "club": "FREEDIVING PATAGONIA",
+    "announced_performance": "160",
+    "official_slot": "16:44",
+    "line": 1
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "José Enjuto",
+    "category": "SENIOR",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "03:00",
+    "official_slot": "12:45",
+    "line": 1
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "María de los Milagros Montangie",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "02:35",
+    "official_slot": "12:45",
+    "line": 2
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "María de los Angeles Schneider",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "02:15",
+    "official_slot": "12:52",
+    "line": 1
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Verónica Tufró",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "02:10",
+    "official_slot": "12:52",
+    "line": 2
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Ezequiel Cuchiarelli",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "02:00",
+    "official_slot": "12:59",
+    "line": 1
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Matias Gonzalez Courtois",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "02:00",
+    "official_slot": "12:59",
+    "line": 2
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Shaojun Wang",
+    "category": "SENIOR",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "02:00",
+    "official_slot": "13:06",
+    "line": 1
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Guadalupe Fardi",
+    "category": "JUNIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "02:00",
+    "official_slot": "13:06",
+    "line": 2
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Hernán Fardi",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "01:45",
+    "official_slot": "13:13",
+    "line": 1
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Alina Di Lernia",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "01:45",
+    "official_slot": "13:13",
+    "line": 2
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "José Clementi",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "01:40",
+    "official_slot": "13:20",
+    "line": 1
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Mauro Almada",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "01:30",
+    "official_slot": "13:20",
+    "line": 2
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Diego Calvo",
+    "category": "SENIOR",
+    "club": "BAJAU FREEDIVING",
+    "announced_performance": "01:30",
+    "official_slot": "13:27",
+    "line": 1
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Nicolás Burgell",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "01:30",
+    "official_slot": "13:27",
+    "line": 2
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Pablo Sale",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "01:30",
+    "official_slot": "13:34",
+    "line": 1
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Thiago Stalldecker",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "01:20",
+    "official_slot": "13:34",
+    "line": 2
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "María Laura Ortiz Fleury",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "01:15",
+    "official_slot": "13:41",
+    "line": 1
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Nicolás Zimmermann",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": "01:05",
+    "official_slot": "13:41",
+    "line": 2
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Alejandro Alperin",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "01:00",
+    "official_slot": "13:48",
+    "line": 1
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Pablo De Celis",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "00:58",
+    "official_slot": "13:48",
+    "line": 2
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Sebastián Quintana",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "00:50",
+    "official_slot": "13:55",
+    "line": 1
+  },
+  {
+    "discipline": "SPE",
+    "source_pdf": "SPE (Buenos Aires 2025).pdf",
+    "name": "Silvia Maidana",
+    "category": "MASTER",
+    "club": "FREEDIVING PATAGONIA",
+    "announced_performance": "00:30",
+    "official_slot": "13:55",
+    "line": 2
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Pablo Sale",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "00:30",
+    "official_slot": "12:00",
+    "line": 1
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "José Enjuto",
+    "category": "SENIOR",
+    "club": "FREEDIVING ROSARIO",
+    "announced_performance": "02:00",
+    "official_slot": "12:00",
+    "line": 2
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Sebastián Quintana",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "02:00",
+    "official_slot": "12:00",
+    "line": 3
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Matias Gonzalez Courtois",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "02:00",
+    "official_slot": "12:11",
+    "line": 1
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Pablo Durante",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "02:00",
+    "official_slot": "12:11",
+    "line": 2
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Nicolas Stafforini",
+    "category": "SENIOR",
+    "club": "IAAS",
+    "announced_performance": "02:30",
+    "official_slot": "12:11",
+    "line": 3
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Thiago Stalldecker",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "02:30",
+    "official_slot": "12:19",
+    "line": 1
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Karina Menchini",
+    "category": "SENIOR",
+    "club": "FREEDIVING SANTA TERESA",
+    "announced_performance": "02:30",
+    "official_slot": "12:19",
+    "line": 2
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "María de los Angeles Schneider",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "02:30",
+    "official_slot": "12:19",
+    "line": 3
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Guadalupe Fardi",
+    "category": "JUNIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "02:40",
+    "official_slot": "12:27",
+    "line": 1
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Silvia Maidana",
+    "category": "MASTER",
+    "club": "FREEDIVING PATAGONIA",
+    "announced_performance": "03:00",
+    "official_slot": "12:27",
+    "line": 2
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Verónica Tufró",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "03:00",
+    "official_slot": "12:27",
+    "line": 3
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "María Laura Ortiz Fleury",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "03:00",
+    "official_slot": "12:35",
+    "line": 1
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Ezequiel Cuchiarelli",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "03:00",
+    "official_slot": "12:35",
+    "line": 2
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Shaojun Wang",
+    "category": "SENIOR",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "03:00",
+    "official_slot": "12:35",
+    "line": 3
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "María de los Milagros Montangie",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "03:00",
+    "official_slot": "12:43",
+    "line": 1
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Raúl Urquiza",
+    "category": "MASTER",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "03:00",
+    "official_slot": "12:43",
+    "line": 2
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Víctor Valotto",
+    "category": "MASTER",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "03:15",
+    "official_slot": "12:43",
+    "line": 3
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Pablo De Celis",
+    "category": "SENIOR",
+    "club": "ESCUELA DE BUCEO CETACEOS",
+    "announced_performance": "03:30",
+    "official_slot": "12:51",
+    "line": 1
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Nicolás Burgell",
+    "category": "SENIOR",
+    "club": "ESCUELA MARES",
+    "announced_performance": "03:30",
+    "official_slot": "12:51",
+    "line": 2
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "José Clementi",
+    "category": "SENIOR",
+    "club": "REGATAS SANTA FE",
+    "announced_performance": "03:30",
+    "official_slot": "12:51",
+    "line": 3
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Alina Di Lernia",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "04:00",
+    "official_slot": "12:59",
+    "line": 1
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Laura Iglesias",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "04:00",
+    "official_slot": "12:59",
+    "line": 2
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Hernán Fardi",
+    "category": "MASTER",
+    "club": "ESCUELA MARES",
+    "announced_performance": "04:00",
+    "official_slot": "12:59",
+    "line": 3
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Nicolás Zimmermann",
+    "category": "SENIOR",
+    "club": "FREEDIVING ARGENTINA",
+    "announced_performance": "04:00",
+    "official_slot": "13:07",
+    "line": 1
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Alejandro Alperin",
+    "category": "MASTER",
+    "club": "OHANA FREEDIVERS",
+    "announced_performance": "04:01",
+    "official_slot": "13:07",
+    "line": 2
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Mauro Almada",
+    "category": "SENIOR",
+    "club": "FREEDIVING BUENOS AIRES",
+    "announced_performance": "05:00",
+    "official_slot": "13:07",
+    "line": 3
+  },
+  {
+    "discipline": "STA",
+    "source_pdf": "STA (Buenos Aires 2025).pdf",
+    "name": "Diego Calvo",
+    "category": "SENIOR",
+    "club": "BAJAU FREEDIVING",
+    "announced_performance": "05:30",
+    "official_slot": "13:15",
+    "line": 1
+  }
+]

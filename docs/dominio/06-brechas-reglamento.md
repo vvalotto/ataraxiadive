@@ -1,14 +1,10 @@
 # Brechas entre el Reglamento CMAS/FAAS y la aplicación actual
 
-> **Estado documental:** referencia de analisis reglamentario. Cada brecha debe
-> leerse junto con `docs/traceability/matrix.md`, `.cm/baselines/` y el plan
-> vigente del subproyecto en curso antes de inferir alcance pendiente.
-
-> **Fuente:** Reglamento CMAS Apnea Indoor v2022/01 — Traducción FAAS (versión en uso 2025)
-> **Fecha de análisis:** 2026-04-05
-> **Propósito:** Registro de funcionalidad definida en el reglamento oficial que no está
-> contemplada actualmente en AtaraxiaDive. Cada brecha incluye la descripción de la regla
-> y la diferencia funcional respecto al estado actual. No implica decisión de implementar.
+> Estado documental: vigente
+> Fuente de verdad para: registro de funcionalidad definida en el reglamento oficial que no está contemplada en AtaraxiaDive.
+> **Importante:** Leer siempre junto con `docs/traceability/matrix.md`, `.cm/baselines/` y el plan del subproyecto vigente antes de inferir alcance pendiente.
+> Última actualización: 2026-04-05
+> Fuente de reglamento: Reglamento CMAS Apnea Indoor v2022/01 — Traducción FAAS (versión en uso 2025)
 
 ---
 

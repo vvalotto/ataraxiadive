@@ -14,25 +14,16 @@ export function DisciplinasPage() {
 
   return (
     <JuezLayout
-      title="Mis disciplinas"
+      title="Mis asignaciones"
       subtitle={subtitle}
       actions={
-        <div className="flex flex-col gap-2 sm:items-end">
-          <button
-            type="button"
-            onClick={() => void navigate('/cambiar-password')}
-            className="rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-200"
-          >
-            Password
-          </button>
-          <button
-            type="button"
-            onClick={logout}
-            className="rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-200"
-          >
-            Salir
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={logout}
+          className="rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-200"
+        >
+          Salir
+        </button>
       }
     >
       {location.state && (location.state as { passwordUpdated?: boolean }).passwordUpdated ? (

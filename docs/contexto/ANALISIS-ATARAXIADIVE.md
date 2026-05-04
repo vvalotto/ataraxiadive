@@ -1,5 +1,11 @@
 # AtaraxiaDive como Caso de Estudio del Entorno IA-Dev
 
+> Estado documental: histórico
+> Análisis metodológico del proyecto como caso de estudio.
+> Conservado como evidencia del enfoque experimental inicial.
+> No reemplaza a las fuentes vigentes.
+> Fuente vigente relacionada: `docs/contexto/PLAN-EXPERIMENTO.md`
+
 **Fecha:** 2026-03-14
 **Estado:** Borrador inicial
 **Versión:** 1.0

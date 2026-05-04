@@ -1,12 +1,17 @@
 # Traceability Matrix — AtaraxiaDive
 
+> Estado documental: vigente  
+> Fuente de verdad para: trazabilidad RF → BC → incremento → US-IEDD · estados de implementación  
+> Última actualización: 2026-05-02  
+> Jerarquía de autoridad: [FUENTES-DE-VERDAD-DOCUMENTAL.md](../inventario/FUENTES-DE-VERDAD-DOCUMENTAL.md)
+
 | Campo | Valor |
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
 | **Fecha** | 2026-05-01 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.30 — INC-5.7 cerrado (Portal del Atleta · PRs #137–#140 · fix resultados provisionales · DesignReviewer 0 CRITICAL · 256 WARNING) |
+| **Estado** | ✅ v1.34 — SP6 INC-6.1 en curso · US-6.1.1 ✅ · US-6.1.2 ✅ · US-6.1.3 ✅ · US-6.1.4 ✅ |
 
 ---
 
@@ -23,6 +28,19 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
   del horizonte actual del proyecto.
 - Los RFs marcados como `parcial` tienen definición o soporte técnico previo,
   pero todavía no están expuestos como producto final en el incremento vigente.
+
+### Estados normalizados en esta matriz
+
+| Estado | Significado | Autoridad |
+|--------|------------|-----------|
+| **Planificado** | Existe intención en plan, sin especificación formal | Planes (docs/plans/) |
+| **Especificado** | Tiene US-IEDD con criterios de aceptación | US-IEDD en docs/specs/ |
+| **Implementado** | Código integrado en rama principal | Tests unitarios pass + revisión código |
+| **Validado** | Tests + UAT + baseline de cierre | Baselines (.cm/baselines/) |
+| `✅ definido` | Especificado (equivalente a "Especificado") | US-IEDD |
+| `✅ completado` / `✅ implementado` | Implementado + validado en SP cerrado | Baseline del SP |
+| `🟡` (naranja) | Especificado pero parcialmente implementado | US-IEDD + rama de trabajo |
+| `— fuera de alcance v1` | Planificado para SP futuro o descartado | Planes o decisión formal |
 
 ---
 
@@ -76,8 +94,8 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-IN-02 | Brevet no obligatorio | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 | RF-IN-03 | Sin límite de atletas por torneo o disciplina | Registro | SP3 | 3.2 | US-3.2.3 | ✅ implementado |
 | RF-IN-04 | Cancelar inscripción hasta el día anterior | Registro | SP3 | 3.2 | US-3.2.3 | ✅ implementado |
-| RF-IN-05 | Apto médico como requisito de inscripción | Registro | SP5 | 5.4 | US-5.4.1 | 🟡 definido conceptualmente; exposición en producto pendiente en INC-5.4 |
-| RF-IN-06 | Constancia de pago como requisito | Registro | SP5 | 5.4 | US-5.4.1 | 🟡 definido conceptualmente; exposición en producto pendiente en INC-5.4 |
+| RF-IN-05 | Apto médico como requisito de inscripción | Registro | SP5 | 5.4 | US-5.4.1 | ⏳ Deuda técnica — UI implementado (frontend/src/pages/atleta/AtletaInscripcionPage.tsx step 3); persistencia backend pendiente. Evidencia: tests/features/US-5.5.1-inscripcion-atleta-ap.feature; docs/reports/US-5.5.1-report.md; docs/plans/sp5/US-5.5.1-implementation-notes.md; PRs #120–#122. Aceptación: adjuntos son validados en UI; almacenamiento backend pospuesto a SP6. |
+| RF-IN-06 | Constancia de pago como requisito | Registro | SP5 | 5.4 | US-5.4.1 | ⏳ Deuda técnica — UI implementado (frontend/src/pages/atleta/AtletaInscripcionPage.tsx step 3); persistencia backend pendiente. Evidencia: tests/features/US-5.5.1-inscripcion-atleta-ap.feature; docs/reports/US-5.5.1-report.md; docs/plans/sp5/US-5.5.1-implementation-notes.md; PRs #120–#122. Aceptación: adjuntos son validados en UI; almacenamiento backend pospuesto a SP6. |
 | RF-IN-07 | Conflicto de datos con BD FAAS | Registro | Futuro | — | — | — fuera de scope SP5/v1.0; depende de integración FAAS |
 | RF-IN-08 | Género solo para categorización — sin otro efecto | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 | RF-IN-09 | Atleta no puede cambiar categoría por disciplina | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
@@ -107,7 +125,7 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-EJ-01 | Más de un juez asignado a una disciplina | Identidad / Torneo | SP3 | 3.4 | US-3.4.x | ✅ definido |
 | RF-EJ-02 | DNS = descalificación inmediata, sin espera (P-07, INV-P-08) | Competencia | SP1 | 1.4 | US-P-05 | ✅ definido |
 | RF-EJ-03 | Tarjetas amarillas con penalizaciones configurables | Competencia | SP4 | 4.4 | US-4.4.x | ✅ definido |
-| RF-EJ-04 | Códigos de penalización (AIDA/CMAS) | Competencia | SP4 | 4.4 | US-4.4.x | ⏳ pendiente |
+| RF-EJ-04 | Códigos de penalización (AIDA/CMAS) | Competencia | SP4 | 4.4 | US-4.4.x | ✅ implementado — dominio: competencia/domain/value_objects/tipo_penalizacion.py; spec US-4.1.2 |
 | RF-EJ-05 | Cronometraje manual — juez ingresa el tiempo | Competencia | SP1 | 1.4 | US-P-03 | ✅ definido |
 | RF-EJ-06 | Corrección con ventana de impugnación (INV-P-15, HS-P2 ✅) | Competencia | SP4 | 4.4 | US-P-06 | ✅ definido |
 | RF-EJ-07 | Black-out registra el hecho y la distancia alcanzada | Competencia | SP1 | 1.4 | US-P-04 | ✅ definido |
@@ -121,12 +139,12 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-PM-01 | Fórmula de puntos configurable por torneo (HS-19 ✅) | Resultados / Torneo | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.1..5.5.2 | 🟡 definido; algoritmo FAAS y exposición final pendientes en INC-5.5 |
-| RF-PM-02 | Overall = ranking general multi-disciplina por categoría | Resultados | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.4 | 🟡 base implementada; overall por categoría/género con puntos pendiente en INC-5.5 |
+| RF-PM-01 | Fórmula de puntos configurable por torneo (HS-19 ✅) | Resultados / Torneo | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.1..5.5.2 | ✅ completado (implementado en INC-5.6) |
+| RF-PM-02 | Overall = ranking general multi-disciplina por categoría | Resultados | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.4 | ✅ completado (implementado en INC-5.6) |
 | RF-PM-03 | Empates = mismo puesto y mismos puntos | Resultados | SP2 | 2.4 | US-2.4.2 | ✅ Implementado |
 | RF-PM-04 | Certificados/diplomas | — | — | — | — | — fuera de alcance v1 |
-| RF-PM-05 | Rankings por categoría y género | Resultados | SP-ADJ-04/SP5 | — / 5.5 | US-ADJ-4.5 / US-5.5.3..5.5.6 | 🟡 soporte parcial; rankings/podios por categoría y género como producto final pendientes en INC-5.5 |
-| RF-PM-06 | Publicación en plataforma + descarga | Resultados | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.5..5.5.6 | 🟡 definido; vistas finales tabla OT + podios pendientes en INC-5.5 |
+| RF-PM-05 | Rankings por categoría y género | Resultados | SP-ADJ-04/SP5 | — / 5.5 | US-ADJ-4.5 / US-5.5.3..5.5.6 | ✅ completado (implementado en INC-5.6) |
+| RF-PM-06 | Publicación en plataforma + descarga | Resultados | SP3/SP5 | 3.5 / 5.5 | US-3.5.x / US-5.5.5..5.5.6 | ✅ completado (implementado en INC-5.7) |
 
 ---
 
@@ -172,7 +190,7 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 | RF | Descripción | Bloquea | Resolver antes de |
 |----|-------------|---------|-------------------|
 | RF-IN-07 | ¿Qué pasa si los datos del atleta difieren de la BD FAAS? | Futuro | Post-SP5 |
-| RF-EJ-04 | Códigos de penalización (AIDA/CMAS u otra federación) | Futuro | Post-SP5 |
+| RF-EJ-04 | Códigos de penalización (AIDA/CMAS u otra federación) | — | Resuelto (implementado) |
 | RF-NT-03 | ¿Juez u organizador reciben notificaciones durante ejecución? | Futuro | Post-SP5 |
 | RF-IG-01..04 | Integración completa con BD FAAS / exportación a rankings | Futuro | Post-SP5 |
 
@@ -532,6 +550,21 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 
 ---
 
+## 29. US-IEDD SP6 INC-6.1 — Ajustes Juez
+
+> Estado al 2026-05-04: 4/5 US mergeadas a `develop`. INC-6.1 en curso.
+> Quality gates: frontend-only · CodeGuard N/A (sin cambios Python) · DesignReviewer al cierre del INC.
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-6.1.1 | 6.1 | Fix `canSubmitBko` (limpieza remanente) + reorden flujo juez: tarjeta (paso 5) → marca (paso 6) · `usePerformanceFlow.ts` + `PerformanceFlowPage.tsx` | ✅ Done (PR #143) |
+| US-6.1.2 | 6.1 | Colores tarjeta outline/filled (MUX-02) + heading paso 5 corregido · MUX-05 ya estaba resuelto en PerformanceFlowPage · `StepTarjeta.tsx` | ✅ Done (PR #144) |
+| US-6.1.3 | 6.1 | Grilla ordenada por estado + keypad visible móvil · MUX-03 ya resuelto · MUX-01: `RpSelector.tsx` space-y-2 + py-2 en keypad | ✅ Done (PR #145) |
+| US-6.1.4 | 6.1 | Rediseño inicio juez + STA mm:ss + tarjeta amarilla (UI-JUE-01 + MUX-08 + MUX-07) · `DisciplinasPage.tsx`: "Mis asignaciones" + sin Password · `utils/marca.ts`: " min" suffix · `StepRevision.tsx`: labels BLANCA/ROJA | ✅ Done (PR #146) |
+| US-6.1.5 | 6.1 | AtletaCard compacta en paso 5 (MUX-06) | ⏳ Pendiente |
+
+---
+
 ## 30. Trazabilidad: Discrepancias → US → Documentos a actualizar
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
@@ -655,6 +688,10 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-5.7.2 | frontend (build + eslint) · UAT visual INC-5.7 (BDD waiver — frontend puro) | ✅ Done (PR #138) |
 | US-5.7.3 | frontend (build + eslint) · UAT visual INC-5.7 (BDD waiver — frontend puro) | ✅ Done (PR #139) |
 | US-5.7.4 | frontend (build + eslint) · UAT visual INC-5.7 (BDD waiver — frontend puro) | ✅ Done (PR #140) |
+| US-6.1.1 | frontend (build) · `tests/features/US-6.1.1-flow-juez.feature` · 362 unit/competencia sin regresiones (BDD waiver — frontend puro) | ✅ Done (PR #143) |
+| US-6.1.2 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #144) |
+| US-6.1.3 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #145) |
+| US-6.1.4 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #146) |
 
 ---
 
@@ -673,6 +710,10 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
+*v1.34 — 2026-05-04: US-6.1.4 ✅ (PR #146) · §29 y US→Tests actualizados*
+*v1.33 — 2026-05-04: US-6.1.3 ✅ (PR #145) · §29 y US→Tests actualizados*
+*v1.32 — 2026-05-03: US-6.1.2 ✅ (PR #144) · §29 y US→Tests actualizados*
+*v1.31 — 2026-05-03: SP6 iniciado · §29 INC-6.1 agregado · US-6.1.1 ✅ (PR #143) · US→Tests US-6.1.1 agregado · header actualizado*
 *v1.30 — 2026-05-01: INC-5.7 cerrado (§28 nuevo · 4/4 US ✅ · PRs #137–#140 · DesignReviewer 0 CRITICAL · 256 WARNING) · INC-5.8 desestimado (absorbido SP6) · §§ renumerados 29..33 · US→Tests US-5.7.x · §2 cobertura actualizada*
 *v1.29 — 2026-04-29: INC-5.6 cerrado (§26 nuevo · 6/6 US ✅ · PRs #123–#128 · DesignReviewer 0 CRITICAL · 252 WARNING) · SP-ADJ-09 cerrado (§27 nuevo · 7/7 US ✅ · PRs #129–#136) · §§ renumerados 28..31 · US→Tests US-5.5.x + US-5.6.x + US-ADJ-9.x · §2 cobertura actualizada*
 *v1.27 — 2026-04-26: INC-5.5 cerrado (§25 nuevo · 2/2 US ✅ + fix UAT · PRs #120–#122 · DesignReviewer 0 CRITICAL · 227 WARNING)*

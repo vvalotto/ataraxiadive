@@ -196,13 +196,34 @@ export function PerformanceFlowPage() {
           onCancel={() => {
             flow.setIsBkoMode(false)
             flow.setMotivoDq('')
-            flow.setDistanciaBlackout('')
           }}
         />
       ) : null}
 
-      {/* Paso 5 — Registrar RP */}
+      {/* Paso 5 — Asignar tarjeta */}
       {!flow.completed && flow.step === 5 ? (
+        <p className="px-1 text-lg font-semibold text-white">{flow.atletaActivo.nombreAtleta}</p>
+      ) : null}
+      {!flow.completed && flow.step === 5 ? (
+        <StepTarjeta
+          selectedCard={flow.selectedCard}
+          motivoDq={flow.motivoDq}
+          canSubmitRedCard={flow.canSubmitRedCard}
+          isPending={false}
+          penalizaciones={{
+            items: flow.penalizaciones,
+            disciplina: flow.disciplinaActiva ?? '',
+            admite: flow.disciplinaPermitePenalizaciones,
+            onChange: flow.setPenalizaciones,
+          }}
+          onSelectCard={flow.setSelectedCard}
+          onMotivoDqChange={flow.setMotivoDq}
+          onConfirm={() => flow.setStep(6)}
+        />
+      ) : null}
+
+      {/* Paso 6 — Registrar RP y confirmar marca */}
+      {!flow.completed && flow.step === 6 ? (
         <section className="space-y-3">
           <p className="px-1 text-lg font-semibold text-white">{flow.atletaActivo.nombreAtleta}</p>
           <RpSelector
@@ -221,28 +242,6 @@ export function PerformanceFlowPage() {
             CONFIRMAR MARCA
           </button>
         </section>
-      ) : null}
-
-      {/* Paso 6 — Asignar tarjeta */}
-      {!flow.completed && flow.step === 6 ? (
-        <p className="px-1 text-lg font-semibold text-white">{flow.atletaActivo.nombreAtleta}</p>
-      ) : null}
-      {!flow.completed && flow.step === 6 ? (
-        <StepTarjeta
-          selectedCard={flow.selectedCard}
-          motivoDq={flow.motivoDq}
-          canSubmitRedCard={flow.canSubmitRedCard}
-          isPending={flow.tarjetaMutation.isPending}
-          penalizaciones={{
-            items: flow.penalizaciones,
-            disciplina: flow.disciplinaActiva ?? '',
-            admite: flow.disciplinaPermitePenalizaciones,
-            onChange: flow.setPenalizaciones,
-          }}
-          onSelectCard={flow.setSelectedCard}
-          onMotivoDqChange={flow.setMotivoDq}
-          onConfirm={() => flow.tarjetaMutation.mutate()}
-        />
       ) : null}
 
       {/* Paso 7 — Resolver revisión */}
