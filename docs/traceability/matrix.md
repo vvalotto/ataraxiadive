@@ -11,7 +11,7 @@
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
 | **Fecha** | 2026-05-01 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.32 — SP6 INC-6.1 en curso · US-6.1.1 ✅ · US-6.1.2 ✅ |
+| **Estado** | ✅ v1.33 — SP6 INC-6.1 en curso · US-6.1.1 ✅ · US-6.1.2 ✅ · US-6.1.3 ✅ |
 
 ---
 
@@ -552,14 +552,14 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 
 ## 29. US-IEDD SP6 INC-6.1 — Ajustes Juez
 
-> Estado al 2026-05-03: 1/5 US mergeada a `develop` (en PR). INC-6.1 en curso.
+> Estado al 2026-05-04: 3/5 US mergeadas a `develop`. INC-6.1 en curso.
 > Quality gates: frontend-only · CodeGuard N/A (sin cambios Python) · DesignReviewer al cierre del INC.
 
 | US | Inc. | Contenido principal | Estado |
 |----|------|---------------------|--------|
 | US-6.1.1 | 6.1 | Fix `canSubmitBko` (limpieza remanente) + reorden flujo juez: tarjeta (paso 5) → marca (paso 6) · `usePerformanceFlow.ts` + `PerformanceFlowPage.tsx` | ✅ Done (PR #143) |
 | US-6.1.2 | 6.1 | Colores tarjeta outline/filled (MUX-02) + heading paso 5 corregido · MUX-05 ya estaba resuelto en PerformanceFlowPage · `StepTarjeta.tsx` | ✅ Done (PR #144) |
-| US-6.1.3 | 6.1 | Grilla ordenada por estado + keypad visible móvil (MUX-03 + MUX-01) | ⏳ Pendiente |
+| US-6.1.3 | 6.1 | Grilla ordenada por estado + keypad visible móvil · MUX-03 ya resuelto · MUX-01: `RpSelector.tsx` space-y-2 + py-2 en keypad | ✅ Done (PR #145) |
 | US-6.1.4 | 6.1 | Rediseño inicio juez + STA mm:ss + tarjeta amarilla (UI-JUE-01 + MUX-08 + MUX-07) | ⏳ Pendiente |
 | US-6.1.5 | 6.1 | AtletaCard compacta en paso 5 (MUX-06) | ⏳ Pendiente |
 
@@ -690,6 +690,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-5.7.4 | frontend (build + eslint) · UAT visual INC-5.7 (BDD waiver — frontend puro) | ✅ Done (PR #140) |
 | US-6.1.1 | frontend (build) · `tests/features/US-6.1.1-flow-juez.feature` · 362 unit/competencia sin regresiones (BDD waiver — frontend puro) | ✅ Done (PR #143) |
 | US-6.1.2 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #144) |
+| US-6.1.3 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #145) |
 
 ---
 
@@ -708,6 +709,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
+*v1.33 — 2026-05-04: US-6.1.3 ✅ (PR #145) · §29 y US→Tests actualizados*
 *v1.32 — 2026-05-03: US-6.1.2 ✅ (PR #144) · §29 y US→Tests actualizados*
 *v1.31 — 2026-05-03: SP6 iniciado · §29 INC-6.1 agregado · US-6.1.1 ✅ (PR #143) · US→Tests US-6.1.1 agregado · header actualizado*
 *v1.30 — 2026-05-01: INC-5.7 cerrado (§28 nuevo · 4/4 US ✅ · PRs #137–#140 · DesignReviewer 0 CRITICAL · 256 WARNING) · INC-5.8 desestimado (absorbido SP6) · §§ renumerados 29..33 · US→Tests US-5.7.x · §2 cobertura actualizada*
