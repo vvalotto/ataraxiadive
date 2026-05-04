@@ -7,6 +7,7 @@ interface AtletaCardProps {
   andarivel: number
   otProgramado: string
   estado: string
+  variant?: 'full' | 'compact'
 }
 
 function formatOt(iso: string) {
@@ -23,8 +24,22 @@ export function AtletaCard({
   andarivel,
   otProgramado,
   estado,
+  variant = 'full',
 }: AtletaCardProps) {
   const showEstado = estado !== 'AnunciadaAP'
+
+  if (variant === 'compact') {
+    return (
+      <section className="flex items-center justify-between rounded-[2rem] border border-slate-800 bg-slate-900/80 px-5 py-3">
+        <p className="text-base font-semibold text-white">{nombreAtleta}</p>
+        {showEstado ? (
+          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">
+            {estado}
+          </span>
+        ) : null}
+      </section>
+    )
+  }
 
   return (
     <section className="rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5 shadow-[0_24px_80px_-50px_rgba(34,211,238,0.7)]">
