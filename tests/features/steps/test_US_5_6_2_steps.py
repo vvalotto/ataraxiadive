@@ -47,6 +47,7 @@ def _torneo_base(**overrides: object) -> Torneo:
 # Background
 # ---------------------------------------------------------------------------
 
+
 @given("un torneo base con datos validos")
 def step_torneo_base(ctx: dict) -> None:
     ctx["torneo"] = _torneo_base()
@@ -55,6 +56,7 @@ def step_torneo_base(ctx: dict) -> None:
 # ---------------------------------------------------------------------------
 # Given
 # ---------------------------------------------------------------------------
+
 
 @given("un torneo creado sin tipo_reglamento explicito")
 def step_torneo_sin_reglamento(ctx: dict) -> None:
@@ -76,13 +78,20 @@ def step_handler_con_mock(ctx: dict) -> None:
     ranking_store.append = AsyncMock()
 
     resultados_port = MagicMock()
-    resultados_port.get_resultados_finales = AsyncMock(return_value=[
-        ResultadoFinal(atleta_id=uuid4(), rp=Decimal("70"), unidad="Metros", tarjeta="Blanca", es_dns=False),
-        ResultadoFinal(atleta_id=uuid4(), rp=Decimal("50"), unidad="Metros", tarjeta="Blanca", es_dns=False),
-    ])
+    resultados_port.get_resultados_finales = AsyncMock(
+        return_value=[
+            ResultadoFinal(
+                atleta_id=uuid4(), rp=Decimal("70"), unidad="Metros", tarjeta="Blanca", es_dns=False
+            ),
+            ResultadoFinal(
+                atleta_id=uuid4(), rp=Decimal("50"), unidad="Metros", tarjeta="Blanca", es_dns=False
+            ),
+        ]
+    )
 
     atleta_port = MagicMock()
     from registro.domain.value_objects.categoria import Categoria
+
     atleta_port.get_categoria = AsyncMock(return_value=Categoria.SENIOR_MASCULINO)
 
     ctx["algoritmo_mock"] = algoritmo_mock
@@ -104,6 +113,7 @@ def step_disciplina_con_resultados(ctx: dict) -> None:
 # When
 # ---------------------------------------------------------------------------
 
+
 @when("se consulta el tipo_reglamento del torneo")
 def step_consultar_reglamento(ctx: dict) -> None:
     ctx["tipo_reglamento_obtenido"] = ctx["torneo"].tipo_reglamento
@@ -124,6 +134,7 @@ def step_ejecutar_handler(ctx: dict) -> None:
 # ---------------------------------------------------------------------------
 # Then
 # ---------------------------------------------------------------------------
+
 
 @then(parsers.parse('el tipo_reglamento es "{valor}"'))
 def step_tipo_reglamento_es(ctx: dict, valor: str) -> None:

@@ -92,7 +92,9 @@ def test_usuario_trim_nombre_y_apellido() -> None:
     assert u.apellido == "Garcia"
 
 
-@pytest.mark.parametrize("campo, nombre, apellido", [("nombre", " ", "Garcia"), ("apellido", "Ana", "\t")])
+@pytest.mark.parametrize(
+    "campo, nombre, apellido", [("nombre", " ", "Garcia"), ("apellido", "Ana", "\t")]
+)
 def test_usuario_rechaza_nombre_o_apellido_vacios(campo: str, nombre: str, apellido: str) -> None:
     with pytest.raises(CampoRequerido, match=campo):
         Usuario(

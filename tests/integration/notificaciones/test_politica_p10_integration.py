@@ -56,9 +56,7 @@ def _handler(repo: SQLiteNotificacionRepository, email: FakeEmailPort) -> Politi
 
 async def _event_types(db_path) -> list[str]:
     async with aiosqlite.connect(db_path) as db:
-        cursor = await db.execute(
-            "SELECT event_type FROM notificaciones_events ORDER BY id ASC"
-        )
+        cursor = await db.execute("SELECT event_type FROM notificaciones_events ORDER BY id ASC")
         rows = await cursor.fetchall()
     return [row[0] for row in rows]
 

@@ -139,7 +139,9 @@ def _run_command(ctx, command: AsignarTarjetaCommand) -> None:
     asyncio.run(_execute())
 
 
-@when(parsers.parse("asigna tarjeta Roja con motivo BKO_SUPERFICIE y distancia_blackout {distancia}"))
+@when(
+    parsers.parse("asigna tarjeta Roja con motivo BKO_SUPERFICIE y distancia_blackout {distancia}")
+)
 def when_roja_bko(ctx, distancia: str):
     _run_command(
         ctx,
@@ -199,7 +201,9 @@ def when_roja_bko_sin_distancia(ctx):
     )
 
 
-@when(parsers.parse("asigna tarjeta Roja con motivo BKO_SUBACUATICO y distancia_blackout {distancia}"))
+@when(
+    parsers.parse("asigna tarjeta Roja con motivo BKO_SUBACUATICO y distancia_blackout {distancia}")
+)
 def when_roja_bko_subacuatico(ctx, distancia: str):
     _run_command(
         ctx,
@@ -215,7 +219,9 @@ def when_roja_bko_subacuatico(ctx, distancia: str):
     )
 
 
-@when(parsers.parse("asigna tarjeta Roja con motivo SALIDA_EN_FALSO y distancia_blackout {distancia}"))
+@when(
+    parsers.parse("asigna tarjeta Roja con motivo SALIDA_EN_FALSO y distancia_blackout {distancia}")
+)
 def when_roja_no_bko_con_distancia(ctx, distancia: str):
     _run_command(
         ctx,

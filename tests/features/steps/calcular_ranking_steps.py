@@ -138,7 +138,11 @@ async def _performance_ejecutada(
         "BO": MotivoDQ.PROTOCOLO_SUPERFICIE,
         "black-out": MotivoDQ.BKO_SUPERFICIE,
     }
-    motivo_dq = _MOTIVO_DQ_MAP.get(motivo or "", MotivoDQ.PROTOCOLO_SUPERFICIE) if tarjeta == TipoTarjeta.Roja else None
+    motivo_dq = (
+        _MOTIVO_DQ_MAP.get(motivo or "", MotivoDQ.PROTOCOLO_SUPERFICIE)
+        if tarjeta == TipoTarjeta.Roja
+        else None
+    )
     motivo_texto = motivo if tarjeta == TipoTarjeta.Amarilla else None
     await AsignarTarjetaHandler(event_store=store).handle(
         AsignarTarjetaCommand(

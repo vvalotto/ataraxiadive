@@ -50,9 +50,7 @@ class FakeNotificacionRepository:
 
     def event_types(self) -> list[str]:
         return [
-            event["event_type"]
-            for events in self.events_by_stream.values()
-            for event in events
+            event["event_type"] for events in self.events_by_stream.values() for event in events
         ]
 
 

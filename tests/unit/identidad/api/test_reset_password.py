@@ -62,7 +62,9 @@ class FakeEmailSender:
         return "fake-provider-id"
 
 
-def _client(repo: FakeUsuarioRepository, token_service: JWTService, email_sender: FakeEmailSender) -> TestClient:
+def _client(
+    repo: FakeUsuarioRepository, token_service: JWTService, email_sender: FakeEmailSender
+) -> TestClient:
     app = FastAPI()
     app.include_router(router)
     app.dependency_overrides[get_usuario_repository] = lambda: repo

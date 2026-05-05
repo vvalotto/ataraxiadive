@@ -96,6 +96,7 @@ def _extraer_estado_provisional(
         payload = event["payload"]
         if isinstance(payload, str):
             import json
+
             payload = json.loads(payload)
         _aplicar(estado, event["event_type"], payload)
 

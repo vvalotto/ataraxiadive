@@ -48,12 +48,20 @@ async def _persist_pending(ctx: dict) -> None:
         await ctx["repo"].append(aggregate.stream_id, event.event_type, event.to_payload())
 
 
-@given(parsers.parse('el event store de notificaciones no tiene eventos para evento_fuente_id "{evento_fuente_id}"'))
+@given(
+    parsers.parse(
+        'el event store de notificaciones no tiene eventos para evento_fuente_id "{evento_fuente_id}"'
+    )
+)
 def given_store_vacio(ctx: dict, evento_fuente_id: str) -> None:
     ctx["evento_fuente_id"] = evento_fuente_id
 
 
-@given(parsers.parse('el event store de notificaciones tiene NotificacionEnviada para evento_fuente_id "{evento_fuente_id}"'))
+@given(
+    parsers.parse(
+        'el event store de notificaciones tiene NotificacionEnviada para evento_fuente_id "{evento_fuente_id}"'
+    )
+)
 def given_store_con_exito(ctx: dict, evento_fuente_id: str) -> None:
     async def _run() -> None:
         aggregate = await Notificacion.solicitar_envio(
@@ -73,7 +81,11 @@ def given_store_con_exito(ctx: dict, evento_fuente_id: str) -> None:
     ctx["evento_fuente_id"] = evento_fuente_id
 
 
-@given(parsers.parse('el event store de notificaciones tiene NotificacionFallida para evento_fuente_id "{evento_fuente_id}"'))
+@given(
+    parsers.parse(
+        'el event store de notificaciones tiene NotificacionFallida para evento_fuente_id "{evento_fuente_id}"'
+    )
+)
 def given_store_con_fallo(ctx: dict, evento_fuente_id: str) -> None:
     async def _run() -> None:
         aggregate = await Notificacion.solicitar_envio(
@@ -109,7 +121,11 @@ def given_notificacion_solicitada(ctx: dict) -> None:
     asyncio.run(_run())
 
 
-@when(parsers.parse('se ejecuta SolicitarEnvio con evento_fuente_id "{evento_fuente_id}" y destinatario "{email}"'))
+@when(
+    parsers.parse(
+        'se ejecuta SolicitarEnvio con evento_fuente_id "{evento_fuente_id}" y destinatario "{email}"'
+    )
+)
 def when_solicitar_envio(ctx: dict, evento_fuente_id: str, email: str) -> None:
     async def _run() -> None:
         try:
@@ -131,7 +147,9 @@ def when_solicitar_envio(ctx: dict, evento_fuente_id: str, email: str) -> None:
     asyncio.run(_run())
 
 
-@when(parsers.parse('se ejecuta SolicitarEnvio con evento_fuente_id "{evento_fuente_id}" nuevamente'))
+@when(
+    parsers.parse('se ejecuta SolicitarEnvio con evento_fuente_id "{evento_fuente_id}" nuevamente')
+)
 def when_solicitar_envio_duplicado(ctx: dict, evento_fuente_id: str) -> None:
     async def _run() -> None:
         ctx["aggregate"] = await Notificacion.solicitar_envio(
@@ -147,7 +165,11 @@ def when_solicitar_envio_duplicado(ctx: dict, evento_fuente_id: str) -> None:
     asyncio.run(_run())
 
 
-@when(parsers.parse('se ejecuta SolicitarEnvio con evento_fuente_id "{evento_fuente_id}" y destinatario "ana@example.com"'))
+@when(
+    parsers.parse(
+        'se ejecuta SolicitarEnvio con evento_fuente_id "{evento_fuente_id}" y destinatario "ana@example.com"'
+    )
+)
 def when_reintento(ctx: dict, evento_fuente_id: str) -> None:
     when_solicitar_envio(ctx, evento_fuente_id, "ana@example.com")
 

@@ -57,7 +57,9 @@ async def test_repository_detecta_exito_previod_por_evento_fuente_id(tmp_path) -
         await repo.append(aggregate.stream_id, event.event_type, event.to_payload())
     aggregate.registrar_envio_exitoso("provider-1")
     for event in aggregate.pull_events():
-        await repo.append(aggregate.stream_id, event.event_type, event.to_payload(), expected_version=1)
+        await repo.append(
+            aggregate.stream_id, event.event_type, event.to_payload(), expected_version=1
+        )
 
     assert await repo.exists_success_by_evento_fuente_id("reg-001") is True
     assert await repo.exists_success_by_evento_fuente_id("reg-002") is False

@@ -39,7 +39,10 @@ from resultados.application.commands.calcular_ranking import (
     CalcularRankingCommand,
     CalcularRankingHandler,
 )
-from resultados.application.queries.obtener_ranking import ObtenerRankingHandler, ObtenerRankingQuery
+from resultados.application.queries.obtener_ranking import (
+    ObtenerRankingHandler,
+    ObtenerRankingQuery,
+)
 from resultados.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter as ResultadosDisciplinaDescriptorAdapter,
 )
@@ -106,9 +109,7 @@ def ctx_us_4_1_2():
 def _bootstrap_performance(ctx: dict, rp: str, pid: object | None = None) -> None:
     async def _run():
         participante_id = pid or ctx["pid"]
-        await RegistrarAPHandler(
-            ctx["store"], ctx["stub"], DisciplinaDescriptorAdapter()
-        ).handle(
+        await RegistrarAPHandler(ctx["store"], ctx["stub"], DisciplinaDescriptorAdapter()).handle(
             RegistrarAPCommand(
                 competencia_id=ctx["cid"],
                 participante_id=participante_id,
@@ -140,7 +141,10 @@ def _bootstrap_performance(ctx: dict, rp: str, pid: object | None = None) -> Non
     asyncio.run(_run())
 
 
-@given(parsers.parse("una Performance en estado ResultadoRegistrado para disciplina DYN con RP {rp}"), target_fixture="ctx")
+@given(
+    parsers.parse("una Performance en estado ResultadoRegistrado para disciplina DYN con RP {rp}"),
+    target_fixture="ctx",
+)
 def given_performance(ctx_us_4_1_2, rp: str):
     ctx_us_4_1_2["pid"] = uuid4()
     _bootstrap_performance(ctx_us_4_1_2, rp)
@@ -210,7 +214,9 @@ def when_una_penalizacion(ctx):
     _asignar(ctx, (_PENALIZACIONES["SIN_CONTACTO_PARED"],))
 
 
-@when("el juez asigna tarjeta BlancaConPenalizaciones con penalizaciones SIN_CONTACTO_PARED y FUERA_DE_CARRIL")
+@when(
+    "el juez asigna tarjeta BlancaConPenalizaciones con penalizaciones SIN_CONTACTO_PARED y FUERA_DE_CARRIL"
+)
 def when_dos_penalizaciones(ctx):
     _asignar(
         ctx,
@@ -231,7 +237,9 @@ def when_calcula_ranking(ctx):
             resultados_port=ResultadosCompetenciaAdapter(ctx["store"]),
             descriptor=ResultadosDisciplinaDescriptorAdapter(),
         )
-        await handler.handle(CalcularRankingCommand(competencia_id=ctx["cid"], disciplina=Disciplina.DYN))
+        await handler.handle(
+            CalcularRankingCommand(competencia_id=ctx["cid"], disciplina=Disciplina.DYN)
+        )
         ctx["ranking"] = await ObtenerRankingHandler(ctx["ranking_store"]).handle(
             ObtenerRankingQuery(competencia_id=ctx["cid"], disciplina=Disciplina.DYN)
         )
@@ -275,7 +283,9 @@ def then_tipo_evento(ctx, tipo: str):
     assert payload["tipo"] == tipo
 
 
-@then(parsers.parse("el evento incluye la penalizacion SIN_CONTACTO_PARED con deduccion {deduccion}"))
+@then(
+    parsers.parse("el evento incluye la penalizacion SIN_CONTACTO_PARED con deduccion {deduccion}")
+)
 def then_evento_penalizacion(ctx, deduccion: str):
     async def _run():
         stream_id = f"performance-{ctx['cid']}-{ctx['pid']}-{Disciplina.DYN.value}"

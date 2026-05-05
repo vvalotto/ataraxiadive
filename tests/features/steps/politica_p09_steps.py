@@ -43,7 +43,9 @@ async def _init_event_db(db_path: str) -> None:
         await db.commit()
 
 
-async def _seed_torneo(repo: SQLiteTorneoRepository, torneo_id, disciplinas: set[Disciplina]) -> None:
+async def _seed_torneo(
+    repo: SQLiteTorneoRepository, torneo_id, disciplinas: set[Disciplina]
+) -> None:
     torneo = Torneo(
         torneo_id=torneo_id,
         nombre="Torneo test",
@@ -91,7 +93,9 @@ async def _append_competencia(
         )
 
 
-async def _append_finalizacion(store: SQLiteEventStore, competencia_id, disciplina: Disciplina) -> None:
+async def _append_finalizacion(
+    store: SQLiteEventStore, competencia_id, disciplina: Disciplina
+) -> None:
     await store.append(
         stream_id=f"competencia-{competencia_id}",
         event_type="CompetenciaFinalizada",
@@ -188,7 +192,9 @@ def given_dnf_no_finalizo(ctx: dict) -> None:
 @given("la disciplina STA ya finalizo con ranking calculado")
 def given_sta_ya_finalizo(ctx: dict) -> None:
     async def _run() -> None:
-        await _append_finalizacion(ctx["competencia_store"], ctx["competencias"]["STA"], Disciplina.STA)
+        await _append_finalizacion(
+            ctx["competencia_store"], ctx["competencias"]["STA"], Disciplina.STA
+        )
 
     asyncio.run(_run())
 
@@ -198,20 +204,24 @@ def given_competencia_standalone(ctx: dict) -> None:
     async def _run() -> None:
         competencia_id = uuid4()
         ctx["competencias"]["STA"] = competencia_id
-        await _append_competencia(ctx["competencia_store"], competencia_id, None, Disciplina.STA, True)
+        await _append_competencia(
+            ctx["competencia_store"], competencia_id, None, Disciplina.STA, True
+        )
 
     asyncio.run(_run())
 
 
 @given("un torneo cuyo overall ya fue calculado")
 def given_overall_ya_calculado(ctx: dict) -> None:
-    asyncio.run(
-        _seed_torneo(ctx["torneo_repo"], ctx["torneo_id"], {Disciplina.STA})
-    )
+    asyncio.run(_seed_torneo(ctx["torneo_repo"], ctx["torneo_id"], {Disciplina.STA}))
     ctx["competencias"]["STA"] = uuid4()
     asyncio.run(
         _append_competencia(
-            ctx["competencia_store"], ctx["competencias"]["STA"], ctx["torneo_id"], Disciplina.STA, True
+            ctx["competencia_store"],
+            ctx["competencias"]["STA"],
+            ctx["torneo_id"],
+            Disciplina.STA,
+            True,
         )
     )
     ctx["llamadas"].append(("overall", "torneo"))
@@ -227,7 +237,9 @@ def when_finaliza_sta(ctx: dict) -> None:
 @when("la competencia DNF finaliza")
 def when_finaliza_dnf(ctx: dict) -> None:
     async def _run() -> None:
-        await _append_finalizacion(ctx["competencia_store"], ctx["competencias"]["DNF"], Disciplina.DNF)
+        await _append_finalizacion(
+            ctx["competencia_store"], ctx["competencias"]["DNF"], Disciplina.DNF
+        )
         callback = app_module.build_on_finalizada_callback(ctx["competencia_store"])
         await callback(ctx["competencias"]["DNF"], Disciplina.DNF, ctx["torneo_id"])
 

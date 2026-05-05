@@ -320,8 +320,10 @@ async def fase1() -> None:
     print()
     print("⚠  Fase 1 completada. Próximos pasos:")
     print("   1. Levantá el servidor: uv run fastapi dev src/app.py")
-    print(f"   2. POST /competencia/{cid}/confirmar-grilla  {{\"disciplina\": \"STA\"}}")
-    print(f"   3. POST /competencia/{cid}/iniciar           {{\"disciplina\": \"STA\", \"juez_id\": \"{_JUEZ}\"}}")
+    print(f'   2. POST /competencia/{cid}/confirmar-grilla  {{"disciplina": "STA"}}')
+    print(
+        f'   3. POST /competencia/{cid}/iniciar           {{"disciplina": "STA", "juez_id": "{_JUEZ}"}}'
+    )
     print("   4. Ejecutá: uv run python tests/uat/sp3/seed_sp3.py fase2")
 
 
@@ -344,8 +346,7 @@ async def fase2() -> None:
     torneo_id = UUID(ids["torneo_id"])
     cid = UUID(ids["competencia_id"])
     atleta_ids = {
-        label.upper(): UUID(ids[f"atleta_{label}"])
-        for label in ["a", "b", "c", "d", "e", "f"]
+        label.upper(): UUID(ids[f"atleta_{label}"]) for label in ["a", "b", "c", "d", "e", "f"]
     }
 
     print("=" * 60)

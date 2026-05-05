@@ -29,9 +29,13 @@ class Inscripcion:
 
     def declarar_ap(self, disciplina: Disciplina, valor: Decimal) -> APDeclarado:
         if disciplina not in self.disciplinas:
-            raise DisciplinaNoInscripta(f"La disciplina {disciplina.value} no pertenece a la inscripción")
+            raise DisciplinaNoInscripta(
+                f"La disciplina {disciplina.value} no pertenece a la inscripción"
+            )
         if self.obtener_ap(disciplina) is not None:
-            raise APYaDeclarado(f"El AP para {disciplina.value} ya fue declarado y no puede editarse")
+            raise APYaDeclarado(
+                f"El AP para {disciplina.value} ya fue declarado y no puede editarse"
+            )
         ap = APDeclarado.desde_disciplina(disciplina, valor)
         self.ap_por_disciplina[disciplina] = ap
         return ap

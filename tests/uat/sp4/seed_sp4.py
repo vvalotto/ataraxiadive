@@ -15,6 +15,7 @@ Crea:
 
 Uso:  uv run python tests/uat/sp4/seed_sp4.py
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -198,49 +199,80 @@ def main() -> None:
 
         # ── Torneo ────────────────────────────────────────────────────────────
         print("▸ Torneo")
-        resp = client.post("/torneos", json={
-            "nombre": "UAT SP4 — Flujo de Performance",
-            "descripcion": "Torneo de prueba para UAT SP4",
-            "fecha_inicio": "2025-12-01",
-            "fecha_fin": "2025-12-01",
-            "sede": {"nombre": "Pileta UAT", "ciudad": "Buenos Aires", "pais": "Argentina"},
-            "entidad_organizadora": {"nombre": "AIDA Argentina", "tipo": "Federación"},
-        }, headers=org_h)
+        resp = client.post(
+            "/torneos",
+            json={
+                "nombre": "UAT SP4 — Flujo de Performance",
+                "descripcion": "Torneo de prueba para UAT SP4",
+                "fecha_inicio": "2025-12-01",
+                "fecha_fin": "2025-12-01",
+                "sede": {"nombre": "Pileta UAT", "ciudad": "Buenos Aires", "pais": "Argentina"},
+                "entidad_organizadora": {"nombre": "AIDA Argentina", "tipo": "Federación"},
+            },
+            headers=org_h,
+        )
         torneo_id = assert_ok(resp, "crear torneo")["torneo_id"]
         log(f"torneo_id: {torneo_id}")
 
         # ── Disciplinas y juez ────────────────────────────────────────────────
         print("▸ Disciplinas")
-        assert_ok(client.put(f"/torneos/{torneo_id}/disciplinas",
-                             json={"disciplinas": ["DNF", "STA"]}, headers=org_h),
-                  "agregar disciplinas")
-        assert_ok(client.put(f"/torneos/{torneo_id}/disciplinas/DNF/juez",
-                             json={"juez_id": juez_id}, headers=org_h), "asignar juez DNF")
-        assert_ok(client.put(f"/torneos/{torneo_id}/disciplinas/STA/juez",
-                             json={"juez_id": juez_id}, headers=org_h), "asignar juez STA")
+        assert_ok(
+            client.put(
+                f"/torneos/{torneo_id}/disciplinas",
+                json={"disciplinas": ["DNF", "STA"]},
+                headers=org_h,
+            ),
+            "agregar disciplinas",
+        )
+        assert_ok(
+            client.put(
+                f"/torneos/{torneo_id}/disciplinas/DNF/juez",
+                json={"juez_id": juez_id},
+                headers=org_h,
+            ),
+            "asignar juez DNF",
+        )
+        assert_ok(
+            client.put(
+                f"/torneos/{torneo_id}/disciplinas/STA/juez",
+                json={"juez_id": juez_id},
+                headers=org_h,
+            ),
+            "asignar juez STA",
+        )
         log("DNF + STA asignadas al juez")
 
-        assert_ok(client.put(f"/torneos/{torneo_id}/abrir-inscripcion", headers=org_h),
-                  "abrir inscripcion")
+        assert_ok(
+            client.put(f"/torneos/{torneo_id}/abrir-inscripcion", headers=org_h),
+            "abrir inscripcion",
+        )
 
         # ── Atletas DNF ───────────────────────────────────────────────────────
         print("▸ Atletas DNF (e02-e06)")
         atletas_dnf_def = [
-            ("e02", "Elena",    "Marino",   "SENIOR_FEMENINO",  "e02@uat.test",  72),
-            ("e03", "Tomás",    "Buceo",    "SENIOR_MASCULINO", "e03@uat.test",  68),
-            ("e04", "Sofía",    "Oceano",   "SENIOR_FEMENINO",  "e04@uat.test",  65),
-            ("e05", "Rodrigo",  "Profundo", "MASTER_MASCULINO", "e05@uat.test",  60),
-            ("e06", "Camila",   "Abismo",   "SENIOR_FEMENINO",  "e06@uat.test",  55),
+            ("e02", "Elena", "Marino", "SENIOR_FEMENINO", "e02@uat.test", 72),
+            ("e03", "Tomás", "Buceo", "SENIOR_MASCULINO", "e03@uat.test", 68),
+            ("e04", "Sofía", "Oceano", "SENIOR_FEMENINO", "e04@uat.test", 65),
+            ("e05", "Rodrigo", "Profundo", "MASTER_MASCULINO", "e05@uat.test", 60),
+            ("e06", "Camila", "Abismo", "SENIOR_FEMENINO", "e06@uat.test", 55),
         ]
         atleta_ids: dict[str, str] = {}
         atleta_ap_dnf: list[tuple[str, int]] = []
         for codigo, nombre, apellido, cat, email, ap in atletas_dnf_def:
             aid = str(uuid.uuid4())
-            resp = client.post("/registro/atletas", json={
-                "atleta_id": aid, "nombre": nombre, "apellido": apellido,
-                "email": email, "fecha_nacimiento": "1990-01-01",
-                "categoria": cat, "club": "Club UAT",
-            }, headers=admin_h)
+            resp = client.post(
+                "/registro/atletas",
+                json={
+                    "atleta_id": aid,
+                    "nombre": nombre,
+                    "apellido": apellido,
+                    "email": email,
+                    "fecha_nacimiento": "1990-01-01",
+                    "categoria": cat,
+                    "club": "Club UAT",
+                },
+                headers=admin_h,
+            )
             data = assert_ok(resp, f"registrar atleta {codigo}")
             atleta_ids[codigo] = data.get("atleta_id", aid)
             atleta_ap_dnf.append((atleta_ids[codigo], ap))
@@ -248,18 +280,26 @@ def main() -> None:
 
         print("▸ Atletas STA (t01-t03)")
         atletas_sta_def = [
-            ("t01", "Lucía",     "Apnea",    "SENIOR_FEMENINO",  "t01@uat.test", 300),
-            ("t02", "Marcos",    "Silencio",  "SENIOR_MASCULINO", "t02@uat.test", 270),
-            ("t03", "Valentina", "Fondo",    "SENIOR_FEMENINO",  "t03@uat.test", 240),
+            ("t01", "Lucía", "Apnea", "SENIOR_FEMENINO", "t01@uat.test", 300),
+            ("t02", "Marcos", "Silencio", "SENIOR_MASCULINO", "t02@uat.test", 270),
+            ("t03", "Valentina", "Fondo", "SENIOR_FEMENINO", "t03@uat.test", 240),
         ]
         atleta_ap_sta: list[tuple[str, int]] = []
         for codigo, nombre, apellido, cat, email, ap in atletas_sta_def:
             aid = str(uuid.uuid4())
-            resp = client.post("/registro/atletas", json={
-                "atleta_id": aid, "nombre": nombre, "apellido": apellido,
-                "email": email, "fecha_nacimiento": "1992-01-01",
-                "categoria": cat, "club": "Club UAT",
-            }, headers=admin_h)
+            resp = client.post(
+                "/registro/atletas",
+                json={
+                    "atleta_id": aid,
+                    "nombre": nombre,
+                    "apellido": apellido,
+                    "email": email,
+                    "fecha_nacimiento": "1992-01-01",
+                    "categoria": cat,
+                    "club": "Club UAT",
+                },
+                headers=admin_h,
+            )
             data = assert_ok(resp, f"registrar atleta {codigo}")
             atleta_ids[codigo] = data.get("atleta_id", aid)
             atleta_ap_sta.append((atleta_ids[codigo], ap))
@@ -268,22 +308,44 @@ def main() -> None:
         # ── Inscripciones ─────────────────────────────────────────────────────
         print("▸ Inscripciones")
         for codigo in ["e02", "e03", "e04", "e05", "e06"]:
-            assert_ok(client.post("/registro/inscripciones", json={
-                "atleta_id": atleta_ids[codigo], "torneo_id": torneo_id, "disciplinas": ["DNF"],
-            }, headers=admin_h), f"inscribir {codigo}")
+            assert_ok(
+                client.post(
+                    "/registro/inscripciones",
+                    json={
+                        "atleta_id": atleta_ids[codigo],
+                        "torneo_id": torneo_id,
+                        "disciplinas": ["DNF"],
+                    },
+                    headers=admin_h,
+                ),
+                f"inscribir {codigo}",
+            )
             log(f"  {codigo} → DNF")
         for codigo in ["t01", "t02", "t03"]:
-            assert_ok(client.post("/registro/inscripciones", json={
-                "atleta_id": atleta_ids[codigo], "torneo_id": torneo_id, "disciplinas": ["STA"],
-            }, headers=admin_h), f"inscribir {codigo}")
+            assert_ok(
+                client.post(
+                    "/registro/inscripciones",
+                    json={
+                        "atleta_id": atleta_ids[codigo],
+                        "torneo_id": torneo_id,
+                        "disciplinas": ["STA"],
+                    },
+                    headers=admin_h,
+                ),
+                f"inscribir {codigo}",
+            )
             log(f"  {codigo} → STA")
 
         # ── Ciclo torneo → EJECUCION ──────────────────────────────────────────
         print("▸ Torneo → EJECUCION")
-        assert_ok(client.put(f"/torneos/{torneo_id}/cerrar-inscripcion", headers=org_h),
-                  "cerrar inscripcion")
-        assert_ok(client.put(f"/torneos/{torneo_id}/iniciar-ejecucion", headers=org_h),
-                  "iniciar ejecucion")
+        assert_ok(
+            client.put(f"/torneos/{torneo_id}/cerrar-inscripcion", headers=org_h),
+            "cerrar inscripcion",
+        )
+        assert_ok(
+            client.put(f"/torneos/{torneo_id}/iniciar-ejecucion", headers=org_h),
+            "iniciar ejecucion",
+        )
         log("estado: EJECUCION")
 
     # ── Competencias (application layer) ─────────────────────────────────────
@@ -291,26 +353,30 @@ def main() -> None:
     cid_sta = uuid.uuid4()
 
     print("▸ Competencia DNF (application layer)")
-    asyncio.run(setup_competencia(
-        competencia_id=cid_dnf,
-        disciplina_str="DNF",
-        intervalo_minutos=7,
-        juez_id=juez_id,
-        torneo_id=torneo_id,
-        atletas=atleta_ap_dnf,
-        unidad_str="metros",
-    ))
+    asyncio.run(
+        setup_competencia(
+            competencia_id=cid_dnf,
+            disciplina_str="DNF",
+            intervalo_minutos=7,
+            juez_id=juez_id,
+            torneo_id=torneo_id,
+            atletas=atleta_ap_dnf,
+            unidad_str="metros",
+        )
+    )
 
     print("▸ Competencia STA (application layer)")
-    asyncio.run(setup_competencia(
-        competencia_id=cid_sta,
-        disciplina_str="STA",
-        intervalo_minutos=20,
-        juez_id=juez_id,
-        torneo_id=torneo_id,
-        atletas=atleta_ap_sta,
-        unidad_str="segundos",
-    ))
+    asyncio.run(
+        setup_competencia(
+            competencia_id=cid_sta,
+            disciplina_str="STA",
+            intervalo_minutos=20,
+            juez_id=juez_id,
+            torneo_id=torneo_id,
+            atletas=atleta_ap_sta,
+            unidad_str="segundos",
+        )
+    )
 
     # ── Guardar IDs ───────────────────────────────────────────────────────────
     ids = {

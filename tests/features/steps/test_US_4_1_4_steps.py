@@ -65,7 +65,9 @@ def ctx_us_4_1_4(tmp_path) -> dict:  # type: ignore[type-arg]
     }
 
 
-def _seed_competencia(ctx: dict, disciplina: Disciplina, aps: list[str], unidad: UnidadMedida) -> None:
+def _seed_competencia(
+    ctx: dict, disciplina: Disciplina, aps: list[str], unidad: UnidadMedida
+) -> None:
     async def _run() -> None:
         ctx["disciplina"] = disciplina
         await ConfigurarIntervaloOTHandler(ctx["store"]).handle(
@@ -101,9 +103,7 @@ def given_dyn(ctx_us_4_1_4):
 
 @given("una competencia STA con APs 300s, 180s y 240s", target_fixture="ctx")
 def given_sta(ctx_us_4_1_4):
-    _seed_competencia(
-        ctx_us_4_1_4, Disciplina.STA, ["300s", "180s", "240s"], UnidadMedida.Segundos
-    )
+    _seed_competencia(ctx_us_4_1_4, Disciplina.STA, ["300s", "180s", "240s"], UnidadMedida.Segundos)
     return ctx_us_4_1_4
 
 

@@ -172,9 +172,11 @@ class GrillaDeSalida:
 
     def asignar_juez(self, performance_id: UUID, juez_id: str) -> None:
         self._entradas = [
-            self._reemplazar_entrada(entrada, juez_id=juez_id)
-            if entrada.performance_id == performance_id
-            else entrada
+            (
+                self._reemplazar_entrada(entrada, juez_id=juez_id)
+                if entrada.performance_id == performance_id
+                else entrada
+            )
             for entrada in self._entradas
         ]
 

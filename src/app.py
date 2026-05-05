@@ -437,7 +437,9 @@ def build_ejecucion_precondition(
         os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db")
     )
     torneos_path = torneo_db_path or os.getenv("TORNEO_DB_PATH", "data/torneo.db")
-    competencias_path = competencia_db_path or os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db")
+    competencias_path = competencia_db_path or os.getenv(
+        "COMPETENCIA_DB_PATH", "data/competencia.db"
+    )
 
     async def _precondition(torneo_id: UUID) -> None:
         pendientes = await _obtener_disciplinas_pendientes_ejecucion(
@@ -447,9 +449,7 @@ def build_ejecucion_precondition(
             competencias_path,
         )
         if pendientes:
-            raise EjecucionNoPermitida(
-                "No se puede pasar a ejecucion: " + "; ".join(pendientes)
-            )
+            raise EjecucionNoPermitida("No se puede pasar a ejecucion: " + "; ".join(pendientes))
 
     return _precondition
 
@@ -464,7 +464,9 @@ def build_ejecucion_post_action(
         os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db")
     )
     torneos_path = torneo_db_path or os.getenv("TORNEO_DB_PATH", "data/torneo.db")
-    competencias_path = competencia_db_path or os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db")
+    competencias_path = competencia_db_path or os.getenv(
+        "COMPETENCIA_DB_PATH", "data/competencia.db"
+    )
 
     async def _post_action(torneo_id: UUID) -> None:
         disciplinas = await _obtener_disciplinas_torneo(torneo_id, torneos_path)

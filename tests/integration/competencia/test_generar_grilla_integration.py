@@ -247,7 +247,9 @@ class TestGenerarGrillaIntegracion:
             )
 
     @pytest.mark.asyncio
-    async def test_grilla_spe_4x50_usa_orden_descendente(self, event_store: SQLiteEventStore) -> None:
+    async def test_grilla_spe_4x50_usa_orden_descendente(
+        self, event_store: SQLiteEventStore
+    ) -> None:
         competencia_id = UUID("00000000-0000-0000-0000-000000000004")
         disciplina = Disciplina.SPE_4X50
         await ConfigurarIntervaloOTHandler(event_store).handle(
@@ -284,7 +286,9 @@ class TestGenerarGrillaIntegracion:
         assert atletas_orden == [str(A002), str(A003), str(A001)]
 
     @pytest.mark.asyncio
-    async def test_grilla_spe_2x50_usa_orden_descendente(self, event_store: SQLiteEventStore) -> None:
+    async def test_grilla_spe_2x50_usa_orden_descendente(
+        self, event_store: SQLiteEventStore
+    ) -> None:
         competencia_id = UUID("00000000-0000-0000-0000-000000000005")
         disciplina = Disciplina.SPE_2X50
         await ConfigurarIntervaloOTHandler(event_store).handle(

@@ -157,9 +157,7 @@ async def get_ranking(
 
     if not calculado:
         rankings = await provisional_handler.handle(
-            ObtenerRankingProvisionalQuery(
-                competencia_id=competencia_id, disciplina=disciplina
-            )
+            ObtenerRankingProvisionalQuery(competencia_id=competencia_id, disciplina=disciplina)
         )
 
     return JSONResponse(

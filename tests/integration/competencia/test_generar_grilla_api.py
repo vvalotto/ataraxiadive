@@ -25,7 +25,6 @@ from competencia.infrastructure.repositories.disciplina_descriptor_adapter impor
 )
 from identidad.api.dependencies import get_current_user
 
-
 CREATE_EVENTS_TABLE = """
     CREATE TABLE events (
         id          INTEGER PRIMARY KEY AUTOINCREMENT,

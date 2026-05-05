@@ -92,13 +92,11 @@ def _evento(
 async def _events(db_path) -> list[dict[str, Any]]:
     async with aiosqlite.connect(db_path) as db:
         db.row_factory = aiosqlite.Row
-        cursor = await db.execute(
-            """
+        cursor = await db.execute("""
             SELECT event_type, payload
             FROM notificaciones_events
             ORDER BY id ASC
-            """
-        )
+            """)
         rows = await cursor.fetchall()
     return [{"event_type": row["event_type"], "payload": row["payload"]} for row in rows]
 
@@ -151,11 +149,7 @@ def given_proveedor_falla(ctx: dict[str, Any]) -> None:
     ctx["email"].fail = True
 
 
-@given(
-    parsers.parse(
-        'el evento tiene torneo "{torneo}", fecha "{fecha}" y sede "{sede}"'
-    )
-)
+@given(parsers.parse('el evento tiene torneo "{torneo}", fecha "{fecha}" y sede "{sede}"'))
 def given_torneo_fecha_sede(ctx: dict[str, Any], torneo: str, fecha: str, sede: str) -> None:
     evento = ctx["evento"]
     ctx["evento"] = _evento(

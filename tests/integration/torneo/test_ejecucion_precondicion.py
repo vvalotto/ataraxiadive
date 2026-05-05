@@ -65,7 +65,10 @@ def _crear_torneo_en_preparacion(client: TestClient) -> UUID:
     assert response.status_code == 201
     torneo_id = UUID(response.json()["torneo_id"])
 
-    assert client.put(f"/torneos/{torneo_id}/disciplinas", json={"disciplinas": ["STA"]}).status_code == 200
+    assert (
+        client.put(f"/torneos/{torneo_id}/disciplinas", json={"disciplinas": ["STA"]}).status_code
+        == 200
+    )
     assert client.put(f"/torneos/{torneo_id}/abrir-inscripcion").status_code == 200
     assert client.put(f"/torneos/{torneo_id}/cerrar-inscripcion").status_code == 200
     return torneo_id
