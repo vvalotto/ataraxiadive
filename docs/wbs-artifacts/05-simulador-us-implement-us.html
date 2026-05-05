@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AtaraxiaDive — Simulador /implement-us</title>
+  <style>
+    :root{--bg:#07111f;--panel:rgba(15,23,42,.88);--card:rgba(30,41,59,.88);--text:#e5e7eb;--muted:#94a3b8;--line:rgba(148,163,184,.22);--blue:#38bdf8;--green:#22c55e;--yellow:#facc15;--red:#fb7185;--violet:#a78bfa}*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:radial-gradient(circle at 8% 8%,rgba(56,189,248,.22),transparent 30%),radial-gradient(circle at 90% 20%,rgba(167,139,250,.17),transparent 28%),var(--bg)}header{padding:30px 42px 18px;border-bottom:1px solid var(--line);background:rgba(7,17,31,.92);backdrop-filter:blur(14px);position:sticky;top:0;z-index:10}h1{margin:0 0 8px;font-size:clamp(30px,4vw,50px);letter-spacing:-.045em}.subtitle{color:var(--muted);max-width:1080px;line-height:1.55}main{padding:26px 42px 44px;display:grid;gap:22px}.grid{display:grid;grid-template-columns:minmax(420px,1fr) 410px;gap:22px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:0 24px 70px rgba(2,6,23,.35)}.side{position:sticky;top:128px;align-self:start}.muted{color:var(--muted);line-height:1.55}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.btn,select{background:#020617;color:var(--text);border:1px solid var(--line);border-radius:999px;padding:10px 14px;cursor:pointer}.btn:hover,.btn.active,select:hover{background:#082f49;border-color:var(--blue)}.us-card{display:grid;gap:8px;background:rgba(2,6,23,.62);border:1px solid var(--line);border-radius:22px;padding:18px}.badges{display:flex;gap:7px;flex-wrap:wrap}.badge{display:inline-flex;border:1px solid rgba(148,163,184,.25);background:rgba(2,6,23,.62);border-radius:999px;padding:5px 9px;font-size:12px;color:#dbeafe}.green{color:#bbf7d0}.yellow{color:#fef3c7}.red{color:#fecdd3}.timeline{display:grid;gap:11px}.phase{display:grid;grid-template-columns:54px 1fr 120px;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:13px;cursor:pointer;transition:.18s}.phase:hover,.phase.active{transform:translateX(5px);border-color:var(--blue);background:#082f49}.num{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:rgba(56,189,248,.14);border:1px solid rgba(56,189,248,.28);font-weight:900;color:#bae6fd}.phase h3{margin:0 0 4px;font-size:17px}.phase p{margin:0;color:var(--muted);font-size:13px;line-height:1.35}.state{text-align:right;font-size:12px}.state.done{color:var(--green)}.state.current{color:var(--yellow)}.state.pending{color:var(--muted)}.artifact{background:rgba(2,6,23,.62);border:1px solid var(--line);border-radius:18px;padding:14px;margin-top:10px}.artifact h4{margin:0 0 6px}.artifact p{margin:0;color:var(--muted);line-height:1.45}.progress-wrap{height:12px;background:#020617;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-top:14px}.progress{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--green));transition:.25s}.code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;background:#020617;border:1px solid var(--line);border-radius:14px;padding:12px;color:#dbeafe;white-space:pre-wrap;line-height:1.45;font-size:13px}.decision{border-left:4px solid var(--yellow);padding-left:12px;color:#fef3c7}.footer-note{font-size:13px;color:var(--muted)}@media(max-width:1050px){header,main{padding-left:18px;padding-right:18px}.grid{grid-template-columns:1fr}.side{position:static}.phase{grid-template-columns:54px 1fr}.state{text-align:left;grid-column:2}}@media(max-width:640px){.phase{grid-template-columns:1fr}.state{grid-column:auto}.num{width:42px}}
+  </style>
+</head>
+<body>
+<header>
+  <h1>Simulador de US — `/implement-us`</h1>
+  <div class="subtitle">Simulación didáctica de una Historia de Usuario atravesando el skill real: validación de contexto, BDD, planificación, implementación, tests, quality gates, documentación y reporte final.</div>
+</header>
+<main>
+  <section class="panel">
+    <div class="toolbar">
+      <button class="btn" id="prev">← Fase anterior</button>
+      <button class="btn active" id="next">Siguiente fase →</button>
+      <button class="btn" id="reset">Reiniciar</button>
+      <select id="scenario">
+        <option value="judge">US-6.1.1 — Ajustes Juez</option>
+        <option value="athlete">US-6.3.1 — Ajustes Atleta</option>
+      </select>
+    </div>
+    <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+  </section>
+
+  <section class="grid">
+    <article class="panel">
+      <div class="us-card" id="usCard"></div>
+      <h2>Recorrido por fases</h2>
+      <div class="timeline" id="timeline"></div>
+    </article>
+    <aside class="panel side" id="detail"></aside>
+  </section>
+
+  <section class="panel">
+    <h2>Lectura didáctica</h2>
+    <p class="muted">Esta simulación no ejecuta código ni modifica el producto. Sirve para explicar cómo una US deja de ser una intención y se convierte en evidencia: escenarios, plan, tareas, tests, validaciones, documentación y métricas. Es una maqueta honesta: no compite, entrena.</p>
+  </section>
+</main>
+<script>
+const scenarios={
+  judge:{id:'US-6.1.1',title:'Fix BUG canSubmitBko + corrección secuencia tarjeta→marca',product:'frontend',sp:'SP6 — Validación, Ajustes y Despliegue',context:'Ajustes Juez',risk:'UX móvil + secuencia de negocio',dod:'El juez finaliza la performance, asigna tarjeta y luego confirma marca sin bloqueo por canSubmitBko.'},
+  athlete:{id:'US-6.3.1',title:'Portal Atleta — priorizar próxima disciplina y estado de participación',product:'frontend',sp:'SP6 — Validación, Ajustes y Despliegue',context:'Ajustes Atleta',risk:'Ordenamiento UX + consistencia de estado',dod:'El atleta ve primero su próxima disciplina, luego futuras y al final las ya realizadas.'}
+};
+const phases=[
+{n:0,name:'Validación de Contexto',approval:'Automática',kind:'setup',out:'Contexto validado',text:'Se busca la US, se verifica el producto activo, la arquitectura hexagonal/DDD/BC y los estándares de calidad aplicables.',artifact:s=>`Producto: ${s.product}\nSP: ${s.sp}\nRiesgo principal: ${s.risk}\nContexto obligatorio: docs/contexto/ATARAXIADIVE-CONTEXT.md`},
+{n:1,name:'Generación de Escenarios BDD',approval:'Requerida',kind:'human',out:'Archivo .feature',text:'Se traducen criterios de aceptación a escenarios Given-When-Then. El usuario debe revisar si esos escenarios representan el comportamiento esperado.',artifact:s=>`Feature: ${s.id}\nScenario: flujo principal cumple DoD\nGiven una situación válida\nWhen el usuario ejecuta la acción\nThen el sistema cumple: ${s.dod}`},
+{n:2,name:'Plan de Implementación',approval:'Requerida',kind:'human',out:'Checklist técnico',text:'Se define qué componentes tocar, tareas, estimación y orden de implementación según el perfil hexagonal-ddd-bc.',artifact:s=>`Checklist:\n[ ] Identificar componentes frontend afectados\n[ ] Ajustar estado/UI\n[ ] Actualizar tests\n[ ] Ejecutar build y validaciones\n[ ] Registrar evidencia`},
+{n:3,name:'Implementación Guiada por Tareas',approval:'Por tarea configurable',kind:'build',out:'Código modificado',text:'Se ejecutan las tareas del plan secuencialmente con tracking de tiempo y checkpoints opcionales.',artifact:s=>`Tarea 1: localizar componentes\nTarea 2: aplicar cambio mínimo\nTarea 3: revisar efectos colaterales\nTarea 4: dejar evidencia para revisión`},
+{n:4,name:'Tests Unitarios',approval:'Automática',kind:'test',out:'Tests unitarios pasando',text:'Se generan o actualizan tests unitarios según el framework configurado. En frontend se complementa con build y validación manual UI.',artifact:s=>`pytest / npm build según producto\nResultado esperado: sin regresiones unitarias\nCobertura: revisar componentes críticos`},
+{n:5,name:'Tests de Integración',approval:'Automática',kind:'test',out:'Suite integrada',text:'Se valida interacción entre componentes y se ejecuta la suite completa que corresponda.',artifact:s=>`Integración UI ↔ estado ↔ API client\nValidar persistencia del flujo\nRevisar navegación y datos derivados`},
+{n:6,name:'Validación BDD',approval:'Automática',kind:'test',out:'Escenarios BDD pasando',text:'Se implementan step definitions si corresponde y se valida que los escenarios BDD pasen.',artifact:s=>`BDD ejecutado contra escenarios de ${s.id}\nResultado esperado: escenarios principales y alternativos en verde`},
+{n:7,name:'Quality Gates',approval:'Automática',kind:'quality',out:'Reporte de calidad',text:'Se ejecutan validaciones de calidad: pylint, complejidad, cobertura y reportes. En frontend: build/lint/validación de UI según corresponda.',artifact:s=>`Quality gate:\n- Sin CRITICAL\n- Build OK\n- Complejidad controlada\n- Sin deuda crítica nueva`},
+{n:8,name:'Documentación',approval:'Requerida',kind:'human',out:'Docs actualizadas',text:'Se actualiza documentación de arquitectura, README o docs del proyecto si el cambio lo exige. El usuario revisa.',artifact:s=>`Documentar:\n- Qué cambió\n- Qué flujo queda validado\n- Evidencia UAT o captura\n- Impacto sobre WBS/SP6`},
+{n:9,name:'Reporte Final',approval:'Automática',kind:'report',out:'Reporte + métricas',text:'Se consolidan métricas, reporte de implementación, varianza estimado vs real y datos para análisis histórico.',artifact:s=>`Reporte final ${s.id}:\nEstado: completada\nEvidencia: tests + quality + docs\nMétricas: tiempo por fase, varianza, observaciones`}
+];
+let current=0, scenarioKey='judge';
+const timeline=document.getElementById('timeline'),detail=document.getElementById('detail'),usCard=document.getElementById('usCard'),progress=document.getElementById('progress');
+function scenario(){return scenarios[scenarioKey]}
+function stateFor(i){return i<current?'done':i===current?'current':'pending'}
+function render(){const s=scenario();usCard.innerHTML=`<div class="badges"><span class="badge blue">${s.id}</span><span class="badge">${s.product}</span><span class="badge yellow">${s.context}</span></div><h2>${s.title}</h2><p class="muted"><strong>${s.sp}</strong><br>${s.dod}</p>`;timeline.innerHTML='';phases.forEach((p,i)=>{const st=stateFor(i);const el=document.createElement('div');el.className='phase '+(i===current?'active':'');el.innerHTML=`<div class="num">${p.n}</div><div><h3>${p.name}</h3><p>${p.text}</p></div><div class="state ${st}">${st==='done'?'completa':st==='current'?'actual':'pendiente'}<br>${p.approval}</div>`;el.onclick=()=>{current=i;render()};timeline.appendChild(el)});showDetail(phases[current]);progress.style.width=(current/(phases.length-1)*100)+'%'}
+function showDetail(p){const s=scenario();detail.innerHTML=`<h2>Fase ${p.n}: ${p.name}</h2><p class="muted">${p.text}</p><div class="badges"><span class="badge">${p.out}</span><span class="badge ${p.approval==='Requerida'?'yellow':'green'}">Aprobación: ${p.approval}</span></div><h3>Artefacto simulado</h3><div class="code">${p.artifact(s)}</div>${p.approval==='Requerida'?'<p class="decision"><strong>Checkpoint humano:</strong> acá el usuario valida que el resultado tenga sentido antes de seguir. Sin esto, la IA puede correr muy rápido… hacia el precipicio.</p>':''}`}
+document.getElementById('next').onclick=()=>{if(current<phases.length-1)current++;render()};document.getElementById('prev').onclick=()=>{if(current>0)current--;render()};document.getElementById('reset').onclick=()=>{current=0;render()};document.getElementById('scenario').onchange=e=>{scenarioKey=e.target.value;current=0;render()};render();
+</script>
+</body>
+</html>
