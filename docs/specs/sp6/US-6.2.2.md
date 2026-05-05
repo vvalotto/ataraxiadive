@@ -1,6 +1,6 @@
 # US-6.2.2: Inscriptos + Grilla — Categoría Legible + Columna AP → Anuncios
 
-**Estado**: `Pending`  
+**Estado**: `Done`
 **Incremento**: INC-6.2 — Ajustes Organizador  
 **Hallazgos**: UI-ORG-03 · UI-ORG-04  
 **Bounded Context**: `frontend`  
@@ -29,6 +29,13 @@ La columna `Categoria` muestra el valor raw del enum (ej: `SENIOR_MASCULINO`). A
 **Ubicación**: `frontend/src/components/organizador/TablaGrilla.tsx` — línea `<th>AP</th>`
 
 El término interno "AP" (Announced Performance) no es claro para el organizador; debe decir "Anuncio".
+
+## Fuente de verdad UX
+
+- `docs/design/ux/wireframes-organizador.md` — estructura de tablas y lenguaje visual del portal organizador.
+- `docs/design/ux/prototipos/prototipo-organizador.html` — prototipo navegable aprobado para el rol organizador.
+- `docs/plans/sp6/PLAN-SP6.md` — hallazgos UI-ORG-03 y UI-ORG-04 detectados en validación SP5.
+- `frontend/src/components/organizador/TablaInscriptos.tsx` y `TablaGrilla.tsx` — implementación React actual comparada contra los hallazgos.
 
 ---
 
