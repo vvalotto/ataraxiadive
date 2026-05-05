@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AtaraxiaDive — Niveles Metodológicos</title>
+  <style>
+    :root{--bg:#07111f;--panel:rgba(15,23,42,.86);--card:rgba(30,41,59,.88);--text:#e5e7eb;--muted:#94a3b8;--line:rgba(148,163,184,.22);--blue:#38bdf8;--violet:#a78bfa;--green:#22c55e;--yellow:#facc15;--orange:#fb923c;--red:#fb7185}*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:radial-gradient(circle at 8% 8%,rgba(56,189,248,.23),transparent 28%),radial-gradient(circle at 92% 18%,rgba(167,139,250,.18),transparent 28%),radial-gradient(circle at 50% 100%,rgba(34,197,94,.1),transparent 26%),var(--bg)}header{padding:30px 42px 18px;border-bottom:1px solid var(--line);background:rgba(7,17,31,.92);backdrop-filter:blur(14px);position:sticky;top:0;z-index:10}h1{margin:0 0 8px;font-size:clamp(30px,4vw,50px);letter-spacing:-.045em}.subtitle{color:var(--muted);max-width:1050px;line-height:1.55}main{padding:26px 42px 44px;display:grid;gap:22px}.grid{display:grid;grid-template-columns:minmax(420px,1fr) 390px;gap:22px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:0 24px 70px rgba(2,6,23,.34)}.side{position:sticky;top:128px;align-self:start}.intro h2,.panel h2{margin:0 0 10px;font-size:26px;letter-spacing:-.03em}.muted{color:var(--muted);line-height:1.55}.stack{display:grid;gap:12px}.level-card{display:grid;grid-template-columns:86px 1fr 140px;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;cursor:pointer;transition:.18s}.level-card:hover,.level-card.active{transform:translateX(5px);border-color:var(--blue);background:rgba(8,47,73,.78)}.num{width:62px;height:62px;border-radius:18px;display:grid;place-items:center;background:rgba(56,189,248,.14);border:1px solid rgba(56,189,248,.28);font-weight:900;font-size:22px;color:#bae6fd}.level-card:nth-child(2) .num{background:rgba(167,139,250,.14);border-color:rgba(167,139,250,.28)}.level-card:nth-child(3) .num{background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.28)}.level-card:nth-child(4) .num{background:rgba(250,204,21,.14);border-color:rgba(250,204,21,.28)}.level-card:nth-child(5) .num{background:rgba(251,146,60,.14);border-color:rgba(251,146,60,.28)}.level-card:nth-child(6) .num{background:rgba(251,113,133,.14);border-color:rgba(251,113,133,.28)}.level-card h3{margin:0 0 5px;font-size:21px;letter-spacing:-.025em}.level-card p{margin:0;color:var(--muted);line-height:1.4}.analogy{text-align:right;color:#dbeafe;font-size:13px}.badge{display:inline-flex;border:1px solid rgba(148,163,184,.25);background:rgba(2,6,23,.62);border-radius:999px;padding:5px 9px;font-size:12px;color:#dbeafe;margin:3px}.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.flow-step{background:rgba(2,6,23,.62);border:1px solid var(--line);border-radius:18px;padding:14px;min-height:128px}.flow-step strong{display:block;margin-bottom:8px;color:#e0f2fe}.flow-step span{color:var(--muted);font-size:13px;line-height:1.4}.phases{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.phase{background:rgba(2,6,23,.62);border:1px solid var(--line);border-radius:16px;padding:12px}.phase b{color:#e2e8f0}.phase p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.4}.togglebar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}button{background:#020617;color:var(--text);border:1px solid var(--line);border-radius:999px;padding:10px 14px;cursor:pointer}button:hover,button.active{background:#082f49;border-color:var(--blue)}@media(max-width:1100px){header,main{padding-left:18px;padding-right:18px}.grid{grid-template-columns:1fr}.side{position:static}.flow{grid-template-columns:1fr 1fr}.level-card{grid-template-columns:70px 1fr}.analogy{text-align:left;grid-column:2}}@media(max-width:680px){.flow,.phases{grid-template-columns:1fr}.level-card{grid-template-columns:1fr}.num{width:54px;height:54px}.analogy{grid-column:auto}}
+  </style>
+</head>
+<body>
+<header>
+  <h1>Niveles Metodológicos — AtaraxiaDive</h1>
+  <div class="subtitle">Vista interactiva del motor de trabajo: cómo se conectan gestión, estrategia, entregables, incrementos, especificación formal y ejecución técnica con IA.</div>
+</header>
+<main>
+  <section class="panel intro">
+    <h2>El sistema operativo del proyecto</h2>
+    <p class="muted">AtaraxiaDive no se entiende solo como una WBS ni solo como un backlog. Funciona con una cadena de niveles: arriba se decide propósito y valor; abajo se transforma una US-IEDD en tests, código, quality gates y trazabilidad. Esta vista muestra esa escalera completa.</p>
+  </section>
+  <section class="grid">
+    <article class="panel"><div class="stack" id="levels"></div></article>
+    <aside class="panel side" id="detail"></aside>
+  </section>
+  <section class="panel">
+    <h2>Flujo completo de responsabilidad</h2>
+    <div class="flow" id="flow"></div>
+  </section>
+  <section class="panel">
+    <h2>Zoom sobre Nivel 5 — `/implement-us`</h2>
+    <div class="togglebar">
+      <button class="active" data-mode="all">Todas las fases</button>
+      <button data-mode="spec">Especificación y diseño</button>
+      <button data-mode="build">Construcción</button>
+      <button data-mode="quality">Calidad y cierre</button>
+    </div>
+    <div class="phases" id="phases"></div>
+  </section>
+</main>
+<script>
+const levels=[
+{id:'l0',num:'0',name:'Proyecto',label:'AtaraxiaDive',analogy:'Sistema completo',purpose:'Define el producto y el experimento completo.',output:'Producto + evidencia del experimento',cadence:'Ciclo completo hasta v1.0',question:'¿Qué estamos construyendo y qué queremos aprender?'},
+{id:'l1',num:'1',name:'Horizonte',label:'Validar / Construir / Producir',analogy:'Estrategia',purpose:'Agrupa el trabajo según una pregunta estratégica.',output:'Hipótesis respondida con evidencia',cadence:'Tramo mayor del proyecto',question:'¿Qué pregunta del experimento responde esta etapa?'},
+{id:'l2',num:'2',name:'Subproyecto',label:'SP1…SP6',analogy:'Release / fase',purpose:'Unidad de valor completa con cierre formal.',output:'Baseline + tag Git',cadence:'Cierra con BL y versión',question:'¿Qué entrega reconocible queda funcionando?'},
+{id:'l3',num:'3',name:'Incremento',label:'INC-x.y',analogy:'Sprint sin timebox fijo',purpose:'Unidad de ritmo con DoD concreta.',output:'PR a develop + evidencia de DoD',cadence:'Termina cuando se cumple la DoD',question:'¿Qué avance observable se completa?'},
+{id:'l4',num:'4',name:'US-IEDD',label:'Historia formalizada',analogy:'Unidad de especificación',purpose:'Expresa comportamiento con precondición, postcondición e invariantes.',output:'Tests, código de dominio y reporte de calidad',cadence:'Una unidad implementable',question:'¿Qué comportamiento verificable se especifica?'},
+{id:'l5',num:'5',name:'/implement-us',label:'Proceso técnico por US',analogy:'Pipeline de construcción',purpose:'Transforma una US-IEDD en software validado.',output:'Commit convencional + trazabilidad actualizada',cadence:'10 fases por historia',question:'¿Cómo se ejecuta técnicamente la historia?'}
+];
+const phases=[
+{n:1,name:'Análisis de invariantes',mode:'spec',text:'Revisar precondición, postcondición e invariantes de la US-IEDD.'},
+{n:2,name:'Diseño del dominio',mode:'spec',text:'Identificar aggregate, value objects, domain events y ports.'},
+{n:3,name:'Tests primero',mode:'spec',text:'Escribir tests unitarios que fallen antes del código.'},
+{n:4,name:'Implementación dominio',mode:'build',text:'Aggregate, value objects, events y reglas de negocio.'},
+{n:5,name:'Capa de aplicación',mode:'build',text:'Comandos o queries que orquestan el dominio.'},
+{n:6,name:'Infraestructura',mode:'build',text:'Repositorios, event store y adaptadores.'},
+{n:7,name:'API REST',mode:'build',text:'Router FastAPI, schemas y dependency injection.'},
+{n:8,name:'Quality gate',mode:'quality',text:'CodeGuard, Pylint ≥ 8.0, mypy strict y Ruff.'},
+{n:9,name:'Integración y BDD',mode:'quality',text:'Scenarios Gherkin que verifican la DoD de la US.'},
+{n:10,name:'Commit y cierre',mode:'quality',text:'Conventional Commit y actualización de traceability matrix.'}
+];
+const levelsEl=document.getElementById('levels'),detail=document.getElementById('detail'),flow=document.getElementById('flow'),phasesEl=document.getElementById('phases');
+function renderLevels(){levelsEl.innerHTML='';levels.forEach((l,i)=>{const el=document.createElement('div');el.className='level-card '+(i===0?'active':'');el.dataset.id=l.id;el.innerHTML=`<div class="num">${l.num}</div><div><h3>${l.name}</h3><p>${l.label}</p></div><div class="analogy">${l.analogy}</div>`;el.onclick=()=>selectLevel(l.id);levelsEl.appendChild(el)})}
+function selectLevel(id){const l=levels.find(x=>x.id===id)||levels[0];document.querySelectorAll('.level-card').forEach(c=>c.classList.toggle('active',c.dataset.id===id));detail.innerHTML=`<h2>Nivel ${l.num} — ${l.name}</h2><p class="muted">${l.purpose}</p><p><strong>Pregunta que responde:</strong><br><span class="muted">${l.question}</span></p><p><strong>Producto / evidencia:</strong><br><span class="muted">${l.output}</span></p><p><strong>Cadencia:</strong><br><span class="muted">${l.cadence}</span></p><span class="badge">${l.label}</span><span class="badge">${l.analogy}</span>`}
+function renderFlow(){flow.innerHTML=levels.map(l=>`<div class="flow-step"><strong>Nivel ${l.num}<br>${l.name}</strong><span>${l.question}</span></div>`).join('')}
+function renderPhases(mode='all'){phasesEl.innerHTML=phases.filter(p=>mode==='all'||p.mode===mode).map(p=>`<div class="phase"><b>${p.n}. ${p.name}</b><p>${p.text}</p></div>`).join('')}
+document.querySelectorAll('.togglebar button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.togglebar button').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderPhases(b.dataset.mode)});
+renderLevels();selectLevel('l0');renderFlow();renderPhases();
+</script>
+</body>
+</html>
