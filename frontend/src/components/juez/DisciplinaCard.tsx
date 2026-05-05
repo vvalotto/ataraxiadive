@@ -15,8 +15,8 @@ export function DisciplinaCard({ disciplina, estado, onSelect }: DisciplinaCardP
       className={[
         'w-full rounded-3xl border p-4 text-left transition',
         isActive
-          ? 'border-sky-500/60 bg-slate-900 shadow-lg shadow-sky-950/20'
-          : 'border-slate-800 bg-slate-900/60 opacity-75',
+          ? 'border-sky-500 bg-sky-950/40 shadow-lg shadow-sky-950/40'
+          : 'border-slate-700 bg-slate-800/80 opacity-60',
       ].join(' ')}
     >
       <div className="flex items-center justify-between gap-3">
@@ -29,7 +29,7 @@ export function DisciplinaCard({ disciplina, estado, onSelect }: DisciplinaCardP
         <span
           className={[
             'rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em]',
-            isActive ? 'bg-emerald-500/15 text-emerald-300' : 'bg-slate-700 text-slate-300',
+            isActive ? 'bg-emerald-500/30 text-emerald-200' : 'bg-slate-600 text-slate-300',
           ].join(' ')}
         >
           {estado}

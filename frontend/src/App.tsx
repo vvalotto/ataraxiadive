@@ -45,7 +45,7 @@ function RootRedirect() {
 function GlobalHealthCheck() {
   const location = useLocation()
 
-  if (location.pathname.startsWith('/organizador')) {
+  if (location.pathname.startsWith('/organizador') || location.pathname.startsWith('/juez')) {
     return null
   }
 
