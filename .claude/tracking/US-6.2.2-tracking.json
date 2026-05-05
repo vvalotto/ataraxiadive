@@ -1,0 +1,156 @@
+{
+  "metadata": {
+    "us_id": "US-6.2.2",
+    "us_title": "Inscriptos y grilla - categoria legible y AP como Anuncio",
+    "us_points": 2,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-05-05T12:14:38.650211+00:00",
+    "completed_at": "2026-05-05T12:29:08.554798+00:00",
+    "total_elapsed_seconds": 869,
+    "effective_seconds": 869,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-05-05T12:14:49.077559+00:00",
+      "completed_at": "2026-05-05T12:15:08.957290+00:00",
+      "elapsed_seconds": 19,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación de Plan de Implementación",
+      "started_at": "2026-05-05T12:16:10.023774+00:00",
+      "completed_at": "2026-05-05T12:16:51.335450+00:00",
+      "elapsed_seconds": 41,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-05-05T12:18:02.866042+00:00",
+      "completed_at": "2026-05-05T12:23:18.128824+00:00",
+      "elapsed_seconds": 315,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Actualizar TablaInscriptos",
+          "task_type": "frontend",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-05-05T12:18:10.073153+00:00",
+          "completed_at": "2026-05-05T12:19:16.549652+00:00",
+          "elapsed_seconds": 66,
+          "actual_minutes": 1.1,
+          "variance_minutes": -13.9,
+          "file_created": "frontend/src/components/organizador/TablaInscriptos.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_002",
+          "task_name": "Actualizar TablaGrilla",
+          "task_type": "frontend",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-05-05T12:19:22.397671+00:00",
+          "completed_at": "2026-05-05T12:21:29.324288+00:00",
+          "elapsed_seconds": 126,
+          "actual_minutes": 2.1,
+          "variance_minutes": -2.9,
+          "file_created": "frontend/src/components/organizador/TablaGrilla.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_003",
+          "task_name": "Actualizar fuente UX en spec",
+          "task_type": "docs",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-05-05T12:21:35.989239+00:00",
+          "completed_at": "2026-05-05T12:22:56.708324+00:00",
+          "elapsed_seconds": 80,
+          "actual_minutes": 1.33,
+          "variance_minutes": -3.67,
+          "file_created": "docs/specs/sp6/US-6.2.2.md",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-05-05T12:24:04.801194+00:00",
+      "completed_at": "2026-05-05T12:24:39.337400+00:00",
+      "elapsed_seconds": 34,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-05-05T12:24:45.076237+00:00",
+      "completed_at": "2026-05-05T12:24:51.269304+00:00",
+      "elapsed_seconds": 6,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-05-05T12:25:06.302139+00:00",
+      "completed_at": "2026-05-05T12:26:27.630852+00:00",
+      "elapsed_seconds": 81,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-05-05T12:26:59.596909+00:00",
+      "completed_at": "2026-05-05T12:27:38.789363+00:00",
+      "elapsed_seconds": 39,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-05-05T12:28:04.047133+00:00",
+      "completed_at": "2026-05-05T12:29:02.219960+00:00",
+      "elapsed_seconds": 58,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 3,
+    "completed_tasks": 3,
+    "total_phases": 8,
+    "estimated_total_minutes": 25.0,
+    "actual_total_minutes": 4.53,
+    "variance_minutes": -20.47,
+    "variance_percent": -81.87
+  }
+}

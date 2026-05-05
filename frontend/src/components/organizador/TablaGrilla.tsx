@@ -87,7 +87,7 @@ export function TablaGrilla({ rows, readOnly, isSaving, onReorder }: TablaGrilla
           <tr>
             <th className="px-4 py-3">Posicion</th>
             <th className="px-4 py-3">Atleta</th>
-            <th className="px-4 py-3">AP</th>
+            <th className="px-4 py-3">Anuncio</th>
             <th className="px-4 py-3">Andarivel</th>
             <th className="px-4 py-3">OT</th>
             <th className="px-4 py-3">Estado</th>
