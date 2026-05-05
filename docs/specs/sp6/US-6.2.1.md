@@ -1,6 +1,6 @@
 # US-6.2.1: Inicio Organizador — Ordenar Torneos por Fecha + Mostrar Fecha
 
-**Estado**: `Pending`  
+**Estado**: `Done`
 **Incremento**: INC-6.2 — Ajustes Organizador  
 **Hallazgos**: UI-ORG-01  
 **Bounded Context**: `frontend`  
@@ -23,6 +23,13 @@ para **identificar rápidamente el próximo torneo sin tener que abrir cada uno*
 **Ubicación**: `frontend/src/pages/organizador/DashboardPage.tsx`
 
 La función `filtrarTorneos` filtra por estado (vigentes/histórico) pero no aplica ningún ordenamiento. Las tarjetas muestran: nombre, sede, ciudad y estado — pero omiten `fecha_inicio` y `fecha_fin`, que ya están disponibles en el DTO (`TorneoDto.fecha_inicio: string`, `TorneoDto.fecha_fin: string`).
+
+## Fuente de verdad UX
+
+- `docs/design/ux/wireframes-organizador.md` — navegación y estructura base del portal organizador.
+- `docs/design/ux/prototipos/prototipo-organizador.html` — prototipo navegable aprobado para el rol organizador.
+- `docs/plans/sp6/PLAN-SP6.md` — hallazgo UI-ORG-01 detectado en validación SP5.
+- `frontend/src/pages/organizador/DashboardPage.tsx` — implementación React actual comparada contra el hallazgo.
 
 ---
 
