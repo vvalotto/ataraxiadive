@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AtaraxiaDive — Horizontes Estratégicos</title>
+  <style>
+    :root {
+      --bg: #090f1c;
+      --panel: rgba(15, 23, 42, .84);
+      --card: rgba(30, 41, 59, .86);
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --line: rgba(148, 163, 184, .22);
+      --blue: #38bdf8;
+      --violet: #a78bfa;
+      --green: #22c55e;
+      --yellow: #facc15;
+      --orange: #fb923c;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(56, 189, 248, .24), transparent 28%),
+        radial-gradient(circle at 88% 20%, rgba(167, 139, 250, .18), transparent 30%),
+        radial-gradient(circle at 50% 100%, rgba(34, 197, 94, .10), transparent 26%),
+        var(--bg);
+    }
+
+    header {
+      padding: 30px 42px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(9, 15, 28, .9);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 4vw, 50px);
+      letter-spacing: -0.045em;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      max-width: 980px;
+      line-height: 1.55;
+    }
+
+    main {
+      padding: 26px 42px 44px;
+      display: grid;
+      gap: 24px;
+    }
+
+    .hero {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 24px 70px rgba(2, 6, 23, .38);
+    }
+
+    .hero h2 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p { color: var(--muted); line-height: 1.55; margin: 0; }
+
+    .horizons {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .horizon-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      cursor: pointer;
+      min-height: 330px;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .horizon-card:hover, .horizon-card.active {
+      transform: translateY(-4px);
+      border-color: var(--blue);
+      background: rgba(8, 47, 73, .78);
+    }
+
+    .horizon-card::before {
+      content: "";
+      position: absolute;
+      inset: -80px auto auto -80px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: var(--blue);
+      opacity: .12;
+    }
+
+    .horizon-card[data-id="construir"]::before { background: var(--violet); }
+    .horizon-card[data-id="producir"]::before { background: var(--green); }
+
+    .eyebrow {
+      color: var(--blue);
+      font-size: 12px;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .horizon-card[data-id="construir"] .eyebrow { color: #ddd6fe; }
+    .horizon-card[data-id="producir"] .eyebrow { color: #bbf7d0; }
+
+    .horizon-card h3 {
+      margin: 0 0 12px;
+      font-size: 27px;
+      letter-spacing: -0.035em;
+    }
+
+    .question {
+      color: #e0f2fe;
+      font-size: 18px;
+      line-height: 1.35;
+      font-weight: 750;
+      margin-bottom: 16px;
+    }
+
+    .desc {
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: auto;
+    }
+
+    .chip {
+      font-size: 12px;
+      border-radius: 999px;
+      padding: 6px 9px;
+      background: rgba(2, 6, 23, .64);
+      border: 1px solid rgba(148, 163, 184, .2);
+      color: #dbeafe;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: minmax(360px, 1.05fr) minmax(320px, .95fr);
+      gap: 20px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 24px 70px rgba(2, 6, 23, .34);
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 25px;
+      letter-spacing: -0.03em;
+    }
+
+    .panel p, .panel li { color: var(--muted); line-height: 1.55; }
+
+    .sp-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .sp {
+      background: rgba(2, 6, 23, .66);
+      border: 1px solid rgba(148, 163, 184, .18);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .sp h4 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+
+    .sp p { margin: 0; }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .metric {
+      text-align: center;
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(2, 6, 23, .68);
+      border: 1px solid rgba(148, 163, 184, .18);
+    }
+
+    .metric b {
+      display: block;
+      font-size: 25px;
+      color: #e0f2fe;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .map {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .map-step {
+      border-radius: 20px;
+      padding: 16px;
+      background: rgba(2, 6, 23, .66);
+      border: 1px solid rgba(148, 163, 184, .18);
+      position: relative;
+    }
+
+    .map-step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -13px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--blue);
+      font-weight: 900;
+      font-size: 20px;
+    }
+
+    .map-step strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #e2e8f0;
+    }
+
+    .map-step span {
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 14px;
+    }
+
+    @media (max-width: 1040px) {
+      header, main { padding-left: 20px; padding-right: 20px; }
+      .horizons, .detail-grid, .map { grid-template-columns: 1fr; }
+      .map-step:not(:last-child)::after { content: "↓"; right: 18px; top: auto; bottom: -18px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Horizontes Estratégicos — AtaraxiaDive</h1>
+    <div class="subtitle">
+      Esta vista muestra la organización del proyecto como una secuencia de hipótesis. Cada horizonte responde una pregunta distinta y agrupa subproyectos que producen evidencia concreta.
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h2>Del trabajo al aprendizaje</h2>
+      <p>
+        Una WBS tradicional dice qué hay que hacer. Esta vista agrega algo más fuerte: muestra para qué se hizo cada tramo. AtaraxiaDive no avanza solo por entregables; avanza por preguntas que ordenan el experimento, el producto y el material académico.
+      </p>
+    </section>
+
+    <section class="horizons" id="horizons"></section>
+
+    <section class="detail-grid">
+      <article class="panel" id="detail"></article>
+      <aside class="panel" id="side"></aside>
+    </section>
+
+    <section class="panel">
+      <h2>Lectura completa del recorrido</h2>
+      <div class="map">
+        <div class="map-step">
+          <strong>1. Validar</strong>
+          <span>Primero se verifica si el entorno técnico, metodológico y agéntico funciona sin romperse al primer uso real.</span>
+        </div>
+        <div class="map-step">
+          <strong>2. Construir</strong>
+          <span>Luego se expone IEDD + DDD a un dominio real, con reglas, excepciones, datos reales y deuda técnica. Acá se acaba el PowerPoint y empieza la intemperie.</span>
+        </div>
+        <div class="map-step">
+          <strong>3. Producir</strong>
+          <span>Finalmente se busca convertir el conocimiento acumulado en producto operativo, evidencia académica, libro y paper.</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const horizons = [
+      {
+        id: 'validar',
+        number: 'Horizonte 1',
+        title: 'Validar',
+        question: '¿El entorno funciona integrado?',
+        description: 'Verifica si CM, Dev Kit, Software Limpio, IEDD, DDD, quality gates y flujo Git pueden operar como sistema de trabajo real.',
+        criterion: 'BL-002 con métricas reales, 15+ US-IEDD trazadas y primera retrospectiva del entorno documentada.',
+        status: 'Finalizado',
+        baselines: 'BL-001 / BL-002',
+        tags: 'v0.2.0 / v0.3.0',
+        sps: [
+          { name: 'SP1 — La Performance', text: 'Walking skeleton: performance registrada de punta a punta por un juez en celular.' },
+          { name: 'SP2 — La Competencia', text: 'Disciplina completa con grilla, andariveles, secuencia y ranking.' }
+        ],
+        evidence: ['207 tests en SP1', '481 tests en SP2', 'Primera traza fuerte de US-IEDD', 'Refactorings SOLID post-SP2'],
+        reading: 'Este horizonte prueba si la máquina de trabajo arranca. No busca riqueza funcional, busca integración viable.'
+      },
+      {
+        id: 'construir',
+        number: 'Horizonte 2',
+        title: 'Construir',
+        question: '¿IEDD sobrevive al dominio real?',
+        description: 'Somete el enfoque a un torneo realista: inscripción, roles, rankings, offline-first, notificaciones, auditoría y reglas deportivas más finas.',
+        criterion: 'Simulación de torneo completo de principio a fin y evidencia empírica suficiente para paper sobre IEDD + IA.',
+        status: 'Finalizado',
+        baselines: 'BL-003 / BL-004',
+        tags: 'v0.4.0 / v0.5.0',
+        sps: [
+          { name: 'SP3 — El Torneo', text: 'Ciclo completo del torneo con inscripción, anuncios, grillas automáticas, roles y resultados.' },
+          { name: 'SP4 — La Plataforma', text: 'Transformación hacia plataforma operativa con PWA, offline-first, notificaciones y auditoría.' }
+        ],
+        evidence: ['Dataset real Buenos Aires 2025', 'UAT con datos reales', 'Offline-first validado en móvil', 'Auditoría criptográfica y exportación'],
+        reading: 'Este horizonte es el choque con la realidad. El dominio deja de ser prolijo y empieza a mostrar sus dientes.'
+      },
+      {
+        id: 'producir',
+        number: 'Horizonte 3',
+        title: 'Producir',
+        question: '¿El conocimiento fluye al producto intelectual?',
+        description: 'Busca cerrar el ciclo v1.0, validar con los tres roles, desplegar y capitalizar el aprendizaje en material académico y de investigación.',
+        criterion: 'Torneo real completado con AtaraxiaDive, 3 capítulos del libro DDD con ejemplos de producción y 1 paper sobre IEDD + IA.',
+        status: 'En curso',
+        baselines: 'BL-005 / BL-006',
+        tags: 'v0.6.0 / v1.0.0',
+        sps: [
+          { name: 'SP5 — La Puesta en Marcha', text: 'Portal organizador, portal atleta, identidad extendida, inscripción completa y algoritmo FAAS.' },
+          { name: 'SP6 — Validación, Ajustes y Despliegue', text: 'Correcciones UX, UAT integral con tres roles y despliegue final v1.0.' }
+        ],
+        evidence: ['BL-005 cerrada', 'v0.6.0 publicado', 'SP6 en ejecución', 'Validación y despliegue pendientes'],
+        reading: 'Este horizonte intenta que el esfuerzo no quede encerrado en el código. Quiere convertir experiencia en conocimiento transferible.'
+      }
+    ];
+
+    const cards = document.getElementById('horizons');
+    const detail = document.getElementById('detail');
+    const side = document.getElementById('side');
+
+    function renderCards() {
+      cards.innerHTML = '';
+      horizons.forEach((h, index) => {
+        const card = document.createElement('article');
+        card.className = 'horizon-card';
+        card.dataset.id = h.id;
+        card.innerHTML = `
+          <div class="eyebrow">${h.number}</div>
+          <h3>${h.title}</h3>
+          <div class="question">${h.question}</div>
+          <div class="desc">${h.description}</div>
+          <div class="chips">
+            <span class="chip">${h.status}</span>
+            <span class="chip">${h.baselines}</span>
+            <span class="chip">${h.tags}</span>
+          </div>
+        `;
+        card.addEventListener('click', () => selectHorizon(h.id));
+        cards.appendChild(card);
+        if (index === 0) card.classList.add('active');
+      });
+    }
+
+    function selectHorizon(id) {
+      const h = horizons.find(item => item.id === id) || horizons[0];
+      document.querySelectorAll('.horizon-card').forEach(card => card.classList.toggle('active', card.dataset.id === id));
+      detail.innerHTML = `
+        <h2>${h.number} — ${h.title}</h2>
+        <p><strong>Pregunta guía:</strong><br>${h.question}</p>
+        <p>${h.description}</p>
+        <p><strong>Criterio de éxito:</strong><br>${h.criterion}</p>
+        <div class="sp-list">
+          ${h.sps.map(sp => `
+            <div class="sp">
+              <h4>${sp.name}</h4>
+              <p>${sp.text}</p>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      side.innerHTML = `
+        <h2>Lectura ejecutiva</h2>
+        <p>${h.reading}</p>
+        <div class="metric-grid">
+          <div class="metric"><b>${h.status}</b><span>estado</span></div>
+          <div class="metric"><b>${h.baselines}</b><span>baselines</span></div>
+          <div class="metric"><b>${h.tags}</b><span>tags</span></div>
+        </div>
+        <h2 style="margin-top:22px">Evidencias</h2>
+        <ul>
+          ${h.evidence.map(e => `<li>${e}</li>`).join('')}
+        </ul>
+      `;
+    }
+
+    renderCards();
+    selectHorizon('validar');
+  </script>
+</body>
+</html>
