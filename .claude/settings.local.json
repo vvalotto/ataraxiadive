@@ -195,7 +195,11 @@
       "Bash(xargs -I {} basename {})",
       "Bash(git ls-remote *)",
       "Bash(git config *)",
-      "Bash(tracker init *)"
+      "Bash(tracker init *)",
+      "Bash(xargs cat *)",
+      "Bash(npx --prefix /Users/victor/PycharmProjects/ataraxiadive/frontend eslint src/components/juez/AtletaCard.tsx src/pages/juez/PerformanceFlowPage.tsx)",
+      "Bash(npx --prefix frontend eslint frontend/src/components/juez/AtletaCard.tsx frontend/src/pages/juez/PerformanceFlowPage.tsx)",
+      "Bash(echo \"PID: $!\")"
     ]
   }
 }
