@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AtaraxiaDive — Controles de Calidad</title>
+  <style>
+    :root{--bg:#07111f;--panel:rgba(15,23,42,.88);--card:rgba(30,41,59,.88);--text:#e5e7eb;--muted:#94a3b8;--line:rgba(148,163,184,.22);--blue:#38bdf8;--green:#22c55e;--yellow:#facc15;--red:#fb7185;--violet:#a78bfa;--orange:#fb923c}*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:radial-gradient(circle at 9% 8%,rgba(56,189,248,.22),transparent 30%),radial-gradient(circle at 90% 18%,rgba(167,139,250,.16),transparent 30%),var(--bg)}header{padding:30px 42px 18px;border-bottom:1px solid var(--line);background:rgba(7,17,31,.92);backdrop-filter:blur(14px);position:sticky;top:0;z-index:10}h1{margin:0 0 8px;font-size:clamp(30px,4vw,50px);letter-spacing:-.045em}.subtitle{color:var(--muted);max-width:1100px;line-height:1.55}main{padding:26px 42px 44px;display:grid;gap:22px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:0 24px 70px rgba(2,6,23,.35)}.grid{display:grid;grid-template-columns:minmax(420px,1fr) 410px;gap:22px}.side{position:sticky;top:128px;align-self:start}.muted{color:var(--muted);line-height:1.55}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}button,select{background:#020617;color:var(--text);border:1px solid var(--line);border-radius:999px;padding:10px 14px;cursor:pointer}button:hover,button.active,select:hover{background:#082f49;border-color:var(--blue)}.cards{display:grid;gap:13px}.control-card{display:grid;grid-template-columns:64px 1fr 120px;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;cursor:pointer;transition:.18s}.control-card:hover,.control-card.active{transform:translateX(5px);border-color:var(--blue);background:#082f49}.icon{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:rgba(56,189,248,.14);border:1px solid rgba(56,189,248,.28);font-size:22px}.control-card h3{margin:0 0 5px;font-size:20px;letter-spacing:-.02em}.control-card p{margin:0;color:var(--muted);line-height:1.35;font-size:13px}.badge{display:inline-flex;border:1px solid rgba(148,163,184,.25);background:rgba(2,6,23,.62);border-radius:999px;padding:5px 9px;font-size:12px;color:#dbeafe;margin:3px}.block{color:#fecdd3;border-color:rgba(251,113,133,.35);background:rgba(251,113,133,.12)}.warn{color:#fef3c7;border-color:rgba(250,204,21,.35);background:rgba(250,204,21,.12)}.ok{color:#bbf7d0;border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.12)}.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.step{background:rgba(2,6,23,.62);border:1px solid var(--line);border-radius:18px;padding:14px;min-height:140px}.step strong{display:block;color:#e0f2fe;margin-bottom:8px}.step span{display:block;color:var(--muted);font-size:13px;line-height:1.42}.matrix{width:100%;border-collapse:collapse;overflow:hidden;border-radius:18px}th,td{border-bottom:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}th{color:#bae6fd;background:rgba(2,6,23,.64);font-size:13px;text-transform:uppercase;letter-spacing:.08em}td{color:var(--muted);line-height:1.45}.detail h2{margin:0 0 10px;font-size:26px;letter-spacing:-.03em}.risk{border-left:4px solid var(--yellow);padding-left:12px;color:#fef3c7}.result{border-left:4px solid var(--green);padding-left:12px;color:#bbf7d0}@media(max-width:1100px){header,main{padding-left:18px;padding-right:18px}.grid{grid-template-columns:1fr}.side{position:static}.flow{grid-template-columns:1fr 1fr}.control-card{grid-template-columns:58px 1fr}.control-card .stage{grid-column:2}}@media(max-width:680px){.flow{grid-template-columns:1fr}.control-card{grid-template-columns:1fr}.stage{grid-column:auto}table,thead,tbody,tr,th,td{display:block}th{display:none}td{border-bottom:none}tr{border-bottom:1px solid var(--line);padding:8px 0}}
+  </style>
+</head>
+<body>
+<header>
+  <h1>Controles de Calidad — AtaraxiaDive</h1>
+  <div class="subtitle">Mapa visual de controles: qué se controla, cuándo se ejecuta, qué busca detectar y si bloquea o solo advierte. La idea es mostrar que la calidad no es una ceremonia final, sino una red de defensas distribuidas.</div>
+</header>
+<main>
+  <section class="panel">
+    <h2>Principio general</h2>
+    <p class="muted">AtaraxiaDive combina controles automáticos y revisiones manuales. Algunos actúan temprano, como alarmas; otros aparecen en cierres formales, como barreras. En conjunto buscan evitar tres males clásicos: código que funciona de casualidad, diseño que se degrada en silencio y documentación que queda contando una película vieja.</p>
+  </section>
+
+  <section class="grid">
+    <article class="panel">
+      <div class="toolbar">
+        <button class="active" data-filter="all">Todos</button>
+        <button data-filter="auto">Automáticos</button>
+        <button data-filter="manual">Manuales</button>
+        <button data-filter="block">Bloqueantes</button>
+        <button data-filter="warn">No bloqueantes</button>
+      </div>
+      <div class="cards" id="cards"></div>
+    </article>
+    <aside class="panel side detail" id="detail"></aside>
+  </section>
+
+  <section class="panel">
+    <h2>Cuándo aparecen en el flujo</h2>
+    <div class="flow" id="flow"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Matriz resumida</h2>
+    <table class="matrix" id="matrix"></table>
+  </section>
+</main>
+<script>
+const controls=[
+{id:'context',icon:'🔍',name:'Validación de contexto',kind:'auto',block:'warn',when:'Fase 0 de /implement-us',looks:'Que exista información suficiente de la US, producto activo, arquitectura de referencia y contexto obligatorio.',risk:'Arrancar una implementación con datos ambiguos, arquitectura mal asumida o producto incorrecto.',result:'Contexto mínimo validado o advertencia para completar datos manualmente.'},
+{id:'bdd-review',icon:'📝',name:'Revisión de escenarios BDD',kind:'manual',block:'block',when:'Fase 1 de /implement-us',looks:'Que los escenarios Given-When-Then expresen correctamente el comportamiento esperado y los criterios de aceptación.',risk:'Automatizar mal la intención: si el escenario está mal, todo lo demás puede estar prolijo y equivocado.',result:'Escenarios aprobados por el usuario antes de implementar.'},
+{id:'plan-review',icon:'📋',name:'Revisión del plan de implementación',kind:'manual',block:'block',when:'Fase 2 de /implement-us',looks:'Que el plan toque los componentes correctos, respete la arquitectura y tenga una secuencia razonable.',risk:'Implementar rápido pero en el lugar equivocado, con acoplamiento innecesario o tareas incompletas.',result:'Checklist técnico validado antes de tocar código.'},
+{id:'unit',icon:'🧪',name:'Tests unitarios',kind:'auto',block:'block',when:'Fase 4 de /implement-us',looks:'Que cada componente cumpla su comportamiento esperado de manera aislada.',risk:'Reglas de negocio rotas, componentes frágiles, errores locales que después se camuflan en integración.',result:'Tests unitarios pasando y cobertura revisada.'},
+{id:'integration',icon:'🔗',name:'Tests de integración',kind:'auto',block:'block',when:'Fase 5 de /implement-us',looks:'Que los componentes colaboren correctamente: aplicación, infraestructura, API, frontend o stores según corresponda.',risk:'Piezas correctas por separado pero incompatibles entre sí. El clásico “en mi máquina anda”, versión académica.',result:'Suite integrada pasando.'},
+{id:'bdd-validation',icon:'✅',name:'Validación BDD',kind:'auto',block:'block',when:'Fase 6 de /implement-us',looks:'Que los escenarios aprobados al inicio se cumplan realmente en el sistema.',risk:'Perder trazabilidad entre intención, implementación y validación.',result:'Escenarios BDD en verde.'},
+{id:'quality',icon:'📊',name:'Quality Gates técnicos',kind:'auto',block:'warn',when:'Fase 7 de /implement-us y PR',looks:'Pylint, complejidad ciclomática, cobertura, build, lint, type checks y reglas del proyecto según producto.',risk:'Deuda técnica nueva, complejidad creciente, estilo inconsistente o errores detectables automáticamente.',result:'Reporte de calidad; puede advertir o bloquear según severidad y contexto.'},
+{id:'designreviewer',icon:'🏗️',name:'DesignReviewer',kind:'auto',block:'block',when:'Cada PR a develop y cierre de incremento',looks:'Violaciones críticas de diseño, arquitectura, dependencias, responsabilidades y principios de diseño.',risk:'Que la arquitectura se degrade de a poco, como humedad en la pared: un día se cae el revoque y todos se sorprenden.',result:'Debe haber 0 CRITICAL para cerrar incremento o aprobar PR.'},
+{id:'architect',icon:'🧭',name:'ArchitectAnalyst',kind:'manual',block:'warn',when:'Cierre de Subproyecto / Baseline',looks:'Tendencias arquitectónicas, deuda acumulada, complejidad por bounded context y riesgos estructurales.',risk:'No ver el bosque por mirar solo los commits. Detecta tendencia, no solo error puntual.',result:'Informe de tendencias; no bloquea por defecto, orienta ajustes técnicos.'},
+{id:'uat',icon:'👤',name:'UAT / Validación funcional',kind:'manual',block:'block',when:'Post-SP y antes de baseline mayor',looks:'Que usuarios o datos reales validen el comportamiento en escenarios significativos.',risk:'Producto técnicamente correcto pero inútil o incómodo para el uso real.',result:'Checks funcionales aprobados; si falla, bloquea cierre o despliegue.'},
+{id:'docs',icon:'📚',name:'Revisión documental',kind:'manual',block:'block',when:'Fase 8 de /implement-us y cierres de SP',looks:'Que la documentación refleje el cambio, la arquitectura vigente y la trazabilidad.',risk:'Documentos que narran una versión paralela del producto. Ciencia ficción involuntaria.',result:'Documentación actualizada y aprobada.'},
+{id:'baseline',icon:'🏷️',name:'Baseline + tag Git',kind:'manual',block:'block',when:'Cierre de Subproyecto',looks:'Que exista un punto congelado, trazable y recuperable del estado del producto y sus evidencias.',risk:'No poder reconstruir qué se entregó, cuándo y con qué evidencia.',result:'Baseline registrada y tag asociado.'}
+];
+const stages=[
+{title:'Antes de implementar',text:'Validación de contexto, escenarios BDD y plan. Busca evitar arrancar mal.'},
+{title:'Durante la construcción',text:'Implementación guiada, checkpoints y tests unitarios. Busca controlar el cambio local.'},
+{title:'Al integrar',text:'Tests de integración y validación BDD. Busca confirmar que la intención se volvió comportamiento.'},
+{title:'Antes del PR / cierre INC',text:'Quality gates y DesignReviewer. Busca evitar deuda técnica o diseño roto.'},
+{title:'Cierre de SP',text:'ArchitectAnalyst, UAT, documentación, baseline y tag. Busca evidencia consolidada.'},
+{title:'Post cierre',text:'Ajustes SP-ADJ si aparecen deuda, gaps o inconsistencias. Busca aprender y corregir rumbo.'}
+];
+const cards=document.getElementById('cards'),detail=document.getElementById('detail'),flow=document.getElementById('flow'),matrix=document.getElementById('matrix');
+let current='context',filter='all';
+function visible(c){return filter==='all'||c.kind===filter||(filter==='block'&&c.block==='block')||(filter==='warn'&&c.block==='warn')}
+function renderCards(){cards.innerHTML='';controls.filter(visible).forEach(c=>{const el=document.createElement('div');el.className='control-card '+(c.id===current?'active':'');el.innerHTML=`<div class="icon">${c.icon}</div><div><h3>${c.name}</h3><p>${c.when}</p></div><div class="stage"><span class="badge ${c.block==='block'?'block':'warn'}">${c.block==='block'?'bloquea':'advierte'}</span><span class="badge">${c.kind==='auto'?'automático':'manual'}</span></div>`;el.onclick=()=>{current=c.id;renderAll()};cards.appendChild(el)})}
+function renderDetail(){const c=controls.find(x=>x.id===current)||controls[0];detail.innerHTML=`<h2>${c.icon} ${c.name}</h2><p><strong>Cuándo se ejecuta</strong><br><span class="muted">${c.when}</span></p><p><strong>Qué controla</strong><br><span class="muted">${c.looks}</span></p><p class="risk"><strong>Qué busca evitar</strong><br>${c.risk}</p><p class="result"><strong>Resultado esperado</strong><br>${c.result}</p><span class="badge ${c.kind==='auto'?'ok':'yellow'}">${c.kind==='auto'?'Automático':'Manual'}</span><span class="badge ${c.block==='block'?'block':'warn'}">${c.block==='block'?'Bloqueante':'No bloqueante / advierte'}</span>`}
+function renderFlow(){flow.innerHTML=stages.map(s=>`<div class="step"><strong>${s.title}</strong><span>${s.text}</span></div>`).join('')}
+function renderMatrix(){matrix.innerHTML=`<thead><tr><th>Control</th><th>Cuándo</th><th>Qué busca</th><th>Efecto</th></tr></thead><tbody>${controls.map(c=>`<tr><td>${c.icon} <strong>${c.name}</strong></td><td>${c.when}</td><td>${c.looks}</td><td><span class="badge ${c.block==='block'?'block':'warn'}">${c.block==='block'?'bloquea':'advierte'}</span></td></tr>`).join('')}</tbody>`}
+function renderAll(){renderCards();renderDetail();renderFlow();renderMatrix()}
+document.querySelectorAll('.toolbar button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.toolbar button').forEach(x=>x.classList.remove('active'));b.classList.add('active');filter=b.dataset.filter;renderCards()});
+renderAll();
+</script>
+</body>
+</html>
