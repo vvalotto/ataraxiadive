@@ -20,6 +20,30 @@ Foco: **corregir el flujo de competencia** — BUG crítico MUX-04 primero, lueg
 
 ---
 
+## Incremento 6.2 — Ajustes Organizador
+
+Foco: **corregir UX del portal organizador** — torneos ordenados, columnas renombradas, nueva página de Podios.
+
+### Stories
+
+| US | Título | Hallazgos | Estado |
+|----|--------|-----------|--------|
+| [US-6.2.1](./US-6.2.1.md) | Inicio: Ordenar Torneos por Fecha + Mostrar Fecha | UI-ORG-01 | Pending |
+| [US-6.2.2](./US-6.2.2.md) | Inscriptos + Grilla: Categoría Legible + AP → Anuncios | UI-ORG-03 · UI-ORG-04 | Pending |
+| [US-6.2.3](./US-6.2.3.md) | Resultados: Quitar PTS FAAS + Andarivel Numérico + AP → Anuncio | UI-ORG-05 | Pending |
+| [US-6.2.4](./US-6.2.4.md) | Panel Torneo: Alertas sin "Resolver" + Jueces sin Texto Nombre | UI-ORG-02 · UI-ORG-06 | Pending |
+| [US-6.2.5](./US-6.2.5.md) | Nuevo Torneo: Selección Categorías JUNIOR/SENIOR/MASTER | UI-ORG-07 | Pending |
+| [US-6.2.6](./US-6.2.6.md) | Crear Página de Podios | UI-ORG-08 | Pending |
+
+### Criterios de Cierre INC-6.2
+
+- [ ] US-6.2.1..6.2.6 especificadas (IEDD completa)
+- [ ] DesignReviewer 0 CRITICAL al merge de cada US
+- [ ] US-6.2.5 requiere migración SQLite — verificar compatibilidad con datos existentes
+- [ ] UAT organizador E2E: inicio, inscriptos, grilla, resultados, podios, nuevo torneo
+
+---
+
 ## Dependencias y Bloqueantes
 
 - **US-6.1.1** debe completarse **antes de cualquier UAT** del rol juez
