@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AtaraxiaDive — WBS Jerárquica Interactiva</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #1e293b;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --line: #334155;
+      --accent: #38bdf8;
+      --green: #22c55e;
+      --yellow: #facc15;
+      --red: #fb7185;
+      --card: #020617;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #1e3a8a 0, transparent 32%), var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      padding: 28px 36px 18px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 46px);
+      letter-spacing: -0.04em;
+    }
+
+    .subtitle {
+      max-width: 900px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 16px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(320px, 1fr) 380px;
+      gap: 22px;
+      padding: 24px 36px 40px;
+    }
+
+    .toolbar, .details, .tree-panel {
+      background: rgba(15, 23, 42, 0.78);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 22px;
+      box-shadow: 0 20px 50px rgba(2, 6, 23, 0.35);
+    }
+
+    .toolbar {
+      padding: 14px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    button, select, input {
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      background: #020617;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    button {
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+      background: #082f49;
+    }
+
+    input {
+      min-width: 240px;
+      border-radius: 14px;
+    }
+
+    .tree-panel {
+      padding: 22px;
+      overflow-x: auto;
+    }
+
+    .tree {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .tree ul {
+      list-style: none;
+      margin: 8px 0 0 22px;
+      padding-left: 18px;
+      border-left: 1px dashed var(--line);
+    }
+
+    .node {
+      margin: 8px 0;
+    }
+
+    .node-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(30, 41, 59, 0.72);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      cursor: pointer;
+      transition: background .15s ease, border-color .15s ease, transform .15s ease;
+      max-width: 980px;
+    }
+
+    .node-row:hover {
+      background: rgba(8, 47, 73, 0.92);
+      border-color: var(--accent);
+      transform: translateX(2px);
+    }
+
+    .toggle {
+      width: 24px;
+      height: 24px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #020617;
+      color: var(--accent);
+      font-weight: 700;
+      flex: 0 0 auto;
+    }
+
+    .leaf .toggle { color: var(--muted); }
+
+    .level {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      padding: 3px 7px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .title {
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .tag {
+      font-size: 12px;
+      color: #bae6fd;
+      background: rgba(14, 165, 233, 0.16);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      padding: 4px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .status {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      flex: 0 0 auto;
+      box-shadow: 0 0 16px currentColor;
+    }
+
+    .done { color: var(--green); background: var(--green); }
+    .progress { color: var(--yellow); background: var(--yellow); }
+    .pending { color: var(--muted); background: var(--muted); }
+
+    .hidden { display: none !important; }
+
+    .details {
+      padding: 22px;
+      position: sticky;
+      top: 122px;
+      align-self: start;
+    }
+
+    .details h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      letter-spacing: -0.03em;
+    }
+
+    .details .kind {
+      color: var(--accent);
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: .12em;
+      font-weight: 800;
+    }
+
+    .details p {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .meta {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .meta div {
+      padding: 12px;
+      background: rgba(2, 6, 23, 0.72);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 14px;
+    }
+
+    .meta strong {
+      display: block;
+      color: #cbd5e1;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 4px;
+    }
+
+    .legend {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; padding: 18px; }
+      header { padding: 22px 18px 14px; }
+      .details { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>WBS Jerárquica — AtaraxiaDive</h1>
+    <div class="subtitle">
+      Prototipo interactivo para visualizar la organización del proyecto por niveles: proyecto, horizontes, subproyectos e incrementos. Permite expandir, colapsar, filtrar por estado y explorar detalles.
+    </div>
+  </header>
+
+  <main class="layout">
+    <section>
+      <div class="toolbar">
+        <button id="expandAll">Expandir todo</button>
+        <button id="collapseAll">Colapsar todo</button>
+        <select id="statusFilter" aria-label="Filtrar por estado">
+          <option value="all">Todos los estados</option>
+          <option value="done">Finalizados</option>
+          <option value="progress">En curso</option>
+          <option value="pending">Pendientes / planificados</option>
+        </select>
+        <input id="search" placeholder="Buscar: SP4, offline, juez, baseline..." />
+      </div>
+
+      <div class="tree-panel">
+        <ul class="tree" id="tree"></ul>
+      </div>
+    </section>
+
+    <aside class="details" id="details">
+      <div class="kind">Seleccioná un nodo</div>
+      <h2>Exploración de la WBS</h2>
+      <p>Hacé clic sobre cualquier elemento para ver objetivo, estado, baseline, tag y sentido dentro del proyecto.</p>
+      <div class="legend">
+        <span><i class="status done"></i> Finalizado</span>
+        <span><i class="status progress"></i> En curso</span>
+        <span><i class="status pending"></i> Pendiente</span>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const wbs = {
+      id: 'ataraxiadive',
+      title: 'AtaraxiaDive',
+      level: 'Proyecto',
+      status: 'progress',
+      tag: 'v1.0.0 en construcción',
+      baseline: 'BL-000 a BL-006',
+      description: 'Plataforma web para gestión de torneos de apnea y experimento empírico de desarrollo con IA usando IEDD, DDD y arquitectura hexagonal.',
+      children: [
+        {
+          id: 'fase-0', title: 'Fase 0 — Inicialización', level: 'Fase', status: 'done', tag: 'v0.1.0', baseline: 'BL-000',
+          description: 'Crea la infraestructura inicial del experimento: repositorio, ADRs, Context Map, modelo de dominio, visión, template US-IEDD y quality gates.',
+          children: []
+        },
+        {
+          id: 'h1', title: 'Horizonte 1 — Validar', level: 'Horizonte', status: 'done', tag: 'v0.2.0 → v0.3.0', baseline: 'BL-001 / BL-002',
+          description: 'Responde si el ecosistema de configuración, Dev Kit y Software Limpio funciona integrado sin generar fricción excesiva.',
+          children: [
+            {
+              id: 'sp1', title: 'SP1 — La Performance', level: 'Subproyecto', status: 'done', tag: 'v0.2.0', baseline: 'BL-001',
+              description: 'Walking skeleton: una performance registrada de punta a punta por un juez en el celular.',
+              children: [
+                { id: 'inc-1-1', title: 'INC-1.1 — Fundación técnica', level: 'Incremento', status: 'done', description: 'Estructura de capas, entorno ejecutable y health-check.' },
+                { id: 'inc-1-2', title: 'INC-1.2 — El dominio habla', level: 'Incremento', status: 'done', description: 'Aggregate Performance, Event Store y flujo completo de eventos.' },
+                { id: 'inc-1-3', title: 'INC-1.3 — El juez ve y toca', level: 'Incremento', status: 'done', description: 'Interfaz móvil inicial del juez con seis pasos.' },
+                { id: 'inc-1-4', title: 'INC-1.4 — Todo conectado', level: 'Incremento', status: 'done', description: 'Frontend conectado al backend con persistencia end-to-end.' }
+              ]
+            },
+            {
+              id: 'sp2', title: 'SP2 — La Competencia', level: 'Subproyecto', status: 'done', tag: 'v0.3.0', baseline: 'BL-002',
+              description: 'Disciplina completa con grilla, secuencia de atletas, andariveles y ranking.',
+              children: [
+                { id: 'inc-2-0', title: 'INC-2.0 — Planificación y diseño', level: 'Incremento', status: 'done', description: 'Event Storming Process Modeling del BC Competencia.' },
+                { id: 'inc-2-1', title: 'INC-2.1 — La grilla de salida', level: 'Incremento', status: 'done', description: 'Secuencia de atletas y avance automático.' },
+                { id: 'inc-2-2', title: 'INC-2.2 — Dos mecánicas, un modelo', level: 'Incremento', status: 'done', description: 'STA y DNF funcionando con el mismo modelo conceptual.' },
+                { id: 'inc-2-3', title: 'INC-2.3 — Andariveles simultáneos', level: 'Incremento', status: 'done', description: 'Aislamiento de performances por andarivel.' },
+                { id: 'inc-2-4', title: 'INC-2.4 — El ranking', level: 'Incremento', status: 'done', description: 'Ranking automático y podio.' },
+                { id: 'adj-1-2', title: 'SP-ADJ-01/02 — Ajustes técnicos', level: 'Ajuste', status: 'done', description: 'Refactorings SOLID, documentación, composición y dependencias.' }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'h2', title: 'Horizonte 2 — Construir', level: 'Horizonte', status: 'done', tag: 'v0.4.0 → v0.5.0', baseline: 'BL-003 / BL-004',
+          description: 'Responde si IEDD sobrevive al contacto con un dominio real y produce evidencia suficiente para investigación y docencia.',
+          children: [
+            {
+              id: 'sp3', title: 'SP3 — El Torneo', level: 'Subproyecto', status: 'done', tag: 'v0.4.0', baseline: 'BL-003',
+              description: 'Ciclo completo del torneo: inscripción, anuncios, grillas automáticas, roles y resultados.',
+              children: [
+                { id: 'inc-3-1', title: 'INC-3.1 — Torneo como máquina de estados', level: 'Incremento', status: 'done', description: 'Estados del torneo y rol organizador.' },
+                { id: 'inc-3-2', title: 'INC-3.2 — La inscripción', level: 'Incremento', status: 'done', description: 'Atletas, categorías, club e inscripción a disciplinas.' },
+                { id: 'inc-3-3', title: 'INC-3.3 — Anuncios y grillas automáticas', level: 'Incremento', status: 'done', description: 'AP y generación automática de grillas.' },
+                { id: 'inc-3-4', title: 'INC-3.4 — Multi-disciplina y jueces', level: 'Incremento', status: 'done', description: 'Cinco disciplinas y asignación de jueces.' },
+                { id: 'inc-3-5', title: 'INC-3.5 — Premiación y Overall', level: 'Incremento', status: 'done', description: 'Rankings por disciplina y ranking overall.' },
+                { id: 'adj-3-4', title: 'SP-ADJ-03/04 — Refactoring y dominio real', level: 'Ajuste', status: 'done', description: 'Correcciones contra dataset real Buenos Aires 2025.' }
+              ]
+            },
+            {
+              id: 'sp4', title: 'SP4 — La Plataforma', level: 'Subproyecto', status: 'done', tag: 'v0.5.0', baseline: 'BL-004',
+              description: 'Transforma la demo funcional en plataforma operativa: PWA, offline-first, notificaciones, auditoría y exportación.',
+              children: [
+                { id: 'inc-4-0', title: 'INC-4.0 — UX Design', level: 'Incremento', status: 'done', description: 'Wireframes, flujos y decisiones de diseño frontend.' },
+                { id: 'inc-4-1', title: 'INC-4.1 — Correcciones CMAS/FAAS', level: 'Incremento', status: 'done', description: 'Motivos DQ, penalizaciones, SPE y orden de grilla.' },
+                { id: 'inc-4-2', title: 'INC-4.2 — Fundación Frontend', level: 'Incremento', status: 'done', description: 'Vite, React, TypeScript, Tailwind y PWA.' },
+                { id: 'inc-4-3', title: 'INC-4.3 — Interfaz del Juez', level: 'Incremento', status: 'done', description: 'Flujo de seis pasos y casos alternativos.' },
+                { id: 'inc-4-4', title: 'INC-4.4 — Offline-first', level: 'Incremento', status: 'done', description: 'Service Worker, IndexedDB y sincronización.' },
+                { id: 'inc-4-5', title: 'INC-4.5 — Notificaciones', level: 'Incremento', status: 'done', description: 'BC Notificaciones con email real e idempotencia.' },
+                { id: 'inc-4-6', title: 'INC-4.6 — Auditoría y Exportación', level: 'Incremento', status: 'done', description: 'Audit log, hash SHA-256 y exportación CSV/JSON.' },
+                { id: 'adj-6', title: 'SP-ADJ-06 — Ajuste post-SP4', level: 'Ajuste', status: 'done', description: 'Renombre FAAS, bugs y correcciones UX.' }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'h3', title: 'Horizonte 3 — Producir', level: 'Horizonte', status: 'progress', tag: 'v0.6.0 → v1.0.0', baseline: 'BL-005 / BL-006',
+          description: 'Busca capitalizar el conocimiento producido: torneo real, producto intelectual, paper y cierre v1.0.',
+          children: [
+            {
+              id: 'sp5', title: 'SP5 — La Puesta en Marcha', level: 'Subproyecto', status: 'done', tag: 'v0.6.0', baseline: 'BL-005',
+              description: 'Priorizó la capa de presentación completa: portal organizador, portal atleta y algoritmo FAAS.',
+              children: [
+                { id: 'inc-5-1', title: 'INC-5.1 — Panel del Organizador', level: 'Incremento', status: 'done', description: 'Ciclo de vida del torneo desde el panel.' },
+                { id: 'inc-5-2', title: 'INC-5.2 — Ejecución por Disciplina', level: 'Incremento', status: 'done', description: 'Operación por disciplina y ajustes post-UAT.' },
+                { id: 'inc-5-3', title: 'INC-5.3 — Usuarios y Roles', level: 'Incremento', status: 'done', description: 'Gestión de usuarios y permisos.' },
+                { id: 'inc-5-4', title: 'INC-5.4 — Identidad Extendida', level: 'Incremento', status: 'done', description: 'Auto-registro y recuperación/cambio de contraseña.' },
+                { id: 'inc-5-5', title: 'INC-5.5 — Inscripción Completa', level: 'Incremento', status: 'done', description: 'Portal atleta e ingreso de AP.' },
+                { id: 'inc-5-6', title: 'INC-5.6 — Algoritmo FAAS', level: 'Incremento', status: 'done', description: 'Rankings por categoría/género y podios.' },
+                { id: 'inc-5-7', title: 'INC-5.7 — Portal del Atleta', level: 'Incremento', status: 'done', description: 'Mis torneos, grilla, resultados y rankings.' }
+              ]
+            },
+            {
+              id: 'sp6', title: 'SP6 — Validación, Ajustes y Despliegue', level: 'Subproyecto', status: 'progress', tag: 'v1.0.0', baseline: 'BL-006',
+              description: 'Cierre del ciclo v1.0: corrección de defectos, UAT completo con tres roles y despliegue en producción.',
+              children: [
+                { id: 'inc-6-1', title: 'INC-6.1 — Ajustes Juez', level: 'Incremento', status: 'progress', description: 'Correcciones UX y funcionales del flujo del juez.' },
+                { id: 'inc-6-2', title: 'INC-6.2 — Ajustes Organizador', level: 'Incremento', status: 'pending', description: 'Ajustes pendientes del portal organizador.' },
+                { id: 'inc-6-3', title: 'INC-6.3 — Ajustes Atleta', level: 'Incremento', status: 'pending', description: 'Ajustes del portal atleta y experiencia de inscripción.' },
+                { id: 'inc-6-4', title: 'INC-6.4 — UAT Integral', level: 'Incremento', status: 'pending', description: 'Validación completa con organizador, juez y atleta.' },
+                { id: 'inc-6-5', title: 'INC-6.5 — Despliegue v1.0', level: 'Incremento', status: 'pending', description: 'Publicación final de la versión v1.0.0.' }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+
+    const tree = document.getElementById('tree');
+    const details = document.getElementById('details');
+    const statusFilter = document.getElementById('statusFilter');
+    const searchInput = document.getElementById('search');
+
+    function statusLabel(status) {
+      return status === 'done' ? 'Finalizado' : status === 'progress' ? 'En curso' : 'Pendiente';
+    }
+
+    function renderNode(node) {
+      const li = document.createElement('li');
+      li.className = 'node';
+      li.dataset.status = node.status || 'pending';
+      li.dataset.search = `${node.title} ${node.level || ''} ${node.description || ''} ${node.tag || ''} ${node.baseline || ''}`.toLowerCase();
+
+      const row = document.createElement('div');
+      row.className = 'node-row';
+
+      const hasChildren = node.children && node.children.length;
+      if (!hasChildren) li.classList.add('leaf');
+
+      const toggle = document.createElement('span');
+      toggle.className = 'toggle';
+      toggle.textContent = hasChildren ? '−' : '•';
+
+      const status = document.createElement('span');
+      status.className = `status ${node.status || 'pending'}`;
+
+      const level = document.createElement('span');
+      level.className = 'level';
+      level.textContent = node.level || 'Nodo';
+
+      const title = document.createElement('span');
+      title.className = 'title';
+      title.textContent = node.title;
+
+      row.append(toggle, status, level, title);
+
+      if (node.tag) {
+        const tag = document.createElement('span');
+        tag.className = 'tag';
+        tag.textContent = node.tag;
+        row.appendChild(tag);
+      }
+
+      row.addEventListener('click', (event) => {
+        event.stopPropagation();
+        showDetails(node);
+        if (hasChildren && event.target.className.includes('toggle')) {
+          const childList = li.querySelector(':scope > ul');
+          childList.classList.toggle('hidden');
+          toggle.textContent = childList.classList.contains('hidden') ? '+' : '−';
+        }
+      });
+
+      li.appendChild(row);
+
+      if (hasChildren) {
+        const ul = document.createElement('ul');
+        node.children.forEach(child => ul.appendChild(renderNode(child)));
+        li.appendChild(ul);
+      }
+      return li;
+    }
+
+    function showDetails(node) {
+      details.innerHTML = `
+        <div class="kind">${node.level || 'Nodo'} · ${statusLabel(node.status || 'pending')}</div>
+        <h2>${node.title}</h2>
+        <p>${node.description || 'Sin descripción disponible.'}</p>
+        <div class="meta">
+          <div><strong>Estado</strong>${statusLabel(node.status || 'pending')}</div>
+          <div><strong>Baseline</strong>${node.baseline || 'No aplica / no informado'}</div>
+          <div><strong>Tag</strong>${node.tag || 'No aplica / no informado'}</div>
+          <div><strong>Lectura didáctica</strong>${didacticReading(node)}</div>
+        </div>
+      `;
+    }
+
+    function didacticReading(node) {
+      const level = node.level || '';
+      if (level === 'Horizonte') return 'Explica el propósito estratégico: qué pregunta intenta responder esta parte del proyecto.';
+      if (level === 'Subproyecto') return 'Representa una unidad de valor completa, con cierre por baseline y tag.';
+      if (level === 'Incremento') return 'Representa una unidad concreta de avance, observable por su definición de terminado.';
+      if (level === 'Ajuste') return 'Muestra aprendizaje, deuda técnica y corrección de rumbo entre subproyectos.';
+      if (level === 'Fase') return 'Prepara las condiciones iniciales antes de producir código de producto.';
+      return 'Permite ubicar el proyecto completo y entender su composición.';
+    }
+
+    function applyFilters() {
+      const statusValue = statusFilter.value;
+      const query = searchInput.value.trim().toLowerCase();
+      const nodes = [...document.querySelectorAll('.node')];
+
+      nodes.forEach(li => {
+        const matchStatus = statusValue === 'all' || li.dataset.status === statusValue;
+        const matchSearch = !query || li.dataset.search.includes(query);
+        li.classList.toggle('hidden', !(matchStatus && matchSearch));
+      });
+    }
+
+    document.getElementById('expandAll').addEventListener('click', () => {
+      document.querySelectorAll('.tree ul').forEach(ul => ul.classList.remove('hidden'));
+      document.querySelectorAll('.toggle').forEach(t => { if (t.textContent !== '•') t.textContent = '−'; });
+    });
+
+    document.getElementById('collapseAll').addEventListener('click', () => {
+      document.querySelectorAll('.tree > .node > ul ul').forEach(ul => ul.classList.add('hidden'));
+      document.querySelectorAll('.toggle').forEach(t => { if (t.textContent !== '•') t.textContent = '+'; });
+      const rootToggle = document.querySelector('.tree > .node > .node-row .toggle');
+      if (rootToggle) rootToggle.textContent = '−';
+    });
+
+    statusFilter.addEventListener('change', applyFilters);
+    searchInput.addEventListener('input', applyFilters);
+
+    tree.appendChild(renderNode(wbs));
+    showDetails(wbs);
+  </script>
+</body>
+</html>
