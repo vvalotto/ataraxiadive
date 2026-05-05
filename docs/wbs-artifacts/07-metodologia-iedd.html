@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AtaraxiaDive — Metodología IEDD</title>
+  <style>
+    :root{--bg:#07111f;--panel:rgba(15,23,42,.88);--card:rgba(30,41,59,.88);--text:#e5e7eb;--muted:#94a3b8;--line:rgba(148,163,184,.22);--blue:#38bdf8;--green:#22c55e;--yellow:#facc15;--red:#fb7185;--violet:#a78bfa;--orange:#fb923c}*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:radial-gradient(circle at 8% 8%,rgba(56,189,248,.23),transparent 30%),radial-gradient(circle at 90% 18%,rgba(167,139,250,.16),transparent 30%),radial-gradient(circle at 55% 100%,rgba(34,197,94,.1),transparent 28%),var(--bg)}header{padding:30px 42px 18px;border-bottom:1px solid var(--line);background:rgba(7,17,31,.92);backdrop-filter:blur(14px);position:sticky;top:0;z-index:10}h1{margin:0 0 8px;font-size:clamp(30px,4vw,50px);letter-spacing:-.045em}.subtitle{color:var(--muted);max-width:1120px;line-height:1.55}main{padding:26px 42px 44px;display:grid;gap:22px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:0 24px 70px rgba(2,6,23,.35)}.grid{display:grid;grid-template-columns:minmax(460px,1fr) 420px;gap:22px}.side{position:sticky;top:128px;align-self:start}.muted{color:var(--muted);line-height:1.55}.thesis{font-size:22px;line-height:1.4;color:#e0f2fe;font-weight:760;max-width:1050px}.layers{display:grid;gap:12px}.layer{display:grid;grid-template-columns:70px 1fr 150px;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;cursor:pointer;transition:.18s}.layer:hover,.layer.active{transform:translateX(5px);border-color:var(--blue);background:#082f49}.num{width:54px;height:54px;border-radius:18px;display:grid;place-items:center;background:rgba(56,189,248,.14);border:1px solid rgba(56,189,248,.28);font-weight:900;color:#bae6fd}.layer:nth-child(2) .num{background:rgba(167,139,250,.14);border-color:rgba(167,139,250,.28)}.layer:nth-child(3) .num{background:rgba(250,204,21,.14);border-color:rgba(250,204,21,.28)}.layer:nth-child(4) .num{background:rgba(251,146,60,.14);border-color:rgba(251,146,60,.28)}.layer:nth-child(5) .num{background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.28)}.layer h3{margin:0 0 5px;font-size:22px;letter-spacing:-.025em}.layer p{margin:0;color:var(--muted);line-height:1.38}.kind{text-align:right;color:#dbeafe;font-size:13px}.badge{display:inline-flex;border:1px solid rgba(148,163,184,.25);background:rgba(2,6,23,.62);border-radius:999px;padding:5px 9px;font-size:12px;color:#dbeafe;margin:3px}.ai-bridge{display:grid;grid-template-columns:1fr 170px 1fr;gap:14px;align-items:center}.box{background:rgba(2,6,23,.62);border:1px solid var(--line);border-radius:22px;padding:18px;min-height:135px}.box h3{margin:0 0 8px}.bridge{border-radius:24px;padding:20px;text-align:center;background:linear-gradient(135deg,rgba(56,189,248,.18),rgba(167,139,250,.18));border:1px solid rgba(56,189,248,.35)}.bridge strong{display:block;font-size:24px;margin-bottom:8px}.arrow{font-size:32px;color:var(--blue);font-weight:900}.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.step{background:rgba(2,6,23,.62);border:1px solid var(--line);border-radius:18px;padding:14px;min-height:150px}.step strong{display:block;color:#e0f2fe;margin-bottom:8px}.step span{display:block;color:var(--muted);font-size:13px;line-height:1.42}.artifact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.artifact{background:rgba(2,6,23,.62);border:1px solid var(--line);border-radius:18px;padding:14px}.artifact h4{margin:0 0 8px}.artifact p{margin:0;color:var(--muted);font-size:13px;line-height:1.42}.compare{width:100%;border-collapse:collapse;overflow:hidden;border-radius:18px}th,td{border-bottom:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}th{color:#bae6fd;background:rgba(2,6,23,.64);font-size:13px;text-transform:uppercase;letter-spacing:.08em}td{color:var(--muted);line-height:1.45}.callout{border-left:4px solid var(--yellow);padding-left:14px;color:#fef3c7}.result{border-left:4px solid var(--green);padding-left:14px;color:#bbf7d0}@media(max-width:1120px){header,main{padding-left:18px;padding-right:18px}.grid,.ai-bridge,.artifact-grid{grid-template-columns:1fr}.side{position:static}.flow{grid-template-columns:1fr 1fr}.kind{text-align:left;grid-column:2}}@media(max-width:720px){.flow{grid-template-columns:1fr}.layer{grid-template-columns:1fr}.kind{grid-column:auto}table,thead,tbody,tr,th,td{display:block}th{display:none}td{border-bottom:none}tr{border-bottom:1px solid var(--line);padding:8px 0}}
+  </style>
+</head>
+<body>
+<header>
+  <h1>Metodología IEDD</h1>
+  <div class="subtitle">Ingeniería de Especificaciones Dirigida por el Dominio: una forma de construir software con IA poniendo el foco en dominio, modelo y especificación antes que en el lenguaje de programación.</div>
+</header>
+<main>
+  <section class="panel">
+    <h2>Tesis central</h2>
+    <p class="thesis">La mayor dificultad del software está en especificar y diseñar el comportamiento del sistema, no en escribir código. La IA vuelve visible esta realidad porque puede derivar implementación, pero solo si el dominio, el modelo y la especificación son claros.</p>
+    <p class="muted">En IEDD, la IA no reemplaza el pensamiento: lo obliga a estar mejor formulado. Si la especificación es floja, la IA no hace magia; hace velocidad. Y velocidad sin dirección es solo ansiedad con GPU.</p>
+  </section>
+
+  <section class="grid">
+    <article class="panel">
+      <h2>Las 5 capas IEDD</h2>
+      <div class="layers" id="layers"></div>
+    </article>
+    <aside class="panel side" id="detail"></aside>
+  </section>
+
+  <section class="panel">
+    <h2>La IA como traductor conceptual</h2>
+    <div class="ai-bridge">
+      <div class="box">
+        <h3>Especificación</h3>
+        <p class="muted">Precondiciones, postcondiciones, invariantes, criterios BDD, estados y eventos esperados.</p>
+      </div>
+      <div class="bridge">
+        <strong>IA</strong>
+        <span>traduce intención formalizada en diseño técnico y código</span>
+        <div class="arrow">↓</div>
+      </div>
+      <div class="box">
+        <h3>Implementación</h3>
+        <p class="muted">Código, tests, APIs, persistencia, UI, adaptadores, documentación y reportes.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Flujo de trabajo propuesto</h2>
+    <div class="flow" id="flow"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Artefactos típicos por capa</h2>
+    <div class="artifact-grid" id="artifacts"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Cambio de enfoque pedagógico</h2>
+    <table class="compare">
+      <thead><tr><th>Aspecto</th><th>Enfoque tradicional</th><th>Enfoque IEDD</th></tr></thead>
+      <tbody>
+        <tr><td>Punto de partida</td><td>Lenguaje, framework o tecnología.</td><td>Dominio del problema y reglas de negocio.</td></tr>
+        <tr><td>Eje central</td><td>Código como actividad principal.</td><td>Especificación del comportamiento como centro.</td></tr>
+        <tr><td>Rol de la IA</td><td>Generador de código.</td><td>Traductor conceptual entre especificación e implementación.</td></tr>
+        <tr><td>Competencia profesional</td><td>Sintaxis, librerías, frameworks.</td><td>Modelado, lenguaje ubicuo, precisión, gestión de ambigüedad.</td></tr>
+        <tr><td>Implementación</td><td>Trabajo principal.</td><td>Parte derivable, verificable y controlada.</td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+<script>
+const layers=[
+{id:'dominio',n:1,name:'Dominio',kind:'Realidad del problema',question:'¿Qué ocurre en el mundo real?',desc:'Actores, procesos, reglas, lenguaje del negocio y restricciones sin decidir todavía tecnología.',artifacts:['Visión del producto','Glosario / lenguaje ubicuo','Reglas del negocio','Event Storming Big Picture'],risk:'Saltar esta capa lleva a automatizar una mala comprensión del problema.'},
+{id:'modelo',n:2,name:'Modelo',kind:'Representación conceptual',question:'¿Cómo representamos el dominio?',desc:'Modelo DDD: bounded contexts, agregados, entidades, value objects, eventos y relaciones significativas.',artifacts:['Context Map','Domain Model','Agregados','Eventos de dominio'],risk:'Un modelo pobre empuja responsabilidades al lugar equivocado y después el código lo paga con intereses.'},
+{id:'especificacion',n:3,name:'Especificación',kind:'Comportamiento formal',question:'¿Qué debe hacer el sistema?',desc:'Define comportamiento verificable: precondiciones, postcondiciones, invariantes, estados, operaciones y escenarios BDD.',artifacts:['US-IEDD','BDD Gherkin','Invariantes','Pre/Postcondiciones'],risk:'Sin especificación clara, la IA completa huecos con supuestos. Y los supuestos son deuda técnica disfrazada.'},
+{id:'arquitectura',n:4,name:'Arquitectura',kind:'Organización técnica',question:'¿Cómo organizamos la solución?',desc:'Decisiones de componentes, capas, puertos, adaptadores, persistencia, integración y límites entre contextos.',artifacts:['ADRs','Arquitectura hexagonal','Puertos y adaptadores','C4 / vistas técnicas'],risk:'La especificación puede ser buena, pero una arquitectura débil vuelve frágil la implementación.'},
+{id:'implementacion',n:5,name:'Implementación',kind:'Tecnología concreta',question:'¿Cómo se materializa?',desc:'Código, APIs, bases de datos, UI, tests, automatizaciones, despliegue, documentación y evidencias.',artifacts:['Código fuente','Tests','Pull Request','Baseline / tag'],risk:'La implementación no debe independizarse del modelo. Cuando el código gobierna solo, el dominio desaparece.'}
+];
+const flow=[
+{title:'1. Explorar dominio',text:'Capturar procesos, actores, reglas y vocabulario del problema antes de decidir solución.'},
+{title:'2. Modelar con DDD',text:'Construir bounded contexts, agregados, eventos y lenguaje ubicuo.'},
+{title:'3. Especificar comportamiento',text:'Convertir el modelo en US-IEDD con precondiciones, postcondiciones, invariantes y BDD.'},
+{title:'4. Traducir con IA',text:'Usar /implement-us para generar BDD, plan, implementación, tests y documentación.'},
+{title:'5. Verificar fidelidad',text:'Controlar que código, tests, arquitectura y documentación respeten la especificación original.'}
+];
+const layersEl=document.getElementById('layers'),detail=document.getElementById('detail'),flowEl=document.getElementById('flow'),artifactsEl=document.getElementById('artifacts');
+function renderLayers(){layersEl.innerHTML='';layers.forEach((l,i)=>{const el=document.createElement('div');el.className='layer '+(i===0?'active':'');el.dataset.id=l.id;el.innerHTML=`<div class="num">${l.n}</div><div><h3>${l.name}</h3><p>${l.question}</p></div><div class="kind">${l.kind}</div>`;el.onclick=()=>selectLayer(l.id);layersEl.appendChild(el)})}
+function selectLayer(id){const l=layers.find(x=>x.id===id)||layers[0];document.querySelectorAll('.layer').forEach(x=>x.classList.toggle('active',x.dataset.id===id));detail.innerHTML=`<h2>${l.n}. ${l.name}</h2><p class="muted">${l.desc}</p><p><strong>Pregunta guía</strong><br><span class="muted">${l.question}</span></p><p class="callout"><strong>Riesgo si se omite</strong><br>${l.risk}</p><p><strong>Artefactos</strong></p><div>${l.artifacts.map(a=>`<span class="badge">${a}</span>`).join('')}</div><p class="result"><strong>Resultado esperado</strong><br>Una capa suficientemente clara para alimentar la siguiente sin perder intención.</p>`}
+function renderFlow(){flowEl.innerHTML=flow.map(f=>`<div class="step"><strong>${f.title}</strong><span>${f.text}</span></div>`).join('')}
+function renderArtifacts(){artifactsEl.innerHTML=layers.map(l=>`<div class="artifact"><h4>${l.name}</h4><p>${l.artifacts.join(' · ')}</p></div>`).join('')}
+renderLayers();selectLayer('dominio');renderFlow();renderArtifacts();
+</script>
+</body>
+</html>
