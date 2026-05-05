@@ -1,10 +1,10 @@
 # US-6.2.4: Panel Torneo — Alertas sin "Resolver" + Jueces sin Texto Nombre
 
-**Estado**: `Pending`  
+**Estado**: `Done`
 **Incremento**: INC-6.2 — Ajustes Organizador  
 **Hallazgos**: UI-ORG-02 · UI-ORG-06  
 **Bounded Context**: `frontend`  
-**Capas afectadas**: `frontend/pages/organizador/DashboardOperativoPage.tsx`, `frontend/components/organizador/JuecesPanel.tsx`
+**Capas afectadas**: `frontend/pages/organizador/DashboardOperativoPage.tsx`, `frontend/components/organizador/JuecesPanel.tsx`, `frontend/components/organizador/TablaJueces.tsx`
 
 ---
 
@@ -29,6 +29,15 @@ El panel de alertas activas muestra un botón/texto `Resolver →` junto a cada 
 **Ubicación**: `frontend/src/components/organizador/JuecesPanel.tsx`
 
 El panel muestra dos secciones de resumen ("Cobertura Operativa" y "Estado de Asignación") que no aportan valor al organizador en el contexto de validación SP5. Además, en cada fila de la tabla de asignación de juez, se muestra el nombre del juez como texto adicional junto al selector — lo que duplica información ya visible en el selector mismo.
+
+---
+
+## Fuente de verdad UX
+
+- `docs/design/ux/wireframes-organizador.md` — estructura aprobada del portal organizador, incluyendo alertas y flujos de revisión.
+- `docs/design/ux/prototipos/prototipo-organizador.html` — prototipo navegable aprobado para el rol organizador.
+- `docs/plans/sp6/PLAN-SP6.md` — hallazgos UI-ORG-02 y UI-ORG-06 detectados en validación SP5.
+- `frontend/src/pages/organizador/DashboardOperativoPage.tsx`, `frontend/src/components/organizador/JuecesPanel.tsx` y `frontend/src/components/organizador/TablaJueces.tsx` — implementación React actual comparada contra los hallazgos.
 
 ---
 

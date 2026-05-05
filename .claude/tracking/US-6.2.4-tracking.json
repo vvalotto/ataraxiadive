@@ -1,0 +1,192 @@
+{
+  "metadata": {
+    "us_id": "US-6.2.4",
+    "us_title": "Panel torneo alertas y jueces simplificados",
+    "us_points": 2,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-05-05T22:48:38.538419+00:00",
+    "completed_at": "2026-05-05T22:56:50.680463+00:00",
+    "total_elapsed_seconds": 492,
+    "effective_seconds": 492,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-05-05T22:48:43.679997+00:00",
+      "completed_at": "2026-05-05T22:50:12.392763+00:00",
+      "elapsed_seconds": 88,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Evaluación BDD",
+      "started_at": "2026-05-05T22:50:17.258536+00:00",
+      "completed_at": "2026-05-05T22:50:32.378318+00:00",
+      "elapsed_seconds": 15,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de Implementación",
+      "started_at": "2026-05-05T22:50:35.573918+00:00",
+      "completed_at": "2026-05-05T22:51:14.172385+00:00",
+      "elapsed_seconds": 38,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-05-05T22:51:40.444267+00:00",
+      "completed_at": "2026-05-05T22:52:54.427332+00:00",
+      "elapsed_seconds": 73,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Quitar acciones Resolver de alertas",
+          "task_type": "frontend",
+          "estimated_minutes": 8.0,
+          "started_at": "2026-05-05T22:51:43.882373+00:00",
+          "completed_at": "2026-05-05T22:51:56.584211+00:00",
+          "elapsed_seconds": 12,
+          "actual_minutes": 0.2,
+          "variance_minutes": -7.8,
+          "file_created": "frontend/src/pages/organizador/DashboardOperativoPage.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_002",
+          "task_name": "Simplificar resumen de JuecesPanel",
+          "task_type": "frontend",
+          "estimated_minutes": 8.0,
+          "started_at": "2026-05-05T22:52:00.062386+00:00",
+          "completed_at": "2026-05-05T22:52:23.701497+00:00",
+          "elapsed_seconds": 23,
+          "actual_minutes": 0.38,
+          "variance_minutes": -7.62,
+          "file_created": "frontend/src/components/organizador/JuecesPanel.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_003",
+          "task_name": "Simplificar fila de TablaJueces",
+          "task_type": "frontend",
+          "estimated_minutes": 7.0,
+          "started_at": "2026-05-05T22:52:27.296752+00:00",
+          "completed_at": "2026-05-05T22:52:43.835396+00:00",
+          "elapsed_seconds": 16,
+          "actual_minutes": 0.27,
+          "variance_minutes": -6.73,
+          "file_created": "frontend/src/components/organizador/TablaJueces.tsx",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Validación frontend",
+      "started_at": "2026-05-05T22:52:59.170237+00:00",
+      "completed_at": "2026-05-05T22:54:26.070863+00:00",
+      "elapsed_seconds": 86,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_004",
+          "task_name": "Corregir warning focal de hook",
+          "task_type": "frontend",
+          "estimated_minutes": 4.0,
+          "started_at": "2026-05-05T22:53:51.899339+00:00",
+          "completed_at": "2026-05-05T22:53:59.714385+00:00",
+          "elapsed_seconds": 7,
+          "actual_minutes": 0.12,
+          "variance_minutes": -3.88,
+          "file_created": "frontend/src/components/organizador/JuecesPanel.tsx",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Integración no aplicable",
+      "started_at": "2026-05-05T22:54:31.812669+00:00",
+      "completed_at": "2026-05-05T22:54:35.113168+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "BDD waiver",
+      "started_at": "2026-05-05T22:54:39.698448+00:00",
+      "completed_at": "2026-05-05T22:54:42.975863+00:00",
+      "elapsed_seconds": 3,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality gates",
+      "started_at": "2026-05-05T22:54:47.081448+00:00",
+      "completed_at": "2026-05-05T22:55:03.239320+00:00",
+      "elapsed_seconds": 16,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-05-05T22:55:07.735344+00:00",
+      "completed_at": "2026-05-05T22:55:45.623442+00:00",
+      "elapsed_seconds": 37,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-05-05T22:56:15.031773+00:00",
+      "completed_at": "2026-05-05T22:56:47.066567+00:00",
+      "elapsed_seconds": 32,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 4,
+    "completed_tasks": 4,
+    "total_phases": 10,
+    "estimated_total_minutes": 27.0,
+    "actual_total_minutes": 0.97,
+    "variance_minutes": -26.03,
+    "variance_percent": -96.42
+  }
+}

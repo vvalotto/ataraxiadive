@@ -554,12 +554,6 @@ function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
                     </p>
                     <h3 className="mt-2 text-xl font-semibold text-white">Operacion en revision</h3>
                   </div>
-                  <Link
-                    to={`/organizador/grilla?torneo_id=${torneoId}`}
-                    className="text-sm font-semibold text-sky-300"
-                  >
-                    Resolver →
-                  </Link>
                 </div>
 
                 <div className="mt-4 space-y-3">
@@ -574,7 +568,6 @@ function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
                           {alerta.atleta} · {alerta.disciplina}
                         </p>
                         <p className="mt-2 text-sm text-amber-50/90">{alerta.descripcion}</p>
-                        <p className="mt-3 text-sm font-semibold text-amber-200">Resolver →</p>
                       </Link>
                     ))
                   ) : (
