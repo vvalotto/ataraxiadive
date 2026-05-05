@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AtaraxiaDive — Ecosistema IEDD + implement-us + Software Limpio</title>
+  <style>
+    :root{--bg:#07111f;--panel:rgba(15,23,42,.88);--card:rgba(30,41,59,.88);--text:#e5e7eb;--muted:#94a3b8;--line:rgba(148,163,184,.22);--blue:#38bdf8;--green:#22c55e;--yellow:#facc15;--red:#fb7185;--violet:#a78bfa;--orange:#fb923c}*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:radial-gradient(circle at 8% 8%,rgba(56,189,248,.23),transparent 30%),radial-gradient(circle at 92% 18%,rgba(167,139,250,.17),transparent 30%),radial-gradient(circle at 50% 100%,rgba(34,197,94,.11),transparent 28%),var(--bg)}header{padding:30px 42px 18px;border-bottom:1px solid var(--line);background:rgba(7,17,31,.92);backdrop-filter:blur(14px);position:sticky;top:0;z-index:10}h1{margin:0 0 8px;font-size:clamp(30px,4vw,50px);letter-spacing:-.045em}.subtitle{color:var(--muted);max-width:1120px;line-height:1.55}main{padding:26px 42px 44px;display:grid;gap:22px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:0 24px 70px rgba(2,6,23,.35)}.thesis{font-size:22px;line-height:1.42;color:#e0f2fe;font-weight:760;max-width:1080px}.muted{color:var(--muted);line-height:1.55}.grid{display:grid;grid-template-columns:minmax(460px,1fr) 420px;gap:22px}.side{position:sticky;top:128px;align-self:start}.triad{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.node{position:relative;background:var(--card);border:1px solid var(--line);border-radius:28px;padding:22px;min-height:300px;cursor:pointer;transition:.18s;overflow:hidden}.node:hover,.node.active{transform:translateY(-4px);border-color:var(--blue);background:#082f49}.node:before{content:"";position:absolute;inset:-80px auto auto -80px;width:180px;height:180px;border-radius:50%;opacity:.13;background:var(--blue)}.node:nth-child(2):before{background:var(--violet)}.node:nth-child(3):before{background:var(--green)}.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:12px;font-weight:900;color:var(--blue)}.node:nth-child(2) .eyebrow{color:#ddd6fe}.node:nth-child(3) .eyebrow{color:#bbf7d0}.node h2{margin:8px 0 12px;font-size:29px;letter-spacing:-.035em}.node p{color:var(--muted);line-height:1.5}.badge{display:inline-flex;border:1px solid rgba(148,163,184,.25);background:rgba(2,6,23,.62);border-radius:999px;padding:5px 9px;font-size:12px;color:#dbeafe;margin:3px}.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.step{background:rgba(2,6,23,.62);border:1px solid var(--line);border-radius:18px;padding:14px;min-height:155px}.step strong{display:block;color:#e0f2fe;margin-bottom:8px}.step span{display:block;color:var(--muted);font-size:13px;line-height:1.42}.matrix{width:100%;border-collapse:collapse;overflow:hidden;border-radius:18px}th,td{border-bottom:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}th{color:#bae6fd;background:rgba(2,6,23,.64);font-size:13px;text-transform:uppercase;letter-spacing:.08em}td{color:var(--muted);line-height:1.45}.detail h2{margin:0 0 10px;font-size:26px;letter-spacing:-.03em}.callout{border-left:4px solid var(--yellow);padding-left:14px;color:#fef3c7}.result{border-left:4px solid var(--green);padding-left:14px;color:#bbf7d0}.links{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.linkbox{background:rgba(2,6,23,.62);border:1px solid var(--line);border-radius:20px;padding:16px}.linkbox h3{margin:0 0 8px}.linkbox p{margin:0;color:var(--muted);font-size:14px;line-height:1.45}@media(max-width:1120px){header,main{padding-left:18px;padding-right:18px}.triad,.grid,.flow,.links{grid-template-columns:1fr}.side{position:static}}@media(max-width:720px){table,thead,tbody,tr,th,td{display:block}th{display:none}td{border-bottom:none}tr{border-bottom:1px solid var(--line);padding:8px 0}}
+  </style>
+</head>
+<body>
+<header>
+  <h1>Convivencia metodológica en AtaraxiaDive</h1>
+  <div class="subtitle">El experimento no muestra IEDD, implement-us y Software Limpio como piezas separadas. Muestra cómo conviven en un proyecto concreto y se necesitan mutuamente para transformar dominio en software verificable.</div>
+</header>
+<main>
+  <section class="panel">
+    <h2>Tesis del experimento</h2>
+    <p class="thesis">AtaraxiaDive funciona como laboratorio donde IEDD define qué debe pensarse, <code>/implement-us</code> organiza cómo se construye y Software Limpio verifica si lo construido conserva calidad y fidelidad arquitectónica.</p>
+    <p class="muted">La gracia no está en usar tres nombres bonitos. La gracia está en la convivencia: especificación, ejecución y verificación dentro del mismo flujo real de trabajo.</p>
+  </section>
+
+  <section class="grid">
+    <article class="panel">
+      <h2>Las tres fuerzas del ecosistema</h2>
+      <div class="triad" id="triad"></div>
+    </article>
+    <aside class="panel side detail" id="detail"></aside>
+  </section>
+
+  <section class="panel">
+    <h2>Flujo integrado: de dominio a evidencia</h2>
+    <div class="flow" id="flow"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Cómo se conectan en la práctica</h2>
+    <table class="matrix">
+      <thead><tr><th>Momento</th><th>IEDD</th><th>/implement-us</th><th>Software Limpio</th></tr></thead>
+      <tbody>
+        <tr><td>Exploración</td><td>Comprende dominio, reglas, actores y lenguaje ubicuo.</td><td>No actúa todavía; espera una US suficientemente especificada.</td><td>No mide todavía; la calidad conceptual se prepara antes del código.</td></tr>
+        <tr><td>Modelado</td><td>Define agregados, bounded contexts, invariantes y eventos.</td><td>Usa ese modelo como referencia para planificar componentes.</td><td>Luego verificará si el código respeta cohesión, acoplamiento y límites.</td></tr>
+        <tr><td>Especificación</td><td>Convierte intención en US-IEDD, pre/postcondiciones, invariantes y BDD.</td><td>Genera escenarios BDD y plan de implementación desde esa especificación.</td><td>Permite detectar si las responsabilidades quedaron mal asignadas.</td></tr>
+        <tr><td>Implementación</td><td>Actúa como brújula conceptual: qué comportamiento debe preservarse.</td><td>Orquesta fases 0 a 9: contexto, BDD, plan, código, tests, docs y reporte.</td><td>Controla calidad técnica y señales de degradación.</td></tr>
+        <tr><td>Cierre</td><td>La especificación queda trazada contra comportamiento validado.</td><td>Entrega métricas, documentación y reporte final.</td><td>DesignReviewer, CodeGuard y ArchitectAnalyst informan si el producto se mantiene limpio.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel">
+    <h2>Lectura como experimento</h2>
+    <div class="links">
+      <div class="linkbox"><h3>Hipótesis 1</h3><p>Una especificación más clara mejora la calidad del BDD y reduce iteraciones de corrección.</p></div>
+      <div class="linkbox"><h3>Hipótesis 2</h3><p>Un skill orquestado permite convertir US en evidencia repetible, no en actividad artesanal opaca.</p></div>
+      <div class="linkbox"><h3>Hipótesis 3</h3><p>Los controles de Software Limpio muestran si la implementación respeta modelo, arquitectura y calidad.</p></div>
+    </div>
+  </section>
+</main>
+<script>
+const triad=[
+{id:'iedd',label:'Pensamiento',title:'IEDD',subtitle:'Define el qué',desc:'Marco metodológico que transforma dominio en modelo y especificación. Su foco está en comprender, modelar y formular comportamiento verificable.',artifacts:['Dominio','Modelo DDD','US-IEDD','Invariantes','BDD'],risk:'Sin IEDD, la IA implementa rápido pero puede implementar supuestos equivocados.',result:'Una especificación suficientemente clara para ser traducida por IA.'},
+{id:'implement',label:'Ejecución',title:'/implement-us',subtitle:'Organiza el cómo',desc:'Skill orquestador que toma una US y la conduce por fases: contexto, BDD, plan, implementación, tests, quality gates, documentación y reporte.',artifacts:['Feature BDD','Plan','Código','Tests','Reporte final'],risk:'Sin implement-us, la implementación con IA queda artesanal, poco repetible y difícil de auditar.',result:'Una implementación guiada, trazable y con artefactos por fase.'},
+{id:'limpio',label:'Verificación',title:'Software Limpio',subtitle:'Evalúa si se sostiene',desc:'Conjunto de controles y agentes que verifican calidad técnica, diseño, arquitectura y deuda. No reemplaza criterio: lo operacionaliza.',artifacts:['CodeGuard','DesignReviewer','ArchitectAnalyst','Métricas','Quality reports'],risk:'Sin Software Limpio, el sistema puede funcionar hoy y degradarse mañana sin que nadie lo note.',result:'Señales objetivas sobre calidad, arquitectura y riesgos de degradación.'}
+];
+const flow=[
+{title:'1. Dominio',text:'IEDD parte del problema real: actores, reglas, procesos, lenguaje y restricciones.'},
+{title:'2. Modelo',text:'IEDD organiza el dominio con DDD: bounded contexts, agregados, eventos e invariantes.'},
+{title:'3. Especificación',text:'La US-IEDD formaliza comportamiento con pre/postcondiciones, invariantes y BDD.'},
+{title:'4. Ejecución',text:'/implement-us traduce la especificación en plan, código, tests, documentación y reporte.'},
+{title:'5. Verificación',text:'Software Limpio mide si el resultado conserva calidad, diseño, arquitectura y trazabilidad.'}
+];
+const triadEl=document.getElementById('triad'),detail=document.getElementById('detail'),flowEl=document.getElementById('flow');
+function renderTriad(){triadEl.innerHTML='';triad.forEach((t,i)=>{const el=document.createElement('div');el.className='node '+(i===0?'active':'');el.dataset.id=t.id;el.innerHTML=`<div class="eyebrow">${t.label}</div><h2>${t.title}</h2><p><strong>${t.subtitle}</strong></p><p>${t.desc}</p>${t.artifacts.map(a=>`<span class="badge">${a}</span>`).join('')}`;el.onclick=()=>select(t.id);triadEl.appendChild(el)})}
+function select(id){const t=triad.find(x=>x.id===id)||triad[0];document.querySelectorAll('.node').forEach(n=>n.classList.toggle('active',n.dataset.id===id));detail.innerHTML=`<h2>${t.title}</h2><p class="muted">${t.desc}</p><p><strong>Rol en el ecosistema</strong><br><span class="muted">${t.subtitle}</span></p><p class="callout"><strong>Riesgo si falta</strong><br>${t.risk}</p><p class="result"><strong>Resultado esperado</strong><br>${t.result}</p><div>${t.artifacts.map(a=>`<span class="badge">${a}</span>`).join('')}</div>`}
+function renderFlow(){flowEl.innerHTML=flow.map(f=>`<div class="step"><strong>${f.title}</strong><span>${f.text}</span></div>`).join('')}
+renderTriad();select('iedd');renderFlow();
+</script>
+</body>
+</html>
