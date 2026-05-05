@@ -1,6 +1,6 @@
 # US-6.2.3: Resultados — Quitar PTS FAAS + Andarivel Numérico + AP → Anuncio
 
-**Estado**: `Pending`  
+**Estado**: `Done`
 **Incremento**: INC-6.2 — Ajustes Organizador  
 **Hallazgos**: UI-ORG-05  
 **Bounded Context**: `frontend`  
@@ -28,6 +28,13 @@ Hallazgos concretos en el código:
 - Columna AP sin renombrar (aplica igual que UI-ORG-04 en grilla)
 
 El hallazgo "Podios y Overall → mover a página propia" está cubierto por **US-6.2.6**.
+
+## Fuente de verdad UX
+
+- `docs/design/ux/wireframes-organizador.md` — estructura de la vista de resultados y ranking del portal organizador.
+- `docs/design/ux/prototipos/prototipo-organizador.html` — prototipo navegable aprobado para el rol organizador.
+- `docs/plans/sp6/PLAN-SP6.md` — hallazgo UI-ORG-05 detectado en validación SP5.
+- `frontend/src/components/organizador/TablaDisciplinaResultados.tsx`, `FilaResultado.tsx` y `frontend/src/pages/organizador/ResultadosPage.tsx` — implementación React actual comparada contra el hallazgo.
 
 ---
 

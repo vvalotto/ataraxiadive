@@ -367,7 +367,7 @@ function ResultadosTorneo({ torneoId }: ResultadosTorneoProps) {
                   </p>
                   <h2 className="mt-2 text-2xl font-semibold text-white">{disciplinaActiva}</h2>
                   <p className="mt-2 text-sm text-slate-300">
-                    Tabla de ejecucion ordenada por OT con AP, RP, tarjeta y puntos FAAS.
+                    Tabla de ejecucion ordenada por OT con anuncio, RP, tarjeta y andarivel.
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.16em] text-slate-400">
