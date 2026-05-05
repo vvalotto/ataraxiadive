@@ -24,13 +24,6 @@ interface TablaJuecesProps {
   onAsignar: (row: FilaJuezPerformance, juezId: string) => void
 }
 
-function juezLabel(jueces: UsuarioDto[], juezId: string | null) {
-  if (!juezId) return 'Sin juez asignado'
-  const juez = jueces.find((item) => item.usuario_id === juezId)
-  if (!juez) return 'Juez no encontrado'
-  return [juez.nombre, juez.apellido].filter(Boolean).join(' ').trim() || juez.email
-}
-
 function formatOt(value: string) {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return value
@@ -97,21 +90,12 @@ export function TablaJueces({
                     {formatMarca(row.apDeclarado, row.unidad)}
                   </td>
                   <td className="min-w-64 px-4 py-3">
-                    <div className="space-y-2">
-                      <JuezSelector
-                        jueces={jueces}
-                        value={row.juezId}
-                        disabled={saving || jueces.length === 0}
-                        onChange={(juezId) => onAsignar(row, juezId)}
-                      />
-                      <p className="text-xs text-slate-400">
-                        {saving
-                          ? 'Guardando...'
-                          : row.juezId
-                            ? juezLabel(jueces, row.juezId)
-                            : 'Pendiente'}
-                      </p>
-                    </div>
+                    <JuezSelector
+                      jueces={jueces}
+                      value={row.juezId}
+                      disabled={saving || jueces.length === 0}
+                      onChange={(juezId) => onAsignar(row, juezId)}
+                    />
                   </td>
                 </tr>
               )
