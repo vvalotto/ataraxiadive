@@ -1,10 +1,10 @@
 # US-6.2.6: Crear Página de Podios
 
-**Estado**: `Pending`  
+**Estado**: `Done`
 **Incremento**: INC-6.2 — Ajustes Organizador  
 **Hallazgos**: UI-ORG-08  
 **Bounded Context**: `frontend`  
-**Capas afectadas**: `frontend/pages/organizador/ResultadosPage.tsx`, `frontend/src/App.tsx`, nueva página `frontend/pages/organizador/PodiosPage.tsx`
+**Capas afectadas**: `frontend/src/pages/organizador/ResultadosPage.tsx`, `frontend/src/App.tsx`, nueva página `frontend/src/pages/organizador/PodiosPage.tsx`
 
 ---
 
@@ -23,6 +23,19 @@ para **navegar más fácilmente entre la vista de resultados técnicos y la vist
 **Ubicación**: `frontend/src/pages/organizador/ResultadosPage.tsx`
 
 `PodiosSection` (podios por disciplina + overall) está embebida dentro de `ResultadosPage`, lo que hace la página muy larga y dificulta llegar al contenido de premiación. El componente `PodiosSection` ya está extraído y es reutilizable — solo hay que moverlo a su propia página y ruta.
+
+---
+
+## Fuente de verdad UX
+
+- `docs/design/ux/wireframes-organizador.md` — contrato visual aprobado del portal organizador; define `S-04 Resultados` como pantalla de rankings técnicos con navegación sticky y ancho máximo de 1100 px.
+- `docs/design/ux/prototipos/prototipo-organizador.html` — prototipo navegable aprobado para el rol organizador y base de navegación del panel.
+- `docs/design/ux/flujos-por-rol.md` — flujo del organizador; ubica resultados, overall y publicación oficial dentro del cierre del torneo.
+- `docs/design/ux/decisiones-frontend.md` — decisiones de React Router, React Query y Tailwind aplicables a la nueva ruta.
+- `docs/plans/sp6/PLAN-SP6.md` — hallazgos UI-ORG-05 y UI-ORG-08 de validación SP5; UI-ORG-08 especializa el wireframe original separando la vista de premiación en una página propia.
+- `frontend/src/pages/organizador/ResultadosPage.tsx`, `frontend/src/components/organizador/PodiosSection.tsx` y `frontend/src/components/organizador/OrganizadorLayout.tsx` — implementación React actual comparada contra el hallazgo.
+
+**Lectura UX aplicada:** el wireframe original `S-04 Resultados` combinaba ranking por disciplina y overall en una pantalla. La validación SP5 refinó ese contrato: `Resultados` queda como vista técnica de rankings por disciplina, y `Podios` pasa a ser la vista dedicada de premiación. Esta US implementa esa separación sin cambiar tokens visuales, layout base, guards ni patrón de navegación del organizador.
 
 ---
 

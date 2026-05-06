@@ -5,13 +5,13 @@ Permite usar TimeTracker desde Bash, invocando un comando por llamada.
 Cada invocación carga el estado desde JSON, opera y persiste.
 
 Uso en phase files:
-    uv run python .claude/tracking/tracker_cli.py init US-1.2.1 "Registrar AP" 3 ataraxiadive
-    uv run python .claude/tracking/tracker_cli.py start-phase 0 "Validación de Contexto"
-    uv run python .claude/tracking/tracker_cli.py end-phase 0
-    uv run python .claude/tracking/tracker_cli.py start-task task_001 "Crear aggregate" domain 20
-    uv run python .claude/tracking/tracker_cli.py end-task task_001 src/competencia/domain/aggregates/performance.py
-    uv run python .claude/tracking/tracker_cli.py end
-    uv run python .claude/tracking/tracker_cli.py status
+    .venv/bin/python .claude/tracking/tracker_cli.py init US-1.2.1 "Registrar AP" 3 ataraxiadive
+    .venv/bin/python .claude/tracking/tracker_cli.py start-phase 0 "Validación de Contexto"
+    .venv/bin/python .claude/tracking/tracker_cli.py end-phase 0
+    .venv/bin/python .claude/tracking/tracker_cli.py start-task task_001 "Crear aggregate" domain 20
+    .venv/bin/python .claude/tracking/tracker_cli.py end-task task_001 src/competencia/domain/aggregates/performance.py
+    .venv/bin/python .claude/tracking/tracker_cli.py end
+    .venv/bin/python .claude/tracking/tracker_cli.py status
 """
 
 import sys

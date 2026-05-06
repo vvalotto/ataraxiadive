@@ -18,7 +18,16 @@ interface OrganizadorLayoutProps {
 interface NavItem {
   label: string
   to: string
-  key: 'inicio' | 'inscriptos' | 'panel' | 'grilla' | 'resultados' | 'jueces' | 'torneo' | 'audit'
+  key:
+    | 'inicio'
+    | 'inscriptos'
+    | 'panel'
+    | 'grilla'
+    | 'resultados'
+    | 'podios'
+    | 'jueces'
+    | 'torneo'
+    | 'audit'
   disabled?: boolean
 }
 
@@ -28,6 +37,7 @@ const NAV_ITEMS: NavItem[] = [
   { key: 'inscriptos', label: 'Inscriptos', to: '/organizador/inscriptos' },
   { key: 'grilla', label: 'Grilla', to: '/organizador/grilla' },
   { key: 'resultados', label: 'Resultados', to: '/organizador/resultados' },
+  { key: 'podios', label: 'Podios', to: '/organizador/podios' },
   { key: 'jueces', label: 'Jueces', to: '/organizador/jueces' },
   { key: 'torneo', label: 'Torneo', to: '/organizador/torneo' },
   { key: 'audit', label: 'Audit Log', to: '/organizador/audit-log' },
@@ -39,6 +49,7 @@ function currentSection(pathname: string): NavItem['key'] {
   if (pathname.startsWith('/organizador/panel')) return 'panel'
   if (pathname.startsWith('/organizador/grilla')) return 'grilla'
   if (pathname.startsWith('/organizador/resultados')) return 'resultados'
+  if (pathname.startsWith('/organizador/podios')) return 'podios'
   if (pathname.startsWith('/organizador/jueces')) return 'jueces'
   if (pathname.startsWith('/organizador/audit-log')) return 'audit'
   if (pathname.startsWith('/organizador/torneos/') && pathname.endsWith('/competencias')) {
@@ -80,6 +91,7 @@ export function OrganizadorLayout({
 
   function shouldShowNavItem(item: NavItem): boolean {
     if (item.key === 'torneo') return Boolean(activeTournamentId)
+    if (item.key === 'podios') return Boolean(activeTournamentId) || seccionActiva === 'podios'
     if (item.key === 'inscriptos') {
       return Boolean(activeTournamentId) || seccionActiva === 'inscriptos'
     }

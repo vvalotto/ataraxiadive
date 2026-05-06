@@ -32,6 +32,7 @@ import { UsuariosPage } from './pages/organizador/UsuariosPage'
 import { AuditoriaCompetenciaPage } from './pages/organizador/AuditoriaCompetenciaPage'
 import { AuditoriaPerformancePage } from './pages/organizador/AuditoriaPerformancePage'
 import { ResultadosPage } from './pages/organizador/ResultadosPage'
+import { PodiosPage } from './pages/organizador/PodiosPage'
 import { HealthCheck } from './components/HealthCheck'
 
 function RootRedirect() {
@@ -286,6 +287,14 @@ function App() {
           element={
             <RequireRole role="organizador">
               <ResultadosPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/organizador/podios"
+          element={
+            <RequireRole role="organizador">
+              <PodiosPage />
             </RequireRole>
           }
         />

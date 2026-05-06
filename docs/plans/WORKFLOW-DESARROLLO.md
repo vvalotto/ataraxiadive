@@ -136,6 +136,12 @@ main          ← baselines etiquetadas (v0.1.0, v0.2.0...)
 > paralelo ni agrupar escrituras concurrentes sobre el mismo
 > `.claude/tracking/US-*.json`: el tracker no garantiza concurrencia y puede
 > corromper el JSON persistido.
+>
+> **Política de escritura del tracker:** ejecutar el CLI con el Python local del
+> repositorio: `.venv/bin/python .claude/tracking/tracker_cli.py ...`.
+> No usar `uv run` para operaciones de tracking: `uv` puede intentar escribir en
+> caches externas al workspace y disparar autorización de escritura. El tracker
+> debe persistir únicamente en `.claude/tracking/` sin pedir autorización extra.
 
 ### Ejecución de fases
 

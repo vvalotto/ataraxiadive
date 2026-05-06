@@ -25,13 +25,15 @@ Este documento define:
 
 **Al inicio de la fase — ejecutar ANTES de cualquier otro trabajo:**
 ```bash
-uv run python .claude/tracking/tracker_cli.py init {US_ID} "{US_TITLE}" {US_POINTS} {PRODUCT}
-uv run python .claude/tracking/tracker_cli.py start-phase 0 "Validación de Contexto"
+.venv/bin/python .claude/tracking/tracker_cli.py init {US_ID} "{US_TITLE}" {US_POINTS} {PRODUCT}
+.venv/bin/python .claude/tracking/tracker_cli.py start-phase 0 "Validación de Contexto"
 ```
 
 > **Obligatorio:** sin este paso, todo el tracking de la sesión será post-facto.
 > El `tracker_cli.py` persiste estado en `.claude/tracking/{US_ID}-tracking.json`
 > al finalizar cada llamada — no requiere objeto en memoria entre fases.
+> Usar `.venv/bin/python`, no `uv run`, para evitar escrituras en caches externas
+> al workspace y no pedir autorización de escritura para el log.
 
 ---
 
@@ -136,7 +138,7 @@ Identificar el BC al que pertenece la US (de `docs/contexto/ATARAXIADIVE-CONTEXT
 
 **Al finalizar la fase:**
 ```bash
-uv run python .claude/tracking/tracker_cli.py end-phase 0
+.venv/bin/python .claude/tracking/tracker_cli.py end-phase 0
 ```
 
 ---
