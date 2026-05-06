@@ -130,6 +130,7 @@ from torneo.application.commands.asignar_disciplinas import (
     AsignarDisciplinasHandler,
 )
 from torneo.application.commands.crear_torneo import CrearTorneoCommand, CrearTorneoHandler
+from torneo.domain.value_objects.grupo_etario import GrupoEtario
 from torneo.application.commands.transicionar_torneo import (
     AbrirInscripcionHandler,
     TransicionarTorneoCommand,
@@ -206,6 +207,7 @@ async def fase1() -> None:
             sede_pais="Argentina",
             entidad_nombre="AIDA Argentina",
             entidad_tipo="Federación",
+            grupos_etarios=frozenset({GrupoEtario.SENIOR}),
         )
     )
     print(f"✓ Torneo creado: {torneo_id}")

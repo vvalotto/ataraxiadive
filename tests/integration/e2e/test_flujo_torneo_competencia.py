@@ -57,6 +57,9 @@ from competencia.infrastructure.repositories.disciplina_descriptor_adapter impor
 from competencia.infrastructure.repositories.performances_ap_adapter import (
     PerformancesAPAdapter,
 )
+from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
+    SQLiteCompetenciasPorTorneo,
+)
 from registro.application.commands.inscribir_atleta import (
     InscribirAtletaCommand,
     InscribirAtletaHandler,
@@ -79,6 +82,7 @@ from torneo.application.commands.transicionar_torneo import (
     AbrirInscripcionHandler,
     TransicionarTorneoCommand,
 )
+from torneo.domain.value_objects.grupo_etario import GrupoEtario
 from torneo.infrastructure.repositories.sqlite_torneo_repository import (
     SQLiteTorneoRepository,
 )
@@ -121,6 +125,7 @@ async def infra(tmp_path):
     inscripcion_repo = SQLiteInscripcionRepository(db_path=registro_db)
     torneo_consulta = SQLiteTorneoConsulta(db_path=torneo_db)
     event_store = SQLiteEventStore(db_path=competencia_db)
+    competencias_por_torneo = SQLiteCompetenciasPorTorneo(db_path=competencia_db)
 
     return {
         "torneo_repo": torneo_repo,
@@ -128,6 +133,7 @@ async def infra(tmp_path):
         "inscripcion_repo": inscripcion_repo,
         "torneo_consulta": torneo_consulta,
         "event_store": event_store,
+        "competencias_por_torneo": competencias_por_torneo,
     }
 
 
@@ -143,6 +149,7 @@ async def _crear_torneo_abierto(torneo_repo) -> UUID:
         sede_pais="Argentina",
         entidad_nombre="FADA",
         entidad_tipo="FEDERACION",
+        grupos_etarios=frozenset({GrupoEtario.SENIOR}),
     )
     torneo_id = await CrearTorneoHandler(torneo_repo).handle(cmd)
     await AbrirInscripcionHandler(torneo_repo).handle(TransicionarTorneoCommand(torneo_id))
@@ -175,10 +182,10 @@ async def _registrar_e_inscribir(
     return atleta_id
 
 
-async def _configurar_competencia(event_store, torneo_id: UUID) -> UUID:
+async def _configurar_competencia(event_store, competencias_por_torneo, torneo_id: UUID) -> UUID:
     """Configura una competencia STA con torneo_id. Retorna competencia_id."""
     competencia_id = uuid4()
-    await ConfigurarIntervaloOTHandler(event_store).handle(
+    await ConfigurarIntervaloOTHandler(event_store, competencias_por_torneo).handle(
         ConfigurarIntervaloOTCommand(
             competencia_id=competencia_id,
             disciplina=Disciplina.STA,
@@ -190,8 +197,20 @@ async def _configurar_competencia(event_store, torneo_id: UUID) -> UUID:
     return competencia_id
 
 
-async def _registrar_ap(event_store, competencia_id: UUID, atleta_id: UUID, valor: int) -> None:
+async def _registrar_ap(
+    event_store,
+    inscripcion_repo,
+    competencia_id: UUID,
+    torneo_id: UUID,
+    atleta_id: UUID,
+    valor: int,
+) -> None:
     """Registra AP para un atleta en la competencia."""
+    inscripcion = await inscripcion_repo.find_by_atleta_y_torneo(atleta_id, torneo_id)
+    assert inscripcion is not None
+    inscripcion.declarar_ap(SharedDisciplina.STA, Decimal(valor))
+    await inscripcion_repo.save(inscripcion)
+
     estado_adapter = CompetenciaEstadoAdapter(event_store)
     descriptor_adapter = DisciplinaDescriptorAdapter()
     await RegistrarAPHandler(event_store, estado_adapter, descriptor_adapter).handle(
@@ -205,9 +224,14 @@ async def _registrar_ap(event_store, competencia_id: UUID, atleta_id: UUID, valo
     )
 
 
-async def _generar_y_confirmar_grilla(event_store, competencia_id: UUID) -> None:
+async def _generar_y_confirmar_grilla(
+    event_store,
+    competencias_por_torneo,
+    inscripcion_repo,
+    competencia_id: UUID,
+) -> None:
     """Genera y confirma la grilla de la competencia."""
-    ap_adapter = PerformancesAPAdapter(event_store)
+    ap_adapter = PerformancesAPAdapter(event_store, competencias_por_torneo, inscripcion_repo)
     descriptor_adapter = DisciplinaDescriptorAdapter()
 
     ot_inicio = datetime(2026, 9, 10, 9, 0, 0, tzinfo=timezone.utc)
@@ -239,11 +263,25 @@ async def test_flujo_completo_inscripcion_ap_grilla(infra):
         infra["torneo_consulta"],
         torneo_id,
     )
-    competencia_id = await _configurar_competencia(infra["event_store"], torneo_id)
+    competencia_id = await _configurar_competencia(
+        infra["event_store"], infra["competencias_por_torneo"], torneo_id
+    )
 
     # AP y grilla (participante_id = atleta_id — INV-E2E-01)
-    await _registrar_ap(infra["event_store"], competencia_id, atleta_id, 360)
-    await _generar_y_confirmar_grilla(infra["event_store"], competencia_id)
+    await _registrar_ap(
+        infra["event_store"],
+        infra["inscripcion_repo"],
+        competencia_id,
+        torneo_id,
+        atleta_id,
+        360,
+    )
+    await _generar_y_confirmar_grilla(
+        infra["event_store"],
+        infra["competencias_por_torneo"],
+        infra["inscripcion_repo"],
+        competencia_id,
+    )
 
     # Verificar grilla (INV-E2E-03)
     grilla = await ObtenerGrillaHandler(infra["event_store"]).handle(
@@ -288,9 +326,23 @@ async def test_atleta_sin_ap_no_aparece_en_grilla(infra):
         )
     )
 
-    competencia_id = await _configurar_competencia(infra["event_store"], torneo_id)
-    await _registrar_ap(infra["event_store"], competencia_id, atleta_con_ap, 300)
-    await _generar_y_confirmar_grilla(infra["event_store"], competencia_id)
+    competencia_id = await _configurar_competencia(
+        infra["event_store"], infra["competencias_por_torneo"], torneo_id
+    )
+    await _registrar_ap(
+        infra["event_store"],
+        infra["inscripcion_repo"],
+        competencia_id,
+        torneo_id,
+        atleta_con_ap,
+        300,
+    )
+    await _generar_y_confirmar_grilla(
+        infra["event_store"],
+        infra["competencias_por_torneo"],
+        infra["inscripcion_repo"],
+        competencia_id,
+    )
 
     grilla = await ObtenerGrillaHandler(infra["event_store"]).handle(
         ObtenerGrillaQuery(competencia_id=competencia_id, disciplina=Disciplina.STA)
@@ -303,7 +355,9 @@ async def test_atleta_sin_ap_no_aparece_en_grilla(infra):
 async def test_multiples_atletas_ordenados_por_ap_ascendente(infra):
     """RF-PR-05: STA — menor AP primero (240s → 300s → 360s)."""
     torneo_id = await _crear_torneo_abierto(infra["torneo_repo"])
-    competencia_id = await _configurar_competencia(infra["event_store"], torneo_id)
+    competencia_id = await _configurar_competencia(
+        infra["event_store"], infra["competencias_por_torneo"], torneo_id
+    )
 
     atletas_y_aps = [(uuid4(), ap) for ap in [360, 300, 240]]
 
@@ -326,9 +380,21 @@ async def test_multiples_atletas_ordenados_por_ap_ascendente(infra):
                 disciplinas=frozenset({SharedDisciplina.STA}),
             )
         )
-        await _registrar_ap(infra["event_store"], competencia_id, atleta_id, ap_segundos)
+        await _registrar_ap(
+            infra["event_store"],
+            infra["inscripcion_repo"],
+            competencia_id,
+            torneo_id,
+            atleta_id,
+            ap_segundos,
+        )
 
-    await _generar_y_confirmar_grilla(infra["event_store"], competencia_id)
+    await _generar_y_confirmar_grilla(
+        infra["event_store"],
+        infra["competencias_por_torneo"],
+        infra["inscripcion_repo"],
+        competencia_id,
+    )
 
     grilla = await ObtenerGrillaHandler(infra["event_store"]).handle(
         ObtenerGrillaQuery(competencia_id=competencia_id, disciplina=Disciplina.STA)

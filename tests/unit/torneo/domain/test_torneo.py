@@ -7,6 +7,7 @@ from torneo.domain.aggregates.torneo import Torneo
 from torneo.domain.exceptions import TorneoCerrado, TransicionEstadoInvalida
 from torneo.domain.value_objects.entidad_organizadora import EntidadOrganizadora
 from torneo.domain.value_objects.estado_torneo import EstadoTorneo
+from torneo.domain.value_objects.grupo_etario import GrupoEtario
 from torneo.domain.value_objects.sede import Sede
 
 
@@ -115,6 +116,37 @@ class TestCreacion:
             entidad_organizadora=entidad,
         )
         assert t.estado == EstadoTorneo.CREADO
+
+    def test_grupo_etario_default_es_senior(self, torneo: Torneo) -> None:
+        assert torneo.grupos_etarios == frozenset({GrupoEtario.SENIOR})
+
+    def test_grupos_etarios_multiples_son_validos(
+        self, sede: Sede, entidad: EntidadOrganizadora
+    ) -> None:
+        t = Torneo(
+            nombre="Test",
+            descripcion="",
+            fecha_inicio=date(2026, 6, 1),
+            fecha_fin=date(2026, 6, 1),
+            sede=sede,
+            entidad_organizadora=entidad,
+            grupos_etarios=frozenset({GrupoEtario.JUNIOR, GrupoEtario.MASTER}),
+        )
+        assert t.grupos_etarios == frozenset({GrupoEtario.JUNIOR, GrupoEtario.MASTER})
+
+    def test_grupos_etarios_vacio_lanza_error(
+        self, sede: Sede, entidad: EntidadOrganizadora
+    ) -> None:
+        with pytest.raises(ValueError, match="grupo etario"):
+            Torneo(
+                nombre="Test",
+                descripcion="",
+                fecha_inicio=date(2026, 6, 1),
+                fecha_fin=date(2026, 6, 1),
+                sede=sede,
+                entidad_organizadora=entidad,
+                grupos_etarios=frozenset(),
+            )
 
 
 class TestTransiciones:

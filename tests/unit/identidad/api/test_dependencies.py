@@ -101,6 +101,7 @@ class TestOrganizadorDep:
                 "fecha_fin": "2026-06-03",
                 "sede": {"nombre": "P", "ciudad": "C", "pais": "AR"},
                 "entidad_organizadora": {"nombre": "E", "tipo": "club"},
+                "grupos_etarios": ["SENIOR"],
             },
         )
         assert resp.status_code == 201
@@ -125,6 +126,7 @@ class TestOrganizadorDep:
                 "fecha_fin": "2026-06-03",
                 "sede": {"nombre": "P", "ciudad": "C", "pais": "AR"},
                 "entidad_organizadora": {"nombre": "E", "tipo": "club"},
+                "grupos_etarios": ["SENIOR"],
             },
         )
         assert resp.status_code == 403

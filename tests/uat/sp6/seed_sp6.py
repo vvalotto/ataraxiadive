@@ -225,6 +225,7 @@ def main() -> None:
                         "pais": "Argentina",
                     },
                     "entidad_organizadora": {"nombre": "AIDA Argentina", "tipo": "Federación"},
+                    "grupos_etarios": ["SENIOR"],
                 },
                 headers=org_h,
             ),

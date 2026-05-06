@@ -7,6 +7,7 @@ from uuid import UUID
 from torneo.domain.aggregates.torneo import Torneo
 from torneo.domain.ports.torneo_repository_port import TorneoRepositoryPort
 from torneo.domain.value_objects.entidad_organizadora import EntidadOrganizadora
+from torneo.domain.value_objects.grupo_etario import GrupoEtario
 from torneo.domain.value_objects.sede import Sede
 
 
@@ -21,6 +22,7 @@ class CrearTorneoCommand:
     sede_pais: str
     entidad_nombre: str
     entidad_tipo: str
+    grupos_etarios: frozenset[GrupoEtario]
 
 
 class CrearTorneoHandler:
@@ -37,6 +39,7 @@ class CrearTorneoHandler:
             entidad_organizadora=EntidadOrganizadora(
                 nombre=cmd.entidad_nombre, tipo=cmd.entidad_tipo
             ),
+            grupos_etarios=cmd.grupos_etarios,
         )
         await self._repo.save(torneo)
         return torneo.torneo_id

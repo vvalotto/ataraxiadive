@@ -49,6 +49,7 @@ def _payload(**overrides: Any) -> dict[str, Any]:
         "fecha_fin": "2026-06-03",
         "sede": {"nombre": "Piscina Municipal", "ciudad": "Buenos Aires", "pais": "Argentina"},
         "entidad_organizadora": {"nombre": "AIDA Argentina", "tipo": "FEDERACION"},
+        "grupos_etarios": ["SENIOR"],
     }
     base.update(overrides)
     return base

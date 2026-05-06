@@ -25,6 +25,7 @@ export interface TorneoDto {
     tipo: string
   }
   estado: EstadoTorneo
+  grupos_etarios: GrupoEtario[]
 }
 
 type TorneoApiDto = Omit<TorneoDto, 'estado'> & {
@@ -63,6 +64,8 @@ export type DisciplinaCodigo =
   | 'SPE_8X50'
   | 'SPE_16X50'
 
+export type GrupoEtario = 'JUNIOR' | 'SENIOR' | 'MASTER'
+
 export interface CrearTorneoPayload {
   nombre: string
   descripcion: string
@@ -77,6 +80,7 @@ export interface CrearTorneoPayload {
     nombre: string
     tipo: string
   }
+  grupos_etarios: GrupoEtario[]
 }
 
 export interface CrearTorneoResponse {

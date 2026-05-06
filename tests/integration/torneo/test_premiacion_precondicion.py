@@ -51,6 +51,7 @@ def _crear_torneo_en_ejecucion(client: TestClient) -> UUID:
             "fecha_fin": "2026-06-03",
             "sede": {"nombre": "Piscina", "ciudad": "BA", "pais": "AR"},
             "entidad_organizadora": {"nombre": "AIDA", "tipo": "FEDERACION"},
+            "grupos_etarios": ["SENIOR"],
         },
     )
     assert response.status_code == 201

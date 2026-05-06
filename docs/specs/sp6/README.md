@@ -32,7 +32,7 @@ Foco: **corregir UX del portal organizador** — torneos ordenados, columnas ren
 | [US-6.2.2](./US-6.2.2.md) | Inscriptos + Grilla: Categoría Legible + AP → Anuncios | UI-ORG-03 · UI-ORG-04 | Pending |
 | [US-6.2.3](./US-6.2.3.md) | Resultados: Quitar PTS FAAS + Andarivel Numérico + AP → Anuncio | UI-ORG-05 | Pending |
 | [US-6.2.4](./US-6.2.4.md) | Panel Torneo: Alertas sin "Resolver" + Jueces sin Texto Nombre | UI-ORG-02 · UI-ORG-06 | Done |
-| [US-6.2.5](./US-6.2.5.md) | Nuevo Torneo: Selección Categorías JUNIOR/SENIOR/MASTER | UI-ORG-07 | Pending |
+| [US-6.2.5](./US-6.2.5.md) | Nuevo Torneo: Selección Categorías JUNIOR/SENIOR/MASTER | UI-ORG-07 | Done |
 | [US-6.2.6](./US-6.2.6.md) | Crear Página de Podios | UI-ORG-08 | Pending |
 
 ### Criterios de Cierre INC-6.2
