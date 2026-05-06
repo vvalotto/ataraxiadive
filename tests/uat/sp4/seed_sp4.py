@@ -208,6 +208,7 @@ def main() -> None:
                 "fecha_fin": "2025-12-01",
                 "sede": {"nombre": "Pileta UAT", "ciudad": "Buenos Aires", "pais": "Argentina"},
                 "entidad_organizadora": {"nombre": "AIDA Argentina", "tipo": "Federación"},
+                "grupos_etarios": ["SENIOR"],
             },
             headers=org_h,
         )

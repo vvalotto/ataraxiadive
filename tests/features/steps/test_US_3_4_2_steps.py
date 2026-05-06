@@ -133,6 +133,7 @@ _TORNEO_PAYLOAD = {
     "fecha_fin": "2026-06-03",
     "sede": {"nombre": "Piscina", "ciudad": "CABA", "pais": "Argentina"},
     "entidad_organizadora": {"nombre": "FAADS", "tipo": "federacion"},
+    "grupos_etarios": ["SENIOR"],
 }
 
 

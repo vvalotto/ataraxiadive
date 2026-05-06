@@ -9,6 +9,7 @@ import pytest
 from torneo.application.commands.crear_torneo import CrearTorneoCommand, CrearTorneoHandler
 from torneo.domain.aggregates.torneo import Torneo
 from torneo.domain.value_objects.estado_torneo import EstadoTorneo
+from torneo.domain.value_objects.grupo_etario import GrupoEtario
 
 
 def _cmd(**overrides: object) -> CrearTorneoCommand:
@@ -22,6 +23,7 @@ def _cmd(**overrides: object) -> CrearTorneoCommand:
         sede_pais="Argentina",
         entidad_nombre="AIDA Argentina",
         entidad_tipo="FEDERACION",
+        grupos_etarios=frozenset({GrupoEtario.SENIOR}),
     )
     defaults.update(overrides)
     return CrearTorneoCommand(**defaults)  # type: ignore[arg-type]
@@ -44,6 +46,15 @@ async def test_crear_torneo_persiste_con_estado_creado() -> None:
     torneo: Torneo = repo.save.call_args[0][0]
     assert torneo.estado == EstadoTorneo.CREADO
     assert torneo.nombre == "Torneo Test"
+
+
+@pytest.mark.asyncio
+async def test_crear_torneo_persiste_grupos_etarios() -> None:
+    repo = AsyncMock()
+    handler = CrearTorneoHandler(repo)
+    await handler.handle(_cmd(grupos_etarios=frozenset({GrupoEtario.JUNIOR, GrupoEtario.MASTER})))
+    torneo: Torneo = repo.save.call_args[0][0]
+    assert torneo.grupos_etarios == frozenset({GrupoEtario.JUNIOR, GrupoEtario.MASTER})
 
 
 @pytest.mark.asyncio

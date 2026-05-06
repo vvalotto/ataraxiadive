@@ -52,6 +52,9 @@ from competencia.infrastructure.repositories.disciplina_descriptor_adapter impor
 from competencia.infrastructure.repositories.performances_ap_adapter import (
     PerformancesAPAdapter,
 )
+from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
+    SQLiteCompetenciasPorTorneo,
+)
 from registro.application.commands.inscribir_atleta import (
     InscribirAtletaCommand,
     InscribirAtletaHandler,
@@ -75,6 +78,7 @@ from torneo.application.commands.transicionar_torneo import (
     AbrirInscripcionHandler,
     TransicionarTorneoCommand,
 )
+from torneo.domain.value_objects.grupo_etario import GrupoEtario
 from torneo.infrastructure.repositories.sqlite_torneo_repository import (
     SQLiteTorneoRepository,
 )
@@ -122,6 +126,7 @@ def ctx(tmp_path: Any) -> dict[str, Any]:
         "inscripcion_repo": SQLiteInscripcionRepository(db_path=registro_db),
         "torneo_consulta": SQLiteTorneoConsulta(db_path=torneo_db),
         "event_store": SQLiteEventStore(db_path=competencia_db),
+        "competencias_por_torneo": SQLiteCompetenciasPorTorneo(db_path=competencia_db),
         "torneo_id": None,
         "atleta_id": None,
         "atleta_con_ap": None,
@@ -163,6 +168,7 @@ async def _crear_torneo_abierto(torneo_repo) -> UUID:
         sede_pais="Argentina",
         entidad_nombre="FADA",
         entidad_tipo="FEDERACION",
+        grupos_etarios=frozenset({GrupoEtario.SENIOR}),
     )
     torneo_id = await CrearTorneoHandler(torneo_repo).handle(cmd)
     await AbrirInscripcionHandler(torneo_repo).handle(TransicionarTorneoCommand(torneo_id))
@@ -202,7 +208,19 @@ async def _registrar_e_inscribir(
     return atleta_id
 
 
-async def _ap(event_store, competencia_id: UUID, atleta_id: UUID, valor: int) -> None:
+async def _ap(
+    event_store,
+    inscripcion_repo,
+    torneo_id: UUID,
+    competencia_id: UUID,
+    atleta_id: UUID,
+    valor: int,
+) -> None:
+    inscripcion = await inscripcion_repo.find_by_atleta_y_torneo(atleta_id, torneo_id)
+    assert inscripcion is not None
+    inscripcion.declarar_ap(SharedDisciplina.STA, Decimal(valor))
+    await inscripcion_repo.save(inscripcion)
+
     estado_adapter = CompetenciaEstadoAdapter(event_store)
     descriptor_adapter = DisciplinaDescriptorAdapter()
     await RegistrarAPHandler(event_store, estado_adapter, descriptor_adapter).handle(
@@ -216,8 +234,13 @@ async def _ap(event_store, competencia_id: UUID, atleta_id: UUID, valor: int) ->
     )
 
 
-async def _generar_y_confirmar(event_store, competencia_id: UUID) -> list:
-    ap_adapter = PerformancesAPAdapter(event_store)
+async def _generar_y_confirmar(
+    event_store,
+    competencias_por_torneo,
+    inscripcion_repo,
+    competencia_id: UUID,
+) -> list:
+    ap_adapter = PerformancesAPAdapter(event_store, competencias_por_torneo, inscripcion_repo)
     descriptor_adapter = DisciplinaDescriptorAdapter()
     await GenerarGrillaHandler(event_store, ap_adapter, descriptor_adapter).handle(
         GenerarGrillaCommand(
@@ -261,7 +284,9 @@ def competencia_configurada(ctx: dict[str, Any]) -> None:
     competencia_id = uuid4()
 
     async def _cfg():
-        await ConfigurarIntervaloOTHandler(ctx["event_store"]).handle(
+        await ConfigurarIntervaloOTHandler(
+            ctx["event_store"], ctx["competencias_por_torneo"]
+        ).handle(
             ConfigurarIntervaloOTCommand(
                 competencia_id=competencia_id,
                 disciplina=Disciplina.STA,
@@ -326,18 +351,52 @@ def tres_atletas_con_aps(ctx: dict[str, Any]) -> None:
 
 @when("el atleta registra su AP en la competencia")
 def atleta_registra_ap(ctx: dict[str, Any]) -> None:
-    _run(_ap(ctx["event_store"], ctx["competencia_id"], ctx["atleta_id"], 360))
+    _run(
+        _ap(
+            ctx["event_store"],
+            ctx["inscripcion_repo"],
+            ctx["torneo_id"],
+            ctx["competencia_id"],
+            ctx["atleta_id"],
+            360,
+        )
+    )
 
 
 @when("se genera y confirma la grilla")
 def generar_confirmar_grilla(ctx: dict[str, Any]) -> None:
     # Registrar AP del atleta_con_ap si aplica (escenario 2)
     if ctx.get("atleta_con_ap"):
-        _run(_ap(ctx["event_store"], ctx["competencia_id"], ctx["atleta_con_ap"], 300))
+        _run(
+            _ap(
+                ctx["event_store"],
+                ctx["inscripcion_repo"],
+                ctx["torneo_id"],
+                ctx["competencia_id"],
+                ctx["atleta_con_ap"],
+                300,
+            )
+        )
     # Registrar APs de atletas_y_aps si aplica (escenario 3)
     for atleta_id, ap in ctx.get("atletas_y_aps", []):
-        _run(_ap(ctx["event_store"], ctx["competencia_id"], atleta_id, ap))
-    grilla = _run(_generar_y_confirmar(ctx["event_store"], ctx["competencia_id"]))
+        _run(
+            _ap(
+                ctx["event_store"],
+                ctx["inscripcion_repo"],
+                ctx["torneo_id"],
+                ctx["competencia_id"],
+                atleta_id,
+                ap,
+            )
+        )
+    grilla = _run(
+        _generar_y_confirmar(
+            ctx["event_store"],
+            ctx["competencias_por_torneo"],
+            ctx["inscripcion_repo"],
+            ctx["competencia_id"],
+        )
+    )
     ctx["grilla"] = grilla
 
 

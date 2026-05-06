@@ -119,7 +119,7 @@ export function GrillaPage() {
     const grilla = Array.from(grillaMap.values())
     const first = grilla.find((atleta) => atleta.estado === 'AnunciadaAP')
     return first?.performance_id ?? null
-  }, [precargaQuery.payload?.grilla, queueData])
+  }, [juezId, precargaQuery.payload?.grilla, queueData])
 
   const grillaOrdenada = useMemo(() => {
     const grillaBase = (precargaQuery.payload?.grilla ?? []).filter(

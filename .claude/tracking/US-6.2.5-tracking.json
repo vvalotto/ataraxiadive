@@ -1,0 +1,288 @@
+{
+  "metadata": {
+    "us_id": "US-6.2.5",
+    "us_title": "Nuevo torneo con grupos etarios",
+    "us_points": 3,
+    "producto": "torneo",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-05-06T09:35:24.068171+00:00",
+    "completed_at": "2026-05-06T10:03:18.283814+00:00",
+    "total_elapsed_seconds": 1674,
+    "effective_seconds": 1674,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-05-06T09:35:34.665189+00:00",
+      "completed_at": "2026-05-06T09:36:56.608804+00:00",
+      "elapsed_seconds": 81,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación BDD",
+      "started_at": "2026-05-06T09:37:23.343345+00:00",
+      "completed_at": "2026-05-06T09:37:52.088178+00:00",
+      "elapsed_seconds": 28,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de Implementación",
+      "started_at": "2026-05-06T09:37:59.683164+00:00",
+      "completed_at": "2026-05-06T09:38:41.215319+00:00",
+      "elapsed_seconds": 41,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-05-06T09:40:38.685959+00:00",
+      "completed_at": "2026-05-06T09:57:04.712249+00:00",
+      "elapsed_seconds": 986,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Implementar GrupoEtario en dominio",
+          "task_type": "domain",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-05-06T09:40:52.720449+00:00",
+          "completed_at": "2026-05-06T09:41:21.852378+00:00",
+          "elapsed_seconds": 29,
+          "actual_minutes": 0.48,
+          "variance_minutes": -14.52,
+          "file_created": "src/torneo/domain/value_objects/grupo_etario.py",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_002",
+          "task_name": "Actualizar API y command torneo",
+          "task_type": "api",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-05-06T09:41:26.849445+00:00",
+          "completed_at": "2026-05-06T09:41:54.549999+00:00",
+          "elapsed_seconds": 27,
+          "actual_minutes": 0.45,
+          "variance_minutes": -14.55,
+          "file_created": "src/torneo/api/router.py",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_003",
+          "task_name": "Persistir grupos etarios SQLite",
+          "task_type": "infrastructure",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-05-06T09:42:00.763935+00:00",
+          "completed_at": "2026-05-06T09:42:28.658842+00:00",
+          "elapsed_seconds": 27,
+          "actual_minutes": 0.45,
+          "variance_minutes": -14.55,
+          "file_created": "src/torneo/infrastructure/repositories/sqlite_torneo_repository.py",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_004",
+          "task_name": "Implementar selector frontend",
+          "task_type": "frontend",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-05-06T09:42:47.384281+00:00",
+          "completed_at": "2026-05-06T09:43:38.781209+00:00",
+          "elapsed_seconds": 51,
+          "actual_minutes": 0.85,
+          "variance_minutes": -14.15,
+          "file_created": "frontend/src/pages/organizador/CrearTorneoPage.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_005",
+          "task_name": "Actualizar tests y BDD",
+          "task_type": "test",
+          "estimated_minutes": 25.0,
+          "started_at": "2026-05-06T09:43:49.456708+00:00",
+          "completed_at": "2026-05-06T09:56:58.606841+00:00",
+          "elapsed_seconds": 789,
+          "actual_minutes": 13.15,
+          "variance_minutes": -11.85,
+          "file_created": "tests/features/steps/grupos_etarios_torneo_steps.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-05-06T09:57:46.750295+00:00",
+      "completed_at": "2026-05-06T09:58:05.272801+00:00",
+      "elapsed_seconds": 18,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_006",
+          "task_name": "Ejecutar tests unitarios torneo",
+          "task_type": "test",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-05-06T09:57:53.855670+00:00",
+          "completed_at": "2026-05-06T09:57:59.516002+00:00",
+          "elapsed_seconds": 5,
+          "actual_minutes": 0.08,
+          "variance_minutes": -4.92,
+          "file_created": "tests/unit/torneo/domain/test_torneo.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-05-06T09:58:09.566544+00:00",
+      "completed_at": "2026-05-06T09:58:22.783561+00:00",
+      "elapsed_seconds": 13,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_007",
+          "task_name": "Ejecutar tests integración torneo",
+          "task_type": "test",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-05-06T09:58:14.038681+00:00",
+          "completed_at": "2026-05-06T09:58:18.758571+00:00",
+          "elapsed_seconds": 4,
+          "actual_minutes": 0.07,
+          "variance_minutes": -9.93,
+          "file_created": "tests/integration/torneo/test_grupos_etarios_api.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-05-06T09:58:27.567029+00:00",
+      "completed_at": "2026-05-06T09:58:44.709670+00:00",
+      "elapsed_seconds": 17,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_008",
+          "task_name": "Ejecutar BDD US-6.2.5",
+          "task_type": "test",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-05-06T09:58:32.885244+00:00",
+          "completed_at": "2026-05-06T09:58:38.648154+00:00",
+          "elapsed_seconds": 5,
+          "actual_minutes": 0.08,
+          "variance_minutes": -4.92,
+          "file_created": "tests/features/steps/grupos_etarios_torneo_steps.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-05-06T09:58:49.033461+00:00",
+      "completed_at": "2026-05-06T09:59:07.999155+00:00",
+      "elapsed_seconds": 18,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_009",
+          "task_name": "Ejecutar build lint y diff check",
+          "task_type": "quality",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-05-06T09:58:54.261782+00:00",
+          "completed_at": "2026-05-06T09:59:03.662805+00:00",
+          "elapsed_seconds": 9,
+          "actual_minutes": 0.15,
+          "variance_minutes": -9.85,
+          "file_created": "frontend/src/pages/organizador/CrearTorneoPage.tsx",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-05-06T09:59:21.532077+00:00",
+      "completed_at": "2026-05-06T10:02:00.233314+00:00",
+      "elapsed_seconds": 158,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_010",
+          "task_name": "Actualizar documentación US",
+          "task_type": "documentation",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-05-06T09:59:30.001778+00:00",
+          "completed_at": "2026-05-06T10:01:53.189051+00:00",
+          "elapsed_seconds": 143,
+          "actual_minutes": 2.38,
+          "variance_minutes": -2.62,
+          "file_created": "docs/specs/sp6/US-6.2.5.md",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-05-06T10:02:38.343675+00:00",
+      "completed_at": "2026-05-06T10:03:14.735153+00:00",
+      "elapsed_seconds": 36,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_011",
+          "task_name": "Generar reporte final",
+          "task_type": "documentation",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-05-06T10:02:43.773829+00:00",
+          "completed_at": "2026-05-06T10:03:08.292895+00:00",
+          "elapsed_seconds": 24,
+          "actual_minutes": 0.4,
+          "variance_minutes": -4.6,
+          "file_created": "docs/reports/US-6.2.5-report.md",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 11,
+    "completed_tasks": 11,
+    "total_phases": 10,
+    "estimated_total_minutes": 125.0,
+    "actual_total_minutes": 18.55,
+    "variance_minutes": -106.45,
+    "variance_percent": -85.16
+  }
+}

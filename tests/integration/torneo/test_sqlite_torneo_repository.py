@@ -8,6 +8,7 @@ import pytest
 from torneo.domain.aggregates.torneo import Torneo
 from torneo.domain.value_objects.entidad_organizadora import EntidadOrganizadora
 from torneo.domain.value_objects.estado_torneo import EstadoTorneo
+from torneo.domain.value_objects.grupo_etario import GrupoEtario
 from torneo.domain.value_objects.sede import Sede
 from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTorneoRepository
 
@@ -47,6 +48,7 @@ async def test_save_y_find_by_id(repo: SQLiteTorneoRepository) -> None:
     assert resultado.sede.ciudad == "Buenos Aires"
     assert resultado.entidad_organizadora.tipo == "FEDERACION"
     assert resultado.estado == EstadoTorneo.CREADO
+    assert resultado.grupos_etarios == frozenset({GrupoEtario.SENIOR})
 
 
 @pytest.mark.asyncio
@@ -90,3 +92,12 @@ async def test_round_trip_completo(repo: SQLiteTorneoRepository) -> None:
     assert loaded.sede.nombre == "Piscina Municipal"
     assert loaded.sede.pais == "Argentina"
     assert loaded.entidad_organizadora.nombre == "AIDA Argentina"
+
+
+@pytest.mark.asyncio
+async def test_persiste_y_recupera_grupos_etarios(repo: SQLiteTorneoRepository) -> None:
+    torneo = _torneo(grupos_etarios=frozenset({GrupoEtario.JUNIOR, GrupoEtario.MASTER}))
+    await repo.save(torneo)
+    loaded = await repo.find_by_id(torneo.torneo_id)
+    assert loaded is not None
+    assert loaded.grupos_etarios == frozenset({GrupoEtario.JUNIOR, GrupoEtario.MASTER})

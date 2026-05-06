@@ -12,6 +12,7 @@ from torneo.domain.ports.torneo_repository_port import TorneoRepositoryPort
 from torneo.domain.value_objects.disciplina_torneo import DisciplinaTorneo
 from torneo.domain.value_objects.entidad_organizadora import EntidadOrganizadora
 from torneo.domain.value_objects.estado_torneo import EstadoTorneo
+from torneo.domain.value_objects.grupo_etario import GrupoEtario, ordenar_grupos_etarios
 from torneo.domain.value_objects.sede import Sede
 from torneo.domain.value_objects.tipo_reglamento import TipoReglamento
 
@@ -26,7 +27,8 @@ CREATE TABLE IF NOT EXISTS torneos (
     entidad            TEXT NOT NULL,
     estado             TEXT NOT NULL,
     disciplinas_torneo TEXT NOT NULL DEFAULT '[]',
-    tipo_reglamento    TEXT NOT NULL DEFAULT 'FAAS'
+    tipo_reglamento    TEXT NOT NULL DEFAULT 'FAAS',
+    grupos_etarios     TEXT NOT NULL DEFAULT '["SENIOR"]'
 )
 """
 
@@ -38,6 +40,10 @@ _ADD_TIPO_REGLAMENTO_COLUMN = """
 ALTER TABLE torneos ADD COLUMN tipo_reglamento TEXT NOT NULL DEFAULT 'FAAS'
 """
 
+_ADD_GRUPOS_ETARIOS_COLUMN = """
+ALTER TABLE torneos ADD COLUMN grupos_etarios TEXT NOT NULL DEFAULT '["SENIOR"]'
+"""
+
 
 class SQLiteTorneoRepository(TorneoRepositoryPort):
     def __init__(self, db_path: str | None = None) -> None:
@@ -45,7 +51,11 @@ class SQLiteTorneoRepository(TorneoRepositoryPort):
 
     async def _ensure_table(self, conn: aiosqlite.Connection) -> None:
         await conn.execute(_CREATE_TABLE)
-        for migration in (_ADD_DISCIPLINAS_COLUMN, _ADD_TIPO_REGLAMENTO_COLUMN):
+        for migration in (
+            _ADD_DISCIPLINAS_COLUMN,
+            _ADD_TIPO_REGLAMENTO_COLUMN,
+            _ADD_GRUPOS_ETARIOS_COLUMN,
+        ):
             try:
                 await conn.execute(migration)
             except Exception:
@@ -59,8 +69,9 @@ class SQLiteTorneoRepository(TorneoRepositoryPort):
                 """
                 INSERT OR REPLACE INTO torneos
                     (torneo_id, nombre, descripcion, fecha_inicio, fecha_fin,
-                     sede, entidad, estado, disciplinas_torneo, tipo_reglamento)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     sede, entidad, estado, disciplinas_torneo, tipo_reglamento,
+                     grupos_etarios)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 self._torneo_to_row(torneo),
             )
@@ -98,11 +109,12 @@ class SQLiteTorneoRepository(TorneoRepositoryPort):
             estado=EstadoTorneo(row["estado"]),
             disciplinas_torneo=self._deserialize_disciplinas(row["disciplinas_torneo"]),
             tipo_reglamento=TipoReglamento(row["tipo_reglamento"] or "FAAS"),
+            grupos_etarios=self._deserialize_grupos_etarios(row["grupos_etarios"]),
         )
 
     def _torneo_to_row(
         self, torneo: Torneo
-    ) -> tuple[str, str, str, str, str, str, str, str, str, str]:
+    ) -> tuple[str, str, str, str, str, str, str, str, str, str, str]:
         return (
             str(torneo.torneo_id),
             torneo.nombre,
@@ -114,6 +126,7 @@ class SQLiteTorneoRepository(TorneoRepositoryPort):
             torneo.estado.value,
             self._serialize_disciplinas(torneo.disciplinas_torneo),
             torneo.tipo_reglamento.value,
+            self._serialize_grupos_etarios(torneo.grupos_etarios),
         )
 
     @staticmethod
@@ -140,6 +153,10 @@ class SQLiteTorneoRepository(TorneoRepositoryPort):
         return json.dumps([disciplina.to_dict() for disciplina in disciplinas])
 
     @staticmethod
+    def _serialize_grupos_etarios(grupos: frozenset[GrupoEtario]) -> str:
+        return json.dumps([grupo.value for grupo in ordenar_grupos_etarios(grupos)])
+
+    @staticmethod
     def _deserialize_sede(raw: str) -> Sede:
         return Sede(**json.loads(raw))
 
@@ -151,3 +168,8 @@ class SQLiteTorneoRepository(TorneoRepositoryPort):
     def _deserialize_disciplinas(raw: str) -> list[DisciplinaTorneo]:
         disciplinas_raw = json.loads(raw) if raw else []
         return [DisciplinaTorneo.from_dict(disciplina) for disciplina in disciplinas_raw]
+
+    @staticmethod
+    def _deserialize_grupos_etarios(raw: str) -> frozenset[GrupoEtario]:
+        grupos_raw = json.loads(raw) if raw else ["SENIOR"]
+        return frozenset(GrupoEtario(grupo) for grupo in grupos_raw)

@@ -1,6 +1,6 @@
-# US-6.2.5: Nuevo Torneo — Selección de Categorías JUNIOR/SENIOR/MASTER
+# US-6.2.5: Nuevo Torneo — Selección de Grupos Etarios JUNIOR/SENIOR/MASTER
 
-**Estado**: `Pending`  
+**Estado**: `Done`
 **Incremento**: INC-6.2 — Ajustes Organizador  
 **Hallazgos**: UI-ORG-07  
 **Bounded Context**: `torneo` · `frontend`  
@@ -23,6 +23,15 @@ para **que el sistema sepa desde el inicio qué categorías habilitar en inscrip
 **Ubicación**: `frontend/src/pages/organizador/CrearTorneoPage.tsx`
 
 El formulario de creación no tiene campo para categorías. Los seis valores posibles del enum `Categoria` son combinaciones de grupo etario (JUNIOR, SENIOR, MASTER) y género (MASCULINO, FEMENINO). Para el organizador tiene más sentido seleccionar los **grupos** (JUNIOR, SENIOR, MASTER) — el género resulta del registro del atleta.
+
+---
+
+## Fuente de verdad UX
+
+- `docs/design/ux/wireframes-organizador.md` — estructura aprobada del portal organizador y criterios visuales del formulario de torneo.
+- `docs/design/ux/prototipos/prototipo-organizador.html` — prototipo navegable aprobado para el rol organizador.
+- `docs/plans/sp6/PLAN-SP6.md` — hallazgo UI-ORG-07 detectado en validación SP5.
+- `frontend/src/pages/organizador/CrearTorneoPage.tsx` — implementación React actual comparada contra el hallazgo.
 
 ---
 
@@ -102,7 +111,7 @@ Feature: US-6.2.5 — Selección de categorías en nuevo torneo
 ## Notas de implementación
 
 - La integración con inscripción/rankings (validar que el atleta pertenece a un grupo habilitado) está **fuera de scope** de esta US — solo persistir el dato
-- Evaluar si `grupos_etarios` va en la entidad `Torneo` del dominio o solo en el DTO de la API; dado que es informativo y sin lógica de dominio en este incremento, puede ir solo en el modelo de infraestructura/API
+- `grupos_etarios` quedó modelado en el dominio `Torneo` con value object propio `GrupoEtario` para evitar acoplamiento directo con `registro.domain.value_objects.Categoria`
 - Migración SQLite: agregar columna `grupos_etarios TEXT NOT NULL DEFAULT '["SENIOR"]'`
 
 ---
@@ -113,6 +122,16 @@ Feature: US-6.2.5 — Selección de categorías en nuevo torneo
 - Página: `frontend/src/pages/organizador/CrearTorneoPage.tsx`
 - Enum: `src/registro/domain/value_objects/categoria.py`
 - Router torneo: `src/torneo/api/router.py`
+
+---
+
+## Resultado de implementación
+
+- `POST /torneos` requiere `grupos_etarios` y valida `JUNIOR`, `SENIOR`, `MASTER`.
+- `GET /torneos` y `GET /torneos/{id}` retornan `grupos_etarios` en orden determinístico.
+- La persistencia SQLite migra torneos existentes con default `["SENIOR"]`.
+- La pantalla de alta de torneo muestra toggles para los tres grupos etarios con `SENIOR` seleccionado por defecto.
+- La validación impide enviar el formulario sin al menos un grupo etario.
 
 ---
 
