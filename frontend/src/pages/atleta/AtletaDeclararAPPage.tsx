@@ -6,7 +6,7 @@ import { fetchApInscripcion, fetchAtletaMe, guardarApInscripcion, listarInscripc
 import { fetchTorneo } from '../../api/torneo'
 import { AtletaShell } from '../../components/atleta/AtletaShell'
 import { ApiError } from '../../api/registro'
-import { esDisciplinaTiempo, formatAp, formatDisciplina, formatFecha, getUnidadEsperada, getUnidadLabel, isApInputValido, normalizeApInput } from './portalData'
+import { esDisciplinaTiempo, formatAp, formatDisciplina, formatFecha, getUnidadEsperada, getUnidadLabel, isApInputValido, normalizeApInput, secondsToApInput } from './portalData'
 
 async function loadApContext(torneoId: string, disciplina: string) {
   const [torneo, competencias, atleta] = await Promise.all([
@@ -77,8 +77,10 @@ export function AtletaDeclararAPPage() {
   const unidadEsperada = getUnidadEsperada(disciplina ?? '')
   const unidadLabel = getUnidadLabel(unidadEsperada)
   const currentAp = query.data?.apActual ?? ''
-  const valorApValue = valorAp || currentAp
-  const apBloqueado = Boolean(currentAp)
+  const currentApDisplay =
+    currentAp && esDisciplinaTiempo(disciplina ?? '') ? secondsToApInput(currentAp) : currentAp
+  const valorApValue = valorAp || currentApDisplay
+  const apBloqueado = query.data ? query.data.torneo.estado !== 'INSCRIPCION_ABIERTA' : true
   const puedeGuardar = isApInputValido(valorApValue, disciplina ?? '')
 
   return (
@@ -122,7 +124,7 @@ export function AtletaDeclararAPPage() {
                   value={valorApValue}
                   onChange={(event) => setValorAp(event.target.value)}
                   inputMode={esDisciplinaTiempo(disciplina ?? '') ? 'text' : 'decimal'}
-                  placeholder={esDisciplinaTiempo(disciplina ?? '') ? 'mm:ss' : '0'}
+                  placeholder={esDisciplinaTiempo(disciplina ?? '') ? 'ej: 04:30' : 'ej: 50,75'}
                   disabled={apBloqueado}
                   className="w-full bg-transparent text-3xl font-semibold text-white outline-none"
                 />
@@ -138,7 +140,7 @@ export function AtletaDeclararAPPage() {
             ) : null}
             {apBloqueado ? (
               <p className="mt-3 text-sm text-amber-300">
-                El AP ya fue declarado y no puede volver a editarse.
+                El período de inscripción cerró. El AP no puede modificarse.
               </p>
             ) : null}
           </section>

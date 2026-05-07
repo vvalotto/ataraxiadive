@@ -18,11 +18,12 @@ export function AtletaMisInscripcionesPage() {
     enabled: Boolean(atletaId),
   })
 
-  const enEjecucion = (query.data?.entries ?? []).filter(
-    (entry) => entry.torneo.estado !== 'INSCRIPCION_ABIERTA',
+  const NO_INICIADOS = ['CREADO', 'INSCRIPCION_ABIERTA', 'PREPARACION']
+  const noIniciados = (query.data?.entries ?? []).filter((entry) =>
+    NO_INICIADOS.includes(entry.torneo.estado),
   )
-  const abiertas = (query.data?.entries ?? []).filter(
-    (entry) => entry.torneo.estado === 'INSCRIPCION_ABIERTA',
+  const enCurso = (query.data?.entries ?? []).filter(
+    (entry) => !NO_INICIADOS.includes(entry.torneo.estado),
   )
 
   return (
@@ -46,13 +47,13 @@ export function AtletaMisInscripcionesPage() {
               En ejecución
             </p>
             <div className="mt-3 space-y-3">
-              {enEjecucion.length === 0 ? (
+              {enCurso.length === 0 ? (
                 <div className="rounded-3xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-400">
                   No hay disciplinas en ejecución para tus inscripciones activas.
                 </div>
               ) : null}
 
-              {enEjecucion.map((entry) => (
+              {enCurso.map((entry) => (
                 <div
                   key={`${entry.torneo.torneo_id}-${entry.disciplina}`}
                   className="rounded-3xl border border-slate-800 bg-slate-900 p-4"
@@ -100,16 +101,16 @@ export function AtletaMisInscripcionesPage() {
 
           <section>
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-400">
-              Inscripciones abiertas
+              Próximos torneos
             </p>
             <div className="mt-3 space-y-3">
-              {abiertas.length === 0 ? (
+              {noIniciados.length === 0 ? (
                 <div className="rounded-3xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-400">
-                  No tenés inscripciones abiertas para declarar AP.
+                  No tenés inscripciones en torneos próximos.
                 </div>
               ) : null}
 
-              {abiertas.map((entry) => (
+              {noIniciados.map((entry) => (
                 <div
                   key={`${entry.torneo.torneo_id}-${entry.disciplina}`}
                   className="rounded-3xl border border-slate-800 bg-slate-900 p-4"
@@ -124,36 +125,31 @@ export function AtletaMisInscripcionesPage() {
                     <span
                       className={[
                         'rounded-full px-3 py-1 text-xs font-semibold',
-                        entry.apEstado === 'declarado'
+                        entry.ap
                           ? 'border border-emerald-500/30 bg-emerald-500/10 text-emerald-200'
                           : 'border border-amber-500/30 bg-amber-500/10 text-amber-100',
                       ].join(' ')}
                     >
-                      {entry.apEstado === 'declarado' ? 'AP declarado' : 'AP pendiente'}
+                      {entry.ap ? 'AP declarado' : 'AP pendiente'}
                     </span>
                   </div>
                   <p className="mt-3 text-sm text-slate-400">
-                    Deadline visible: el anuncio permanece abierto mientras el torneo siga en inscripción.
-                  </p>
-                  <p className="mt-2 text-sm text-slate-400">
                     Inicio del torneo: {formatFecha(entry.torneo.fecha_inicio)}
                   </p>
-                  <div className="mt-4 flex items-center justify-between gap-3">
+                  <div className="mt-3 flex items-center justify-between gap-3">
                     <p className="text-sm text-slate-300">
-                      {entry.ap ? `AP actual ${formatAp(entry.ap, entry.unidad)}` : '⚠ Sin AP declarado'}
+                      {entry.ap
+                        ? `AP: ${formatAp(entry.ap, entry.unidad)}`
+                        : 'Sin AP declarado'}
                     </p>
-                    {!entry.ap ? (
+                    {entry.torneo.estado === 'INSCRIPCION_ABIERTA' ? (
                       <Link
                         to={`/atleta/ap/${entry.torneo.torneo_id}/${entry.disciplina}`}
                         className="rounded-2xl bg-sky-500 px-4 py-2 text-sm font-semibold text-slate-950"
                       >
-                        Declarar AP
+                        {entry.ap ? 'Editar AP' : 'Declarar AP'}
                       </Link>
-                    ) : (
-                      <span className="rounded-2xl border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-300">
-                        AP bloqueado
-                      </span>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               ))}

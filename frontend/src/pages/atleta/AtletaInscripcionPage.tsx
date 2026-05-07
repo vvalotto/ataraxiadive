@@ -289,7 +289,8 @@ export function AtletaInscripcionPage() {
                   Documento *
                   <input
                     value={documentoNumero}
-                    onChange={(event) => setDocumentoNumero(event.target.value)}
+                    onChange={(event) => setDocumentoNumero(event.target.value.replace(/\D/g, ''))}
+                    inputMode="numeric"
                     className="mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100"
                   />
                 </label>
@@ -298,7 +299,8 @@ export function AtletaInscripcionPage() {
                 Teléfono *
                 <input
                   value={telefono}
-                  onChange={(event) => setTelefono(event.target.value)}
+                  onChange={(event) => setTelefono(event.target.value.replace(/\D/g, ''))}
+                  inputMode="numeric"
                   className="mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100"
                 />
               </label>
@@ -346,7 +348,7 @@ export function AtletaInscripcionPage() {
                               esDisciplinaTiempo(disciplina.disciplina) ? 'text' : 'decimal'
                             }
                             placeholder={
-                              esDisciplinaTiempo(disciplina.disciplina) ? 'mm:ss' : '0'
+                              esDisciplinaTiempo(disciplina.disciplina) ? 'ej: 04:30' : 'ej: 50,75'
                             }
                             className="w-full bg-transparent text-lg font-semibold text-white outline-none placeholder:text-slate-500"
                           />

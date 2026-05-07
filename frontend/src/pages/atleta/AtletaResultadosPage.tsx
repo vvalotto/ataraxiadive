@@ -150,14 +150,17 @@ export function AtletaResultadosPage() {
     torneoIds.map((torneoId, index) => [torneoId, overallQueries[index]?.data ?? null]),
   )
 
-  const resultados: ResultadoEntry[] = entries.map((entry, index) => {
-    const ranking = rankingQueries[index]?.data ?? null
-    return {
-      entry,
-      ranking,
-      miResultado: findMiResultado(ranking, atletaId),
-    }
-  })
+  const resultados: ResultadoEntry[] = entries
+    .filter((entry) => ['EJECUCION', 'PREMIACION', 'CERRADO'].includes(entry.torneo.estado))
+    .map((entry) => {
+      const index = entries.indexOf(entry)
+      const ranking = rankingQueries[index]?.data ?? null
+      return {
+        entry,
+        ranking,
+        miResultado: findMiResultado(ranking, atletaId),
+      }
+    })
   const grupos = groupByTorneo(resultados)
 
   return (
