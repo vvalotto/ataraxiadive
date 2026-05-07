@@ -11,7 +11,36 @@ import {
   formatHora,
   getEstadoTorneoLabel,
   loadAtletaPortalSnapshot,
+  type AtletaPortalEntry,
 } from './portalData'
+
+function getOtTimestamp(entry: AtletaPortalEntry): number | null {
+  if (!entry.ot) return null
+  const timestamp = new Date(entry.ot).getTime()
+  return Number.isNaN(timestamp) ? null : timestamp
+}
+
+function sortDisciplinasPorOt(entries: AtletaPortalEntry[], now = new Date()): AtletaPortalEntry[] {
+  const nowTimestamp = now.getTime()
+
+  return [...entries].sort((left, right) => {
+    const leftTimestamp = getOtTimestamp(left)
+    const rightTimestamp = getOtTimestamp(right)
+    const leftFuture = leftTimestamp !== null && leftTimestamp > nowTimestamp
+    const rightFuture = rightTimestamp !== null && rightTimestamp > nowTimestamp
+    const leftPast = leftTimestamp !== null && leftTimestamp <= nowTimestamp
+    const rightPast = rightTimestamp !== null && rightTimestamp <= nowTimestamp
+
+    if (leftFuture && rightFuture) return leftTimestamp - rightTimestamp
+    if (leftFuture) return -1
+    if (rightFuture) return 1
+    if (!leftPast && !rightPast) return 0
+    if (!leftPast) return -1
+    if (!rightPast) return 1
+    if (leftTimestamp !== null && rightTimestamp !== null) return leftTimestamp - rightTimestamp
+    return 0
+  })
+}
 
 export function AtletaHomePage() {
   const atletaId = useAuthStore((state) => state.userId)
@@ -31,8 +60,10 @@ export function AtletaHomePage() {
         entry.torneo.torneo_id,
         {
           torneo: entry.torneo,
-          disciplinas: (query.data?.entries ?? []).filter(
-            (candidate) => candidate.torneo.torneo_id === entry.torneo.torneo_id,
+          disciplinas: sortDisciplinasPorOt(
+            (query.data?.entries ?? []).filter(
+              (candidate) => candidate.torneo.torneo_id === entry.torneo.torneo_id,
+            ),
           ),
         },
       ]),
@@ -68,9 +99,6 @@ export function AtletaHomePage() {
       {query.data ? (
         <div className="space-y-4">
           <section className="rounded-[1.75rem] border border-slate-800 bg-slate-900 p-5 shadow-[0_30px_60px_-40px_rgba(56,189,248,0.5)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-400">
-              Hola
-            </p>
             <h2 className="mt-2 text-2xl font-semibold text-white">
               {buildNombreCorto(query.data.atleta)}
             </h2>
