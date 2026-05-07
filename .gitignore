@@ -35,6 +35,7 @@ coverage.xml
 
 # Bases de datos SQLite (runtime — un archivo por BC)
 data/*.db
+data/adjuntos/
 
 # Node / Frontend
 frontend/node_modules/

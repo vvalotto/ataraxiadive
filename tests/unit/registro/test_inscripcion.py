@@ -12,11 +12,11 @@ from shared.domain.value_objects.disciplina import Disciplina
 
 
 def _inscripcion(**kwargs) -> Inscripcion:
-    defaults = dict(
-        atleta_id=uuid4(),
-        torneo_id=uuid4(),
-        disciplinas=frozenset({Disciplina.STA}),
-    )
+    defaults = {
+        "atleta_id": uuid4(),
+        "torneo_id": uuid4(),
+        "disciplinas": frozenset({Disciplina.STA}),
+    }
     defaults.update(kwargs)
     return Inscripcion(**defaults)
 
@@ -62,3 +62,27 @@ def test_disciplinas_es_frozenset():
     assert isinstance(ins.disciplinas, frozenset)
     assert Disciplina.STA in ins.disciplinas
     assert Disciplina.DNF in ins.disciplinas
+
+
+def test_adjuntar_apto_medico_registra_path():
+    ins = _inscripcion()
+    ins.adjuntar_apto_medico("data/adjuntos/id/apto_medico.pdf")
+    assert ins.apto_medico_path == "data/adjuntos/id/apto_medico.pdf"
+
+
+def test_adjuntar_constancia_pago_registra_path():
+    ins = _inscripcion()
+    ins.adjuntar_constancia_pago("data/adjuntos/id/constancia_pago.pdf")
+    assert ins.constancia_pago_path == "data/adjuntos/id/constancia_pago.pdf"
+
+
+def test_adjuntar_apto_medico_rechaza_path_vacio():
+    ins = _inscripcion()
+    with pytest.raises(ValueError, match="path no puede ser vacío"):
+        ins.adjuntar_apto_medico(" ")
+
+
+def test_adjuntar_constancia_pago_rechaza_path_vacio():
+    ins = _inscripcion()
+    with pytest.raises(ValueError, match="path no puede ser vacío"):
+        ins.adjuntar_constancia_pago("")

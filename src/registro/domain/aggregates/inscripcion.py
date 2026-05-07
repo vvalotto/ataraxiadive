@@ -20,6 +20,8 @@ class Inscripcion:
     estado: EstadoInscripcion = EstadoInscripcion.ACTIVA
     fecha_inscripcion: datetime = field(default_factory=datetime.utcnow)
     ap_por_disciplina: dict[Disciplina, APDeclarado] = field(default_factory=dict)
+    apto_medico_path: str | None = None
+    constancia_pago_path: str | None = None
 
     def cancelar(self, fecha_actual: date, fecha_inicio_torneo: date) -> None:
         """INV-I-03: solo cancela si fecha_actual < fecha_inicio_torneo."""
@@ -45,3 +47,13 @@ class Inscripcion:
 
     def tiene_ap_completo(self) -> bool:
         return all(self.obtener_ap(disciplina) is not None for disciplina in self.disciplinas)
+
+    def adjuntar_apto_medico(self, path: str) -> None:
+        if not path or not path.strip():
+            raise ValueError("path no puede ser vacío")
+        self.apto_medico_path = path
+
+    def adjuntar_constancia_pago(self, path: str) -> None:
+        if not path or not path.strip():
+            raise ValueError("path no puede ser vacío")
+        self.constancia_pago_path = path

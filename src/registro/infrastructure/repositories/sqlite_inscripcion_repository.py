@@ -9,8 +9,8 @@ from uuid import UUID
 import aiosqlite
 
 from registro.domain.aggregates.inscripcion import Inscripcion
-from registro.domain.value_objects.ap_declarado import APDeclarado
 from registro.domain.ports.inscripcion_repository_port import InscripcionRepositoryPort
+from registro.domain.value_objects.ap_declarado import APDeclarado
 from registro.domain.value_objects.estado_inscripcion import EstadoInscripcion
 from shared.domain.value_objects.disciplina import Disciplina
 from shared.domain.value_objects.unidad_medida import UnidadMedida
@@ -23,7 +23,9 @@ CREATE TABLE IF NOT EXISTS inscripciones (
     disciplinas       TEXT NOT NULL,
     ap_por_disciplina TEXT NOT NULL DEFAULT '{}',
     estado            TEXT NOT NULL,
-    fecha_inscripcion TEXT NOT NULL
+    fecha_inscripcion TEXT NOT NULL,
+    apto_medico_path  TEXT,
+    constancia_pago_path TEXT
 )
 """
 
@@ -45,6 +47,10 @@ class SQLiteInscripcionRepository(InscripcionRepositoryPort):
             await conn.execute(
                 "ALTER TABLE inscripciones ADD COLUMN ap_por_disciplina TEXT NOT NULL DEFAULT '{}'"
             )
+        if "apto_medico_path" not in columns:
+            await conn.execute("ALTER TABLE inscripciones ADD COLUMN apto_medico_path TEXT")
+        if "constancia_pago_path" not in columns:
+            await conn.execute("ALTER TABLE inscripciones ADD COLUMN constancia_pago_path TEXT")
         await conn.commit()
 
     async def save(self, inscripcion: Inscripcion) -> None:
@@ -60,9 +66,11 @@ class SQLiteInscripcionRepository(InscripcionRepositoryPort):
                         disciplinas,
                         ap_por_disciplina,
                         estado,
-                        fecha_inscripcion
+                        fecha_inscripcion,
+                        apto_medico_path,
+                        constancia_pago_path
                     )
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     str(inscripcion.inscripcion_id),
@@ -80,6 +88,8 @@ class SQLiteInscripcionRepository(InscripcionRepositoryPort):
                     ),
                     inscripcion.estado.value,
                     inscripcion.fecha_inscripcion.isoformat(),
+                    inscripcion.apto_medico_path,
+                    inscripcion.constancia_pago_path,
                 ),
             )
             await conn.commit()
@@ -161,4 +171,6 @@ class SQLiteInscripcionRepository(InscripcionRepositoryPort):
                 )
                 for disciplina, payload in json.loads(row["ap_por_disciplina"] or "{}").items()
             },
+            apto_medico_path=row["apto_medico_path"],
+            constancia_pago_path=row["constancia_pago_path"],
         )
