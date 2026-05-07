@@ -44,6 +44,26 @@ Foco: **corregir UX del portal organizador** — torneos ordenados, columnas ren
 
 ---
 
+## Incremento 6.3 — Ajustes Atleta
+
+Foco: **corregir el portal atleta y completar inscripción** — inicio más claro,
+AP inline en el wizard y persistencia de adjuntos obligatorios.
+
+### Stories
+
+| US | Título | Hallazgos | Estado |
+|----|--------|-----------|--------|
+| [US-6.3.1](./US-6.3.1.md) | Inicio atleta: en línea en header + sin "Hola" + torneos en curso ordenados | UI-ATL-01 | Done |
+| [US-6.3.2](./US-6.3.2.md) | Formulario inscripción: AP inline en wizard + persistir apto médico + constancia de pago | UI-ATL-02 · RF-IN-05 · RF-IN-06 | Implementada |
+
+### Criterios de Cierre INC-6.3
+
+- [x] US-6.3.1..6.3.2 especificadas (IEDD completa)
+- [ ] PRs de US-6.3.1..6.3.2 mergeados a `develop`
+- [ ] UAT atleta E2E: inicio, torneos, inscripción, mis inscripciones, grilla, resultados
+
+---
+
 ## Dependencias y Bloqueantes
 
 - **US-6.1.1** debe completarse **antes de cualquier UAT** del rol juez

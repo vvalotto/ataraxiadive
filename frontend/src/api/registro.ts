@@ -93,6 +93,17 @@ function buildHeaders(): Record<string, string> {
   return headers
 }
 
+function buildFileHeaders(): Record<string, string> {
+  const token = getToken()
+  const headers: Record<string, string> = {}
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`
+  }
+
+  return headers
+}
+
 async function parseResponse<T>(response: Response): Promise<T> {
   if (response.ok) {
     if (response.status === 204) {
@@ -196,4 +207,32 @@ export async function guardarApInscripcion(payload: {
     }),
   })
   return parseResponse<InscripcionApDto>(response)
+}
+
+export async function subirAptoMedico(
+  inscripcionId: string,
+  archivo: File,
+): Promise<{ path: string }> {
+  const formData = new FormData()
+  formData.append('archivo', archivo)
+  const response = await fetch(`/registro/inscripciones/${inscripcionId}/apto-medico`, {
+    method: 'POST',
+    headers: buildFileHeaders(),
+    body: formData,
+  })
+  return parseResponse<{ path: string }>(response)
+}
+
+export async function subirConstanciaPago(
+  inscripcionId: string,
+  archivo: File,
+): Promise<{ path: string }> {
+  const formData = new FormData()
+  formData.append('archivo', archivo)
+  const response = await fetch(`/registro/inscripciones/${inscripcionId}/constancia-pago`, {
+    method: 'POST',
+    headers: buildFileHeaders(),
+    body: formData,
+  })
+  return parseResponse<{ path: string }>(response)
 }
