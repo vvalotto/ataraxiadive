@@ -11,7 +11,7 @@
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
 | **Fecha** | 2026-05-01 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.35 — SP6 INC-6.1 en curso · US-6.1.1 ✅ · US-6.1.2 ✅ · US-6.1.3 ✅ · US-6.1.4 ✅ · US-6.1.5 ✅ |
+| **Estado** | ✅ v1.36 — SP6 INC-6.1 ✅ · INC-6.2 ✅ · US-6.2.1..6.2.6 ✅ |
 
 ---
 
@@ -552,8 +552,8 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 
 ## 29. US-IEDD SP6 INC-6.1 — Ajustes Juez
 
-> Estado al 2026-05-04: 5/5 US mergeadas a `develop`. INC-6.1 completo — pendiente DesignReviewer cierre incremento.
-> Quality gates: frontend-only · CodeGuard N/A (sin cambios Python) · DesignReviewer al cierre del INC.
+> Estado al 2026-05-04: 5/5 US mergeadas a `develop`. INC-6.1 cerrado formalmente.
+> Quality gates: frontend-only · CodeGuard N/A (sin cambios Python) · DesignReviewer 0 CRITICAL · 256 WARNING (cierre conjunto INC-6.1/6.2 — 2026-05-07).
 
 | US | Inc. | Contenido principal | Estado |
 |----|------|---------------------|--------|
@@ -565,7 +565,23 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 
 ---
 
-## 30. Trazabilidad: Discrepancias → US → Documentos a actualizar
+## 30. US-IEDD SP6 INC-6.2 — Ajustes Organizador
+
+> Estado al 2026-05-07: 6/6 US mergeadas a `develop`. INC-6.2 cerrado formalmente.
+> Quality gates: frontend-only · CodeGuard N/A (sin cambios Python) · DesignReviewer 0 CRITICAL · 256 WARNING.
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-6.2.1 | 6.2 | Torneos ordenados por fecha desc + fecha visible en lista organizador · `TorneoList.tsx` | ✅ Done (PR #148) |
+| US-6.2.2 | 6.2 | Inscriptos + Grilla: columna categoría legible + título "ANUNCIO" · `InscriptosList.tsx` + `GrillaPage.tsx` | ✅ Done (PR #149) |
+| US-6.2.3 | 6.2 | Resultados: quitar PTS FAAS + andarivel como número + AP → Anuncios · `ResultadosPage.tsx` | ✅ Done (PR #150) |
+| US-6.2.4 | 6.2 | Panel torneo: alertas sin botón "Resolver" + jueces sin texto nombre · `TorneoPanel.tsx` | ✅ Done (PR #151) |
+| US-6.2.5 | 6.2 | Nuevo torneo con grupos etarios JUNIOR/SENIOR/MASTER · `CrearTorneoPage.tsx` | ✅ Done (PR #152) |
+| US-6.2.6 | 6.2 | Página de Podios (UI-ORG-08) · `PodiosPage.tsx` | ✅ Done (PR #153) |
+
+---
+
+## 31. Trazabilidad: Discrepancias → US → Documentos a actualizar
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -584,7 +600,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 31. Cobertura Total
+## 32. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -604,7 +620,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 32. US → Tests
+## 33. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -693,10 +709,16 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-6.1.3 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #145) |
 | US-6.1.4 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #146) |
 | US-6.1.5 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #147) |
+| US-6.2.1 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #148) |
+| US-6.2.2 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #149) |
+| US-6.2.3 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #150) |
+| US-6.2.4 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #151) |
+| US-6.2.5 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #152) |
+| US-6.2.6 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #153) |
 
 ---
 
-## 33. US → ADR
+## 34. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -711,6 +733,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
+*v1.36 — 2026-05-07: INC-6.2 cerrado · §30 nuevo (6/6 US ✅ PRs #148–#153) · DesignReviewer 0 CRITICAL · §§ renumerados 31..34 · US→Tests US-6.2.x · header actualizado*
 *v1.35 — 2026-05-04: US-6.1.5 ✅ (PR #147) · §29 5/5 completo · US→Tests actualizados*
 *v1.34 — 2026-05-04: US-6.1.4 ✅ (PR #146) · §29 y US→Tests actualizados*
 *v1.33 — 2026-05-04: US-6.1.3 ✅ (PR #145) · §29 y US→Tests actualizados*
