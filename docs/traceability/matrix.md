@@ -581,7 +581,18 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 
 ---
 
-## 31. Trazabilidad: Discrepancias → US → Documentos a actualizar
+## 31. US-IEDD SP6 INC-6.3 — Ajustes Atleta
+
+> Estado al 2026-05-07: INC-6.3 iniciado. `US-6.3.1` implementada en branch, pendiente de PR.
+> Quality gates `US-6.3.1`: frontend-only · `npm run build` ✅ · `npm run lint` ✅ · BDD waiver.
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-6.3.1 | 6.3 | Inicio atleta: indicador "En línea", sin saludo redundante "Hola" y disciplinas de torneos activos ordenadas por OT · `AtletaShell.tsx` + `AtletaHomePage.tsx` | ✅ Implementada (pendiente PR) |
+
+---
+
+## 32. Trazabilidad: Discrepancias → US → Documentos a actualizar
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -600,7 +611,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 32. Cobertura Total
+## 33. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -620,7 +631,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 33. US → Tests
+## 34. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -715,10 +726,11 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-6.2.4 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #151) |
 | US-6.2.5 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #152) |
 | US-6.2.6 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #153) |
+| US-6.3.1 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Implementada (pendiente PR) |
 
 ---
 
-## 34. US → ADR
+## 35. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -733,6 +745,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
+*v1.37 — 2026-05-07: INC-6.3 iniciado · §31 nuevo · US-6.3.1 implementada pendiente PR · US→Tests actualizado*
 *v1.36 — 2026-05-07: INC-6.2 cerrado · §30 nuevo (6/6 US ✅ PRs #148–#153) · DesignReviewer 0 CRITICAL · §§ renumerados 31..34 · US→Tests US-6.2.x · header actualizado*
 *v1.35 — 2026-05-04: US-6.1.5 ✅ (PR #147) · §29 5/5 completo · US→Tests actualizados*
 *v1.34 — 2026-05-04: US-6.1.4 ✅ (PR #146) · §29 y US→Tests actualizados*
