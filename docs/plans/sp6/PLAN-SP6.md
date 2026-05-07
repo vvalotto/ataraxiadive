@@ -153,9 +153,7 @@ Foco: corregir UX del portal atleta y completar backend de inscripción.
 | US | Descripción | Hallazgos |
 |----|-------------|-----------|
 | US-6.3.1 | Inicio atleta: en línea en header + sin "Hola" + torneos en curso ordenados | UI-ATL-01 |
-| US-6.3.2 | Inscripción: declarar AP en formulario | UI-ATL-02 |
-| US-6.3.3 | Backend inscripción: persistir apto médico (RF-IN-05) | RF-IN-05 |
-| US-6.3.4 | Backend inscripción: persistir constancia de pago (RF-IN-06) | RF-IN-06 |
+| US-6.3.2 | Formulario inscripción: AP inline en wizard + persistir apto médico + constancia de pago | UI-ATL-02 · RF-IN-05 · RF-IN-06 |
 | US-6.3.x | Ajustes adicionales vibe coding (por identificar) | — |
 
 ### INC-6.4 — Deuda Técnica Sistema
