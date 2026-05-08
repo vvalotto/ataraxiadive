@@ -10,7 +10,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app import app
-from competencia.api.router import get_event_store
+from competencia.api.router import get_event_store, get_generar_grilla_handler, get_obtener_grilla_handler
 from competencia.application.commands.configurar_intervalo_ot import (
     ConfigurarIntervaloOTCommand,
     ConfigurarIntervaloOTHandler,
@@ -20,10 +20,13 @@ from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
+from competencia.application.commands.generar_grilla import GenerarGrillaHandler
+from competencia.application.queries.obtener_grilla import ObtenerGrillaHandler
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
 from identidad.api.dependencies import get_current_user
+from tests.integration.competencia._stubs import StubAtletaNombrePort, StubPerformancesAPPort
 
 CREATE_EVENTS_TABLE = """
     CREATE TABLE events (
@@ -50,7 +53,15 @@ async def store(tmp_path: pytest.TempPathFactory) -> SQLiteEventStore:
 
 @pytest.fixture
 def client(store: SQLiteEventStore) -> TestClient:
+    stub_ap = StubPerformancesAPPort(store)
+    stub_nombre = StubAtletaNombrePort()
     app.dependency_overrides[get_event_store] = lambda: store
+    app.dependency_overrides[get_generar_grilla_handler] = lambda: GenerarGrillaHandler(
+        store, stub_ap, DisciplinaDescriptorAdapter()
+    )
+    app.dependency_overrides[get_obtener_grilla_handler] = (
+        lambda: ObtenerGrillaHandler(store, stub_nombre)
+    )
     app.dependency_overrides[get_current_user] = lambda: {
         "sub": "organizador-01",
         "email": "org@ataraxia.com",

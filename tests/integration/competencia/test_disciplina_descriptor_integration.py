@@ -29,7 +29,7 @@ from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEven
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
+from tests.integration.competencia._stubs import StubPerformancesAPPort
 
 _CREATE_TABLE = """
     CREATE TABLE events (
@@ -101,7 +101,7 @@ class TestGrillaSTAOrdenAscendente:
                 (A003, Decimal("180"), UnidadMedida.Segundos),
             ],
         )
-        adapter = PerformancesAPAdapter(event_store)
+        adapter = StubPerformancesAPPort(event_store)
         handler = GenerarGrillaHandler(event_store, adapter, DisciplinaDescriptorAdapter())
         await handler.handle(
             GenerarGrillaCommand(
@@ -136,7 +136,7 @@ class TestGrillaDNFOrdenAscendente:
                 (A003, Decimal("60"), UnidadMedida.Metros),
             ],
         )
-        adapter = PerformancesAPAdapter(event_store)
+        adapter = StubPerformancesAPPort(event_store)
         handler = GenerarGrillaHandler(event_store, adapter, DisciplinaDescriptorAdapter())
         await handler.handle(
             GenerarGrillaCommand(

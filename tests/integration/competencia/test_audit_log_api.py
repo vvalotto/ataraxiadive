@@ -9,7 +9,9 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app import app
-from competencia.api.router import get_event_store
+from competencia.api.router import get_event_store, get_obtener_audit_log_handler
+from competencia.application.queries.obtener_audit_log import ObtenerAuditLogHandler
+from tests.integration.competencia._stubs import StubAtletaNombrePort
 from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 from identidad.api.dependencies import get_current_user
 
@@ -38,7 +40,11 @@ async def store(tmp_path: pytest.TempPathFactory) -> SQLiteEventStore:
 
 @pytest.fixture
 def client(store: SQLiteEventStore) -> TestClient:
+    stub_nombre = StubAtletaNombrePort()
     app.dependency_overrides[get_event_store] = lambda: store
+    app.dependency_overrides[get_obtener_audit_log_handler] = (
+        lambda: ObtenerAuditLogHandler(store, stub_nombre)
+    )
     app.dependency_overrides[get_current_user] = lambda: {
         "sub": "org-001",
         "email": "organizador@test.com",

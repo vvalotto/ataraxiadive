@@ -11,7 +11,8 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app import app
-from competencia.api.router import get_event_store
+from competencia.api.router import get_event_store, get_obtener_grilla_handler
+from competencia.application.queries.obtener_grilla import ObtenerGrillaHandler
 from competencia.application.commands.asignar_tarjeta import (
     AsignarTarjetaCommand,
     AsignarTarjetaHandler,
@@ -38,7 +39,7 @@ from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEven
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
+from tests.integration.competencia._stubs import StubAtletaNombrePort, StubPerformancesAPPort
 
 CREATE_EVENTS_TABLE = """
     CREATE TABLE events (
@@ -70,7 +71,11 @@ async def store(tmp_path: pytest.TempPathFactory) -> SQLiteEventStore:
 
 @pytest.fixture
 def client(store: SQLiteEventStore) -> TestClient:
+    stub_nombre = StubAtletaNombrePort()
     app.dependency_overrides[get_event_store] = lambda: store
+    app.dependency_overrides[get_obtener_grilla_handler] = (
+        lambda: ObtenerGrillaHandler(store, stub_nombre)
+    )
     yield TestClient(app)
     app.dependency_overrides.clear()
 
@@ -104,7 +109,7 @@ async def _seed_grilla(store: SQLiteEventStore) -> None:
     await _registrar_ap(store, ATLETA_SIN_TARJETA, "60")
     await GenerarGrillaHandler(
         store,
-        PerformancesAPAdapter(store),
+        StubPerformancesAPPort(store),
         DisciplinaDescriptorAdapter(),
     ).handle(
         GenerarGrillaCommand(

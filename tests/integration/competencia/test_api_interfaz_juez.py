@@ -29,7 +29,11 @@ from competencia.infrastructure.repositories.disciplina_descriptor_adapter impor
     DisciplinaDescriptorAdapter,
 )
 from app import app
-from competencia.api.router import get_event_store
+from competencia.api.router import get_event_store, get_obtener_proximas_performances_handler
+from competencia.application.queries.obtener_proximas_performances import (
+    ObtenerProximasPerformancesHandler,
+)
+from tests.integration.competencia._stubs import StubAtletaNombrePort
 
 CREATE_EVENTS_TABLE = """
     CREATE TABLE events (
@@ -56,7 +60,11 @@ async def store(tmp_path: pytest.TempPathFactory) -> SQLiteEventStore:
 
 @pytest.fixture
 def client(store: SQLiteEventStore) -> TestClient:
+    stub_nombre = StubAtletaNombrePort()
     app.dependency_overrides[get_event_store] = lambda: store
+    app.dependency_overrides[get_obtener_proximas_performances_handler] = (
+        lambda: ObtenerProximasPerformancesHandler(store, stub_nombre)
+    )
     yield TestClient(app)
     app.dependency_overrides.clear()
 
