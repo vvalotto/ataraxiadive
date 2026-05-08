@@ -41,6 +41,7 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | HITO-29 | SP5 Inc 5.5 | 2026-04-26 | Spec-validatoria: anti-patrón de especificar desde código | ¿Escribir specs después de código listo genera sesgos invisibles en la cobertura de casos? | [HITO-29](./HITO-29-SPEC-VALIDATORIA-UX-ANTI-PATRON.md) |
 | HITO-30 | SP6 apertura | 2026-05-08 | Deriva silenciosa de tests: invariantes, contratos y entorno | ¿Qué tipos de deriva silenciosa acumula un proyecto IEDD+LLM cuando los tests unitarios no se ejecutan en cada PR? | [HITO-30](./HITO-30-DERIVA-TESTS-UNITARIOS-INVARIANTES-DOMINIO.md) |
 | HITO-31 | SP6 apertura | 2026-05-08 | Deriva de tests de integración: wiring, invariantes incorrectos y entorno | ¿Qué patrones de falla son exclusivos del nivel de integración frente a los unitarios en un proyecto IEDD+LLM? | [HITO-31](./HITO-31-DERIVA-TESTS-INTEGRACION-WIRING-ENTORNO.md) |
+| HITO-32 | SP6 apertura | 2026-05-08 | Deriva de tests BDD: contratos de adaptadores, passwords y semántica de dominio | ¿Qué tipos de deriva son exclusivos del nivel BDD? ¿Qué proporción de tests con invariantes incorrectos escribe un LLM? | [HITO-32](./HITO-32-DERIVA-TESTS-BDD-CONTRATOS-DOMINIO.md) |
 
 ---
 
