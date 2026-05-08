@@ -15,6 +15,7 @@ from resultados.application.commands.calcular_overall import (
     CalcularOverallHandler,
 )
 from resultados.domain.aggregates.ranking_overall import RankingOverall
+from resultados.domain.exceptions import DisciplinasNoFinalizadas
 from shared.domain.value_objects.disciplina import Disciplina
 from shared.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
 
@@ -32,6 +33,8 @@ CREATE_EVENTS_TABLE = """
         UNIQUE (stream_id, version)
     )
 """
+
+_CATEGORIA = "SENIOR_MASCULINO"
 
 
 async def _init_db(db_path: str) -> None:
@@ -74,6 +77,20 @@ async def _append_ranking(
     )
 
 
+def _entry(atleta_id: UUID, posicion: int, rp: str, unidad: str, puntos: str) -> dict:
+    return {
+        "posicion": posicion,
+        "atleta_id": str(atleta_id),
+        "categoria": _CATEGORIA,
+        "rp": rp,
+        "unidad": unidad,
+        "tarjeta": "Blanca",
+        "es_dns": False,
+        "en_podio": posicion <= 3,
+        "puntos": puntos,
+    }
+
+
 @pytest.fixture
 def ctx() -> dict:
     async def _build() -> dict:
@@ -88,6 +105,7 @@ def ctx() -> dict:
             "competencia_store": SQLiteEventStore(competencia_db),
             "ranking_store": SQLiteEventStore(resultados_db),
             "athletes": {"A": uuid4(), "B": uuid4(), "C": uuid4()},
+            "exc": None,
         }
 
     return asyncio.run(_build())
@@ -103,33 +121,9 @@ def given_sta_abc(ctx: dict) -> None:
             competencia_id,
             Disciplina.STA,
             [
-                {
-                    "posicion": 1,
-                    "atleta_id": str(ctx["athletes"]["A"]),
-                    "rp": "310",
-                    "unidad": "Segundos",
-                    "tarjeta": "Blanca",
-                    "es_dns": False,
-                    "en_podio": True,
-                },
-                {
-                    "posicion": 2,
-                    "atleta_id": str(ctx["athletes"]["B"]),
-                    "rp": "300",
-                    "unidad": "Segundos",
-                    "tarjeta": "Blanca",
-                    "es_dns": False,
-                    "en_podio": True,
-                },
-                {
-                    "posicion": 3,
-                    "atleta_id": str(ctx["athletes"]["C"]),
-                    "rp": "280",
-                    "unidad": "Segundos",
-                    "tarjeta": "Blanca",
-                    "es_dns": False,
-                    "en_podio": True,
-                },
+                _entry(ctx["athletes"]["A"], 1, "310", "Segundos", "20.00"),
+                _entry(ctx["athletes"]["B"], 2, "300", "Segundos", "10.00"),
+                _entry(ctx["athletes"]["C"], 3, "280", "Segundos", "5.00"),
             ],
         )
 
@@ -146,33 +140,9 @@ def given_dnf_abc(ctx: dict) -> None:
             competencia_id,
             Disciplina.DNF,
             [
-                {
-                    "posicion": 2,
-                    "atleta_id": str(ctx["athletes"]["A"]),
-                    "rp": "80",
-                    "unidad": "Metros",
-                    "tarjeta": "Blanca",
-                    "es_dns": False,
-                    "en_podio": True,
-                },
-                {
-                    "posicion": 1,
-                    "atleta_id": str(ctx["athletes"]["B"]),
-                    "rp": "90",
-                    "unidad": "Metros",
-                    "tarjeta": "Blanca",
-                    "es_dns": False,
-                    "en_podio": True,
-                },
-                {
-                    "posicion": 3,
-                    "atleta_id": str(ctx["athletes"]["C"]),
-                    "rp": "70",
-                    "unidad": "Metros",
-                    "tarjeta": "Blanca",
-                    "es_dns": False,
-                    "en_podio": True,
-                },
+                _entry(ctx["athletes"]["A"], 2, "80", "Metros", "10.00"),
+                _entry(ctx["athletes"]["B"], 1, "90", "Metros", "20.00"),
+                _entry(ctx["athletes"]["C"], 3, "70", "Metros", "5.00"),
             ],
         )
 
@@ -189,24 +159,8 @@ def given_sta_ab(ctx: dict) -> None:
             competencia_id,
             Disciplina.STA,
             [
-                {
-                    "posicion": 1,
-                    "atleta_id": str(ctx["athletes"]["A"]),
-                    "rp": "310",
-                    "unidad": "Segundos",
-                    "tarjeta": "Blanca",
-                    "es_dns": False,
-                    "en_podio": True,
-                },
-                {
-                    "posicion": 2,
-                    "atleta_id": str(ctx["athletes"]["B"]),
-                    "rp": "300",
-                    "unidad": "Segundos",
-                    "tarjeta": "Blanca",
-                    "es_dns": False,
-                    "en_podio": True,
-                },
+                _entry(ctx["athletes"]["A"], 1, "310", "Segundos", "20.00"),
+                _entry(ctx["athletes"]["B"], 2, "300", "Segundos", "10.00"),
             ],
         )
 
@@ -223,15 +177,7 @@ def given_dnf_only_b(ctx: dict) -> None:
             competencia_id,
             Disciplina.DNF,
             [
-                {
-                    "posicion": 1,
-                    "atleta_id": str(ctx["athletes"]["B"]),
-                    "rp": "90",
-                    "unidad": "Metros",
-                    "tarjeta": "Blanca",
-                    "es_dns": False,
-                    "en_podio": True,
-                },
+                _entry(ctx["athletes"]["B"], 1, "90", "Metros", "10.00"),
             ],
         )
 
@@ -264,24 +210,8 @@ def given_dnf_ab(ctx: dict) -> None:
             competencia_id,
             Disciplina.DNF,
             [
-                {
-                    "posicion": 2,
-                    "atleta_id": str(ctx["athletes"]["A"]),
-                    "rp": "80",
-                    "unidad": "Metros",
-                    "tarjeta": "Blanca",
-                    "es_dns": False,
-                    "en_podio": True,
-                },
-                {
-                    "posicion": 1,
-                    "atleta_id": str(ctx["athletes"]["B"]),
-                    "rp": "90",
-                    "unidad": "Metros",
-                    "tarjeta": "Blanca",
-                    "es_dns": False,
-                    "en_podio": True,
-                },
+                _entry(ctx["athletes"]["A"], 2, "80", "Metros", "10.00"),
+                _entry(ctx["athletes"]["B"], 1, "90", "Metros", "20.00"),
             ],
         )
 
@@ -291,11 +221,30 @@ def given_dnf_ab(ctx: dict) -> None:
 @when("el sistema calcula el overall del torneo")
 def when_calcula_overall(ctx: dict) -> None:
     async def _run() -> None:
+        try:
+            handler = CalcularOverallHandler(ctx["ranking_store"], ctx["competencia_store"])
+            await handler.handle(
+                CalcularOverallCommand(
+                    torneo_id=ctx["torneo_id"],
+                    disciplinas=[Disciplina.STA, Disciplina.DNF],
+                )
+            )
+            events = await ctx["ranking_store"].load(f"ranking-overall-{ctx['torneo_id']}")
+            ctx["overall"] = RankingOverall.reconstitute(ctx["torneo_id"], events)
+        except DisciplinasNoFinalizadas as exc:
+            ctx["exc"] = exc
+
+    asyncio.run(_run())
+
+
+@when("el sistema calcula el overall solo con STA")
+def when_calcula_overall_solo_sta(ctx: dict) -> None:
+    async def _run() -> None:
         handler = CalcularOverallHandler(ctx["ranking_store"], ctx["competencia_store"])
         await handler.handle(
             CalcularOverallCommand(
                 torneo_id=ctx["torneo_id"],
-                disciplinas=[Disciplina.STA, Disciplina.DNF],
+                disciplinas=[Disciplina.STA],
             )
         )
         events = await ctx["ranking_store"].load(f"ranking-overall-{ctx['torneo_id']}")
@@ -309,7 +258,7 @@ def then_puntaje_posicion(ctx: dict, atleta: str, puntaje: int, posicion: int) -
     entry = next(
         entry for entry in ctx["overall"].entries if entry.atleta_id == ctx["athletes"][atleta]
     )
-    assert entry.puntaje == puntaje
+    assert entry.puntos_overall == puntaje
     assert entry.posicion == posicion
 
 
@@ -330,7 +279,7 @@ def then_a_penalizado(ctx: dict) -> None:
     atleta_a = next(
         entry for entry in ctx["overall"].entries if entry.atleta_id == ctx["athletes"]["A"]
     )
-    assert atleta_a.detalle["DNF"] == 2
+    assert "DNF" not in atleta_a.detalle
 
 
 @then("el overall se calcula solo con STA")
@@ -339,9 +288,9 @@ def then_solo_sta(ctx: dict) -> None:
         assert list(entry.detalle) == ["STA"]
 
 
-@then("el overall del torneo es vacio")
-def then_vacio(ctx: dict) -> None:
-    assert ctx["overall"].entries == []
+@then("el sistema rechaza con DisciplinasNoFinalizadas")
+def then_disciplinas_no_finalizadas(ctx: dict) -> None:
+    assert isinstance(ctx["exc"], DisciplinasNoFinalizadas)
 
 
 @then("A y B tienen la misma posicion overall")

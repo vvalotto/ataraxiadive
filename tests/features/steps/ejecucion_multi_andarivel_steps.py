@@ -63,7 +63,7 @@ from competencia.infrastructure.repositories.andariveles_activos_adapter import 
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
+from tests.features.steps._stubs import StubPerformancesAPPort
 
 scenarios("../US-2.3.1-ejecucion-multi-andarivel.feature")
 
@@ -175,7 +175,7 @@ def _setup_competencia_en_ejecucion(
 
     # Generar grilla con N andariveles
     _run(
-        GenerarGrillaHandler(store, PerformancesAPAdapter(store), _DESCRIPTOR).handle(
+        GenerarGrillaHandler(store, StubPerformancesAPPort(store), _DESCRIPTOR).handle(
             GenerarGrillaCommand(
                 competencia_id=cid,
                 disciplina=Disciplina.STA,
@@ -455,7 +455,7 @@ def setup_4_atletas_2_andariveles(ctx: dict) -> None:
     )
 
     _run(
-        GenerarGrillaHandler(store, PerformancesAPAdapter(store), _DESCRIPTOR).handle(
+        GenerarGrillaHandler(store, StubPerformancesAPPort(store), _DESCRIPTOR).handle(
             GenerarGrillaCommand(
                 competencia_id=cid,
                 disciplina=Disciplina.STA,

@@ -26,7 +26,7 @@ from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEven
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
+from tests.features.steps._stubs import StubPerformancesAPPort
 from shared.domain.value_objects.disciplina import Disciplina
 from shared.domain.value_objects.disciplina_descriptor import DisciplinaDescriptor
 from shared.domain.value_objects.unidad_medida import UnidadMedida
@@ -145,7 +145,7 @@ def given_descriptor_dnf(ctx_us_4_1_4):
 def when_genera_grilla(ctx):
     async def _run() -> None:
         handler = GenerarGrillaHandler(
-            ctx["store"], PerformancesAPAdapter(ctx["store"]), DisciplinaDescriptorAdapter()
+            ctx["store"], StubPerformancesAPPort(ctx["store"]), DisciplinaDescriptorAdapter()
         )
         await handler.handle(
             GenerarGrillaCommand(

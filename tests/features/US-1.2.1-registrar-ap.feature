@@ -18,10 +18,10 @@ Feature: Registrar Announced Performance
     And la performance queda en estado "AnunciadaAP"
     And el evento "APRegistrado" persiste en el event stream
 
-  Scenario: Rechazo por AP ya registrado
+  Scenario: Segunda declaracion de AP actualiza el valor (upsert)
     Given ya existe un AP del participante para esta disciplina y competencia
     When el atleta intenta registrar otro AP de valor "360" unidad "Segundos"
-    Then el sistema rechaza la operación con error "APYaRegistrado"
+    Then el AP queda registrado exitosamente
 
   Scenario: Rechazo por valor AP igual a cero
     Given no existe un AP previo del atleta para esta disciplina y competencia

@@ -57,7 +57,7 @@ from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEven
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
+from tests.features.steps._stubs import StubPerformancesAPPort
 
 scenarios("../US-2.2.2-api-disciplina-aware.feature")
 
@@ -223,7 +223,7 @@ def _setup_competencia_sta_con_grilla(ctx: dict) -> None:  # type: ignore[type-a
         )
     )
     _run(
-        GenerarGrillaHandler(store, PerformancesAPAdapter(store), _DESCRIPTOR).handle(
+        GenerarGrillaHandler(store, StubPerformancesAPPort(store), _DESCRIPTOR).handle(
             GenerarGrillaCommand(competencia_id=cid, disciplina=Disciplina.STA, ot_inicio=_OT)
         )
     )
@@ -300,7 +300,7 @@ def step_competencia_dnf(ctx: dict) -> None:  # type: ignore[type-arg]
         )
     )
     _run(
-        GenerarGrillaHandler(store, PerformancesAPAdapter(store), _DESCRIPTOR).handle(
+        GenerarGrillaHandler(store, StubPerformancesAPPort(store), _DESCRIPTOR).handle(
             GenerarGrillaCommand(competencia_id=cid, disciplina=Disciplina.DNF, ot_inicio=_OT)
         )
     )
