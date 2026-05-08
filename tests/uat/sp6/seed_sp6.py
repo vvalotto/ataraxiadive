@@ -24,6 +24,7 @@ import asyncio
 import base64
 import json
 import os
+import sqlite3
 import sys
 import uuid
 from datetime import datetime, timezone
@@ -52,6 +53,71 @@ ATLETAS_DEF = [
     ("a04", "Rodrigo", "Profundo", "MASTER_MASCULINO", "a04@uat-sp6.test", 60),
     ("a05", "Camila",  "Abismo",   "SENIOR_FEMENINO",  "a05@uat-sp6.test", 55),
 ]
+
+
+REGISTRO_DB = os.getenv("REGISTRO_DB_PATH", "data/registro.db")
+TORNEO_DB = os.getenv("TORNEO_DB_PATH", "data/torneo.db")
+RESULTADOS_DB = os.getenv("RESULTADOS_DB_PATH", "data/resultados.db")
+
+UAT_NOMBRE_PREFIX = "UAT SP6"
+UAT_EMAIL_SUFFIX = "@uat-sp6.test"
+
+
+def limpiar_datos_uat() -> None:
+    """Elimina datos de corridas anteriores del seed para evitar duplicados."""
+
+    with sqlite3.connect(TORNEO_DB) as con:
+        torneo_ids = [
+            row[0]
+            for row in con.execute(
+                "SELECT torneo_id FROM torneos WHERE nombre LIKE ?",
+                (f"{UAT_NOMBRE_PREFIX}%",),
+            )
+        ]
+        if torneo_ids:
+            placeholders = ",".join("?" * len(torneo_ids))
+            con.execute(f"DELETE FROM torneos WHERE torneo_id IN ({placeholders})", torneo_ids)
+    log(f"torneos UAT eliminados: {len(torneo_ids)}")
+
+    with sqlite3.connect(COMPETENCIA_DB) as con:
+        if torneo_ids:
+            placeholders = ",".join("?" * len(torneo_ids))
+            comp_ids = [
+                row[0]
+                for row in con.execute(
+                    f"SELECT competencia_id FROM competencias_por_torneo WHERE torneo_id IN ({placeholders})",
+                    torneo_ids,
+                )
+            ]
+            if comp_ids:
+                p2 = ",".join("?" * len(comp_ids))
+                con.execute(f"DELETE FROM events WHERE stream_id IN ({p2})", comp_ids)
+                con.execute(
+                    f"DELETE FROM competencias_por_torneo WHERE competencia_id IN ({p2})",
+                    comp_ids,
+                )
+            log(f"competencias UAT eliminadas: {len(comp_ids) if torneo_ids else 0}")
+
+    with sqlite3.connect(RESULTADOS_DB) as con:
+        if torneo_ids:
+            placeholders = ",".join("?" * len(torneo_ids))
+            con.execute(
+                f"DELETE FROM events WHERE stream_id IN ({placeholders})", torneo_ids
+            )
+
+    with sqlite3.connect(REGISTRO_DB) as con:
+        atleta_ids = [
+            row[0]
+            for row in con.execute(
+                "SELECT atleta_id FROM atletas WHERE email LIKE ?",
+                (f"%{UAT_EMAIL_SUFFIX}",),
+            )
+        ]
+        if atleta_ids:
+            p3 = ",".join("?" * len(atleta_ids))
+            con.execute(f"DELETE FROM inscripciones WHERE atleta_id IN ({p3})", atleta_ids)
+            con.execute(f"DELETE FROM atletas WHERE atleta_id IN ({p3})", atleta_ids)
+    log(f"atletas UAT eliminados: {len(atleta_ids)}")
 
 
 def log(msg: str) -> None:
@@ -190,6 +256,9 @@ async def iniciar_competencia_async(competencia_id: UUID, juez_id: str) -> None:
 
 def main() -> None:
     print("\n=== Seed UAT SP6 ===\n")
+
+    print("▸ Limpieza de datos anteriores")
+    limpiar_datos_uat()
 
     with httpx.Client(base_url=BASE, timeout=15) as client:
 
