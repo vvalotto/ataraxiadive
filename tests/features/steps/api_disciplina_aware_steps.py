@@ -21,7 +21,13 @@ from fastapi.testclient import TestClient
 from pytest_bdd import given, parsers, scenarios, then, when
 
 from app import app
-from competencia.api.router import get_event_store
+from competencia.api.router import (
+    get_event_store,
+    get_obtener_proximas_performances_handler,
+)
+from competencia.application.queries.obtener_proximas_performances import (
+    ObtenerProximasPerformancesHandler,
+)
 from competencia.application.commands.asignar_tarjeta import (
     AsignarTarjetaCommand,
     AsignarTarjetaHandler,
@@ -57,7 +63,7 @@ from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEven
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-from tests.features.steps._stubs import StubPerformancesAPPort
+from tests.features.steps._stubs import StubAtletaNombrePort, StubPerformancesAPPort
 
 scenarios("../US-2.2.2-api-disciplina-aware.feature")
 
@@ -101,6 +107,9 @@ def _make_store() -> SQLiteEventStore:
 def ctx() -> dict:  # type: ignore[type-arg]
     store = _make_store()
     app.dependency_overrides[get_event_store] = lambda: store
+    app.dependency_overrides[get_obtener_proximas_performances_handler] = (
+        lambda: ObtenerProximasPerformancesHandler(store, StubAtletaNombrePort())
+    )
     client = TestClient(app)
     return {
         "store": store,

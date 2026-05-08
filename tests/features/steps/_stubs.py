@@ -5,9 +5,17 @@ from __future__ import annotations
 from decimal import Decimal
 from uuid import UUID
 
+from competencia.domain.ports.atleta_nombre_port import AtletaNombrePort
 from competencia.domain.ports.performances_ap_port import PerformancesAPData, PerformancesAPPort
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from shared.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
+
+
+class StubAtletaNombrePort(AtletaNombrePort):
+    """Devuelve un nombre placeholder — evita conexión a registro.db en tests."""
+
+    async def get_nombre(self, atleta_id: UUID) -> str:
+        return f"Atleta-{str(atleta_id)[:8]}"
 
 
 class StubPerformancesAPPort(PerformancesAPPort):

@@ -21,7 +21,8 @@ from fastapi.testclient import TestClient
 from pytest_bdd import given, parsers, scenarios, then, when
 
 from app import app
-from competencia.api.router import get_event_store
+from competencia.api.router import get_event_store, get_obtener_grilla_handler
+from competencia.application.queries.obtener_grilla import ObtenerGrillaHandler
 from competencia.application.commands.asignar_tarjeta import (
     AsignarTarjetaCommand,
     AsignarTarjetaHandler,
@@ -63,7 +64,7 @@ from competencia.infrastructure.repositories.andariveles_activos_adapter import 
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-from tests.features.steps._stubs import StubPerformancesAPPort
+from tests.features.steps._stubs import StubAtletaNombrePort, StubPerformancesAPPort
 
 scenarios("../US-2.3.1-ejecucion-multi-andarivel.feature")
 
@@ -111,6 +112,9 @@ def _run(coro):  # type: ignore[no-untyped-def]
 def ctx() -> dict:  # type: ignore[type-arg]
     store = _make_store()
     app.dependency_overrides[get_event_store] = lambda: store
+    app.dependency_overrides[get_obtener_grilla_handler] = lambda: ObtenerGrillaHandler(
+        store, StubAtletaNombrePort()
+    )
     client = TestClient(app)
     cid = uuid4()
     pid_a = uuid4()
