@@ -5,7 +5,7 @@
 | **Documento** | HITO-32 — Hallazgo de calidad en SP6 |
 | **Fecha** | 2026-05-08 |
 | **Sprint** | SP6 — Validación, Ajustes y Despliegue |
-| **Relacionado** | HITO-30 · HITO-31 · `PerformancesAPAdapter` · `RankingOverall` · Identidad |
+| **Relacionado** | HITO-30 · HITO-31 · `PerformancesAPAdapter` · `AtletaNombreAdapter` · `RankingOverall` · Identidad |
 
 ---
 
@@ -76,6 +76,22 @@ Esta familia agrupa tres sub-causas distintas:
 
 ---
 
+## Familia D — `AtletaNombreAdapter` con path relativo desde PyCharm (9 tests)
+
+**Afectados:** `api_disciplina_aware_steps.py`, `ejecucion_multi_andarivel_steps.py`, `interfaz_juez_steps.py`
+
+**Causa:** `AtletaNombreAdapter` abre `data/registro.db` con un path relativo al CWD. Cuando los tests se ejecutan desde PyCharm (CWD = directorio del archivo), el archivo no existe y se lanza `sqlite3.OperationalError: unable to open database file`. Desde CLI en la raíz del proyecto, el path resuelve correctamente y los tests pasan — de ahí que esta familia solo sea visible desde PyCharm.
+
+**Misma raíz que HITO-31 Familia C** (integración), pero en la capa BDD. Los handlers `ObtenerProximasPerformancesHandler` y `ObtenerGrillaHandler` inyectan `AtletaNombreAdapter` vía el contenedor de dependencias de FastAPI; los steps BDD creaban la app sin sobrescribir esas dependencias.
+
+**Solución:** `dependency_overrides` en los fixtures de los 3 archivos afectados:
+- `get_obtener_proximas_performances_handler` → `ObtenerProximasPerformancesHandler(store, StubAtletaNombrePort())`
+- `get_obtener_grilla_handler` → `ObtenerGrillaHandler(store, StubAtletaNombrePort())`
+
+`StubAtletaNombrePort` ya estaba disponible en `tests/features/steps/_stubs.py` (creado en Familia A).
+
+---
+
 ## Análisis de causa raíz transversal
 
 | Familia | Tests afectados | Causa raíz |
@@ -85,7 +101,8 @@ Esta familia agrupa tres sub-causas distintas:
 | B2 — APYaRegistrado | 1 | Refactor de dominio (upsert) no reflejado en BDD |
 | B3 — CANCELADA en listado | 1 | Invariante de repositorio incorrecto en test |
 | C — RankingOverall posicional → FAAS | 4 | Refactor de dominio de SP5.6.4 no reflejado en BDD |
-| **Total** | **47** | |
+| D — `AtletaNombreAdapter` path relativo | 9 | Dependencia con path relativo no sobreescrita en fixtures BDD |
+| **Total** | **56** | |
 
 ---
 
@@ -101,7 +118,11 @@ Hipótesis de HITO-31 confirmada con mayor evidencia: el LLM tiende a especifica
 
 ## Mecanismo de detección
 
-Los 47 fallos solo eran visibles al ejecutar desde PyCharm (CWD distinto a raíz). La ejecución desde CLI en la raíz del proyecto también fallaría en estas familias (las razones no son de CWD, sino de contratos), pero el CI no detectó los fallos porque los tests BDD probablemente no se ejecutaban en el pipeline de PR o fallaban silenciosamente.
+**Familias A/B/C (47 tests):** Los fallos son independientes del CWD — ocurren tanto desde CLI como desde PyCharm. No fueron detectados por CI porque los tests BDD probablemente no se ejecutaban en el pipeline de PR o fallaban silenciosamente.
+
+**Familia D (9 tests):** Los fallos son específicos de PyCharm (CWD ≠ raíz del proyecto). Desde CLI en la raíz el path `data/registro.db` resuelve correctamente, por lo que la suite mostraba 269/269 desde terminal mientras desde PyCharm 9 tests fallaban con `sqlite3.OperationalError`. Misma dinámica que HITO-31 Familia C pero en la capa BDD.
+
+**Implicación:** Ejecutar `pytest tests/features/` solo desde CLI en raíz es insuficiente para detectar deriva de CWD. La cobertura completa requiere ejecutar desde múltiples entornos o usar `dependency_overrides` sistemáticamente para aislar paths absolutos del filesystem.
 
 **Recomendación:** Ejecutar `pytest tests/features/` como parte del CI pipeline con la misma prioridad que unit e integration tests.
 
@@ -109,7 +130,7 @@ Los 47 fallos solo eran visibles al ejecutar desde PyCharm (CWD distinto a raíz
 
 ## Resultado
 
-- Suite BDD: **269/269 pasando** (antes: 222/269)
+- Suite BDD: **269/269 pasando desde cualquier CWD** (desde CLI: 222/269 → 269/269; desde PyCharm: +9 adicionales de Familia D)
 - Suite total: **1140/1140 pasando** (664 unit + 207 integración + 269 BDD)
-- HITO-30: 21 tests unitarios · HITO-31: 31 tests de integración · HITO-32: 47 tests BDD
-- Total corregido en SP6 pre-baseline: **99 tests** que estaban silenciosamente fallando
+- HITO-30: 21 tests unitarios · HITO-31: 31 tests de integración · HITO-32: **56 tests BDD** (47 Familias A/B/C + 9 Familia D)
+- Total corregido en SP6 pre-baseline: **108 tests** que estaban silenciosamente fallando
