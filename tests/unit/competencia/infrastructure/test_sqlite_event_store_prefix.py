@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import tempfile
 import os
+from pathlib import Path
 import pytest
 import pytest_asyncio
 
@@ -11,9 +12,11 @@ from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEven
 from alembic.config import Config
 from alembic import command
 
+_PROJECT_ROOT = Path(__file__).parents[4]
+
 
 def run_migrations(db_path: str) -> None:
-    alembic_cfg = Config("alembic.ini")
+    alembic_cfg = Config(str(_PROJECT_ROOT / "alembic.ini"))
     alembic_cfg.set_main_option("sqlalchemy.url", f"sqlite:///{db_path}")
     command.upgrade(alembic_cfg, "head")
 

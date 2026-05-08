@@ -33,12 +33,39 @@ from competencia.domain.value_objects.disciplina import Disciplina
 from competencia.domain.value_objects.tipo_tarjeta import TipoTarjeta
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 from competencia.infrastructure.competencia_estado_stub import StubCompetenciaEstadoAdapter
+from competencia.domain.ports.performances_ap_port import PerformancesAPData, PerformancesAPPort
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
 
 COMPETENCIA_ID = UUID("00000000-0000-0000-0000-000000000701")
+
+
+class StubPerformancesAPPort(PerformancesAPPort):
+    """Lee APRegistrado desde el event store para tests unitarios."""
+
+    def __init__(self, store: "InMemoryEventStore") -> None:
+        self._store = store
+
+    async def get_performances_con_ap(self, competencia_id: UUID) -> list[PerformancesAPData]:
+        streams = await self._store.load_all_streams_with_prefix(
+            f"performance-{competencia_id}-"
+        )
+        result = []
+        for stream in streams:
+            for event in stream:
+                if event["event_type"] == "APRegistrado":
+                    p = event["payload"]
+                    result.append(
+                        PerformancesAPData(
+                            performance_id=UUID(p["performance_id"]),
+                            atleta_id=UUID(p["participante_id"]),
+                            valor_ap=Decimal(p["valor_ap"]),
+                            unidad=UnidadMedida(p["unidad"]),
+                        )
+                    )
+                    break
+        return result
 ATLETA_CON_TARJETA = UUID("00000000-0000-0000-0000-000000000711")
 ATLETA_SIN_TARJETA = UUID("00000000-0000-0000-0000-000000000712")
 OT_INICIO = datetime(2026, 4, 19, 10, 0, tzinfo=timezone.utc)
@@ -125,7 +152,7 @@ async def _seed_grilla(store: InMemoryEventStore) -> None:
     await _registrar_ap(store, ATLETA_SIN_TARJETA, "60")
     await GenerarGrillaHandler(
         store,
-        PerformancesAPAdapter(store),
+        StubPerformancesAPPort(store),
         DisciplinaDescriptorAdapter(),
     ).handle(
         GenerarGrillaCommand(

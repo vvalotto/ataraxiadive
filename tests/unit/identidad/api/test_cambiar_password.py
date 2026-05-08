@@ -22,7 +22,7 @@ class FakeUsuarioRepository:
             nombre="Julia",
             apellido="Segura",
             email="juez1@email.com",
-            password_hash=password_hasher.hash("apnea123"),
+            password_hash=password_hasher.hash("Apnea12345"),
             rol=Rol.JUEZ,
         )
 
@@ -66,11 +66,11 @@ def test_cambiar_password_exitoso() -> None:
 
     response = client.post(
         "/auth/cambiar-password",
-        json={"password_actual": "apnea123", "password_nueva": "nuevapass456"},
+        json={"password_actual": "Apnea12345", "password_nueva": "NuevaPass456"},
     )
 
     assert response.status_code == 204
-    assert password_hasher.verify("nuevapass456", repo.usuario.password_hash)
+    assert password_hasher.verify("NuevaPass456", repo.usuario.password_hash)
 
 
 def test_cambiar_password_rechaza_password_actual_incorrecta() -> None:
@@ -94,7 +94,7 @@ def test_cambiar_password_rechaza_password_nueva_corta() -> None:
 
     response = client.post(
         "/auth/cambiar-password",
-        json={"password_actual": "apnea123", "password_nueva": "abc"},
+        json={"password_actual": "Apnea12345", "password_nueva": "abc"},
     )
 
     assert response.status_code == 422
@@ -111,7 +111,7 @@ def test_cambiar_password_requiere_autenticacion() -> None:
 
     response = client.post(
         "/auth/cambiar-password",
-        json={"password_actual": "apnea123", "password_nueva": "nuevapass456"},
+        json={"password_actual": "Apnea12345", "password_nueva": "NuevaPass456"},
     )
 
     assert response.status_code == 401

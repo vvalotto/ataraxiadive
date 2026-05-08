@@ -116,11 +116,11 @@ def test_reset_password_exitoso(monkeypatch) -> None:
 
     response = client.post(
         "/auth/reset-password",
-        json={"token": token, "password_nueva": "nuevapass456"},
+        json={"token": token, "password_nueva": "NuevaPass456"},
     )
 
     assert response.status_code == 204
-    assert password_hasher.verify("nuevapass456", repo.usuario.password_hash)
+    assert password_hasher.verify("NuevaPass456", repo.usuario.password_hash)
 
 
 def test_reset_password_rechaza_token_de_sesion(monkeypatch) -> None:
@@ -135,7 +135,7 @@ def test_reset_password_rechaza_token_de_sesion(monkeypatch) -> None:
         "/auth/reset-password",
         json={
             "token": token_service.generate(repo.usuario),
-            "password_nueva": "nuevapass456",
+            "password_nueva": "NuevaPass456",
         },
     )
 
@@ -162,7 +162,7 @@ def test_reset_password_rechaza_token_expirado(monkeypatch) -> None:
 
     response = client.post(
         "/auth/reset-password",
-        json={"token": token, "password_nueva": "nuevapass456"},
+        json={"token": token, "password_nueva": "NuevaPass456"},
     )
 
     assert response.status_code == 400

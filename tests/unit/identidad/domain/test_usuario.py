@@ -132,7 +132,7 @@ def test_usuario_inactivo_mensaje() -> None:
 
 def test_password_demasiado_corto_mensaje() -> None:
     exc = PasswordDemasiadoCorto()
-    assert "8" in str(exc)
+    assert "10" in str(exc)
 
 
 def test_rol_no_permitido_mensaje() -> None:
