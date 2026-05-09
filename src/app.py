@@ -391,7 +391,8 @@ async def _calcular_overall_si_corresponde(
     if not disciplinas:
         return
 
-    overall_handler = CalcularOverallHandler(ranking_store, competencia_event_store)
+    competencias_por_torneo = SQLiteCompetenciasPorTorneo()
+    overall_handler = CalcularOverallHandler(ranking_store, competencias_por_torneo)
     await overall_handler.handle(
         CalcularOverallCommand(
             torneo_id=torneo_id,
