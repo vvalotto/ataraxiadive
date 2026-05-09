@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Awaitable, Callable
 from datetime import datetime
 from decimal import Decimal
-from collections.abc import Awaitable, Callable
 from typing import Annotated
 from uuid import UUID
 
@@ -164,19 +164,28 @@ from competencia.infrastructure.repositories.performances_estado_adapter import 
 from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
     SQLiteCompetenciasPorTorneo,
 )
-from registro.infrastructure.repositories.sqlite_inscripcion_repository import (
-    SQLiteInscripcionRepository,
-)
+from registro.domain.ports.inscripcion_repository_port import InscripcionRepositoryPort
 from shared.api.dependencies import AtletaDep, JuezDep, OrganizadorDep
 
 router = APIRouter(prefix="/competencia", tags=["competencia"])
 APRegistradoCallback = Callable[[UUID, UUID, Disciplina, Decimal], Awaitable[None]]
 _ap_registrado_callback: APRegistradoCallback | None = None
+InscripcionRepositoryFactory = Callable[[], InscripcionRepositoryPort]
+_inscripcion_repository_factory: InscripcionRepositoryFactory | None = None
 
 
 def configure_ap_registrado_callback(callback: APRegistradoCallback | None) -> None:
     global _ap_registrado_callback  # noqa: PLW0603
     _ap_registrado_callback = callback
+
+
+def configure_competencia_cross_bc_dependencies(
+    *,
+    inscripcion_repository_factory: InscripcionRepositoryFactory,
+) -> None:
+    """Configura dependencias cross-BC desde el composition root."""
+    global _inscripcion_repository_factory  # noqa: PLW0603
+    _inscripcion_repository_factory = inscripcion_repository_factory
 
 
 # ── Request body schemas ───────────────────────────────────────────────────────
@@ -355,6 +364,13 @@ def get_competencias_por_torneo_projection() -> CompetenciasPorTorneoPort:
     return SQLiteCompetenciasPorTorneo(db_path)
 
 
+def get_inscripcion_repository() -> InscripcionRepositoryPort:
+    """Dependency: repositorio del BC Registro."""
+    if _inscripcion_repository_factory is None:
+        raise RuntimeError("Dependencia inscripcion_repository no configurada")
+    return _inscripcion_repository_factory()
+
+
 def get_andariveles_activos_adapter(
     event_store: EventStoreDep,
 ) -> AndarivelesActivosAdapter:
@@ -457,6 +473,9 @@ DisciplinaDescriptorDep = Annotated[DisciplinaDescriptorAdapter, Depends(get_dis
 CompetenciasPorTorneoProjectionDep = Annotated[
     CompetenciasPorTorneoPort, Depends(get_competencias_por_torneo_projection)
 ]
+InscripcionRepositoryDep = Annotated[
+    InscripcionRepositoryPort, Depends(get_inscripcion_repository)
+]
 ObtenerAndarivelesActivosHandlerDep = Annotated[
     ObtenerAndarivelesActivosHandler, Depends(get_obtener_andariveles_activos_handler)
 ]
@@ -558,14 +577,16 @@ def get_confirmar_grilla_handler(event_store: EventStoreDep) -> ConfirmarGrillaH
 def get_generar_grilla_handler(
     event_store: EventStoreDep,
     disciplina_descriptor: DisciplinaDescriptorDep,
+    competencias_por_torneo: CompetenciasPorTorneoProjectionDep,
+    inscripcion_repo: InscripcionRepositoryDep,
 ) -> GenerarGrillaHandler:
     """Dependency: handler para generar la grilla."""
     return GenerarGrillaHandler(
         event_store,
         PerformancesAPAdapter(
             event_store,
-            SQLiteCompetenciasPorTorneo(),
-            SQLiteInscripcionRepository(os.getenv("REGISTRO_DB_PATH", "data/registro.db")),
+            competencias_por_torneo,
+            inscripcion_repo,
         ),
         disciplina_descriptor,
     )

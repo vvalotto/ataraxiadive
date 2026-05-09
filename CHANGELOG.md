@@ -10,6 +10,13 @@ Versionado: [Semantic Versioning](https://semver.org/lang/es/)
 ## [Unreleased]
 
 ### Fixed
+- [US-6.4.3] Routers sin imports cross-BC de infraestructura
+  - `resultados/api/router.py` deja de importar infraestructura de `competencia` y `torneo`
+  - `competencia/api/router.py` deja de importar infraestructura de `registro`
+  - `app.py` configura las factories concretas en el composition root
+  - `ExportarResultadosHandler` tipa dependencias cross-BC por ports
+  - `registro` extrae escritura local de adjuntos detrás de `AdjuntoStoragePort`
+  - ArchitectAnalyst mejora `D(registro)` de `0.59` a `0.57`
 - [US-6.4.2] `CalcularOverallHandler` usa la proyeccion materializada `competencias_por_torneo`
   - Reemplaza el scan O(n) sobre streams de competencia por `listar_por_torneo(torneo_id)`
   - Actualiza P-09 en `app.py`, tests y BDD de overall

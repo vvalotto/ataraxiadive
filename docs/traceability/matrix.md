@@ -11,7 +11,7 @@
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
 | **Fecha** | 2026-05-01 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.36 — SP6 INC-6.1 ✅ · INC-6.2 ✅ · US-6.2.1..6.2.6 ✅ |
+| **Estado** | ✅ v1.40 — SP6 INC-6.1 ✅ · INC-6.2 ✅ · INC-6.3 ✅ · INC-6.4 ⏳ specs generadas |
 
 ---
 
@@ -595,7 +595,23 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 
 ---
 
-## 32. Trazabilidad: Discrepancias → US → Documentos a actualizar
+## 32. US-IEDD SP6 INC-6.4 — Deuda Técnica Sistema
+
+> Estado al 2026-05-09: INC-6.4 ⏳ **en definición**. 1/6 US · specs generadas.
+> Foco: resolver hallazgos DesignReviewer + correcciones arquitectónicas críticas.
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-6.4.1 | 6.4 | Romper ciclo ADP en `competencia/domain/aggregates` · AA-01 CRITICAL | ⏳ Pending |
+| US-6.4.2 | 6.4 | Materializar proyección `competencias_por_torneo` en `CalcularOverallHandler` — eliminar O(n) scan · ARCH-01 | ⏳ Pending |
+| US-6.4.3 | 6.4 | Corregir D-05: `resultados/api` y `competencia/api` importan infra cross-BC + reducir `registro` D↑ · ARCH-02 + AA-03 | ✅ Done |
+| US-6.4.4 | 6.4 | Refactoring `AlgoritmoPuntajeFAAS` dispatch explícito + correcciones CodeGuard (E501, import huérfano) · DR-02 + CG | ⏳ Pending |
+| US-6.4.5 | 6.4 | Refactoring `DeclararAPInscripcionHandler` (investigar DR-06) + `SQLiteInscripcionRepository.from_row()` · DR-06 + DR-07 | ⏳ Pending |
+| US-6.4.6 | 6.4 | Cierre decisión ARCH-03 (ACL aceptable) + SRP `RankingCompetencia` (investigar DR-01) + monitoreo `identidad`/`shared` · BL-006 | ⏳ Pending |
+
+---
+
+## 33. Trazabilidad: Discrepancias → US → Documentos a actualizar
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -749,6 +765,8 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
+*v1.41 — 2026-05-09: US-6.4.3 completada · routers sin imports cross-BC de infraestructura · D(registro) 0.59→0.57 · reporte generado*
+*v1.40 — 2026-05-09: INC-6.4 iniciado · §32 nuevo (6 US specs generadas) · §33..35 renumerados · header actualizado*
 *v1.39 — 2026-05-08: INC-6.3 cerrado · §31 2/2 US ✅ PRs #154–#155 · fix 66d7ad0 validaciones atleta · DesignReviewer 0 CRITICAL · 258 WARNING · US→Tests US-6.3.2 actualizado*
 *v1.38 — 2026-05-07: US-6.3.1 ✅ PR #154 · US-6.3.2 implementada pendiente PR · BDD/tests/frontend gates registrados*
 *v1.37 — 2026-05-07: INC-6.3 iniciado · §31 nuevo · US-6.3.1 implementada pendiente PR · US→Tests actualizado*
