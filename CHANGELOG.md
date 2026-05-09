@@ -9,6 +9,12 @@ Versionado: [Semantic Versioning](https://semver.org/lang/es/)
 
 ## [Unreleased]
 
+### Fixed
+- [US-6.4.1] Eliminado ciclo ADP en `competencia/domain/aggregates`
+  - `aggregates/__init__.py` deja de reexportar aggregate roots
+  - `Performance` importa helpers de reconstitucion por path directo
+  - ArchitectAnalyst reporta `DependencyCycle=0`
+
 ### Added
 - [US-ADJ-7.3] Cableado de P-11 al finalizar disciplina para publicar resultados por email
   - `_on_finalizada` ejecuta P-08/P-09 y luego construye `ResultadosPublicados` para `PoliticaP11Handler`

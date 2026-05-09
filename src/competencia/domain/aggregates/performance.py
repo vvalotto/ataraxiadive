@@ -18,7 +18,7 @@ from competencia.domain.aggregates.performance_events import (
     crear_revision_resuelta,
     crear_tarjeta_asignada,
 )
-from competencia.domain.aggregates import performance_state
+from competencia.domain.aggregates.performance_state import apply_stored, parse_payload
 from competencia.domain.exceptions import (
     DisciplinaNoAdmitePenalizaciones,  # noqa: F401 - re-export por compatibilidad
     DistanciaBlackoutObligatoria,  # noqa: F401 - re-export por compatibilidad
@@ -519,7 +519,7 @@ class Performance(AggregateRoot):
             raise ValueError(
                 f"El primer evento debe ser APRegistrado, recibido: {events[0]['event_type']}"
             )
-        first_payload = performance_state.parse_payload(events[0]["payload"])
+        first_payload = parse_payload(events[0]["payload"])
         performance = cls(
             performance_id=UUID(first_payload["performance_id"]),
             competencia_id=UUID(first_payload["competencia_id"]),
@@ -527,7 +527,7 @@ class Performance(AggregateRoot):
             disciplina=Disciplina(first_payload["disciplina"]),
         )
         for event in events:
-            performance_state.apply_stored(performance, event)
+            apply_stored(performance, event)
         return performance
 
     def _aplicar_resolucion_tarjeta(self, resolucion: ResolucionTarjeta) -> None:
