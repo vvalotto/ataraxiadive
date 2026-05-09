@@ -10,6 +10,10 @@ Versionado: [Semantic Versioning](https://semver.org/lang/es/)
 ## [Unreleased]
 
 ### Fixed
+- [US-6.4.2] `CalcularOverallHandler` usa la proyeccion materializada `competencias_por_torneo`
+  - Reemplaza el scan O(n) sobre streams de competencia por `listar_por_torneo(torneo_id)`
+  - Actualiza P-09 en `app.py`, tests y BDD de overall
+  - Agrega cobertura para torneos sin competencias materializadas
 - [US-6.4.1] Eliminado ciclo ADP en `competencia/domain/aggregates`
   - `aggregates/__init__.py` deja de reexportar aggregate roots
   - `Performance` importa helpers de reconstitucion por path directo

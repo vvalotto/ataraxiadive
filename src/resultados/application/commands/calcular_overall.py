@@ -5,12 +5,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from uuid import UUID
 
+from competencia.domain.ports.competencias_por_torneo_port import CompetenciasPorTorneoPort
 from resultados.domain.aggregates.ranking_competencia import RankingCompetencia
 from resultados.domain.aggregates.ranking_overall import RankingOverall
 from shared.domain.ports.event_store_port import EventStorePort
 from shared.domain.value_objects.disciplina import Disciplina
-
-_EVENTO_INTERVALO_OT = "IntervaloOTConfigurado"
 
 
 @dataclass(frozen=True)
@@ -24,17 +23,17 @@ class CalcularOverallCommand:
 class CalcularOverallHandler:
     """Handler del comando CalcularOverall.
 
-    Usa el Event Store de Competencia para mapear torneo -> competencia/disciplina
+    Usa la proyeccion materializada para mapear torneo -> competencia/disciplina
     y el Event Store de Resultados para leer los rankings ya calculados por disciplina.
     """
 
     def __init__(
         self,
         ranking_store: EventStorePort,
-        competencia_store: EventStorePort,
+        competencias_por_torneo: CompetenciasPorTorneoPort,
     ) -> None:
         self._ranking_store = ranking_store
-        self._competencia_store = competencia_store
+        self._competencias_por_torneo = competencias_por_torneo
 
     async def handle(self, command: CalcularOverallCommand) -> list:
         """Calcula y persiste el overall del torneo.
@@ -42,9 +41,10 @@ class CalcularOverallHandler:
         Raises:
             DisciplinasNoFinalizadas: si alguna disciplina no tiene ranking calculado.
         """
-        competencias = await _mapear_competencias_por_torneo(
-            self._competencia_store, command.torneo_id, command.disciplinas
-        )
+        competencias = await self._mapear_competencias_por_torneo(command)
+        if not competencias:
+            return []
+
         rankings_por_disciplina = {}
         for disciplina, competencia_id in competencias.items():
             stream_id = f"ranking-{competencia_id}-{disciplina.value}"
@@ -65,31 +65,18 @@ class CalcularOverallHandler:
             )
         return entries
 
-
-async def _mapear_competencias_por_torneo(
-    competencia_store: EventStorePort,
-    torneo_id: UUID,
-    disciplinas: list[Disciplina],
-) -> dict[Disciplina, UUID]:
-    """Obtiene la competencia por disciplina para un torneo dado."""
-    streams = await competencia_store.load_all_streams_with_prefix("competencia-")
-    disciplinas_buscadas = set(disciplinas)
-    mapeo: dict[Disciplina, UUID] = {}
-
-    for events in streams:
-        for event in events:
-            if event["event_type"] != _EVENTO_INTERVALO_OT:
-                continue
-            payload = event["payload"]
-            torneo_raw = payload.get("torneo_id")
-            if torneo_raw != str(torneo_id):
-                continue
-            disciplina = Disciplina(payload["disciplina"])
-            if disciplina not in disciplinas_buscadas:
-                continue
-            mapeo[disciplina] = UUID(payload["competencia_id"])
-            break
-    return mapeo
+    async def _mapear_competencias_por_torneo(
+        self, command: CalcularOverallCommand
+    ) -> dict[Disciplina, UUID]:
+        """Obtiene la competencia por disciplina para un torneo dado desde la proyeccion."""
+        records = await self._competencias_por_torneo.listar_por_torneo(command.torneo_id)
+        disciplinas_buscadas = set(command.disciplinas)
+        mapeo: dict[Disciplina, UUID] = {}
+        for record in records:
+            disciplina = Disciplina(record.disciplina)
+            if disciplina in disciplinas_buscadas:
+                mapeo[disciplina] = record.competencia_id
+        return mapeo
 
 
 def _build_stream_id(torneo_id: UUID) -> str:

@@ -361,6 +361,7 @@ async def fase2() -> None:
 
     store = SQLiteEventStore(_COMPETENCIA_DB)
     resultados_store = SQLiteEventStore(_RESULTADOS_DB)
+    competencias_por_torneo = SQLiteCompetenciasPorTorneo(_COMPETENCIA_DB)
     estado_adapter = CompetenciaEstadoAdapter(store)
     perf_estado_adapter = PerformancesEstadoAdapter(store)
     descriptor_adapter = DisciplinaDescriptorAdapter()
@@ -383,7 +384,7 @@ async def fase2() -> None:
             torneo = await torneo_repo.find_by_id(torneo_id_cb)
             if torneo is not None:
                 disciplinas = [d for dt in torneo.disciplinas_torneo for d in [dt.disciplina]]
-                await CalcularOverallHandler(resultados_store, store).handle(
+                await CalcularOverallHandler(resultados_store, competencias_por_torneo).handle(
                     CalcularOverallCommand(torneo_id=torneo_id_cb, disciplinas=disciplinas)
                 )
                 print("✓ Overall calculado (P-09)")
