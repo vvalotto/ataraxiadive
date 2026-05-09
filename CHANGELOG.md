@@ -10,6 +10,10 @@ Versionado: [Semantic Versioning](https://semver.org/lang/es/)
 ## [Unreleased]
 
 ### Fixed
+- [US-6.4.4] `AlgoritmoPuntajeFAAS` queda como dispatcher explícito
+  - Extrae cálculo FAAS de distancia y tiempo a funciones de módulo
+  - Elimina el hallazgo LCOM DR-02 en DesignReviewer
+  - CodeGuard queda sin errores ni advertencias sobre el componente
 - [US-6.4.3] Routers sin imports cross-BC de infraestructura
   - `resultados/api/router.py` deja de importar infraestructura de `competencia` y `torneo`
   - `competencia/api/router.py` deja de importar infraestructura de `registro`

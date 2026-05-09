@@ -5,10 +5,9 @@ from __future__ import annotations
 from decimal import ROUND_HALF_UP, Decimal
 from uuid import UUID
 
-from shared.domain.value_objects.disciplina import Disciplina
-
 from resultados.domain.ports.algoritmo_puntaje import AlgoritmoPuntaje
 from resultados.domain.ports.resultados_competencia_port import ResultadoFinal
+from shared.domain.value_objects.disciplina import Disciplina
 
 _DOS_DECIMALES = Decimal("0.01")
 _CIEN = Decimal("100")
@@ -39,42 +38,51 @@ class AlgoritmoPuntajeFAAS(AlgoritmoPuntaje):
             return {}
 
         if disciplina.es_tiempo():
-            return self._calcular_tiempo(resultados)
-        return self._calcular_distancia(resultados)
+            return _calcular_tiempo(resultados)
+        return _calcular_distancia(resultados)
 
-    def _calcular_distancia(self, resultados: list[ResultadoFinal]) -> dict[UUID, Decimal]:
-        validos = [r for r in resultados if self._es_valido(r) and r.rp is not None]
-        d_max = max((r.rp for r in validos), default=None)
 
-        puntos: dict[UUID, Decimal] = {}
-        for r in resultados:
-            if d_max is None or not self._es_valido(r) or r.rp is None:
-                puntos[r.atleta_id] = _CERO
-            else:
-                puntos[r.atleta_id] = _redondear(r.rp / d_max * _CIEN)
-        return puntos
+def _calcular_distancia(resultados: list[ResultadoFinal]) -> dict[UUID, Decimal]:
+    validos = [r for r in resultados if _es_valido(r) and r.rp is not None]
+    d_max = max((r.rp for r in validos), default=None)
 
-    def _calcular_tiempo(self, resultados: list[ResultadoFinal]) -> dict[UUID, Decimal]:
-        validos = [r for r in resultados if self._es_valido(r) and r.rp is not None]
-        t_min = min((r.rp for r in validos), default=None)
-        t_max = max((r.rp for r in validos), default=None)
+    puntos: dict[UUID, Decimal] = {}
+    for r in resultados:
+        if d_max is None or not _es_valido(r) or r.rp is None:
+            puntos[r.atleta_id] = _CERO
+        else:
+            puntos[r.atleta_id] = _redondear(r.rp / d_max * _CIEN)
+    return puntos
 
-        puntos: dict[UUID, Decimal] = {}
-        for r in resultados:
-            if t_min is None or not self._es_valido(r) or r.rp is None:
-                puntos[r.atleta_id] = _CERO
-            elif t_max == t_min:
-                puntos[r.atleta_id] = _CIEN
-            else:
-                puntos[r.atleta_id] = _redondear((t_max - r.rp) / (t_max - t_min) * _CIEN)
-        return puntos
 
-    @staticmethod
-    def _es_valido(r: ResultadoFinal) -> bool:
-        if r.es_dns:
-            return False
-        tarjeta = (r.tarjeta or "").lower()
-        return tarjeta not in {"roja", "red"}
+def _calcular_tiempo(resultados: list[ResultadoFinal]) -> dict[UUID, Decimal]:
+    validos = [r for r in resultados if _es_valido(r) and r.rp is not None]
+    t_min = min((r.rp for r in validos), default=None)
+    t_max = max((r.rp for r in validos), default=None)
+
+    puntos: dict[UUID, Decimal] = {}
+    for r in resultados:
+        puntos[r.atleta_id] = _puntaje_tiempo(r, t_min, t_max)
+    return puntos
+
+
+def _puntaje_tiempo(
+    resultado: ResultadoFinal,
+    t_min: Decimal | None,
+    t_max: Decimal | None,
+) -> Decimal:
+    if t_min is None or not _es_valido(resultado) or resultado.rp is None:
+        return _CERO
+    if t_max == t_min:
+        return _CIEN
+    return _redondear((t_max - resultado.rp) / (t_max - t_min) * _CIEN)
+
+
+def _es_valido(r: ResultadoFinal) -> bool:
+    if r.es_dns:
+        return False
+    tarjeta = (r.tarjeta or "").lower()
+    return tarjeta not in {"roja", "red"}
 
 
 def _redondear(valor: Decimal) -> Decimal:

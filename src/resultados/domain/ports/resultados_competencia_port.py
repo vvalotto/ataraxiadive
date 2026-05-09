@@ -24,7 +24,7 @@ class ResultadoFinal:
         categoria: Categoría competitiva del atleta.
         rp: Marca efectiva registrada. None para DNS.
         unidad: Unidad de medida del RP. None para DNS.
-        tarjeta: Tipo de tarjeta ("Blanca", "BlancaConPenalizaciones", "Amarilla", "Roja"). None para DNS.
+        tarjeta: Tipo de tarjeta. None para DNS.
         es_dns: True si el atleta no se presentó.
     """
 

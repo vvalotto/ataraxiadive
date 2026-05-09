@@ -1,6 +1,6 @@
 # US-6.4.4: Refactoring `AlgoritmoPuntajeFAAS` + correcciones CodeGuard
 
-**Estado**: `Pending`
+**Estado**: `Done`
 **Incremento**: INC-6.4 — Deuda Técnica Sistema
 **Hallazgos**: DR-02 · CG-01/03/04/05
 **Bounded Context**: `resultados`
