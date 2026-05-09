@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from datetime import datetime
 from decimal import Decimal
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from competencia.domain.value_objects.ap import AP
 from competencia.domain.value_objects.estado_performance import EstadoPerformance
@@ -13,11 +13,8 @@ from competencia.domain.value_objects.resolucion_tarjeta import ResolucionTarjet
 from competencia.domain.value_objects.rp_final import RPFinal
 from competencia.domain.value_objects.unidad_medida import UnidadMedida
 
-if TYPE_CHECKING:
-    from competencia.domain.aggregates.performance import Performance
 
-
-def apply_stored(performance: "Performance", event: dict[str, Any]) -> None:
+def apply_stored(performance: Any, event: dict[str, Any]) -> None:
     """Aplica un evento almacenado al estado interno del aggregate."""
     payload = parse_payload(event["payload"])
     handlers = {
@@ -35,7 +32,7 @@ def apply_stored(performance: "Performance", event: dict[str, Any]) -> None:
         handler(performance, payload)
 
 
-def apply_ap_registrado(performance: "Performance", payload: dict[str, Any]) -> None:
+def apply_ap_registrado(performance: Any, payload: dict[str, Any]) -> None:
     performance._ap = AP(
         valor=Decimal(payload["valor_ap"]),
         unidad=UnidadMedida(payload["unidad"]),
@@ -43,23 +40,23 @@ def apply_ap_registrado(performance: "Performance", payload: dict[str, Any]) -> 
     performance._estado = EstadoPerformance.AnunciadaAP
 
 
-def apply_atleta_llamado(performance: "Performance", payload: dict[str, Any]) -> None:
+def apply_atleta_llamado(performance: Any, payload: dict[str, Any]) -> None:
     performance._estado = EstadoPerformance.Llamada
     performance._ot_programado = datetime.fromisoformat(payload["ot_programado"])
     performance._posicion_grilla = payload["posicion_grilla"]
     performance._andarivel = payload.get("andarivel", 1)
 
 
-def apply_resultado_registrado(performance: "Performance", payload: dict[str, Any]) -> None:
+def apply_resultado_registrado(performance: Any, payload: dict[str, Any]) -> None:
     performance._aplicar_rp_final(RPFinal.desde_medicion(Decimal(payload["valor_rp"])))
     performance._estado = EstadoPerformance.ResultadoRegistrado
 
 
-def apply_dns_registrado(performance: "Performance", _payload: dict[str, Any]) -> None:
+def apply_dns_registrado(performance: Any, _payload: dict[str, Any]) -> None:
     performance._estado = EstadoPerformance.DNS
 
 
-def apply_tarjeta_asignada(performance: "Performance", payload: dict[str, Any]) -> None:
+def apply_tarjeta_asignada(performance: Any, payload: dict[str, Any]) -> None:
     resolucion = ResolucionTarjeta.desde_payload(payload)
     if payload.get("tipo") == "Amarilla":
         performance._tarjeta = resolucion.tipo
@@ -73,17 +70,17 @@ def apply_tarjeta_asignada(performance: "Performance", payload: dict[str, Any]) 
     performance._aplicar_resolucion_tarjeta(resolucion)
 
 
-def apply_revision_resuelta(performance: "Performance", payload: dict[str, Any]) -> None:
+def apply_revision_resuelta(performance: Any, payload: dict[str, Any]) -> None:
     performance._aplicar_resolucion_tarjeta(ResolucionTarjeta.desde_payload(payload))
 
 
-def apply_resultado_corregido(performance: "Performance", payload: dict[str, Any]) -> None:
+def apply_resultado_corregido(performance: Any, payload: dict[str, Any]) -> None:
     performance._aplicar_rp_final(
         RPFinal.desde_medicion(Decimal(payload["valor_rp_nuevo"]), performance._penalizaciones)
     )
 
 
-def apply_resultado_corregido_tras_dns(performance: "Performance", payload: dict[str, Any]) -> None:
+def apply_resultado_corregido_tras_dns(performance: Any, payload: dict[str, Any]) -> None:
     performance._aplicar_rp_final(RPFinal.desde_medicion(Decimal(payload["valor_rp"])))
     performance._estado = EstadoPerformance.ResultadoRegistrado
 

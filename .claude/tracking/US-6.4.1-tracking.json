@@ -1,0 +1,179 @@
+{
+  "metadata": {
+    "us_id": "US-6.4.1",
+    "us_title": "Romper ciclo ADP en competencia/domain/aggregates",
+    "us_points": 3,
+    "producto": "competencia",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-05-09T14:21:53.379871+00:00",
+    "completed_at": "2026-05-09T14:34:15.839928+00:00",
+    "total_elapsed_seconds": 742,
+    "effective_seconds": 742,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-05-09T14:21:59.732657+00:00",
+      "completed_at": "2026-05-09T14:23:06.419241+00:00",
+      "elapsed_seconds": 66,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-05-09T14:23:09.204195+00:00",
+      "completed_at": "2026-05-09T14:23:24.498372+00:00",
+      "elapsed_seconds": 15,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-05-09T14:23:28.998577+00:00",
+      "completed_at": "2026-05-09T14:24:22.439893+00:00",
+      "elapsed_seconds": 53,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-05-09T14:24:44.655909+00:00",
+      "completed_at": "2026-05-09T14:25:21.771217+00:00",
+      "elapsed_seconds": 37,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_3_1",
+          "task_name": "Romper ciclo de imports en aggregates",
+          "task_type": "implementation",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-05-09T14:24:53.337194+00:00",
+          "completed_at": "2026-05-09T14:25:04.197537+00:00",
+          "elapsed_seconds": 10,
+          "actual_minutes": 0.17,
+          "variance_minutes": -14.83,
+          "file_created": "src/competencia/domain/aggregates/performance.py",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_3_2",
+          "task_name": "Agregar test de imports de aggregates",
+          "task_type": "test",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-05-09T14:25:09.314325+00:00",
+          "completed_at": "2026-05-09T14:25:18.679596+00:00",
+          "elapsed_seconds": 9,
+          "actual_minutes": 0.15,
+          "variance_minutes": -14.85,
+          "file_created": "tests/unit/competencia/domain/test_aggregates_imports.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-05-09T14:25:25.621120+00:00",
+      "completed_at": "2026-05-09T14:25:45.885876+00:00",
+      "elapsed_seconds": 20,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-05-09T14:25:49.673412+00:00",
+      "completed_at": "2026-05-09T14:26:06.741268+00:00",
+      "elapsed_seconds": 17,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-05-09T14:26:11.181701+00:00",
+      "completed_at": "2026-05-09T14:26:44.800687+00:00",
+      "elapsed_seconds": 33,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-05-09T14:26:47.726536+00:00",
+      "completed_at": "2026-05-09T14:30:17.391007+00:00",
+      "elapsed_seconds": 209,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_7_1",
+          "task_name": "Eliminar ciclo TYPE_CHECKING performance_state",
+          "task_type": "implementation",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-05-09T14:27:03.118065+00:00",
+          "completed_at": "2026-05-09T14:27:11.261205+00:00",
+          "elapsed_seconds": 8,
+          "actual_minutes": 0.13,
+          "variance_minutes": -9.87,
+          "file_created": "src/competencia/domain/aggregates/performance_state.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-05-09T14:30:22.233885+00:00",
+      "completed_at": "2026-05-09T14:31:18.607733+00:00",
+      "elapsed_seconds": 56,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-05-09T14:33:37.004064+00:00",
+      "completed_at": "2026-05-09T14:34:12.292827+00:00",
+      "elapsed_seconds": 35,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 3,
+    "completed_tasks": 3,
+    "total_phases": 10,
+    "estimated_total_minutes": 40.0,
+    "actual_total_minutes": 0.45,
+    "variance_minutes": -39.55,
+    "variance_percent": -98.87
+  }
+}
