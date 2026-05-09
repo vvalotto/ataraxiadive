@@ -3,7 +3,6 @@ from __future__ import annotations
 from collections.abc import Awaitable, Callable
 from datetime import date, datetime
 from decimal import Decimal
-from pathlib import Path
 from typing import Annotated
 from uuid import UUID
 
@@ -45,9 +44,11 @@ from registro.domain.exceptions import (
     PlazoCancelacionVencido,
     TorneoNoDisponible,
 )
+from registro.domain.ports.adjunto_storage_port import AdjuntoStoragePort
 from registro.domain.value_objects.categoria import Categoria
 from registro.domain.value_objects.estado_inscripcion import EstadoInscripcion
 from registro.infrastructure.acl.sqlite_torneo_consulta import SQLiteTorneoConsulta
+from registro.infrastructure.adjuntos.local_adjunto_storage import LocalAdjuntoStorage
 from registro.infrastructure.repositories.sqlite_atleta_repository import SQLiteAtletaRepository
 from registro.infrastructure.repositories.sqlite_inscripcion_repository import (
     SQLiteInscripcionRepository,
@@ -157,6 +158,10 @@ def _torneo_consulta() -> SQLiteTorneoConsulta:
     return SQLiteTorneoConsulta()
 
 
+def _adjunto_storage() -> AdjuntoStoragePort:
+    return LocalAdjuntoStorage()
+
+
 def _format_decimal(value: Decimal | None) -> str | None:
     if value is None:
         return None
@@ -169,6 +174,7 @@ async def _subir_adjunto_inscripcion(
     archivo: UploadFile,
     nombre_archivo: str,
     metodo_adjunto: str,
+    storage: AdjuntoStoragePort | None = None,
 ) -> JSONResponse:
     max_size = 10 * 1024 * 1024
     contenido = await archivo.read()
@@ -182,16 +188,17 @@ async def _subir_adjunto_inscripcion(
     if inscripcion is None:
         return JSONResponse(status_code=404, content={"detail": "Inscripción no encontrada"})
 
-    extension = Path(archivo.filename or "").suffix or ".bin"
-    directorio = Path("data/adjuntos") / str(inscripcion_id)
-    directorio.mkdir(parents=True, exist_ok=True)
-    ruta = directorio / f"{nombre_archivo}{extension}"
-    ruta.write_bytes(contenido)
+    ruta = (storage or _adjunto_storage()).guardar(
+        inscripcion_id=inscripcion_id,
+        nombre_archivo=nombre_archivo,
+        filename_original=archivo.filename,
+        contenido=contenido,
+    )
 
-    getattr(inscripcion, metodo_adjunto)(str(ruta))
+    getattr(inscripcion, metodo_adjunto)(ruta)
     await _inscripcion_repo().save(inscripcion)
 
-    return JSONResponse(status_code=200, content={"path": str(ruta)})
+    return JSONResponse(status_code=200, content={"path": ruta})
 
 
 async def _load_ap_por_torneo(

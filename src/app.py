@@ -9,24 +9,25 @@ from uuid import UUID
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
-from competencia.application.queries.obtener_competencias_por_torneo import (
-    ObtenerCompetenciasPorTorneoHandler,
-    ObtenerCompetenciasPorTorneoQuery,
+from competencia.api.exception_handlers import register_exception_handlers
+from competencia.api.router import (
+    configure_ap_registrado_callback,
+    configure_competencia_cross_bc_dependencies,
+)
+from competencia.api.router import (
+    router as competencia_router,
 )
 from competencia.application.commands.iniciar_competencia import (
     IniciarCompetenciaCommand,
     IniciarCompetenciaHandler,
 )
-from competencia.domain.aggregates.competencia import Competencia
-from competencia.api.exception_handlers import register_exception_handlers
-from competencia.api.router import (
-    configure_ap_registrado_callback,
-    router as competencia_router,
+from competencia.application.queries.obtener_competencias_por_torneo import (
+    ObtenerCompetenciasPorTorneoHandler,
+    ObtenerCompetenciasPorTorneoQuery,
 )
-from resultados.api.router import router as resultados_router
-from resultados.application.commands.calcular_overall import (
-    CalcularOverallCommand,
-    CalcularOverallHandler,
+from competencia.domain.aggregates.competencia import Competencia
+from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
+    SQLiteCompetenciasPorTorneo,
 )
 from identidad.api.dependencies import configure_identity_dependencies
 from identidad.api.router import router as identidad_router
@@ -40,9 +41,9 @@ from notificaciones.application.policies.politica_p10 import (
     InscripcionConfirmada,
     PoliticaP10Handler,
 )
-from notificaciones.application.policies.politica_p11 import PoliticaP11Handler
 from notificaciones.application.policies.politica_p11 import (
     PodioPublicado,
+    PoliticaP11Handler,
     ResultadoPublicadoAtleta,
     ResultadosPublicados,
 )
@@ -63,6 +64,8 @@ from notificaciones.infrastructure.templates.resultados_publicados_template impo
 from registro.api.router import (
     build_cierre_inscripcion_precondition,
     configure_inscripcion_notificaciones,
+)
+from registro.api.router import (
     router as registro_router,
 )
 from registro.application.commands.declarar_ap_inscripcion import (
@@ -74,16 +77,16 @@ from registro.infrastructure.repositories.sqlite_atleta_repository import SQLite
 from registro.infrastructure.repositories.sqlite_inscripcion_repository import (
     SQLiteInscripcionRepository,
 )
-from torneo.api.exception_handlers import register_torneo_exception_handlers
-from torneo.api.router import (
-    configure_cierre_inscripcion_precondition,
-    configure_ejecucion_precondition,
-    configure_ejecucion_post_action,
-    configure_premiacion_precondition,
-    router as torneo_router,
+from resultados.api.router import (
+    configure_resultados_cross_bc_dependencies,
 )
-from torneo.domain.exceptions import EjecucionNoPermitida, PremiacionNoPermitida
-from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTorneoRepository
+from resultados.api.router import (
+    router as resultados_router,
+)
+from resultados.application.commands.calcular_overall import (
+    CalcularOverallCommand,
+    CalcularOverallHandler,
+)
 from resultados.application.commands.calcular_ranking import (
     CalcularRankingCommand,
     CalcularRankingHandler,
@@ -92,20 +95,29 @@ from resultados.application.queries.obtener_ranking import (
     ObtenerRankingHandler,
     ObtenerRankingQuery,
 )
-from resultados.infrastructure.repositories.disciplina_descriptor_adapter import (
-    DisciplinaDescriptorAdapter,
-)
 from resultados.infrastructure.repositories.atleta_categoria_adapter import (
     AtletaCategoriaAdapter,
+)
+from resultados.infrastructure.repositories.disciplina_descriptor_adapter import (
+    DisciplinaDescriptorAdapter,
 )
 from resultados.infrastructure.repositories.resultados_competencia_adapter import (
     ResultadosCompetenciaAdapter,
 )
-from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
-    SQLiteCompetenciasPorTorneo,
-)
 from shared.domain.value_objects.disciplina import Disciplina
 from shared.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
+from torneo.api.exception_handlers import register_torneo_exception_handlers
+from torneo.api.router import (
+    configure_cierre_inscripcion_precondition,
+    configure_ejecucion_post_action,
+    configure_ejecucion_precondition,
+    configure_premiacion_precondition,
+)
+from torneo.api.router import (
+    router as torneo_router,
+)
+from torneo.domain.exceptions import EjecucionNoPermitida, PremiacionNoPermitida
+from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTorneoRepository
 
 app = FastAPI(title="AtaraxiaDive", version="0.1.0")
 logger = logging.getLogger(__name__)
@@ -116,6 +128,18 @@ if os.getenv("IDENTIDAD_JWT_SECRET"):
         password_hasher=BcryptPasswordHasher(),
         email_sender=ResendEmailAdapter() if os.getenv("RESEND_API_KEY") else LoggingEmailAdapter(),
     )
+
+configure_competencia_cross_bc_dependencies(
+    inscripcion_repository_factory=lambda: SQLiteInscripcionRepository(
+        os.getenv("REGISTRO_DB_PATH", "data/registro.db")
+    )
+)
+configure_resultados_cross_bc_dependencies(
+    competencias_por_torneo_factory=lambda: SQLiteCompetenciasPorTorneo(
+        os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db")
+    ),
+    torneo_repository_factory=SQLiteTorneoRepository,
+)
 
 app.include_router(identidad_router)
 app.include_router(registro_router)
