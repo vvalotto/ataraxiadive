@@ -6,12 +6,16 @@ from pathlib import Path
 
 from resultados.domain.aggregates.ranking_competencia import RankingCompetencia
 
+# tests/unit/resultados/domain/ → 4 niveles hasta la raíz del proyecto
+_PROJECT_ROOT = Path(__file__).resolve().parents[4]
+_ADAPTER_PATH = (
+    _PROJECT_ROOT / "src/resultados/infrastructure/repositories/resultados_competencia_adapter.py"
+)
+
 
 def test_arch03_adaptador_no_importa_competencia() -> None:
     """ARCH-03: ResultadosCompetenciaAdapter no importa nada de competencia.*"""
-    source = Path(
-        "src/resultados/infrastructure/repositories/resultados_competencia_adapter.py"
-    ).read_text()
+    source = _ADAPTER_PATH.read_text()
     tree = ast.parse(source)
     cross_bc_imports = [
         node
@@ -29,9 +33,7 @@ def test_arch03_adaptador_no_importa_competencia() -> None:
 def test_arch03_adaptador_solo_importa_shared_y_resultados() -> None:
     """ARCH-03: Los imports del adaptador no incluyen ningún BC externo (solo shared, resultados, stdlib)."""
     bcs_externos = {"competencia.", "torneo.", "registro.", "identidad.", "notificaciones."}
-    source = Path(
-        "src/resultados/infrastructure/repositories/resultados_competencia_adapter.py"
-    ).read_text()
+    source = _ADAPTER_PATH.read_text()
     tree = ast.parse(source)
     for node in ast.walk(tree):
         if isinstance(node, ast.ImportFrom) and node.module:

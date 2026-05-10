@@ -8,6 +8,9 @@ from pytest_bdd import given, scenarios, then, when
 
 scenarios("../US-6.4.6-cierre-arch-decisiones.feature")
 
+# tests/features/steps/ → 3 niveles hasta la raíz del proyecto
+_PROJECT_ROOT = Path(__file__).resolve().parents[3]
+
 # ── shared context ──────────────────────────────────────────────────────────────
 
 
@@ -21,7 +24,10 @@ def ctx() -> dict:
 
 @given("el archivo resultados_competencia_adapter.py")
 def dado_adaptador(ctx: dict) -> None:
-    path = Path("src/resultados/infrastructure/repositories/resultados_competencia_adapter.py")
+    path = (
+        _PROJECT_ROOT
+        / "src/resultados/infrastructure/repositories/resultados_competencia_adapter.py"
+    )
     assert path.exists()
     ctx["adapter_source"] = path.read_text()
 
@@ -101,7 +107,7 @@ def dado_identidad_d(ctx: dict) -> None:
 
 @when("se cierra INC-6.4")
 def cuando_cierra_inc64(ctx: dict) -> None:
-    ctx["bl006_path"] = Path(".cm/baselines/BL-006.md")
+    ctx["bl006_path"] = _PROJECT_ROOT / ".cm/baselines/BL-006.md"
 
 
 @then("BL-006 registra la tendencia de identidad con decision de no intervencion")
@@ -129,7 +135,7 @@ def dado_shared_d(ctx: dict) -> None:
 
 @when("se cierra INC-6.4", target_fixture="cuando_cierra_inc64_shared")  # type: ignore[misc]
 def cuando_cierra_inc64_shared(ctx: dict) -> None:
-    ctx["bl006_path"] = Path(".cm/baselines/BL-006.md")
+    ctx["bl006_path"] = _PROJECT_ROOT / ".cm/baselines/BL-006.md"
 
 
 @then("BL-006 registra shared con decision de diferir a post-despliegue")
@@ -146,7 +152,7 @@ def entonces_bl006_registra_shared(ctx: dict) -> None:
 
 @given("todos los hallazgos de INC-6.4 procesados")
 def dado_hallazgos_procesados(ctx: dict) -> None:
-    report = Path("quality/reports/designreviewer/INC-6.4-report.txt")
+    report = _PROJECT_ROOT / "quality/reports/designreviewer/INC-6.4-report.txt"
     assert report.exists(), f"Reporte DesignReviewer no encontrado: {report}"
     ctx["dr_report"] = report.read_text()
 
