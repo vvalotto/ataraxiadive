@@ -118,7 +118,8 @@ SP6
 ├── INC-6.3  Ajustes Atleta (UX + backend inscripción)
 ├── INC-6.4  Deuda técnica sistema (DR + ARCH)
 ├── INC-6.6  Portal Público (vista sin autenticación + acciones contextuales)
-└── INC-6.5  Validación E2E + Despliegue (UAT completo + deploy)
+├── INC-6.5  Validación E2E (UAT completo con los 3 roles)
+└── INC-6.7  Despliegue (configuración productiva + tag v1.0.0)
 ```
 
 ### INC-6.1 — Ajustes Juez
@@ -187,17 +188,101 @@ Los organizadores crean y administran sus propios torneos directamente. Decisió
 
 > Fuente: `.work/portal_torneos_apnea.md`
 
-### INC-6.5 — Validación E2E + Despliegue
+### INC-6.5 — Validación E2E (UAT)
 
-Foco: UAT final con los tres roles + configuración y publicación del entorno productivo.
+Foco: UAT final con los tres roles sobre datos reales. Precondición: INC-6.1..6.4 y INC-6.6 cerrados.
 
 | US | Descripción |
 |----|-------------|
+| US-6.5.0 | Seed UAT — cargar dataset Buenos Aires 2025 en entorno de validación |
 | US-6.5.1 | UAT E2E rol Juez — flujo completo de competencia con datos reales |
 | US-6.5.2 | UAT E2E rol Organizador — ciclo completo torneo → grilla → resultados |
 | US-6.5.3 | UAT E2E rol Atleta — inscripción → AP → consulta resultados |
-| US-6.5.4 | Configuración entorno productivo (servidor, SSL, dominio, backup) |
-| US-6.5.5 | Despliegue `v1.0.0` + tag BL-006 + ArchitectAnalyst final |
+
+---
+
+#### US-6.5.0 — Seed UAT
+
+**Objetivo:** dejar el entorno de validación con el dataset Buenos Aires 2025 cargado y listo para ejecutar los escenarios de cada rol.
+
+**Script:** `tests/uat/seed_buenos_aires_2025.py`  
+**Fuente:** `data/datasets/buenos_aires_2025/` (athlete_index.json, schedules.json, participantes_por_categoria.csv)
+
+**Datos a cargar:**
+
+| Entidad | Contenido |
+|---------|-----------|
+| Torneo | "Apnea Indoor Buenos Aires 2025" · sede: Buenos Aires · 5 disciplinas: DBF, DNF, DYN, SPE, STA · categorías: JUNIOR / SENIOR / MASTER |
+| Atletas | 30 participantes con credenciales predefinidas (email = `nombre.apellido@uat.test`, pass = `uat2025`) |
+| Inscripciones | Según `participantes_por_categoria.csv` — disciplinas y AP según `schedules.json` |
+| Juez | 1 usuario juez: `juez@uat.test` / `uat2025` |
+| Organizador | 1 usuario organizador: `organizador@uat.test` / `uat2025` |
+
+**Postcondición:** `python tests/uat/seed_buenos_aires_2025.py` corre sin errores; login funciona con cada rol; grilla de cada disciplina muestra los atletas con sus AP.
+
+**Nota:** el seed no carga resultados — estos se ingresan manualmente durante US-6.5.1/6.5.2 como parte de la validación.
+
+---
+
+#### US-6.5.1 — UAT rol Juez
+
+**Precondición:** US-6.5.0 completada.
+
+| # | Escenario | Atleta / Disciplina | AP | Resultado esperado | Verifica |
+|---|-----------|---------------------|----|--------------------|---------|
+| J-01 | Login y vista de asignaciones | juez@uat.test | — | Header "En línea"; sección "Mis asignaciones"; sin botón Password | UI-JUE-01 |
+| J-02 | Grilla ordenada por estado | DBF — inicio | — | Atleta siguiente primero; orden por prioridad de estado | MUX-03 |
+| J-03 | Tarjeta blanca RP > AP | José Enjuto · STA | 02:00 | Ingresar RP=06:33.05 → tarjeta blanca → pantalla completada en verde; rank 1 SENIOR MASC | MUX-02/05 + UI-JUE-02 |
+| J-04 | Tarjeta blanca RP < AP (válida) | Víctor Valotto · DBF | 90m | Ingresar RP=52.40 → tarjeta blanca (RP < AP es válido) → rank 5 MASTER MASC | flujo correcto |
+| J-05 | Tarjeta blanca RP < AP (STA mm:ss) | Víctor Valotto · STA | 03:15 | Ingresar RP=04:32.98 → marca muestra en mm:ss → rank 1 MASTER MASC | MUX-08 |
+| J-06 | DNS | Ezequiel Cuchiarelli · DBF | 50m | Marcar DNS → atleta no aparece en ranking DBF | flujo DNS |
+| J-07 | Tarjeta roja (BKO superficie) | Simular BKO en DNF | — | Confirmar BKO habilitado; tarjeta roja; pantalla completada en rojo; `MotivoDQ=BKO_SUPERFICIE` | MUX-04/05 |
+| J-08 | SPE (formato tiempo) | Alejandro Alperin · SPE | 01:00 | Ingresar RP=00:59.00 → marca en mm:ss → rank 1 MASTER MASC | MUX-08 |
+| J-09 | Keypad visible en móvil | Cualquier atleta | — | RpSelector completamente visible sin scroll horizontal en pantalla móvil | MUX-01 |
+
+---
+
+#### US-6.5.2 — UAT rol Organizador
+
+**Precondición:** US-6.5.0 completada; al menos J-03..J-08 ejecutados (resultados parciales cargados).
+
+| # | Escenario | Pantalla | Resultado esperado | Verifica |
+|---|-----------|----------|--------------------|---------|
+| O-01 | Login y lista de torneos | Inicio | Torneos ordenados por fecha; fecha visible en cada tarjeta | UI-ORG-01 |
+| O-02 | Inscriptos disciplina DBF | Inscriptos | Columna categoría legible (ej. "MASTER"), no clave técnica; título columna "ANUNCIO" | UI-ORG-03 |
+| O-03 | Grilla DBF | Grilla | Columna AP rotulada "Anuncios"; número de andarivel visible | UI-ORG-04 |
+| O-04 | Asignar juez | Jueces | Selector sin texto nombre redundante; sin componentes "Cobertura Operativa" / "Estado de Asignación" | UI-ORG-06 |
+| O-05 | Panel — alertas activas | Alertas | Sin botón "Resolver" | UI-ORG-02 |
+| O-06 | Resultados disciplina STA | Resultados | Marcas en mm:ss; columna AP = "Anuncios"; sin columna "PTS FAAS"; andarivel numérico | UI-ORG-05 |
+| O-07 | Podios | Página Podios | Contenido separado de Resultados; podio SENIOR MASC: 1°José Enjuto 06:33 · 2°Mauro Almada 05:42 · 3°Pablo Sale 05:19 | UI-ORG-08 |
+| O-08 | Overall SENIOR MASC | Resultados → Overall | 1°Pablo De Celis · 2°Mauro Almada · 3°Nicolás Zimmermann | ranking overall |
+| O-09 | Portal público visible | `/torneos` sin login | Torneo "Buenos Aires 2025" visible sin autenticación; estado correcto | INC-6.6 |
+
+---
+
+#### US-6.5.3 — UAT rol Atleta
+
+**Precondición:** US-6.5.0 completada.
+
+| # | Escenario | Atleta | Resultado esperado | Verifica |
+|---|-----------|--------|--------------------|---------|
+| A-01 | Login y vista de inicio | Guadalupe Fardi (JUNIOR) | Sin cartel "Hola"; "En línea" en header; disciplinas en curso ordenadas (próxima → posteriores → realizadas) | UI-ATL-01 |
+| A-02 | Inscripción con AP inline | Nueva inscripción DYN | Formulario incluye campo AP de la disciplina seleccionada; AP queda registrado | UI-ATL-02 |
+| A-03 | Persistencia apto médico | Inscripción con adjunto | Adjunto guardado; visible en re-ingreso | RF-IN-05 |
+| A-04 | Persistencia constancia de pago | Inscripción con adjunto | Adjunto guardado; visible en re-ingreso | RF-IN-06 |
+| A-05 | Consultar resultado propio | Guadalupe Fardi · DNF | RP=41.05 · rank 1 JUNIOR FEM visible | consulta resultados |
+| A-06 | Overall propio | Guadalupe Fardi | Rank 1 JUNIOR FEM en overall | overall atleta |
+| A-07 | Consultar resultado propio | Víctor Valotto · STA | RP=04:32.98 en mm:ss · rank 1 MASTER MASC | MUX-08 + consulta |
+| A-08 | Portal público sin login | Visitante anónimo | Lista de torneos visible; botón "Inscribirse" → redirige a login → post-login va a formulario inscripción | INC-6.6 US-6.6.3 |
+
+### INC-6.7 — Despliegue
+
+Foco: configuración y publicación del entorno productivo. Precondición: INC-6.5 sin bloqueos críticos.
+
+| US | Descripción |
+|----|-------------|
+| US-6.7.1 | Configuración entorno productivo (servidor, SSL, dominio, backup) |
+| US-6.7.2 | Despliegue `v1.0.0` + tag BL-006 + ArchitectAnalyst final |
 
 ---
 
@@ -210,8 +295,9 @@ Foco: UAT final con los tres roles + configuración y publicación del entorno p
 - [ ] ARCH-01 implementado — grilla carga O(1) verificado con dataset real
 - [ ] ARCH-02 corregido — 0 imports directos de infraestructura en routers
 - [ ] INC-6.6: portal público accesible sin login; acciones contextuales verificadas por estado de torneo
-- [ ] INC-6.5: UAT E2E completado con los 3 roles sin bloqueos críticos
-- [ ] `v1.0.0` tageado en `main` + BL-006 registrado
+- [ ] INC-6.5: seed Buenos Aires 2025 ejecutable sin errores (US-6.5.0)
+- [ ] INC-6.5: UAT E2E completado con los 3 roles sin bloqueos críticos (J-01..09 · O-01..09 · A-01..08)
+- [ ] INC-6.7: `v1.0.0` tageado en `main` + BL-006 registrado
 - [ ] ArchitectAnalyst BL-006: `should_block=false`
 
 ---
