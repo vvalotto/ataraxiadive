@@ -37,6 +37,7 @@ from torneo.application.queries.obtener_torneo import (
 )
 from torneo.domain.aggregates.torneo import Torneo
 from torneo.domain.exceptions import AsignacionNoPermitida, DisciplinaNoEnTorneo, DisciplinaObsoleta
+from torneo.domain.value_objects.grupo_etario import GrupoEtario, ordenar_grupos_etarios
 from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTorneoRepository
 
 router = APIRouter(prefix="/torneos", tags=["torneos"])
@@ -94,6 +95,7 @@ class CrearTorneoRequest(BaseModel):
     fecha_fin: date
     sede: SedeSchema
     entidad_organizadora: EntidadOrganizadoraSchema
+    grupos_etarios: list[GrupoEtario]
 
     @field_validator("nombre")
     @classmethod
@@ -108,6 +110,13 @@ class CrearTorneoRequest(BaseModel):
             raise ValueError("fecha_fin debe ser mayor o igual a fecha_inicio")
         return self
 
+    @field_validator("grupos_etarios")
+    @classmethod
+    def grupos_etarios_no_vacio(cls, v: list[GrupoEtario]) -> list[GrupoEtario]:
+        if not v:
+            raise ValueError("Debe seleccionar al menos un grupo etario")
+        return v
+
 
 class TorneoResponse(BaseModel):
     torneo_id: UUID
@@ -118,6 +127,7 @@ class TorneoResponse(BaseModel):
     sede: SedeSchema
     entidad_organizadora: EntidadOrganizadoraSchema
     estado: str
+    grupos_etarios: list[GrupoEtario]
 
     @classmethod
     def from_torneo(cls, torneo: Torneo) -> TorneoResponse:
@@ -137,6 +147,7 @@ class TorneoResponse(BaseModel):
                 tipo=torneo.entidad_organizadora.tipo,
             ),
             estado=torneo.estado.value,
+            grupos_etarios=ordenar_grupos_etarios(torneo.grupos_etarios),
         )
 
 
@@ -165,6 +176,7 @@ async def crear_torneo(body: CrearTorneoRequest, _: OrganizadorDep) -> JSONRespo
             sede_pais=body.sede.pais,
             entidad_nombre=body.entidad_organizadora.nombre,
             entidad_tipo=body.entidad_organizadora.tipo,
+            grupos_etarios=frozenset(body.grupos_etarios),
         )
     )
     return JSONResponse(status_code=201, content={"torneo_id": str(torneo_id)})
@@ -174,7 +186,11 @@ async def crear_torneo(body: CrearTorneoRequest, _: OrganizadorDep) -> JSONRespo
 async def listar_torneos() -> list[TorneoResponse]:
     handler = ListarTorneosHandler(_repo())
     torneos = await handler.handle(ListarTorneosQuery())
-    return [TorneoResponse.from_torneo(t) for t in torneos]
+    return [
+        TorneoResponse.from_torneo(torneo)
+        for torneo in torneos
+        if torneo.estado.value != "CANCELADO"
+    ]
 
 
 @router.get("/{torneo_id}", response_model=TorneoResponse)

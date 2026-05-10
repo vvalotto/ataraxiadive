@@ -1,0 +1,178 @@
+{
+  "metadata": {
+    "us_id": "US-6.2.6",
+    "us_title": "Crear pagina de Podios",
+    "us_points": 2,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-05-06T14:34:37.173445+00:00",
+    "completed_at": "2026-05-06T14:46:20.745908+00:00",
+    "total_elapsed_seconds": 703,
+    "effective_seconds": 703,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-05-06T14:34:44.699099+00:00",
+      "completed_at": "2026-05-06T14:35:00.917844+00:00",
+      "elapsed_seconds": 16,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-05-06T14:35:07.817842+00:00",
+      "completed_at": "2026-05-06T14:35:27.412495+00:00",
+      "elapsed_seconds": 19,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-05-06T14:35:32.406388+00:00",
+      "completed_at": "2026-05-06T14:36:24.211492+00:00",
+      "elapsed_seconds": 51,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-05-06T14:39:03.774362+00:00",
+      "completed_at": "2026-05-06T14:42:40.969108+00:00",
+      "elapsed_seconds": 217,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_3_1",
+          "task_name": "Crear PodiosPage",
+          "task_type": "frontend",
+          "estimated_minutes": 20.0,
+          "started_at": "2026-05-06T14:39:32.121995+00:00",
+          "completed_at": "2026-05-06T14:41:10.010433+00:00",
+          "elapsed_seconds": 97,
+          "actual_minutes": 1.62,
+          "variance_minutes": -18.38,
+          "file_created": "frontend/src/pages/organizador/PodiosPage.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_3_2",
+          "task_name": "Limpiar ResultadosPage",
+          "task_type": "frontend",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-05-06T14:41:17.521845+00:00",
+          "completed_at": "2026-05-06T14:41:58.786951+00:00",
+          "elapsed_seconds": 41,
+          "actual_minutes": 0.68,
+          "variance_minutes": -14.32,
+          "file_created": "frontend/src/pages/organizador/ResultadosPage.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_3_3",
+          "task_name": "Registrar ruta y navegación",
+          "task_type": "frontend",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-05-06T14:42:02.534305+00:00",
+          "completed_at": "2026-05-06T14:42:23.131241+00:00",
+          "elapsed_seconds": 20,
+          "actual_minutes": 0.33,
+          "variance_minutes": -9.67,
+          "file_created": "frontend/src/App.tsx",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-05-06T14:42:47.342605+00:00",
+      "completed_at": "2026-05-06T14:43:37.384694+00:00",
+      "elapsed_seconds": 50,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-05-06T14:43:42.189568+00:00",
+      "completed_at": "2026-05-06T14:44:11.305295+00:00",
+      "elapsed_seconds": 29,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-05-06T14:44:16.262777+00:00",
+      "completed_at": "2026-05-06T14:44:34.056426+00:00",
+      "elapsed_seconds": 17,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-05-06T14:44:39.314373+00:00",
+      "completed_at": "2026-05-06T14:44:43.664678+00:00",
+      "elapsed_seconds": 4,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-05-06T14:44:50.658647+00:00",
+      "completed_at": "2026-05-06T14:45:41.173315+00:00",
+      "elapsed_seconds": 50,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-05-06T14:45:46.291197+00:00",
+      "completed_at": "2026-05-06T14:46:16.446121+00:00",
+      "elapsed_seconds": 30,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 3,
+    "completed_tasks": 3,
+    "total_phases": 10,
+    "estimated_total_minutes": 45.0,
+    "actual_total_minutes": 2.63,
+    "variance_minutes": -42.37,
+    "variance_percent": -94.15
+  }
+}

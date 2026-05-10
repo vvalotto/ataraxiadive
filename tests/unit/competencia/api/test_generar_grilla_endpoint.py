@@ -12,7 +12,6 @@ from competencia.api.router import get_generar_grilla_handler, router
 from competencia.application.commands.generar_grilla import GenerarGrillaCommand
 from identidad.api.dependencies import get_current_user
 
-
 COMPETENCIA_ID = UUID("00000000-0000-0000-0000-000000005114")
 
 

@@ -32,6 +32,8 @@ import { UsuariosPage } from './pages/organizador/UsuariosPage'
 import { AuditoriaCompetenciaPage } from './pages/organizador/AuditoriaCompetenciaPage'
 import { AuditoriaPerformancePage } from './pages/organizador/AuditoriaPerformancePage'
 import { ResultadosPage } from './pages/organizador/ResultadosPage'
+import { PodiosPage } from './pages/organizador/PodiosPage'
+import { PublicTorneosPage } from './pages/PublicTorneosPage'
 import { HealthCheck } from './components/HealthCheck'
 
 function RootRedirect() {
@@ -45,7 +47,11 @@ function RootRedirect() {
 function GlobalHealthCheck() {
   const location = useLocation()
 
-  if (location.pathname.startsWith('/organizador')) {
+  if (
+    location.pathname.startsWith('/organizador') ||
+    location.pathname.startsWith('/juez') ||
+    location.pathname.startsWith('/portalapnea')
+  ) {
     return null
   }
 
@@ -64,6 +70,7 @@ function App() {
     <>
       <GlobalHealthCheck />
       <Routes>
+        <Route path="/portalapnea" element={<PublicTorneosPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registro" element={<RegistroPage />} />
         <Route path="/recuperar-password" element={<RecuperarPasswordPage />} />
@@ -286,6 +293,14 @@ function App() {
           element={
             <RequireRole role="organizador">
               <ResultadosPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/organizador/podios"
+          element={
+            <RequireRole role="organizador">
+              <PodiosPage />
             </RequireRole>
           }
         />

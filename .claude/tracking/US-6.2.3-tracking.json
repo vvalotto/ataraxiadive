@@ -1,0 +1,169 @@
+{
+  "metadata": {
+    "us_id": "US-6.2.3",
+    "us_title": "Resultados - quitar FAAS, andarivel numerico y AP como Anuncio",
+    "us_points": 2,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-05-05T12:39:03.435653+00:00",
+    "completed_at": "2026-05-05T12:50:11.959394+00:00",
+    "total_elapsed_seconds": 668,
+    "effective_seconds": 668,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-05-05T12:39:10.470081+00:00",
+      "completed_at": "2026-05-05T12:39:42.523351+00:00",
+      "elapsed_seconds": 32,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación de Plan de Implementación",
+      "started_at": "2026-05-05T12:39:49.858381+00:00",
+      "completed_at": "2026-05-05T12:40:25.744382+00:00",
+      "elapsed_seconds": 35,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-05-05T12:40:56.535229+00:00",
+      "completed_at": "2026-05-05T12:42:51.345160+00:00",
+      "elapsed_seconds": 114,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_001",
+          "task_name": "Actualizar tabla resultados",
+          "task_type": "frontend",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-05-05T12:41:03.141898+00:00",
+          "completed_at": "2026-05-05T12:41:22.214659+00:00",
+          "elapsed_seconds": 19,
+          "actual_minutes": 0.32,
+          "variance_minutes": -14.68,
+          "file_created": "frontend/src/components/organizador/TablaDisciplinaResultados.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_002",
+          "task_name": "Actualizar fila resultado",
+          "task_type": "frontend",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-05-05T12:41:30.659656+00:00",
+          "completed_at": "2026-05-05T12:41:55.082167+00:00",
+          "elapsed_seconds": 24,
+          "actual_minutes": 0.4,
+          "variance_minutes": -4.6,
+          "file_created": "frontend/src/components/organizador/FilaResultado.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_003",
+          "task_name": "Actualizar copy resultados",
+          "task_type": "frontend",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-05-05T12:42:01.893945+00:00",
+          "completed_at": "2026-05-05T12:42:13.963718+00:00",
+          "elapsed_seconds": 12,
+          "actual_minutes": 0.2,
+          "variance_minutes": -4.8,
+          "file_created": "frontend/src/pages/organizador/ResultadosPage.tsx",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_004",
+          "task_name": "Actualizar fuente UX en spec",
+          "task_type": "docs",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-05-05T12:42:24.854828+00:00",
+          "completed_at": "2026-05-05T12:42:44.951426+00:00",
+          "elapsed_seconds": 20,
+          "actual_minutes": 0.33,
+          "variance_minutes": -4.67,
+          "file_created": "docs/specs/sp6/US-6.2.3.md",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-05-05T12:43:16.038916+00:00",
+      "completed_at": "2026-05-05T12:44:09.708389+00:00",
+      "elapsed_seconds": 53,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-05-05T12:44:54.338603+00:00",
+      "completed_at": "2026-05-05T12:45:00.062666+00:00",
+      "elapsed_seconds": 5,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-05-05T12:45:05.768509+00:00",
+      "completed_at": "2026-05-05T12:48:05.060481+00:00",
+      "elapsed_seconds": 179,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-05-05T12:48:12.455574+00:00",
+      "completed_at": "2026-05-05T12:48:55.580652+00:00",
+      "elapsed_seconds": 43,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-05-05T12:49:20.018021+00:00",
+      "completed_at": "2026-05-05T12:50:03.195022+00:00",
+      "elapsed_seconds": 43,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 4,
+    "completed_tasks": 4,
+    "total_phases": 8,
+    "estimated_total_minutes": 30.0,
+    "actual_total_minutes": 1.25,
+    "variance_minutes": -28.75,
+    "variance_percent": -95.83
+  }
+}

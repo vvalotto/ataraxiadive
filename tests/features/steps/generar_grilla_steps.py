@@ -36,9 +36,7 @@ from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEven
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-from competencia.infrastructure.repositories.performances_ap_adapter import (
-    PerformancesAPAdapter,
-)
+from tests.features.steps._stubs import StubPerformancesAPPort
 
 scenarios("../US-2.1.2-generar-grilla.feature")
 
@@ -152,7 +150,7 @@ def dados_aps_sta(context: dict, datatable: object) -> None:
 @given("la grilla ya fue generada previamente")
 def dada_grilla_generada(context: dict) -> None:
     store = _get_store(context)
-    adapter = PerformancesAPAdapter(store)
+    adapter = StubPerformancesAPPort(store)
     handler = GenerarGrillaHandler(store, adapter, DisciplinaDescriptorAdapter())
     asyncio.run(
         handler.handle(
@@ -257,7 +255,7 @@ def cuando_genera_grilla_dnf(context: dict, ot_str: str) -> None:
 
 def _ejecutar_generar_grilla(context: dict) -> None:
     store = _get_store(context)
-    adapter = PerformancesAPAdapter(store)
+    adapter = StubPerformancesAPPort(store)
     handler = GenerarGrillaHandler(store, adapter, DisciplinaDescriptorAdapter())
     try:
         asyncio.run(

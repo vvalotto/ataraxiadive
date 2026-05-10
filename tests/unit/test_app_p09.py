@@ -37,7 +37,9 @@ async def _init_event_db(db_path: str) -> None:
         await db.commit()
 
 
-async def _seed_torneo(repo: SQLiteTorneoRepository, torneo_id, disciplinas: set[Disciplina]) -> None:
+async def _seed_torneo(
+    repo: SQLiteTorneoRepository, torneo_id, disciplinas: set[Disciplina]
+) -> None:
     torneo = Torneo(
         torneo_id=torneo_id,
         nombre="Torneo test",

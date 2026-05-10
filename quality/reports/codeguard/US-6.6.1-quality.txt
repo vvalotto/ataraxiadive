@@ -1,0 +1,16 @@
+US-6.6.1 - Quality Gate
+
+Comando:
+.venv/bin/codeguard src/torneo --config pyproject.toml
+
+Resultado:
+- Archivos analizados: 30
+- Checks ejecutados: 6
+- Resultados totales: 90
+- Errores: 0
+- Advertencias: 0
+- Informativos: 90
+
+Notas:
+- `src/torneo/api/router.py` queda PEP8 compliant, sin security issues y con complejidad bajo umbral.
+- CodeGuard reporta un informativo preexistente B110 en `src/torneo/infrastructure/repositories/sqlite_torneo_repository.py`; no es error ni advertencia y no pertenece al cambio de US-6.6.1.

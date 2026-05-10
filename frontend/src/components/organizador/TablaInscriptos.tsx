@@ -6,6 +6,15 @@ function esDisciplinaTiempo(disciplina: string): boolean {
   return ['STA', 'SPE_2X50', 'SPE_4X50', 'SPE_8X50', 'SPE_16X50'].includes(disciplina)
 }
 
+const CATEGORIA_LABELS: Record<string, string> = {
+  SENIOR_MASCULINO: 'Senior M',
+  SENIOR_FEMENINO: 'Senior F',
+  MASTER_MASCULINO: 'Master M',
+  MASTER_FEMENINO: 'Master F',
+  JUNIOR_MASCULINO: 'Junior M',
+  JUNIOR_FEMENINO: 'Junior F',
+}
+
 export interface EstadoAP {
   estado: 'pendiente' | 'declarado' | 'cerrado'
   ap: string | null
@@ -33,6 +42,10 @@ interface TablaInscriptosProps {
 
 function puedeDeclararAp(estado?: EstadoAP): boolean {
   return !estado?.ap?.trim()
+}
+
+function formatCategoria(categoria: string): string {
+  return CATEGORIA_LABELS[categoria] ?? categoria
 }
 
 export function TablaInscriptos({
@@ -95,7 +108,7 @@ export function TablaInscriptos({
                 <th className="px-4 py-3">Inscripcion</th>
                 {disciplinasVisibles.map((disciplina) => (
                   <th key={disciplina} className="px-4 py-3">
-                    {disciplina}
+                    Anuncio · {disciplina}
                   </th>
                 ))}
               </tr>
@@ -105,7 +118,9 @@ export function TablaInscriptos({
                 <tr key={row.inscripcionId}>
                   <td className="px-4 py-3 font-semibold text-white">{row.nombre}</td>
                   <td className="px-4 py-3 text-slate-300">{row.club}</td>
-                  <td className="px-4 py-3 text-slate-300">{row.categoria}</td>
+                  <td className="px-4 py-3 text-slate-300">
+                    {formatCategoria(row.categoria)}
+                  </td>
                   <td className="px-4 py-3 text-slate-300">{row.estadoInscripcion}</td>
                   {disciplinasVisibles.map((disciplina) => {
                     if (!row.disciplinas.includes(disciplina)) {

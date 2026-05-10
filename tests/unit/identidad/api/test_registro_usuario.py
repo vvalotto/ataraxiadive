@@ -60,7 +60,7 @@ def test_registro_exitoso_persiste_nombre_apellido_y_rol() -> None:
             "nombre": "Ana",
             "apellido": "Garcia",
             "email": "ana@email.com",
-            "password": "apnea123",
+            "password": "Apnea12345",
             "rol": "ATLETA",
         },
     )
@@ -93,7 +93,7 @@ def test_registro_rechaza_email_duplicado() -> None:
             "nombre": "Otro",
             "apellido": "Usuario",
             "email": "juez1@email.com",
-            "password": "apnea123",
+            "password": "Apnea12345",
             "rol": "ATLETA",
         },
     )
@@ -129,7 +129,7 @@ def test_registro_rechaza_rol_admin() -> None:
             "nombre": "Admin",
             "apellido": "Prohibido",
             "email": "admin@email.com",
-            "password": "apnea123",
+            "password": "Apnea12345",
             "rol": "ADMIN",
         },
     )

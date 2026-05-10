@@ -319,7 +319,8 @@ async def test_blackout_con_distancia_en_event_store(
     blackout_events = [
         e
         for e in events
-        if e["event_type"] == "TarjetaAsignada" and e["data"].get("motivo_dq_codigo") == "BKO_SUPERFICIE"
+        if e["event_type"] == "TarjetaAsignada"
+        and e["data"].get("motivo_dq_codigo") == "BKO_SUPERFICIE"
     ]
     # stream_id = "performance-{competencia_id}-{participante_id}-{disciplina}"
     # performance_id en el DTO es "{participante_id}-{disciplina}" (sufijo post-prefijo)

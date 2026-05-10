@@ -1,0 +1,18 @@
+{
+  "atleta_email": "atleta@uat-atleta.test",
+  "atleta_password": "AtletaUat2026!",
+  "org_email": "org@uat-atleta.test",
+  "org_password": "OrgUat2026!",
+  "juez_email": "juez@uat-atleta.test",
+  "juez_password": "JuezUat2026!",
+  "atleta_registro_id": "28e3c53e-34da-4d70-9806-ac8c4cd16348",
+  "torneo_a_id": "e1fbe3b2-ce92-45bd-a7bd-f21d17afbdbc",
+  "torneo_a_nombre": "Copa Apnea Indoor BsAs 2026",
+  "torneo_a_estado": "EJECUCION",
+  "competencia_dnf_id": "1f6cce71-4784-4e4f-be5f-ed9fe653eeb3",
+  "competencia_sta_id": "bfcd3287-2b03-4a94-a815-942be4ce953b",
+  "inscripcion_a_id": "47c580df-e5d7-4b2f-8f6b-9d2f70fdf304",
+  "torneo_b_id": "36d39ed8-5ab7-4448-8bdf-e9968f3bf376",
+  "torneo_b_nombre": "Open Nacional Apnea 2026",
+  "torneo_b_estado": "INSCRIPCION"
+}

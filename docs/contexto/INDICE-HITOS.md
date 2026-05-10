@@ -39,6 +39,9 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | HITO-27 | SP5 Inc 5.2 | 2026-04-23 | Deriva Documental y Gates de Consistencia | ¿Cómo se detecta y controla la derivación documental cuando la especificación y la implementación compiten por autoridad? | [HITO-27](./HITO-27-DERIVA-DOCUMENTAL-GATES-CONSISTENCIA.md) |
 | HITO-28 | SP5 Inc 5.2 | 2026-04-23 | UAT: Vibe Coding vs Pipeline Formal | ¿El testing exploratorio ad-hoc captura invariantes que el pipeline formal no ve? | [HITO-28](./HITO-28-UAT-VIBE-CODING-VS-PIPELINE-FORMAL.md) |
 | HITO-29 | SP5 Inc 5.5 | 2026-04-26 | Spec-validatoria: anti-patrón de especificar desde código | ¿Escribir specs después de código listo genera sesgos invisibles en la cobertura de casos? | [HITO-29](./HITO-29-SPEC-VALIDATORIA-UX-ANTI-PATRON.md) |
+| HITO-30 | SP6 apertura | 2026-05-08 | Deriva silenciosa de tests: invariantes, contratos y entorno | ¿Qué tipos de deriva silenciosa acumula un proyecto IEDD+LLM cuando los tests unitarios no se ejecutan en cada PR? | [HITO-30](./HITO-30-DERIVA-TESTS-UNITARIOS-INVARIANTES-DOMINIO.md) |
+| HITO-31 | SP6 apertura | 2026-05-08 | Deriva de tests de integración: wiring, invariantes incorrectos y entorno | ¿Qué patrones de falla son exclusivos del nivel de integración frente a los unitarios en un proyecto IEDD+LLM? | [HITO-31](./HITO-31-DERIVA-TESTS-INTEGRACION-WIRING-ENTORNO.md) |
+| HITO-32 | SP6 apertura | 2026-05-08 | Deriva de tests BDD: contratos de adaptadores, passwords y semántica de dominio | ¿Qué tipos de deriva son exclusivos del nivel BDD? ¿Qué proporción de tests con invariantes incorrectos escribe un LLM? | [HITO-32](./HITO-32-DERIVA-TESTS-BDD-CONTRATOS-DOMINIO.md) |
 
 ---
 
@@ -52,6 +55,7 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | SP3 (El Torneo) | 14, 15, 16 | Proyecciones CQRS emergentes, secuencialidad del pipeline y gobierno del proceso |
 | SP4 (La Plataforma) | 17, 18, 19, 20, 21, 22, 23, 24, 25 | Datos reales como oráculo, validación UX, captura formal de hallazgos estructurales, gobierno secuencial del tracker, integridad criptográfica, auditoría navegable por composición de read models, exportación portable, restricción técnica como driver de buen diseño |
 | SP5 (La Puesta en Marcha) | 26, 27, 28, 29 | Cobertura asimétrica del event storming, deriva documental, validación con UAT exploratorio, anti-patrones de validación tardía |
+| SP6 (Validación y Despliegue) | 30 | Deriva silenciosa de tests por evolución de invariantes de dominio |
 
 ---
 

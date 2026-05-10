@@ -245,7 +245,9 @@ def step_asignar_amarilla_con_motivo(ctx: dict, motivo: str, juez: str) -> None:
     _ejecutar_asignar_tarjeta(ctx, TipoTarjeta.Amarilla, juez, motivo_texto=motivo)
 
 
-@when(parsers.parse('el juez asigna tarjeta roja con motivo_dq="{motivo_dq}" asignada_por="{juez}"'))
+@when(
+    parsers.parse('el juez asigna tarjeta roja con motivo_dq="{motivo_dq}" asignada_por="{juez}"')
+)
 def step_asignar_roja_con_motivo_dq(ctx: dict, motivo_dq: str, juez: str) -> None:  # type: ignore[type-arg]
     _ejecutar_asignar_tarjeta(ctx, TipoTarjeta.Roja, juez, motivo_dq=MotivoDQ(motivo_dq))
 
@@ -291,7 +293,11 @@ def step_evento_tarjeta_en_stream(ctx: dict) -> None:  # type: ignore[type-arg]
     assert any(e["event_type"] == "TarjetaAsignada" for e in events)
 
 
-@then(parsers.parse('el evento contiene tipo="{tipo}", motivo_dq=null, motivo_texto=null y asignadaPor="{juez}"'))
+@then(
+    parsers.parse(
+        'el evento contiene tipo="{tipo}", motivo_dq=null, motivo_texto=null y asignadaPor="{juez}"'
+    )
+)
 def step_payload_blanca_correcto(ctx: dict, tipo: str, juez: str) -> None:  # type: ignore[type-arg]
     stream_id = (
         f"performance-{ctx['competencia_id']}"
@@ -307,7 +313,11 @@ def step_payload_blanca_correcto(ctx: dict, tipo: str, juez: str) -> None:  # ty
     assert payload["asignada_por"] == juez
 
 
-@then(parsers.parse('el evento contiene tipo="{tipo}", motivo_texto="{motivo}" y asignadaPor="{juez}"'))
+@then(
+    parsers.parse(
+        'el evento contiene tipo="{tipo}", motivo_texto="{motivo}" y asignadaPor="{juez}"'
+    )
+)
 def step_payload_con_motivo_texto_correcto(
     ctx: dict, tipo: str, motivo: str, juez: str  # type: ignore[type-arg]
 ) -> None:
@@ -325,7 +335,11 @@ def step_payload_con_motivo_texto_correcto(
     assert payload["asignada_por"] == juez
 
 
-@then(parsers.parse('el evento contiene tipo="{tipo}", motivo_dq="{motivo_dq}" y asignadaPor="{juez}"'))
+@then(
+    parsers.parse(
+        'el evento contiene tipo="{tipo}", motivo_dq="{motivo_dq}" y asignadaPor="{juez}"'
+    )
+)
 def step_payload_con_motivo_dq_correcto(
     ctx: dict, tipo: str, motivo_dq: str, juez: str  # type: ignore[type-arg]
 ) -> None:

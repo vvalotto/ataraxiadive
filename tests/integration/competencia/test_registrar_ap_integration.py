@@ -9,7 +9,6 @@ import aiosqlite
 import pytest
 
 from competencia.application.commands.registrar_ap import (
-    APYaRegistrado,
     RegistrarAPCommand,
     RegistrarAPHandler,
 )
@@ -115,24 +114,38 @@ async def test_registrar_ap_payload_contiene_ids_correctos(
     assert payload["unidad"] == "Metros"
 
 
-async def test_segunda_llamada_misma_combinacion_lanza_error(
+async def test_segunda_llamada_misma_combinacion_actualiza_ap(
     handler: RegistrarAPHandler,
+    event_store: SQLiteEventStore,
 ) -> None:
-    """INV-P-02: segunda llamada con misma (competencia, participante, disciplina)."""
+    """El atleta puede actualizar su AP antes de que se genere la grilla."""
     cid = uuid4()
     pid = uuid4()
-    cmd = RegistrarAPCommand(
-        competencia_id=cid,
-        participante_id=pid,
-        disciplina=Disciplina.CWT,
-        valor_ap=Decimal("40"),
-        unidad=UnidadMedida.Metros,
+
+    id1 = await handler.handle(
+        RegistrarAPCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.CWT,
+            valor_ap=Decimal("40"),
+            unidad=UnidadMedida.Metros,
+        )
+    )
+    id2 = await handler.handle(
+        RegistrarAPCommand(
+            competencia_id=cid,
+            participante_id=pid,
+            disciplina=Disciplina.CWT,
+            valor_ap=Decimal("45"),
+            unidad=UnidadMedida.Metros,
+        )
     )
 
-    await handler.handle(cmd)
-
-    with pytest.raises(APYaRegistrado):
-        await handler.handle(cmd)
+    assert id1 == id2  # misma performance, AP actualizado
+    stream_id = f"performance-{cid}-{pid}-CWT"
+    events = await event_store.load(stream_id)
+    assert len(events) == 2
+    assert events[-1]["payload"]["valor_ap"] == "45"
 
 
 async def test_distinta_disciplina_mismo_atleta_es_independiente(

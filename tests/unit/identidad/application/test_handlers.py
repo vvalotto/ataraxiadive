@@ -82,7 +82,7 @@ async def test_registrar_usuario_exitoso(
         nombre="Nuevo",
         apellido="Usuario",
         email="nuevo@test.com",
-        password="seguro12",
+        password="Seguro1234",
         rol=Rol.ORGANIZADOR,
     )
     usuario_id = await handler.handle(cmd)
@@ -99,14 +99,14 @@ async def test_registrar_guarda_hash_no_plain(
         nombre="Ana",
         apellido="Garcia",
         email="t@t.com",
-        password="password1",
+        password="Password10",
         rol=Rol.ATLETA,
     )
     await handler.handle(cmd)
     saved_usuario: Usuario = mock_repo.save.call_args[0][0]
     assert saved_usuario.nombre == "Ana"
     assert saved_usuario.apellido == "Garcia"
-    assert saved_usuario.password_hash != "password1"
+    assert saved_usuario.password_hash != "Password10"
     assert saved_usuario.password_hash.startswith("$2b$")
 
 
@@ -121,7 +121,7 @@ async def test_registrar_email_duplicado_lanza_excepcion(
         nombre="Dup",
         apellido="Nuevo",
         email="dup@test.com",
-        password="password1",
+        password="Password10",
         rol=Rol.JUEZ,
     )
     with pytest.raises(EmailYaRegistrado):
@@ -145,7 +145,7 @@ async def test_registrar_password_corto_lanza_excepcion(
 
 
 @pytest.mark.asyncio
-async def test_registrar_password_exactamente_8_es_valido(
+async def test_registrar_password_exactamente_10_es_valido(
     mock_repo: AsyncMock, password_hasher: PasswordHashingPort
 ) -> None:
     handler = RegistrarUsuarioHandler(mock_repo, password_hasher)
@@ -153,7 +153,7 @@ async def test_registrar_password_exactamente_8_es_valido(
         nombre="Ana",
         apellido="Garcia",
         email="t@t.com",
-        password="12345678",
+        password="Valida1234",
         rol=Rol.ATLETA,
     )
     usuario_id = await handler.handle(cmd)
@@ -169,7 +169,7 @@ async def test_registrar_admin_lanza_excepcion(
         nombre="Admin",
         apellido="Prohibido",
         email="admin@test.com",
-        password="12345678",
+        password="Valida1234",
         rol=Rol.ADMIN,
     )
     with pytest.raises(RolNoPermitido):
@@ -191,11 +191,11 @@ async def test_cambiar_password_exitoso(
         CambiarPasswordCommand(
             usuario_id=usuario.usuario_id,
             password_actual="clave1234",
-            password_nueva="nuevapass456",
+            password_nueva="NuevaPass456",
         )
     )
 
-    assert password_hasher.verify("nuevapass456", usuario.password_hash)
+    assert password_hasher.verify("NuevaPass456", usuario.password_hash)
     mock_repo.save.assert_called_once_with(usuario)
 
 
@@ -212,7 +212,7 @@ async def test_cambiar_password_rechaza_password_actual_incorrecta(
             CambiarPasswordCommand(
                 usuario_id=usuario.usuario_id,
                 password_actual="wrongpass",
-                password_nueva="nuevapass456",
+                password_nueva="NuevaPass456",
             )
         )
 
@@ -247,7 +247,7 @@ async def test_cambiar_password_rechaza_usuario_inexistente(
             CambiarPasswordCommand(
                 usuario_id=uuid.uuid4(),
                 password_actual="clave1234",
-                password_nueva="nuevapass456",
+                password_nueva="NuevaPass456",
             )
         )
 
@@ -311,9 +311,9 @@ async def test_reset_password_exitoso(
     handler = ResetPasswordHandler(mock_repo, token_service, password_hasher)
     token = token_service.generate_reset_token(usuario.email)
 
-    await handler.handle(ResetPasswordCommand(token=token, password_nueva="nuevapass456"))
+    await handler.handle(ResetPasswordCommand(token=token, password_nueva="NuevaPass456"))
 
-    assert password_hasher.verify("nuevapass456", usuario.password_hash)
+    assert password_hasher.verify("NuevaPass456", usuario.password_hash)
     mock_repo.save.assert_called_once_with(usuario)
 
 
@@ -326,7 +326,7 @@ async def test_reset_password_rechaza_token_de_sesion(
     token = token_service.generate(usuario)
 
     with pytest.raises(TokenResetInvalido):
-        await handler.handle(ResetPasswordCommand(token=token, password_nueva="nuevapass456"))
+        await handler.handle(ResetPasswordCommand(token=token, password_nueva="NuevaPass456"))
 
 
 @pytest.mark.asyncio

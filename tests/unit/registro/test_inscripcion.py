@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime
+from decimal import Decimal
 from uuid import uuid4
 
 import pytest
@@ -9,14 +10,15 @@ from registro.domain.aggregates.inscripcion import Inscripcion
 from registro.domain.exceptions import PlazoCancelacionVencido
 from registro.domain.value_objects.estado_inscripcion import EstadoInscripcion
 from shared.domain.value_objects.disciplina import Disciplina
+from shared.domain.value_objects.unidad_medida import UnidadMedida
 
 
 def _inscripcion(**kwargs) -> Inscripcion:
-    defaults = dict(
-        atleta_id=uuid4(),
-        torneo_id=uuid4(),
-        disciplinas=frozenset({Disciplina.STA}),
-    )
+    defaults = {
+        "atleta_id": uuid4(),
+        "torneo_id": uuid4(),
+        "disciplinas": frozenset({Disciplina.STA}),
+    }
     defaults.update(kwargs)
     return Inscripcion(**defaults)
 
@@ -62,3 +64,83 @@ def test_disciplinas_es_frozenset():
     assert isinstance(ins.disciplinas, frozenset)
     assert Disciplina.STA in ins.disciplinas
     assert Disciplina.DNF in ins.disciplinas
+
+
+def test_adjuntar_apto_medico_registra_path():
+    ins = _inscripcion()
+    ins.adjuntar_apto_medico("data/adjuntos/id/apto_medico.pdf")
+    assert ins.apto_medico_path == "data/adjuntos/id/apto_medico.pdf"
+
+
+def test_adjuntar_constancia_pago_registra_path():
+    ins = _inscripcion()
+    ins.adjuntar_constancia_pago("data/adjuntos/id/constancia_pago.pdf")
+    assert ins.constancia_pago_path == "data/adjuntos/id/constancia_pago.pdf"
+
+
+def test_adjuntar_apto_medico_rechaza_path_vacio():
+    ins = _inscripcion()
+    with pytest.raises(ValueError, match="path no puede ser vacío"):
+        ins.adjuntar_apto_medico(" ")
+
+
+def test_adjuntar_constancia_pago_rechaza_path_vacio():
+    ins = _inscripcion()
+    with pytest.raises(ValueError, match="path no puede ser vacío"):
+        ins.adjuntar_constancia_pago("")
+
+
+def test_from_row_reconstituye_inscripcion_con_ap_y_adjuntos():
+    inscripcion_id = uuid4()
+    atleta_id = uuid4()
+    torneo_id = uuid4()
+
+    ins = Inscripcion.from_row(
+        {
+            "inscripcion_id": str(inscripcion_id),
+            "atleta_id": str(atleta_id),
+            "torneo_id": str(torneo_id),
+            "disciplinas": '["STA", "DNF"]',
+            "estado": "ACTIVA",
+            "fecha_inscripcion": "2026-05-09T12:30:00",
+            "ap_por_disciplina": (
+                '{"STA": {"valor": "120", "unidad": "Segundos"}, '
+                '"DNF": {"valor": "75", "unidad": "Metros"}}'
+            ),
+            "apto_medico_path": "data/adjuntos/ins/apto.pdf",
+            "constancia_pago_path": "data/adjuntos/ins/pago.pdf",
+        }
+    )
+
+    assert ins.inscripcion_id == inscripcion_id
+    assert ins.atleta_id == atleta_id
+    assert ins.torneo_id == torneo_id
+    assert ins.disciplinas == frozenset({Disciplina.STA, Disciplina.DNF})
+    assert ins.estado == EstadoInscripcion.ACTIVA
+    assert ins.fecha_inscripcion == datetime(2026, 5, 9, 12, 30)
+    assert ins.ap_por_disciplina[Disciplina.STA].valor == Decimal("120")
+    assert ins.ap_por_disciplina[Disciplina.STA].unidad == UnidadMedida.Segundos
+    assert ins.ap_por_disciplina[Disciplina.DNF].valor == Decimal("75")
+    assert ins.ap_por_disciplina[Disciplina.DNF].unidad == UnidadMedida.Metros
+    assert ins.apto_medico_path == "data/adjuntos/ins/apto.pdf"
+    assert ins.constancia_pago_path == "data/adjuntos/ins/pago.pdf"
+
+
+def test_from_row_reconstituye_ap_vacio():
+    ins = Inscripcion.from_row(
+        {
+            "inscripcion_id": str(uuid4()),
+            "atleta_id": str(uuid4()),
+            "torneo_id": str(uuid4()),
+            "disciplinas": '["STA"]',
+            "estado": "ACTIVA",
+            "fecha_inscripcion": "2026-05-09T12:30:00",
+            "ap_por_disciplina": "{}",
+            "apto_medico_path": None,
+            "constancia_pago_path": None,
+        }
+    )
+
+    assert ins.ap_por_disciplina == {}
+    assert ins.apto_medico_path is None
+    assert ins.constancia_pago_path is None

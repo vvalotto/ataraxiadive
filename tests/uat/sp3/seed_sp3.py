@@ -130,6 +130,7 @@ from torneo.application.commands.asignar_disciplinas import (
     AsignarDisciplinasHandler,
 )
 from torneo.application.commands.crear_torneo import CrearTorneoCommand, CrearTorneoHandler
+from torneo.domain.value_objects.grupo_etario import GrupoEtario
 from torneo.application.commands.transicionar_torneo import (
     AbrirInscripcionHandler,
     TransicionarTorneoCommand,
@@ -206,6 +207,7 @@ async def fase1() -> None:
             sede_pais="Argentina",
             entidad_nombre="AIDA Argentina",
             entidad_tipo="Federación",
+            grupos_etarios=frozenset({GrupoEtario.SENIOR}),
         )
     )
     print(f"✓ Torneo creado: {torneo_id}")
@@ -320,8 +322,10 @@ async def fase1() -> None:
     print()
     print("⚠  Fase 1 completada. Próximos pasos:")
     print("   1. Levantá el servidor: uv run fastapi dev src/app.py")
-    print(f"   2. POST /competencia/{cid}/confirmar-grilla  {{\"disciplina\": \"STA\"}}")
-    print(f"   3. POST /competencia/{cid}/iniciar           {{\"disciplina\": \"STA\", \"juez_id\": \"{_JUEZ}\"}}")
+    print(f'   2. POST /competencia/{cid}/confirmar-grilla  {{"disciplina": "STA"}}')
+    print(
+        f'   3. POST /competencia/{cid}/iniciar           {{"disciplina": "STA", "juez_id": "{_JUEZ}"}}'
+    )
     print("   4. Ejecutá: uv run python tests/uat/sp3/seed_sp3.py fase2")
 
 
@@ -344,8 +348,7 @@ async def fase2() -> None:
     torneo_id = UUID(ids["torneo_id"])
     cid = UUID(ids["competencia_id"])
     atleta_ids = {
-        label.upper(): UUID(ids[f"atleta_{label}"])
-        for label in ["a", "b", "c", "d", "e", "f"]
+        label.upper(): UUID(ids[f"atleta_{label}"]) for label in ["a", "b", "c", "d", "e", "f"]
     }
 
     print("=" * 60)
@@ -358,6 +361,7 @@ async def fase2() -> None:
 
     store = SQLiteEventStore(_COMPETENCIA_DB)
     resultados_store = SQLiteEventStore(_RESULTADOS_DB)
+    competencias_por_torneo = SQLiteCompetenciasPorTorneo(_COMPETENCIA_DB)
     estado_adapter = CompetenciaEstadoAdapter(store)
     perf_estado_adapter = PerformancesEstadoAdapter(store)
     descriptor_adapter = DisciplinaDescriptorAdapter()
@@ -380,7 +384,7 @@ async def fase2() -> None:
             torneo = await torneo_repo.find_by_id(torneo_id_cb)
             if torneo is not None:
                 disciplinas = [d for dt in torneo.disciplinas_torneo for d in [dt.disciplina]]
-                await CalcularOverallHandler(resultados_store, store).handle(
+                await CalcularOverallHandler(resultados_store, competencias_por_torneo).handle(
                     CalcularOverallCommand(torneo_id=torneo_id_cb, disciplinas=disciplinas)
                 )
                 print("✓ Overall calculado (P-09)")

@@ -41,8 +41,39 @@ function esTorneoHistorico(estado: EstadoTorneo): boolean {
 }
 
 function filtrarTorneos(torneos: TorneoDto[], filtro: FiltroTorneos): TorneoDto[] {
-  if (filtro === 'vigentes') return torneos.filter((torneo) => esTorneoVigente(torneo.estado))
-  return torneos.filter((torneo) => esTorneoHistorico(torneo.estado))
+  const filtrados =
+    filtro === 'vigentes'
+      ? torneos.filter((torneo) => esTorneoVigente(torneo.estado))
+      : torneos.filter((torneo) => esTorneoHistorico(torneo.estado))
+
+  return filtrados
+    .map((torneo, index) => ({ torneo, index }))
+    .sort((a, b) => {
+      const fechaComparison = b.torneo.fecha_inicio.localeCompare(a.torneo.fecha_inicio)
+      if (fechaComparison !== 0) return fechaComparison
+      return a.index - b.index
+    })
+    .map(({ torneo }) => torneo)
+}
+
+function formatFechaCorta(fecha: string): string {
+  return new Date(`${fecha}T00:00:00`).toLocaleDateString('es-AR', {
+    day: 'numeric',
+    month: 'short',
+  })
+}
+
+function formatFechaCompleta(fecha: string): string {
+  return new Date(`${fecha}T00:00:00`).toLocaleDateString('es-AR', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  })
+}
+
+function formatFechaTorneo(inicio: string, fin: string): string {
+  if (inicio === fin) return formatFechaCompleta(inicio)
+  return `${formatFechaCorta(inicio)}-${formatFechaCompleta(fin)}`
 }
 
 function emptyMessage(filtro: FiltroTorneos): string {
@@ -216,6 +247,9 @@ export function DashboardPage() {
                     className={`mt-2 text-sm ${historicalTextClass(torneo.estado)}`}
                   >
                     {torneo.sede.nombre}, {torneo.sede.ciudad} · {formatEstadoTorneo(torneo.estado)}
+                  </p>
+                  <p className={`mt-1 text-xs ${historicalTextClass(torneo.estado)}`}>
+                    {formatFechaTorneo(torneo.fecha_inicio, torneo.fecha_fin)}
                   </p>
                 </div>
                 <Link

@@ -15,6 +15,7 @@ from torneo.domain.exceptions import (
 from torneo.domain.value_objects.disciplina_torneo import DisciplinaTorneo
 from torneo.domain.value_objects.entidad_organizadora import EntidadOrganizadora
 from torneo.domain.value_objects.estado_torneo import EstadoTorneo
+from torneo.domain.value_objects.grupo_etario import GrupoEtario
 from torneo.domain.value_objects.sede import Sede
 from torneo.domain.value_objects.tipo_reglamento import TipoReglamento
 
@@ -50,10 +51,14 @@ class Torneo:
     estado: EstadoTorneo = EstadoTorneo.CREADO
     disciplinas_torneo: list[DisciplinaTorneo] = field(default_factory=list)
     tipo_reglamento: TipoReglamento = TipoReglamento.FAAS
+    grupos_etarios: frozenset[GrupoEtario] = field(
+        default_factory=lambda: frozenset({GrupoEtario.SENIOR})
+    )
 
     def __post_init__(self) -> None:
         self._validar_nombre()
         self._validar_fechas()
+        self._validar_grupos_etarios()
 
     def _transicionar(self, nuevo_estado: EstadoTorneo) -> None:
         self._validar_transicion(nuevo_estado)
@@ -135,3 +140,7 @@ class Torneo:
             raise DisciplinaObsoleta(
                 "Disciplina.SPE es legacy y no puede configurarse en torneos nuevos"
             )
+
+    def _validar_grupos_etarios(self) -> None:
+        if not self.grupos_etarios:
+            raise ValueError("Debe seleccionar al menos un grupo etario")

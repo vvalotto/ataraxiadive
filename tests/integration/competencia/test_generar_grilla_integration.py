@@ -35,9 +35,7 @@ from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEven
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-from competencia.infrastructure.repositories.performances_ap_adapter import (
-    PerformancesAPAdapter,
-)
+from tests.integration.competencia._stubs import StubPerformancesAPPort
 
 CREATE_EVENTS_TABLE = """
     CREATE TABLE events (
@@ -123,7 +121,7 @@ class TestGenerarGrillaIntegracion:
         await _seed_intervalo(event_store)
         await _seed_ap(event_store, A001, "330")
 
-        adapter = PerformancesAPAdapter(event_store)
+        adapter = StubPerformancesAPPort(event_store)
         handler = GenerarGrillaHandler(event_store, adapter, DisciplinaDescriptorAdapter())
         await handler.handle(
             GenerarGrillaCommand(
@@ -145,7 +143,7 @@ class TestGenerarGrillaIntegracion:
         await _seed_ap(event_store, A002, "360")  # 6:00 — mayor, pos=3
         await _seed_ap(event_store, A003, "285")  # 4:45 — menor, pos=1
 
-        adapter = PerformancesAPAdapter(event_store)
+        adapter = StubPerformancesAPPort(event_store)
         handler = GenerarGrillaHandler(event_store, adapter, DisciplinaDescriptorAdapter())
         await handler.handle(
             GenerarGrillaCommand(
@@ -170,7 +168,7 @@ class TestGenerarGrillaIntegracion:
         await _seed_ap(event_store, A001, "330")
         await _seed_ap(event_store, A002, "360")
 
-        adapter = PerformancesAPAdapter(event_store)
+        adapter = StubPerformancesAPPort(event_store)
         handler = GenerarGrillaHandler(event_store, adapter, DisciplinaDescriptorAdapter())
         await handler.handle(
             GenerarGrillaCommand(
@@ -194,7 +192,7 @@ class TestGenerarGrillaIntegracion:
         await _seed_intervalo(event_store)
         await _seed_ap(event_store, A001, "330")
 
-        adapter = PerformancesAPAdapter(event_store)
+        adapter = StubPerformancesAPPort(event_store)
         handler = GenerarGrillaHandler(event_store, adapter, DisciplinaDescriptorAdapter())
         await handler.handle(
             GenerarGrillaCommand(
@@ -215,7 +213,7 @@ class TestGenerarGrillaIntegracion:
         await _seed_intervalo(event_store)
         await _seed_ap(event_store, A001, "330")
 
-        adapter = PerformancesAPAdapter(event_store)
+        adapter = StubPerformancesAPPort(event_store)
         handler = GenerarGrillaHandler(event_store, adapter, DisciplinaDescriptorAdapter())
         cmd = GenerarGrillaCommand(
             competencia_id=COMPETENCIA_ID,
@@ -235,7 +233,7 @@ class TestGenerarGrillaIntegracion:
         await _seed_intervalo(event_store)
         # No se registran APs
 
-        adapter = PerformancesAPAdapter(event_store)
+        adapter = StubPerformancesAPPort(event_store)
         handler = GenerarGrillaHandler(event_store, adapter, DisciplinaDescriptorAdapter())
         with pytest.raises(SinPerformancesParaGrilla):
             await handler.handle(
@@ -247,7 +245,9 @@ class TestGenerarGrillaIntegracion:
             )
 
     @pytest.mark.asyncio
-    async def test_grilla_spe_4x50_usa_orden_descendente(self, event_store: SQLiteEventStore) -> None:
+    async def test_grilla_spe_4x50_usa_orden_descendente(
+        self, event_store: SQLiteEventStore
+    ) -> None:
         competencia_id = UUID("00000000-0000-0000-0000-000000000004")
         disciplina = Disciplina.SPE_4X50
         await ConfigurarIntervaloOTHandler(event_store).handle(
@@ -268,7 +268,7 @@ class TestGenerarGrillaIntegracion:
             event_store, competencia_id, disciplina, A003, "195", UnidadMedida.Segundos
         )
 
-        adapter = PerformancesAPAdapter(event_store)
+        adapter = StubPerformancesAPPort(event_store)
         handler = GenerarGrillaHandler(event_store, adapter, DisciplinaDescriptorAdapter())
         await handler.handle(
             GenerarGrillaCommand(
@@ -284,7 +284,9 @@ class TestGenerarGrillaIntegracion:
         assert atletas_orden == [str(A002), str(A003), str(A001)]
 
     @pytest.mark.asyncio
-    async def test_grilla_spe_2x50_usa_orden_descendente(self, event_store: SQLiteEventStore) -> None:
+    async def test_grilla_spe_2x50_usa_orden_descendente(
+        self, event_store: SQLiteEventStore
+    ) -> None:
         competencia_id = UUID("00000000-0000-0000-0000-000000000005")
         disciplina = Disciplina.SPE_2X50
         await ConfigurarIntervaloOTHandler(event_store).handle(
@@ -305,7 +307,7 @@ class TestGenerarGrillaIntegracion:
             event_store, competencia_id, disciplina, A003, "80", UnidadMedida.Segundos
         )
 
-        adapter = PerformancesAPAdapter(event_store)
+        adapter = StubPerformancesAPPort(event_store)
         handler = GenerarGrillaHandler(event_store, adapter, DisciplinaDescriptorAdapter())
         await handler.handle(
             GenerarGrillaCommand(

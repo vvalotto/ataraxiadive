@@ -32,7 +32,10 @@ from resultados.application.commands.calcular_ranking import (
     CalcularRankingCommand,
     CalcularRankingHandler,
 )
-from resultados.application.queries.obtener_ranking import ObtenerRankingHandler, ObtenerRankingQuery
+from resultados.application.queries.obtener_ranking import (
+    ObtenerRankingHandler,
+    ObtenerRankingQuery,
+)
 from resultados.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter as ResultadosDisciplinaDescriptorAdapter,
 )

@@ -92,7 +92,9 @@ def test_usuario_trim_nombre_y_apellido() -> None:
     assert u.apellido == "Garcia"
 
 
-@pytest.mark.parametrize("campo, nombre, apellido", [("nombre", " ", "Garcia"), ("apellido", "Ana", "\t")])
+@pytest.mark.parametrize(
+    "campo, nombre, apellido", [("nombre", " ", "Garcia"), ("apellido", "Ana", "\t")]
+)
 def test_usuario_rechaza_nombre_o_apellido_vacios(campo: str, nombre: str, apellido: str) -> None:
     with pytest.raises(CampoRequerido, match=campo):
         Usuario(
@@ -130,7 +132,7 @@ def test_usuario_inactivo_mensaje() -> None:
 
 def test_password_demasiado_corto_mensaje() -> None:
     exc = PasswordDemasiadoCorto()
-    assert "8" in str(exc)
+    assert "10" in str(exc)
 
 
 def test_rol_no_permitido_mensaje() -> None:

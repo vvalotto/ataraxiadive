@@ -11,7 +11,6 @@ export interface FilaResultadoData {
   rp: string | null
   unidad: string | null
   tarjeta: string | null
-  puntos: string | null
 }
 
 interface FilaResultadoProps {
@@ -68,7 +67,6 @@ function ChipTarjeta({ tarjeta }: { tarjeta: string | null }) {
 
 export function FilaResultado({ fila }: FilaResultadoProps) {
   const rpDisplay = fila.rp ? `${fila.rp} ${fila.unidad ?? ''}`.trim() : '—'
-  const puntosDisplay = fila.puntos ?? '—'
 
   return (
     <tr className="border-b border-slate-800 text-sm transition hover:bg-slate-800/60">
@@ -85,9 +83,6 @@ export function FilaResultado({ fila }: FilaResultadoProps) {
       <td className="px-3 py-3 font-mono font-semibold text-white">{rpDisplay}</td>
       <td className="px-3 py-3">
         <ChipTarjeta tarjeta={fila.tarjeta} />
-      </td>
-      <td className="px-3 py-3 text-right font-mono font-bold text-sky-300">
-        {puntosDisplay}
       </td>
     </tr>
   )

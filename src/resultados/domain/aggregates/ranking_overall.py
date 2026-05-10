@@ -59,7 +59,8 @@ class RankingOverall(AggregateRoot):
         """Calcula y registra el ranking overall sumando puntos FAAS.
 
         Raises:
-            DisciplinasNoFinalizadas: si alguna disciplina no tiene ranking calculado (INV-5.6.4-04).
+            DisciplinasNoFinalizadas: si alguna disciplina no tiene ranking calculado
+                (INV-5.6.4-04).
         """
         _validar_disciplinas_finalizadas(rankings_por_disciplina)
 

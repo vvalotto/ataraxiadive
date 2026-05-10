@@ -37,7 +37,7 @@ from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEven
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
+from tests.integration.competencia._stubs import StubPerformancesAPPort
 
 CREATE_EVENTS_TABLE = """
     CREATE TABLE events (
@@ -94,7 +94,7 @@ async def _seed_grilla(store: SQLiteEventStore) -> dict[str, UUID]:
             )
         )
 
-    adapter = PerformancesAPAdapter(store)
+    adapter = StubPerformancesAPPort(store)
     handler_grilla = GenerarGrillaHandler(store, adapter, DisciplinaDescriptorAdapter())
     await handler_grilla.handle(
         GenerarGrillaCommand(

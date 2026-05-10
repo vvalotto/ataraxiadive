@@ -31,7 +31,7 @@ from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEven
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
+from tests.features.steps._stubs import StubPerformancesAPPort
 
 scenarios("../US-2.2.1-disciplina-descriptor.feature")
 
@@ -142,7 +142,7 @@ def cuando_consulta_descriptor(context: dict) -> None:
 @when("se genera la grilla usando el DisciplinaDescriptorPort")
 def cuando_genera_grilla(context: dict) -> None:
     store: SQLiteEventStore = context["store"]
-    ap_adapter = PerformancesAPAdapter(store)
+    ap_adapter = StubPerformancesAPPort(store)
     handler = GenerarGrillaHandler(store, ap_adapter, context["adapter"])
     ot = datetime(2026, 1, 1, 10, 0, 0, tzinfo=timezone.utc)
     asyncio.run(

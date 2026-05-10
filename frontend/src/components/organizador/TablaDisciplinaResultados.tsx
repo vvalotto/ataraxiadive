@@ -22,8 +22,9 @@ function derivarCategoriaCorta(categoria: string): string {
   return categoria.split('_')[0] ?? categoria
 }
 
-function formatearLinea(andarivel: number): string {
-  return andarivel === 1 ? 'A' : andarivel === 2 ? 'B' : String(andarivel)
+function formatearAndarivel(andarivel: number | null | undefined): string {
+  if (!andarivel) return '—'
+  return String(andarivel)
 }
 
 export function TablaDisciplinaResultados({
@@ -34,7 +35,7 @@ export function TablaDisciplinaResultados({
   const filas = useMemo<FilaResultadoData[]>(() => {
     const rankingPorAtleta = new Map<
       string,
-      { rp: string | null; unidad: string | null; tarjeta: string | null; puntos: string | null; categoria: string }
+      { rp: string | null; unidad: string | null; tarjeta: string | null; categoria: string }
     >()
 
     if (ranking) {
@@ -44,7 +45,6 @@ export function TablaDisciplinaResultados({
             rp: entrada.rp,
             unidad: entrada.unidad,
             tarjeta: entrada.es_dns ? 'DNS' : (entrada.tarjeta ?? null),
-            puntos: entrada.puntos ?? null,
             categoria: grupo.categoria,
           })
         }
@@ -75,11 +75,10 @@ export function TablaDisciplinaResultados({
           club: inscriptoData?.club ?? '',
           ap: `${atleta.ap_declarado} ${atleta.unidad}`.trim(),
           ot: atleta.ot_programado,
-          linea: formatearLinea(atleta.andarivel),
+          linea: formatearAndarivel(atleta.andarivel),
           rp: rankData?.rp ?? null,
           unidad: rankData?.unidad ?? atleta.unidad,
           tarjeta: rankData?.tarjeta ?? null,
-          puntos: rankData?.puntos ?? null,
         }
       })
   }, [grilla, ranking, inscriptos])
@@ -102,12 +101,11 @@ export function TablaDisciplinaResultados({
             <th className="px-3 py-2 text-center">Gén.</th>
             <th className="px-3 py-2">Categoría</th>
             <th className="px-3 py-2">Club</th>
-            <th className="px-3 py-2">AP</th>
+            <th className="px-3 py-2">Anuncio</th>
             <th className="px-3 py-2">OT</th>
             <th className="px-3 py-2 text-center">Línea</th>
             <th className="px-3 py-2">RP</th>
             <th className="px-3 py-2">Tarjeta</th>
-            <th className="px-3 py-2 text-right">Pts FAAS</th>
           </tr>
         </thead>
         <tbody className="bg-slate-900/40">

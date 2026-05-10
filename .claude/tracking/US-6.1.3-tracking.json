@@ -8,9 +8,9 @@
   },
   "timeline": {
     "started_at": "2026-05-04T10:00:17.175228+00:00",
-    "completed_at": null,
-    "total_elapsed_seconds": 0,
-    "effective_seconds": 0,
+    "completed_at": "2026-05-06T14:27:11.773338+00:00",
+    "total_elapsed_seconds": 188814,
+    "effective_seconds": 188814,
     "paused_seconds": 0
   },
   "phases": [],

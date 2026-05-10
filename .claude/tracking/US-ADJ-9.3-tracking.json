@@ -8,9 +8,9 @@
   },
   "timeline": {
     "started_at": "2026-04-28T13:32:00+00:00",
-    "completed_at": null,
-    "total_elapsed_seconds": 600,
-    "effective_seconds": 600,
+    "completed_at": "2026-05-06T14:27:12.441006+00:00",
+    "total_elapsed_seconds": 694512,
+    "effective_seconds": 694512,
     "paused_seconds": 0
   },
   "phases": [
@@ -131,8 +131,8 @@
     "completed_tasks": 0,
     "total_phases": 10,
     "estimated_total_minutes": 0,
-    "actual_total_minutes": 10,
+    "actual_total_minutes": 0,
     "variance_minutes": 0,
-    "variance_percent": 0
+    "variance_percent": 0.0
   }
 }

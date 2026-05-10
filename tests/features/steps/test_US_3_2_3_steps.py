@@ -345,13 +345,13 @@ def then_409_atleta_ya_inscripto(context: dict[str, Any]) -> None:
 @then("200 y la inscripcion queda en estado CANCELADA")
 def then_200_cancelada(context: dict[str, Any], client: TestClient) -> None:
     assert context["response"].status_code == 200
+    # listar_inscriptos filtra CANCELADAS por diseño — la inscripción no debe aparecer
     resp = client.get(f"/registro/torneos/{context['torneo_id']}/inscriptos")
     inscripciones = resp.json()
     match = next(
         (i for i in inscripciones if i["inscripcion_id"] == context["inscripcion_id"]), None
     )
-    assert match is not None
-    assert match["estado"] == "CANCELADA"
+    assert match is None
 
 
 @then("409 Conflict con detalle PlazoCancelacionVencido")

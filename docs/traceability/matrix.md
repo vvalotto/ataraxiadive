@@ -11,7 +11,7 @@
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
 | **Fecha** | 2026-05-01 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.34 — SP6 INC-6.1 en curso · US-6.1.1 ✅ · US-6.1.2 ✅ · US-6.1.3 ✅ · US-6.1.4 ✅ |
+| **Estado** | ✅ v1.42 — SP6 INC-6.1 ✅ · INC-6.2 ✅ · INC-6.3 ✅ · INC-6.4 ✅ cerrado |
 
 ---
 
@@ -552,8 +552,8 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 
 ## 29. US-IEDD SP6 INC-6.1 — Ajustes Juez
 
-> Estado al 2026-05-04: 4/5 US mergeadas a `develop`. INC-6.1 en curso.
-> Quality gates: frontend-only · CodeGuard N/A (sin cambios Python) · DesignReviewer al cierre del INC.
+> Estado al 2026-05-04: 5/5 US mergeadas a `develop`. INC-6.1 cerrado formalmente.
+> Quality gates: frontend-only · CodeGuard N/A (sin cambios Python) · DesignReviewer 0 CRITICAL · 256 WARNING (cierre conjunto INC-6.1/6.2 — 2026-05-07).
 
 | US | Inc. | Contenido principal | Estado |
 |----|------|---------------------|--------|
@@ -561,11 +561,58 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 | US-6.1.2 | 6.1 | Colores tarjeta outline/filled (MUX-02) + heading paso 5 corregido · MUX-05 ya estaba resuelto en PerformanceFlowPage · `StepTarjeta.tsx` | ✅ Done (PR #144) |
 | US-6.1.3 | 6.1 | Grilla ordenada por estado + keypad visible móvil · MUX-03 ya resuelto · MUX-01: `RpSelector.tsx` space-y-2 + py-2 en keypad | ✅ Done (PR #145) |
 | US-6.1.4 | 6.1 | Rediseño inicio juez + STA mm:ss + tarjeta amarilla (UI-JUE-01 + MUX-08 + MUX-07) · `DisciplinasPage.tsx`: "Mis asignaciones" + sin Password · `utils/marca.ts`: " min" suffix · `StepRevision.tsx`: labels BLANCA/ROJA | ✅ Done (PR #146) |
-| US-6.1.5 | 6.1 | AtletaCard compacta en paso 5 (MUX-06) | ⏳ Pendiente |
+| US-6.1.5 | 6.1 | AtletaCard compacta en paso 5 (MUX-06) · `AtletaCard.tsx`: prop `variant='full'|'compact'` · `PerformanceFlowPage.tsx`: paso 6 (RpSelector) usa compact | ✅ Done (PR #147) |
 
 ---
 
-## 30. Trazabilidad: Discrepancias → US → Documentos a actualizar
+## 30. US-IEDD SP6 INC-6.2 — Ajustes Organizador
+
+> Estado al 2026-05-07: 6/6 US mergeadas a `develop`. INC-6.2 cerrado formalmente.
+> Quality gates: frontend-only · CodeGuard N/A (sin cambios Python) · DesignReviewer 0 CRITICAL · 256 WARNING.
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-6.2.1 | 6.2 | Torneos ordenados por fecha desc + fecha visible en lista organizador · `TorneoList.tsx` | ✅ Done (PR #148) |
+| US-6.2.2 | 6.2 | Inscriptos + Grilla: columna categoría legible + título "ANUNCIO" · `InscriptosList.tsx` + `GrillaPage.tsx` | ✅ Done (PR #149) |
+| US-6.2.3 | 6.2 | Resultados: quitar PTS FAAS + andarivel como número + AP → Anuncios · `ResultadosPage.tsx` | ✅ Done (PR #150) |
+| US-6.2.4 | 6.2 | Panel torneo: alertas sin botón "Resolver" + jueces sin texto nombre · `TorneoPanel.tsx` | ✅ Done (PR #151) |
+| US-6.2.5 | 6.2 | Nuevo torneo con grupos etarios JUNIOR/SENIOR/MASTER · `CrearTorneoPage.tsx` | ✅ Done (PR #152) |
+| US-6.2.6 | 6.2 | Página de Podios (UI-ORG-08) · `PodiosPage.tsx` | ✅ Done (PR #153) |
+
+---
+
+## 31. US-IEDD SP6 INC-6.3 — Ajustes Atleta
+
+> Estado al 2026-05-08: INC-6.3 ✅ **cerrado**. 2/2 US ✅ · PRs #154–#155 · fix `66d7ad0` (validaciones portal atleta).
+> Quality gates `US-6.3.1`: frontend-only · `npm run build` ✅ · `npm run lint` ✅ · BDD waiver.
+> Quality gates `US-6.3.2`: registro + frontend · 32 tests ✅ · BDD 8 escenarios ✅ · ruff ✅ · frontend build/lint ✅.
+> Quality gates INC-6.3: DesignReviewer 0 CRITICAL · 258 WARNING · CodeGuard 0 errores.
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-6.3.1 | 6.3 | Inicio atleta: indicador "En línea", sin saludo redundante "Hola" y disciplinas de torneos activos ordenadas por OT · `AtletaShell.tsx` + `AtletaHomePage.tsx` | ✅ Done (PR #154) |
+| US-6.3.2 | 6.3 | Inscripción atleta: AP inline en wizard + persistencia de apto médico y constancia de pago · `AtletaInscripcionPage.tsx` + `registro` aggregate/repo/API | ✅ Done (PR #155) |
+
+---
+
+## 32. US-IEDD SP6 INC-6.4 — Deuda Técnica Sistema
+
+> Estado al 2026-05-10: INC-6.4 ✅ **cerrado**. 6/6 US mergeadas.
+> Foco: resolver hallazgos DesignReviewer + correcciones arquitectónicas críticas.
+> Quality gates: DesignReviewer **0 CRITICAL · 253 WARNING** (−5 vs INC-6.3 · `quality/reports/designreviewer/INC-6.4-report.txt`).
+
+| US | Inc. | Contenido principal | Estado |
+|----|------|---------------------|--------|
+| US-6.4.1 | 6.4 | Romper ciclo ADP en `competencia/domain/aggregates` · AA-01 CRITICAL | ✅ Done (PR #157) |
+| US-6.4.2 | 6.4 | Materializar proyección `competencias_por_torneo` en `CalcularOverallHandler` — eliminar O(n) scan · ARCH-01 | ✅ Done (PR #158) |
+| US-6.4.3 | 6.4 | Corregir D-05: `resultados/api` y `competencia/api` importan infra cross-BC + reducir `registro` D↑ · ARCH-02 + AA-03 | ✅ Done (PR #160) |
+| US-6.4.4 | 6.4 | Refactoring `AlgoritmoPuntajeFAAS` dispatch explícito + correcciones CodeGuard (E501, import huérfano) · DR-02 + CG | ✅ Done |
+| US-6.4.5 | 6.4 | Refactoring `DeclararAPInscripcionHandler` (DR-06 no aplicable) + `SQLiteInscripcionRepository.from_row()` · DR-06 + DR-07 | ✅ Done |
+| US-6.4.6 | 6.4 | Cierre decisión ARCH-03 (ACL aceptable) + SRP `RankingCompetencia` (investigar DR-01) + monitoreo `identidad`/`shared` · BL-006 | ✅ Done |
+
+---
+
+## 33. Trazabilidad: Discrepancias → US → Documentos a actualizar
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -584,7 +631,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 31. Cobertura Total
+## 33. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -604,7 +651,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 32. US → Tests
+## 34. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -692,10 +739,19 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-6.1.2 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #144) |
 | US-6.1.3 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #145) |
 | US-6.1.4 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #146) |
+| US-6.1.5 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #147) |
+| US-6.2.1 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #148) |
+| US-6.2.2 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #149) |
+| US-6.2.3 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #150) |
+| US-6.2.4 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #151) |
+| US-6.2.5 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #152) |
+| US-6.2.6 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #153) |
+| US-6.3.1 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #154) |
+| US-6.3.2 | unit/registro + integration/registro + `tests/features/US-6.3.2` · frontend (build + eslint) · ruff focalizado | ✅ Done (PR #155) |
 
 ---
 
-## 33. US → ADR
+## 35. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -710,6 +766,16 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
+*v1.43 — 2026-05-09: US-6.4.5 completada · SQLiteInscripcionRepository sin DR-07 · DR-06 documentado como coordination handler*
+*v1.42 — 2026-05-09: US-6.4.4 completada · AlgoritmoPuntajeFAAS thin dispatcher · DesignReviewer 0 issues componente*
+*v1.42 — 2026-05-10: INC-6.4 cerrado · US-6.4.1/6.4.2 corregidas a Done · US-6.4.6 ✅ · BL-006 draft creado · ARCH-03/DR-01 decisiones cerradas*
+*v1.41 — 2026-05-09: US-6.4.3 completada · routers sin imports cross-BC de infraestructura · D(registro) 0.59→0.57 · reporte generado*
+*v1.40 — 2026-05-09: INC-6.4 iniciado · §32 nuevo (6 US specs generadas) · §33..35 renumerados · header actualizado*
+*v1.39 — 2026-05-08: INC-6.3 cerrado · §31 2/2 US ✅ PRs #154–#155 · fix 66d7ad0 validaciones atleta · DesignReviewer 0 CRITICAL · 258 WARNING · US→Tests US-6.3.2 actualizado*
+*v1.38 — 2026-05-07: US-6.3.1 ✅ PR #154 · US-6.3.2 implementada pendiente PR · BDD/tests/frontend gates registrados*
+*v1.37 — 2026-05-07: INC-6.3 iniciado · §31 nuevo · US-6.3.1 implementada pendiente PR · US→Tests actualizado*
+*v1.36 — 2026-05-07: INC-6.2 cerrado · §30 nuevo (6/6 US ✅ PRs #148–#153) · DesignReviewer 0 CRITICAL · §§ renumerados 31..34 · US→Tests US-6.2.x · header actualizado*
+*v1.35 — 2026-05-04: US-6.1.5 ✅ (PR #147) · §29 5/5 completo · US→Tests actualizados*
 *v1.34 — 2026-05-04: US-6.1.4 ✅ (PR #146) · §29 y US→Tests actualizados*
 *v1.33 — 2026-05-04: US-6.1.3 ✅ (PR #145) · §29 y US→Tests actualizados*
 *v1.32 — 2026-05-03: US-6.1.2 ✅ (PR #144) · §29 y US→Tests actualizados*

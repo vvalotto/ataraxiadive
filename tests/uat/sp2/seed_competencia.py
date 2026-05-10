@@ -248,7 +248,9 @@ async def fase2() -> None:
     # Callback P-08: CompetenciaFinalizada → CalcularRanking
     resultados_store = SQLiteEventStore(_RESULTADOS_DB_PATH)
 
-    async def on_finalizada(competencia_id: UUID, disciplina: Disciplina, _torneo_id: UUID | None = None) -> None:
+    async def on_finalizada(
+        competencia_id: UUID, disciplina: Disciplina, _torneo_id: UUID | None = None
+    ) -> None:
         acl = ResultadosCompetenciaAdapter(store)
         descriptor = ResultadosDisciplinaDescriptorAdapter()
         await CalcularRankingHandler(resultados_store, acl, descriptor).handle(

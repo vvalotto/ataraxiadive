@@ -9,6 +9,9 @@ from uuid import uuid4
 import aiosqlite
 import pytest
 
+from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
+    SQLiteCompetenciasPorTorneo,
+)
 from resultados.application.commands.calcular_overall import (
     CalcularOverallCommand,
     CalcularOverallHandler,
@@ -97,6 +100,7 @@ async def test_calcular_overall_persiste_y_reconstituye() -> None:
 
     competencia_store = SQLiteEventStore(competencia_db)
     ranking_store = SQLiteEventStore(resultados_db)
+    competencias_por_torneo = SQLiteCompetenciasPorTorneo(competencia_db)
 
     torneo_id = uuid4()
     competencia_sta = uuid4()
@@ -107,6 +111,8 @@ async def test_calcular_overall_persiste_y_reconstituye() -> None:
 
     await _append_competencia(competencia_store, competencia_sta, torneo_id, Disciplina.STA)
     await _append_competencia(competencia_store, competencia_dnf, torneo_id, Disciplina.DNF)
+    await competencias_por_torneo.guardar(competencia_sta, Disciplina.STA.value, torneo_id)
+    await competencias_por_torneo.guardar(competencia_dnf, Disciplina.DNF.value, torneo_id)
 
     # Atleta A: STA=100, DNF=80 → overall=180
     # Atleta B: STA=80, DNF=100 → overall=180 (empate)
@@ -132,7 +138,7 @@ async def test_calcular_overall_persiste_y_reconstituye() -> None:
         ],
     )
 
-    handler = CalcularOverallHandler(ranking_store, competencia_store)
+    handler = CalcularOverallHandler(ranking_store, competencias_por_torneo)
     await handler.handle(
         CalcularOverallCommand(torneo_id=torneo_id, disciplinas=[Disciplina.STA, Disciplina.DNF])
     )
@@ -160,6 +166,7 @@ async def test_calcular_overall_rechaza_si_falta_ranking_de_disciplina() -> None
 
     competencia_store = SQLiteEventStore(competencia_dir + "/comp.db")
     ranking_store = SQLiteEventStore(resultados_dir + "/res.db")
+    competencias_por_torneo = SQLiteCompetenciasPorTorneo(competencia_dir + "/comp.db")
 
     torneo_id = uuid4()
     competencia_sta = uuid4()
@@ -168,6 +175,8 @@ async def test_calcular_overall_rechaza_si_falta_ranking_de_disciplina() -> None
 
     await _append_competencia(competencia_store, competencia_sta, torneo_id, Disciplina.STA)
     await _append_competencia(competencia_store, competencia_dnf, torneo_id, Disciplina.DNF)
+    await competencias_por_torneo.guardar(competencia_sta, Disciplina.STA.value, torneo_id)
+    await competencias_por_torneo.guardar(competencia_dnf, Disciplina.DNF.value, torneo_id)
     await _append_ranking(
         ranking_store,
         competencia_sta,
@@ -176,7 +185,7 @@ async def test_calcular_overall_rechaza_si_falta_ranking_de_disciplina() -> None
     )
     # DNF no tiene ranking calculado
 
-    handler = CalcularOverallHandler(ranking_store, competencia_store)
+    handler = CalcularOverallHandler(ranking_store, competencias_por_torneo)
 
     with pytest.raises(DisciplinasNoFinalizadas):
         await handler.handle(

@@ -5,24 +5,23 @@ from __future__ import annotations
 import csv
 import io
 import os
+from collections.abc import Callable
 from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse, Response
 
-from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
-    SQLiteCompetenciasPorTorneo,
-)
+from competencia.domain.ports.competencias_por_torneo_port import CompetenciasPorTorneoPort
 from resultados.application.queries.exportar_resultados import (
-    ExportResultadosDTO,
     ExportarResultadosHandler,
     ExportarResultadosQuery,
+    ExportResultadosDTO,
 )
-from shared.domain.value_objects.disciplina import Disciplina
-from shared.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
-from shared.api.dependencies import OrganizadorDep
-from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTorneoRepository
+from resultados.application.queries.obtener_overall import (
+    ObtenerOverallHandler,
+    ObtenerOverallQuery,
+)
 from resultados.application.queries.obtener_ranking import (
     ObtenerRankingHandler,
     ObtenerRankingQuery,
@@ -31,15 +30,30 @@ from resultados.application.queries.obtener_ranking_provisional import (
     ObtenerRankingProvisionalHandler,
     ObtenerRankingProvisionalQuery,
 )
-from resultados.application.queries.obtener_overall import (
-    ObtenerOverallHandler,
-    ObtenerOverallQuery,
-)
 from resultados.domain.exceptions import TorneoNoEncontrado
 from resultados.infrastructure.repositories.atleta_categoria_adapter import AtletaCategoriaAdapter
 from resultados.infrastructure.repositories.atleta_info_adapter import AtletaInfoAdapter
+from shared.api.dependencies import OrganizadorDep
+from shared.domain.value_objects.disciplina import Disciplina
+from shared.infrastructure.event_store.sqlite_event_store import SQLiteEventStore
+from torneo.domain.ports.torneo_repository_port import TorneoRepositoryPort
 
 router = APIRouter(prefix="/resultados", tags=["resultados"])
+CompetenciasPorTorneoFactory = Callable[[], CompetenciasPorTorneoPort]
+TorneoRepositoryFactory = Callable[[], TorneoRepositoryPort]
+_competencias_por_torneo_factory: CompetenciasPorTorneoFactory | None = None
+_torneo_repository_factory: TorneoRepositoryFactory | None = None
+
+
+def configure_resultados_cross_bc_dependencies(
+    *,
+    competencias_por_torneo_factory: CompetenciasPorTorneoFactory,
+    torneo_repository_factory: TorneoRepositoryFactory,
+) -> None:
+    """Configura dependencias cross-BC desde el composition root."""
+    global _competencias_por_torneo_factory, _torneo_repository_factory  # noqa: PLW0603
+    _competencias_por_torneo_factory = competencias_por_torneo_factory
+    _torneo_repository_factory = torneo_repository_factory
 
 
 # ── Dependency providers ──────────────────────────────────────────────────────
@@ -57,14 +71,18 @@ def get_competencia_store() -> SQLiteEventStore:
     return SQLiteEventStore(db_path)
 
 
-def get_competencias_por_torneo_projection() -> SQLiteCompetenciasPorTorneo:
+def get_competencias_por_torneo_projection() -> CompetenciasPorTorneoPort:
     """Dependency: proyección de competencias por torneo."""
-    return SQLiteCompetenciasPorTorneo()
+    if _competencias_por_torneo_factory is None:
+        raise RuntimeError("Dependencia competencias_por_torneo no configurada")
+    return _competencias_por_torneo_factory()
 
 
-def get_torneo_repository() -> SQLiteTorneoRepository:
-    """Dependency: repositorio SQLite del BC Torneo."""
-    return SQLiteTorneoRepository()
+def get_torneo_repository() -> TorneoRepositoryPort:
+    """Dependency: repositorio del BC Torneo."""
+    if _torneo_repository_factory is None:
+        raise RuntimeError("Dependencia torneo_repository no configurada")
+    return _torneo_repository_factory()
 
 
 def get_atleta_info_adapter() -> AtletaInfoAdapter:
@@ -111,9 +129,9 @@ def get_exportar_resultados_handler(
     ranking_store: Annotated[SQLiteEventStore, Depends(get_ranking_store)],
     competencia_store: Annotated[SQLiteEventStore, Depends(get_competencia_store)],
     competencias_por_torneo: Annotated[
-        SQLiteCompetenciasPorTorneo, Depends(get_competencias_por_torneo_projection)
+        CompetenciasPorTorneoPort, Depends(get_competencias_por_torneo_projection)
     ],
-    torneo_repo: Annotated[SQLiteTorneoRepository, Depends(get_torneo_repository)],
+    torneo_repo: Annotated[TorneoRepositoryPort, Depends(get_torneo_repository)],
     atleta_info_adapter: Annotated[AtletaInfoAdapter, Depends(get_atleta_info_adapter)],
 ) -> ExportarResultadosHandler:
     """Dependency: handler de exportación consolidada."""
@@ -157,9 +175,7 @@ async def get_ranking(
 
     if not calculado:
         rankings = await provisional_handler.handle(
-            ObtenerRankingProvisionalQuery(
-                competencia_id=competencia_id, disciplina=disciplina
-            )
+            ObtenerRankingProvisionalQuery(competencia_id=competencia_id, disciplina=disciplina)
         )
 
     return JSONResponse(

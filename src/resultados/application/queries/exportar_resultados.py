@@ -2,16 +2,13 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from dataclasses import replace
+import json
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from decimal import Decimal
-import json
 from uuid import UUID
 
-from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
-    SQLiteCompetenciasPorTorneo,
-)
+from competencia.domain.ports.competencias_por_torneo_port import CompetenciasPorTorneoPort
 from resultados.application.queries.obtener_overall import (
     ObtenerOverallHandler,
     ObtenerOverallQuery,
@@ -29,9 +26,9 @@ from resultados.infrastructure.repositories.atleta_info_adapter import (
 from resultados.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTorneoRepository
 from shared.domain.ports.event_store_port import EventStorePort
 from shared.domain.value_objects.disciplina import Disciplina
+from torneo.domain.ports.torneo_repository_port import TorneoRepositoryPort
 
 
 @dataclass(frozen=True)
@@ -110,8 +107,8 @@ class ExportarResultadosHandler:
         self,
         ranking_store: EventStorePort,
         competencia_store: EventStorePort,
-        competencias_por_torneo: SQLiteCompetenciasPorTorneo,
-        torneo_repo: SQLiteTorneoRepository,
+        competencias_por_torneo: CompetenciasPorTorneoPort,
+        torneo_repo: TorneoRepositoryPort,
         atleta_info_adapter: AtletaInfoAdapter,
         descriptor: DisciplinaDescriptorAdapter | None = None,
     ) -> None:

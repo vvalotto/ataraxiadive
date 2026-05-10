@@ -59,7 +59,7 @@ from competencia.infrastructure.repositories.competencia_estado_adapter import (
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
+from tests.integration.competencia._stubs import StubPerformancesAPPort
 
 CREATE_EVENTS_TABLE = """
     CREATE TABLE events (
@@ -117,7 +117,7 @@ async def _setup_grilla_generada(
                 unidad=UnidadMedida.Segundos,
             )
         )
-    adapter = PerformancesAPAdapter(store)
+    adapter = StubPerformancesAPPort(store)
     await GenerarGrillaHandler(store, adapter, DisciplinaDescriptorAdapter()).handle(
         GenerarGrillaCommand(
             competencia_id=competencia_id,

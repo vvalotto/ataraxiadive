@@ -154,9 +154,7 @@ async def test_callback_persiste_overall_cuando_finaliza_ultima_disciplina(
 
     await _append_competencia(competencia_store, competencia_sta, torneo_id, Disciplina.STA)
     await _append_competencia(competencia_store, competencia_dnf, torneo_id, Disciplina.DNF)
-    await _append_ranking(
-        ranking_store, competencia_sta, Disciplina.STA, atleta_a, atleta_b, 1, 2
-    )
+    await _append_ranking(ranking_store, competencia_sta, Disciplina.STA, atleta_a, atleta_b, 1, 2)
 
     class FakeRankingHandler:
         def __init__(self, *_args) -> None:

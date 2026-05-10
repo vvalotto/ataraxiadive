@@ -9,6 +9,31 @@ Versionado: [Semantic Versioning](https://semver.org/lang/es/)
 
 ## [Unreleased]
 
+### Fixed
+- [US-6.4.5] `SQLiteInscripcionRepository` delega reconstitucion en `Inscripcion`
+  - Agrega `Inscripcion.from_row()` para reconstruir datos planos persistidos
+  - Elimina DR-07 del repositorio en DesignReviewer
+  - Documenta DR-06 como falso positivo de coordination handler
+- [US-6.4.4] `AlgoritmoPuntajeFAAS` queda como dispatcher explícito
+  - Extrae cálculo FAAS de distancia y tiempo a funciones de módulo
+  - Elimina el hallazgo LCOM DR-02 en DesignReviewer
+  - CodeGuard queda sin errores ni advertencias sobre el componente
+- [US-6.4.3] Routers sin imports cross-BC de infraestructura
+  - `resultados/api/router.py` deja de importar infraestructura de `competencia` y `torneo`
+  - `competencia/api/router.py` deja de importar infraestructura de `registro`
+  - `app.py` configura las factories concretas en el composition root
+  - `ExportarResultadosHandler` tipa dependencias cross-BC por ports
+  - `registro` extrae escritura local de adjuntos detrás de `AdjuntoStoragePort`
+  - ArchitectAnalyst mejora `D(registro)` de `0.59` a `0.57`
+- [US-6.4.2] `CalcularOverallHandler` usa la proyeccion materializada `competencias_por_torneo`
+  - Reemplaza el scan O(n) sobre streams de competencia por `listar_por_torneo(torneo_id)`
+  - Actualiza P-09 en `app.py`, tests y BDD de overall
+  - Agrega cobertura para torneos sin competencias materializadas
+- [US-6.4.1] Eliminado ciclo ADP en `competencia/domain/aggregates`
+  - `aggregates/__init__.py` deja de reexportar aggregate roots
+  - `Performance` importa helpers de reconstitucion por path directo
+  - ArchitectAnalyst reporta `DependencyCycle=0`
+
 ### Added
 - [US-ADJ-7.3] Cableado de P-11 al finalizar disciplina para publicar resultados por email
   - `_on_finalizada` ejecuta P-08/P-09 y luego construye `ResultadosPublicados` para `PoliticaP11Handler`

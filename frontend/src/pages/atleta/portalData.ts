@@ -117,10 +117,18 @@ export function formatAp(value: string | null, unidad: string | null): string {
   return formatMarca(value, unidad ?? 'Metros')
 }
 
+export function secondsToApInput(value: string): string {
+  const total = Number(value)
+  if (!Number.isFinite(total) || total <= 0) return value
+  const minutos = Math.floor(total / 60)
+  const segundos = total % 60
+  return `${minutos}:${String(segundos).padStart(2, '0')}`
+}
+
 export function normalizeApInput(value: string, disciplina: string): string {
   const trimmed = value.trim()
   if (!esDisciplinaTiempo(disciplina)) {
-    return trimmed
+    return trimmed.replace(',', '.')
   }
   if (!trimmed.includes(':')) {
     return trimmed
@@ -146,16 +154,13 @@ export function isApInputValido(value: string, disciplina: string): boolean {
     return false
   }
   if (!esDisciplinaTiempo(disciplina)) {
-    return Number(trimmed) > 0
+    return Number(trimmed.replace(',', '.')) > 0
   }
-  if (trimmed.includes(':')) {
-    if (!/^\d+:\d{1,2}$/.test(trimmed)) {
-      return false
-    }
-    const normalizado = normalizeApInput(trimmed, disciplina)
-    return Number(normalizado) > 0 && !normalizado.includes(':')
+  if (!/^\d+:\d{2}$/.test(trimmed)) {
+    return false
   }
-  return Number(trimmed) > 0
+  const normalizado = normalizeApInput(trimmed, disciplina)
+  return Number(normalizado) > 0 && !normalizado.includes(':')
 }
 
 function buildApEstado(

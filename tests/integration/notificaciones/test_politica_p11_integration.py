@@ -42,9 +42,13 @@ def _evento(*, resultados: tuple[ResultadoPublicadoAtleta, ...] | None = None):
         disciplina="DNF",
         resultados=resultados
         or (
-            ResultadoPublicadoAtleta("ath-1", "martin@example.com", "Martin Garcia", 1, "96m", "Blanca"),
+            ResultadoPublicadoAtleta(
+                "ath-1", "martin@example.com", "Martin Garcia", 1, "96m", "Blanca"
+            ),
             ResultadoPublicadoAtleta("ath-2", "ana@example.com", "Ana Lopez", 2, "88m", "Blanca"),
-            ResultadoPublicadoAtleta("ath-3", "diego@example.com", "Diego Vega", 3, "DNS", None, "DNS"),
+            ResultadoPublicadoAtleta(
+                "ath-3", "diego@example.com", "Diego Vega", 3, "DNS", None, "DNS"
+            ),
         ),
         podio=(
             PodioPublicado(posicion=1, atleta_nombre="Martin Garcia", rp="96m"),
@@ -71,8 +75,7 @@ async def _events(db_path) -> list[dict[str, Any]]:
         )
         rows = await cursor.fetchall()
     return [
-        {"event_type": row["event_type"], "payload": json.loads(row["payload"])}
-        for row in rows
+        {"event_type": row["event_type"], "payload": json.loads(row["payload"])} for row in rows
     ]
 
 

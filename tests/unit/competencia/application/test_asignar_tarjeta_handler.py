@@ -403,9 +403,7 @@ async def test_handler_blanca_con_penalizaciones_persiste_rp_penalizado(
         disciplina=Disciplina.DYN,
         tipo=TipoTarjeta.BlancaConPenalizaciones,
         asignada_por="juez-001",
-        penalizaciones=(
-            PenalizacionTecnica(TipoPenalizacion.SIN_CONTACTO_PARED, Decimal("3")),
-        ),
+        penalizaciones=(PenalizacionTecnica(TipoPenalizacion.SIN_CONTACTO_PARED, Decimal("3")),),
     )
     await handler.handle(command)
 
@@ -451,9 +449,7 @@ async def test_handler_penalizaciones_en_sta_lanza_error(
         disciplina=Disciplina.STA,
         tipo=TipoTarjeta.BlancaConPenalizaciones,
         asignada_por="juez-001",
-        penalizaciones=(
-            PenalizacionTecnica(TipoPenalizacion.SIN_CONTACTO_PARED, Decimal("3")),
-        ),
+        penalizaciones=(PenalizacionTecnica(TipoPenalizacion.SIN_CONTACTO_PARED, Decimal("3")),),
     )
     with pytest.raises(DisciplinaNoAdmitePenalizaciones):
         await handler.handle(command)

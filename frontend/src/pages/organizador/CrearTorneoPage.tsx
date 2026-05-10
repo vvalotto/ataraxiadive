@@ -9,6 +9,7 @@ import {
   listarDisciplinasTorneo,
   type CrearTorneoPayload,
   type DisciplinaCodigo,
+  type GrupoEtario,
 } from '../../api/torneo'
 import { DisciplinaSelector } from '../../components/organizador/DisciplinaSelector'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
@@ -25,7 +26,9 @@ interface FormState {
   entidadTipo: string
 }
 
-type FormErrors = Partial<Record<keyof FormState | 'disciplinas' | 'general', string>>
+type FormErrors = Partial<Record<keyof FormState | 'disciplinas' | 'gruposEtarios' | 'general', string>>
+
+const GRUPOS_ETARIOS: GrupoEtario[] = ['JUNIOR', 'SENIOR', 'MASTER']
 
 const INITIAL_FORM: FormState = {
   nombre: '',
@@ -60,6 +63,7 @@ export function CrearTorneoPage() {
   const isEditingDisciplinas = Boolean(torneoId)
   const [form, setForm] = useState<FormState>(INITIAL_FORM)
   const [disciplinas, setDisciplinas] = useState<DisciplinaCodigo[]>([])
+  const [gruposEtarios, setGruposEtarios] = useState<GrupoEtario[]>(['SENIOR'])
   const [errors, setErrors] = useState<FormErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isLoading, setIsLoading] = useState(isEditingDisciplinas)
@@ -131,6 +135,9 @@ export function CrearTorneoPage() {
     if (disciplinas.length === 0) {
       nextErrors.disciplinas = 'Selecciona al menos una disciplina'
     }
+    if (!isEditingDisciplinas && gruposEtarios.length === 0) {
+      nextErrors.gruposEtarios = 'Selecciona al menos un grupo etario'
+    }
     return nextErrors
   }
 
@@ -149,7 +156,17 @@ export function CrearTorneoPage() {
         nombre: form.entidadNombre.trim(),
         tipo: form.entidadTipo.trim(),
       },
+      grupos_etarios: gruposEtarios,
     }
+  }
+
+  function toggleGrupoEtario(grupo: GrupoEtario) {
+    setGruposEtarios((current) =>
+      current.includes(grupo)
+        ? current.filter((item) => item !== grupo)
+        : GRUPOS_ETARIOS.filter((item) => item === grupo || current.includes(item)),
+    )
+    setErrors((current) => ({ ...current, gruposEtarios: undefined, general: undefined }))
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -345,6 +362,36 @@ export function CrearTorneoPage() {
         </div>
 
         <div className="mt-6">
+          {!isEditingDisciplinas ? (
+            <fieldset className="mb-6">
+              <legend className="text-sm font-semibold text-slate-100">Grupos etarios</legend>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {GRUPOS_ETARIOS.map((grupo) => {
+                  const selected = gruposEtarios.includes(grupo)
+                  return (
+                    <button
+                      key={grupo}
+                      type="button"
+                      onClick={() => toggleGrupoEtario(grupo)}
+                      className={[
+                        'rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition',
+                        selected
+                          ? 'border-sky-400 bg-sky-400/10 text-sky-300'
+                          : 'border-slate-700 bg-slate-950 text-slate-300 hover:border-slate-500',
+                      ].join(' ')}
+                      aria-pressed={selected}
+                    >
+                      {grupo}
+                    </button>
+                  )
+                })}
+              </div>
+              {errors.gruposEtarios ? (
+                <p className="mt-2 text-sm text-red-300">{errors.gruposEtarios}</p>
+              ) : null}
+            </fieldset>
+          ) : null}
+
           <DisciplinaSelector
             value={disciplinas}
             onChange={(nextValue) => {
@@ -364,7 +411,12 @@ export function CrearTorneoPage() {
           </Link>
           <button
             type="submit"
-            disabled={isSubmitting || isLoading || Boolean(errors.general)}
+            disabled={
+              isSubmitting ||
+              isLoading ||
+              Boolean(errors.general) ||
+              (!isEditingDisciplinas && gruposEtarios.length === 0)
+            }
             className="rounded-full bg-sky-500 px-5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950 disabled:cursor-not-allowed disabled:bg-slate-600 disabled:text-slate-300"
           >
             {isSubmitting

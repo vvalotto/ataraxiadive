@@ -1,0 +1,18 @@
+{
+  "us_id": "US-6.6.2",
+  "branch": "feature/US-6.6.2-pagina-publica-torneos",
+  "started_at": "2026-05-10T17:00:00.000000+00:00",
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validacion de Contexto",
+      "started_at": "2026-05-10T17:00:00.000000+00:00",
+      "completed_at": "2026-05-10T17:05:00.000000+00:00",
+      "elapsed_seconds": 300,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ]
+}

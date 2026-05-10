@@ -26,7 +26,7 @@ from competencia.infrastructure.event_store.sqlite_event_store import SQLiteEven
 from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
     DisciplinaDescriptorAdapter,
 )
-from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
+from tests.features.steps._stubs import StubPerformancesAPPort
 from shared.domain.value_objects.disciplina import Disciplina
 from shared.domain.value_objects.disciplina_descriptor import DisciplinaDescriptor
 from shared.domain.value_objects.unidad_medida import UnidadMedida
@@ -65,7 +65,9 @@ def ctx_us_4_1_4(tmp_path) -> dict:  # type: ignore[type-arg]
     }
 
 
-def _seed_competencia(ctx: dict, disciplina: Disciplina, aps: list[str], unidad: UnidadMedida) -> None:
+def _seed_competencia(
+    ctx: dict, disciplina: Disciplina, aps: list[str], unidad: UnidadMedida
+) -> None:
     async def _run() -> None:
         ctx["disciplina"] = disciplina
         await ConfigurarIntervaloOTHandler(ctx["store"]).handle(
@@ -101,9 +103,7 @@ def given_dyn(ctx_us_4_1_4):
 
 @given("una competencia STA con APs 300s, 180s y 240s", target_fixture="ctx")
 def given_sta(ctx_us_4_1_4):
-    _seed_competencia(
-        ctx_us_4_1_4, Disciplina.STA, ["300s", "180s", "240s"], UnidadMedida.Segundos
-    )
+    _seed_competencia(ctx_us_4_1_4, Disciplina.STA, ["300s", "180s", "240s"], UnidadMedida.Segundos)
     return ctx_us_4_1_4
 
 
@@ -145,7 +145,7 @@ def given_descriptor_dnf(ctx_us_4_1_4):
 def when_genera_grilla(ctx):
     async def _run() -> None:
         handler = GenerarGrillaHandler(
-            ctx["store"], PerformancesAPAdapter(ctx["store"]), DisciplinaDescriptorAdapter()
+            ctx["store"], StubPerformancesAPPort(ctx["store"]), DisciplinaDescriptorAdapter()
         )
         await handler.handle(
             GenerarGrillaCommand(

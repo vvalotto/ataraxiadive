@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-import os
 from collections.abc import Awaitable, Callable
 from datetime import date, datetime
 from decimal import Decimal
+from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter
-from fastapi import Depends
+from fastapi import APIRouter, Depends, UploadFile
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, field_validator
 
@@ -36,19 +35,20 @@ from registro.application.queries.verificar_completitud_ap import (
 from registro.domain.aggregates.inscripcion import Inscripcion
 from registro.domain.exceptions import (
     APIncompletoParaPreparacion,
-    APYaDeclarado,
     AtletaNoEncontrado,
     AtletaYaInscripto,
     AtletaYaRegistrado,
-    DisciplinaNoInscripta,
     DisciplinaNoDisponible,
+    DisciplinaNoInscripta,
     InscripcionNoEncontrada,
     PlazoCancelacionVencido,
     TorneoNoDisponible,
 )
+from registro.domain.ports.adjunto_storage_port import AdjuntoStoragePort
 from registro.domain.value_objects.categoria import Categoria
 from registro.domain.value_objects.estado_inscripcion import EstadoInscripcion
 from registro.infrastructure.acl.sqlite_torneo_consulta import SQLiteTorneoConsulta
+from registro.infrastructure.adjuntos.local_adjunto_storage import LocalAdjuntoStorage
 from registro.infrastructure.repositories.sqlite_atleta_repository import SQLiteAtletaRepository
 from registro.infrastructure.repositories.sqlite_inscripcion_repository import (
     SQLiteInscripcionRepository,
@@ -57,6 +57,7 @@ from shared.api.dependencies import AtletaDep, OrganizadorDep
 from shared.domain.value_objects.disciplina import Disciplina
 
 router = APIRouter(prefix="/registro", tags=["registro"])
+CurrentUserDep = Annotated[dict, Depends(get_current_user)]
 
 _on_inscripcion_confirmada_callback: Callable[[Inscripcion], Awaitable[None]] | None = None
 
@@ -157,11 +158,47 @@ def _torneo_consulta() -> SQLiteTorneoConsulta:
     return SQLiteTorneoConsulta()
 
 
+def _adjunto_storage() -> AdjuntoStoragePort:
+    return LocalAdjuntoStorage()
+
+
 def _format_decimal(value: Decimal | None) -> str | None:
     if value is None:
         return None
     normalized = value.normalize()
     return format(normalized, "f")
+
+
+async def _subir_adjunto_inscripcion(
+    inscripcion_id: UUID,
+    archivo: UploadFile,
+    nombre_archivo: str,
+    metodo_adjunto: str,
+    storage: AdjuntoStoragePort | None = None,
+) -> JSONResponse:
+    max_size = 10 * 1024 * 1024
+    contenido = await archivo.read()
+    if len(contenido) > max_size:
+        return JSONResponse(
+            status_code=413,
+            content={"detail": "Archivo demasiado grande (máx 10 MB)"},
+        )
+
+    inscripcion = await _inscripcion_repo().find_by_id(inscripcion_id)
+    if inscripcion is None:
+        return JSONResponse(status_code=404, content={"detail": "Inscripción no encontrada"})
+
+    ruta = (storage or _adjunto_storage()).guardar(
+        inscripcion_id=inscripcion_id,
+        nombre_archivo=nombre_archivo,
+        filename_original=archivo.filename,
+        contenido=contenido,
+    )
+
+    getattr(inscripcion, metodo_adjunto)(ruta)
+    await _inscripcion_repo().save(inscripcion)
+
+    return JSONResponse(status_code=200, content={"path": ruta})
 
 
 async def _load_ap_por_torneo(
@@ -400,7 +437,7 @@ async def listar_inscriptos_detalle(torneo_id: UUID, _: OrganizadorDep) -> JSONR
 async def obtener_ap_inscripcion(
     inscripcion_id: UUID,
     disciplina: Disciplina,
-    _: dict = Depends(get_current_user),
+    _: CurrentUserDep,
 ) -> JSONResponse:
     inscripcion = await _inscripcion_repo().find_by_id(inscripcion_id)
     if inscripcion is None:
@@ -420,7 +457,7 @@ async def obtener_ap_inscripcion(
 async def declarar_ap_inscripcion(
     inscripcion_id: UUID,
     body: DeclararAPInscripcionRequest,
-    _: dict = Depends(get_current_user),
+    _: CurrentUserDep,
 ) -> JSONResponse:
     handler = DeclararAPInscripcionHandler(_inscripcion_repo())
     try:
@@ -435,8 +472,6 @@ async def declarar_ap_inscripcion(
         return JSONResponse(status_code=404, content={"detail": str(exc)})
     except DisciplinaNoInscripta as exc:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
-    except APYaDeclarado as exc:
-        return JSONResponse(status_code=409, content={"detail": str(exc)})
     except ValueError as exc:
         return JSONResponse(status_code=422, content={"detail": str(exc)})
 
@@ -450,4 +485,32 @@ async def declarar_ap_inscripcion(
             "ap": _format_decimal(ap.valor) if ap else None,
             "unidad": ap.unidad.value if ap else None,
         },
+    )
+
+
+@router.post("/inscripciones/{inscripcion_id}/apto-medico", status_code=200)
+async def subir_apto_medico(
+    inscripcion_id: UUID,
+    archivo: UploadFile,
+    _: AtletaDep,
+) -> JSONResponse:
+    return await _subir_adjunto_inscripcion(
+        inscripcion_id,
+        archivo,
+        "apto_medico",
+        "adjuntar_apto_medico",
+    )
+
+
+@router.post("/inscripciones/{inscripcion_id}/constancia-pago", status_code=200)
+async def subir_constancia_pago(
+    inscripcion_id: UUID,
+    archivo: UploadFile,
+    _: AtletaDep,
+) -> JSONResponse:
+    return await _subir_adjunto_inscripcion(
+        inscripcion_id,
+        archivo,
+        "constancia_pago",
+        "adjuntar_constancia_pago",
     )

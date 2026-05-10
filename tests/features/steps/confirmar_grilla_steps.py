@@ -48,7 +48,7 @@ from competencia.infrastructure.repositories.disciplina_descriptor_adapter impor
 from competencia.infrastructure.repositories.competencia_estado_adapter import (
     CompetenciaEstadoAdapter,
 )
-from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
+from tests.features.steps._stubs import StubPerformancesAPPort
 
 scenarios("../US-2.1.4-confirmar-grilla.feature")
 
@@ -129,7 +129,7 @@ async def _seed_grilla(store: SQLiteEventStore, comp_id: UUID) -> None:
                 unidad=UnidadMedida.Segundos,
             )
         )
-    adapter = PerformancesAPAdapter(store)
+    adapter = StubPerformancesAPPort(store)
     await GenerarGrillaHandler(store, adapter, DisciplinaDescriptorAdapter()).handle(
         GenerarGrillaCommand(
             competencia_id=comp_id,

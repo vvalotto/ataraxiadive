@@ -20,6 +20,76 @@ Foco: **corregir el flujo de competencia** — BUG crítico MUX-04 primero, lueg
 
 ---
 
+## Incremento 6.2 — Ajustes Organizador
+
+Foco: **corregir UX del portal organizador** — torneos ordenados, columnas renombradas, nueva página de Podios.
+
+### Stories
+
+| US | Título | Hallazgos | Estado |
+|----|--------|-----------|--------|
+| [US-6.2.1](./US-6.2.1.md) | Inicio: Ordenar Torneos por Fecha + Mostrar Fecha | UI-ORG-01 | Pending |
+| [US-6.2.2](./US-6.2.2.md) | Inscriptos + Grilla: Categoría Legible + AP → Anuncios | UI-ORG-03 · UI-ORG-04 | Pending |
+| [US-6.2.3](./US-6.2.3.md) | Resultados: Quitar PTS FAAS + Andarivel Numérico + AP → Anuncio | UI-ORG-05 | Pending |
+| [US-6.2.4](./US-6.2.4.md) | Panel Torneo: Alertas sin "Resolver" + Jueces sin Texto Nombre | UI-ORG-02 · UI-ORG-06 | Done |
+| [US-6.2.5](./US-6.2.5.md) | Nuevo Torneo: Selección Categorías JUNIOR/SENIOR/MASTER | UI-ORG-07 | Done |
+| [US-6.2.6](./US-6.2.6.md) | Crear Página de Podios | UI-ORG-08 | Done |
+
+### Criterios de Cierre INC-6.2
+
+- [ ] US-6.2.1..6.2.6 especificadas (IEDD completa)
+- [ ] DesignReviewer 0 CRITICAL al merge de cada US
+- [ ] US-6.2.5 requiere migración SQLite — verificar compatibilidad con datos existentes
+- [ ] UAT organizador E2E: inicio, inscriptos, grilla, resultados, podios, nuevo torneo
+
+---
+
+## Incremento 6.3 — Ajustes Atleta
+
+Foco: **corregir el portal atleta y completar inscripción** — inicio más claro,
+AP inline en el wizard y persistencia de adjuntos obligatorios.
+
+### Stories
+
+| US | Título | Hallazgos | Estado |
+|----|--------|-----------|--------|
+| [US-6.3.1](./US-6.3.1.md) | Inicio atleta: en línea en header + sin "Hola" + torneos en curso ordenados | UI-ATL-01 | Done |
+| [US-6.3.2](./US-6.3.2.md) | Formulario inscripción: AP inline en wizard + persistir apto médico + constancia de pago | UI-ATL-02 · RF-IN-05 · RF-IN-06 | Implementada |
+
+### Criterios de Cierre INC-6.3
+
+- [x] US-6.3.1..6.3.2 especificadas (IEDD completa)
+- [ ] PRs de US-6.3.1..6.3.2 mergeados a `develop`
+- [ ] UAT atleta E2E: inicio, torneos, inscripción, mis inscripciones, grilla, resultados
+
+---
+
+## Incremento 6.6 — Portal Público
+
+Foco: **vista pública sin autenticación** — lista de torneos con tarjetas y acciones contextuales según estado; navegación al login guardando destino y redirect post-login por rol.
+
+**Decisión de diseño:** Organizadores = Administradores — sin rol Admin separado. Los organizadores crean y administran sus propios torneos directamente.
+
+### Stories
+
+| US | Título | Estado |
+|----|--------|--------|
+| [US-6.6.1](./US-6.6.1.md) | Endpoint público `GET /api/torneos` — sin auth, filtra CANCELADO | Pending |
+| [US-6.6.2](./US-6.6.2.md) | Página pública `/torneos` — tarjetas con acciones contextuales por estado | Pending |
+| [US-6.6.3](./US-6.6.3.md) | Navegación contextual — redirect al login guardando destino + post-login por rol | Pending |
+
+### Criterios de Cierre INC-6.6
+
+- [ ] US-6.6.1..6.6.3 especificadas (IEDD completa)
+- [ ] `GET /api/torneos` accesible sin token — verificado con curl sin Authorization header
+- [ ] `/torneos` accesible sin login — visitante no es redirigido a `/login`
+- [ ] Acciones contextuales verificadas por estado (INSCRIPCION_ABIERTA → "Inscribirse", EJECUCION → "Ver panel")
+- [ ] Redirect post-login lleva al destino guardado si el rol coincide
+- [ ] `RootRedirect` lleva a `/torneos` para visitantes sin sesión (no a `/login`)
+- [ ] DesignReviewer 0 CRITICAL al merge de cada US
+
+---
+
 ## Dependencias y Bloqueantes
 
 - **US-6.1.1** debe completarse **antes de cualquier UAT** del rol juez

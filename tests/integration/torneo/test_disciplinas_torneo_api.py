@@ -56,6 +56,7 @@ def client_con_torneo() -> tuple[TestClient, Torneo]:
             "fecha_fin": "2026-06-03",
             "sede": {"nombre": "Piscina", "ciudad": "CABA", "pais": "Argentina"},
             "entidad_organizadora": {"nombre": "FAADS", "tipo": "federacion"},
+            "grupos_etarios": ["SENIOR"],
         },
     )
     assert resp.status_code == 201
@@ -98,6 +99,7 @@ def _crear_torneo(client: TestClient) -> str:
             "fecha_fin": "2026-06-03",
             "sede": {"nombre": "Piscina", "ciudad": "CABA", "pais": "Argentina"},
             "entidad_organizadora": {"nombre": "FAADS", "tipo": "federacion"},
+            "grupos_etarios": ["SENIOR"],
         },
     )
     assert resp.status_code == 201

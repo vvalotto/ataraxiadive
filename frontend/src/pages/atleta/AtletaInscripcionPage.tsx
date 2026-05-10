@@ -2,11 +2,26 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchTorneo, listarDisciplinasTorneo } from '../../api/torneo'
-import { fetchAtletaMe, inscribirAtleta } from '../../api/registro'
+import {
+  fetchAtletaMe,
+  guardarApInscripcion,
+  inscribirAtleta,
+  subirAptoMedico,
+  subirConstanciaPago,
+} from '../../api/registro'
 import useAuthStore from '../../stores/useAuthStore'
 import { AtletaShell } from '../../components/atleta/AtletaShell'
 import { ApiError } from '../../api/registro'
-import { formatCategoria, formatDisciplina, formatFecha } from './portalData'
+import {
+  esDisciplinaTiempo,
+  formatCategoria,
+  formatDisciplina,
+  formatFecha,
+  getUnidadEsperada,
+  getUnidadLabel,
+  isApInputValido,
+  normalizeApInput,
+} from './portalData'
 import type { DisciplinaCodigo } from '../../api/torneo'
 
 type WizardStep = 1 | 2 | 3
@@ -32,9 +47,11 @@ export function AtletaInscripcionPage() {
   const [categoria, setCategoria] = useState('')
   const [brevet, setBrevet] = useState('')
   const [disciplinasSeleccionadas, setDisciplinasSeleccionadas] = useState<string[]>([])
+  const [apPorDisciplina, setApPorDisciplina] = useState<Record<string, string>>({})
   const [certificado, setCertificado] = useState<File | null>(null)
   const [comprobante, setComprobante] = useState<File | null>(null)
   const [validationError, setValidationError] = useState('')
+  const [postSubmitWarning, setPostSubmitWarning] = useState('')
 
   const query = useQuery({
     queryKey: ['atleta-inscripcion-form', torneoId, atletaId],
@@ -55,13 +72,64 @@ export function AtletaInscripcionPage() {
       if (!registroAtletaId || !torneoId) {
         throw new Error('No se pudo identificar al atleta o torneo para inscribirse.')
       }
-      return inscribirAtleta({
+      const { inscripcion_id: inscripcionId } = await inscribirAtleta({
         atletaId: registroAtletaId,
         torneoId,
         disciplinas: disciplinasSeleccionadas as DisciplinaCodigo[],
       })
+
+      const warnings: string[] = []
+      for (const disciplina of disciplinasSeleccionadas) {
+        const valorAp = apPorDisciplina[disciplina]?.trim()
+        if (!valorAp || !isApInputValido(valorAp, disciplina)) continue
+        try {
+          await guardarApInscripcion({
+            inscripcionId,
+            disciplina,
+            valorAp: normalizeApInput(valorAp, disciplina),
+          })
+        } catch (error) {
+          warnings.push(
+            error instanceof Error
+              ? `AP ${formatDisciplina(disciplina)}: ${error.message}`
+              : `AP ${formatDisciplina(disciplina)} no se pudo guardar`,
+          )
+        }
+      }
+
+      if (certificado) {
+        try {
+          await subirAptoMedico(inscripcionId, certificado)
+        } catch (error) {
+          warnings.push(
+            error instanceof Error
+              ? `Certificado médico: ${error.message}`
+              : 'Certificado médico no se pudo subir',
+          )
+        }
+      }
+
+      if (comprobante) {
+        try {
+          await subirConstanciaPago(inscripcionId, comprobante)
+        } catch (error) {
+          warnings.push(
+            error instanceof Error
+              ? `Comprobante de pago: ${error.message}`
+              : 'Comprobante de pago no se pudo subir',
+          )
+        }
+      }
+
+      return { inscripcionId, warnings }
     },
-    onSuccess: () => {
+    onSuccess: ({ warnings }) => {
+      if (warnings.length > 0) {
+        setPostSubmitWarning(
+          `La inscripción fue creada, pero quedaron datos pendientes: ${warnings.join('; ')}`,
+        )
+        return
+      }
       navigate('/atleta/mis-inscripciones')
     },
   })
@@ -73,11 +141,17 @@ export function AtletaInscripcionPage() {
   const brevetValue = brevet || atleta?.brevet || ''
 
   function toggleDisciplina(disciplina: string) {
-    setDisciplinasSeleccionadas((current) =>
-      current.includes(disciplina)
-        ? current.filter((item) => item !== disciplina)
-        : [...current, disciplina],
-    )
+    setDisciplinasSeleccionadas((current) => {
+      if (!current.includes(disciplina)) {
+        return [...current, disciplina]
+      }
+      setApPorDisciplina((currentAp) => {
+        const rest = { ...currentAp }
+        delete rest[disciplina]
+        return rest
+      })
+      return current.filter((item) => item !== disciplina)
+    })
   }
 
   function nextStep() {
@@ -90,6 +164,16 @@ export function AtletaInscripcionPage() {
     if (step === 2) {
       if (disciplinasSeleccionadas.length === 0 || !categoriaValue) {
         setValidationError('Seleccioná al menos una disciplina y confirmá la categoría.')
+        return
+      }
+      const disciplinaConApInvalido = disciplinasSeleccionadas.find((disciplina) => {
+        const valorAp = apPorDisciplina[disciplina]?.trim()
+        return valorAp ? !isApInputValido(valorAp, disciplina) : false
+      })
+      if (disciplinaConApInvalido) {
+        setValidationError(
+          `Revisá el AP de ${formatDisciplina(disciplinaConApInvalido)} antes de continuar.`,
+        )
         return
       }
     }
@@ -108,6 +192,7 @@ export function AtletaInscripcionPage() {
       return
     }
     setValidationError('')
+    setPostSubmitWarning('')
     await mutation.mutateAsync()
   }
 
@@ -204,7 +289,8 @@ export function AtletaInscripcionPage() {
                   Documento *
                   <input
                     value={documentoNumero}
-                    onChange={(event) => setDocumentoNumero(event.target.value)}
+                    onChange={(event) => setDocumentoNumero(event.target.value.replace(/\D/g, ''))}
+                    inputMode="numeric"
                     className="mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100"
                   />
                 </label>
@@ -213,7 +299,8 @@ export function AtletaInscripcionPage() {
                 Teléfono *
                 <input
                   value={telefono}
-                  onChange={(event) => setTelefono(event.target.value)}
+                  onChange={(event) => setTelefono(event.target.value.replace(/\D/g, ''))}
+                  inputMode="numeric"
                   className="mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100"
                 />
               </label>
@@ -229,11 +316,10 @@ export function AtletaInscripcionPage() {
               <div className="grid gap-3">
                 {query.data.disciplinas.map((disciplina) => {
                   const selected = disciplinasSeleccionadas.includes(disciplina.disciplina)
+                  const unidadEsperada = getUnidadEsperada(disciplina.disciplina)
                   return (
-                    <button
+                    <div
                       key={disciplina.disciplina}
-                      type="button"
-                      onClick={() => toggleDisciplina(disciplina.disciplina)}
                       className={[
                         'rounded-3xl border px-4 py-4 text-left text-sm font-semibold transition-colors',
                         selected
@@ -241,8 +327,37 @@ export function AtletaInscripcionPage() {
                           : 'border-slate-800 bg-slate-950/70 text-slate-200',
                       ].join(' ')}
                     >
-                      {formatDisciplina(disciplina.disciplina)}
-                    </button>
+                      <button
+                        type="button"
+                        onClick={() => toggleDisciplina(disciplina.disciplina)}
+                        className="w-full text-left"
+                      >
+                        {formatDisciplina(disciplina.disciplina)}
+                      </button>
+                      {selected ? (
+                        <div className="mt-3 flex items-center gap-3 rounded-2xl border border-sky-500/30 bg-sky-500/10 px-4 py-3">
+                          <input
+                            value={apPorDisciplina[disciplina.disciplina] ?? ''}
+                            onChange={(event) =>
+                              setApPorDisciplina((current) => ({
+                                ...current,
+                                [disciplina.disciplina]: event.target.value,
+                              }))
+                            }
+                            inputMode={
+                              esDisciplinaTiempo(disciplina.disciplina) ? 'text' : 'decimal'
+                            }
+                            placeholder={
+                              esDisciplinaTiempo(disciplina.disciplina) ? 'ej: 04:30' : 'ej: 50,75'
+                            }
+                            className="w-full bg-transparent text-lg font-semibold text-white outline-none placeholder:text-slate-500"
+                          />
+                          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-300">
+                            {getUnidadLabel(unidadEsperada)}
+                          </span>
+                        </div>
+                      ) : null}
+                    </div>
                   )
                 })}
               </div>
@@ -314,6 +429,12 @@ export function AtletaInscripcionPage() {
           {mutation.isError ? (
             <div className="rounded-3xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-100">
               {getInscripcionError(mutation.error)}
+            </div>
+          ) : null}
+
+          {postSubmitWarning ? (
+            <div className="rounded-3xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-100">
+              {postSubmitWarning}
             </div>
           ) : null}
 

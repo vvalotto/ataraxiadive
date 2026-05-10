@@ -1,0 +1,166 @@
+{
+  "metadata": {
+    "us_id": "US-6.4.2",
+    "us_title": "Materializar proyección competencias_por_torneo en CalcularOverallHandler",
+    "us_points": 5,
+    "producto": "resultados",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-05-09T14:38:26.169910+00:00",
+    "completed_at": "2026-05-09T14:48:42.927144+00:00",
+    "total_elapsed_seconds": 616,
+    "effective_seconds": 616,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-05-09T14:38:30.187796+00:00",
+      "completed_at": "2026-05-09T14:39:12.664390+00:00",
+      "elapsed_seconds": 42,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-05-09T14:39:18.385080+00:00",
+      "completed_at": "2026-05-09T14:39:33.256522+00:00",
+      "elapsed_seconds": 14,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Generación del Plan de Implementación",
+      "started_at": "2026-05-09T14:39:38.411514+00:00",
+      "completed_at": "2026-05-09T14:40:34.183598+00:00",
+      "elapsed_seconds": 55,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-05-09T14:40:55.825371+00:00",
+      "completed_at": "2026-05-09T14:42:54.612545+00:00",
+      "elapsed_seconds": 118,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "task_3_1",
+          "task_name": "Actualizar handler y composition root",
+          "task_type": "implementation",
+          "estimated_minutes": 50.0,
+          "started_at": "2026-05-09T14:41:09.497392+00:00",
+          "completed_at": "2026-05-09T14:41:36.828378+00:00",
+          "elapsed_seconds": 27,
+          "actual_minutes": 0.45,
+          "variance_minutes": -49.55,
+          "file_created": "src/resultados/application/commands/calcular_overall.py",
+          "status": "completed"
+        },
+        {
+          "task_id": "task_3_2",
+          "task_name": "Actualizar tests overall",
+          "task_type": "test",
+          "estimated_minutes": 65.0,
+          "started_at": "2026-05-09T14:41:41.142211+00:00",
+          "completed_at": "2026-05-09T14:42:49.907701+00:00",
+          "elapsed_seconds": 68,
+          "actual_minutes": 1.13,
+          "variance_minutes": -63.87,
+          "file_created": "tests/unit/resultados/application/test_calcular_overall_handler.py",
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-05-09T14:42:59.330241+00:00",
+      "completed_at": "2026-05-09T14:43:23.525068+00:00",
+      "elapsed_seconds": 24,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-05-09T14:43:32.035156+00:00",
+      "completed_at": "2026-05-09T14:43:46.028595+00:00",
+      "elapsed_seconds": 13,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-05-09T14:43:51.984324+00:00",
+      "completed_at": "2026-05-09T14:44:57.037551+00:00",
+      "elapsed_seconds": 65,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-05-09T14:45:04.164705+00:00",
+      "completed_at": "2026-05-09T14:45:32.609298+00:00",
+      "elapsed_seconds": 28,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-05-09T14:45:37.146712+00:00",
+      "completed_at": "2026-05-09T14:46:08.731453+00:00",
+      "elapsed_seconds": 31,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": false,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-05-09T14:48:00.887727+00:00",
+      "completed_at": "2026-05-09T14:48:37.748110+00:00",
+      "elapsed_seconds": 36,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 2,
+    "completed_tasks": 2,
+    "total_phases": 10,
+    "estimated_total_minutes": 115.0,
+    "actual_total_minutes": 1.58,
+    "variance_minutes": -113.42,
+    "variance_percent": -98.62
+  },
+  "completed_at": "2026-05-10T12:40:00.812062+00:00"
+}

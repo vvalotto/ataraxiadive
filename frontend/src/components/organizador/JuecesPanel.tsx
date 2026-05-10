@@ -76,7 +76,7 @@ export function JuecesPanel({ torneoId }: JuecesPanelProps) {
       })) ?? [],
   })
 
-  const disciplinas = disciplinasQuery.data ?? []
+  const disciplinas = useMemo(() => disciplinasQuery.data ?? [], [disciplinasQuery.data])
   const jueces = useMemo(
     () => (juecesQuery.data ?? []).filter((usuario) => usuario.rol === 'JUEZ' && usuario.activo),
     [juecesQuery.data],
@@ -123,7 +123,6 @@ export function JuecesPanel({ torneoId }: JuecesPanelProps) {
     disciplinasConGrilla === disciplinas.length &&
     totalPerformances > 0 &&
     performancesAsignadas === totalPerformances
-  const sinJuecesAsignados = totalPerformances > 0 && performancesAsignadas === 0
   const hayCompetenciasOperativas = (competenciasQuery.data?.length ?? 0) > 0
   const disciplinasPendientesDeGrilla = useMemo(() => {
     const competenciasPorDisciplina = new Map(
@@ -216,32 +215,6 @@ export function JuecesPanel({ torneoId }: JuecesPanelProps) {
           >
             {todasAsignadas ? 'Asignación completa' : 'Asignación pendiente'}
           </span>
-        </div>
-
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          <div className="rounded-[1.5rem] border border-slate-700 bg-slate-950/70 p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-              Cobertura operativa
-            </p>
-            <p className="mt-3 text-3xl font-semibold tracking-tight text-white">
-              {performancesAsignadas}/{totalPerformances || 0}
-            </p>
-            <p className="mt-2 text-sm text-slate-300">
-              performances con juez · {jueces.length} jueces disponibles
-            </p>
-          </div>
-
-          <div className="rounded-[1.5rem] border border-slate-700 bg-slate-950/70 p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-              Estado de asignación
-            </p>
-            <p className="mt-3 text-lg font-semibold text-white">
-              {sinJuecesAsignados ? 'Todavía no hay jueces asignados' : 'Asignaciones en curso'}
-            </p>
-            <p className="mt-2 text-sm text-slate-300">
-              La asignación se hace por performance una vez que la disciplina ya tiene grilla confirmada.
-            </p>
-          </div>
         </div>
 
         {disciplinasPendientesDeGrilla.length > 0 ? (

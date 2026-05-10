@@ -53,7 +53,16 @@ def email_no_registrado(context: dict[str, Any], email: str) -> None:
 
 @given(parsers.parse('un usuario registrado con email "{email}"'))
 def usuario_ya_registrado(client: TestClient, context: dict[str, Any], email: str) -> None:
-    client.post("/auth/registro", json={"email": email, "password": "password1", "rol": "ATLETA"})
+    client.post(
+        "/auth/registro",
+        json={
+            "email": email,
+            "nombre": "Test",
+            "apellido": "User",
+            "password": "Password1A",
+            "rol": "ATLETA",
+        },
+    )
     context["email"] = email
 
 
@@ -63,7 +72,16 @@ def usuario_ya_registrado(client: TestClient, context: dict[str, Any], email: st
 def usuario_registrado_con_rol(
     client: TestClient, context: dict[str, Any], email: str, password: str, rol: str
 ) -> None:
-    resp = client.post("/auth/registro", json={"email": email, "password": password, "rol": rol})
+    resp = client.post(
+        "/auth/registro",
+        json={
+            "email": email,
+            "nombre": "Test",
+            "apellido": "User",
+            "password": password,
+            "rol": rol,
+        },
+    )
     assert resp.status_code == 201
     context["email"] = email
     context["password"] = password
@@ -88,7 +106,14 @@ def post_registro(
     client: TestClient, context: dict[str, Any], email: str, password: str, rol: str
 ) -> None:
     context["response"] = client.post(
-        "/auth/registro", json={"email": email, "password": password, "rol": rol}
+        "/auth/registro",
+        json={
+            "email": email,
+            "nombre": "Test",
+            "apellido": "User",
+            "password": password,
+            "rol": rol,
+        },
     )
 
 

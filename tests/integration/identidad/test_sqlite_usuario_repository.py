@@ -136,8 +136,7 @@ async def test_list_all_devuelve_todos_ordenados_por_rol_y_email(
 async def test_ensure_table_migra_columnas_nombre_y_apellido() -> None:
     db_path = Path(tempfile.mktemp(suffix=".db"))
     async with aiosqlite.connect(db_path) as conn:
-        await conn.execute(
-            """
+        await conn.execute("""
             CREATE TABLE usuarios (
                 usuario_id TEXT PRIMARY KEY,
                 email TEXT UNIQUE NOT NULL,
@@ -145,8 +144,7 @@ async def test_ensure_table_migra_columnas_nombre_y_apellido() -> None:
                 rol TEXT NOT NULL,
                 activo INTEGER NOT NULL DEFAULT 1
             )
-            """
-        )
+            """)
         await conn.commit()
 
     repo = SQLiteUsuarioRepository(db_path=str(db_path))
