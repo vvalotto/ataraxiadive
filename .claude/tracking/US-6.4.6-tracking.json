@@ -1,0 +1,178 @@
+{
+  "metadata": {
+    "us_id": "US-6.4.6",
+    "us_title": "Decisión ARCH-03 + SRP RankingCompetencia + monitoreo identidad/shared",
+    "us_points": 3,
+    "producto": "resultados",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-05-10T12:40:33.881688+00:00",
+    "completed_at": "2026-05-10T12:54:49.113946+00:00",
+    "total_elapsed_seconds": 855,
+    "effective_seconds": 855,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-05-10T12:40:39.771236+00:00",
+      "completed_at": "2026-05-10T12:41:10.279700+00:00",
+      "elapsed_seconds": 30,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "BDD Scenarios",
+      "started_at": "2026-05-10T12:41:14.133852+00:00",
+      "completed_at": "2026-05-10T12:41:34.635320+00:00",
+      "elapsed_seconds": 20,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de Implementación",
+      "started_at": "2026-05-10T12:41:37.728796+00:00",
+      "completed_at": "2026-05-10T12:42:56.617246+00:00",
+      "elapsed_seconds": 78,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-05-10T12:43:00.022962+00:00",
+      "completed_at": "2026-05-10T12:46:59.428045+00:00",
+      "elapsed_seconds": 239,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "T1",
+          "task_name": "Crear BL-006 draft",
+          "task_type": "implementation",
+          "estimated_minutes": 20.0,
+          "started_at": "2026-05-10T12:43:06.975225+00:00",
+          "completed_at": "2026-05-10T12:44:56.515832+00:00",
+          "elapsed_seconds": 109,
+          "actual_minutes": 1.82,
+          "variance_minutes": -18.18,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T2",
+          "task_name": "Actualizar matrix.md §32 INC-6.4",
+          "task_type": "documentation",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-05-10T12:45:00.669356+00:00",
+          "completed_at": "2026-05-10T12:46:00.068361+00:00",
+          "elapsed_seconds": 59,
+          "actual_minutes": 0.98,
+          "variance_minutes": -9.02,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T3",
+          "task_name": "DesignReviewer INC-6.4",
+          "task_type": "quality",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-05-10T12:46:04.053330+00:00",
+          "completed_at": "2026-05-10T12:46:55.974618+00:00",
+          "elapsed_seconds": 51,
+          "actual_minutes": 0.85,
+          "variance_minutes": -9.15,
+          "file_created": null,
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-05-10T12:47:04.328490+00:00",
+      "completed_at": "2026-05-10T12:48:48.679564+00:00",
+      "elapsed_seconds": 104,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-05-10T12:48:51.961581+00:00",
+      "completed_at": "2026-05-10T12:49:23.632986+00:00",
+      "elapsed_seconds": 31,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-05-10T12:49:27.369371+00:00",
+      "completed_at": "2026-05-10T12:50:39.468205+00:00",
+      "elapsed_seconds": 72,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-05-10T12:50:45.229029+00:00",
+      "completed_at": "2026-05-10T12:53:02.030828+00:00",
+      "elapsed_seconds": 136,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-05-10T12:53:05.459451+00:00",
+      "completed_at": "2026-05-10T12:54:04.925814+00:00",
+      "elapsed_seconds": 59,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-05-10T12:54:08.202657+00:00",
+      "completed_at": "2026-05-10T12:54:48.885190+00:00",
+      "elapsed_seconds": 40,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 3,
+    "completed_tasks": 3,
+    "total_phases": 10,
+    "estimated_total_minutes": 40.0,
+    "actual_total_minutes": 3.65,
+    "variance_minutes": -36.35,
+    "variance_percent": -90.88
+  }
+}

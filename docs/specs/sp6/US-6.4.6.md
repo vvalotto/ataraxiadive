@@ -1,6 +1,6 @@
 # US-6.4.6: Decisión ARCH-03 + SRP `RankingCompetencia` + monitoreo `identidad`/`shared`
 
-**Estado**: `Pending`
+**Estado**: `Done`
 **Incremento**: INC-6.4 — Deuda Técnica Sistema
 **Hallazgos**: ARCH-03 · DR-01 · AA-02 · AA-04
 **Bounded Contexts**: `resultados` · `identidad` · `shared`
