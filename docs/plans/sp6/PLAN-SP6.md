@@ -99,8 +99,8 @@ más la deuda técnica pendiente de quality gates.
 | AA-04 | `shared` | **CRITICAL** — D=0.63 Zone of Pain, estable — estructura concreto-rígida | Media | BL-005 |
 | ARCH-01 | `competencia/application/queries` | Proyección `competencias_por_torneo` no materializada → O(n) scan en producción | Alta | HITO-15 |
 | ARCH-02 | `identidad/`, `registro/`, `torneo/` | Routers importan `JWTService` (infra) directamente — violación hexagonal D-05 | Alta | notas .work |
-| ARCH-03 | `resultados_competencia_adapter.py` | Import cross-BC directo — decisión pendiente: ¿ACL aceptable o violación? | Media | notas .work |
-| DR-01 | `RankingCompetencia` | LCOM 2/1 — mezcla lógica ranking + acumulación overall → candidato SRP | Media | DR INC-5.6 |
+| ARCH-03 | `resultados_competencia_adapter.py` | ✅ Cerrado US-6.4.6 — ACL aceptable: no hay import cross-BC; usa EventStorePort (shared abstraction) | Media | BL-006 |
+| DR-01 | `RankingCompetencia` | ✅ Cerrado US-6.4.6 — Falso positivo: LCOM=2 inherente al patrón ES (comando + reconstitución) | Media | BL-006 |
 | DR-02 | `AlgoritmoPuntajeFAAS` | LCOM 2/1 + C=11 — dos paths cálculo → dispatch por TipoDisciplina | Media | DR INC-5.6 + CG |
 | DR-06 | `DeclararAPInscripcionHandler` | FeatureEnvy 4/2 — no aplicable: coordination handler load → domain method → save | Media | US-6.4.5 |
 | DR-07 | `SQLiteInscripcionRepository` | Resuelto: reconstitucion delegada a `Inscripcion.from_row()` y helpers de serializacion fuera del metodo `save()` | Media | US-6.4.5 |
