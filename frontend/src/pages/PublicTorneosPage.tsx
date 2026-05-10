@@ -49,7 +49,7 @@ function accionPorEstado(torneo: TorneoDto, rol: string | null): Accion | null {
     case 'EJECUCION':
       if (rol === 'juez') return { label: 'Ver panel', destino: '/juez/disciplinas' }
       if (rol === 'organizador') return { label: 'Ver panel', destino: '/organizador/torneo' }
-      return { label: 'Ver panel', destino: `/portalapnea/${torneo.torneo_id}/panel` }
+      return { label: 'Ver panel', destino: `/portalapnea/${torneo.torneo_id}` }
     case 'PREMIACION':
     case 'CERRADO':
       return { label: 'Ver resultados', destino: null, deshabilitado: true }
