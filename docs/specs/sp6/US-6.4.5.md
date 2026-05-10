@@ -1,6 +1,6 @@
 # US-6.4.5: Refactoring `DeclararAPInscripcionHandler` + `SQLiteInscripcionRepository`
 
-**Estado**: `Pending`
+**Estado**: `Done`
 **Incremento**: INC-6.4 — Deuda Técnica Sistema
 **Hallazgos**: DR-06 · DR-07
 **Bounded Context**: `registro`

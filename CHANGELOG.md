@@ -10,6 +10,10 @@ Versionado: [Semantic Versioning](https://semver.org/lang/es/)
 ## [Unreleased]
 
 ### Fixed
+- [US-6.4.5] `SQLiteInscripcionRepository` delega reconstitucion en `Inscripcion`
+  - Agrega `Inscripcion.from_row()` para reconstruir datos planos persistidos
+  - Elimina DR-07 del repositorio en DesignReviewer
+  - Documenta DR-06 como falso positivo de coordination handler
 - [US-6.4.4] `AlgoritmoPuntajeFAAS` queda como dispatcher explícito
   - Extrae cálculo FAAS de distancia y tiempo a funciones de módulo
   - Elimina el hallazgo LCOM DR-02 en DesignReviewer

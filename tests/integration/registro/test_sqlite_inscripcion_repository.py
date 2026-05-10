@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from decimal import Decimal
 from uuid import uuid4
 
 import aiosqlite
@@ -12,6 +13,7 @@ from registro.infrastructure.repositories.sqlite_inscripcion_repository import (
     SQLiteInscripcionRepository,
 )
 from shared.domain.value_objects.disciplina import Disciplina
+from shared.domain.value_objects.unidad_medida import UnidadMedida
 
 
 @pytest_asyncio.fixture
@@ -97,6 +99,22 @@ async def test_disciplinas_persisten_correctamente(repo):
 
 
 @pytest.mark.asyncio
+async def test_ap_por_disciplina_persiste_correctamente(repo):
+    ins = _inscripcion()
+    ins.declarar_ap(Disciplina.STA, Decimal("120"))
+    ins.declarar_ap(Disciplina.DNF, Decimal("75"))
+
+    await repo.save(ins)
+
+    found = await repo.find_by_id(ins.inscripcion_id)
+    assert found is not None
+    assert found.ap_por_disciplina[Disciplina.STA].valor == Decimal("120")
+    assert found.ap_por_disciplina[Disciplina.STA].unidad == UnidadMedida.Segundos
+    assert found.ap_por_disciplina[Disciplina.DNF].valor == Decimal("75")
+    assert found.ap_por_disciplina[Disciplina.DNF].unidad == UnidadMedida.Metros
+
+
+@pytest.mark.asyncio
 async def test_adjuntos_persisten_correctamente(repo):
     ins = _inscripcion()
     ins.adjuntar_apto_medico("data/adjuntos/ins/apto_medico.pdf")
@@ -118,8 +136,7 @@ async def test_migracion_legacy_sin_adjuntos_usa_none(tmp_path):
     torneo_id = uuid4()
 
     async with aiosqlite.connect(db_path) as conn:
-        await conn.execute(
-            """
+        await conn.execute("""
             CREATE TABLE inscripciones (
                 inscripcion_id    TEXT PRIMARY KEY,
                 atleta_id         TEXT NOT NULL,
@@ -129,8 +146,7 @@ async def test_migracion_legacy_sin_adjuntos_usa_none(tmp_path):
                 estado            TEXT NOT NULL,
                 fecha_inscripcion TEXT NOT NULL
             )
-            """
-        )
+            """)
         await conn.execute(
             """
             INSERT INTO inscripciones (
