@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { fetchTorneos, type EstadoTorneo, type TorneoDto } from '../api/torneo'
 import { formatFecha } from './atleta/portalData'
 import { useNavigateWithRedirect } from '../hooks/useNavigateWithRedirect'
@@ -40,6 +40,7 @@ interface Accion {
   label: string
   destino: string | null
   deshabilitado?: boolean
+  publico?: boolean
 }
 
 function accionPorEstado(torneo: TorneoDto, rol: string | null): Accion | null {
@@ -49,7 +50,7 @@ function accionPorEstado(torneo: TorneoDto, rol: string | null): Accion | null {
     case 'EJECUCION':
       if (rol === 'juez') return { label: 'Ver panel', destino: '/juez/disciplinas' }
       if (rol === 'organizador') return { label: 'Ver panel', destino: '/organizador/torneo' }
-      return { label: 'Ver panel', destino: `/portalapnea/${torneo.torneo_id}` }
+      return { label: 'Ver panel', destino: `/portalapnea/${torneo.torneo_id}`, publico: true }
     case 'PREMIACION':
     case 'CERRADO':
       return { label: 'Ver resultados', destino: null, deshabilitado: true }
@@ -60,6 +61,7 @@ function accionPorEstado(torneo: TorneoDto, rol: string | null): Accion | null {
 
 function TorneoCard({ torneo }: { torneo: TorneoDto }) {
   const navigateWithRedirect = useNavigateWithRedirect()
+  const navigate = useNavigate()
   const rol = useAuthStore((s) => s.rol)
   const badge = ESTADO_BADGE[torneo.estado]
   const accion = accionPorEstado(torneo, rol)
@@ -96,7 +98,7 @@ function TorneoCard({ torneo }: { torneo: TorneoDto }) {
             </button>
           ) : (
             <button
-              onClick={() => accion.destino && navigateWithRedirect(accion.destino)}
+              onClick={() => accion.destino && (accion.publico ? navigate(accion.destino) : navigateWithRedirect(accion.destino))}
               className="rounded-2xl bg-sky-500 px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-sky-400"
             >
               {accion.label}
