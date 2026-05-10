@@ -102,8 +102,8 @@ más la deuda técnica pendiente de quality gates.
 | ARCH-03 | `resultados_competencia_adapter.py` | Import cross-BC directo — decisión pendiente: ¿ACL aceptable o violación? | Media | notas .work |
 | DR-01 | `RankingCompetencia` | LCOM 2/1 — mezcla lógica ranking + acumulación overall → candidato SRP | Media | DR INC-5.6 |
 | DR-02 | `AlgoritmoPuntajeFAAS` | LCOM 2/1 + C=11 — dos paths cálculo → dispatch por TipoDisciplina | Media | DR INC-5.6 + CG |
-| DR-06 | `DeclararAPInscripcionHandler` | FeatureEnvy 4/2 — lógica AP debería estar en aggregate `Inscripcion` | Media | DR SP-ADJ-09 |
-| DR-07 | `SQLiteInscripcionRepository` | FeatureEnvy 7/2 + FanOut 9/7 — query ensambla múltiples entidades | Media | DR SP-ADJ-09 |
+| DR-06 | `DeclararAPInscripcionHandler` | FeatureEnvy 4/2 — no aplicable: coordination handler load → domain method → save | Media | US-6.4.5 |
+| DR-07 | `SQLiteInscripcionRepository` | Resuelto: reconstitucion delegada a `Inscripcion.from_row()` y helpers de serializacion fuera del metodo `save()` | Media | US-6.4.5 |
 | CG-01/03/04/05 | varios | E501 (4 líneas) + `import os` huérfano — resolubles con `black` | Baja | CodeGuard |
 | QG-01 | DesignReviewer | Evaluar reducción `max_cbo`/`max_wmc` post-SP6 | Baja | memory |
 
