@@ -20,6 +20,9 @@ scenarios("../US-3.1.2-api-rest-torneo.feature")
 def context(tmp_path: Any, monkeypatch: Any) -> dict[str, Any]:
     db_path = str(tmp_path / "torneo_test.db")
     monkeypatch.setenv("TORNEO_DB_PATH", db_path)
+    monkeypatch.setenv("REGISTRO_DB_PATH", str(tmp_path / "registro_test.db"))
+    monkeypatch.setenv("COMPETENCIA_DB_PATH", str(tmp_path / "competencia_test.db"))
+    monkeypatch.setenv("RESULTADOS_DB_PATH", str(tmp_path / "resultados_test.db"))
     return {"db_path": db_path}
 
 
