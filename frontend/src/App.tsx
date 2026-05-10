@@ -50,7 +50,7 @@ function GlobalHealthCheck() {
   if (
     location.pathname.startsWith('/organizador') ||
     location.pathname.startsWith('/juez') ||
-    location.pathname.startsWith('/torneos')
+    location.pathname.startsWith('/portalapnea')
   ) {
     return null
   }
@@ -70,7 +70,7 @@ function App() {
     <>
       <GlobalHealthCheck />
       <Routes>
-        <Route path="/torneos" element={<PublicTorneosPage />} />
+        <Route path="/portalapnea" element={<PublicTorneosPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registro" element={<RegistroPage />} />
         <Route path="/recuperar-password" element={<RecuperarPasswordPage />} />

@@ -45,11 +45,11 @@ interface Accion {
 function accionPorEstado(torneo: TorneoDto, rol: string | null): Accion | null {
   switch (torneo.estado) {
     case 'INSCRIPCION_ABIERTA':
-      return { label: 'Inscribirse', destino: `/atleta/torneos/${torneo.torneo_id}/inscripcion` }
+      return { label: 'Inscribirse', destino: `/atleta/portalapnea/${torneo.torneo_id}/inscripcion` }
     case 'EJECUCION':
       if (rol === 'juez') return { label: 'Ver panel', destino: '/juez/disciplinas' }
       if (rol === 'organizador') return { label: 'Ver panel', destino: '/organizador/torneo' }
-      return { label: 'Ver panel', destino: `/torneos/${torneo.torneo_id}/panel` }
+      return { label: 'Ver panel', destino: `/portalapnea/${torneo.torneo_id}/panel` }
     case 'PREMIACION':
     case 'CERRADO':
       return { label: 'Ver resultados', destino: null, deshabilitado: true }
