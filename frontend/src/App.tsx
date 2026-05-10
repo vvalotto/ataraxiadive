@@ -41,7 +41,7 @@ function RootRedirect() {
   if (rol === 'juez') return <Navigate to="/juez/disciplinas" replace />
   if (rol === 'organizador') return <Navigate to="/organizador/torneo" replace />
   if (rol === 'atleta') return <Navigate to="/atleta" replace />
-  return <Navigate to="/login" replace />
+  return <Navigate to="/portalapnea" replace />
 }
 
 function GlobalHealthCheck() {
