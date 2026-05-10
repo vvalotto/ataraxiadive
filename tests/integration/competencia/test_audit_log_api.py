@@ -42,8 +42,8 @@ async def store(tmp_path: pytest.TempPathFactory) -> SQLiteEventStore:
 def client(store: SQLiteEventStore) -> TestClient:
     stub_nombre = StubAtletaNombrePort()
     app.dependency_overrides[get_event_store] = lambda: store
-    app.dependency_overrides[get_obtener_audit_log_handler] = (
-        lambda: ObtenerAuditLogHandler(store, stub_nombre)
+    app.dependency_overrides[get_obtener_audit_log_handler] = lambda: ObtenerAuditLogHandler(
+        store, stub_nombre
     )
     app.dependency_overrides[get_current_user] = lambda: {
         "sub": "org-001",

@@ -47,11 +47,11 @@ ADMIN_PASSWORD = "adminsp4uat2025"
 COMPETENCIA_DB = os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db")
 
 ATLETAS_DEF = [
-    ("a01", "Elena",   "Marino",   "SENIOR_FEMENINO",  "a01@uat-sp6.test", 72),
-    ("a02", "Tomás",   "Buceo",    "SENIOR_MASCULINO", "a02@uat-sp6.test", 68),
-    ("a03", "Sofía",   "Oceano",   "SENIOR_FEMENINO",  "a03@uat-sp6.test", 65),
+    ("a01", "Elena", "Marino", "SENIOR_FEMENINO", "a01@uat-sp6.test", 72),
+    ("a02", "Tomás", "Buceo", "SENIOR_MASCULINO", "a02@uat-sp6.test", 68),
+    ("a03", "Sofía", "Oceano", "SENIOR_FEMENINO", "a03@uat-sp6.test", 65),
     ("a04", "Rodrigo", "Profundo", "MASTER_MASCULINO", "a04@uat-sp6.test", 60),
-    ("a05", "Camila",  "Abismo",   "SENIOR_FEMENINO",  "a05@uat-sp6.test", 55),
+    ("a05", "Camila", "Abismo", "SENIOR_FEMENINO", "a05@uat-sp6.test", 55),
 ]
 
 
@@ -101,9 +101,7 @@ def limpiar_datos_uat() -> None:
     with sqlite3.connect(RESULTADOS_DB) as con:
         if torneo_ids:
             placeholders = ",".join("?" * len(torneo_ids))
-            con.execute(
-                f"DELETE FROM events WHERE stream_id IN ({placeholders})", torneo_ids
-            )
+            con.execute(f"DELETE FROM events WHERE stream_id IN ({placeholders})", torneo_ids)
 
     with sqlite3.connect(REGISTRO_DB) as con:
         atleta_ids = [
@@ -179,7 +177,9 @@ async def preparar_grilla(
     from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
         DisciplinaDescriptorAdapter,
     )
-    from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
+    from competencia.infrastructure.repositories.performances_ap_adapter import (
+        PerformancesAPAdapter,
+    )
     from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
         SQLiteCompetenciasPorTorneo,
     )

@@ -56,7 +56,9 @@ async def crear_admin_directo(email: str, password: str) -> None:
     from identidad.domain.aggregates.usuario import Usuario
     from identidad.domain.value_objects.rol import Rol
     from identidad.infrastructure.bcrypt_password_hasher import BcryptPasswordHasher
-    from identidad.infrastructure.repositories.sqlite_usuario_repository import SQLiteUsuarioRepository
+    from identidad.infrastructure.repositories.sqlite_usuario_repository import (
+        SQLiteUsuarioRepository,
+    )
 
     repo = SQLiteUsuarioRepository()
     existente = await repo.find_by_email(email)
@@ -66,7 +68,8 @@ async def crear_admin_directo(email: str, password: str) -> None:
     hasher = BcryptPasswordHasher()
     usuario = Usuario(
         usuario_id=_uuid.uuid4(),
-        nombre="Admin", apellido="UAT",
+        nombre="Admin",
+        apellido="UAT",
         email=email,
         password_hash=hasher.hash(password),
         rol=Rol.ADMIN,
@@ -88,8 +91,12 @@ def assert_ok(resp: httpx.Response, context: str) -> dict:
 
 
 def get_or_create_usuario(
-    client: httpx.Client, email: str, password: str, rol: str,
-    nombre: str = "UAT", apellido: str = "Test",
+    client: httpx.Client,
+    email: str,
+    password: str,
+    rol: str,
+    nombre: str = "UAT",
+    apellido: str = "Test",
 ) -> str:
     resp = client.post("/auth/login", json={"email": email, "password": password})
     if resp.status_code == 200:
@@ -97,7 +104,13 @@ def get_or_create_usuario(
         return resp.json()["access_token"]
     resp = client.post(
         "/auth/registro",
-        json={"email": email, "password": password, "rol": rol, "nombre": nombre, "apellido": apellido},
+        json={
+            "email": email,
+            "password": password,
+            "rol": rol,
+            "nombre": nombre,
+            "apellido": apellido,
+        },
     )
     assert_ok(resp, f"registro {email}")
     resp = client.post("/auth/login", json={"email": email, "password": password})
@@ -143,7 +156,9 @@ async def preparar_grilla_disciplina(
     from competencia.infrastructure.repositories.disciplina_descriptor_adapter import (
         DisciplinaDescriptorAdapter,
     )
-    from competencia.infrastructure.repositories.performances_ap_adapter import PerformancesAPAdapter
+    from competencia.infrastructure.repositories.performances_ap_adapter import (
+        PerformancesAPAdapter,
+    )
     from competencia.infrastructure.repositories.sqlite_competencias_por_torneo import (
         SQLiteCompetenciasPorTorneo,
     )
@@ -194,7 +209,9 @@ async def preparar_grilla_disciplina(
     log(f"Grilla {disciplina_cod} confirmada")
 
 
-async def iniciar_competencia_async(competencia_id: UUID, disciplina_cod: str, juez_id: str) -> None:
+async def iniciar_competencia_async(
+    competencia_id: UUID, disciplina_cod: str, juez_id: str
+) -> None:
     from competencia.application.commands.iniciar_competencia import (
         IniciarCompetenciaCommand,
         IniciarCompetenciaHandler,
@@ -226,21 +243,27 @@ def main() -> None:
 
         # ── Usuarios ──────────────────────────────────────────────────────────
         print("▸ Usuarios")
-        org_token    = get_or_create_usuario(client, ORG_EMAIL,    ORG_PASSWORD,    "ORGANIZADOR", "Org",      "UAT")
-        juez_token   = get_or_create_usuario(client, JUEZ_EMAIL,   JUEZ_PASSWORD,   "JUEZ",        "Juez",     "UAT")
-        atleta_token = get_or_create_usuario(client, ATLETA_EMAIL, ATLETA_PASSWORD, "ATLETA",      "Valentina","Costas")
-        admin_token  = get_or_create_usuario(client, ADMIN_EMAIL,  ADMIN_PASSWORD,  "ADMIN",       "Admin",    "UAT")
+        org_token = get_or_create_usuario(
+            client, ORG_EMAIL, ORG_PASSWORD, "ORGANIZADOR", "Org", "UAT"
+        )
+        juez_token = get_or_create_usuario(client, JUEZ_EMAIL, JUEZ_PASSWORD, "JUEZ", "Juez", "UAT")
+        atleta_token = get_or_create_usuario(
+            client, ATLETA_EMAIL, ATLETA_PASSWORD, "ATLETA", "Valentina", "Costas"
+        )
+        admin_token = get_or_create_usuario(
+            client, ADMIN_EMAIL, ADMIN_PASSWORD, "ADMIN", "Admin", "UAT"
+        )
 
-        org_id    = decode_sub(org_token)
-        juez_id   = decode_sub(juez_token)
+        org_id = decode_sub(org_token)
+        juez_id = decode_sub(juez_token)
         atleta_user_id = decode_sub(atleta_token)
 
         log(f"org_id:    {org_id}")
         log(f"juez_id:   {juez_id}")
         log(f"atleta_user_id: {atleta_user_id}")
 
-        org_h    = {"Authorization": f"Bearer {org_token}"}
-        admin_h  = {"Authorization": f"Bearer {admin_token}"}
+        org_h = {"Authorization": f"Bearer {org_token}"}
+        admin_h = {"Authorization": f"Bearer {admin_token}"}
         atleta_h = {"Authorization": f"Bearer {atleta_token}"}
 
         # ── Atleta en registro ─────────────────────────────────────────────────
@@ -314,15 +337,20 @@ def main() -> None:
             )
         log("DNF + STA con juez asignado")
 
-        assert_ok(client.put(f"/torneos/{torneo_a_id}/abrir-inscripcion", headers=org_h), "abrir inscripcion A")
+        assert_ok(
+            client.put(f"/torneos/{torneo_a_id}/abrir-inscripcion", headers=org_h),
+            "abrir inscripcion A",
+        )
 
         # Atleta + 3 competidores más para tener grilla
         otros_atletas = []
-        for i, (nombre, apellido, cat, ap_dnf, ap_sta) in enumerate([
-            ("Lucía",   "Fondos",   "SENIOR_FEMENINO",  60, 240),
-            ("Marco",   "Pelágico", "SENIOR_MASCULINO", 75, 300),
-            ("Daniela", "Abismo",   "SENIOR_FEMENINO",  55, 210),
-        ]):
+        for i, (nombre, apellido, cat, ap_dnf, ap_sta) in enumerate(
+            [
+                ("Lucía", "Fondos", "SENIOR_FEMENINO", 60, 240),
+                ("Marco", "Pelágico", "SENIOR_MASCULINO", 75, 300),
+                ("Daniela", "Abismo", "SENIOR_FEMENINO", 55, 210),
+            ]
+        ):
             aid = str(uuid.uuid4())
             email = f"comp{i+1}@uat-atleta.test"
             assert_ok(
@@ -346,12 +374,18 @@ def main() -> None:
 
         # Inscribir a todos (atleta principal + 3 competidores) en DNF + STA
         inscripcion_a_id = None
-        todos = [(atleta_registro_id, 65, 260)] + [(a["id"], a["ap_dnf"], a["ap_sta"]) for a in otros_atletas]
+        todos = [(atleta_registro_id, 65, 260)] + [
+            (a["id"], a["ap_dnf"], a["ap_sta"]) for a in otros_atletas
+        ]
         for aid, ap_dnf, ap_sta in todos:
             insc = assert_ok(
                 client.post(
                     "/registro/inscripciones",
-                    json={"atleta_id": aid, "torneo_id": torneo_a_id, "disciplinas": ["DNF", "STA"]},
+                    json={
+                        "atleta_id": aid,
+                        "torneo_id": torneo_a_id,
+                        "disciplinas": ["DNF", "STA"],
+                    },
                     headers=admin_h,
                 ),
                 f"inscribir {aid}",
@@ -371,7 +405,10 @@ def main() -> None:
         log(f"4 atletas inscriptos en DNF + STA, APs declarados")
         log(f"inscripcion atleta principal: {inscripcion_a_id}")
 
-        assert_ok(client.put(f"/torneos/{torneo_a_id}/cerrar-inscripcion", headers=org_h), "cerrar inscripcion A")
+        assert_ok(
+            client.put(f"/torneos/{torneo_a_id}/cerrar-inscripcion", headers=org_h),
+            "cerrar inscripcion A",
+        )
         log("estado torneo A: PREPARACION")
 
     # ── Grillas DNF + STA ──────────────────────────────────────────────────────
@@ -384,18 +421,28 @@ def main() -> None:
     dnf_rps = {todos[0][0]: 62, todos[1][0]: 58, todos[2][0]: 72, todos[3][0]: 50}
 
     # DNF: OT empieza a las 09:00
-    asyncio.run(preparar_grilla_disciplina(
-        cid_dnf, torneo_a_id, juez_id, "DNF",
-        atleta_ap_dnf,
-        ot_inicio=datetime(2026, 6, 15, 9, 0, 0, tzinfo=timezone.utc),
-    ))
+    asyncio.run(
+        preparar_grilla_disciplina(
+            cid_dnf,
+            torneo_a_id,
+            juez_id,
+            "DNF",
+            atleta_ap_dnf,
+            ot_inicio=datetime(2026, 6, 15, 9, 0, 0, tzinfo=timezone.utc),
+        )
+    )
     # STA: OT empieza a las 14:00 (POSTERIOR a DNF → verificar sort en homepage)
-    asyncio.run(preparar_grilla_disciplina(
-        cid_sta, torneo_a_id, juez_id, "STA",
-        atleta_ap_sta,
-        ot_inicio=datetime(2026, 6, 15, 14, 0, 0, tzinfo=timezone.utc),
-        intervalo_minutos=10,
-    ))
+    asyncio.run(
+        preparar_grilla_disciplina(
+            cid_sta,
+            torneo_a_id,
+            juez_id,
+            "STA",
+            atleta_ap_sta,
+            ot_inicio=datetime(2026, 6, 15, 14, 0, 0, tzinfo=timezone.utc),
+            intervalo_minutos=10,
+        )
+    )
 
     print("▸ DNF — iniciar competencia (application layer)")
     asyncio.run(iniciar_competencia_async(cid_dnf, "DNF", juez_id))
@@ -422,7 +469,10 @@ def main() -> None:
         log("jueces asignados")
 
         print("▸ Torneo A → EJECUCION")
-        assert_ok(client.put(f"/torneos/{torneo_a_id}/iniciar-ejecucion", headers=org_h), "iniciar ejecucion A")
+        assert_ok(
+            client.put(f"/torneos/{torneo_a_id}/iniciar-ejecucion", headers=org_h),
+            "iniciar ejecucion A",
+        )
         log("estado: EJECUCION")
 
         # ── DNF: registrar resultados (todos tarjeta blanca) ──────────────────
@@ -451,7 +501,12 @@ def main() -> None:
             assert_ok(
                 client.post(
                     f"/competencia/{cid_dnf}/registrar-resultado",
-                    json={"participante_id": aid, "disciplina": "DNF", "valor_rp": rp, "unidad": "Metros"},
+                    json={
+                        "participante_id": aid,
+                        "disciplina": "DNF",
+                        "valor_rp": rp,
+                        "unidad": "Metros",
+                    },
                     headers=juez_h,
                 ),
                 f"resultado DNF {aid}",
@@ -465,7 +520,9 @@ def main() -> None:
                 f"tarjeta DNF {aid}",
             )
         assert_ok(
-            client.post(f"/competencia/{cid_dnf}/finalizar", json={"disciplina": "DNF"}, headers=org_h),
+            client.post(
+                f"/competencia/{cid_dnf}/finalizar", json={"disciplina": "DNF"}, headers=org_h
+            ),
             "finalizar DNF",
         )
         log("DNF finalizado — STA sin resultados (pendiente)")
@@ -495,10 +552,17 @@ def main() -> None:
         log(f"torneo_b_id: {torneo_b_id}")
 
         assert_ok(
-            client.put(f"/torneos/{torneo_b_id}/disciplinas", json={"disciplinas": ["DNF", "DYN", "STA"]}, headers=org_h),
+            client.put(
+                f"/torneos/{torneo_b_id}/disciplinas",
+                json={"disciplinas": ["DNF", "DYN", "STA"]},
+                headers=org_h,
+            ),
             "agregar disciplinas torneo B",
         )
-        assert_ok(client.put(f"/torneos/{torneo_b_id}/abrir-inscripcion", headers=org_h), "abrir inscripcion B")
+        assert_ok(
+            client.put(f"/torneos/{torneo_b_id}/abrir-inscripcion", headers=org_h),
+            "abrir inscripcion B",
+        )
         log("DNF + DYN + STA disponibles — inscripción abierta")
 
     # ── Guardar IDs ───────────────────────────────────────────────────────────

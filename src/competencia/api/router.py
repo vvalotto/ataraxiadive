@@ -473,9 +473,7 @@ DisciplinaDescriptorDep = Annotated[DisciplinaDescriptorAdapter, Depends(get_dis
 CompetenciasPorTorneoProjectionDep = Annotated[
     CompetenciasPorTorneoPort, Depends(get_competencias_por_torneo_projection)
 ]
-InscripcionRepositoryDep = Annotated[
-    InscripcionRepositoryPort, Depends(get_inscripcion_repository)
-]
+InscripcionRepositoryDep = Annotated[InscripcionRepositoryPort, Depends(get_inscripcion_repository)]
 ObtenerAndarivelesActivosHandlerDep = Annotated[
     ObtenerAndarivelesActivosHandler, Depends(get_obtener_andariveles_activos_handler)
 ]

@@ -48,9 +48,7 @@ class StubPerformancesAPPort(PerformancesAPPort):
         self._store = store
 
     async def get_performances_con_ap(self, competencia_id: UUID) -> list[PerformancesAPData]:
-        streams = await self._store.load_all_streams_with_prefix(
-            f"performance-{competencia_id}-"
-        )
+        streams = await self._store.load_all_streams_with_prefix(f"performance-{competencia_id}-")
         result = []
         for stream in streams:
             for event in stream:
@@ -66,6 +64,8 @@ class StubPerformancesAPPort(PerformancesAPPort):
                     )
                     break
         return result
+
+
 ATLETA_CON_TARJETA = UUID("00000000-0000-0000-0000-000000000711")
 ATLETA_SIN_TARJETA = UUID("00000000-0000-0000-0000-000000000712")
 OT_INICIO = datetime(2026, 4, 19, 10, 0, tzinfo=timezone.utc)

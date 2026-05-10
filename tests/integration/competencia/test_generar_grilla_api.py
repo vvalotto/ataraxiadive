@@ -10,7 +10,11 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app import app
-from competencia.api.router import get_event_store, get_generar_grilla_handler, get_obtener_grilla_handler
+from competencia.api.router import (
+    get_event_store,
+    get_generar_grilla_handler,
+    get_obtener_grilla_handler,
+)
 from competencia.application.commands.configurar_intervalo_ot import (
     ConfigurarIntervaloOTCommand,
     ConfigurarIntervaloOTHandler,
@@ -59,8 +63,8 @@ def client(store: SQLiteEventStore) -> TestClient:
     app.dependency_overrides[get_generar_grilla_handler] = lambda: GenerarGrillaHandler(
         store, stub_ap, DisciplinaDescriptorAdapter()
     )
-    app.dependency_overrides[get_obtener_grilla_handler] = (
-        lambda: ObtenerGrillaHandler(store, stub_nombre)
+    app.dependency_overrides[get_obtener_grilla_handler] = lambda: ObtenerGrillaHandler(
+        store, stub_nombre
     )
     app.dependency_overrides[get_current_user] = lambda: {
         "sub": "organizador-01",

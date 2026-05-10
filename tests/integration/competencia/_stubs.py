@@ -25,9 +25,7 @@ class StubPerformancesAPPort(PerformancesAPPort):
         self._store = store
 
     async def get_performances_con_ap(self, competencia_id: UUID) -> list[PerformancesAPData]:
-        streams = await self._store.load_all_streams_with_prefix(
-            f"performance-{competencia_id}-"
-        )
+        streams = await self._store.load_all_streams_with_prefix(f"performance-{competencia_id}-")
         result = []
         for stream in streams:
             for event in stream:

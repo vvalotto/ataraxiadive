@@ -73,8 +73,8 @@ async def store(tmp_path: pytest.TempPathFactory) -> SQLiteEventStore:
 def client(store: SQLiteEventStore) -> TestClient:
     stub_nombre = StubAtletaNombrePort()
     app.dependency_overrides[get_event_store] = lambda: store
-    app.dependency_overrides[get_obtener_grilla_handler] = (
-        lambda: ObtenerGrillaHandler(store, stub_nombre)
+    app.dependency_overrides[get_obtener_grilla_handler] = lambda: ObtenerGrillaHandler(
+        store, stub_nombre
     )
     yield TestClient(app)
     app.dependency_overrides.clear()
