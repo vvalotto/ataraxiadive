@@ -4,6 +4,19 @@ import { useMutation } from '@tanstack/react-query'
 import { loginApi } from '../api/auth'
 import useAuthStore from '../stores/useAuthStore'
 
+function portalPorRol(rol: string): string {
+  if (rol === 'juez') return '/juez/disciplinas'
+  if (rol === 'organizador') return '/organizador/torneo'
+  return '/atleta'
+}
+
+function esDestinoCompatible(destino: string, rol: string): boolean {
+  if (destino.startsWith('/atleta') && rol === 'atleta') return true
+  if (destino.startsWith('/juez') && rol === 'juez') return true
+  if (destino.startsWith('/organizador') && rol === 'organizador') return true
+  return false
+}
+
 export function LoginPage() {
   const [searchParams] = useSearchParams()
   const [email, setEmail] = useState('')
@@ -20,15 +33,13 @@ export function LoginPage() {
   const registered = searchParams.get('registered') === '1'
   const resetDone = searchParams.get('reset') === '1'
 
-  // Redirect si ya tiene sesión activa
-  if (rol === 'juez') {
-    return <Navigate to="/juez/disciplinas" replace />
-  }
-  if (rol === 'organizador') {
-    return <Navigate to="/organizador/dashboard" replace />
-  }
-  if (rol === 'atleta') {
-    return <Navigate to="/atleta" replace />
+  if (rol) {
+    const redirect = sessionStorage.getItem('redirectAfterLogin')
+    sessionStorage.removeItem('redirectAfterLogin')
+    if (redirect && esDestinoCompatible(redirect, rol)) {
+      return <Navigate to={redirect} replace />
+    }
+    return <Navigate to={portalPorRol(rol)} replace />
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -107,6 +118,12 @@ export function LoginPage() {
             No tenes cuenta?{' '}
             <Link to="/registro" className="font-semibold text-sky-300 hover:text-sky-200">
               Registrate
+            </Link>
+          </p>
+          <p className="mt-3 text-center text-sm text-gray-500">
+            ¿Solo querés ver los torneos?{' '}
+            <Link to="/portalapnea" className="text-blue-600 underline">
+              Ver torneos
             </Link>
           </p>
         </div>
