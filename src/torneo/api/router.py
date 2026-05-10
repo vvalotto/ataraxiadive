@@ -186,7 +186,11 @@ async def crear_torneo(body: CrearTorneoRequest, _: OrganizadorDep) -> JSONRespo
 async def listar_torneos() -> list[TorneoResponse]:
     handler = ListarTorneosHandler(_repo())
     torneos = await handler.handle(ListarTorneosQuery())
-    return [TorneoResponse.from_torneo(t) for t in torneos]
+    return [
+        TorneoResponse.from_torneo(torneo)
+        for torneo in torneos
+        if torneo.estado.value != "CANCELADO"
+    ]
 
 
 @router.get("/{torneo_id}", response_model=TorneoResponse)
