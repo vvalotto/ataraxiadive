@@ -64,6 +64,32 @@ AP inline en el wizard y persistencia de adjuntos obligatorios.
 
 ---
 
+## Incremento 6.6 — Portal Público
+
+Foco: **vista pública sin autenticación** — lista de torneos con tarjetas y acciones contextuales según estado; navegación al login guardando destino y redirect post-login por rol.
+
+**Decisión de diseño:** Organizadores = Administradores — sin rol Admin separado. Los organizadores crean y administran sus propios torneos directamente.
+
+### Stories
+
+| US | Título | Estado |
+|----|--------|--------|
+| [US-6.6.1](./US-6.6.1.md) | Endpoint público `GET /api/torneos` — sin auth, filtra CANCELADO | Pending |
+| [US-6.6.2](./US-6.6.2.md) | Página pública `/torneos` — tarjetas con acciones contextuales por estado | Pending |
+| [US-6.6.3](./US-6.6.3.md) | Navegación contextual — redirect al login guardando destino + post-login por rol | Pending |
+
+### Criterios de Cierre INC-6.6
+
+- [ ] US-6.6.1..6.6.3 especificadas (IEDD completa)
+- [ ] `GET /api/torneos` accesible sin token — verificado con curl sin Authorization header
+- [ ] `/torneos` accesible sin login — visitante no es redirigido a `/login`
+- [ ] Acciones contextuales verificadas por estado (INSCRIPCION_ABIERTA → "Inscribirse", EJECUCION → "Ver panel")
+- [ ] Redirect post-login lleva al destino guardado si el rol coincide
+- [ ] `RootRedirect` lleva a `/torneos` para visitantes sin sesión (no a `/login`)
+- [ ] DesignReviewer 0 CRITICAL al merge de cada US
+
+---
+
 ## Dependencias y Bloqueantes
 
 - **US-6.1.1** debe completarse **antes de cualquier UAT** del rol juez
