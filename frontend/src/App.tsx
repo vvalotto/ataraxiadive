@@ -33,6 +33,7 @@ import { AuditoriaCompetenciaPage } from './pages/organizador/AuditoriaCompetenc
 import { AuditoriaPerformancePage } from './pages/organizador/AuditoriaPerformancePage'
 import { ResultadosPage } from './pages/organizador/ResultadosPage'
 import { PodiosPage } from './pages/organizador/PodiosPage'
+import { PublicTorneosPage } from './pages/PublicTorneosPage'
 import { HealthCheck } from './components/HealthCheck'
 
 function RootRedirect() {
@@ -46,7 +47,11 @@ function RootRedirect() {
 function GlobalHealthCheck() {
   const location = useLocation()
 
-  if (location.pathname.startsWith('/organizador') || location.pathname.startsWith('/juez')) {
+  if (
+    location.pathname.startsWith('/organizador') ||
+    location.pathname.startsWith('/juez') ||
+    location.pathname.startsWith('/torneos')
+  ) {
     return null
   }
 
@@ -65,6 +70,7 @@ function App() {
     <>
       <GlobalHealthCheck />
       <Routes>
+        <Route path="/torneos" element={<PublicTorneosPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registro" element={<RegistroPage />} />
         <Route path="/recuperar-password" element={<RecuperarPasswordPage />} />
