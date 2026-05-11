@@ -19,10 +19,11 @@
 | F01-S06 | Visitante | Cualquier browser | Intentar acción que requiere auth (ej. inscribirse) | Redirige a login · post-login regresa al destino correcto | — | ⬜ PENDIENTE | — |
 | F01-S07 | Visitante | Desktop | Completar formulario de registro como nuevo atleta (`nuevo.atleta@ba2025.uat`) | Cuenta creada · redirige a portal atleta · sin error | registro UI | 🔴 |
 | F01-S08 | Admin | Desktop | Login como `admin@ba2025.uat` · cambiar rol de `nuevo.atleta@ba2025.uat` a JUEZ | Rol actualizado · próximo login del usuario refleja nuevo rol y redirige a portal juez | cambio de rol | 🟡 |
+| F01-S09 | Visitante | Desktop | Registrar nuevo usuario desde la UI | Llega email de confirmación de registro a la casilla indicada | Notificaciones | 🔴 |
 
 ## Criterio de Salida
 
-- [ ] Todos los escenarios 🔴 en PASS (S01, S02, S03, S04, S06, S07)
+- [ ] Todos los escenarios 🔴 en PASS (S01, S02, S03, S04, S06, S07, S09)
 - [ ] Usuarios autenticables: organizador, juez1, juez2, juez3, atletas
 - [ ] Portal público accesible sin autenticación
 - [ ] Registro de usuario desde UI funcional

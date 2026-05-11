@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { fetchTorneos, listarDisciplinasTorneo } from '../../api/torneo'
 import {
+  ApiError,
   fetchAtletaMe,
   listarInscripcionesDeAtleta,
   type InscriptoDto,
@@ -32,10 +33,12 @@ function sortDetalleByFecha<T extends { torneo: { fecha_inicio: string } }>(item
 }
 
 async function loadTorneos() {
-  const atleta = await fetchAtletaMe()
+  const atleta = await fetchAtletaMe().catch((err) =>
+    err instanceof ApiError && err.status === 404 ? null : Promise.reject(err),
+  )
   const [torneos, inscripciones] = await Promise.all([
     fetchTorneos(),
-    listarInscripcionesDeAtleta(atleta.atleta_id),
+    atleta ? listarInscripcionesDeAtleta(atleta.atleta_id) : Promise.resolve([]),
   ])
 
   const inscripcionesByTorneoId = new Map(

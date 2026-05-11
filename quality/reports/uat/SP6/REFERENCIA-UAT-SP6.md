@@ -81,3 +81,5 @@ nombre.apellido@ba2025.uat  /  ba2025uat
 | 🔴 Bloqueante | Impide continuar · pérdida de datos · flujo roto | Detener — registrar — no avanzar |
 | 🟡 Observación | Incorrecto pero el flujo puede continuar | Registrar — continuar |
 | ⚪ Estético | Texto, color, alineación | Registrar para después |
+
+vvalotto@gmail.com

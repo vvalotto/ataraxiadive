@@ -17,7 +17,7 @@ export function RequireRole({ role, children }: RequireRoleProps) {
     return <Navigate to="/login" replace />
   }
 
-  if (rol !== role) {
+  if (rol !== role && rol !== 'admin') {
     return <Navigate to={HOME_BY_ROL[rol]} replace />
   }
 
