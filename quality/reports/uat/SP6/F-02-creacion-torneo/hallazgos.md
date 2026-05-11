@@ -13,6 +13,8 @@
 
 | H-02-06 | F02-S02/S03 | La pantalla de edición dice "Editar disciplinas" y solo permite editar disciplinas — debería decir "Editar torneo" y permitir editar todos los campos incluyendo nombre, sede, fechas y categorías. Confirmado en F02-S03: si el organizador selecciona categorías incorrectas al crear, no tiene forma de corregirlas desde la UI. | 🟡 | 1. Abrir torneo · 2. Click en editar disciplinas · 3. Ver campos deshabilitados y título incorrecto · 4. No hay otra pantalla para editar categorías | Abierto — requiere US-IEDD | Nuevo endpoint `PUT /torneos/{id}` + handler `ActualizarTorneoCommand` + habilitar todos los campos en `CrearTorneoPage` modo edición |
 
+| H-02-07 | F02-S03 | El panel del organizador no mostraba las categorías seleccionadas del torneo en "Datos generales" | 🟡 | 1. Abrir panel de torneo · 2. Ver sección "Datos generales" · 3. No aparecen JUNIOR/SENIOR/MASTER | ✅ Resuelto | Agregado bloque de categorías con chips en `DetalleTorneoPage.tsx` bajo la info de sede/entidad |
+
 ## Mejoras (fuera de scope UAT)
 
 | ID | Origen | Descripción | Prioridad sugerida |
