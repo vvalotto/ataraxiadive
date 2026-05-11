@@ -96,7 +96,14 @@ export function AtletaHomePage() {
         </div>
       ) : null}
 
-      {query.data ? (
+      {query.data?.atleta === null ? (
+        <div className="rounded-3xl border border-slate-700 bg-slate-900 p-6 text-center text-sm text-slate-400">
+          <p className="text-base font-semibold text-slate-200">No hay torneos activos.</p>
+          <p className="mt-2">Cuando te inscribas en un torneo, tu información y disciplinas aparecerán aquí.</p>
+        </div>
+      ) : null}
+
+      {query.data?.atleta ? (
         <div className="space-y-4">
           <section className="rounded-[1.75rem] border border-slate-800 bg-slate-900 p-5 shadow-[0_30px_60px_-40px_rgba(56,189,248,0.5)]">
             <h2 className="mt-2 text-2xl font-semibold text-white">
@@ -173,7 +180,7 @@ export function AtletaHomePage() {
             <div className="mt-4 space-y-3">
               {torneosActivos.length === 0 ? (
                 <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-4 text-sm text-slate-400">
-                  Todavía no tenés inscripciones activas.
+                  No hay torneos activos para mostrar.
                 </div>
               ) : null}
 

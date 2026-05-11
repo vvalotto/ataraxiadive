@@ -37,13 +37,13 @@ Los roles participan en cada fase donde corresponde naturalmente — igual que e
 
 | Rol | Email | Password | Alcance |
 |-----|-------|----------|---------|
-| Organizador | `organizador@ba2025.uat` | `ba2025uat` | — |
-| Juez 1 | `juez1@ba2025.uat` | `ba2025uat` | DBF/DNF/DYN/SPE andarivel 1 · STA andarivel 1 |
-| Juez 2 | `juez2@ba2025.uat` | `ba2025uat` | DBF/DNF/DYN/SPE andarivel 2 · STA andarivel 2 |
-| Juez 3 | `juez3@ba2025.uat` | `ba2025uat` | STA andarivel 3 (solo STA) |
-| Atleta (Víctor Valotto) | `victor.valotto@ba2025.uat` | `ba2025uat` | — |
-| Atleta (Guadalupe Fardi) | `guadalupe.fardi@ba2025.uat` | `ba2025uat` | — |
-| Atleta (patrón general) | `nombre.apellido@ba2025.uat` | `ba2025uat` | — |
+| Organizador | `organizador@ba2025.uat` | `Ba2025uat!` | — |
+| Juez 1 | `juez1@ba2025.uat` | `Ba2025uat!` | DBF/DNF/DYN/SPE andarivel 1 · STA andarivel 1 |
+| Juez 2 | `juez2@ba2025.uat` | `Ba2025uat!` | DBF/DNF/DYN/SPE andarivel 2 · STA andarivel 2 |
+| Juez 3 | `juez3@ba2025.uat` | `Ba2025uat!` | STA andarivel 3 (solo STA) |
+| Atleta (Víctor Valotto) | `victor.valotto@ba2025.uat` | `Ba2025uat!` | — |
+| Atleta (Guadalupe Fardi) | `guadalupe.fardi@ba2025.uat` | `Ba2025uat!` | — |
+| Atleta (patrón general) | `nombre.apellido@ba2025.uat` | `Ba2025uat!` | — |
 
 **Asignación de jueces por disciplina:**
 

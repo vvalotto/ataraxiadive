@@ -5,6 +5,7 @@ import {
   type GrillaAtletaDto,
 } from '../../api/competencia'
 import {
+  ApiError,
   fetchApInscripcion,
   fetchAtletaMe,
   listarInscripcionesDeAtleta,
@@ -28,7 +29,7 @@ export interface AtletaPortalEntry {
 }
 
 export interface AtletaPortalSnapshot {
-  atleta: AtletaDto
+  atleta: AtletaDto | null
   inscripciones: InscriptoDto[]
   torneos: TorneoDto[]
   entries: AtletaPortalEntry[]
@@ -174,7 +175,14 @@ function buildApEstado(
 }
 
 export async function loadAtletaPortalSnapshot(): Promise<AtletaPortalSnapshot> {
-  const [atleta, torneos] = await Promise.all([fetchAtletaMe(), fetchTorneos()])
+  const [atletaResult, torneos] = await Promise.all([
+    fetchAtletaMe().catch((err) => (err instanceof ApiError && err.status === 404 ? null : Promise.reject(err))),
+    fetchTorneos(),
+  ])
+  if (atletaResult === null) {
+    return { atleta: null, inscripciones: [], torneos: [], entries: [] }
+  }
+  const atleta = atletaResult
   const atletaId = atleta.atleta_id
   const inscripciones = await listarInscripcionesDeAtleta(atletaId)
 

@@ -108,7 +108,7 @@ export function AtletaResultadosPage() {
   })
 
   const entries = snapshotQuery.data?.entries ?? []
-  const atletaId = snapshotQuery.data?.atleta.atleta_id ?? ''
+  const atletaId = snapshotQuery.data?.atleta?.atleta_id ?? ''
 
   const rankingQueries = useQueries({
     queries: entries.map((entry) => ({
@@ -179,9 +179,9 @@ export function AtletaResultadosPage() {
 
       {snapshotQuery.data && resultados.length === 0 ? (
         <div className="rounded-[1.75rem] border border-slate-800 bg-slate-900 p-5">
-          <p className="text-sm font-semibold text-white">Aún no tenés resultados publicados.</p>
+          <p className="text-sm font-semibold text-white">No hay resultados para mostrar.</p>
           <p className="mt-2 text-sm text-slate-400">
-            Tus resultados aparecerán cuando tengas inscripciones con disciplinas publicadas.
+            Tus resultados aparecerán una vez que el torneo esté en ejecución y el juez registre tus performances.
           </p>
         </div>
       ) : null}

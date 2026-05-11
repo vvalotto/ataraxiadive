@@ -7,6 +7,7 @@ import useAuthStore from '../stores/useAuthStore'
 function portalPorRol(rol: string): string {
   if (rol === 'juez') return '/juez/disciplinas'
   if (rol === 'organizador') return '/organizador/torneo'
+  if (rol === 'admin') return '/organizador/torneo'
   return '/atleta'
 }
 

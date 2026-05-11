@@ -1,4 +1,4 @@
-export type RolUsuario = 'juez' | 'organizador' | 'atleta'
+export type RolUsuario = 'juez' | 'organizador' | 'atleta' | 'admin'
 
 export type EstadoPerformance =
   | 'AnunciadaAP'

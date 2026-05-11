@@ -130,15 +130,33 @@ Al cerrar cada fase, verificar:
 
 Durante el vibe coding aparecerán cosas que "podrían estar mejor" pero no son defectos funcionales. Se registran en una sección separada de `hallazgos.md` y **no bloquean** el cierre de la fase. El criterio de cierre aplica solo a defectos — no a mejoras.
 
-### 3.4 Commit de cierre por fase
+### 3.4 Branch y commit por fase
 
-Al cerrar cada fase, crear un commit con el estado del código y los artefactos UAT:
+Cada fase del UAT se ejecuta en su propio branch, creado desde `develop` al iniciar la fase y mergeado a `develop` al cerrarla.
 
+**Nomenclatura de branch:**
+```
+uat/INC-X.Y/F-NN-nombre
+```
+
+**Ciclo de vida del branch:**
+```
+develop
+  └── uat/INC-6.5/F-01-setup      ← crear al iniciar F-01
+        ├── artefactos de la fase (escenarios.md, hallazgos.md, reporte)
+        ├── fixes de vibe coding si los hay
+        └── commit de cierre → PR → merge a develop → crear F-02
+```
+
+**Commit de cierre:**
 ```
 test(uat): fase F-NN completa — N hallazgos resueltos [INC-X.Y]
 ```
 
-Este commit es el punto de retorno si algo se rompe en la fase siguiente, y es evidencia en git del progreso real del UAT.
+Este ciclo garantiza que:
+- Cada fase es un punto de retorno limpio en git
+- Los fixes de vibe coding quedan asociados a la fase que los generó
+- `develop` avanza fase a fase con evidencia verificable del progreso
 
 ---
 
