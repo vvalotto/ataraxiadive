@@ -352,10 +352,28 @@ function TorneoOperativoPanel({
             </FieldShell>
           </div>
 
-          <div className="mt-4 rounded-[1.25rem] border border-slate-700 bg-slate-950/40 p-4 text-sm text-slate-300">
-            {torneo.sede.ciudad}, {torneo.sede.pais} · {torneo.entidad_organizadora.nombre} ·{' '}
-            {torneo.entidad_organizadora.tipo}
+          <div className="mt-4">
+            <label className="mb-2 block text-sm font-medium text-slate-200">Ciudad</label>
+            <div className="rounded-[1.25rem] border border-slate-700 bg-slate-950/40 p-4 text-sm text-slate-300">
+              {torneo.sede.ciudad}, {torneo.sede.pais}
+            </div>
           </div>
+
+          {torneo.grupos_etarios.length > 0 && (
+            <div className="mt-4">
+              <label className="mb-2 block text-sm font-medium text-slate-200">Categorías</label>
+              <div className="flex flex-wrap gap-2 rounded-[1.25rem] border border-slate-700 bg-slate-950/40 p-4">
+                {torneo.grupos_etarios.map((cat) => (
+                  <span
+                    key={cat}
+                    className="rounded-full border border-slate-600 bg-slate-800 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-200"
+                  >
+                    {cat}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
           {torneo.estado === 'EJECUCION' && isPremiacionStatusLoading ? (
             <p className="mt-4 text-sm font-semibold text-slate-300">
