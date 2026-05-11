@@ -29,6 +29,9 @@ BASE = "http://localhost:8000"
 PASSWORD = "Ba2025uat!"
 EMAIL_DOMAIN = "@ba2025.uat"
 
+# El dataset BA2025 usa "SPE" (legacy) que en la plataforma corresponde a SPE_2X50
+DISCIPLINA_MAP = {"SPE": "SPE_2X50"}
+
 SCHEDULES_PATH = Path("data/datasets/buenos_aires_2025/schedules.json")
 IDS_PATH = Path("quality/reports/uat/SP6/uat_ba2025_usuarios_ids.json")
 
@@ -76,9 +79,10 @@ def cargar_schedules() -> dict[str, list[dict]]:
     data = json.loads(SCHEDULES_PATH.read_text())
     por_atleta: dict[str, list[dict]] = defaultdict(list)
     for entry in data:
+        disciplina = DISCIPLINA_MAP.get(entry["discipline"], entry["discipline"])
         por_atleta[entry["name"]].append(
             {
-                "disciplina": entry["discipline"],
+                "disciplina": disciplina,
                 "ap": ap_a_decimal(entry["announced_performance"]),
             }
         )

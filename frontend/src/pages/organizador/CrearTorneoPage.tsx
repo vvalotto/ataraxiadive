@@ -63,7 +63,7 @@ export function CrearTorneoPage() {
   const isEditingDisciplinas = Boolean(torneoId)
   const [form, setForm] = useState<FormState>(INITIAL_FORM)
   const [disciplinas, setDisciplinas] = useState<DisciplinaCodigo[]>([])
-  const [gruposEtarios, setGruposEtarios] = useState<GrupoEtario[]>(['SENIOR'])
+  const [gruposEtarios, setGruposEtarios] = useState<GrupoEtario[]>(['JUNIOR', 'SENIOR', 'MASTER'])
   const [errors, setErrors] = useState<FormErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isLoading, setIsLoading] = useState(isEditingDisciplinas)
@@ -132,11 +132,9 @@ export function CrearTorneoPage() {
     if (form.fechaInicio && form.fechaFin && form.fechaFin < form.fechaInicio) {
       nextErrors.fechaFin = 'La fecha de fin debe ser igual o posterior a la de inicio'
     }
-    if (disciplinas.length === 0) {
-      nextErrors.disciplinas = 'Selecciona al menos una disciplina'
-    }
+
     if (!isEditingDisciplinas && gruposEtarios.length === 0) {
-      nextErrors.gruposEtarios = 'Selecciona al menos un grupo etario'
+      nextErrors.gruposEtarios = 'Selecciona al menos una categoría'
     }
     return nextErrors
   }
@@ -188,12 +186,14 @@ export function CrearTorneoPage() {
       }
 
       const response = await crearTorneo(buildPayload())
-      try {
-        await asignarDisciplinas(response.torneo_id, disciplinas)
-      } catch (error) {
-        setTorneoCreadoSinDisciplinas(response.torneo_id)
-        setErrors({ general: `Torneo creado sin disciplinas: ${getErrorMessage(error)}` })
-        return
+      if (disciplinas.length > 0) {
+        try {
+          await asignarDisciplinas(response.torneo_id, disciplinas)
+        } catch (error) {
+          setTorneoCreadoSinDisciplinas(response.torneo_id)
+          setErrors({ general: `Torneo creado sin disciplinas: ${getErrorMessage(error)}` })
+          return
+        }
       }
       navigate(`/organizador/panel?torneo_id=${response.torneo_id}`)
     } catch (error) {
@@ -364,7 +364,7 @@ export function CrearTorneoPage() {
         <div className="mt-6">
           {!isEditingDisciplinas ? (
             <fieldset className="mb-6">
-              <legend className="text-sm font-semibold text-slate-100">Grupos etarios</legend>
+              <legend className="text-sm font-semibold text-slate-100">Categorías</legend>
               <div className="mt-3 flex flex-wrap gap-2">
                 {GRUPOS_ETARIOS.map((grupo) => {
                   const selected = gruposEtarios.includes(grupo)

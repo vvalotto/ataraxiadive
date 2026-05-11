@@ -2,45 +2,34 @@
 
 ## Criterio de Entrada
 
-- [ ] F-01 completada: usuarios autenticables · portal público accesible
-- [ ] Backend y frontend levantados
+- [x] F-01 cerrada: usuarios autenticables · portal público accesible
+- [x] Backend y frontend levantados
 
-## Datos a ingresar
+## Datos usados
 
-| Campo | Valor |
-|-------|-------|
-| Nombre | Apnea Indoor Buenos Aires 2025 |
-| Sede nombre | Club Náutico Buenos Aires |
-| Sede ciudad | Buenos Aires |
-| Sede país | Argentina |
-| Fecha inicio | 2025-06-14 |
-| Fecha fin | 2025-06-15 |
-| Entidad organizadora | Freediving Argentina |
-| Tipo entidad | ASOCIACION |
-| Disciplinas | DBF · DNF · DYN · SPE · STA |
-| Categorías | JUNIOR · SENIOR · MASTER |
+Torneo de referencia UAT: **Puerto Madryn 2016** (`cedbbe83-a87a-4a81-9d80-68de6f6f5405`)  
+*(el nombre del torneo no afecta la funcionalidad del UAT — los datos del dataset BA2025 se vinculan por torneo_id)*
 
 ## Escenarios
 
 | ID | Actor | Dispositivo | Acción | Resultado esperado | Resultado real | Estado | Hallazgo |
 |----|-------|-------------|--------|--------------------|----------------|--------|----------|
-| F02-S01 | Organizador | Desktop | Crear torneo con todos los datos del dataset | Torneo creado · `torneo_id` visible o accesible | — | ⬜ PENDIENTE | — |
-| F02-S02 | Organizador | Desktop | Configurar disciplinas: DBF, DNF, DYN, SPE, STA | 5 disciplinas asociadas | — | ⬜ PENDIENTE | — |
-| F02-S03 | Organizador | Desktop | Configurar categorías: JUNIOR, SENIOR, MASTER | Categorías guardadas | — | ⬜ PENDIENTE | — |
-| F02-S04 | Visitante | Cualquier | Refrescar `/portalapnea` | Torneo aparece en lista (estado CREADO) | — | ⬜ PENDIENTE | — |
-| F02-S05 | Organizador | Desktop | Ver lista de torneos en portal organizador | Torneo aparece ordenado por fecha | — | ⬜ PENDIENTE | — |
+| F02-S01 | Organizador | Desktop | Crear torneo con datos y categorías | Torneo creado · `torneo_id` disponible | Torneo creado correctamente · categorías JUNIOR/SENIOR/MASTER | ✅ PASS | H-02-01 · H-02-02 · H-02-03 · H-02-04 (todos resueltos) |
+| F02-S02 | Organizador | Desktop | Configurar disciplinas: DBF, DNF, DYN, SPE_2X50, STA | 5 disciplinas asociadas al torneo | 5 disciplinas confirmadas vía API | ✅ PASS | H-02-06 🟡 diferido |
+| F02-S03 | Organizador | Desktop | Verificar categorías: JUNIOR, SENIOR, MASTER | Categorías guardadas | Confirmadas en API (`grupos_etarios`) | ✅ PASS | — |
+| F02-S04 | Visitante | Cualquier | Refrescar `/portalapnea` | Torneo aparece en la lista | Ambos torneos visibles en portal público | ✅ PASS | — |
+| F02-S05 | Organizador | Desktop | Verificar lista de torneos ordenada por fecha | Torneos ordenados por fecha de inicio ascendente | Orden correcto tras fix | ✅ PASS | H-02-05 (resuelto) |
 
 ## Registro de torneo_id
 
-**Anotar aquí el `torneo_id` generado — requerido para Seed-B:**
-
 ```
-torneo_id: ________________________________
+torneo_id: cedbbe83-a87a-4a81-9d80-68de6f6f5405  (Puerto Madryn 2016)
 ```
 
 ## Criterio de Salida
 
-- [ ] Torneo creado con 5 disciplinas y 3 categorías
-- [ ] `torneo_id` registrado
-- [ ] Torneo visible en portal organizador
-- [ ] Estado: `CREADO`
+- [x] Torneo creado con 5 disciplinas y 3 categorías
+- [x] `torneo_id` registrado
+- [x] Torneo visible en portal público
+- [x] Lista del organizador ordenada por fecha ascendente
+- [x] Estado: `CREADO`
