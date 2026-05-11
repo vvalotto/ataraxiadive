@@ -102,12 +102,12 @@ export function TablaInscriptos({
           <table className="min-w-full divide-y divide-slate-700 text-left text-sm">
             <thead className="bg-slate-950/80 text-xs font-semibold uppercase text-slate-400">
               <tr>
-                <th className="px-4 py-3">Atleta</th>
-                <th className="px-4 py-3">Club</th>
-                <th className="px-4 py-3">Categoria</th>
-                <th className="px-4 py-3">Inscripcion</th>
+                <th className="px-4 py-3 text-center">Atleta</th>
+                <th className="px-4 py-3 text-center">Club</th>
+                <th className="px-4 py-3 text-center">Categoria</th>
+                <th className="px-4 py-3 text-center">Inscripcion</th>
                 {disciplinasVisibles.map((disciplina) => (
-                  <th key={disciplina} className="px-4 py-3">
+                  <th key={disciplina} className="px-4 py-3 text-center">
                     Anuncio · {disciplina}
                   </th>
                 ))}
@@ -118,14 +118,14 @@ export function TablaInscriptos({
                 <tr key={row.inscripcionId}>
                   <td className="px-4 py-3 font-semibold text-white">{row.nombre}</td>
                   <td className="px-4 py-3 text-slate-300">{row.club}</td>
-                  <td className="px-4 py-3 text-slate-300">
+                  <td className="px-4 py-3 text-center text-slate-300">
                     {formatCategoria(row.categoria)}
                   </td>
-                  <td className="px-4 py-3 text-slate-300">{row.estadoInscripcion}</td>
+                  <td className="px-4 py-3 text-center text-slate-300">{row.estadoInscripcion}</td>
                   {disciplinasVisibles.map((disciplina) => {
                     if (!row.disciplinas.includes(disciplina)) {
                       return (
-                        <td key={disciplina} className="px-4 py-3 text-slate-500">
+                        <td key={disciplina} className="px-4 py-3 text-center text-slate-500">
                           No inscripto
                         </td>
                       )
@@ -135,8 +135,8 @@ export function TablaInscriptos({
                     const draft = drafts[cellKey] ?? estado?.ap ?? ''
                     const editableCell = editable && puedeDeclararAp(estado)
                     return (
-                      <td key={disciplina} className="px-4 py-3">
-                        <div className="space-y-2">
+                      <td key={disciplina} className="px-4 py-3 text-center">
+                        <div className="flex flex-col items-center space-y-2">
                           <EstadoAPBadge
                             estado={estado?.estado ?? 'pendiente'}
                             ap={estado?.ap}

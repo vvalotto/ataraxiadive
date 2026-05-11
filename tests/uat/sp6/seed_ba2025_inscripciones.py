@@ -114,16 +114,18 @@ def main() -> None:
 
     with httpx.Client(base_url=BASE, timeout=30) as client:
 
-        # ── 1. Abrir inscripciones ─────────────────────────────────────────────
-        print("▸ Abriendo inscripciones del torneo")
+        # ── 1. Verificar que el torneo está en INSCRIPCION_ABIERTA ────────────
+        print("▸ Verificando estado del torneo")
         org_token = login(client, f"organizador{EMAIL_DOMAIN}")
         org_h = {"Authorization": f"Bearer {org_token}"}
-        resp = client.put(f"/torneos/{torneo_id}/abrir-inscripcion", headers=org_h)
-        if resp.status_code == 409:
-            log("inscripciones ya abiertas (OK)")
-        else:
-            assert_ok(resp, "abrir-inscripcion")
-            log("✓ inscripciones abiertas")
+        resp = client.get(f"/torneos/{torneo_id}")
+        assert_ok(resp, "obtener torneo")
+        estado = resp.json().get("estado")
+        if estado != "INSCRIPCION_ABIERTA":
+            print(f"\n✗ El torneo está en estado '{estado}' — debe estar en INSCRIPCION_ABIERTA.")
+            print("  Abrí las inscripciones desde el portal del organizador (F-04-S01) antes de correr Seed-B.")
+            sys.exit(1)
+        log(f"✓ estado: {estado}")
         print()
 
         # ── 2. Inscribir atletas y declarar APs ───────────────────────────────
