@@ -102,23 +102,33 @@ function TorneoCard({ torneo }: { torneo: TorneoDto }) {
       </div>
 
       {(disciplinaNames.length > 0 || categorias.length > 0) && (
-        <div className="mt-3 flex flex-wrap gap-1.5">
-          {disciplinaNames.map((d) => (
-            <span
-              key={d}
-              className="rounded-full border border-sky-700/40 bg-sky-900/30 px-2.5 py-0.5 text-xs font-semibold text-sky-300"
-            >
-              {d}
-            </span>
-          ))}
-          {categorias.map((c) => (
-            <span
-              key={c}
-              className="rounded-full border border-slate-600/40 bg-slate-800/60 px-2.5 py-0.5 text-xs font-semibold text-slate-300"
-            >
-              {c}
-            </span>
-          ))}
+        <div className="mt-3 space-y-2">
+          {disciplinaNames.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="text-xs text-slate-500 mr-0.5">Disciplinas</span>
+              {disciplinaNames.map((d) => (
+                <span
+                  key={d}
+                  className="rounded-full border border-sky-700/40 bg-sky-900/30 px-2.5 py-0.5 text-xs font-semibold text-sky-300"
+                >
+                  {d}
+                </span>
+              ))}
+            </div>
+          )}
+          {categorias.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="text-xs text-slate-500 mr-0.5">Categorías</span>
+              {categorias.map((c) => (
+                <span
+                  key={c}
+                  className="rounded-full border border-slate-600/40 bg-slate-800/60 px-2.5 py-0.5 text-xs font-semibold text-slate-300"
+                >
+                  {c}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
