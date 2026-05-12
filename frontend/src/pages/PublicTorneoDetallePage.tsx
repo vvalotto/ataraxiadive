@@ -92,12 +92,12 @@ function AtletaRow({ entry }: { entry: GrillaAtletaDto }) {
   const enCurso = entry.estado === 'Llamada'
   return (
     <tr className={enCurso ? 'border-b border-emerald-500/20 bg-emerald-500/5' : 'border-b border-slate-800/60'}>
-      <td className="py-2 pr-3 text-right text-xs text-slate-500">{entry.posicion}</td>
+      <td className="py-2 pr-3 text-center text-xs text-slate-500">{entry.posicion}</td>
       <td className="py-2 pr-3 text-sm text-slate-200">{entry.nombre_atleta}</td>
-      <td className="py-2 pr-3 text-xs text-slate-400">{formatAp(entry.ap_declarado, entry.unidad)}</td>
-      <td className="py-2 pr-3 text-xs text-slate-400">{formatHora(entry.ot_programado)}</td>
-      <td className="py-2 pr-3 text-xs font-medium text-slate-300">{formatRp(entry.performance, entry.unidad)}</td>
-      <td className={`py-2 text-xs ${tarjetaClases(entry.tarjeta_asignada)}`}>
+      <td className="py-2 pr-3 text-center text-xs text-slate-400">{formatAp(entry.ap_declarado, entry.unidad)}</td>
+      <td className="py-2 pr-3 text-center text-xs text-slate-400">{formatHora(entry.ot_programado)}</td>
+      <td className="py-2 pr-3 text-center text-xs font-medium text-slate-300">{formatRp(entry.performance, entry.unidad)}</td>
+      <td className={`py-2 text-center text-xs ${tarjetaClases(entry.tarjeta_asignada)}`}>
         {entry.tarjeta_asignada ?? '—'}
       </td>
     </tr>
@@ -112,12 +112,12 @@ function GrillaTabContent({ grilla }: { grilla: GrillaDisciplina }) {
       <table className="w-full min-w-[520px] text-left">
         <thead>
           <tr className="border-b border-slate-700">
-            <th className="pb-2 pr-3 text-right text-xs text-slate-500">Pos</th>
+            <th className="pb-2 pr-3 text-center text-xs text-slate-500">Pos</th>
             <th className="pb-2 pr-3 text-xs text-slate-500">Atleta</th>
-            <th className="pb-2 pr-3 text-xs text-slate-500">Anuncio</th>
-            <th className="pb-2 pr-3 text-xs text-slate-500">OT</th>
-            <th className="pb-2 pr-3 text-xs text-slate-500">Performance</th>
-            <th className="pb-2 text-xs text-slate-500">Tarjeta</th>
+            <th className="pb-2 pr-3 text-center text-xs text-slate-500">Anuncio</th>
+            <th className="pb-2 pr-3 text-center text-xs text-slate-500">OT</th>
+            <th className="pb-2 pr-3 text-center text-xs text-slate-500">Performance</th>
+            <th className="pb-2 text-center text-xs text-slate-500">Tarjeta</th>
           </tr>
         </thead>
         <tbody>
