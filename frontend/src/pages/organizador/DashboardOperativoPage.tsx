@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import {
@@ -116,7 +116,9 @@ function formatTorneoEstado(estado: EstadoTorneo): string {
 
 function formatDurationMinutes(totalMinutes: number | null): string {
   if (totalMinutes === null || totalMinutes <= 0) return 'Sin ETA'
-  return `${totalMinutes}'`
+  const hours = Math.floor(totalMinutes / 60)
+  const minutes = totalMinutes % 60
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
 }
 
 function formatOtHora(ot: string | null | undefined): string {
@@ -318,6 +320,8 @@ export function DashboardOperativoPage() {
 }
 
 function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
+  const [disciplinaSeleccionada, setDisciplinaSeleccionada] = useState<string>('')
+
   const torneoQuery = useQuery({
     queryKey: ['torneo', torneoId],
     queryFn: () => fetchTorneo(torneoId),
@@ -346,10 +350,14 @@ function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
     [competenciasQuery.data, estadoCompetenciasQueries],
   )
 
-  const competenciaActiva = useMemo(
-    () => pickCompetenciaActiva(competenciasOperativas),
-    [competenciasOperativas],
-  )
+  const competenciaActiva = useMemo(() => {
+    if (disciplinaSeleccionada) {
+      return competenciasOperativas.find(
+        (item) => item.competencia.disciplina === disciplinaSeleccionada,
+      ) ?? pickCompetenciaActiva(competenciasOperativas)
+    }
+    return pickCompetenciaActiva(competenciasOperativas)
+  }, [competenciasOperativas, disciplinaSeleccionada])
 
   const progresoQuery = useQuery({
     queryKey: ['panel-progreso', competenciaActiva?.competencia.competencia_id],
@@ -436,6 +444,25 @@ function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
         <EmptyStateCard message="Este torneo todavía no tiene competencias operativas." />
       ) : null}
 
+      {competenciasOperativas.length > 1 ? (
+        <div className="flex items-center gap-3">
+          <label className="text-sm font-semibold text-slate-300">
+            Disciplina
+          </label>
+          <select
+            value={disciplinaSeleccionada || (competenciaActiva?.competencia.disciplina ?? '')}
+            onChange={(event) => setDisciplinaSeleccionada(event.target.value)}
+            className="min-h-10 rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
+          >
+            {competenciasOperativas.map((item) => (
+              <option key={item.competencia.disciplina} value={item.competencia.disciplina}>
+                {item.competencia.disciplina}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
+
       {competenciaActiva ? (
         <>
           <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -457,7 +484,7 @@ function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
               detail="Alertas operativas pendientes de resolucion"
             />
             <KpiCard
-              label="Tiempo estimado"
+              label="Tiempo estimado (hh:mm)"
               value={tiempoEstimado}
               tone="accent"
               detail="Estimacion basada en intervalo configurado y atletas pendientes"

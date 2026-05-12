@@ -10,8 +10,13 @@ export interface DisciplinaViewModel {
   competenciaId: string
 }
 
-function esEnEjecucion(estado: string): boolean {
-  return estado === 'EJECUCION' || estado === 'EnEjecucion'
+function esTorneoOperativo(estado: string): boolean {
+  return (
+    estado === 'PREPARACION' ||
+    estado === 'EJECUCION' ||
+    estado === 'EnEjecucion' ||
+    estado === 'PREMIACION'
+  )
 }
 
 export function useDisciplinasJuez() {
@@ -21,7 +26,7 @@ export function useDisciplinasJuez() {
   const torneoActivoQuery = useQuery({
     queryKey: ['torneos'],
     queryFn: fetchTorneos,
-    select: (torneos) => torneos.find((torneo) => esEnEjecucion(torneo.estado)) ?? null,
+    select: (torneos) => torneos.find((torneo) => esTorneoOperativo(torneo.estado)) ?? null,
   })
 
   const disciplinasQuery = useQuery({
@@ -56,7 +61,7 @@ export function useDisciplinasJuez() {
           return {
             disciplina,
             competenciaId: competencia.competencia_id,
-            estado: esEnEjecucion(estado.estado) ? 'ACTIVA' : 'PENDIENTE',
+            estado: esTorneoOperativo(estado.estado) ? 'ACTIVA' : 'PENDIENTE',
           } satisfies DisciplinaViewModel
         }),
       )

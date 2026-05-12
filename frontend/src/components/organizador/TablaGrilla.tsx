@@ -9,15 +9,6 @@ interface TablaGrillaProps {
   onReorder: (rows: GrillaAtletaDto[], cambios: CambioGrillaPayload[]) => void
 }
 
-const ESTADO_PERFORMANCE_LABELS: Record<string, string> = {
-  AnunciadaAP: 'AP anunciada',
-  Llamada: 'Llamada',
-  ResultadoRegistrado: 'Resultado registrado',
-  EnRevision: 'En revisión',
-  Ejecutada: 'Ejecutada',
-  DNS: 'DNS',
-}
-
 function formatOt(value: string) {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) {
@@ -35,10 +26,6 @@ function moveRow(rows: GrillaAtletaDto[], fromIndex: number, toIndex: number) {
   const [moved] = next.splice(fromIndex, 1)
   next.splice(toIndex, 0, moved)
   return next.map((row, index) => ({ ...row, posicion: index + 1 }))
-}
-
-function formatEstadoPerformance(estado: string): string {
-  return ESTADO_PERFORMANCE_LABELS[estado] ?? estado
 }
 
 export function TablaGrilla({ rows, readOnly, isSaving, onReorder }: TablaGrillaProps) {
@@ -90,7 +77,6 @@ export function TablaGrilla({ rows, readOnly, isSaving, onReorder }: TablaGrilla
             <th className="px-4 py-3">Anuncio</th>
             <th className="px-4 py-3">Andarivel</th>
             <th className="px-4 py-3">OT</th>
-            <th className="px-4 py-3">Estado</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-800 bg-slate-900/70">
@@ -121,7 +107,6 @@ export function TablaGrilla({ rows, readOnly, isSaving, onReorder }: TablaGrilla
               <td className="px-4 py-3 font-semibold text-slate-100">
                 {formatOt(row.ot_programado)}
               </td>
-              <td className="px-4 py-3 text-slate-300">{formatEstadoPerformance(row.estado)}</td>
             </tr>
           ))}
         </tbody>
