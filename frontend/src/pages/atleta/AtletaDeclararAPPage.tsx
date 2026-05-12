@@ -50,7 +50,7 @@ function getApError(error: unknown): string {
 export function AtletaDeclararAPPage() {
   const { torneoId, disciplina } = useParams<{ torneoId: string; disciplina: string }>()
   const navigate = useNavigate()
-  const [valorAp, setValorAp] = useState('')
+  const [valorAp, setValorAp] = useState<string | null>(null)
   const query = useQuery({
     queryKey: ['atleta-ap-context', torneoId, disciplina],
     queryFn: () => loadApContext(torneoId ?? '', disciplina ?? ''),
@@ -79,7 +79,7 @@ export function AtletaDeclararAPPage() {
   const currentAp = query.data?.apActual ?? ''
   const currentApDisplay =
     currentAp && esDisciplinaTiempo(disciplina ?? '') ? secondsToApInput(currentAp) : currentAp
-  const valorApValue = valorAp || currentApDisplay
+  const valorApValue = valorAp ?? currentApDisplay
   const apBloqueado = query.data ? query.data.torneo.estado !== 'INSCRIPCION_ABIERTA' : true
   const puedeGuardar = isApInputValido(valorApValue, disciplina ?? '')
 

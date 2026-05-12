@@ -24,6 +24,11 @@ export function LoginPage() {
   const [password, setPassword] = useState('')
   const login = useAuthStore((s) => s.login)
   const rol = useAuthStore((s) => s.rol)
+  const [redirectTarget] = useState<string | null>(() => {
+    const redirect = sessionStorage.getItem('redirectAfterLogin')
+    if (redirect) sessionStorage.removeItem('redirectAfterLogin')
+    return redirect
+  })
 
   const mutation = useMutation({
     mutationFn: () => loginApi(email, password),
@@ -35,10 +40,8 @@ export function LoginPage() {
   const resetDone = searchParams.get('reset') === '1'
 
   if (rol) {
-    const redirect = sessionStorage.getItem('redirectAfterLogin')
-    sessionStorage.removeItem('redirectAfterLogin')
-    if (redirect && esDestinoCompatible(redirect, rol)) {
-      return <Navigate to={redirect} replace />
+    if (redirectTarget && esDestinoCompatible(redirectTarget, rol)) {
+      return <Navigate to={redirectTarget} replace />
     }
     return <Navigate to={portalPorRol(rol)} replace />
   }

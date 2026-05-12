@@ -55,6 +55,17 @@ export interface AtletaDto {
   brevet: string | null
 }
 
+export interface CrearAtletaPayload {
+  atletaId: string
+  nombre: string
+  apellido: string
+  email: string
+  fechaNacimiento: string
+  categoria: string
+  club: string
+  brevet?: string
+}
+
 export interface InscribirAtletaPayload {
   atletaId: string
   torneoId: string
@@ -149,6 +160,32 @@ export async function fetchAtletaMe(): Promise<AtletaDto> {
     headers: buildHeaders(),
   })
   return parseResponse<AtletaDto>(response)
+}
+
+export async function fetchAtletaMeOrNull(): Promise<AtletaDto | null> {
+  const response = await fetch('/registro/atletas/me', {
+    headers: buildHeaders(),
+  })
+  if (response.status === 404) return null
+  return parseResponse<AtletaDto>(response)
+}
+
+export async function crearAtleta(payload: CrearAtletaPayload): Promise<{ atleta_id: string }> {
+  const response = await fetch('/registro/atletas', {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      atleta_id: payload.atletaId,
+      nombre: payload.nombre,
+      apellido: payload.apellido,
+      email: payload.email,
+      fecha_nacimiento: payload.fechaNacimiento,
+      categoria: payload.categoria,
+      club: payload.club,
+      brevet: payload.brevet ?? null,
+    }),
+  })
+  return parseResponse<{ atleta_id: string }>(response)
 }
 
 export async function fetchAtleta(atletaId: string): Promise<AtletaDto> {
