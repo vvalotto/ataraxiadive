@@ -3,7 +3,8 @@ import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchTorneo, listarDisciplinasTorneo } from '../../api/torneo'
 import {
-  fetchAtletaMe,
+  crearAtleta,
+  fetchAtletaMeOrNull,
   guardarApInscripcion,
   inscribirAtleta,
   subirAptoMedico,
@@ -36,6 +37,8 @@ export function AtletaInscripcionPage() {
   const { torneoId } = useParams<{ torneoId: string }>()
   const atletaId = useAuthStore((state) => state.userId)
   const email = useAuthStore((state) => state.email)
+  const authNombre = useAuthStore((state) => state.nombre)
+  const authApellido = useAuthStore((state) => state.apellido)
   const navigate = useNavigate()
   const [step, setStep] = useState<WizardStep>(1)
   const [nombreCompleto, setNombreCompleto] = useState('')
@@ -45,6 +48,7 @@ export function AtletaInscripcionPage() {
   const [documentoNumero, setDocumentoNumero] = useState('')
   const [telefono, setTelefono] = useState('')
   const [categoria, setCategoria] = useState('')
+  const [club, setClub] = useState('')
   const [brevet, setBrevet] = useState('')
   const [disciplinasSeleccionadas, setDisciplinasSeleccionadas] = useState<string[]>([])
   const [apPorDisciplina, setApPorDisciplina] = useState<Record<string, string>>({})
@@ -59,7 +63,7 @@ export function AtletaInscripcionPage() {
       const [torneo, disciplinas, atleta] = await Promise.all([
         fetchTorneo(torneoId ?? ''),
         listarDisciplinasTorneo(torneoId ?? ''),
-        fetchAtletaMe(),
+        fetchAtletaMeOrNull(),
       ])
       return { torneo, disciplinas, atleta }
     },
@@ -68,10 +72,25 @@ export function AtletaInscripcionPage() {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const registroAtletaId = query.data?.atleta.atleta_id
-      if (!registroAtletaId || !torneoId) {
+      if (!atletaId || !torneoId) {
         throw new Error('No se pudo identificar al atleta o torneo para inscribirse.')
       }
+
+      let registroAtletaId = query.data?.atleta?.atleta_id
+      if (!registroAtletaId) {
+        const created = await crearAtleta({
+          atletaId,
+          nombre: authNombre ?? nombreCompletoValue.split(' ')[0] ?? '',
+          apellido: authApellido ?? nombreCompletoValue.split(' ').slice(1).join(' ') ?? '',
+          email: email ?? '',
+          fechaNacimiento: fechaNacimientoValue,
+          categoria: categoriaValue,
+          club: club || atleta?.club || '',
+          brevet: brevetValue || undefined,
+        })
+        registroAtletaId = created.atleta_id
+      }
+
       const { inscripcion_id: inscripcionId } = await inscribirAtleta({
         atletaId: registroAtletaId,
         torneoId,
@@ -135,7 +154,7 @@ export function AtletaInscripcionPage() {
   })
 
   const atleta = query.data?.atleta
-  const nombreCompletoValue = nombreCompleto || (atleta ? `${atleta.nombre} ${atleta.apellido}`.trim() : '')
+  const nombreCompletoValue = nombreCompleto || (atleta ? `${atleta.nombre} ${atleta.apellido}`.trim() : `${authNombre ?? ''} ${authApellido ?? ''}`.trim())
   const fechaNacimientoValue = fechaNacimiento || atleta?.fecha_nacimiento || ''
   const categoriaValue = categoria || atleta?.categoria || ''
   const brevetValue = brevet || atleta?.brevet || ''
@@ -363,7 +382,22 @@ export function AtletaInscripcionPage() {
               </div>
               <label className="block text-sm text-slate-300">
                 Categoría *
-                {categoriaValue === 'MASTER_MASCULINO' || categoriaValue === 'MASTER_FEMENINO' ? (
+                {!categoriaValue ? (
+                  <select
+                    value={categoria.replace(/_MASCULINO|_FEMENINO/, '')}
+                    onChange={(event) => {
+                      const base = event.target.value
+                      const suffix = genero === 'F' ? '_FEMENINO' : '_MASCULINO'
+                      setCategoria(base ? `${base}${suffix}` : '')
+                    }}
+                    className="mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100"
+                  >
+                    <option value="">— Seleccioná tu categoría —</option>
+                    <option value="JUNIOR">Junior</option>
+                    <option value="SENIOR">Senior</option>
+                    <option value="MASTER">Master</option>
+                  </select>
+                ) : categoriaValue === 'MASTER_MASCULINO' || categoriaValue === 'MASTER_FEMENINO' ? (
                   <select
                     value={categoria || categoriaValue}
                     onChange={(event) => setCategoria(event.target.value)}
@@ -381,6 +415,15 @@ export function AtletaInscripcionPage() {
                     className="mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-400"
                   />
                 )}
+              </label>
+              <label className="block text-sm text-slate-300">
+                Club
+                <input
+                  value={club || atleta?.club || ''}
+                  onChange={(event) => setClub(event.target.value)}
+                  placeholder="Nombre del club (opcional)"
+                  className="mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100"
+                />
               </label>
               <label className="block text-sm text-slate-300">
                 Nº Brevet FAAS

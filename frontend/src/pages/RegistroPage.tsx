@@ -185,6 +185,9 @@ export function RegistroPage() {
                 className={inputClass(Boolean(errors.password))}
               />
               <PasswordStrengthBar password={form.password} />
+              <span className="mt-1 block text-xs text-slate-500">
+                Mínimo 10 caracteres · al menos una mayúscula · al menos un número
+              </span>
               {errors.password ? (
                 <span className="mt-1 block text-sm text-red-300">{errors.password}</span>
               ) : null}

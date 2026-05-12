@@ -7,6 +7,7 @@ import useAuthStore from '../stores/useAuthStore'
 function portalPorRol(rol: string): string {
   if (rol === 'juez') return '/juez/disciplinas'
   if (rol === 'organizador') return '/organizador/torneo'
+  if (rol === 'admin') return '/organizador/torneo'
   return '/atleta'
 }
 
@@ -23,6 +24,11 @@ export function LoginPage() {
   const [password, setPassword] = useState('')
   const login = useAuthStore((s) => s.login)
   const rol = useAuthStore((s) => s.rol)
+  const [redirectTarget] = useState<string | null>(() => {
+    const redirect = sessionStorage.getItem('redirectAfterLogin')
+    if (redirect) sessionStorage.removeItem('redirectAfterLogin')
+    return redirect
+  })
 
   const mutation = useMutation({
     mutationFn: () => loginApi(email, password),
@@ -34,10 +40,8 @@ export function LoginPage() {
   const resetDone = searchParams.get('reset') === '1'
 
   if (rol) {
-    const redirect = sessionStorage.getItem('redirectAfterLogin')
-    sessionStorage.removeItem('redirectAfterLogin')
-    if (redirect && esDestinoCompatible(redirect, rol)) {
-      return <Navigate to={redirect} replace />
+    if (redirectTarget && esDestinoCompatible(redirectTarget, rol)) {
+      return <Navigate to={redirectTarget} replace />
     }
     return <Navigate to={portalPorRol(rol)} replace />
   }

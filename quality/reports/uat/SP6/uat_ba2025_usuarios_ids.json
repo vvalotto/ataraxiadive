@@ -1,0 +1,209 @@
+{
+  "password_universal": "Ba2025uat!",
+  "roles_fijos": {
+    "organizador": {
+      "email": "organizador@ba2025.uat",
+      "user_id": "fbcd9cbb-07e0-408d-9227-6ce7ba07dc9f"
+    },
+    "juez1": {
+      "email": "juez1@ba2025.uat",
+      "user_id": "d965f4c7-5de4-4be8-9db2-21c250ab304c"
+    },
+    "juez2": {
+      "email": "juez2@ba2025.uat",
+      "user_id": "7de61b6f-d59e-41ce-9aad-f91a6d5aa515"
+    },
+    "juez3": {
+      "email": "juez3@ba2025.uat",
+      "user_id": "07e4ba3e-b821-403f-a9ca-a91327440b59"
+    }
+  },
+  "atletas": {
+    "Alejandro Alperin": {
+      "atleta_id": "dae4f716-2a44-4965-9796-7b7e51c9a70c",
+      "email": "alejandro.alperin@ba2025.uat",
+      "categoria": "MASTER_MASCULINO",
+      "club": "OHANA FREEDIVERS"
+    },
+    "Alina Di Lernia": {
+      "atleta_id": "33311317-945f-4c80-9287-56e09aea7b15",
+      "email": "alina.di.lernia@ba2025.uat",
+      "categoria": "MASTER_FEMENINO",
+      "club": "ESCUELA MARES"
+    },
+    "Diego Calvo": {
+      "atleta_id": "fecac447-a613-4b69-8b2b-25545d685077",
+      "email": "diego.calvo@ba2025.uat",
+      "categoria": "SENIOR_MASCULINO",
+      "club": "BAJAU FREEDIVING"
+    },
+    "Diego Martinez": {
+      "atleta_id": "32a1096c-36d0-4317-af24-822c95aa5cec",
+      "email": "diego.martinez@ba2025.uat",
+      "categoria": "MASTER_MASCULINO",
+      "club": "FREEDIVING ROSARIO"
+    },
+    "Ezequiel Cuchiarelli": {
+      "atleta_id": "39fa56cb-2bca-433d-bf44-ba92bfeffa32",
+      "email": "ezequiel.cuchiarelli@ba2025.uat",
+      "categoria": "SENIOR_MASCULINO",
+      "club": "ESCUELA MARES"
+    },
+    "Guadalupe Fardi": {
+      "atleta_id": "581ddddd-0331-4d06-9a37-3b8e451169e4",
+      "email": "guadalupe.fardi@ba2025.uat",
+      "categoria": "JUNIOR_FEMENINO",
+      "club": "ESCUELA MARES"
+    },
+    "Hern\u00e1n Fardi": {
+      "atleta_id": "ef68bf8d-001b-4755-b4c7-f0f9108306fd",
+      "email": "hernan.fardi@ba2025.uat",
+      "categoria": "MASTER_MASCULINO",
+      "club": "ESCUELA MARES"
+    },
+    "Ignacio Saslavsky": {
+      "atleta_id": "e7910394-3871-4043-98ae-77f0be037f5b",
+      "email": "ignacio.saslavsky@ba2025.uat",
+      "categoria": "SENIOR_MASCULINO",
+      "club": "FREEDIVING ARGENTINA"
+    },
+    "Jos\u00e9 Clementi": {
+      "atleta_id": "88e45887-ad0a-4a1e-93b8-fba136128808",
+      "email": "jose.clementi@ba2025.uat",
+      "categoria": "SENIOR_MASCULINO",
+      "club": "REGATAS SANTA FE"
+    },
+    "Jos\u00e9 Enjuto": {
+      "atleta_id": "80df6160-dd4d-4996-8ad3-89be597624b0",
+      "email": "jose.enjuto@ba2025.uat",
+      "categoria": "SENIOR_MASCULINO",
+      "club": "FREEDIVING ROSARIO"
+    },
+    "Juan Ignacio Catalano": {
+      "atleta_id": "57e839be-73ca-4844-a807-fa3953ec2ad9",
+      "email": "juan.ignacio.catalano@ba2025.uat",
+      "categoria": "SENIOR_MASCULINO",
+      "club": "FREEDIVING ROSARIO"
+    },
+    "Karina Menchini": {
+      "atleta_id": "925a27e9-9001-4695-bd97-81ab4d5f7887",
+      "email": "karina.menchini@ba2025.uat",
+      "categoria": "SENIOR_FEMENINO",
+      "club": "FREEDIVING SANTA TERESA"
+    },
+    "Laura Iglesias": {
+      "atleta_id": "ecdef3cc-d33b-4034-b16d-6f7df0f22254",
+      "email": "laura.iglesias@ba2025.uat",
+      "categoria": "MASTER_FEMENINO",
+      "club": "ESCUELA MARES"
+    },
+    "Mar\u00eda Laura Ortiz Fleury": {
+      "atleta_id": "e19e6ad5-8938-4af2-9231-670bc176057e",
+      "email": "maria.laura.ortiz.fleury@ba2025.uat",
+      "categoria": "SENIOR_FEMENINO",
+      "club": "FREEDIVING BUENOS AIRES"
+    },
+    "Mar\u00eda de los Angeles Schneider": {
+      "atleta_id": "61c745c3-9ccf-4320-9b26-6a868243a6be",
+      "email": "maria.de.los.angeles.schneider@ba2025.uat",
+      "categoria": "SENIOR_FEMENINO",
+      "club": "ESCUELA DE BUCEO CETACEOS"
+    },
+    "Mar\u00eda de los Milagros Montangie": {
+      "atleta_id": "f5e2e4be-6e2b-425e-a140-6ce5c0f59a17",
+      "email": "maria.de.los.milagros.montangie@ba2025.uat",
+      "categoria": "SENIOR_FEMENINO",
+      "club": "ESCUELA DE BUCEO CETACEOS"
+    },
+    "Matias Gonzalez Courtois": {
+      "atleta_id": "81536222-c853-4f69-8bf0-84bbb2c4cc98",
+      "email": "matias.gonzalez.courtois@ba2025.uat",
+      "categoria": "SENIOR_MASCULINO",
+      "club": "ESCUELA MARES"
+    },
+    "Mauro Almada": {
+      "atleta_id": "536bd00b-726f-47e3-92eb-823b884b2c0a",
+      "email": "mauro.almada@ba2025.uat",
+      "categoria": "SENIOR_MASCULINO",
+      "club": "FREEDIVING BUENOS AIRES"
+    },
+    "Nicolas Stafforini": {
+      "atleta_id": "db39111f-33f8-4184-8eef-3df6ccdaf3b9",
+      "email": "nicolas.stafforini@ba2025.uat",
+      "categoria": "SENIOR_MASCULINO",
+      "club": "IAAS"
+    },
+    "Nicol\u00e1s Burgell": {
+      "atleta_id": "3a0779b6-6fa8-44fd-8056-e62eafc08f55",
+      "email": "nicolas.burgell@ba2025.uat",
+      "categoria": "SENIOR_MASCULINO",
+      "club": "ESCUELA MARES"
+    },
+    "Nicol\u00e1s Zimmermann": {
+      "atleta_id": "ed6558b4-2487-4e89-aca2-976ec9e6d0dd",
+      "email": "nicolas.zimmermann@ba2025.uat",
+      "categoria": "SENIOR_MASCULINO",
+      "club": "FREEDIVING ARGENTINA"
+    },
+    "Pablo De Celis": {
+      "atleta_id": "ef008d05-ced9-4d30-88d6-0f303c73f8f0",
+      "email": "pablo.de.celis@ba2025.uat",
+      "categoria": "SENIOR_MASCULINO",
+      "club": "ESCUELA DE BUCEO CETACEOS"
+    },
+    "Pablo Durante": {
+      "atleta_id": "83b9f718-a416-47ef-b6cf-69ef746f14bd",
+      "email": "pablo.durante@ba2025.uat",
+      "categoria": "MASTER_MASCULINO",
+      "club": "OHANA FREEDIVERS"
+    },
+    "Pablo Sale": {
+      "atleta_id": "8b9c7f19-de77-4cd1-9bad-2c2499d38de8",
+      "email": "pablo.sale@ba2025.uat",
+      "categoria": "SENIOR_MASCULINO",
+      "club": "REGATAS SANTA FE"
+    },
+    "Sebasti\u00e1n Quintana": {
+      "atleta_id": "0e810983-daab-4e76-b6a1-84723a9789cd",
+      "email": "sebastian.quintana@ba2025.uat",
+      "categoria": "SENIOR_MASCULINO",
+      "club": "FREEDIVING BUENOS AIRES"
+    },
+    "Shaojun Wang": {
+      "atleta_id": "b1dfc62b-5963-4ba6-930b-51949185b12b",
+      "email": "shaojun.wang@ba2025.uat",
+      "categoria": "SENIOR_FEMENINO",
+      "club": "OHANA FREEDIVERS"
+    },
+    "Silvia Maidana": {
+      "atleta_id": "c5e3e8b0-54e6-4023-bb02-2f02af7d570e",
+      "email": "silvia.maidana@ba2025.uat",
+      "categoria": "MASTER_FEMENINO",
+      "club": "FREEDIVING PATAGONIA"
+    },
+    "Thiago Stalldecker": {
+      "atleta_id": "15b25804-4179-436a-8110-a2afc40b9174",
+      "email": "thiago.stalldecker@ba2025.uat",
+      "categoria": "SENIOR_MASCULINO",
+      "club": "ESCUELA DE BUCEO CETACEOS"
+    },
+    "Ver\u00f3nica Tufr\u00f3": {
+      "atleta_id": "45cfc396-d6bb-4de9-93ab-6cdc006df834",
+      "email": "veronica.tufro@ba2025.uat",
+      "categoria": "MASTER_FEMENINO",
+      "club": "ESCUELA MARES"
+    },
+    "V\u00edctor Valotto": {
+      "atleta_id": "9aa50068-3a79-4510-89ac-25857e61a578",
+      "email": "victor.valotto@ba2025.uat",
+      "categoria": "MASTER_MASCULINO",
+      "club": "REGATAS SANTA FE"
+    },
+    "Ra\u00fal Urquiza": {
+      "atleta_id": "b06f2bc3-a3ae-4db6-af7b-c747c5f73501",
+      "email": "raul.urquiza@ba2025.uat",
+      "categoria": "MASTER_MASCULINO",
+      "club": "REGATAS SANTA FE"
+    }
+  }
+}

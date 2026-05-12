@@ -49,7 +49,7 @@ function filtrarTorneos(torneos: TorneoDto[], filtro: FiltroTorneos): TorneoDto[
   return filtrados
     .map((torneo, index) => ({ torneo, index }))
     .sort((a, b) => {
-      const fechaComparison = b.torneo.fecha_inicio.localeCompare(a.torneo.fecha_inicio)
+      const fechaComparison = a.torneo.fecha_inicio.localeCompare(b.torneo.fecha_inicio)
       if (fechaComparison !== 0) return fechaComparison
       return a.index - b.index
     })

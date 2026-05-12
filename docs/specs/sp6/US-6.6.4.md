@@ -146,6 +146,14 @@ Feature: US-6.6.4 — Página pública de torneo en ejecución
 
 ---
 
+## Fuente de verdad UX
+
+No existen wireframes ni prototipos aprobados para el rol "visitante" (portal público). La UX fue diseñada de novo en INC-6.6, siguiendo los patrones visuales ya implementados:
+- `frontend/src/pages/PublicTorneosPage.tsx` — fuente de verdad de estructura, header y estilo visual del portal público.
+- `frontend/src/pages/atleta/AtletaMiGrillaPage.tsx` — referencia de cómo se renderiza la grilla de atletas.
+
+---
+
 ## Referencias
 
 - US-6.6.3: navegación contextual — botón "Ver panel" que lleva a esta página

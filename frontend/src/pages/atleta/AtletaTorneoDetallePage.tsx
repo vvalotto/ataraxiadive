@@ -1,20 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
-import { fetchTorneo, listarDisciplinasTorneo } from '../../api/torneo'
+import { fetchTorneo } from '../../api/torneo'
 import { fetchAtletaMe, listarInscripcionesDeAtleta } from '../../api/registro'
 import { AtletaShell } from '../../components/atleta/AtletaShell'
 import { formatDisciplina, formatFecha, getEstadoTorneoLabel } from './portalData'
 
 async function loadTorneoDetalle(torneoId: string) {
-  const [torneo, disciplinas, atleta] = await Promise.all([
+  const [torneo, atleta] = await Promise.all([
     fetchTorneo(torneoId),
-    listarDisciplinasTorneo(torneoId),
     fetchAtletaMe(),
   ])
   const inscripciones = await listarInscripcionesDeAtleta(atleta.atleta_id)
   const inscripcion = inscripciones.find((item) => item.torneo_id === torneoId) ?? null
 
-  return { torneo, disciplinas, inscripcion }
+  return { torneo, inscripcion }
 }
 
 export function AtletaTorneoDetallePage() {
@@ -65,25 +64,6 @@ export function AtletaTorneoDetallePage() {
                 <dd className="mt-1">{query.data.torneo.descripcion || 'Sin descripción pública.'}</dd>
               </div>
             </dl>
-          </section>
-
-          <section className="rounded-[1.75rem] border border-slate-800 bg-slate-900 p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-400">
-              Disciplinas disponibles
-            </p>
-            <div className="mt-4 space-y-3">
-              {query.data.disciplinas.map((disciplina) => (
-                <div
-                  key={disciplina.disciplina}
-                  className="rounded-3xl border border-slate-800 bg-slate-950/70 p-4"
-                >
-                  <p className="text-sm font-semibold text-white">{formatDisciplina(disciplina.disciplina)}</p>
-                  <p className="mt-1 text-sm text-slate-400">
-                    Juez asignado: {disciplina.juez_id ? 'Sí' : 'Pendiente'}
-                  </p>
-                </div>
-              ))}
-            </div>
           </section>
 
           {query.data.inscripcion ? (

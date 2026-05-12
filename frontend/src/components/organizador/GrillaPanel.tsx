@@ -175,6 +175,32 @@ export function GrillaPanel({
     onError: (mutationError) => setError((mutationError as Error).message),
   })
 
+  const regenerarConIntervaloMutation = useMutation({
+    mutationFn: async (payload: {
+      otInicio: string
+      intervaloMinutos: number
+      andariveles: number
+    }) => {
+      if (!competencia || !disciplina || !organizadorId) return
+      setError('')
+      await crearCompetencia({
+        competenciaId: competencia.competencia_id,
+        disciplina,
+        intervaloMinutos: payload.intervaloMinutos,
+        configuradoPor: organizadorId,
+        torneoId,
+      })
+      await generarGrilla({
+        competenciaId: competencia.competencia_id,
+        disciplina,
+        otInicio: payload.otInicio,
+        andariveles: payload.andariveles,
+      })
+    },
+    onSuccess: refresh,
+    onError: (mutationError) => setError((mutationError as Error).message),
+  })
+
   const confirmarMutation = useMutation({
     mutationFn: async () => {
       if (!competencia || !disciplina) return
@@ -299,18 +325,20 @@ export function GrillaPanel({
           {puedeRegenerar ? (
             <div className="mt-6 rounded-[1.5rem] border border-amber-500/30 bg-amber-500/5 p-4">
               <p className="mb-3 text-sm text-slate-300">
-                Puedes volver a generar la grilla antes de confirmarla para cambiar fecha, primer OT y cantidad de andariveles.
+                Puedes volver a generar la grilla antes de confirmarla para cambiar intervalo OT, fecha, primer OT y cantidad de andariveles.
               </p>
               <ConfigurarGrillaForm
                 disciplina={disciplina}
-                isSubmitting={generarMutation.isPending}
+                requiresIntervalo
+                isSubmitting={regenerarConIntervaloMutation.isPending}
                 fechaInicioTorneo={fechaInicioTorneo}
                 fechaFinTorneo={fechaFinTorneo}
                 submitLabel="Regenerar grilla"
                 submittingLabel="Regenerando..."
-                onSubmit={({ fechaOt, primerOt, andariveles }) =>
-                  generarMutation.mutate({
+                onSubmit={({ fechaOt, primerOt, intervaloMinutos, andariveles }) =>
+                  regenerarConIntervaloMutation.mutate({
                     otInicio: buildOtInicio(fechaOt, primerOt),
+                    intervaloMinutos: intervaloMinutos ?? 1,
                     andariveles,
                   })
                 }

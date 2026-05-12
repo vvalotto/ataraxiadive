@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
-import { fetchTorneos, type EstadoTorneo, type TorneoDto } from '../api/torneo'
+import { Link, useNavigate } from 'react-router-dom'
+import { fetchTorneos, listarDisciplinasTorneo, type EstadoTorneo, type TorneoDto } from '../api/torneo'
 import { formatFecha } from './atleta/portalData'
 import { useNavigateWithRedirect } from '../hooks/useNavigateWithRedirect'
 import useAuthStore from '../stores/useAuthStore'
@@ -40,6 +40,7 @@ interface Accion {
   label: string
   destino: string | null
   deshabilitado?: boolean
+  publico?: boolean
 }
 
 function accionPorEstado(torneo: TorneoDto, rol: string | null): Accion | null {
@@ -49,7 +50,7 @@ function accionPorEstado(torneo: TorneoDto, rol: string | null): Accion | null {
     case 'EJECUCION':
       if (rol === 'juez') return { label: 'Ver panel', destino: '/juez/disciplinas' }
       if (rol === 'organizador') return { label: 'Ver panel', destino: '/organizador/torneo' }
-      return { label: 'Ver panel', destino: `/portalapnea/${torneo.torneo_id}/panel` }
+      return { label: 'Ver panel', destino: `/portalapnea/${torneo.torneo_id}`, publico: true }
     case 'PREMIACION':
     case 'CERRADO':
       return { label: 'Ver resultados', destino: null, deshabilitado: true }
@@ -58,11 +59,27 @@ function accionPorEstado(torneo: TorneoDto, rol: string | null): Accion | null {
   }
 }
 
+const CATEGORIA_LABELS: Record<string, string> = {
+  JUNIOR: 'Junior',
+  SENIOR: 'Senior',
+  MASTER: 'Master',
+}
+
 function TorneoCard({ torneo }: { torneo: TorneoDto }) {
   const navigateWithRedirect = useNavigateWithRedirect()
+  const navigate = useNavigate()
   const rol = useAuthStore((s) => s.rol)
   const badge = ESTADO_BADGE[torneo.estado]
   const accion = accionPorEstado(torneo, rol)
+
+  const { data: disciplinas } = useQuery({
+    queryKey: ['disciplinas-torneo-public', torneo.torneo_id],
+    queryFn: () => listarDisciplinasTorneo(torneo.torneo_id),
+    staleTime: 60_000,
+  })
+
+  const disciplinaNames = disciplinas?.map((d) => d.disciplina) ?? []
+  const categorias = torneo.grupos_etarios.map((g) => CATEGORIA_LABELS[g] ?? g)
 
   return (
     <div className="rounded-3xl border border-slate-800 bg-slate-900 p-5">
@@ -84,6 +101,37 @@ function TorneoCard({ torneo }: { torneo: TorneoDto }) {
         </span>
       </div>
 
+      {(disciplinaNames.length > 0 || categorias.length > 0) && (
+        <div className="mt-3 space-y-2">
+          {disciplinaNames.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="text-xs text-slate-500 mr-0.5">Disciplinas</span>
+              {disciplinaNames.map((d) => (
+                <span
+                  key={d}
+                  className="rounded-full border border-sky-700/40 bg-sky-900/30 px-2.5 py-0.5 text-xs font-semibold text-sky-300"
+                >
+                  {d}
+                </span>
+              ))}
+            </div>
+          )}
+          {categorias.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="text-xs text-slate-500 mr-0.5">Categorías</span>
+              {categorias.map((c) => (
+                <span
+                  key={c}
+                  className="rounded-full border border-slate-600/40 bg-slate-800/60 px-2.5 py-0.5 text-xs font-semibold text-slate-300"
+                >
+                  {c}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {accion ? (
         <div className="mt-4">
           {accion.deshabilitado ? (
@@ -96,7 +144,7 @@ function TorneoCard({ torneo }: { torneo: TorneoDto }) {
             </button>
           ) : (
             <button
-              onClick={() => accion.destino && navigateWithRedirect(accion.destino)}
+              onClick={() => accion.destino && (accion.publico ? navigate(accion.destino) : navigateWithRedirect(accion.destino))}
               className="rounded-2xl bg-sky-500 px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-sky-400"
             >
               {accion.label}
