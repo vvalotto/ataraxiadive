@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DQ_REASON_LABELS, PENALTY_LABELS } from '../constants/tarjeta'
+import { DQ_REASON_LABELS, PENALTY_LABELS, TARJETA_LABELS } from '../constants/tarjeta'
 import { formatMarca } from '../utils/marca'
 import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
@@ -101,7 +101,7 @@ function AtletaRow({ entry }: { entry: GrillaAtletaDto }) {
       <td className="py-2 pr-3 text-center text-xs font-medium text-slate-300">{formatRp(entry.performance, entry.unidad)}</td>
       <td className="py-2 text-center text-xs">
         <span className={entry.estado === 'DNS' ? 'text-slate-500' : tarjetaClases(entry.tarjeta_asignada)}>
-          {entry.estado === 'DNS' ? 'DNS' : entry.tarjeta_asignada ?? '—'}
+          {entry.estado === 'DNS' ? 'DNS' : (entry.tarjeta_asignada ? (TARJETA_LABELS[entry.tarjeta_asignada] ?? entry.tarjeta_asignada) : '—')}
         </span>
         {entry.motivo_dq ? (
           <p className="mt-0.5 text-red-400">

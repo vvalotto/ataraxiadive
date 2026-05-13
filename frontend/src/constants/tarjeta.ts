@@ -32,5 +32,13 @@ export const DQ_REASON_LABELS: Record<string, string> = {
   SALIDA_EN_FALSO: 'Salida en falso',
 }
 
+export const TARJETA_LABELS: Record<string, string> = {
+  Blanca: 'Blanca',
+  BlancaConPenalizaciones: 'Blanca con penalizaciones',
+  Amarilla: 'En revisión',
+  Roja: 'Roja',
+  Dns: 'DNS',
+}
+
 export type DqReason = (typeof DQ_REASONS)[number]
 export type PenaltyType = (typeof PENALTY_TYPES)[number]
