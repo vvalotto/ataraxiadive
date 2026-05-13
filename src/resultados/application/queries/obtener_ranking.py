@@ -54,6 +54,7 @@ class RankingEntradaDTO:
     puntos: str = "0.00"
     motivo_dq: str | None = None
     penalizaciones: tuple[str, ...] = ()
+    rp_medido: str | None = None
 
 
 @dataclass(frozen=True)

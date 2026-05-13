@@ -9,6 +9,7 @@ export interface RankingEntradaDto {
   puntos: string | null
   motivo_dq: string | null
   penalizaciones: string[]
+  rp_medido: string | null
 }
 
 export interface RankingCategoriaDto {

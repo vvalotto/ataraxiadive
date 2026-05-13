@@ -86,6 +86,7 @@ def _extraer_estado_provisional(
         "atleta_id": None,
         "disciplina": None,
         "rp": None,
+        "rp_medido": None,
         "unidad": None,
         "tarjeta": None,
         "motivo_dq": None,
@@ -127,16 +128,22 @@ def _aplicar(estado: dict, event_type: str, payload: dict) -> None:
         estado["tarjeta"] = payload.get("tipo")
         estado["motivo_dq"] = payload.get("motivo_dq_codigo")
         estado["penalizaciones"] = [p["tipo"] for p in payload.get("penalizaciones", [])]
-        rp_final = payload.get("rp_penalizado") or payload.get("rp_medido")
+        rp_medido = payload.get("rp_medido")
+        rp_final = payload.get("rp_penalizado") or rp_medido
         if rp_final is not None:
             estado["rp"] = str(Decimal(str(rp_final)))
+        if rp_medido is not None:
+            estado["rp_medido"] = str(Decimal(str(rp_medido)))
     elif event_type == "RevisionResuelta":
         estado["tarjeta"] = payload.get("tipo")
         estado["motivo_dq"] = payload.get("motivo_dq_codigo")
         estado["penalizaciones"] = [p["tipo"] for p in payload.get("penalizaciones", [])]
-        rp_final = payload.get("rp_penalizado") or payload.get("rp_medido")
+        rp_medido = payload.get("rp_medido")
+        rp_final = payload.get("rp_penalizado") or rp_medido
         if rp_final is not None:
             estado["rp"] = str(Decimal(str(rp_final)))
+        if rp_medido is not None:
+            estado["rp_medido"] = str(Decimal(str(rp_medido)))
         estado["tiene_rp"] = rp_final is not None or estado["tiene_rp"]
     elif event_type == "DNSRegistrado":
         estado["es_dns"] = True
@@ -186,6 +193,7 @@ def _rankear_categoria(estados: list[dict]) -> list[RankingEntradaDTO]:
                 puntos="0.00",
                 motivo_dq=e.get("motivo_dq"),
                 penalizaciones=tuple(e.get("penalizaciones", [])),
+                rp_medido=e.get("rp_medido"),
             )
         )
         posicion = len(entradas) + 1
@@ -203,6 +211,7 @@ def _rankear_categoria(estados: list[dict]) -> list[RankingEntradaDTO]:
                 puntos="0.00",
                 motivo_dq=e.get("motivo_dq"),
                 penalizaciones=tuple(e.get("penalizaciones", [])),
+                rp_medido=e.get("rp_medido"),
             )
         )
         posicion += 1

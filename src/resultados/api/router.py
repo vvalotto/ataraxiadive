@@ -196,6 +196,7 @@ async def get_ranking(
                             "puntos": e.puntos,
                             "motivo_dq": e.motivo_dq,
                             "penalizaciones": list(e.penalizaciones),
+                            "rp_medido": e.rp_medido,
                         }
                         for e in grupo.entradas
                     ],

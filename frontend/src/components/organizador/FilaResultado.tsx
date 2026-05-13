@@ -16,6 +16,7 @@ export interface FilaResultadoData {
   tarjeta: string | null
   motivo_dq: string | null
   penalizaciones: string[]
+  rp_medido: string | null
 }
 
 interface FilaResultadoProps {
@@ -77,6 +78,16 @@ export function FilaResultado({ fila }: FilaResultadoProps) {
     ? 'px-3 py-3 text-center font-mono font-semibold text-red-400'
     : 'px-3 py-3 text-center font-mono font-semibold text-white'
 
+  const rpBreakdown = (() => {
+    if (!fila.rp_medido || !fila.rp || fila.penalizaciones.length === 0) return null
+    const medido = parseFloat(fila.rp_medido)
+    const final = parseFloat(fila.rp)
+    const diff = Math.round((medido - final) * 100) / 100
+    if (diff <= 0) return null
+    const unidad = fila.unidad ?? 'Metros'
+    return `(${formatMarca(fila.rp_medido, unidad)} − ${diff}m)`
+  })()
+
   return (
     <tr className="border-b border-slate-800 text-sm transition hover:bg-slate-800/60">
       <td className="px-3 py-3 text-center font-mono text-xs text-slate-400">
@@ -89,7 +100,12 @@ export function FilaResultado({ fila }: FilaResultadoProps) {
       <td className="px-3 py-3 text-center font-mono text-slate-300">{fila.ap}</td>
       <td className="px-3 py-3 text-center font-mono text-xs text-slate-400">{fila.ot}</td>
       <td className="px-3 py-3 text-center text-slate-400">{fila.linea}</td>
-      <td className={rpClass}>{rpDisplay}</td>
+      <td className={rpClass}>
+        {rpDisplay}
+        {rpBreakdown ? (
+          <p className="mt-0.5 text-xs font-normal text-slate-400">{rpBreakdown}</p>
+        ) : null}
+      </td>
       <td className="px-3 py-3 text-center">
         <ChipTarjeta tarjeta={fila.tarjeta} />
         {fila.motivo_dq ? (
