@@ -123,7 +123,9 @@ def main() -> None:
         estado = resp.json().get("estado")
         if estado != "INSCRIPCION_ABIERTA":
             print(f"\n✗ El torneo está en estado '{estado}' — debe estar en INSCRIPCION_ABIERTA.")
-            print("  Abrí las inscripciones desde el portal del organizador (F-04-S01) antes de correr Seed-B.")
+            print(
+                "  Abrí las inscripciones desde el portal del organizador (F-04-S01) antes de correr Seed-B."
+            )
             sys.exit(1)
         log(f"✓ estado: {estado}")
         print()
@@ -157,9 +159,7 @@ def main() -> None:
             )
             if resp.status_code == 409 and "ya está inscripto" in resp.text:
                 # Obtener inscripcion existente
-                resp2 = client.get(
-                    f"/registro/atletas/{atleta_id}/inscripciones", headers=headers
-                )
+                resp2 = client.get(f"/registro/atletas/{atleta_id}/inscripciones", headers=headers)
                 if resp2.status_code != 200:
                     log(f"✗ no se pudo recuperar inscripcion para {nombre}")
                     err += 1

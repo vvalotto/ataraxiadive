@@ -126,9 +126,7 @@ def limpiar_entorno_uat() -> None:
 
     # Identidad: eliminar todos los usuarios no-admin de dominios de prueba
     with sqlite3.connect(IDENTIDAD_DB) as con:
-        rows = con.execute(
-            "SELECT email FROM usuarios WHERE rol != 'ADMIN'"
-        ).fetchall()
+        rows = con.execute("SELECT email FROM usuarios WHERE rol != 'ADMIN'").fetchall()
         if rows:
             emails = [r[0] for r in rows]
             placeholders = ",".join("?" * len(emails))
@@ -164,7 +162,13 @@ def assert_ok(resp: httpx.Response, context: str) -> dict:
 def crear_usuario(client: httpx.Client, email: str, nombre: str, apellido: str, rol: str) -> str:
     resp = client.post(
         "/auth/registro",
-        json={"email": email, "password": PASSWORD, "rol": rol, "nombre": nombre, "apellido": apellido},
+        json={
+            "email": email,
+            "password": PASSWORD,
+            "rol": rol,
+            "nombre": nombre,
+            "apellido": apellido,
+        },
     )
     assert_ok(resp, f"registro {email}")
     resp = client.post("/auth/login", json={"email": email, "password": PASSWORD})
