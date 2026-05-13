@@ -2,13 +2,10 @@ interface RankingRowProps {
   posicion: number
   nombre: string
   rp: string
-  puntos: string
   tarjeta: string | null
   esDns: boolean
   isSelf: boolean
 }
-
-const PODIO_ICONS: Record<number, string> = { 1: '🥇', 2: '🥈', 3: '🥉' }
 
 function ChipTarjeta({ tarjeta, esDns }: { tarjeta: string | null; esDns: boolean }) {
   if (esDns) {
@@ -35,7 +32,7 @@ function ChipTarjeta({ tarjeta, esDns }: { tarjeta: string | null; esDns: boolea
   return null
 }
 
-export function RankingRow({ posicion, nombre, rp, puntos, tarjeta, esDns, isSelf }: RankingRowProps) {
+export function RankingRow({ posicion, nombre, rp, tarjeta, esDns, isSelf }: RankingRowProps) {
   return (
     <div
       className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 ${
@@ -43,7 +40,7 @@ export function RankingRow({ posicion, nombre, rp, puntos, tarjeta, esDns, isSel
       }`}
     >
       <span className="w-6 text-center text-sm font-bold text-slate-400">
-        {PODIO_ICONS[posicion] ?? posicion}
+        {posicion}
       </span>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5">
@@ -57,7 +54,6 @@ export function RankingRow({ posicion, nombre, rp, puntos, tarjeta, esDns, isSel
         <span className="text-xs text-slate-400">{rp}</span>
       </div>
       <div className="flex flex-col items-end gap-1">
-        <span className="text-sm font-semibold text-white">{puntos}</span>
         <ChipTarjeta tarjeta={tarjeta} esDns={esDns} />
       </div>
     </div>

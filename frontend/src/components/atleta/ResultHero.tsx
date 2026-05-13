@@ -6,7 +6,6 @@ interface ResultHeroProps {
   rp: string
   ap: string
   diferencia: string
-  puntos: string
   enPodio: boolean
 }
 
@@ -23,7 +22,6 @@ export function ResultHero({
   rp,
   ap,
   diferencia,
-  puntos,
   enPodio,
 }: ResultHeroProps) {
   return (
@@ -47,7 +45,7 @@ export function ResultHero({
         </div>
       </div>
 
-      <dl className="mt-5 grid grid-cols-3 gap-3 text-sm">
+      <dl className="mt-5 grid grid-cols-2 gap-3 text-sm">
         <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-3">
           <dt className="text-xs uppercase tracking-[0.16em] opacity-70">AP</dt>
           <dd className="mt-1 font-semibold text-white">{ap}</dd>
@@ -55,10 +53,6 @@ export function ResultHero({
         <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-3">
           <dt className="text-xs uppercase tracking-[0.16em] opacity-70">Dif.</dt>
           <dd className="mt-1 font-semibold text-white">{diferencia}</dd>
-        </div>
-        <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-3">
-          <dt className="text-xs uppercase tracking-[0.16em] opacity-70">Puntos</dt>
-          <dd className="mt-1 font-semibold text-white">{puntos}</dd>
         </div>
       </dl>
     </article>

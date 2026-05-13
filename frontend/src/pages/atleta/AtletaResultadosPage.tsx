@@ -246,8 +246,7 @@ export function AtletaResultadosPage() {
                           unidad: miResultado.unidad ?? entry.unidad,
                           esDns: miResultado.es_dns,
                         })}
-                        puntos={miResultado.es_dns ? '-' : (miResultado.puntos ?? '-')}
-                        enPodio={miResultado.en_podio}
+                        enPodio={['PREMIACION', 'CERRADO'].includes(entry.torneo.estado) && miResultado.en_podio}
                       />
                       {miCategoria ? (
                         <RankingCard
@@ -263,13 +262,15 @@ export function AtletaResultadosPage() {
                   )
                 })}
 
-                <OverallCard
-                  overall={overall}
-                  atletaId={atletaId}
-                  nombresPorId={nombresParaOverall}
-                  categoriaAtleta={categoriaAtleta}
-                  categoriaLabel={categoriaLabel}
-                />
+                {['PREMIACION', 'CERRADO'].includes(grupo.resultados[0]?.entry.torneo.estado ?? '') ? (
+                  <OverallCard
+                    overall={overall}
+                    atletaId={atletaId}
+                    nombresPorId={nombresParaOverall}
+                    categoriaAtleta={categoriaAtleta}
+                    categoriaLabel={categoriaLabel}
+                  />
+                ) : null}
               </section>
             )
           })}

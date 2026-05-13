@@ -1,3 +1,5 @@
+import { formatMarca } from '../../utils/marca'
+
 export interface FilaResultadoData {
   posicion_ot: number
   atleta_id: string
@@ -66,7 +68,7 @@ function ChipTarjeta({ tarjeta }: { tarjeta: string | null }) {
 }
 
 export function FilaResultado({ fila }: FilaResultadoProps) {
-  const rpDisplay = fila.rp ? `${fila.rp} ${fila.unidad ?? ''}`.trim() : '—'
+  const rpDisplay = fila.rp ? formatMarca(fila.rp, fila.unidad ?? 'Metros') : '—'
 
   return (
     <tr className="border-b border-slate-800 text-sm transition hover:bg-slate-800/60">
@@ -77,11 +79,11 @@ export function FilaResultado({ fila }: FilaResultadoProps) {
       <td className="px-3 py-3 text-center text-slate-300">{fila.genero}</td>
       <td className="px-3 py-3 text-slate-300">{fila.categoria_corta}</td>
       <td className="px-3 py-3 text-slate-400">{fila.club || '—'}</td>
-      <td className="px-3 py-3 font-mono text-slate-300">{fila.ap}</td>
-      <td className="px-3 py-3 font-mono text-xs text-slate-400">{fila.ot}</td>
+      <td className="px-3 py-3 text-center font-mono text-slate-300">{fila.ap}</td>
+      <td className="px-3 py-3 text-center font-mono text-xs text-slate-400">{fila.ot}</td>
       <td className="px-3 py-3 text-center text-slate-400">{fila.linea}</td>
-      <td className="px-3 py-3 font-mono font-semibold text-white">{rpDisplay}</td>
-      <td className="px-3 py-3">
+      <td className="px-3 py-3 text-center font-mono font-semibold text-white">{rpDisplay}</td>
+      <td className="px-3 py-3 text-center">
         <ChipTarjeta tarjeta={fila.tarjeta} />
       </td>
     </tr>

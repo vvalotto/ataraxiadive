@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { formatMarca } from '../utils/marca'
 import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
 import {
@@ -74,7 +75,7 @@ function tarjetaClases(tarjeta: string | null): string {
 
 function formatRp(performance: string | null | undefined, unidad: string): string {
   if (!performance) return '—'
-  return `${performance} ${unidad}`
+  return formatMarca(performance, unidad)
 }
 
 function formatCategoria(cat: string): string {
@@ -97,8 +98,8 @@ function AtletaRow({ entry }: { entry: GrillaAtletaDto }) {
       <td className="py-2 pr-3 text-center text-xs text-slate-400">{formatAp(entry.ap_declarado, entry.unidad)}</td>
       <td className="py-2 pr-3 text-center text-xs text-slate-400">{formatHora(entry.ot_programado)}</td>
       <td className="py-2 pr-3 text-center text-xs font-medium text-slate-300">{formatRp(entry.performance, entry.unidad)}</td>
-      <td className={`py-2 text-center text-xs ${tarjetaClases(entry.tarjeta_asignada)}`}>
-        {entry.tarjeta_asignada ?? '—'}
+      <td className={`py-2 text-center text-xs ${entry.estado === 'DNS' ? 'text-slate-500' : tarjetaClases(entry.tarjeta_asignada)}`}>
+        {entry.estado === 'DNS' ? 'DNS' : entry.tarjeta_asignada ?? '—'}
       </td>
     </tr>
   )
@@ -312,8 +313,10 @@ function TorneoDetalleCard({ torneo, grillas, rankings, noDisponible }: TorneoDe
               {grillaActiva ? <GrillaTabContent grilla={grillaActiva} /> : null}
             </div>
 
-            {/* Podios */}
-            <PodiosSection rankings={rankings} nombrePorId={nombrePorId} />
+            {/* Podios — solo en PREMIACION o CERRADO */}
+            {['PREMIACION', 'CERRADO'].includes(torneo.estado) ? (
+              <PodiosSection rankings={rankings} nombrePorId={nombrePorId} />
+            ) : null}
           </>
         )}
       </div>
