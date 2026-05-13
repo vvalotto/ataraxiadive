@@ -140,25 +140,23 @@ function GrupoResultados({ grupo, atletaId, nombresPorCompetencia, overallPorTor
         <h2 className="mt-1 text-lg font-semibold text-white">{grupo.torneoNombre}</h2>
       </div>
 
-      {grupo.resultados.length > 1 ? (
-        <div className="flex rounded-2xl border border-slate-800 bg-slate-900 overflow-hidden">
-          {grupo.resultados.map(({ entry: e }, i) => (
-            <button
-              key={e.disciplina}
-              type="button"
-              onClick={() => setTabIdx(i)}
-              className={[
-                'flex-1 py-2 text-xs font-semibold transition-colors border-b-2',
-                i === tabIdx
-                  ? 'border-sky-400 text-sky-300 bg-slate-950/60'
-                  : 'border-transparent text-slate-400',
-              ].join(' ')}
-            >
-              {formatDisciplina(e.disciplina)}
-            </button>
-          ))}
-        </div>
-      ) : null}
+      <div className="flex rounded-2xl border border-slate-800 bg-slate-900 overflow-hidden">
+        {grupo.resultados.map(({ entry: e }, i) => (
+          <button
+            key={e.disciplina}
+            type="button"
+            onClick={() => setTabIdx(i)}
+            className={[
+              'flex-1 py-2 text-xs font-semibold transition-colors border-b-2',
+              i === tabIdx
+                ? 'border-sky-400 text-sky-300 bg-slate-950/60'
+                : 'border-transparent text-slate-400',
+            ].join(' ')}
+          >
+            {formatDisciplina(e.disciplina)}
+          </button>
+        ))}
+      </div>
 
       {!miResultado ? (
         <DisciplinaPendienteCard
