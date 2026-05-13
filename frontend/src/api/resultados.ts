@@ -7,6 +7,9 @@ export interface RankingEntradaDto {
   es_dns: boolean
   en_podio: boolean
   puntos: string | null
+  motivo_dq: string | null
+  penalizaciones: string[]
+  rp_medido: string | null
 }
 
 export interface RankingCategoriaDto {

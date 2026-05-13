@@ -35,6 +35,8 @@ class EntradaGrillaDTO:
     estado: str
     tarjeta_asignada: str | None
     juez_id: str | None
+    motivo_dq: str | None = None
+    penalizaciones: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)  # pylint: disable=too-few-public-methods
@@ -83,6 +85,8 @@ class ObtenerGrillaHandler:
                 estado=performance.estado,
                 tarjeta_asignada=performance.tarjeta_asignada,
                 juez_id=e.juez_id,
+                motivo_dq=performance.motivo_dq,
+                penalizaciones=performance.penalizaciones,
             )
             for e in competencia.grilla
             for performance in [
@@ -117,6 +121,8 @@ class ObtenerGrillaHandler:
             performance=str(performance.rp) if performance.rp is not None else None,
             estado=performance.estado.value if performance.estado else "",
             tarjeta_asignada=performance.tarjeta.value if performance.tarjeta else None,
+            motivo_dq=performance.motivo_dq.value if performance.motivo_dq else None,
+            penalizaciones=tuple(p.tipo.value for p in performance.penalizaciones),
         )
 
 
@@ -128,3 +134,5 @@ class _PerformanceProjection:
     performance: str | None
     estado: str
     tarjeta_asignada: str | None
+    motivo_dq: str | None = None
+    penalizaciones: tuple[str, ...] = ()

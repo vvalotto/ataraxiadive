@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { AtletaShell } from '../../components/atleta/AtletaShell'
 import { DisciplinaPendienteCard } from '../../components/atleta/DisciplinaPendienteCard'
@@ -101,6 +102,110 @@ function groupByTorneo(resultados: ResultadoEntry[]): Array<{
   return Array.from(groups.values())
 }
 
+interface GrupoResultadosProps {
+  grupo: ReturnType<typeof groupByTorneo>[number]
+  atletaId: string
+  nombresPorCompetencia: Map<string, Map<string, string>>
+  overallPorTorneo: Map<string, import('../../api/resultados').OverallDto | null>
+}
+
+function GrupoResultados({ grupo, atletaId, nombresPorCompetencia, overallPorTorneo }: GrupoResultadosProps) {
+  const [tabIdx, setTabIdx] = useState(0)
+  const { entry, miResultado, ranking } = grupo.resultados[tabIdx] ?? grupo.resultados[0]
+
+  const overall = overallPorTorneo.get(grupo.torneoId) ?? null
+  const categoriaAtleta =
+    grupo.resultados
+      .map(({ ranking: r }) => findMiCategoriaEntradas(r, atletaId)?.categoria)
+      .find(Boolean) ?? ''
+  const categoriaLabel = formatCategoria(categoriaAtleta)
+  const nombresParaOverall = (() => {
+    const mapa = new Map<string, string>()
+    grupo.resultados.forEach(({ entry: e }) => {
+      if (!e.competenciaId) return
+      nombresPorCompetencia.get(e.competenciaId)?.forEach((nombre, id) => mapa.set(id, nombre))
+    })
+    return mapa
+  })()
+
+  const nombresPorId = entry.competenciaId
+    ? (nombresPorCompetencia.get(entry.competenciaId) ?? new Map())
+    : new Map<string, string>()
+  const miCategoria = findMiCategoriaEntradas(ranking, atletaId)
+
+  return (
+    <section className="space-y-3">
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-400">Torneo</p>
+        <h2 className="mt-1 text-lg font-semibold text-white">{grupo.torneoNombre}</h2>
+      </div>
+
+      <div className="flex rounded-2xl border border-slate-800 bg-slate-900 overflow-hidden">
+        {grupo.resultados.map(({ entry: e }, i) => (
+          <button
+            key={e.disciplina}
+            type="button"
+            onClick={() => setTabIdx(i)}
+            className={[
+              'flex-1 py-2 text-xs font-semibold transition-colors border-b-2',
+              i === tabIdx
+                ? 'border-sky-400 text-sky-300 bg-slate-950/60'
+                : 'border-transparent text-slate-400',
+            ].join(' ')}
+          >
+            {formatDisciplina(e.disciplina)}
+          </button>
+        ))}
+      </div>
+
+      {!miResultado ? (
+        <DisciplinaPendienteCard
+          disciplina={formatDisciplina(entry.disciplina)}
+          ot={entry.ot ? formatHora(entry.ot) : '-'}
+          ap={formatAp(entry.ap, entry.unidad)}
+          andarivel={entry.andarivel}
+        />
+      ) : (
+        <div className="space-y-2">
+          <ResultHero
+            disciplina={formatDisciplina(entry.disciplina)}
+            estado={getEstadoResultado(miResultado)}
+            rp={formatResultado(miResultado)}
+            ap={formatAp(entry.ap, entry.unidad)}
+            diferencia={calcularDiferencia({
+              ap: entry.ap,
+              rp: miResultado.rp,
+              unidad: miResultado.unidad ?? entry.unidad,
+              esDns: miResultado.es_dns,
+            })}
+            enPodio={['PREMIACION', 'CERRADO'].includes(entry.torneo.estado) && miResultado.en_podio}
+          />
+          {miCategoria ? (
+            <RankingCard
+              categoriaLabel={formatCategoria(miCategoria.categoria)}
+              entradas={miCategoria.entradas}
+              unidad={entry.unidad}
+              nombresPorId={nombresPorId}
+              atletaId={atletaId}
+              calculado={ranking?.calculado ?? false}
+            />
+          ) : null}
+        </div>
+      )}
+
+      {['PREMIACION', 'CERRADO'].includes(entry.torneo.estado) ? (
+        <OverallCard
+          overall={overall}
+          atletaId={atletaId}
+          nombresPorId={nombresParaOverall}
+          categoriaAtleta={categoriaAtleta}
+          categoriaLabel={categoriaLabel}
+        />
+      ) : null}
+    </section>
+  )
+}
+
 export function AtletaResultadosPage() {
   const snapshotQuery = useQuery({
     queryKey: ['atleta-resultados-snapshot'],
@@ -188,92 +293,15 @@ export function AtletaResultadosPage() {
 
       {snapshotQuery.data && grupos.length > 0 ? (
         <div className="space-y-8">
-          {grupos.map((grupo) => {
-            const overall = overallPorTorneo.get(grupo.torneoId) ?? null
-            const categoriaAtleta = grupo.resultados
-              .map(({ ranking }) => findMiCategoriaEntradas(ranking, atletaId)?.categoria)
-              .find(Boolean) ?? ''
-            const categoriaLabel = formatCategoria(categoriaAtleta)
-            const nombresParaOverall = (() => {
-              const mapa = new Map<string, string>()
-              grupo.resultados.forEach(({ entry }) => {
-                if (!entry.competenciaId) return
-                const m = nombresPorCompetencia.get(entry.competenciaId)
-                m?.forEach((nombre, id) => mapa.set(id, nombre))
-              })
-              return mapa
-            })()
-
-            return (
-              <section key={grupo.torneoId} className="space-y-3">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-400">
-                    Torneo
-                  </p>
-                  <h2 className="mt-1 text-lg font-semibold text-white">{grupo.torneoNombre}</h2>
-                </div>
-
-                {grupo.resultados.map(({ entry, miResultado, ranking }) => {
-                  const nombresPorId = entry.competenciaId
-                    ? (nombresPorCompetencia.get(entry.competenciaId) ?? new Map())
-                    : new Map<string, string>()
-
-                  const miCategoria = findMiCategoriaEntradas(ranking, atletaId)
-
-                  if (!miResultado) {
-                    return (
-                      <DisciplinaPendienteCard
-                        key={`${entry.torneo.torneo_id}-${entry.disciplina}`}
-                        disciplina={formatDisciplina(entry.disciplina)}
-                        ot={entry.ot ? formatHora(entry.ot) : '-'}
-                        ap={formatAp(entry.ap, entry.unidad)}
-                        andarivel={entry.andarivel}
-                      />
-                    )
-                  }
-
-                  const estado = getEstadoResultado(miResultado)
-                  return (
-                    <div key={`${entry.torneo.torneo_id}-${entry.disciplina}`} className="space-y-2">
-                      <ResultHero
-                        disciplina={formatDisciplina(entry.disciplina)}
-                        estado={estado}
-                        rp={formatResultado(miResultado)}
-                        ap={formatAp(entry.ap, entry.unidad)}
-                        diferencia={calcularDiferencia({
-                          ap: entry.ap,
-                          rp: miResultado.rp,
-                          unidad: miResultado.unidad ?? entry.unidad,
-                          esDns: miResultado.es_dns,
-                        })}
-                        enPodio={['PREMIACION', 'CERRADO'].includes(entry.torneo.estado) && miResultado.en_podio}
-                      />
-                      {miCategoria ? (
-                        <RankingCard
-                          categoriaLabel={formatCategoria(miCategoria.categoria)}
-                          entradas={miCategoria.entradas}
-                          unidad={entry.unidad}
-                          nombresPorId={nombresPorId}
-                          atletaId={atletaId}
-                          calculado={ranking?.calculado ?? false}
-                        />
-                      ) : null}
-                    </div>
-                  )
-                })}
-
-                {['PREMIACION', 'CERRADO'].includes(grupo.resultados[0]?.entry.torneo.estado ?? '') ? (
-                  <OverallCard
-                    overall={overall}
-                    atletaId={atletaId}
-                    nombresPorId={nombresParaOverall}
-                    categoriaAtleta={categoriaAtleta}
-                    categoriaLabel={categoriaLabel}
-                  />
-                ) : null}
-              </section>
-            )
-          })}
+          {grupos.map((grupo) => (
+            <GrupoResultados
+              key={grupo.torneoId}
+              grupo={grupo}
+              atletaId={atletaId}
+              nombresPorCompetencia={nombresPorCompetencia}
+              overallPorTorneo={overallPorTorneo}
+            />
+          ))}
         </div>
       ) : null}
     </AtletaShell>

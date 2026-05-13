@@ -199,7 +199,20 @@
       "Bash(xargs cat *)",
       "Bash(npx --prefix /Users/victor/PycharmProjects/ataraxiadive/frontend eslint src/components/juez/AtletaCard.tsx src/pages/juez/PerformanceFlowPage.tsx)",
       "Bash(npx --prefix frontend eslint frontend/src/components/juez/AtletaCard.tsx frontend/src/pages/juez/PerformanceFlowPage.tsx)",
-      "Bash(echo \"PID: $!\")"
+      "Bash(echo \"PID: $!\")",
+      "Bash(.venv/bin/python3 .claude/tracking/tracker_cli.py end-phase 3)",
+      "Bash(.venv/bin/python3 .claude/tracking/tracker_cli.py start-phase 4 \"Tests Unitarios\")",
+      "Bash(/Users/victor/PycharmProjects/ataraxiadive/.venv/bin/python3 *)",
+      "Bash(.venv/bin/python3 .claude/tracking/tracker_cli.py end-phase 4)",
+      "Bash(.venv/bin/python3 .claude/tracking/tracker_cli.py start-phase 5 \"Tests Integración\")",
+      "Bash(.venv/bin/python3 .claude/tracking/tracker_cli.py end-phase 5)",
+      "Bash(.venv/bin/python3 *)",
+      "Bash(lsof -iTCP -sTCP:LISTEN)",
+      "Bash(kill 4469)",
+      "Bash(mkdir -p /Users/victor/PycharmProjects/ataraxiadive/quality/reports/uat/SP6/F-02-creacion-torneo)",
+      "Bash(mkdir -p /Users/victor/PycharmProjects/ataraxiadive/quality/reports/uat/SP6/F-03-seed-b)",
+      "Bash(git reset *)",
+      "Bash(git worktree *)"
     ]
   }
 }

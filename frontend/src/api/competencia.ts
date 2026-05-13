@@ -55,6 +55,8 @@ export interface GrillaAtletaDto {
   estado: EstadoPerformance
   tarjeta_asignada: string | null
   juez_id: string | null
+  motivo_dq: string | null
+  penalizaciones: string[]
 }
 
 export interface PerformanceActualDto {

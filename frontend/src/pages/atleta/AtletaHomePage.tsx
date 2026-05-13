@@ -44,7 +44,6 @@ function sortDisciplinasPorOt(entries: AtletaPortalEntry[], now = new Date()): A
 
 export function AtletaHomePage() {
   const atletaId = useAuthStore((state) => state.userId)
-  const logout = useAuthStore((state) => state.logout)
   const query = useQuery({
     queryKey: ['atleta-portal-home', atletaId],
     queryFn: () => loadAtletaPortalSnapshot(),
@@ -74,15 +73,6 @@ export function AtletaHomePage() {
     <AtletaShell
       title="Portal del atleta"
       subtitle="Tus próximos torneos, anuncios y estado de participación."
-      actions={
-        <button
-          type="button"
-          onClick={logout}
-          className="rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-200"
-        >
-          Salir
-        </button>
-      }
     >
       {query.isLoading ? (
         <div className="rounded-3xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-300">

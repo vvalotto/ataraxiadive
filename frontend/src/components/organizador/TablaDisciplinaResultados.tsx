@@ -36,7 +36,7 @@ export function TablaDisciplinaResultados({
   const filas = useMemo<FilaResultadoData[]>(() => {
     const rankingPorAtleta = new Map<
       string,
-      { rp: string | null; unidad: string | null; tarjeta: string | null; categoria: string }
+      { rp: string | null; unidad: string | null; tarjeta: string | null; categoria: string; motivo_dq: string | null; penalizaciones: string[]; rp_medido: string | null }
     >()
 
     if (ranking) {
@@ -47,6 +47,9 @@ export function TablaDisciplinaResultados({
             unidad: entrada.unidad,
             tarjeta: entrada.es_dns ? 'DNS' : (entrada.tarjeta ?? null),
             categoria: grupo.categoria,
+            motivo_dq: entrada.motivo_dq ?? null,
+            penalizaciones: entrada.penalizaciones ?? [],
+            rp_medido: entrada.rp_medido ?? null,
           })
         }
       }
@@ -75,11 +78,14 @@ export function TablaDisciplinaResultados({
           categoria_corta: derivarCategoriaCorta(categoriaRaw),
           club: inscriptoData?.club ?? '',
           ap: formatMarca(atleta.ap_declarado, atleta.unidad),
-          ot: new Date(atleta.ot_programado).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          ot: new Date(atleta.ot_programado).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
           linea: formatearAndarivel(atleta.andarivel),
           rp: rankData?.rp ?? null,
           unidad: rankData?.unidad ?? atleta.unidad,
           tarjeta: rankData?.tarjeta ?? null,
+          motivo_dq: rankData?.motivo_dq ?? null,
+          penalizaciones: rankData?.penalizaciones ?? [],
+          rp_medido: rankData?.rp_medido ?? null,
         }
       })
   }, [grilla, ranking, inscriptos])
