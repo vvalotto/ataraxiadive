@@ -88,6 +88,7 @@ def _extraer_estado_provisional(
         "rp": None,
         "unidad": None,
         "tarjeta": None,
+        "motivo_dq": None,
         "es_dns": False,
         "tiene_rp": False,
     }
@@ -123,9 +124,17 @@ def _aplicar(estado: dict, event_type: str, payload: dict) -> None:
         estado["tiene_rp"] = True
     elif event_type == "TarjetaAsignada":
         estado["tarjeta"] = payload.get("tipo")
+        estado["motivo_dq"] = payload.get("motivo_dq_codigo")
         rp_final = payload.get("rp_penalizado") or payload.get("rp_medido")
         if rp_final is not None:
             estado["rp"] = str(Decimal(str(rp_final)))
+    elif event_type == "RevisionResuelta":
+        estado["tarjeta"] = payload.get("tipo")
+        estado["motivo_dq"] = payload.get("motivo_dq_codigo")
+        rp_final = payload.get("rp_penalizado") or payload.get("rp_medido")
+        if rp_final is not None:
+            estado["rp"] = str(Decimal(str(rp_final)))
+        estado["tiene_rp"] = rp_final is not None or estado["tiene_rp"]
     elif event_type == "DNSRegistrado":
         estado["es_dns"] = True
         estado["atleta_id"] = payload.get("participante_id")
@@ -172,6 +181,7 @@ def _rankear_categoria(estados: list[dict]) -> list[RankingEntradaDTO]:
                 es_dns=False,
                 en_podio=pos <= 3,
                 puntos="0.00",
+                motivo_dq=e.get("motivo_dq"),
             )
         )
         posicion = len(entradas) + 1
@@ -187,6 +197,7 @@ def _rankear_categoria(estados: list[dict]) -> list[RankingEntradaDTO]:
                 es_dns=e["es_dns"],
                 en_podio=False,
                 puntos="0.00",
+                motivo_dq=e.get("motivo_dq"),
             )
         )
         posicion += 1

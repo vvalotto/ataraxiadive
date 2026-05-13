@@ -52,6 +52,7 @@ class RankingEntradaDTO:
     es_dns: bool
     en_podio: bool
     puntos: str = "0.00"
+    motivo_dq: str | None = None
 
 
 @dataclass(frozen=True)

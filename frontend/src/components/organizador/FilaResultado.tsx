@@ -1,3 +1,4 @@
+import { DQ_REASON_LABELS } from '../../constants/tarjeta'
 import { formatMarca } from '../../utils/marca'
 
 export interface FilaResultadoData {
@@ -13,6 +14,7 @@ export interface FilaResultadoData {
   rp: string | null
   unidad: string | null
   tarjeta: string | null
+  motivo_dq: string | null
 }
 
 interface FilaResultadoProps {
@@ -85,6 +87,11 @@ export function FilaResultado({ fila }: FilaResultadoProps) {
       <td className="px-3 py-3 text-center font-mono font-semibold text-white">{rpDisplay}</td>
       <td className="px-3 py-3 text-center">
         <ChipTarjeta tarjeta={fila.tarjeta} />
+        {fila.motivo_dq ? (
+          <p className="mt-1 text-xs text-red-300">
+            {DQ_REASON_LABELS[fila.motivo_dq] ?? fila.motivo_dq}
+          </p>
+        ) : null}
       </td>
     </tr>
   )
