@@ -18,11 +18,11 @@
 
 | Atleta | Disciplina | Andarivel | Juez | AP | Escenario |
 |--------|-----------|:---------:|------|-----|-----------|
-| Sebastián Quintana | DNF | 1 | Juez 1 | 25m | BKO (F08-S01/S02/S03) |
-| Ignacio Saslavsky | DYN | 2 | Juez 2 | 60m | Tarjeta amarilla → blanca con penalización (F08-S04/S05/S06) |
+| Ezequiel Cuchiarelli | DNF | 1 | Juez 1 | 25m | BKO (F08-S01/S02/S03) |
+| Sebastián Quintana | DYN | — | Juez 2 | — | Tarjeta amarilla → blanca con penalización (F08-S04/S05/S06) |
 
-> **Nota:** Quintana y Fardi ya tienen resultados en DNF (Fardi: 41.05m blanca). Quintana está en andarivel 1 → Juez 1.
-> Saslavsky (DYN, andarivel 2) → Juez 2. Una penalización de 1 infracción descuenta 3m → RP final = RP − 3m.
+> **Nota:** Cuchiarelli ya tiene DNS en DBF (F-07) pero no en DNF — válido para BKO.
+> Saslavsky no estaba en la lista de DYN del juez — se usa Quintana. Una penalización de 1 infracción descuenta 3m → RP final = RP − 3m.
 
 ---
 
@@ -30,12 +30,14 @@
 
 | ID | Actor | Dispositivo | Acción | Resultado esperado | Resultado real | Estado | Hallazgo |
 |----|-------|-------------|--------|--------------------|----------------|--------|----------|
-| F08-S01 | Juez 1 (móvil) | iPhone | Abrir grilla DNF · seleccionar Sebastián Quintana (andarivel 1) · avanzar al paso de ingreso · marcar BKO con botón "Confirmar BKO" | Botón "Confirmar BKO" **habilitado** (MUX-04 resuelto) · al confirmar: performance queda con tarjeta **roja** automática · MotivoDQ = `BKO_SUPERFICIE` | | ⬜ PENDIENTE | — |
-| F08-S02 | Juez 1 (móvil) | iPhone | Verificar pantalla de resultado post-BKO | Pantalla de completado muestra color **rojo** (no verde) · mensaje indica DQ/BKO | | ⬜ PENDIENTE | — |
-| F08-S03 | Organizador | Desktop | Ver grilla DNF · verificar fila de Sebastián Quintana | Tarjeta roja visible · DQ con motivo `BKO_SUPERFICIE` en la columna correspondiente | | ⬜ PENDIENTE | — |
-| F08-S04 | Juez 2 (móvil) | iPhone | Abrir grilla DYN · seleccionar Ignacio Saslavsky (andarivel 2) · ingresar RP = 54m · asignar **tarjeta amarilla** | Performance queda en estado "revisión" · la fila del atleta muestra estado pendiente de revisión en la grilla del juez | | ⬜ PENDIENTE | — |
-| F08-S05 | Juez 2 (móvil) | iPhone | Cerrar revisión de tarjeta amarilla de Saslavsky como **blanca con penalización** · ingresar 1 penalización (3m de deducción) | Performance válida · RP final = 54 − 3 = **51m** · tarjeta blanca con penalización registrada | | ⬜ PENDIENTE | — |
-| F08-S06 | Organizador | Desktop | Ver resultados DYN · verificar Ignacio Saslavsky | RP = 51m visible · aparece en ranking DYN SENIOR MASC · tarjeta blanca con penalización indicada | | ⬜ PENDIENTE | — |
+| F08-S01 | Juez 1 (móvil) | iPhone | Abrir grilla DNF · seleccionar Ezequiel Cuchiarelli (andarivel 1) · avanzar al paso de ingreso · marcar BKO con botón "Confirmar BKO" | Botón "Confirmar BKO" **habilitado** (MUX-04 resuelto) · al confirmar: performance queda con tarjeta **roja** automática · MotivoDQ = `BKO_SUPERFICIE` | Botón habilitado · tarjeta roja · pide confirmación de distancia recorrida antes del BKO | ✅ PASS | — |
+| F08-S02 | Juez 1 (móvil) | iPhone | Verificar pantalla de resultado post-BKO | Pantalla de completado muestra color **rojo** (no verde) · mensaje indica DQ/BKO | Pantalla roja correcta | ✅ PASS | — |
+| F08-S03 | Organizador | Desktop | Ver grilla DNF · verificar fila de Ezequiel Cuchiarelli | Tarjeta roja visible · DQ con motivo `BKO_SUPERFICIE` en la columna correspondiente | Tarjeta roja · RP en rojo · motivo "Blackout" visible | ✅ PASS | H-08-01 resuelto |
+| F08-S04 | Juez 2 (móvil) | iPhone | Abrir grilla DYN · seleccionar Sebastián Quintana · ingresar RP · asignar **tarjeta amarilla** | Performance queda en estado "revisión" · la fila del atleta muestra estado pendiente de revisión en la grilla del juez | Estado "revisión" visible en grilla organizador y portal público | ✅ PASS | — |
+| F08-S05 | Juez 2 (móvil) | iPhone | Cerrar revisión de tarjeta amarilla de Quintana como **blanca** | Performance válida · tarjeta blanca registrada · RP original mantenido | Tarjeta blanca registrada correctamente | ✅ PASS | — |
+| F08-S06 | Organizador | Desktop | Ver resultados DYN · verificar Sebastián Quintana | RP visible · aparece en ranking DYN SENIOR MASC · tarjeta blanca indicada | RP y tarjeta Blanca correctos | ✅ PASS | — |
+| F08-S07 | Juez 2 (móvil) | iPhone | Mauro Almada DYN · ingresar RP=75m · aplicar **1 penalización** al momento de ingreso de marca | Performance válida · RP final = 72m · tarjeta blanca con penalización registrada | RP final = 72m · BlancaConPenalizaciones registrada | ✅ PASS | H-08-02 resuelto |
+| F08-S08 | Organizador | Desktop | Ver resultados DYN · verificar atleta con penalización | RP ajustado (−3m) visible · tarjeta "BlancaConPenalizaciones" o equivalente indicada | | ⬜ PENDIENTE | — |
 
 ---
 
@@ -53,5 +55,6 @@
 - [ ] Todos los escenarios 🔴 en PASS
 - [ ] BKO genera tarjeta roja automática con MotivoDQ = BKO_SUPERFICIE (MUX-04 verificado)
 - [ ] Pantalla post-BKO muestra color rojo (MUX-05 verificado)
-- [ ] Tarjeta amarilla cierra correctamente como blanca con penalización con RP ajustado
+- [ ] Tarjeta amarilla cierra correctamente como Blanca (revisión solo admite Blanca o Roja)
+- [ ] BlancaConPenalizaciones registrada correctamente en flujo normal de ingreso de RP con penalización
 - [ ] Sistema listo para F-09 (resultados completos y premiación)
