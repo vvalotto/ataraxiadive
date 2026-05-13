@@ -36,7 +36,7 @@ export function TablaDisciplinaResultados({
   const filas = useMemo<FilaResultadoData[]>(() => {
     const rankingPorAtleta = new Map<
       string,
-      { rp: string | null; unidad: string | null; tarjeta: string | null; categoria: string; motivo_dq: string | null }
+      { rp: string | null; unidad: string | null; tarjeta: string | null; categoria: string; motivo_dq: string | null; penalizaciones: string[] }
     >()
 
     if (ranking) {
@@ -48,6 +48,7 @@ export function TablaDisciplinaResultados({
             tarjeta: entrada.es_dns ? 'DNS' : (entrada.tarjeta ?? null),
             categoria: grupo.categoria,
             motivo_dq: entrada.motivo_dq ?? null,
+            penalizaciones: entrada.penalizaciones ?? [],
           })
         }
       }
@@ -82,6 +83,7 @@ export function TablaDisciplinaResultados({
           unidad: rankData?.unidad ?? atleta.unidad,
           tarjeta: rankData?.tarjeta ?? null,
           motivo_dq: rankData?.motivo_dq ?? null,
+          penalizaciones: rankData?.penalizaciones ?? [],
         }
       })
   }, [grilla, ranking, inscriptos])

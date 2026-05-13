@@ -8,6 +8,7 @@ export interface RankingEntradaDto {
   en_podio: boolean
   puntos: string | null
   motivo_dq: string | null
+  penalizaciones: string[]
 }
 
 export interface RankingCategoriaDto {

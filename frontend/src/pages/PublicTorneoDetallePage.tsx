@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DQ_REASON_LABELS } from '../constants/tarjeta'
+import { DQ_REASON_LABELS, PENALTY_LABELS } from '../constants/tarjeta'
 import { formatMarca } from '../utils/marca'
 import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
@@ -107,6 +107,15 @@ function AtletaRow({ entry }: { entry: GrillaAtletaDto }) {
           <p className="mt-0.5 text-red-400">
             {DQ_REASON_LABELS[entry.motivo_dq] ?? entry.motivo_dq}
           </p>
+        ) : null}
+        {entry.penalizaciones?.length > 0 ? (
+          <ul className="mt-0.5 space-y-0.5">
+            {entry.penalizaciones.map((p: string) => (
+              <li key={p} className="text-amber-300">
+                {PENALTY_LABELS[p] ?? p}
+              </li>
+            ))}
+          </ul>
         ) : null}
       </td>
     </tr>

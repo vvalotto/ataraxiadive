@@ -1,4 +1,4 @@
-import { DQ_REASON_LABELS } from '../../constants/tarjeta'
+import { DQ_REASON_LABELS, PENALTY_LABELS } from '../../constants/tarjeta'
 import { formatMarca } from '../../utils/marca'
 
 export interface FilaResultadoData {
@@ -15,6 +15,7 @@ export interface FilaResultadoData {
   unidad: string | null
   tarjeta: string | null
   motivo_dq: string | null
+  penalizaciones: string[]
 }
 
 interface FilaResultadoProps {
@@ -95,6 +96,15 @@ export function FilaResultado({ fila }: FilaResultadoProps) {
           <p className="mt-1 text-xs text-red-300">
             {DQ_REASON_LABELS[fila.motivo_dq] ?? fila.motivo_dq}
           </p>
+        ) : null}
+        {fila.penalizaciones.length > 0 ? (
+          <ul className="mt-1 space-y-0.5">
+            {fila.penalizaciones.map((p) => (
+              <li key={p} className="text-xs text-amber-300">
+                {PENALTY_LABELS[p] ?? p}
+              </li>
+            ))}
+          </ul>
         ) : null}
       </td>
     </tr>
