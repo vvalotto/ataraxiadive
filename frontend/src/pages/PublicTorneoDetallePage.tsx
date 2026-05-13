@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { DQ_REASON_LABELS } from '../constants/tarjeta'
 import { formatMarca } from '../utils/marca'
 import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
@@ -98,8 +99,15 @@ function AtletaRow({ entry }: { entry: GrillaAtletaDto }) {
       <td className="py-2 pr-3 text-center text-xs text-slate-400">{formatAp(entry.ap_declarado, entry.unidad)}</td>
       <td className="py-2 pr-3 text-center text-xs text-slate-400">{formatHora(entry.ot_programado)}</td>
       <td className="py-2 pr-3 text-center text-xs font-medium text-slate-300">{formatRp(entry.performance, entry.unidad)}</td>
-      <td className={`py-2 text-center text-xs ${entry.estado === 'DNS' ? 'text-slate-500' : tarjetaClases(entry.tarjeta_asignada)}`}>
-        {entry.estado === 'DNS' ? 'DNS' : entry.tarjeta_asignada ?? '—'}
+      <td className="py-2 text-center text-xs">
+        <span className={entry.estado === 'DNS' ? 'text-slate-500' : tarjetaClases(entry.tarjeta_asignada)}>
+          {entry.estado === 'DNS' ? 'DNS' : entry.tarjeta_asignada ?? '—'}
+        </span>
+        {entry.motivo_dq ? (
+          <p className="mt-0.5 text-red-400">
+            {DQ_REASON_LABELS[entry.motivo_dq] ?? entry.motivo_dq}
+          </p>
+        ) : null}
       </td>
     </tr>
   )

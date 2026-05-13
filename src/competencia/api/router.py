@@ -1243,6 +1243,7 @@ async def get_grilla(
                 "estado": e.estado,
                 "tarjeta_asignada": e.tarjeta_asignada,
                 "juez_id": e.juez_id,
+                "motivo_dq": e.motivo_dq,
             }
             for e in entradas
         ],
