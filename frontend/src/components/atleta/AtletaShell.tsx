@@ -38,8 +38,8 @@ export function AtletaShell({
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto flex min-h-screen w-full max-w-[430px] flex-col border-x border-slate-800 bg-slate-950">
-        <header className="sticky top-0 z-20 border-b border-slate-800 bg-slate-950/95 px-4 py-3 backdrop-blur">
-          <div className="flex items-start justify-between gap-3">
+        <header className="sticky top-0 z-20 border-b border-slate-800 bg-slate-950/95 backdrop-blur">
+          <div className="flex items-start justify-between gap-3 px-4 pt-3 pb-0">
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
                 {showBack ? (
@@ -73,27 +73,29 @@ export function AtletaShell({
               </button>
             </div>
           </div>
+
+          <nav className="mt-3 grid grid-cols-4 border-t border-slate-800">
+            {TABS.map((tab) => {
+              const active = isTabActive(location.pathname, tab.to)
+              return (
+                <Link
+                  key={tab.to}
+                  to={tab.to}
+                  className={[
+                    'flex h-10 items-center justify-center text-center text-xs font-semibold transition-colors',
+                    active
+                      ? 'border-b-2 border-sky-400 text-sky-300'
+                      : 'border-b-2 border-transparent text-slate-400',
+                  ].join(' ')}
+                >
+                  {tab.label}
+                </Link>
+              )
+            })}
+          </nav>
         </header>
 
-        <main className="flex-1 px-4 py-4 pb-24">{children}</main>
-
-        <nav className="sticky bottom-0 z-20 grid h-14 grid-cols-4 border-t border-slate-800 bg-slate-900/95 backdrop-blur">
-          {TABS.map((tab) => {
-            const active = isTabActive(location.pathname, tab.to)
-            return (
-              <Link
-                key={tab.to}
-                to={tab.to}
-                className={[
-                  'flex items-center justify-center text-center text-xs font-semibold transition-colors',
-                  active ? 'text-sky-300' : 'text-slate-400',
-                ].join(' ')}
-              >
-                {tab.label}
-              </Link>
-            )
-          })}
-        </nav>
+        <main className="flex-1 px-4 py-4">{children}</main>
       </div>
     </div>
   )
