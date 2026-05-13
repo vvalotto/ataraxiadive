@@ -78,7 +78,7 @@ export function TablaDisciplinaResultados({
           categoria_corta: derivarCategoriaCorta(categoriaRaw),
           club: inscriptoData?.club ?? '',
           ap: formatMarca(atleta.ap_declarado, atleta.unidad),
-          ot: new Date(atleta.ot_programado).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          ot: new Date(atleta.ot_programado).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
           linea: formatearAndarivel(atleta.andarivel),
           rp: rankData?.rp ?? null,
           unidad: rankData?.unidad ?? atleta.unidad,
