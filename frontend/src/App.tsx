@@ -51,7 +51,8 @@ function GlobalHealthCheck() {
   if (
     location.pathname.startsWith('/organizador') ||
     location.pathname.startsWith('/juez') ||
-    location.pathname.startsWith('/portalapnea')
+    location.pathname.startsWith('/portalapnea') ||
+    location.pathname.startsWith('/atleta')
   ) {
     return null
   }

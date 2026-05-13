@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import useAuthStore from '../../stores/useAuthStore'
 
 interface AtletaShellProps {
   title: string
@@ -32,13 +33,14 @@ export function AtletaShell({
 }: AtletaShellProps) {
   const location = useLocation()
   const navigate = useNavigate()
+  const logout = useAuthStore((state) => state.logout)
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto flex min-h-screen w-full max-w-[430px] flex-col border-x border-slate-800 bg-slate-950">
         <header className="sticky top-0 z-20 border-b border-slate-800 bg-slate-950/95 px-4 py-3 backdrop-blur">
           <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
                 {showBack ? (
                   <button
@@ -60,7 +62,16 @@ export function AtletaShell({
               <h1 className="mt-2 text-xl font-semibold text-white">{title}</h1>
               {subtitle ? <p className="mt-1 text-sm text-slate-400">{subtitle}</p> : null}
             </div>
-            {actions ? <div className="shrink-0">{actions}</div> : null}
+            <div className="flex shrink-0 items-start gap-2">
+              {actions ? <div>{actions}</div> : null}
+              <button
+                type="button"
+                onClick={logout}
+                className="rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-400 hover:border-slate-500 hover:text-slate-200"
+              >
+                Salir
+              </button>
+            </div>
           </div>
         </header>
 
