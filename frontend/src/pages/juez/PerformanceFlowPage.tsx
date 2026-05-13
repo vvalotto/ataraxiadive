@@ -118,16 +118,6 @@ export function PerformanceFlowPage() {
             </button>
           ) : (
             <>
-              <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
-                  Ventana OT activa
-                </p>
-                <p className="mt-2 text-sm text-slate-100">
-                  {flow.isSTA
-                    ? 'Las vias respiratorias del atleta entran en contacto con el agua.'
-                    : 'El atleta comienza su performance dentro de la ventana oficial.'}
-                </p>
-              </div>
               <button
                 type="button"
                 onClick={() => {

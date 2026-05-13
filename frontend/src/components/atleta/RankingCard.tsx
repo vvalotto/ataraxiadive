@@ -38,7 +38,6 @@ export function RankingCard({
             posicion={entrada.posicion}
             nombre={nombresPorId.get(entrada.atleta_id) ?? entrada.atleta_id.slice(0, 8)}
             rp={formatRp(entrada, unidad)}
-            puntos={entrada.es_dns ? '0' : (entrada.puntos ?? '-')}
             tarjeta={entrada.tarjeta}
             esDns={entrada.es_dns}
             isSelf={entrada.atleta_id === atletaId}
