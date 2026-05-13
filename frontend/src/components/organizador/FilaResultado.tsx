@@ -70,7 +70,11 @@ function ChipTarjeta({ tarjeta }: { tarjeta: string | null }) {
 }
 
 export function FilaResultado({ fila }: FilaResultadoProps) {
+  const isRoja = fila.tarjeta === 'Roja' || fila.tarjeta === 'ROJA'
   const rpDisplay = fila.rp ? formatMarca(fila.rp, fila.unidad ?? 'Metros') : '—'
+  const rpClass = isRoja
+    ? 'px-3 py-3 text-center font-mono font-semibold text-red-400'
+    : 'px-3 py-3 text-center font-mono font-semibold text-white'
 
   return (
     <tr className="border-b border-slate-800 text-sm transition hover:bg-slate-800/60">
@@ -84,7 +88,7 @@ export function FilaResultado({ fila }: FilaResultadoProps) {
       <td className="px-3 py-3 text-center font-mono text-slate-300">{fila.ap}</td>
       <td className="px-3 py-3 text-center font-mono text-xs text-slate-400">{fila.ot}</td>
       <td className="px-3 py-3 text-center text-slate-400">{fila.linea}</td>
-      <td className="px-3 py-3 text-center font-mono font-semibold text-white">{rpDisplay}</td>
+      <td className={rpClass}>{rpDisplay}</td>
       <td className="px-3 py-3 text-center">
         <ChipTarjeta tarjeta={fila.tarjeta} />
         {fila.motivo_dq ? (

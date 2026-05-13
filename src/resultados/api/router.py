@@ -194,6 +194,7 @@ async def get_ranking(
                             "es_dns": e.es_dns,
                             "en_podio": e.en_podio,
                             "puntos": e.puntos,
+                            "motivo_dq": e.motivo_dq,
                         }
                         for e in grupo.entradas
                     ],

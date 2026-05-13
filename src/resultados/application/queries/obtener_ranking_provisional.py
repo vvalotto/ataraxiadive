@@ -191,8 +191,8 @@ def _rankear_categoria(estados: list[dict]) -> list[RankingEntradaDTO]:
             RankingEntradaDTO(
                 posicion=posicion,
                 atleta_id=e["atleta_id"],
-                rp=None,
-                unidad=None,
+                rp=e["rp"],
+                unidad=e["unidad"],
                 tarjeta=e["tarjeta"],
                 es_dns=e["es_dns"],
                 en_podio=False,
