@@ -37,7 +37,7 @@
 | F08-S05 | Juez 2 (móvil) | iPhone | Cerrar revisión de tarjeta amarilla de Quintana como **blanca** | Performance válida · tarjeta blanca registrada · RP original mantenido | Tarjeta blanca registrada correctamente | ✅ PASS | — |
 | F08-S06 | Organizador | Desktop | Ver resultados DYN · verificar Sebastián Quintana | RP visible · aparece en ranking DYN SENIOR MASC · tarjeta blanca indicada | RP y tarjeta Blanca correctos | ✅ PASS | — |
 | F08-S07 | Juez 2 (móvil) | iPhone | Mauro Almada DYN · ingresar RP=75m · aplicar **1 penalización** al momento de ingreso de marca | Performance válida · RP final = 72m · tarjeta blanca con penalización registrada | RP final = 72m · BlancaConPenalizaciones registrada | ✅ PASS | H-08-02 resuelto |
-| F08-S08 | Organizador | Desktop | Ver resultados DYN · verificar atleta con penalización | RP ajustado (−3m) visible · tarjeta "BlancaConPenalizaciones" o equivalente indicada | | ⬜ PENDIENTE | — |
+| F08-S08 | Organizador | Desktop | Ver resultados DYN · verificar atleta con penalización | RP ajustado (−3m) visible · tarjeta "BlancaConPenalizaciones" o equivalente indicada | 69.00m con desglose "(72m − 3m)" · "Blanca con penalizaciones" | ✅ PASS | H-08-03 resuelto |
 
 ---
 
@@ -52,9 +52,9 @@
 
 ## Criterio de Salida
 
-- [ ] Todos los escenarios 🔴 en PASS
-- [ ] BKO genera tarjeta roja automática con MotivoDQ = BKO_SUPERFICIE (MUX-04 verificado)
-- [ ] Pantalla post-BKO muestra color rojo (MUX-05 verificado)
-- [ ] Tarjeta amarilla cierra correctamente como Blanca (revisión solo admite Blanca o Roja)
-- [ ] BlancaConPenalizaciones registrada correctamente en flujo normal de ingreso de RP con penalización
-- [ ] Sistema listo para F-09 (resultados completos y premiación)
+- [x] Todos los escenarios en PASS (8/8)
+- [x] BKO genera tarjeta roja automática con MotivoDQ = BKO_SUPERFICIE (MUX-04 verificado)
+- [x] Pantalla post-BKO muestra color rojo (MUX-05 verificado)
+- [x] Tarjeta amarilla cierra correctamente como Blanca (revisión solo admite Blanca o Roja)
+- [x] BlancaConPenalizaciones registrada correctamente en flujo normal de ingreso de RP con penalización
+- [x] Sistema listo para F-09 (resultados completos y premiación)
