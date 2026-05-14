@@ -48,26 +48,23 @@ export function OverallCard({
           return (
             <div
               key={entrada.atleta_id}
-              className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 ${
+              className={`flex items-center justify-center gap-3 rounded-2xl px-3 py-2.5 ${
                 isSelf ? 'border border-sky-500/30 bg-sky-500/10' : 'border border-transparent'
               }`}
             >
               <span className="w-6 text-center text-sm font-bold text-slate-400">
                 {entrada.posicion}
               </span>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="truncate text-sm font-semibold text-white">
-                    {nombresPorId.get(entrada.atleta_id) ?? entrada.atleta_id.slice(0, 8)}
+              <div className="flex items-center gap-1.5">
+                <span className="text-sm font-semibold text-white">
+                  {nombresPorId.get(entrada.atleta_id) ?? entrada.atleta_id.slice(0, 8)}
+                </span>
+                {isSelf ? (
+                  <span className="rounded-full border border-sky-400/40 bg-sky-400/10 px-1.5 py-0.5 text-[10px] font-semibold text-sky-300">
+                    Vos
                   </span>
-                  {isSelf ? (
-                    <span className="rounded-full border border-sky-400/40 bg-sky-400/10 px-1.5 py-0.5 text-[10px] font-semibold text-sky-300">
-                      Vos
-                    </span>
-                  ) : null}
-                </div>
+                ) : null}
               </div>
-              <span className="text-sm font-semibold text-white">{entrada.puntos_overall}</span>
             </div>
           )
         })}

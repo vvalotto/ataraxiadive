@@ -50,8 +50,11 @@ export function AtletaHomePage() {
     enabled: Boolean(atletaId),
   })
 
+  const hayTorneoEnEjecucion = (query.data?.entries ?? []).some((entry) =>
+    ['PREPARACION', 'EJECUCION'].includes(entry.torneo.estado),
+  )
   const nextOt = query.data?.entries
-    .filter((entry) => entry.ot)
+    .filter((entry) => entry.ot && ['PREPARACION', 'EJECUCION'].includes(entry.torneo.estado))
     .sort((left, right) => new Date(left.ot ?? 0).getTime() - new Date(right.ot ?? 0).getTime())[0]
   const torneosActivos = Array.from(
     new Map(
@@ -111,6 +114,7 @@ export function AtletaHomePage() {
             </dl>
           </section>
 
+          {hayTorneoEnEjecucion ? (
           <section className="rounded-[1.75rem] border border-slate-800 bg-slate-900 p-5">
             <div className="flex items-center justify-between gap-3">
               <div>
@@ -153,6 +157,7 @@ export function AtletaHomePage() {
               </div>
             )}
           </section>
+          ) : null}
 
           <section className="rounded-[1.75rem] border border-slate-800 bg-slate-900 p-5">
             <div className="flex items-center justify-between gap-3">
@@ -198,7 +203,7 @@ export function AtletaHomePage() {
                         className="rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-semibold text-slate-200"
                       >
                         {formatDisciplina(entry.disciplina)}
-                        {entry.apEstado === 'declarado' ? ' ✓ AP' : entry.apEstado === 'cerrado' ? ' AP cerrado' : ' Sin AP'}
+                        {entry.apEstado === 'declarado' || entry.apEstado === 'cerrado' ? ' ✓' : ' · Sin AP'}
                       </span>
                     ))}
                   </div>

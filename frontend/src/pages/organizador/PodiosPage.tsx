@@ -3,26 +3,24 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import {
   fetchCompetenciasPorTorneo,
-  fetchEstadoCompetencia,
   type CompetenciaResumenDto,
 } from '../../api/competencia'
 import { listarInscriptosDetalle } from '../../api/registro'
 import { fetchOverall, fetchRankingCompetencia } from '../../api/resultados'
 import { fetchTorneos } from '../../api/torneo'
 import { EmptyStateCard } from '../../components/organizador/EmptyStateCard'
+import { FilaPodio, type FilaPodioData } from '../../components/organizador/FilaPodio'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
-import { PodiosSection, type PodioCategoriaGroup } from '../../components/organizador/PodiosSection'
 
 const PODIO_CATEGORIAS = [
-  { categoria: 'SENIOR_MASCULINO', titulo: 'SENIOR M' },
-  { categoria: 'SENIOR_FEMENINO', titulo: 'SENIOR F' },
-  { categoria: 'MASTER_MASCULINO', titulo: 'MASTER M' },
-  { categoria: 'MASTER_FEMENINO', titulo: 'MASTER F' },
-  { categoria: 'JUNIOR_MASCULINO', titulo: 'JUNIOR M' },
   { categoria: 'JUNIOR_FEMENINO', titulo: 'JUNIOR F' },
+  { categoria: 'JUNIOR_MASCULINO', titulo: 'JUNIOR M' },
+  { categoria: 'SENIOR_FEMENINO', titulo: 'SENIOR F' },
+  { categoria: 'SENIOR_MASCULINO', titulo: 'SENIOR M' },
+  { categoria: 'MASTER_FEMENINO', titulo: 'MASTER F' },
+  { categoria: 'MASTER_MASCULINO', titulo: 'MASTER M' },
 ] as const
 
-const FINAL_STATES = new Set(['Finalizada', 'CompetenciaFinalizada'])
 
 export function PodiosPage() {
   const [searchParams] = useSearchParams()
@@ -108,79 +106,54 @@ interface PodiosTorneoProps {
   torneoId: string
 }
 
-function nombreVisible(nombre: string, apellido: string): string {
-  const partes = [apellido, nombre].filter(Boolean)
-  return partes.join(', ')
+interface EntradaPodio {
+  atleta_id: string
+  posicion: number
+  rp?: string | null
+  unidad?: string | null
+  puntos?: string | null
+  puntos_overall?: string
+  en_podio: boolean
 }
 
-function buildPodioGroups(params: {
-  categorias: Array<
-    | {
-        categoria: string
-        entradas: Array<{
-          atleta_id: string
-          posicion: number
-          rp: string | null
-          unidad: string | null
-          puntos: string | null
-        }>
+interface CategoriaPodio {
+  categoria: string
+  entradas: EntradaPodio[]
+}
+
+function filasParaCategoria(
+  categorias: CategoriaPodio[],
+  categoria: string,
+  inscriptosPorAtleta: Map<string, { nombre: string; club: string }>,
+  kind: 'ranking' | 'overall',
+): FilaPodioData[] {
+  const grupo = categorias.find((g) => g.categoria === categoria)
+  if (!grupo) return []
+  return grupo.entradas
+    .filter((e) => e.en_podio)
+    .map((entrada) => {
+      const inscripto = inscriptosPorAtleta.get(entrada.atleta_id)
+      return {
+        atleta_id: entrada.atleta_id,
+        posicion: entrada.posicion,
+        nombre: inscripto?.nombre ?? entrada.atleta_id,
+        club: inscripto?.club ?? '-',
+        rp: kind === 'ranking' && 'rp' in entrada ? (entrada.rp ?? null) : null,
+        unidad: kind === 'ranking' && 'unidad' in entrada ? (entrada.unidad ?? null) : null,
+        puntos:
+          kind === 'ranking' && 'puntos' in entrada
+            ? (entrada.puntos ?? '')
+            : 'puntos_overall' in entrada
+              ? (entrada.puntos_overall ?? '')
+              : '',
       }
-    | {
-        categoria: string
-        entradas: Array<{
-          atleta_id: string
-          posicion: number
-          puntos_overall: string
-        }>
-      }
-  >
-  inscriptos: Array<{
-    atleta_id: string
-    nombre: string
-    apellido: string
-    club: string
-  }>
-  kind: 'ranking' | 'overall'
-}): PodioCategoriaGroup[] {
-  const inscriptosPorAtleta = new Map(
-    params.inscriptos.map((inscripto) => [
-      inscripto.atleta_id,
-      {
-        nombre: nombreVisible(inscripto.nombre, inscripto.apellido),
-        club: inscripto.club,
-      },
-    ]),
-  )
-
-  const categoriasPorCodigo = new Map(params.categorias.map((grupo) => [grupo.categoria, grupo]))
-
-  return PODIO_CATEGORIAS.map(({ categoria, titulo }) => {
-    const grupo = categoriasPorCodigo.get(categoria)
-    const filas =
-      grupo?.entradas.map((entrada) => {
-        const inscripto = inscriptosPorAtleta.get(entrada.atleta_id)
-        return {
-          atleta_id: entrada.atleta_id,
-          posicion: entrada.posicion,
-          nombre: inscripto?.nombre ?? entrada.atleta_id,
-          club: inscripto?.club ?? '-',
-          rp: params.kind === 'ranking' && 'rp' in entrada ? entrada.rp : null,
-          unidad: params.kind === 'ranking' && 'unidad' in entrada ? entrada.unidad : null,
-          puntos:
-            params.kind === 'ranking' && 'puntos' in entrada
-              ? (entrada.puntos ?? '-')
-              : 'puntos_overall' in entrada
-                ? entrada.puntos_overall
-                : '-',
-        }
-      }) ?? []
-
-    return { categoria, titulo, filas }
-  })
+    })
 }
 
 function PodiosTorneo({ torneoId }: PodiosTorneoProps) {
-  const [disciplinaSeleccionada, setDisciplinaSeleccionada] = useState<string | null>(null)
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<string>(
+    PODIO_CATEGORIAS[0].categoria,
+  )
 
   const torneosQuery = useQuery({
     queryKey: ['torneos-organizador'],
@@ -202,23 +175,14 @@ function PodiosTorneo({ torneoId }: PodiosTorneoProps) {
     () => competenciasQuery.data ?? [],
     [competenciasQuery.data],
   )
-  const disciplinaActiva = disciplinaSeleccionada ?? disciplinas[0]?.disciplina ?? null
-  const competenciaActiva = disciplinas.find((d) => d.disciplina === disciplinaActiva) ?? null
 
-  const estadosCompetenciaQueries = useQueries({
-    queries: disciplinas.map((competencia) => ({
-      queryKey: ['estado-competencia', competencia.competencia_id, competencia.disciplina],
-      queryFn: () => fetchEstadoCompetencia(competencia.competencia_id, competencia.disciplina),
-      enabled: Boolean(competencia.competencia_id && competencia.disciplina),
+  const rankingQueries = useQueries({
+    queries: disciplinas.map((comp) => ({
+      queryKey: ['ranking', comp.competencia_id, comp.disciplina],
+      queryFn: () => fetchRankingCompetencia(comp.competencia_id, comp.disciplina),
+      enabled: Boolean(comp.competencia_id && comp.disciplina),
+      refetchInterval: 30_000,
     })),
-  })
-
-  const rankingQuery = useQuery({
-    queryKey: ['ranking', competenciaActiva?.competencia_id, disciplinaActiva],
-    queryFn: () =>
-      fetchRankingCompetencia(competenciaActiva!.competencia_id, disciplinaActiva!),
-    enabled: Boolean(competenciaActiva && disciplinaActiva),
-    refetchInterval: 30_000,
   })
 
   const overallQuery = useQuery({
@@ -229,69 +193,58 @@ function PodiosTorneo({ torneoId }: PodiosTorneoProps) {
     retry: false,
   })
 
-  const estadoCompetencias = useMemo(
+  const inscriptosPorAtleta = useMemo(
     () =>
-      disciplinas.map((competencia, index) => ({
-        competencia,
-        estado: estadosCompetenciaQueries[index]?.data?.estado ?? null,
+      new Map(
+        (inscriptosQuery.data ?? []).map((i) => [
+          i.atleta_id,
+          { nombre: [i.apellido, i.nombre].filter(Boolean).join(', '), club: i.club },
+        ]),
+      ),
+    [inscriptosQuery.data],
+  )
+
+  const categoriaActiva =
+    PODIO_CATEGORIAS.find((c) => c.categoria === categoriaSeleccionada) ?? PODIO_CATEGORIAS[0]
+
+  const filasOverall = useMemo(
+    () =>
+      filasParaCategoria(
+        (overallQuery.data?.rankings ?? []) as CategoriaPodio[],
+        categoriaActiva.categoria,
+        inscriptosPorAtleta,
+        'overall',
+      ),
+    [overallQuery.data, categoriaActiva, inscriptosPorAtleta],
+  )
+
+  const filasPorDisciplina = useMemo(
+    () =>
+      disciplinas.map((comp, idx) => ({
+        disciplina: comp.disciplina,
+        filas: filasParaCategoria(
+          (rankingQueries[idx]?.data?.rankings ?? []) as CategoriaPodio[],
+          categoriaActiva.categoria,
+          inscriptosPorAtleta,
+          'ranking',
+        ),
+        calculado: rankingQueries[idx]?.data?.calculado ?? false,
       })),
-    [disciplinas, estadosCompetenciaQueries],
-  )
-
-  const disciplinasCerradas = estadoCompetencias.filter((item) =>
-    item.estado ? FINAL_STATES.has(item.estado) : false,
-  ).length
-  const totalDisciplinas = disciplinas.length
-  const overallDisponible = totalDisciplinas > 0 && disciplinasCerradas === totalDisciplinas
-  const estadosLoading = estadosCompetenciaQueries.some((query) => query.isLoading)
-  const disciplinaActivaFinalizada = competenciaActiva
-    ? FINAL_STATES.has(
-        estadoCompetencias.find(
-          (item) => item.competencia.competencia_id === competenciaActiva.competencia_id,
-        )?.estado ?? '',
-      )
-    : false
-
-  const podioDisciplina = useMemo(
-    () =>
-      buildPodioGroups({
-        categorias: rankingQuery.data?.rankings ?? [],
-        inscriptos: inscriptosQuery.data ?? [],
-        kind: 'ranking',
-      }),
-    [rankingQuery.data, inscriptosQuery.data],
-  )
-
-  const podioOverall = useMemo(
-    () =>
-      buildPodioGroups({
-        categorias: overallQuery.data?.rankings ?? [],
-        inscriptos: inscriptosQuery.data ?? [],
-        kind: 'overall',
-      }),
-    [overallQuery.data, inscriptosQuery.data],
+    [disciplinas, rankingQueries, categoriaActiva, inscriptosPorAtleta],
   )
 
   const subtitulo = torneo ? `${torneo.nombre} · ${torneo.sede.ciudad}` : 'Podios del torneo'
-  const progresoLabel =
-    totalDisciplinas > 0 ? `${disciplinasCerradas} de ${totalDisciplinas} disciplinas cerradas` : null
 
   return (
     <OrganizadorLayout
       title="Podios"
       activeTournamentId={torneoId}
       activeTournamentState={torneo?.estado}
-      subtitle={progresoLabel ? `${subtitulo} · ${progresoLabel}` : subtitulo}
+      subtitle={subtitulo}
     >
       {competenciasQuery.isLoading ? (
         <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">
           Cargando disciplinas...
-        </section>
-      ) : null}
-
-      {competenciasQuery.isError ? (
-        <section className="rounded-[2rem] border border-red-500/40 bg-red-950/40 p-5 text-sm text-red-100">
-          No se pudieron cargar las disciplinas del torneo.
         </section>
       ) : null}
 
@@ -303,95 +256,69 @@ function PodiosTorneo({ torneoId }: PodiosTorneoProps) {
         <>
           <section className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-5 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
             <div className="flex flex-col gap-4 border-b border-slate-800 pb-4">
-              <div className="flex flex-wrap items-center gap-2">
-                {disciplinas.map((comp) => (
+              <div className="flex gap-1 border-b border-slate-800">
+                {PODIO_CATEGORIAS.map(({ categoria, titulo }) => (
                   <button
-                    key={comp.disciplina}
+                    key={categoria}
                     type="button"
-                    onClick={() => setDisciplinaSeleccionada(comp.disciplina)}
-                    className={
-                      disciplinaActiva === comp.disciplina
-                        ? 'rounded-full border border-sky-400 bg-sky-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-sky-300'
-                        : 'rounded-full border border-slate-700 bg-slate-950 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-slate-300 hover:border-slate-500 hover:text-white'
-                    }
+                    onClick={() => setCategoriaSeleccionada(categoria)}
+                    className={`flex-1 rounded-t-xl py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors ${
+                      categoriaSeleccionada === categoria
+                        ? 'bg-slate-800 text-sky-400'
+                        : 'text-slate-500 hover:text-slate-300'
+                    }`}
                   >
-                    {comp.disciplina}
+                    {titulo}
                   </button>
                 ))}
               </div>
-
-              <div>
+              <div className="text-center">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Premiacion por categoria
+                  Premiacion
                 </p>
-                <h2 className="mt-2 text-2xl font-semibold text-white">
-                  {disciplinaActiva ?? 'Sin disciplina'}
-                </h2>
-                <p className="mt-2 text-sm text-slate-300">
-                  Podios por disciplina y acumulado overall separados de la vista tecnica de resultados.
-                </p>
+                <h2 className="mt-2 text-2xl font-semibold text-white">{categoriaActiva.titulo}</h2>
               </div>
             </div>
           </section>
 
-          <section className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-            <div className="flex flex-col gap-4">
-              {disciplinaActiva ? (
-                <PodiosSection
-                  title={`Podios — ${disciplinaActiva}`}
-                  subtitle="Resultados agrupados por categoria y genero con puntaje FAAS."
-                  groups={podioDisciplina}
-                  emptyState={
-                    !disciplinaActivaFinalizada
-                      ? {
-                          title: 'Podios disponibles al cerrar la disciplina',
-                          detail: 'La disciplina seleccionada todavia no esta finalizada.',
-                        }
-                      : rankingQuery.isError
-                        ? {
-                            title: 'No se pudo cargar el ranking de la disciplina',
-                            detail: 'Volve a intentar cuando el calculo de resultados este disponible.',
-                          }
-                        : rankingQuery.data && !rankingQuery.data.calculado
-                          ? {
-                              title: 'Ranking aun no calculado',
-                              detail: 'Los podios se publican cuando la disciplina finaliza con ranking calculado.',
-                            }
-                          : null
-                  }
-                />
-              ) : null}
+          <section className="flex flex-col gap-6">
+            <div className="rounded-[2rem] border border-amber-500/30 bg-amber-500/5 p-5 shadow-[0_20px_60px_rgba(245,158,11,0.12)]">
+              <div className="mb-4 border-b border-amber-500/20 pb-3 text-center">
+                <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-amber-300">
+                  Overall — {categoriaActiva.titulo}
+                </h3>
+              </div>
+              {filasOverall.length === 0 ? (
+                <p className="text-sm text-slate-400">Sin datos de overall para esta categoría.</p>
+              ) : (
+                <ol className="space-y-2">
+                  {filasOverall.map((fila) => (
+                    <FilaPodio key={fila.atleta_id} fila={fila} centered />
+                  ))}
+                </ol>
+              )}
             </div>
 
             <div className="flex flex-col gap-4">
-              <PodiosSection
-                title="Overall"
-                subtitle="Acumulado del torneo por categoria y genero."
-                groups={podioOverall}
-                emptyState={
-                  estadosLoading
-                    ? {
-                        title: 'Verificando cierre de disciplinas',
-                        detail: 'Estamos comprobando el estado operativo del torneo.',
-                      }
-                    : !overallDisponible
-                      ? {
-                          title: 'Disponible al cerrar todas las disciplinas',
-                          detail: `(${disciplinasCerradas} de ${totalDisciplinas} disciplinas cerradas)`,
-                        }
-                      : overallQuery.isError
-                        ? {
-                            title: 'No se pudo cargar el overall del torneo',
-                            detail: 'El calculo acumulado todavia no esta disponible.',
-                          }
-                        : overallQuery.data && !overallQuery.data.calculado
-                          ? {
-                              title: 'Overall aun no calculado',
-                              detail: 'El acumulado se habilita cuando el backend publica el ranking overall.',
-                            }
-                          : null
-                }
-              />
+              {filasPorDisciplina
+                .filter(({ filas }) => filas.length > 0)
+                .map(({ disciplina, filas }) => (
+                <div
+                  key={disciplina}
+                  className="rounded-[1.75rem] border border-slate-700 bg-slate-950/60 p-4"
+                >
+                  <div className="mb-3 border-b border-slate-800 pb-2 text-center">
+                    <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                      {disciplina}
+                    </h4>
+                  </div>
+                  <ol className="space-y-2">
+                    {filas.map((fila) => (
+                      <FilaPodio key={fila.atleta_id} fila={fila} />
+                    ))}
+                  </ol>
+                </div>
+              ))}
             </div>
           </section>
         </>

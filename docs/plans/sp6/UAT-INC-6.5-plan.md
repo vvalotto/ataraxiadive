@@ -1,8 +1,8 @@
 # Plan de UAT — INC-6.5 Validación E2E
 ## Apnea Indoor Buenos Aires 2025
 
-> Estado: ⏳ Pendiente de ejecución  
-> Última actualización: 2026-05-11  
+> Estado: ✅ Completado — F-01..F-10 PASS · 0 bloqueantes  
+> Última actualización: 2026-05-14  
 > Precondición: INC-6.1 ✅ · INC-6.2 ✅ · INC-6.3 ✅ · INC-6.4 ✅ · INC-6.6 ✅
 
 ---
@@ -377,17 +377,17 @@ Usar la siguiente tabla durante la ejecución. Un hallazgo por fila.
 
 ## 8. Checklist de Cierre INC-6.5
 
-- [ ] F-01: portal público accesible sin login · login de 3 jueces y organizador funcional
-- [ ] F-02: torneo creado con 5 disciplinas y 3 categorías desde UI
-- [ ] F-03: Seed-B ejecutado sin errores · 31 atletas visibles en inscriptos
-- [ ] F-04: flujo inscripción atleta → portal → login → formulario con AP inline
-- [ ] F-05: grilla generada · marcas STA/SPE en mm:ss · Juez 1+2 asignados a dinámicas · Juez 1+2+3 a STA · sin componentes eliminados · Juez 3 solo ve STA en sus asignaciones
-- [ ] F-06: torneo en EJECUCION · portal muestra "En ejecución" · página pública con grilla
-- [ ] F-07: 6 performances manuales ingresadas por juez correcto según andarivel · secuencia correcta · formatos correctos · verificación cruzada positiva
-- [ ] F-08: BKO confirmar habilitado (MUX-04) · tarjeta roja en rojo (MUX-05) · tarjeta amarilla con cierre como blanca+penalización
-- [ ] F-09: Seed-C ejecutado · podios correctos · resultados en mm:ss · sin PTS FAAS · overall correcto
-- [ ] F-10: torneo CERRADO · portal y atleta muestran estado final
-- [ ] 0 hallazgos bloqueantes sin resolver
+- [x] F-01: portal público accesible sin login · login de 3 jueces y organizador funcional
+- [x] F-02: torneo creado con 5 disciplinas y 3 categorías desde UI
+- [x] F-03: Seed-B ejecutado sin errores · 31 atletas visibles en inscriptos
+- [x] F-04: flujo inscripción atleta → portal → login → formulario con AP inline
+- [x] F-05: grilla generada · marcas STA/SPE en mm:ss · Juez 1+2 asignados a dinámicas · Juez 1+2+3 a STA · sin componentes eliminados · Juez 3 solo ve STA en sus asignaciones
+- [x] F-06: torneo en EJECUCION · portal muestra "En ejecución" · página pública con grilla
+- [x] F-07: 6 performances manuales ingresadas por juez correcto según andarivel · secuencia correcta · formatos correctos · verificación cruzada positiva
+- [x] F-08: BKO confirmar habilitado (MUX-04) · tarjeta roja en rojo (MUX-05) · tarjeta amarilla con cierre como blanca+penalización
+- [x] F-09: Seed-C ejecutado · podios correctos · resultados en mm:ss · sin PTS FAAS · overall correcto · 13/19 PASS + 5 hallazgos H-09-01..05 resueltos
+- [x] F-10: torneo CERRADO · portal y atleta muestran estado final · 13/13 PASS
+- [x] 0 hallazgos bloqueantes sin resolver
 
 ---
 

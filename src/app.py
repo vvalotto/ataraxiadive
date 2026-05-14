@@ -13,6 +13,7 @@ from competencia.api.exception_handlers import register_exception_handlers
 from competencia.api.router import (
     configure_ap_registrado_callback,
     configure_competencia_cross_bc_dependencies,
+    configure_on_finalizada_callback,
 )
 from competencia.api.router import (
     router as competencia_router,
@@ -91,6 +92,7 @@ from resultados.application.commands.calcular_ranking import (
     CalcularRankingCommand,
     CalcularRankingHandler,
 )
+from resultados.domain.services.algoritmo_faas import AlgoritmoPuntajeFAAS
 from resultados.application.queries.obtener_ranking import (
     ObtenerRankingHandler,
     ObtenerRankingQuery,
@@ -385,6 +387,7 @@ async def _calcular_ranking_por_finalizacion(
         acl,
         atleta_categoria_acl,
         descriptor,
+        algoritmo=AlgoritmoPuntajeFAAS(),
     )
     await ranking_handler.handle(
         CalcularRankingCommand(
@@ -635,6 +638,11 @@ async def _obtener_disciplinas_torneo(
 configure_premiacion_precondition(build_premiacion_precondition())
 configure_ejecucion_precondition(build_ejecucion_precondition())
 configure_ejecucion_post_action(build_ejecucion_post_action())
+configure_on_finalizada_callback(
+    build_on_finalizada_callback(
+        SQLiteEventStore(os.getenv("COMPETENCIA_DB_PATH", "data/competencia.db"))
+    )
+)
 
 
 def build_on_ap_registrado_callback(

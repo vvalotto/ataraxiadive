@@ -24,7 +24,7 @@ export const PENALTY_LABELS: Record<string, string> = {
 }
 
 export const DQ_REASON_LABELS: Record<string, string> = {
-  BKO_SUPERFICIE: 'Blackout',
+  BKO_SUPERFICIE: 'Blackout superficie',
   BKO_SUBACUATICO: 'Blackout subacuático',
   PROTOCOLO_SUPERFICIE: 'No protocolo superficie',
   INFRACCION_TECNICA_DQ: 'Infracción técnica',

@@ -21,5 +21,5 @@ export function formatMarca(value: string, unidad: string): string {
     const segundos = totalSeconds % 60
     return `${minutos}:${String(segundos).padStart(2, '0')} min`
   }
-  return `${value} m`
+  return `${String(value).replace('.', ',')} m`
 }

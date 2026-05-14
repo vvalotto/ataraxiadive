@@ -1,3 +1,5 @@
+import { formatMarca } from '../../utils/marca'
+
 export interface FilaPodioData {
   atleta_id: string
   posicion: number
@@ -10,6 +12,7 @@ export interface FilaPodioData {
 
 interface FilaPodioProps {
   fila: FilaPodioData
+  centered?: boolean
 }
 
 function badgeClass(posicion: number): string {
@@ -26,11 +29,33 @@ function badgeClass(posicion: number): string {
 }
 
 function posicionLabel(posicion: number): string {
+  if (posicion === 1) return '🥇'
+  if (posicion === 2) return '🥈'
+  if (posicion === 3) return '🥉'
   return `${posicion}º`
 }
 
-export function FilaPodio({ fila }: FilaPodioProps) {
-  const rpDisplay = fila.rp ? `${fila.rp} ${fila.unidad ?? ''}`.trim() : '—'
+export function FilaPodio({ fila, centered = false }: FilaPodioProps) {
+  const rpDisplay = fila.rp ? formatMarca(fila.rp, fila.unidad ?? 'Metros') : ''
+
+  if (centered) {
+    return (
+      <li className="flex items-center justify-center gap-3 rounded-2xl border border-slate-700 bg-slate-900/80 px-3 py-3">
+        <div
+          className={[
+            'inline-flex min-w-11 items-center justify-center rounded-full px-2 py-1 text-xs font-bold',
+            badgeClass(fila.posicion),
+          ].join(' ')}
+        >
+          {posicionLabel(fila.posicion)}
+        </div>
+        <div className="text-center">
+          <p className="text-sm font-semibold text-white">{fila.nombre}</p>
+          {fila.club ? <p className="text-xs text-slate-400">{fila.club}</p> : null}
+        </div>
+      </li>
+    )
+  }
 
   return (
     <li className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 rounded-2xl border border-slate-700 bg-slate-900/80 px-3 py-3">
@@ -49,8 +74,7 @@ export function FilaPodio({ fila }: FilaPodioProps) {
       </div>
 
       <div className="text-right">
-        <p className="font-mono text-xs text-slate-400">{rpDisplay}</p>
-        <p className="font-mono text-sm font-bold text-sky-300">{fila.puntos}</p>
+        <p className="font-mono text-sm font-semibold text-slate-200">{rpDisplay}</p>
       </div>
     </li>
   )

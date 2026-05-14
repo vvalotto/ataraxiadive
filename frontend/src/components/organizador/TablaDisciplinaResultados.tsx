@@ -83,8 +83,8 @@ export function TablaDisciplinaResultados({
           rp: rankData?.rp ?? null,
           unidad: rankData?.unidad ?? atleta.unidad,
           tarjeta: rankData?.tarjeta ?? null,
-          motivo_dq: rankData?.motivo_dq ?? null,
-          penalizaciones: rankData?.penalizaciones ?? [],
+          motivo_dq: rankData?.motivo_dq ?? atleta.motivo_dq ?? null,
+          penalizaciones: rankData?.penalizaciones ?? atleta.penalizaciones ?? [],
           rp_medido: rankData?.rp_medido ?? null,
         }
       })

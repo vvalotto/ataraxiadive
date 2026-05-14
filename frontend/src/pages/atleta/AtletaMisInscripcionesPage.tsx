@@ -27,18 +27,15 @@ function GrupoEnCurso({ torneoNombre, entries }: GrupoEnCursoProps) {
         <p className="text-sm font-semibold text-white">{torneoNombre}</p>
       </div>
 
-      <div className="mt-3 flex border-b border-slate-800">
+      <div className="flex border-b border-slate-800">
         {entries.map((e, i) => (
           <button
             key={e.disciplina}
             type="button"
             onClick={() => setTabIdx(i)}
-            className={[
-              'flex-1 py-2 text-xs font-semibold transition-colors',
-              i === tabIdx
-                ? 'border-b-2 border-sky-400 text-sky-300'
-                : 'border-b-2 border-transparent text-slate-400',
-            ].join(' ')}
+            className={`flex-1 py-2 text-xs font-semibold transition-colors ${
+              i === tabIdx ? 'bg-slate-800 text-sky-400' : 'text-slate-500 hover:text-slate-300'
+            }`}
           >
             {formatDisciplina(e.disciplina)}
           </button>

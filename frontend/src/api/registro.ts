@@ -139,6 +139,17 @@ async function parseResponse<T>(response: Response): Promise<T> {
   throw new ApiError(response.status, detail)
 }
 
+export interface InscriptoInfoDto {
+  atleta_id: string
+  nombre: string
+  club: string
+}
+
+export async function listarInscriptosInfo(torneoId: string): Promise<InscriptoInfoDto[]> {
+  const response = await fetch(`/registro/torneos/${torneoId}/inscriptos-info`)
+  return parseResponse<InscriptoInfoDto[]>(response)
+}
+
 export async function listarInscriptos(torneoId: string): Promise<InscriptoDto[]> {
   const response = await fetch(`/registro/torneos/${torneoId}/inscriptos`, {
     headers: buildHeaders(),

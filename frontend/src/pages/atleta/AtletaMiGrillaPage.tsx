@@ -58,7 +58,7 @@ export function AtletaMiGrillaPage() {
 
   return (
     <AtletaShell
-      title={`Mi grilla${disciplina ? ` - ${formatDisciplina(disciplina)}` : ''}`}
+      title={`Mi grilla${disciplina ? ` · ${formatDisciplina(disciplina)}` : ''}`}
       subtitle="Tu OT, andarivel y orden completo de salida."
       showBack
     >
@@ -106,21 +106,33 @@ export function AtletaMiGrillaPage() {
           ) : null}
 
           {query.data.grilla.length > 0 ? (
-            <section className="rounded-[1.75rem] border border-slate-800 bg-slate-900 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-400">
+            <section className="rounded-[1.75rem] border border-slate-800 bg-slate-900 overflow-hidden">
+              <p className="px-4 pt-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-400">
                 Orden de salida
               </p>
-              <div className="mt-4 space-y-3">
-                {query.data.grilla.map((entry) => (
-                  <GrillaRow
-                    key={entry.performance_id}
-                    posicion={entry.posicion}
-                    nombre={entry.nombre_atleta}
-                    ot={formatHora(entry.ot_programado)}
-                    andarivel={entry.andarivel}
-                    isSelf={entry.atleta_id === query.data.atletaId}
-                  />
-                ))}
+              <div className="mt-3 overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-slate-800">
+                      <th className="px-4 pb-2 text-center text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Pos</th>
+                      <th className="px-0 pb-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Atleta</th>
+                      <th className="px-4 pb-2 text-center text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">OT</th>
+                      <th className="px-4 pb-2 text-center text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">And.</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60 px-4">
+                    {query.data.grilla.map((entry) => (
+                      <GrillaRow
+                        key={entry.performance_id}
+                        posicion={entry.posicion}
+                        nombre={entry.nombre_atleta}
+                        ot={formatHora(entry.ot_programado)}
+                        andarivel={entry.andarivel}
+                        isSelf={entry.atleta_id === query.data.atletaId}
+                      />
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </section>
           ) : null}

@@ -67,11 +67,12 @@ export function TablaJueces({
         <table className="min-w-full divide-y divide-slate-800 text-left text-sm">
           <thead className="bg-slate-950/80 text-xs font-semibold uppercase text-slate-400">
             <tr>
-              <th className="px-4 py-3">Atleta</th>
-              <th className="px-4 py-3">And.</th>
-              <th className="px-4 py-3">OT</th>
-              <th className="px-4 py-3">AP</th>
-              <th className="px-4 py-3">Juez asignado</th>
+              <th className="px-4 py-3 text-center">Posicion</th>
+              <th className="px-4 py-3 text-center">Atleta</th>
+              <th className="px-4 py-3 text-center">Andarivel</th>
+              <th className="px-4 py-3 text-center">OT</th>
+              <th className="px-4 py-3 text-center">AP</th>
+              <th className="px-4 py-3 text-center">Juez asignado</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-800 bg-slate-900/70">
@@ -80,9 +81,11 @@ export function TablaJueces({
               const saving = savingKey === rowSavingKey
               return (
                 <tr key={row.performanceId}>
+                  <td className="px-4 py-3 text-center font-semibold text-slate-200">
+                    {row.posicion}
+                  </td>
                   <td className="px-4 py-3">
                     <p className="font-semibold text-white">{row.nombreAtleta}</p>
-                    <p className="mt-1 text-xs text-slate-400">Posición {row.posicion}</p>
                   </td>
                   <td className="px-4 py-3 text-center font-semibold text-slate-200">
                     {row.andarivel}

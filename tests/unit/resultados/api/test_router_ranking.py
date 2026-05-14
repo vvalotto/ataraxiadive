@@ -118,6 +118,9 @@ def test_get_ranking_devuelve_agrupado_por_categoria(tmp_path) -> None:
                         "es_dns": False,
                         "en_podio": True,
                         "puntos": "0.00",
+                        "motivo_dq": None,
+                        "penalizaciones": [],
+                        "rp_medido": None,
                     }
                 ],
             },
@@ -133,6 +136,9 @@ def test_get_ranking_devuelve_agrupado_por_categoria(tmp_path) -> None:
                         "es_dns": False,
                         "en_podio": True,
                         "puntos": "0.00",
+                        "motivo_dq": None,
+                        "penalizaciones": [],
+                        "rp_medido": None,
                     }
                 ],
             },

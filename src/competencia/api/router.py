@@ -172,11 +172,18 @@ APRegistradoCallback = Callable[[UUID, UUID, Disciplina, Decimal], Awaitable[Non
 _ap_registrado_callback: APRegistradoCallback | None = None
 InscripcionRepositoryFactory = Callable[[], InscripcionRepositoryPort]
 _inscripcion_repository_factory: InscripcionRepositoryFactory | None = None
+OnFinalizadaCallback = Callable[[UUID, Disciplina, UUID | None], Awaitable[None]]
+_on_finalizada_callback: OnFinalizadaCallback | None = None
 
 
 def configure_ap_registrado_callback(callback: APRegistradoCallback | None) -> None:
     global _ap_registrado_callback  # noqa: PLW0603
     _ap_registrado_callback = callback
+
+
+def configure_on_finalizada_callback(callback: OnFinalizadaCallback | None) -> None:
+    global _on_finalizada_callback  # noqa: PLW0603
+    _on_finalizada_callback = callback
 
 
 def configure_competencia_cross_bc_dependencies(
@@ -435,7 +442,7 @@ def get_asignar_tarjeta_handler(
     performances_estado: PerformancesEstadoAdapterDep,
 ) -> AsignarTarjetaHandler:
     """Dependency: handler para asignar tarjeta."""
-    return AsignarTarjetaHandler(event_store, performances_estado)
+    return AsignarTarjetaHandler(event_store, performances_estado, _on_finalizada_callback)
 
 
 def get_registrar_dns_handler(
@@ -443,7 +450,7 @@ def get_registrar_dns_handler(
     performances_estado: PerformancesEstadoAdapterDep,
 ) -> RegistrarDNSHandler:
     """Dependency: handler para registrar DNS."""
-    return RegistrarDNSHandler(event_store, performances_estado)
+    return RegistrarDNSHandler(event_store, performances_estado, _on_finalizada_callback)
 
 
 def get_corregir_resultado_tras_dns_handler(
@@ -458,7 +465,7 @@ def get_resolver_revision_handler(
     performances_estado: PerformancesEstadoAdapterDep,
 ) -> ResolverRevisionHandler:
     """Dependency: handler para resolver una revision pendiente."""
-    return ResolverRevisionHandler(event_store, performances_estado)
+    return ResolverRevisionHandler(event_store, performances_estado, _on_finalizada_callback)
 
 
 def get_asignar_juez_performance_handler(

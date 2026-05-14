@@ -392,6 +392,31 @@ async def listar_inscripciones_de_atleta(atleta_id: UUID, _: AtletaDep) -> JSONR
     )
 
 
+@router.get("/torneos/{torneo_id}/inscriptos-info", status_code=200)
+async def listar_inscriptos_info_publico(torneo_id: UUID) -> JSONResponse:
+    """Información pública de inscriptos: atleta_id, nombre completo y club. Sin auth."""
+    inscripciones = await _inscripcion_repo().find_active_by_torneo(torneo_id)
+    atletas_repo = _repo()
+    seen: set[str] = set()
+    content = []
+    for inscripcion in inscripciones:
+        key = str(inscripcion.atleta_id)
+        if key in seen:
+            continue
+        seen.add(key)
+        atleta = await atletas_repo.find_by_id(inscripcion.atleta_id)
+        if atleta is None:
+            continue
+        content.append(
+            {
+                "atleta_id": key,
+                "nombre": f"{atleta.nombre} {atleta.apellido}".strip(),
+                "club": atleta.club or "",
+            }
+        )
+    return JSONResponse(status_code=200, content=content)
+
+
 @router.get("/torneos/{torneo_id}/inscriptos-detalle", status_code=200)
 async def listar_inscriptos_detalle(torneo_id: UUID, _: OrganizadorDep) -> JSONResponse:
     inscripciones = await _inscripcion_repo().find_active_by_torneo(torneo_id)

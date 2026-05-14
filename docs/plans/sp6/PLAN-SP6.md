@@ -1,7 +1,7 @@
 # PLAN-SP6 — Validación, Ajustes y Despliegue
 
 > Estado documental: vigente  
-> Última actualización: 2026-05-03  
+> Última actualización: 2026-05-14  
 > Baseline objetivo: `v1.0.0` (BL-006)
 
 ---
@@ -295,8 +295,8 @@ Foco: configuración y publicación del entorno productivo. Precondición: INC-6
 - [ ] ARCH-01 implementado — grilla carga O(1) verificado con dataset real
 - [ ] ARCH-02 corregido — 0 imports directos de infraestructura en routers
 - [ ] INC-6.6: portal público accesible sin login; acciones contextuales verificadas por estado de torneo
-- [ ] INC-6.5: seed Buenos Aires 2025 ejecutable sin errores (US-6.5.0)
-- [ ] INC-6.5: UAT E2E completado con los 3 roles sin bloqueos críticos (J-01..09 · O-01..09 · A-01..08)
+- [x] INC-6.5: seed Buenos Aires 2025 ejecutable sin errores (US-6.5.0)
+- [x] INC-6.5: UAT E2E completado — F-01..F-10 PASS · 0 bloqueantes · hallazgos H-09-01..05 resueltos
 - [ ] INC-6.7: `v1.0.0` tageado en `main` + BL-006 registrado
 - [ ] ArchitectAnalyst BL-006: `should_block=false`
 

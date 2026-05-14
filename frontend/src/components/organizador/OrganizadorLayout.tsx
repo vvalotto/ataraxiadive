@@ -36,9 +36,9 @@ const NAV_ITEMS: NavItem[] = [
   { key: 'panel', label: 'Panel', to: '/organizador/panel' },
   { key: 'inscriptos', label: 'Inscriptos', to: '/organizador/inscriptos' },
   { key: 'grilla', label: 'Grilla', to: '/organizador/grilla' },
+  { key: 'jueces', label: 'Jueces', to: '/organizador/jueces' },
   { key: 'resultados', label: 'Resultados', to: '/organizador/resultados' },
   { key: 'podios', label: 'Podios', to: '/organizador/podios' },
-  { key: 'jueces', label: 'Jueces', to: '/organizador/jueces' },
   { key: 'torneo', label: 'Torneo', to: '/organizador/torneo' },
   { key: 'audit', label: 'Audit Log', to: '/organizador/audit-log' },
 ]
