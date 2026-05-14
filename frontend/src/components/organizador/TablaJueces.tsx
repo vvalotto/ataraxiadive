@@ -68,6 +68,7 @@ export function TablaJueces({
           <thead className="bg-slate-950/80 text-xs font-semibold uppercase text-slate-400">
             <tr>
               <th className="px-4 py-3">Atleta</th>
+              <th className="px-4 py-3">And.</th>
               <th className="px-4 py-3">OT</th>
               <th className="px-4 py-3">AP</th>
               <th className="px-4 py-3">Juez asignado</th>
@@ -81,9 +82,10 @@ export function TablaJueces({
                 <tr key={row.performanceId}>
                   <td className="px-4 py-3">
                     <p className="font-semibold text-white">{row.nombreAtleta}</p>
-                    <p className="mt-1 text-xs text-slate-400">
-                      Posición {row.posicion} · Andarivel {row.andarivel}
-                    </p>
+                    <p className="mt-1 text-xs text-slate-400">Posición {row.posicion}</p>
+                  </td>
+                  <td className="px-4 py-3 text-center font-semibold text-slate-200">
+                    {row.andarivel}
                   </td>
                   <td className="px-4 py-3 text-slate-300">{formatOt(row.otProgramado)}</td>
                   <td className="px-4 py-3 text-slate-300">

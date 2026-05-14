@@ -26,11 +26,14 @@ function badgeClass(posicion: number): string {
 }
 
 function posicionLabel(posicion: number): string {
+  if (posicion === 1) return '🥇'
+  if (posicion === 2) return '🥈'
+  if (posicion === 3) return '🥉'
   return `${posicion}º`
 }
 
 export function FilaPodio({ fila }: FilaPodioProps) {
-  const rpDisplay = fila.rp ? `${fila.rp} ${fila.unidad ?? ''}`.trim() : '—'
+  const rpDisplay = fila.rp ? `${fila.rp} ${fila.unidad ?? ''}`.trim() : ''
 
   return (
     <li className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 rounded-2xl border border-slate-700 bg-slate-900/80 px-3 py-3">

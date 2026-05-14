@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import type { GrillaAtletaDto } from '../../api/competencia'
 import type { InscriptoDetalleDto } from '../../api/registro'
 import type { RankingCompetenciaDto } from '../../api/resultados'
+import { formatMarca } from '../../utils/marca'
 import { FilaResultado, type FilaResultadoData } from './FilaResultado'
 
 interface TablaDisciplinaResultadosProps {
@@ -35,7 +36,7 @@ export function TablaDisciplinaResultados({
   const filas = useMemo<FilaResultadoData[]>(() => {
     const rankingPorAtleta = new Map<
       string,
-      { rp: string | null; unidad: string | null; tarjeta: string | null; categoria: string }
+      { rp: string | null; unidad: string | null; tarjeta: string | null; categoria: string; motivo_dq: string | null; penalizaciones: string[]; rp_medido: string | null }
     >()
 
     if (ranking) {
@@ -46,6 +47,9 @@ export function TablaDisciplinaResultados({
             unidad: entrada.unidad,
             tarjeta: entrada.es_dns ? 'DNS' : (entrada.tarjeta ?? null),
             categoria: grupo.categoria,
+            motivo_dq: entrada.motivo_dq ?? null,
+            penalizaciones: entrada.penalizaciones ?? [],
+            rp_medido: entrada.rp_medido ?? null,
           })
         }
       }
@@ -73,12 +77,15 @@ export function TablaDisciplinaResultados({
           genero: derivarGenero(categoriaRaw),
           categoria_corta: derivarCategoriaCorta(categoriaRaw),
           club: inscriptoData?.club ?? '',
-          ap: `${atleta.ap_declarado} ${atleta.unidad}`.trim(),
-          ot: atleta.ot_programado,
+          ap: formatMarca(atleta.ap_declarado, atleta.unidad),
+          ot: new Date(atleta.ot_programado).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
           linea: formatearAndarivel(atleta.andarivel),
           rp: rankData?.rp ?? null,
           unidad: rankData?.unidad ?? atleta.unidad,
           tarjeta: rankData?.tarjeta ?? null,
+          motivo_dq: rankData?.motivo_dq ?? atleta.motivo_dq ?? null,
+          penalizaciones: rankData?.penalizaciones ?? atleta.penalizaciones ?? [],
+          rp_medido: rankData?.rp_medido ?? null,
         }
       })
   }, [grilla, ranking, inscriptos])
@@ -101,11 +108,11 @@ export function TablaDisciplinaResultados({
             <th className="px-3 py-2 text-center">Gén.</th>
             <th className="px-3 py-2">Categoría</th>
             <th className="px-3 py-2">Club</th>
-            <th className="px-3 py-2">Anuncio</th>
-            <th className="px-3 py-2">OT</th>
+            <th className="px-3 py-2 text-center">Anuncio</th>
+            <th className="px-3 py-2 text-center">OT</th>
             <th className="px-3 py-2 text-center">Línea</th>
-            <th className="px-3 py-2">RP</th>
-            <th className="px-3 py-2">Tarjeta</th>
+            <th className="px-3 py-2 text-center">Performance</th>
+            <th className="px-3 py-2 text-center">Tarjeta</th>
           </tr>
         </thead>
         <tbody className="bg-slate-900/40">

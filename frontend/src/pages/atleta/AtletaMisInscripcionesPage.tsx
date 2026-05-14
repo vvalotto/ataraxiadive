@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import useAuthStore from '../../stores/useAuthStore'
@@ -8,7 +9,83 @@ import {
   formatFecha,
   formatHora,
   loadAtletaPortalSnapshot,
+  type AtletaPortalEntry,
 } from './portalData'
+
+interface GrupoEnCursoProps {
+  torneoNombre: string
+  entries: AtletaPortalEntry[]
+}
+
+function GrupoEnCurso({ torneoNombre, entries }: GrupoEnCursoProps) {
+  const [tabIdx, setTabIdx] = useState(0)
+  const entry = entries[tabIdx] ?? entries[0]
+
+  return (
+    <div className="rounded-3xl border border-slate-800 bg-slate-900 overflow-hidden">
+      <div className="px-4 pt-4">
+        <p className="text-sm font-semibold text-white">{torneoNombre}</p>
+      </div>
+
+      <div className="mt-3 flex border-b border-slate-800">
+        {entries.map((e, i) => (
+          <button
+            key={e.disciplina}
+            type="button"
+            onClick={() => setTabIdx(i)}
+            className={[
+              'flex-1 py-2 text-xs font-semibold transition-colors',
+              i === tabIdx
+                ? 'border-b-2 border-sky-400 text-sky-300'
+                : 'border-b-2 border-transparent text-slate-400',
+            ].join(' ')}
+          >
+            {formatDisciplina(e.disciplina)}
+          </button>
+        ))}
+      </div>
+
+      <div className="p-4">
+        <dl className="grid grid-cols-2 gap-3 text-sm text-slate-300">
+          <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-3">
+            <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">AP</dt>
+            <dd className="mt-1 font-semibold text-white">
+              {formatAp(entry.ap, entry.unidad)}
+            </dd>
+          </div>
+          <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-3">
+            <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">OT</dt>
+            <dd className="mt-1 font-semibold text-white">
+              {entry.ot ? formatHora(entry.ot) : 'Pendiente'}
+            </dd>
+          </div>
+        </dl>
+        <p className="mt-3 text-sm text-slate-400">
+          Andarivel {entry.andarivel ?? '—'} · Posición {entry.posicion ?? '—'}
+        </p>
+        {entry.competenciaId ? (
+          <Link
+            to={`/atleta/grilla/${entry.competenciaId}?disciplina=${encodeURIComponent(entry.disciplina)}`}
+            className="mt-4 flex min-h-10 items-center justify-center rounded-2xl border border-sky-500/40 bg-sky-500/10 px-4 py-2 text-sm font-semibold text-sky-200"
+          >
+            Ver grilla
+          </Link>
+        ) : null}
+      </div>
+    </div>
+  )
+}
+
+function groupByTorneoId(entries: AtletaPortalEntry[]) {
+  const map = new Map<string, { nombre: string; entries: AtletaPortalEntry[] }>()
+  for (const entry of entries) {
+    const id = entry.torneo.torneo_id
+    const current = map.get(id) ?? { nombre: entry.torneo.nombre, entries: [] }
+    current.entries.push(entry)
+    map.set(id, current)
+  }
+  return Array.from(map.values())
+}
 
 export function AtletaMisInscripcionesPage() {
   const atletaId = useAuthStore((state) => state.userId)
@@ -22,8 +99,10 @@ export function AtletaMisInscripcionesPage() {
   const noIniciados = (query.data?.entries ?? []).filter((entry) =>
     NO_INICIADOS.includes(entry.torneo.estado),
   )
-  const enCurso = (query.data?.entries ?? []).filter(
-    (entry) => !NO_INICIADOS.includes(entry.torneo.estado),
+  const enCursoGrupos = groupByTorneoId(
+    (query.data?.entries ?? []).filter(
+      (entry) => !NO_INICIADOS.includes(entry.torneo.estado),
+    ),
   )
 
   return (
@@ -47,54 +126,17 @@ export function AtletaMisInscripcionesPage() {
               En ejecución
             </p>
             <div className="mt-3 space-y-3">
-              {enCurso.length === 0 ? (
+              {enCursoGrupos.length === 0 ? (
                 <div className="rounded-3xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-400">
                   No hay disciplinas en ejecución para tus inscripciones activas.
                 </div>
               ) : null}
-
-              {enCurso.map((entry) => (
-                <div
-                  key={`${entry.torneo.torneo_id}-${entry.disciplina}`}
-                  className="rounded-3xl border border-slate-800 bg-slate-900 p-4"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-semibold text-white">{entry.torneo.nombre}</p>
-                      <p className="mt-1 text-xs uppercase tracking-[0.18em] text-sky-300">
-                        {formatDisciplina(entry.disciplina)}
-                      </p>
-                    </div>
-                    <span className="rounded-full border border-slate-700 px-3 py-1 text-xs font-semibold text-slate-200">
-                      AP cerrado
-                    </span>
-                  </div>
-                  <dl className="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-300">
-                    <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-3">
-                      <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">AP</dt>
-                      <dd className="mt-1 font-semibold text-white">
-                        {formatAp(entry.ap, entry.unidad)}
-                      </dd>
-                    </div>
-                    <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-3">
-                      <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">OT</dt>
-                      <dd className="mt-1 font-semibold text-white">
-                        {entry.ot ? formatHora(entry.ot) : 'Pendiente'}
-                      </dd>
-                    </div>
-                  </dl>
-                  <p className="mt-3 text-sm text-slate-400">
-                    Andarivel {entry.andarivel ?? '—'} · Posición {entry.posicion ?? '—'}
-                  </p>
-                  {entry.competenciaId ? (
-                    <Link
-                      to={`/atleta/grilla/${entry.competenciaId}?disciplina=${encodeURIComponent(entry.disciplina)}`}
-                      className="mt-4 flex min-h-10 items-center justify-center rounded-2xl border border-sky-500/40 bg-sky-500/10 px-4 py-2 text-sm font-semibold text-sky-200"
-                    >
-                      Ver grilla
-                    </Link>
-                  ) : null}
-                </div>
+              {enCursoGrupos.map((grupo) => (
+                <GrupoEnCurso
+                  key={grupo.entries[0].torneo.torneo_id}
+                  torneoNombre={grupo.nombre}
+                  entries={grupo.entries}
+                />
               ))}
             </div>
           </section>

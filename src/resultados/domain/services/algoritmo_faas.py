@@ -43,27 +43,39 @@ class AlgoritmoPuntajeFAAS(AlgoritmoPuntaje):
 
 
 def _calcular_distancia(resultados: list[ResultadoFinal]) -> dict[UUID, Decimal]:
-    validos = [r for r in resultados if _es_valido(r) and r.rp is not None]
-    d_max = max((r.rp for r in validos), default=None)
-
+    grupos = _agrupar_por_categoria(resultados)
     puntos: dict[UUID, Decimal] = {}
-    for r in resultados:
-        if d_max is None or not _es_valido(r) or r.rp is None:
-            puntos[r.atleta_id] = _CERO
-        else:
-            puntos[r.atleta_id] = _redondear(r.rp / d_max * _CIEN)
+    for grupo in grupos.values():
+        validos = [r for r in grupo if _es_valido(r) and r.rp is not None]
+        d_max = max((r.rp for r in validos), default=None)
+        for r in grupo:
+            if d_max is None or not _es_valido(r) or r.rp is None:
+                puntos[r.atleta_id] = _CERO
+            else:
+                puntos[r.atleta_id] = _redondear(r.rp / d_max * _CIEN)
     return puntos
 
 
 def _calcular_tiempo(resultados: list[ResultadoFinal]) -> dict[UUID, Decimal]:
-    validos = [r for r in resultados if _es_valido(r) and r.rp is not None]
-    t_min = min((r.rp for r in validos), default=None)
-    t_max = max((r.rp for r in validos), default=None)
-
+    grupos = _agrupar_por_categoria(resultados)
     puntos: dict[UUID, Decimal] = {}
-    for r in resultados:
-        puntos[r.atleta_id] = _puntaje_tiempo(r, t_min, t_max)
+    for grupo in grupos.values():
+        validos = [r for r in grupo if _es_valido(r) and r.rp is not None]
+        t_min = min((r.rp for r in validos), default=None)
+        t_max = max((r.rp for r in validos), default=None)
+        for r in grupo:
+            puntos[r.atleta_id] = _puntaje_tiempo(r, t_min, t_max)
     return puntos
+
+
+def _agrupar_por_categoria(
+    resultados: list[ResultadoFinal],
+) -> dict[str, list[ResultadoFinal]]:
+    grupos: dict[str, list[ResultadoFinal]] = {}
+    for r in resultados:
+        key = r.categoria.value if r.categoria else "SIN_CATEGORIA"
+        grupos.setdefault(key, []).append(r)
+    return grupos
 
 
 def _puntaje_tiempo(

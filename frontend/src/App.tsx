@@ -35,6 +35,8 @@ import { ResultadosPage } from './pages/organizador/ResultadosPage'
 import { PodiosPage } from './pages/organizador/PodiosPage'
 import { PublicTorneosPage } from './pages/PublicTorneosPage'
 import { PublicTorneoDetallePage } from './pages/PublicTorneoDetallePage'
+import { PublicTorneoResultadosPage } from './pages/PublicTorneoResultadosPage'
+import { PublicTorneoPodiosPage } from './pages/PublicTorneoPodiosPage'
 import { HealthCheck } from './components/HealthCheck'
 
 function RootRedirect() {
@@ -51,7 +53,8 @@ function GlobalHealthCheck() {
   if (
     location.pathname.startsWith('/organizador') ||
     location.pathname.startsWith('/juez') ||
-    location.pathname.startsWith('/portalapnea')
+    location.pathname.startsWith('/portalapnea') ||
+    location.pathname.startsWith('/atleta')
   ) {
     return null
   }
@@ -73,6 +76,8 @@ function App() {
       <Routes>
         <Route path="/portalapnea" element={<PublicTorneosPage />} />
         <Route path="/portalapnea/:torneoId" element={<PublicTorneoDetallePage />} />
+        <Route path="/portalapnea/:torneoId/resultados" element={<PublicTorneoResultadosPage />} />
+        <Route path="/portalapnea/:torneoId/podios" element={<PublicTorneoPodiosPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registro" element={<RegistroPage />} />
         <Route path="/recuperar-password" element={<RecuperarPasswordPage />} />

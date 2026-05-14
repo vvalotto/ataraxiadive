@@ -23,5 +23,22 @@ export const PENALTY_LABELS: Record<string, string> = {
   PATADA_DELFIN_BIALETAS: 'Patada delfín con bialetas',
 }
 
+export const DQ_REASON_LABELS: Record<string, string> = {
+  BKO_SUPERFICIE: 'Blackout superficie',
+  BKO_SUBACUATICO: 'Blackout subacuático',
+  PROTOCOLO_SUPERFICIE: 'No protocolo superficie',
+  INFRACCION_TECNICA_DQ: 'Infracción técnica',
+  NO_INICIO_EN_VENTANA: 'No inicio en ventana',
+  SALIDA_EN_FALSO: 'Salida en falso',
+}
+
+export const TARJETA_LABELS: Record<string, string> = {
+  Blanca: 'Blanca',
+  BlancaConPenalizaciones: 'Blanca con penalizaciones',
+  Amarilla: 'En revisión',
+  Roja: 'Roja',
+  Dns: 'DNS',
+}
+
 export type DqReason = (typeof DQ_REASONS)[number]
 export type PenaltyType = (typeof PENALTY_TYPES)[number]
