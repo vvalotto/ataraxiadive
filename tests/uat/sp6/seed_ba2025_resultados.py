@@ -8,7 +8,7 @@ Salta performances que ya tienen estado != AnunciadaAP (ya procesadas).
 
 Tipos de resultado asignados (mix realista para validación):
   · Blanca               — resultado válido sin incidencias
-  · BlancaConPenalización — RP medido con deducción INFRACCION_TECNICA
+  · BlancaConPenalización — RP medido con deducción SIN_CONTACTO_PARED
   · Roja BKO_SUPERFICIE  — blackout en superficie
   · Roja BKO_SUBACUATICO — blackout subacuático
   · DNS                  — atleta en grilla pero sin resultado real
@@ -36,11 +36,11 @@ EMAIL_DOMAIN = "@ba2025.uat"
 
 DISCIPLINA_MAP = {"SPE": "SPE_2X50"}
 DISCIPLINA_UNIDAD = {
-    "DBF": "METROS",
-    "DNF": "METROS",
-    "DYN": "METROS",
-    "SPE_2X50": "SEGUNDOS",
-    "STA": "SEGUNDOS",
+    "DBF": "Metros",
+    "DNF": "Metros",
+    "DYN": "Metros",
+    "SPE_2X50": "Segundos",
+    "STA": "Segundos",
 }
 
 RESULTS_PATH = Path("data/datasets/buenos_aires_2025/results.json")
@@ -80,32 +80,24 @@ SCENARIO_OVERRIDES: dict[tuple[str, str], dict] = {
         "card": "Roja",
         "motivo_dq": "BKO_SUPERFICIE",  # M-SENIOR rank 13 — último
     },
-    # Blanca con penalización — INFRACCION_TECNICA (deducción en unidad de la disciplina)
+    # Blanca con penalización — SIN_CONTACTO_PARED (deducción en unidad de la disciplina)
     ("Diego Calvo", "DBF"): {
         "card": "Blanca",
-        "penalizaciones": [{"tipo": "INFRACCION_TECNICA", "deduccion": "3"}],
+        "penalizaciones": [{"tipo": "SIN_CONTACTO_PARED", "deduccion": "3"}],
         # M-SENIOR rank 12 (67,95m real) → RP final 64,95m
     },
     ("Diego Calvo", "DNF"): {
         "card": "Blanca",
-        "penalizaciones": [{"tipo": "INFRACCION_TECNICA", "deduccion": "3"}],
+        "penalizaciones": [{"tipo": "SIN_CONTACTO_PARED", "deduccion": "3"}],
         # M-SENIOR rank 9 (43,30m real) → RP final 40,30m
     },
     ("Sebastian Quintana", "DYN"): {
         "card": "Blanca",
-        "penalizaciones": [{"tipo": "INFRACCION_TECNICA", "deduccion": "3"}],
+        "penalizaciones": [{"tipo": "SIN_CONTACTO_PARED", "deduccion": "3"}],
         # M-SENIOR rank 11 (55,50m real) → RP final 52,50m
     },
-    ("Nicolás Burgell", "SPE_2X50"): {
-        "card": "Blanca",
-        "penalizaciones": [{"tipo": "INFRACCION_TECNICA", "deduccion": "5"}],
-        # M-SENIOR rank 9 (01:39,36 = 99,36s real) → RP final 94,36s
-    },
-    ("Nicolás Burgell", "STA"): {
-        "card": "Blanca",
-        "penalizaciones": [{"tipo": "INFRACCION_TECNICA", "deduccion": "5"}],
-        # M-SENIOR rank 9 (03:07.22 = 187,22s real) → RP final 182,22s
-    },
+    # STA y SPE_2X50 no admiten BlancaConPenalizaciones — Blanca simple
+    # (penalizaciones solo aplican a disciplinas de distancia: DBF, DNF, DYN)
 }
 
 
@@ -180,6 +172,56 @@ def cargar_dns_candidates() -> dict[str, set[str]]:
     }
 
 
+def solo_asignar_tarjeta(
+    client: httpx.Client,
+    comp_id: str,
+    disciplina: str,
+    entrada: dict,
+    juez_h: dict,
+) -> str:
+    """Asigna tarjeta a una performance ya en ResultadoRegistrado (usa el override si aplica)."""
+    nombre = entrada.get("nombre_atleta", "")
+    participante_id = entrada.get("atleta_id")
+    override = SCENARIO_OVERRIDES.get((nombre, disciplina))
+
+    if override and override["card"] == "Roja":
+        tarjeta_body: dict = {
+            "participante_id": participante_id,
+            "disciplina": disciplina,
+            "tipo": "Roja",
+            "motivo_dq": override["motivo_dq"],
+        }
+        if "distancia_blackout" in override:
+            tarjeta_body["distancia_blackout"] = override["distancia_blackout"]
+        label = override["motivo_dq"]
+    elif override and override.get("penalizaciones"):
+        tarjeta_body = {
+            "participante_id": participante_id,
+            "disciplina": disciplina,
+            "tipo": "BlancaConPenalizaciones",
+            "penalizaciones": override["penalizaciones"],
+        }
+        label = "BlancaConPenalizaciones"
+    else:
+        tarjeta_body = {
+            "participante_id": participante_id,
+            "disciplina": disciplina,
+            "tipo": "Blanca",
+        }
+        label = "Blanca"
+
+    resp = client.post(
+        f"/competencia/{comp_id}/asignar-tarjeta",
+        json=tarjeta_body,
+        headers=juez_h,
+    )
+    if resp.status_code != 204:
+        log(f"  ✗ {nombre} asignar-tarjeta error: {resp.status_code} {resp.text[:150]}")
+        return "err"
+    log(f"  ✓ {nombre} — tarjeta asignada · {label}")
+    return "ok"
+
+
 def procesar_performance(
     client: httpx.Client,
     comp_id: str,
@@ -188,8 +230,13 @@ def procesar_performance(
     resultados: dict[tuple[str, str], Decimal],
     dns_candidates: dict[str, set[str]],
     juez_h: dict,
+    ya_llamado: bool = False,
 ) -> str:
-    """Procesa una performance. Retorna: 'ok' | 'dns' | 'skip' | 'err'."""
+    """Procesa una performance. Retorna: 'ok' | 'dns' | 'skip' | 'err'.
+
+    ya_llamado=True: el atleta está en estado Llamada por una corrida anterior;
+    se salta el paso llamar y va directo a registrar-resultado.
+    """
     nombre = entrada.get("nombre_atleta", "")
     participante_id = entrada.get("atleta_id")
     posicion = entrada.get("posicion", 1)
@@ -202,6 +249,23 @@ def procesar_performance(
         nombre in dns_candidates.get(disciplina, set())
     )
     if is_dns:
+        # DNS requiere estado Llamada — llamar primero si está en AnunciadaAP
+        if not ya_llamado:
+            ot_now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+            resp = client.post(
+                f"/competencia/{comp_id}/llamar",
+                json={
+                    "participante_id": participante_id,
+                    "disciplina": disciplina,
+                    "ot_programado": ot_now,
+                    "posicion_grilla": posicion,
+                    "andarivel": andarivel,
+                },
+                headers=juez_h,
+            )
+            if resp.status_code != 204:
+                log(f"  ✗ {nombre} llamar (pre-DNS) error: {resp.status_code} {resp.text[:150]}")
+                return "err"
         resp = client.post(
             f"/competencia/{comp_id}/registrar-dns",
             json={"participante_id": participante_id, "disciplina": disciplina},
@@ -222,24 +286,29 @@ def procesar_performance(
             json={"participante_id": participante_id, "disciplina": disciplina},
             headers=juez_h,
         )
-        return "dns" if resp.status_code == 204 else "err"
+        if resp.status_code == 204:
+            return "dns"
+        # DNS fallido: entrada sin resultado conocido y sin inscripción válida — anomalía de datos
+        log(f"  ⚠ {nombre} — DNS no registrado ({resp.status_code}), se omite")
+        return "skip"
 
-    # ── Llamar atleta ──────────────────────────────────────────────────────────
-    ot_now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-    resp = client.post(
-        f"/competencia/{comp_id}/llamar",
-        json={
-            "participante_id": participante_id,
-            "disciplina": disciplina,
-            "ot_programado": ot_now,
-            "posicion_grilla": posicion,
-            "andarivel": andarivel,
-        },
-        headers=juez_h,
-    )
-    if resp.status_code not in (204, 409):
-        log(f"  ✗ {nombre} llamar error: {resp.status_code} {resp.text[:150]}")
-        return "err"
+    # ── Llamar atleta (solo si no fue llamado ya) ─────────────────────────────
+    if not ya_llamado:
+        ot_now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        resp = client.post(
+            f"/competencia/{comp_id}/llamar",
+            json={
+                "participante_id": participante_id,
+                "disciplina": disciplina,
+                "ot_programado": ot_now,
+                "posicion_grilla": posicion,
+                "andarivel": andarivel,
+            },
+            headers=juez_h,
+        )
+        if resp.status_code != 204:
+            log(f"  ✗ {nombre} llamar error: {resp.status_code} {resp.text[:150]}")
+            return "err"
 
     # ── Registrar resultado ────────────────────────────────────────────────────
     unidad = DISCIPLINA_UNIDAD[disciplina]
@@ -272,10 +341,10 @@ def procesar_performance(
         tarjeta_body = {
             "participante_id": participante_id,
             "disciplina": disciplina,
-            "tipo": "Blanca",
+            "tipo": "BlancaConPenalizaciones",
             "penalizaciones": override["penalizaciones"],
         }
-        motivo_label = f"Blanca+{len(override['penalizaciones'])}penal"
+        motivo_label = "BlancaConPenalizaciones"
     else:
         tarjeta_body = {
             "participante_id": participante_id,
@@ -373,17 +442,47 @@ def main() -> None:
             assert_ok(resp, f"grilla {disciplina}")
             grilla = resp.json()
 
-            for entrada in grilla:
-                if entrada.get("estado") != "AnunciadaAP":
-                    log(
-                        f"  ⏭ {entrada.get('nombre_atleta')} — ya procesado ({entrada.get('estado')})"
-                    )
-                    totales["skip"] += 1
-                    continue
+            # Separar por estado para procesar en orden seguro:
+            #   ResultadoRegistrado → solo asignar-tarjeta
+            #   Llamada             → registrar-resultado + asignar-tarjeta
+            #   AnunciadaAP         → flujo completo
+            #   Ejecutada/DNS/EnRevision → skip
+            estados_finales = {"Ejecutada", "DNS", "EnRevision"}
+            pendientes_rp = [e for e in grilla if e.get("estado") == "ResultadoRegistrado"]
+            pendientes_llamada = [e for e in grilla if e.get("estado") == "Llamada"]
+            pendientes_anunciada = [e for e in grilla if e.get("estado") == "AnunciadaAP"]
+            ya_procesados = [e for e in grilla if e.get("estado") in estados_finales]
 
+            for entrada in ya_procesados:
+                log(f"  ⏭ {entrada.get('nombre_atleta')} — ya procesado ({entrada.get('estado')})")
+                totales["skip"] += 1
+
+            for entrada in pendientes_rp:
+                log(f"  ↩ {entrada.get('nombre_atleta')} — retomando desde ResultadoRegistrado")
                 andarivel = entrada.get("andarivel", 1)
                 juez_h = {"Authorization": f"Bearer {tokens.get(andarivel, tokens[1])}"}
+                resultado = solo_asignar_tarjeta(client, comp_id, disciplina, entrada, juez_h)
+                totales[resultado] = totales.get(resultado, 0) + 1
 
+            for entrada in pendientes_llamada:
+                log(f"  ↩ {entrada.get('nombre_atleta')} — retomando desde Llamada")
+                andarivel = entrada.get("andarivel", 1)
+                juez_h = {"Authorization": f"Bearer {tokens.get(andarivel, tokens[1])}"}
+                resultado = procesar_performance(
+                    client,
+                    comp_id,
+                    disciplina,
+                    entrada,
+                    resultados,
+                    dns_candidates,
+                    juez_h,
+                    ya_llamado=True,
+                )
+                totales[resultado] = totales.get(resultado, 0) + 1
+
+            for entrada in pendientes_anunciada:
+                andarivel = entrada.get("andarivel", 1)
+                juez_h = {"Authorization": f"Bearer {tokens.get(andarivel, tokens[1])}"}
                 resultado = procesar_performance(
                     client,
                     comp_id,

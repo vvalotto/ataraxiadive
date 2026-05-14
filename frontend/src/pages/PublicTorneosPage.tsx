@@ -53,7 +53,7 @@ function accionPorEstado(torneo: TorneoDto, rol: string | null): Accion | null {
       return { label: 'Ver panel', destino: `/portalapnea/${torneo.torneo_id}`, publico: true }
     case 'PREMIACION':
     case 'CERRADO':
-      return { label: 'Ver resultados', destino: null, deshabilitado: true }
+      return { label: 'Ver resultados', destino: `/portalapnea/${torneo.torneo_id}`, publico: true }
     default:
       return null
   }

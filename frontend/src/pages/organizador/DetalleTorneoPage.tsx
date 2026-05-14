@@ -97,7 +97,7 @@ function DetalleTorneoContent({ torneoId }: DetalleTorneoContentProps) {
         queryKey: ['competencia-estado', competencia.competencia_id, competencia.disciplina],
         queryFn: () =>
           fetchEstadoCompetencia(competencia.competencia_id, competencia.disciplina),
-        enabled: torneoQuery.data?.estado === 'EJECUCION',
+        enabled: ['EJECUCION', 'PREMIACION', 'CERRADO'].includes(torneoQuery.data?.estado ?? ''),
       })) ?? [],
   })
   const isPremiacionStatusLoading =
