@@ -189,10 +189,6 @@ export function DashboardPage() {
 
       {!torneosQuery.isLoading && !torneosQuery.isError ? (
         <>
-          <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
-            Esta pantalla muestra los torneos que organizas. La navegación del torneo aparece cuando seleccionas uno para gestionarlo.
-          </section>
-
           <section className="flex flex-wrap items-center gap-2">
             {FILTROS_TORNEOS.map((item) => {
               const isActive = filtro === item.value

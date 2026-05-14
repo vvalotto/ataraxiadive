@@ -445,21 +445,23 @@ function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
       ) : null}
 
       {competenciasOperativas.length > 1 ? (
-        <div className="flex items-center gap-3">
-          <label className="text-sm font-semibold text-slate-300">
-            Disciplina
-          </label>
-          <select
-            value={disciplinaSeleccionada || (competenciaActiva?.competencia.disciplina ?? '')}
-            onChange={(event) => setDisciplinaSeleccionada(event.target.value)}
-            className="min-h-10 rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
-          >
-            {competenciasOperativas.map((item) => (
-              <option key={item.competencia.disciplina} value={item.competencia.disciplina}>
-                {item.competencia.disciplina}
-              </option>
-            ))}
-          </select>
+        <div className="flex gap-1 rounded-[2rem] border border-slate-700 bg-slate-900/85 overflow-hidden">
+          {competenciasOperativas.map((item) => {
+            const disc = item.competencia.disciplina
+            const isActive = (disciplinaSeleccionada || competenciaActiva?.competencia.disciplina) === disc
+            return (
+              <button
+                key={disc}
+                type="button"
+                onClick={() => setDisciplinaSeleccionada(disc)}
+                className={`flex-1 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] transition-colors ${
+                  isActive ? 'bg-slate-800 text-sky-400' : 'text-slate-500 hover:text-slate-300'
+                }`}
+              >
+                {disc}
+              </button>
+            )
+          })}
         </div>
       ) : null}
 

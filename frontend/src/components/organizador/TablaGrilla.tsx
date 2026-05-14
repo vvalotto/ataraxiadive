@@ -74,9 +74,9 @@ export function TablaGrilla({ rows, readOnly, isSaving, onReorder }: TablaGrilla
           <tr>
             <th className="px-4 py-3">Posicion</th>
             <th className="px-4 py-3">Atleta</th>
-            <th className="px-4 py-3">Anuncio</th>
-            <th className="px-4 py-3">Andarivel</th>
-            <th className="px-4 py-3">OT</th>
+            <th className="px-4 py-3 text-center">Anuncio</th>
+            <th className="px-4 py-3 text-center">Andarivel</th>
+            <th className="px-4 py-3 text-center">OT</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-800 bg-slate-900/70">
@@ -100,11 +100,11 @@ export function TablaGrilla({ rows, readOnly, isSaving, onReorder }: TablaGrilla
             >
               <td className="px-4 py-3 font-semibold text-white">{row.posicion}</td>
               <td className="px-4 py-3 text-slate-100">{row.nombre_atleta}</td>
-              <td className="px-4 py-3 text-slate-300">
+              <td className="px-4 py-3 text-center text-slate-300">
                 {formatMarca(row.ap_declarado, row.unidad)}
               </td>
-              <td className="px-4 py-3 text-slate-300">{row.andarivel}</td>
-              <td className="px-4 py-3 font-semibold text-slate-100">
+              <td className="px-4 py-3 text-center text-slate-300">{row.andarivel}</td>
+              <td className="px-4 py-3 text-center font-semibold text-slate-100">
                 {formatOt(row.ot_programado)}
               </td>
             </tr>

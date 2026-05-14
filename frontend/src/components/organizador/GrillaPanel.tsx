@@ -252,7 +252,27 @@ export function GrillaPanel({
       ) : null}
 
       {disciplina ? (
-        <article className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-6 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
+        <article className="rounded-[2rem] border border-slate-700 bg-slate-900/85 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
+          <div className="flex gap-1 border-b border-slate-800">
+            {disciplinas.map((item) => (
+              <button
+                key={item}
+                type="button"
+                disabled={disciplinasQuery.isLoading}
+                onClick={() => {
+                  setDisciplinaSeleccionada(item as DisciplinaCodigo)
+                  setLocalRows(null)
+                  setError('')
+                }}
+                className={`flex-1 rounded-t-[2rem] py-3 text-xs font-semibold uppercase tracking-[0.18em] transition-colors ${
+                  disciplina === item ? 'bg-slate-800 text-sky-400' : 'text-slate-500 hover:text-slate-300'
+                }`}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+          <div className="p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
@@ -273,24 +293,6 @@ export function GrillaPanel({
             </div>
             <div className="flex flex-col gap-2 sm:items-end">
               <label className="text-sm font-semibold text-slate-200">
-                Disciplina
-                <select
-                  value={disciplina}
-                  onChange={(event) => {
-                    setDisciplinaSeleccionada(event.target.value as DisciplinaCodigo)
-                    setLocalRows(null)
-                    setError('')
-                  }}
-                  disabled={disciplinasQuery.isLoading || disciplinas.length === 0}
-                  className="mt-2 min-h-10 min-w-40 rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
-                >
-                  {disciplinas.map((item) => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-              </label>
               {estadoQuery.data ? (
                 <span className="rounded-full border border-slate-700 bg-slate-950 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-slate-200">
                   {formatEstadoCompetencia(
@@ -299,6 +301,7 @@ export function GrillaPanel({
                   )}
                 </span>
               ) : null}
+              </label>
             </div>
           </div>
 
@@ -391,6 +394,7 @@ export function GrillaPanel({
               </button>
             </div>
           ) : null}
+          </div>
         </article>
       ) : null}
     </div>

@@ -224,18 +224,17 @@ export function JuecesPanel({ torneoId }: JuecesPanelProps) {
         ) : null}
 
         {disciplinasDisponibles.length > 1 ? (
-          <div className="mt-6 flex flex-wrap gap-2">
+          <div className="mt-6 flex gap-1 border-b border-slate-800">
             {disciplinasDisponibles.map((disciplina) => (
               <button
                 key={disciplina}
                 type="button"
                 onClick={() => setSelectedDisciplina(disciplina)}
-                className={[
-                  'rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition',
+                className={`flex-1 rounded-t-xl py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors ${
                   disciplina === disciplinaActiva
-                    ? 'border-sky-400 bg-sky-400/10 text-sky-300'
-                    : 'border-slate-700 bg-slate-950 text-slate-300 hover:border-slate-500',
-                ].join(' ')}
+                    ? 'bg-slate-800 text-sky-400'
+                    : 'text-slate-500 hover:text-slate-300'
+                }`}
               >
                 {disciplina}
               </button>

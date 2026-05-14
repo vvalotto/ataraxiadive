@@ -74,7 +74,7 @@ export function FilaPodio({ fila, centered = false }: FilaPodioProps) {
       </div>
 
       <div className="text-right">
-        <p className="font-mono text-xs text-slate-400">{rpDisplay}</p>
+        <p className="font-mono text-sm font-semibold text-slate-200">{rpDisplay}</p>
       </div>
     </li>
   )

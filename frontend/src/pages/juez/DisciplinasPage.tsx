@@ -1,5 +1,4 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { DisciplinaCard } from '../../components/juez/DisciplinaCard'
 import { JuezLayout } from '../../components/juez/JuezLayout'
 import { useDisciplinasJuez } from '../../hooks/useDisciplinasJuez'
 import useAuthStore from '../../stores/useAuthStore'
@@ -68,21 +67,33 @@ export function DisciplinasPage() {
             </p>
           </section>
 
-          {disciplinas.map((item) => (
-            <DisciplinaCard
-              key={item.competenciaId}
-              disciplina={item.disciplina}
-              estado={item.estado}
-              onSelect={() => {
-                seleccionarCompetencia({
-                  torneoId: torneoActivo!.torneo_id,
-                  competenciaId: item.competenciaId,
-                  disciplinaActiva: item.disciplina,
-                })
-                void navigate('/juez/grilla')
-              }}
-            />
-          ))}
+          <div className="flex gap-1 rounded-[2rem] border border-slate-700 bg-slate-900/85 overflow-hidden">
+            {disciplinas.map((item) => {
+              const isActive = item.estado === 'ACTIVA'
+              return (
+                <button
+                  key={item.competenciaId}
+                  type="button"
+                  disabled={!isActive}
+                  onClick={() => {
+                    seleccionarCompetencia({
+                      torneoId: torneoActivo!.torneo_id,
+                      competenciaId: item.competenciaId,
+                      disciplinaActiva: item.disciplina,
+                    })
+                    void navigate('/juez/grilla')
+                  }}
+                  className={`flex-1 py-3 text-xs font-semibold uppercase tracking-[0.18em] transition-colors ${
+                    isActive
+                      ? 'text-sky-400 hover:bg-slate-800'
+                      : 'cursor-not-allowed text-slate-600'
+                  }`}
+                >
+                  {item.disciplina}
+                </button>
+              )
+            })}
+          </div>
         </>
       ) : null}
     </JuezLayout>

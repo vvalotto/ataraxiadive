@@ -256,17 +256,17 @@ function PodiosTorneo({ torneoId }: PodiosTorneoProps) {
         <>
           <section className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-5 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
             <div className="flex flex-col gap-4 border-b border-slate-800 pb-4">
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex gap-1 border-b border-slate-800">
                 {PODIO_CATEGORIAS.map(({ categoria, titulo }) => (
                   <button
                     key={categoria}
                     type="button"
                     onClick={() => setCategoriaSeleccionada(categoria)}
-                    className={
+                    className={`flex-1 rounded-t-xl py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors ${
                       categoriaSeleccionada === categoria
-                        ? 'rounded-full border border-sky-400 bg-sky-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-sky-300'
-                        : 'rounded-full border border-slate-700 bg-slate-950 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-slate-300 hover:border-slate-500 hover:text-white'
-                    }
+                        ? 'bg-slate-800 text-sky-400'
+                        : 'text-slate-500 hover:text-slate-300'
+                    }`}
                   >
                     {titulo}
                   </button>
@@ -300,7 +300,9 @@ function PodiosTorneo({ torneoId }: PodiosTorneoProps) {
             </div>
 
             <div className="flex flex-col gap-4">
-              {filasPorDisciplina.map(({ disciplina, filas, calculado }) => (
+              {filasPorDisciplina
+                .filter(({ filas }) => filas.length > 0)
+                .map(({ disciplina, filas }) => (
                 <div
                   key={disciplina}
                   className="rounded-[1.75rem] border border-slate-700 bg-slate-950/60 p-4"
@@ -310,17 +312,11 @@ function PodiosTorneo({ torneoId }: PodiosTorneoProps) {
                       {disciplina}
                     </h4>
                   </div>
-                  {!calculado ? (
-                    <p className="text-xs text-slate-500">Ranking pendiente</p>
-                  ) : filas.length === 0 ? (
-                    <p className="text-xs text-slate-500">Sin podio</p>
-                  ) : (
-                    <ol className="space-y-2">
-                      {filas.map((fila) => (
-                        <FilaPodio key={fila.atleta_id} fila={fila} />
-                      ))}
-                    </ol>
-                  )}
+                  <ol className="space-y-2">
+                    {filas.map((fila) => (
+                      <FilaPodio key={fila.atleta_id} fila={fila} />
+                    ))}
+                  </ol>
                 </div>
               ))}
             </div>

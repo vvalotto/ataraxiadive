@@ -74,23 +74,31 @@ export function TablaInscriptos({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-2">
         <p className="text-sm text-slate-300">{rows.length} atletas inscriptos</p>
-        <label className="text-sm font-semibold text-slate-200">
-          Disciplina
-          <select
-            value={disciplinaFiltro}
-            onChange={(event) => setDisciplinaFiltro(event.target.value)}
-            className="ml-0 mt-2 min-h-10 rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 sm:ml-3 sm:mt-0"
+        <div className="flex gap-1 border-b border-slate-800">
+          <button
+            type="button"
+            onClick={() => setDisciplinaFiltro('TODAS')}
+            className={`flex-1 rounded-t-xl py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors ${
+              disciplinaFiltro === 'TODAS' ? 'bg-slate-800 text-sky-400' : 'text-slate-500 hover:text-slate-300'
+            }`}
           >
-            <option value="TODAS">Todas</option>
-            {disciplinas.map((disciplina) => (
-              <option key={disciplina} value={disciplina}>
-                {disciplina}
-              </option>
-            ))}
-          </select>
-        </label>
+            Todas
+          </button>
+          {disciplinas.map((disciplina) => (
+            <button
+              key={disciplina}
+              type="button"
+              onClick={() => setDisciplinaFiltro(disciplina)}
+              className={`flex-1 rounded-t-xl py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-colors ${
+                disciplinaFiltro === disciplina ? 'bg-slate-800 text-sky-400' : 'text-slate-500 hover:text-slate-300'
+              }`}
+            >
+              {disciplina}
+            </button>
+          ))}
+        </div>
       </div>
 
       {rowsFiltradas.length === 0 ? (
@@ -105,7 +113,6 @@ export function TablaInscriptos({
                 <th className="px-4 py-3 text-center">Atleta</th>
                 <th className="px-4 py-3 text-center">Club</th>
                 <th className="px-4 py-3 text-center">Categoria</th>
-                <th className="px-4 py-3 text-center">Inscripcion</th>
                 {disciplinasVisibles.map((disciplina) => (
                   <th key={disciplina} className="px-4 py-3 text-center">
                     Anuncio · {disciplina}
@@ -121,7 +128,6 @@ export function TablaInscriptos({
                   <td className="px-4 py-3 text-center text-slate-300">
                     {formatCategoria(row.categoria)}
                   </td>
-                  <td className="px-4 py-3 text-center text-slate-300">{row.estadoInscripcion}</td>
                   {disciplinasVisibles.map((disciplina) => {
                     if (!row.disciplinas.includes(disciplina)) {
                       return (
