@@ -34,28 +34,24 @@ function ChipTarjeta({ tarjeta, esDns }: { tarjeta: string | null; esDns: boolea
 
 export function RankingRow({ posicion, nombre, rp, tarjeta, esDns, isSelf }: RankingRowProps) {
   return (
-    <div
-      className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 ${
-        isSelf ? 'border border-sky-500/30 bg-sky-500/10' : 'border border-transparent'
-      }`}
-    >
-      <span className="w-6 text-center text-sm font-bold text-slate-400">
-        {posicion}
-      </span>
-      <div className="min-w-0 flex-1">
+    <tr className={isSelf ? 'bg-sky-500/10' : undefined}>
+      <td className="py-2 pr-3 text-center text-xs font-semibold text-slate-400">{posicion}</td>
+      <td className="py-2 pr-3">
         <div className="flex items-center gap-1.5">
-          <span className="truncate text-sm font-semibold text-white">{nombre}</span>
+          <span className={`text-sm font-semibold ${isSelf ? 'text-sky-300' : 'text-white'}`}>
+            {nombre}
+          </span>
           {isSelf ? (
             <span className="rounded-full border border-sky-400/40 bg-sky-400/10 px-1.5 py-0.5 text-[10px] font-semibold text-sky-300">
               Vos
             </span>
           ) : null}
         </div>
-        <span className="text-xs text-slate-400">{rp}</span>
-      </div>
-      <div className="flex flex-col items-end gap-1">
+      </td>
+      <td className="py-2 pr-3 text-center text-sm font-semibold text-slate-200">{rp}</td>
+      <td className="py-2 text-right">
         <ChipTarjeta tarjeta={tarjeta} esDns={esDns} />
-      </div>
-    </div>
+      </td>
+    </tr>
   )
 }

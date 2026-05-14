@@ -146,12 +146,9 @@ function GrupoResultados({ grupo, atletaId, nombresPorCompetencia, overallPorTor
             key={e.disciplina}
             type="button"
             onClick={() => setTabIdx(i)}
-            className={[
-              'flex-1 py-2 text-xs font-semibold transition-colors border-b-2',
-              i === tabIdx
-                ? 'border-sky-400 text-sky-300 bg-slate-950/60'
-                : 'border-transparent text-slate-400',
-            ].join(' ')}
+            className={`flex-1 py-2 text-xs font-semibold transition-colors ${
+              i === tabIdx ? 'bg-slate-800 text-sky-400' : 'text-slate-500 hover:text-slate-300'
+            }`}
           >
             {formatDisciplina(e.disciplina)}
           </button>

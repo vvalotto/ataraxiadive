@@ -92,6 +92,7 @@ def _aplicar_evento_en_estado(estado: dict[str, object], event: dict) -> None:
         "APRegistrado": _aplicar_ap_registrado,
         "ResultadoRegistrado": _aplicar_resultado_registrado,
         "TarjetaAsignada": _aplicar_tarjeta_asignada,
+        "RevisionResuelta": _aplicar_tarjeta_asignada,
         "DNSRegistrado": _aplicar_dns_registrado,
     }
     handler = handlers.get(event_type)

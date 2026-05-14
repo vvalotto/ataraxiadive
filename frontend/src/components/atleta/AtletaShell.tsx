@@ -13,7 +13,7 @@ interface AtletaShellProps {
 const TABS = [
   { label: 'Inicio', to: '/atleta' },
   { label: 'Torneos', to: '/atleta/torneos' },
-  { label: 'Mis inscr.', to: '/atleta/mis-inscripciones' },
+  { label: 'Inscripciones', to: '/atleta/mis-inscripciones' },
   { label: 'Resultados', to: '/atleta/resultados' },
 ]
 
