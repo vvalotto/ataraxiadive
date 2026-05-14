@@ -272,7 +272,7 @@ function PodiosTorneo({ torneoId }: PodiosTorneoProps) {
                   </button>
                 ))}
               </div>
-              <div>
+              <div className="text-center">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                   Premiacion
                 </p>
@@ -283,7 +283,7 @@ function PodiosTorneo({ torneoId }: PodiosTorneoProps) {
 
           <section className="flex flex-col gap-6">
             <div className="rounded-[2rem] border border-amber-500/30 bg-amber-500/5 p-5 shadow-[0_20px_60px_rgba(245,158,11,0.12)]">
-              <div className="mb-4 border-b border-amber-500/20 pb-3">
+              <div className="mb-4 border-b border-amber-500/20 pb-3 text-center">
                 <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-amber-300">
                   Overall — {categoriaActiva.titulo}
                 </h3>
@@ -293,7 +293,7 @@ function PodiosTorneo({ torneoId }: PodiosTorneoProps) {
               ) : (
                 <ol className="space-y-2">
                   {filasOverall.map((fila) => (
-                    <FilaPodio key={fila.atleta_id} fila={fila} />
+                    <FilaPodio key={fila.atleta_id} fila={fila} centered />
                   ))}
                 </ol>
               )}
@@ -305,7 +305,7 @@ function PodiosTorneo({ torneoId }: PodiosTorneoProps) {
                   key={disciplina}
                   className="rounded-[1.75rem] border border-slate-700 bg-slate-950/60 p-4"
                 >
-                  <div className="mb-3 border-b border-slate-800 pb-2">
+                  <div className="mb-3 border-b border-slate-800 pb-2 text-center">
                     <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                       {disciplina}
                     </h4>

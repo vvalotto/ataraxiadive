@@ -11,6 +11,8 @@ import {
 } from '../api/resultados'
 import useAuthStore from '../stores/useAuthStore'
 import { formatFecha } from './atleta/portalData'
+import { formatMarca } from '../utils/marca'
+import { listarInscriptosInfo, type InscriptoInfoDto } from '../api/registro'
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -28,32 +30,43 @@ const MEDALLA = ['🥇', '🥈', '🥉']
 function FilaPodio({
   posicion,
   atletaId,
-  nombrePorId,
+  infoPorId,
   rp,
   unidad,
-  puntos,
+  centered = false,
 }: {
   posicion: number
   atletaId: string
-  nombrePorId: Map<string, string>
+  infoPorId: Map<string, InscriptoInfoDto>
   rp?: string | null
   unidad?: string | null
-  puntos?: string | null
+  centered?: boolean
 }) {
+  const info = infoPorId.get(atletaId)
+  const nombre = info?.nombre ?? atletaId
+  const club = info?.club ?? ''
+
+  if (centered) {
+    return (
+      <div className="flex items-center justify-center gap-3">
+        <span className="w-6 text-center text-lg">{MEDALLA[posicion - 1] ?? `${posicion}º`}</span>
+        <div className="text-center">
+          <p className="text-sm font-medium text-slate-200">{nombre}</p>
+          {club ? <p className="text-xs text-slate-400">{club}</p> : null}
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="flex items-center gap-3">
       <span className="w-6 text-center text-lg">{MEDALLA[posicion - 1] ?? `${posicion}º`}</span>
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-slate-200">
-          {nombrePorId.get(atletaId) ?? atletaId}
-        </p>
+        <p className="truncate text-sm font-medium text-slate-200">{nombre}</p>
+        {club ? <p className="truncate text-xs text-slate-400">{club}</p> : null}
       </div>
       <div className="shrink-0 text-right">
         {rp && unidad ? (
-          <p className="text-sm font-semibold text-slate-100">{`${rp} ${unidad}`}</p>
-        ) : null}
-        {puntos ? (
-          <p className="font-mono text-xs text-sky-400">{puntos} pts</p>
+          <p className="text-sm font-semibold text-slate-100">{formatMarca(rp, unidad)}</p>
         ) : null}
       </div>
     </div>
@@ -63,17 +76,17 @@ function FilaPodio({
 function OverallCategoriaCard({
   categoria,
   entradas,
-  nombrePorId,
+  infoPorId,
 }: {
   categoria: string
   entradas: OverallEntradaDto[]
-  nombrePorId: Map<string, string>
+  infoPorId: Map<string, InscriptoInfoDto>
 }) {
   const podio = entradas.filter((e) => e.en_podio).slice(0, 3)
   if (podio.length === 0) return null
   return (
     <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4">
-      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">
+      <p className="mb-3 text-center text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">
         {formatCategoria(categoria)}
       </p>
       <div className="space-y-2">
@@ -82,8 +95,8 @@ function OverallCategoriaCard({
             key={e.atleta_id}
             posicion={e.posicion}
             atletaId={e.atleta_id}
-            nombrePorId={nombrePorId}
-            puntos={e.puntos_overall}
+            infoPorId={infoPorId}
+            centered
           />
         ))}
       </div>
@@ -94,11 +107,11 @@ function OverallCategoriaCard({
 function DisciplinaCategoriaCard({
   categoria,
   disciplinas,
-  nombrePorId,
+  infoPorId,
 }: {
   categoria: string
   disciplinas: { disciplina: string; entradas: RankingEntradaDto[] }[]
-  nombrePorId: Map<string, string>
+  infoPorId: Map<string, InscriptoInfoDto>
 }) {
   const [tab, setTab] = useState(disciplinas[0]?.disciplina ?? '')
   const activo = disciplinas.find((d) => d.disciplina === tab)
@@ -107,7 +120,7 @@ function DisciplinaCategoriaCard({
   return (
     <div className="rounded-2xl border border-slate-800 bg-slate-900/60">
       <div className="border-b border-slate-800 px-4 pb-0 pt-3">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+        <p className="mb-2 text-center text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
           {formatCategoria(categoria)}
         </p>
         <div className="flex gap-1">
@@ -115,7 +128,7 @@ function DisciplinaCategoriaCard({
             <button
               key={d.disciplina}
               onClick={() => setTab(d.disciplina)}
-              className={`rounded-t-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+              className={`flex-1 rounded-t-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
                 tab === d.disciplina
                   ? 'bg-slate-800 text-sky-400'
                   : 'text-slate-500 hover:text-slate-300'
@@ -135,10 +148,9 @@ function DisciplinaCategoriaCard({
               key={e.atleta_id}
               posicion={e.posicion}
               atletaId={e.atleta_id}
-              nombrePorId={nombrePorId}
+              infoPorId={infoPorId}
               rp={e.rp}
               unidad={e.unidad}
-              puntos={e.puntos}
             />
           ))
         )}
@@ -175,13 +187,25 @@ export function PublicTorneoPodiosPage() {
     })),
   })
 
-  const nombrePorId = useMemo(() => {
-    const map = new Map<string, string>()
+  const inscriptosQuery = useQuery({
+    queryKey: ['inscriptos-info', torneoId],
+    queryFn: () => listarInscriptosInfo(torneoId ?? ''),
+    enabled: Boolean(torneoId),
+  })
+
+  const infoPorId = useMemo(() => {
+    const map = new Map<string, InscriptoInfoDto>()
+    ;(inscriptosQuery.data ?? []).forEach((i) => map.set(i.atleta_id, i))
+    // fallback: complementar con nombres de la grilla si aún no cargó inscriptos
     grillaQueries.forEach((q) => {
-      ;(q.data ?? []).forEach((a) => map.set(a.atleta_id, a.nombre_atleta))
+      ;(q.data ?? []).forEach((a) => {
+        if (!map.has(a.atleta_id)) {
+          map.set(a.atleta_id, { atleta_id: a.atleta_id, nombre: a.nombre_atleta, club: '' })
+        }
+      })
     })
     return map
-  }, [grillaQueries])
+  }, [inscriptosQuery.data, grillaQueries])
 
   const rankingQueries = useQueries({
     queries: competencias.map((comp) => ({
@@ -292,7 +316,7 @@ export function PublicTorneoPodiosPage() {
                       key={cat.categoria}
                       categoria={cat.categoria}
                       entradas={cat.entradas}
-                      nombrePorId={nombrePorId}
+                      infoPorId={infoPorId}
                     />
                   ))}
                 </div>
@@ -311,7 +335,7 @@ export function PublicTorneoPodiosPage() {
                       key={categoria}
                       categoria={categoria}
                       disciplinas={disciplinas}
-                      nombrePorId={nombrePorId}
+                      infoPorId={infoPorId}
                     />
                   ))}
                 </div>

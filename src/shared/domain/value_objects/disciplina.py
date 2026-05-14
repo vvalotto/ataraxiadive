@@ -50,3 +50,7 @@ class Disciplina(StrEnum):
     def es_distancia(self) -> bool:
         """Retorna True si la disciplina se mide en metros."""
         return not self.es_tiempo()
+
+    def tiempo_mayor_es_mejor(self) -> bool:
+        """Retorna True si en esta disciplina mayor tiempo = mejor resultado (STA)."""
+        return self == Disciplina.STA

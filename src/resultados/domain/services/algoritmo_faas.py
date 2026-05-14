@@ -21,10 +21,15 @@ class AlgoritmoPuntajeFAAS(AlgoritmoPuntaje):
         P_i = (d_i / d_max) × 100
         d_max = max RP entre atletas con tarjeta blanca.
 
-    Tiempo (STA, SPE_*):
+    Tiempo resistencia (STA):
+        P_i = (t_i - t_min) / (t_max - t_min) × 100
+        t_max → 100 pts (más tiempo = mejor), t_min → 0 pts.
+
+    Tiempo velocidad (SPE_*):
         P_i = (t_max - t_i) / (t_max - t_min) × 100
-        t_min → 100 pts (más rápido), t_max → 0 pts (más lento).
-        Caso borde: t_max == t_min → todos reciben 100.
+        t_min → 100 pts (más rápido = mejor), t_max → 0 pts.
+
+    Caso borde: t_max == t_min → todos reciben 100.
 
     DNS y tarjeta roja → 0 puntos; excluidos del cálculo de referencia.
     """
@@ -38,7 +43,7 @@ class AlgoritmoPuntajeFAAS(AlgoritmoPuntaje):
             return {}
 
         if disciplina.es_tiempo():
-            return _calcular_tiempo(resultados)
+            return _calcular_tiempo(resultados, mayor_es_mejor=disciplina.tiempo_mayor_es_mejor())
         return _calcular_distancia(resultados)
 
 
@@ -56,7 +61,9 @@ def _calcular_distancia(resultados: list[ResultadoFinal]) -> dict[UUID, Decimal]
     return puntos
 
 
-def _calcular_tiempo(resultados: list[ResultadoFinal]) -> dict[UUID, Decimal]:
+def _calcular_tiempo(
+    resultados: list[ResultadoFinal], *, mayor_es_mejor: bool = False
+) -> dict[UUID, Decimal]:
     grupos = _agrupar_por_categoria(resultados)
     puntos: dict[UUID, Decimal] = {}
     for grupo in grupos.values():
@@ -64,7 +71,7 @@ def _calcular_tiempo(resultados: list[ResultadoFinal]) -> dict[UUID, Decimal]:
         t_min = min((r.rp for r in validos), default=None)
         t_max = max((r.rp for r in validos), default=None)
         for r in grupo:
-            puntos[r.atleta_id] = _puntaje_tiempo(r, t_min, t_max)
+            puntos[r.atleta_id] = _puntaje_tiempo(r, t_min, t_max, mayor_es_mejor=mayor_es_mejor)
     return puntos
 
 
@@ -82,11 +89,17 @@ def _puntaje_tiempo(
     resultado: ResultadoFinal,
     t_min: Decimal | None,
     t_max: Decimal | None,
+    *,
+    mayor_es_mejor: bool = False,
 ) -> Decimal:
     if t_min is None or not _es_valido(resultado) or resultado.rp is None:
         return _CERO
     if t_max == t_min:
         return _CIEN
+    if mayor_es_mejor:
+        # STA: mayor tiempo = mejor → t_max recibe 100 pts
+        return _redondear((resultado.rp - t_min) / (t_max - t_min) * _CIEN)
+    # SPE: menor tiempo = mejor → t_min recibe 100 pts
     return _redondear((t_max - resultado.rp) / (t_max - t_min) * _CIEN)
 
 

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { fetchCompetenciasPorTorneo, fetchGrillaCompetencia, type GrillaAtletaDto } from '../api/competencia'
@@ -7,6 +7,7 @@ import { DQ_REASON_LABELS, PENALTY_LABELS, TARJETA_LABELS } from '../constants/t
 import { formatMarca } from '../utils/marca'
 import useAuthStore from '../stores/useAuthStore'
 import { formatAp, formatFecha, formatHora } from './atleta/portalData'
+import { listarInscriptosInfo } from '../api/registro'
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -27,7 +28,7 @@ function formatRp(performance: string | null | undefined, unidad: string): strin
 
 // ── Componentes ────────────────────────────────────────────────────────────────
 
-function AtletaRow({ entry }: { entry: GrillaAtletaDto }) {
+function AtletaRow({ entry, club }: { entry: GrillaAtletaDto; club?: string }) {
   const enCurso = entry.estado === 'Llamada'
   return (
     <tr
@@ -38,7 +39,10 @@ function AtletaRow({ entry }: { entry: GrillaAtletaDto }) {
       }
     >
       <td className="py-2 pr-3 text-center text-xs text-slate-500">{entry.posicion}</td>
-      <td className="py-2 pr-3 text-sm text-slate-200">{entry.nombre_atleta}</td>
+      <td className="py-2 pr-3">
+        <p className="text-sm text-slate-200">{entry.nombre_atleta}</p>
+        {club ? <p className="text-xs text-slate-500">{club}</p> : null}
+      </td>
       <td className="py-2 pr-3 text-center text-xs text-slate-400">
         {formatAp(entry.ap_declarado, entry.unidad)}
       </td>
@@ -112,6 +116,18 @@ export function PublicTorneoResultadosPage() {
     refetchInterval: 30_000,
   })
 
+  const inscriptosQuery = useQuery({
+    queryKey: ['inscriptos-info', torneoId],
+    queryFn: () => listarInscriptosInfo(torneoId ?? ''),
+    enabled: Boolean(torneoId),
+  })
+
+  const clubPorAtletaId = useMemo(() => {
+    const map = new Map<string, string>()
+    ;(inscriptosQuery.data ?? []).forEach((i) => map.set(i.atleta_id, i.club))
+    return map
+  }, [inscriptosQuery.data])
+
   const atletas = [...(grillaQuery.data ?? [])].sort((a, b) => a.posicion - b.posicion)
 
   const portalLink =
@@ -179,7 +195,7 @@ export function PublicTorneoResultadosPage() {
                     <button
                       key={c.disciplina}
                       onClick={() => setTabActiva(c.disciplina)}
-                      className={`rounded-t-xl px-4 py-2 text-xs font-semibold transition-colors ${
+                      className={`flex-1 rounded-t-xl px-4 py-2 text-xs font-semibold transition-colors ${
                         tab === c.disciplina
                           ? 'bg-slate-800 text-sky-400'
                           : 'text-slate-500 hover:text-slate-300'
@@ -210,7 +226,11 @@ export function PublicTorneoResultadosPage() {
                         </thead>
                         <tbody>
                           {atletas.map((e) => (
-                            <AtletaRow key={e.performance_id} entry={e} />
+                            <AtletaRow
+                              key={e.performance_id}
+                              entry={e}
+                              club={clubPorAtletaId.get(e.atleta_id)}
+                            />
                           ))}
                         </tbody>
                       </table>

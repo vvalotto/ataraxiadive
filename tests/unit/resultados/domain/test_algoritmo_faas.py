@@ -80,22 +80,23 @@ class TestDistancia:
 
 
 class TestTiempo:
-    def test_mas_rapido_recibe_100(self, faas: AlgoritmoPuntajeFAAS) -> None:
+    def test_sta_mayor_tiempo_recibe_100(self, faas: AlgoritmoPuntajeFAAS) -> None:
+        # STA: mayor tiempo = mejor → ANA(270s) → 100 pts, LUIS(190s) → 0 pts
         resultados = [_resultado(LUIS, 190.0, "Blanca"), _resultado(ANA, 270.0, "Blanca")]
         puntos = faas.calcular(resultados, Disciplina.STA)
-        assert puntos[LUIS] == Decimal("100.00")
-        assert puntos[ANA] == Decimal("0.00")
+        assert puntos[ANA] == Decimal("100.00")
+        assert puntos[LUIS] == Decimal("0.00")
 
-    def test_intermedio_proporcional(self, faas: AlgoritmoPuntajeFAAS) -> None:
-        # t_min=100, t_max=200. Pedro=150 → (200-150)/(200-100)×100 = 50
+    def test_sta_intermedio_proporcional(self, faas: AlgoritmoPuntajeFAAS) -> None:
+        # t_min=100, t_max=200. Pedro=150 → (150-100)/(200-100)×100 = 50
         resultados = [
             _resultado(ANA, 100.0, "Blanca"),
             _resultado(LUIS, 200.0, "Blanca"),
             _resultado(PEDRO, 150.0, "Blanca"),
         ]
         puntos = faas.calcular(resultados, Disciplina.STA)
-        assert puntos[ANA] == Decimal("100.00")
-        assert puntos[LUIS] == Decimal("0.00")
+        assert puntos[LUIS] == Decimal("100.00")
+        assert puntos[ANA] == Decimal("0.00")
         assert puntos[PEDRO] == Decimal("50.00")
 
     def test_todos_iguales_reciben_100(self, faas: AlgoritmoPuntajeFAAS) -> None:
@@ -110,7 +111,8 @@ class TestTiempo:
         assert puntos[ANA] == Decimal("100.00")
         assert puntos[PEDRO] == Decimal("0.00")
 
-    def test_spe_variante_tiempo(self, faas: AlgoritmoPuntajeFAAS) -> None:
+    def test_spe_menor_tiempo_recibe_100(self, faas: AlgoritmoPuntajeFAAS) -> None:
+        # SPE: menor tiempo = mejor (velocidad) → ANA(120s) → 100 pts, LUIS(160s) → 0 pts
         resultados = [_resultado(ANA, 120.0, "Blanca"), _resultado(LUIS, 160.0, "Blanca")]
         puntos = faas.calcular(resultados, Disciplina.SPE_4X50)
         assert puntos[ANA] == Decimal("100.00")

@@ -393,12 +393,12 @@ def _dns_dnf(
 
 
 def test_calcular_con_faas_incluye_puntos_en_entradas() -> None:
-    """Ana (70m) → 100.00 pts; Luis (56m) → 80.00 pts (INV-5.6.3-01)."""
+    """Ana (70m) → 100.00 pts; Luis (56m) → 80.00 pts (INV-5.6.3-01). Misma categoría."""
     ana = uuid4()
     luis = uuid4()
     resultados = [
         _resultado_dnf("70", atleta_id=ana, categoria=Categoria.SENIOR_FEMENINO),
-        _resultado_dnf("56", atleta_id=luis, categoria=Categoria.SENIOR_MASCULINO),
+        _resultado_dnf("56", atleta_id=luis, categoria=Categoria.SENIOR_FEMENINO),
     ]
 
     ranking = _make_ranking_dnf()
