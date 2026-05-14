@@ -49,22 +49,20 @@ export function AtletaCard({
         </p>
       ) : null}
       <h2 className="mt-3 text-2xl font-semibold text-white">{nombreAtleta}</h2>
-      <div className="mt-4 space-y-3 text-sm text-slate-300">
+      <div className="mt-4 grid grid-cols-3 gap-2 text-sm text-slate-300">
         <div className="rounded-2xl bg-slate-950/70 p-3">
-          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
-            Performance anunciada
-          </p>
-          <p className="mt-2 text-lg font-semibold text-slate-50">
+          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">AP</p>
+          <p className="mt-2 text-base font-semibold text-slate-50">
             {formatMarca(apDeclarado, unidad)}
           </p>
         </div>
         <div className="rounded-2xl bg-slate-950/70 p-3">
           <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Andarivel</p>
-          <p className="mt-2 text-lg font-semibold text-slate-50">{andarivel}</p>
+          <p className="mt-2 text-base font-semibold text-slate-50">{andarivel}</p>
         </div>
         <div className="rounded-2xl bg-slate-950/70 p-3">
           <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">OT</p>
-          <p className="mt-2 text-lg font-semibold text-slate-50">{formatOt(otProgramado)}</p>
+          <p className="mt-2 text-base font-semibold text-slate-50">{formatOt(otProgramado)}</p>
         </div>
       </div>
     </section>

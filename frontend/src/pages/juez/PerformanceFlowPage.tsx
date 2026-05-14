@@ -135,11 +135,11 @@ export function PerformanceFlowPage() {
 
       {/* Paso 4 — Performance en curso */}
       {!flow.completed && flow.step === 4 && !flow.isBkoMode ? (
-        <p className="px-1 text-lg font-semibold text-white">{flow.atletaActivo.nombreAtleta}</p>
-      ) : null}
-      {!flow.completed && flow.step === 4 && !flow.isBkoMode ? (
         <section className="space-y-4 rounded-[2rem] border border-slate-800 bg-slate-900/80 p-5">
-          <h3 className="text-xl font-semibold text-white">Paso 4 · Performance</h3>
+          <div>
+            <h3 className="text-xl font-semibold text-white">Paso 4 · Performance</h3>
+            <p className="mt-0.5 text-sm font-semibold text-slate-300">{flow.atletaActivo.nombreAtleta}</p>
+          </div>
           <p className="text-sm text-slate-300">
             {flow.chronoStarted
               ? 'La performance esta en curso. Finaliza cuando el atleta complete su intento.'
@@ -168,7 +168,7 @@ export function PerformanceFlowPage() {
 
       {/* Paso 4 — BKO mode */}
       {!flow.completed && flow.step === 4 && flow.isBkoMode ? (
-        <p className="px-1 text-lg font-semibold text-white">{flow.atletaActivo.nombreAtleta}</p>
+        <p className="px-1 text-sm font-semibold text-slate-300">{flow.atletaActivo.nombreAtleta}</p>
       ) : null}
       {!flow.completed && flow.step === 4 && flow.isBkoMode ? (
         <StepBKO
@@ -192,7 +192,7 @@ export function PerformanceFlowPage() {
 
       {/* Paso 5 — Asignar tarjeta */}
       {!flow.completed && flow.step === 5 ? (
-        <p className="px-1 text-lg font-semibold text-white">{flow.atletaActivo.nombreAtleta}</p>
+        <p className="px-1 text-sm font-semibold text-slate-300">{flow.atletaActivo.nombreAtleta}</p>
       ) : null}
       {!flow.completed && flow.step === 5 ? (
         <StepTarjeta

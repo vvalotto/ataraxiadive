@@ -43,6 +43,14 @@ function resolveRowStatus(
   return 'PENDIENTE'
 }
 
+const STATUS_LABEL: Record<RowStatus, string> = {
+  EN_CURSO: 'En curso',
+  SIGUIENTE: 'Siguiente',
+  REVISION: 'Revisión',
+  PENDIENTE: 'Pendiente',
+  FINALIZADA: 'Finalizada',
+}
+
 const STATUS_ORDER: Record<RowStatus, number> = {
   SIGUIENTE: 0,
   EN_CURSO: 1,
@@ -234,15 +242,15 @@ export function GrillaPage() {
               })
               void navigate('/juez/performance')
             }}
-            className={`block w-full rounded-[2rem] border p-5 text-left transition ${statusClasses(status)}`}
+            className={`block w-full rounded-[2rem] border px-4 py-3 text-left transition ${statusClasses(status)}`}
           >
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
                   #{atleta.posicion} · andarivel {atleta.andarivel}
                 </p>
-                <h2 className="mt-2 text-lg font-semibold text-slate-50">{atleta.nombre_atleta}</h2>
-                <p className="mt-2 text-sm text-slate-400">
+                <h2 className="mt-1 text-base font-semibold text-slate-50">{atleta.nombre_atleta}</h2>
+                <p className="mt-1 text-sm text-slate-400">
                   AP {formatMarca(atleta.ap_declarado, atleta.unidad)}
                 </p>
               </div>
@@ -256,7 +264,7 @@ export function GrillaPage() {
                   status === 'FINALIZADA' ? 'bg-slate-950 text-slate-500' : '',
                 ].join(' ')}
               >
-                {status}
+                {STATUS_LABEL[status]}
                 {pendientes > 0 ? ` ⏳ ${pendientes}` : ''}
               </span>
             </div>
