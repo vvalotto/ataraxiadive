@@ -125,14 +125,14 @@ async def test_callback_dispara_overall_si_todas_finalizaron(
     )
 
     class FakeRankingHandler:
-        def __init__(self, *_args) -> None:
+        def __init__(self, *_args, **_kwargs) -> None:
             pass
 
         async def handle(self, command) -> None:
             llamadas.append(("ranking", command.competencia_id))
 
     class FakeOverallHandler:
-        def __init__(self, *_args) -> None:
+        def __init__(self, *_args, **_kwargs) -> None:
             pass
 
         async def handle(self, command) -> None:
@@ -167,14 +167,14 @@ async def test_callback_no_dispara_overall_si_falta_otra_disciplina(
     )
 
     class FakeRankingHandler:
-        def __init__(self, *_args) -> None:
+        def __init__(self, *_args, **_kwargs) -> None:
             pass
 
         async def handle(self, _command) -> None:
             llamadas.append("ranking")
 
     class FakeOverallHandler:
-        def __init__(self, *_args) -> None:
+        def __init__(self, *_args, **_kwargs) -> None:
             pass
 
         async def handle(self, _command) -> None:
@@ -198,14 +198,14 @@ async def test_callback_standalone_no_activa_p09(
     competencia_id = uuid4()
 
     class FakeRankingHandler:
-        def __init__(self, *_args) -> None:
+        def __init__(self, *_args, **_kwargs) -> None:
             pass
 
         async def handle(self, _command) -> None:
             llamadas.append("ranking")
 
     class FakeOverallHandler:
-        def __init__(self, *_args) -> None:
+        def __init__(self, *_args, **_kwargs) -> None:
             pass
 
         async def handle(self, _command) -> None:

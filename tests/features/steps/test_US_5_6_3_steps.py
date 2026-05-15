@@ -42,7 +42,7 @@ def step_algoritmo_faas(ctx: dict) -> None:
 
 
 @given(
-    "una disciplina DNF con Ana (70m Blanca, SENIOR_FEMENINO) y Luis (56m Blanca, SENIOR_MASCULINO)"
+    "una disciplina DNF con Ana (70m Blanca, SENIOR_FEMENINO) y Luis (56m Blanca, SENIOR_FEMENINO)"
 )
 def step_ana_y_luis_dnf(ctx: dict) -> None:
     ana_id = uuid4()
@@ -64,7 +64,7 @@ def step_ana_y_luis_dnf(ctx: dict) -> None:
             unidad="Metros",
             tarjeta="Blanca",
             es_dns=False,
-            categoria=Categoria.SENIOR_MASCULINO,
+            categoria=Categoria.SENIOR_FEMENINO,  # misma cat que Ana para puntaje proporcional
         ),
     ]
     ctx["ranking"] = RankingCompetencia(competencia_id=uuid4(), disciplina=Disciplina.DNF)

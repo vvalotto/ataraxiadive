@@ -123,6 +123,32 @@ Esto sugiere una extensión posible del pipeline: al cerrar la Fase 7 (implement
 
 ---
 
+## Familia D — Fake con `*_args` que no captura kwargs del constructor (2026-05-15)
+
+**Archivo:** `tests/unit/test_app_p09.py` (3 tests: `test_callback_dispara_overall_si_todas_finalizaron`, `test_callback_no_dispara_overall_si_falta_otra_disciplina`, `test_callback_standalone_no_activa_p09`)
+
+**Causa:** `CalcularRankingHandler` recibió el argumento `algoritmo=AlgoritmoPuntajeFAAS()` como keyword argument en US-5.6.2 (commit `32be3c2`). Los tres `FakeRankingHandler` del test habían sido escritos en US-3.5.2 con `def __init__(self, *_args)`, que captura solo args posicionales. Al pasar `algoritmo=...`, Python lanza:
+
+```
+TypeError: FakeRankingHandler.__init__() got an unexpected keyword argument 'algoritmo'
+```
+
+**Diferencia con Familia A:** La Familia A es un cambio en la cantidad de argumentos posicionales — el fake falla porque recibe más args de los que declara. La Familia D es un cambio a keyword argument — el fake parece "seguro" por tener `*_args` pero ignora los kwargs. El mensaje de error es distinto y puede llevar a pensar que la causa es diferente.
+
+```
+Familia A:  def __init__(self, store)       → TypeError: takes 2 positional arguments but 4 given
+Familia D:  def __init__(self, *_args)      → TypeError: got an unexpected keyword argument 'algoritmo'
+                                               # *_args se ve como "acepta todo", pero no acepta kwargs
+```
+
+**Timeline:** fake escrito en US-3.5.2 (SP3), kwarg agregado en US-5.6.2 (SP5), fallo detectado en SP6.
+
+**Fix:** `def __init__(self, *_args, **_kwargs)` — la signatura correcta para un fake que no tiene opinión sobre sus dependencias.
+
+**Prevención:** Los fakes cuyo propósito es absorber la construcción sin importarle las dependencias deben declararla explícitamente con `*_args, **_kwargs`. Un fake con solo `*_args` hace un supuesto implícito: que el constructor real nunca usará keyword arguments.
+
+---
+
 ## Resolución aplicada
 
 - **Familia A:** Se introdujo `StubPerformancesAPPort` en el test, que lee `APRegistrado` events del event store in-memory. El test unitario ahora es independiente de la infraestructura.

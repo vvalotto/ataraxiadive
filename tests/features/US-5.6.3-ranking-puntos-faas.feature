@@ -4,7 +4,7 @@ Feature: US-5.6.3 — RankingCompetencia con puntos FAAS por categoria
     Given un algoritmo FAAS inyectado en el aggregate
 
   Scenario: ranking incluye puntos FAAS por atleta en DNF
-    Given una disciplina DNF con Ana (70m Blanca, SENIOR_FEMENINO) y Luis (56m Blanca, SENIOR_MASCULINO)
+    Given una disciplina DNF con Ana (70m Blanca, SENIOR_FEMENINO) y Luis (56m Blanca, SENIOR_FEMENINO)
     When se calcula el ranking con algoritmo FAAS
     Then Ana tiene puntos = 100.00 en su EntradaRanking
     And Luis tiene puntos = 80.00 en su EntradaRanking

@@ -16,9 +16,13 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from pytest_bdd import given, parsers, scenarios, then, when
 
+import sys
+
 from identidad.api.dependencies import get_current_user
 from torneo.api.exception_handlers import register_torneo_exception_handlers
-from torneo.api.router import router as torneo_router
+from torneo.api.router import router as torneo_router  # noqa: F401 — side-effect: loads module into sys.modules
+
+_torneo_router_mod = sys.modules["torneo.api.router"]
 
 scenarios("../US-6.6.4-pagina-publica-torneo.feature")
 
@@ -29,6 +33,11 @@ scenarios("../US-6.6.4-pagina-publica-torneo.feature")
 @pytest.fixture
 def context(tmp_path: object, monkeypatch: pytest.MonkeyPatch) -> dict[str, Any]:
     monkeypatch.setenv("TORNEO_DB_PATH", str(tmp_path / "torneo.db"))
+    # Resetear precondiciones globales que podrían haber sido seteadas por app.py
+    # en otros tests del mismo proceso, evitando que accedan a DBs de producción.
+    monkeypatch.setattr(_torneo_router_mod, "_cierre_inscripcion_precondition", None)
+    monkeypatch.setattr(_torneo_router_mod, "_ejecucion_precondition", None)
+    monkeypatch.setattr(_torneo_router_mod, "_ejecucion_post_action", None)
     return {}
 
 

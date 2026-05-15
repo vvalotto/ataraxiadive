@@ -118,6 +118,22 @@ Este patrón es especialmente difícil de detectar porque:
 
 ---
 
+## Familia D — Fake con `*_args` que no captura kwargs del constructor (2026-05-15)
+
+**Archivo:** `tests/integration/test_p09_callback_integration.py` (`test_callback_persiste_overall_cuando_finaliza_ultima_disciplina`)
+
+**Causa:** Mismo patrón que HITO-30 Familia D. `CalcularRankingHandler` recibió `algoritmo=AlgoritmoPuntajeFAAS()` como keyword argument en US-5.6.2. El `FakeRankingHandler` del test de integración usaba `def __init__(self, *_args)` — captura args posicionales pero no kwargs. Falla con:
+
+```
+TypeError: FakeRankingHandler.__init__() got an unexpected keyword argument 'algoritmo'
+```
+
+El patrón es transversal a suites: un fake con `*_args` hace el supuesto implícito de que el constructor real nunca usará keyword arguments. Al agregar `algoritmo=...` en producción, tanto los unit tests (HITO-30 Familia D) como este test de integración fallaron por la misma razón.
+
+**Fix:** `def __init__(self, *_args, **_kwargs)`.
+
+---
+
 ## Resolución aplicada
 
 **Familia A:**

@@ -131,14 +131,14 @@ def ctx(tmp_path, monkeypatch: pytest.MonkeyPatch) -> dict:
         }
 
     class FakeRankingHandler:
-        def __init__(self, *_args) -> None:
+        def __init__(self, *_args, **_kwargs) -> None:
             pass
 
         async def handle(self, command) -> None:
             ctx_data["llamadas"].append(("ranking", command.disciplina.value))
 
     class FakeOverallHandler:
-        def __init__(self, *_args) -> None:
+        def __init__(self, *_args, **_kwargs) -> None:
             pass
 
         async def handle(self, _command) -> None:

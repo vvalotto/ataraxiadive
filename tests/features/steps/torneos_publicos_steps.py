@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import sys
 from collections.abc import Iterator
 from typing import Any
 
@@ -12,7 +13,9 @@ from pytest_bdd import given, parsers, scenarios, then, when
 
 from identidad.api.dependencies import get_current_user
 from torneo.api.exception_handlers import register_torneo_exception_handlers
-from torneo.api.router import router
+from torneo.api.router import router  # noqa: F401 — side-effect: loads module into sys.modules
+
+_torneo_router_mod = sys.modules["torneo.api.router"]
 
 scenarios("../US-6.6.1-endpoint-publico-torneos.feature")
 
@@ -20,6 +23,9 @@ scenarios("../US-6.6.1-endpoint-publico-torneos.feature")
 @pytest.fixture
 def context(tmp_path: object, monkeypatch: pytest.MonkeyPatch) -> dict[str, Any]:
     monkeypatch.setenv("TORNEO_DB_PATH", str(tmp_path / "torneo.db"))
+    monkeypatch.setattr(_torneo_router_mod, "_cierre_inscripcion_precondition", None)
+    monkeypatch.setattr(_torneo_router_mod, "_ejecucion_precondition", None)
+    monkeypatch.setattr(_torneo_router_mod, "_ejecucion_post_action", None)
     return {"created_ids": {}}
 
 

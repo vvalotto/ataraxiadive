@@ -92,6 +92,84 @@ Esta familia agrupa tres sub-causas distintas:
 
 ---
 
+## Familia E — Scenarios BDD de una US no actualizados al refactorizar la regla de dominio (2026-05-15)
+
+**Archivos:** `tests/features/US-5.6.1-algoritmo-puntaje-faas.feature`, `tests/features/US-5.6.3-ranking-puntos-faas.feature` y sus steps (2 tests)
+
+**Causa raíz:** Distinta a todas las familias anteriores. Los scenarios fueron **correctos cuando se escribieron** — pasaban contra la implementación de su US. El problema apareció cuando una US posterior cambió la regla de dominio que los scenarios cubrían, y nadie buscó ni revisó los scenarios afectados.
+
+**Caso 1 — US-5.6.1 vs US-6.4.4 (algoritmo STA):**
+- US-5.6.1 implementa `AlgoritmoPuntajeFAAS` con una única fórmula para disciplinas de tiempo: `t_min → 100 pts` (menos tiempo = mejor). El scenario "tiempo — el mas rapido recibe 100 puntos" usa `STA` y espera que Luis (190s) reciba 100 pts y Ana (270s) reciba 0.
+- US-6.4.4 refactoriza el algoritmo para distinguir STA (más tiempo = mejor) vs SPE (menos tiempo = mejor).
+- El scenario de US-5.6.1 queda con disciplina `STA` pero expectativas de SPE. El test pasa la validación visual ("el scenario dice lo que debería hacer") pero falla en runtime porque la regla de dominio cambió.
+- **Corrección:** disciplina cambiada a `SPE_2X50` — semánticamente correcta para "el más rápido gana".
+
+**Caso 2 — US-5.6.3 vs segmentación por categoría (algoritmo FAAS):**
+- US-5.6.3 escribe el scenario con Ana (SENIOR_FEMENINO, 70m) y Luis (SENIOR_MASCULINO, 56m) esperando Luis = 80.00 pts = (56/70)×100. Esto asume que todos los atletas compiten en un pool único.
+- En algún punto posterior el algoritmo FAAS incorpora segmentación por categoría: cada categoría tiene su propio `d_max`. Luis, único en SENIOR_MASCULINO, obtiene 100.00 pts.
+- El scenario especificaba el comportamiento correcto para el algoritmo original, pero incorrecto para el algoritmo con segmentación.
+- **Corrección:** Luis puesto en la misma categoría que Ana (SENIOR_FEMENINO) para que la proporción sea válida.
+
+**Por qué no se detectó al leer/revisar el scenario:**
+Leer el scenario en el momento de su creación no habría revelado nada — era correcto. La validación que faltó fue **al cerrar la US que cambió la regla**: al implementar US-6.4.4 (distinción STA/SPE) y al agregar segmentación por categoría, el paso obligatorio habría sido `grep -r "AlgoritmoPuntajeFAAS\|STA\|calcular_tiempo" tests/features/` y verificar que todos los scenarios afectados siguieran siendo válidos. Ese grep nunca se ejecutó.
+
+**Diferencia con Familia C (RankingOverall posicional → FAAS):**
+La Familia C también es un refactor de dominio no propagado a BDD, pero el cambio era tan profundo (fórmula posicional → fórmula FAAS) que afectaba semántica, campos y estructura. La Familia E es más sutil: el scenario parece correcto a simple vista, el nombre del scenario es consistente con las expectativas, y el error solo aparece al entender en detalle qué hace la nueva implementación con ese input específico.
+
+**Implicación metodológica:**
+Al cerrar una US que modifica una regla de dominio existente (no solo agrega funcionalidad), el checklist debe incluir:
+1. `grep` sobre `tests/features/` buscando el nombre del servicio/método/regla modificada
+2. Verificar que los scenarios encontrados sigan siendo semánticamente válidos con la nueva implementación
+3. Ejecutar `pytest tests/features/` completo antes del commit
+
+---
+
+## Familia F — Globals de módulo contaminados entre tests por estado de app.py (2026-05-15)
+
+**Archivos:** `tests/features/steps/pagina_publica_torneo_detalle_steps.py`, `tests/features/steps/torneos_publicos_steps.py` (5 tests)
+
+**Causa raíz:** `torneo/api/router.py` expone tres variables de módulo mutables que son seteadas por `app.py` al arrancar la aplicación:
+
+```python
+_cierre_inscripcion_precondition: CierreInscripcionPrecondition | None = None
+_ejecucion_precondition: EjecucionPrecondition | None = None
+_ejecucion_post_action: EjecucionPostAction | None = None
+```
+
+En producción esto es correcto: `app.py` las setea una vez al inicializar. En tests, los módulos Python son **singletons en `sys.modules`**: cuando un test anterior importa `app.py` y setea los tres globals, ese estado persiste para todos los tests posteriores del mismo proceso. Los step files que montan una `FastAPI()` fresca con `torneo_router` no resetean estos globals, por lo que los endpoints `cerrar-inscripcion` e `iniciar-ejecucion` invocan precondiciones y post-actions que acceden a `data/registro.db` con path relativo → `sqlite3.OperationalError: unable to open database file`.
+
+**Síntoma característico:** el test pasa al ejecutarse en aislamiento (`pytest tests/features/steps/pagina_publica_torneo_detalle_steps.py` solo), falla en la suite completa. La causa es el orden de ejecución: algún test anterior en el proceso importa `app.py`, y el estado global queda contaminado.
+
+**Complicación adicional:** `torneo/api/__init__.py` re-exporta `router` (el `APIRouter`):
+```python
+from torneo.api.router import router
+__all__ = ["router"]
+```
+Esto hace que `import torneo.api.router as m` resuelva el `APIRouter`, no el módulo. La forma correcta de obtener el módulo es vía `sys.modules["torneo.api.router"]` después de cualquier import que lo cargue como side-effect.
+
+**Fix aplicado en ambos step files:**
+```python
+import sys
+from torneo.api.router import router  # side-effect: carga el módulo en sys.modules
+_torneo_router_mod = sys.modules["torneo.api.router"]
+
+@pytest.fixture
+def context(tmp_path, monkeypatch):
+    monkeypatch.setenv("TORNEO_DB_PATH", str(tmp_path / "torneo.db"))
+    monkeypatch.setattr(_torneo_router_mod, "_cierre_inscripcion_precondition", None)
+    monkeypatch.setattr(_torneo_router_mod, "_ejecucion_precondition", None)
+    monkeypatch.setattr(_torneo_router_mod, "_ejecucion_post_action", None)
+    return {}
+```
+
+`monkeypatch.setattr` restaura el valor original automáticamente al finalizar cada test.
+
+**Por qué se diseñó con globals mutables:** la precondición de `cerrar-inscripcion` cruza bounded contexts (torneo llama a registro). Los globals son el composition root pragmático para este cross-BC wiring en producción. Son correctos en runtime; frágiles en tests que comparten proceso.
+
+**Diferencia con Familia D (path relativo):** en la Familia D el adaptador de infraestructura usa un path relativo al CWD. En la Familia F el path relativo lo usa una precondición inyectada via global de módulo — el test no puede sobreescribir la dependency de FastAPI porque el problema está antes del DI, en el closure que captura `_inscripcion_repo()`.
+
+---
+
 ## Análisis de causa raíz transversal
 
 | Familia | Tests afectados | Causa raíz |
@@ -102,15 +180,19 @@ Esta familia agrupa tres sub-causas distintas:
 | B3 — CANCELADA en listado | 1 | Invariante de repositorio incorrecto en test |
 | C — RankingOverall posicional → FAAS | 4 | Refactor de dominio de SP5.6.4 no reflejado en BDD |
 | D — `AtletaNombreAdapter` path relativo | 9 | Dependencia con path relativo no sobreescrita en fixtures BDD |
-| **Total** | **56** | |
+| E — Scenarios correctos al escribirlos, inválidos tras refactor posterior | 2 | Regla de dominio evolucionó sin revisión de scenarios afectados |
+| F — Globals de módulo contaminados entre tests por `app.py` | 5 | Estado mutable de módulo seteado en un test persiste en los siguientes |
+| **Total** | **63** | |
 
 ---
 
 ## Pregunta experimental
 
-Las Familias B2, B3 y C son casos de **tests con invariantes incorrectos** escritos por LLM (asistidos por Claude). La proporción es significativa: 6/47 (13%) de los fallos BDD son tests que especifican el comportamiento incorrecto, no el correcto.
+Las Familias B2, B3, C y E son casos de **tests con invariantes incorrectos** escritos por LLM (asistidos por Claude). La proporción es significativa: 8/58 (14%) de los fallos BDD son tests que especifican el comportamiento incorrecto, no el correcto.
 
 Hipótesis de HITO-31 confirmada con mayor evidencia: el LLM tiende a especificar el comportamiento que describe el enunciado original de la US, sin actualizar cuando el comportamiento cambia en USs posteriores. Los tests de integración y BDD tienen mayor riesgo porque suelen escribirse contra el comportamiento descrito, y el dominio puede evolucionar sin que los tests sean actualizados.
+
+La Familia E agrega un matiz: **el error no es de escritura sino de omisión de búsqueda**. El scenario era correcto; lo que faltó fue el paso activo de buscarlo y revisarlo al momento del cambio posterior. Esta distinción es relevante para IEDD porque sugiere que la corrección no está en cómo se escriben los tests, sino en cuándo y cómo se buscan los tests existentes al implementar cada US.
 
 **Implicación metodológica para IEDD:** Al cerrar un sprint, la revisión de tests debería incluir explícitamente la verificación de que los tests BDD de USs anteriores sigan siendo válidos frente a los cambios de USs posteriores. Este es el principio de "regresión de invariantes" — no solo de funcionalidad.
 
@@ -130,7 +212,7 @@ Hipótesis de HITO-31 confirmada con mayor evidencia: el LLM tiende a especifica
 
 ## Resultado
 
-- Suite BDD: **269/269 pasando desde cualquier CWD** (desde CLI: 222/269 → 269/269; desde PyCharm: +9 adicionales de Familia D)
-- Suite total: **1140/1140 pasando** (664 unit + 207 integración + 269 BDD)
-- HITO-30: 21 tests unitarios · HITO-31: 31 tests de integración · HITO-32: **56 tests BDD** (47 Familias A/B/C + 9 Familia D)
-- Total corregido en SP6 pre-baseline: **108 tests** que estaban silenciosamente fallando
+- Suite BDD: **282/282 pasando** (Familias A/B/C/D resueltas en SP6 + Familias E/F resueltas en SP6 continuación)
+- Suite total: **1170/1170 pasando** (676 unit + 212 integración + 282 BDD) — 4 skipped (validación visual UI)
+- HITO-30: 21 tests unitarios · HITO-31: 31 tests de integración · HITO-32: **63 tests BDD** (Familias A–F)
+- Total corregido acumulado SP6: **115 tests** que estaban silenciosamente fallando

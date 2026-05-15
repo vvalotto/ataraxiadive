@@ -11,7 +11,7 @@ Feature: US-5.6.1 — Algoritmo de puntaje FAAS
     And Luis recibe 80.00 puntos
 
   Scenario: tiempo — el mas rapido recibe 100 puntos
-    Given una disciplina de tipo tiempo STA
+    Given una disciplina de tipo tiempo SPE_2X50
     And los resultados son: Luis 190 segundos Blanca, Ana 270 segundos Blanca
     When se calcula el puntaje FAAS
     Then Luis recibe 100.00 puntos
