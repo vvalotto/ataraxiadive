@@ -173,6 +173,22 @@ export async function fetchAtletaMe(): Promise<AtletaDto> {
   return parseResponse<AtletaDto>(response)
 }
 
+export interface ActualizarAtletaMePayload {
+  nombre?: string
+  apellido?: string
+  categoria?: string
+  club?: string
+}
+
+export async function actualizarAtletaMe(payload: ActualizarAtletaMePayload): Promise<AtletaDto> {
+  const response = await fetch('/registro/atletas/me', {
+    method: 'PATCH',
+    headers: buildHeaders(),
+    body: JSON.stringify(payload),
+  })
+  return parseResponse<AtletaDto>(response)
+}
+
 export async function fetchAtletaMeOrNull(): Promise<AtletaDto | null> {
   const response = await fetch('/registro/atletas/me', {
     headers: buildHeaders(),

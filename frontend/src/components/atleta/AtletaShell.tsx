@@ -15,6 +15,7 @@ const TABS = [
   { label: 'Torneos', to: '/atleta/torneos' },
   { label: 'Inscripciones', to: '/atleta/mis-inscripciones' },
   { label: 'Resultados', to: '/atleta/resultados' },
+  { label: 'Mis Datos', to: '/atleta/mis-datos' },
 ]
 
 function isTabActive(pathname: string, to: string): boolean {
@@ -74,7 +75,7 @@ export function AtletaShell({
             </div>
           </div>
 
-          <nav className="mt-3 grid grid-cols-4 border-t border-slate-800">
+          <nav className="mt-3 grid grid-cols-5 border-t border-slate-800">
             {TABS.map((tab) => {
               const active = isTabActive(location.pathname, tab.to)
               return (

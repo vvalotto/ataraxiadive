@@ -9,6 +9,19 @@ Versionado: [Semantic Versioning](https://semver.org/lang/es/)
 
 ## [Unreleased]
 
+### Added
+- [US-ADJ-10.2] Página "Mis Datos" del atleta — `PATCH /registro/atletas/me`
+  - `Atleta.actualizar()` con semántica PATCH (campos opcionales, solo muta los provistos)
+  - `ActualizarAtletaCommand` + `ActualizarAtletaHandler` en BC `registro`
+  - Tab "Mis Datos" en `AtletaShell` (5 tabs); `AtletaMisDatosPage` con form pre-rellenado
+  - 10 tests unitarios, 4 integración, 4 escenarios BDD — 18 passed
+- [US-ADJ-10.1] Edición completa del torneo — `PUT /torneos/{id}`
+  - `Torneo.actualizar()` con precondición de estado (`CREADO | INSCRIPCION_ABIERTA`)
+  - `ActualizarTorneoCommand` + `ActualizarTorneoHandler` en BC `torneo`
+  - `CrearTorneoPage` en modo dual (crear / editar-disciplinas / editar-torneo)
+  - Botón "Editar torneo" en `DetalleTorneoPage` visible solo en estados editables
+  - 7 tests unitarios, 6 integración, 4 escenarios BDD — 17 passed
+
 ### Fixed
 - [US-6.4.5] `SQLiteInscripcionRepository` delega reconstitucion en `Inscripcion`
   - Agrega `Inscripcion.from_row()` para reconstruir datos planos persistidos
