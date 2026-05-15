@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, Navigate, useSearchParams } from 'react-router-dom'
+import { Link, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { loginApi } from '../api/auth'
 import useAuthStore from '../stores/useAuthStore'
@@ -20,6 +20,9 @@ function esDestinoCompatible(destino: string, rol: string): boolean {
 
 export function LoginPage() {
   const [searchParams] = useSearchParams()
+  const location = useLocation()
+  const autologinFailed =
+    (location.state as { autologinFailed?: boolean } | null)?.autologinFailed ?? false
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const login = useAuthStore((s) => s.login)
@@ -67,6 +70,11 @@ export function LoginPage() {
           {registered ? (
             <p className="mb-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-center text-sm text-emerald-100">
               Cuenta creada. Inicia sesion.
+            </p>
+          ) : null}
+          {autologinFailed ? (
+            <p className="mb-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-center text-sm text-amber-100">
+              Tu cuenta fue creada. Por favor ingresá manualmente.
             </p>
           ) : null}
           {resetDone ? (
