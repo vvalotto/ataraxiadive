@@ -261,6 +261,60 @@ class FakeEmailSender:
         return "fake-provider-id"
 
 
+class FailingEmailSender:
+    async def enviar(self, destinatario, contenido):  # type: ignore[no-untyped-def]
+        raise RuntimeError("SMTP no disponible")
+
+
+@pytest.mark.asyncio
+async def test_registrar_usuario_envia_email_de_bienvenida(
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+) -> None:
+    email_sender = FakeEmailSender()
+    handler = RegistrarUsuarioHandler(mock_repo, password_hasher, email_sender)
+    cmd = RegistrarUsuarioCommand(
+        nombre="Ana", apellido="Garcia", email="ana@test.com", password="Seguro1234", rol=Rol.ATLETA
+    )
+    await handler.handle(cmd)
+    assert len(email_sender.enviados) == 1
+    destinatario, asunto, _ = email_sender.enviados[0]
+    assert destinatario == "ana@test.com"
+    assert "AtaraxiaDive" in asunto
+
+
+@pytest.mark.asyncio
+async def test_registrar_usuario_no_falla_si_email_lanza_excepcion(
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+) -> None:
+    handler = RegistrarUsuarioHandler(mock_repo, password_hasher, FailingEmailSender())
+    cmd = RegistrarUsuarioCommand(
+        nombre="Luis",
+        apellido="Perez",
+        email="luis@test.com",
+        password="Seguro1234",
+        rol=Rol.JUEZ,
+    )
+    usuario_id = await handler.handle(cmd)
+    assert usuario_id is not None
+    mock_repo.save.assert_called_once()
+
+
+@pytest.mark.asyncio
+async def test_registrar_usuario_sin_email_sender_funciona(
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+) -> None:
+    handler = RegistrarUsuarioHandler(mock_repo, password_hasher)
+    cmd = RegistrarUsuarioCommand(
+        nombre="Sin",
+        apellido="Email",
+        email="sin@test.com",
+        password="Seguro1234",
+        rol=Rol.ORGANIZADOR,
+    )
+    usuario_id = await handler.handle(cmd)
+    assert usuario_id is not None
+
+
 @pytest.mark.asyncio
 async def test_solicitar_reset_password_envia_email_si_usuario_existe(
     mock_repo: AsyncMock, token_service: TokenServicePort

@@ -8,7 +8,10 @@ import {
   type CrearUsuarioRequest,
   type RolGestionUsuario,
 } from '../api/identidad'
+import { loginApi } from '../api/auth'
 import useAuthStore from '../stores/useAuthStore'
+import { HOME_BY_ROL } from '../utils/auth'
+import type { RolUsuario } from '../types/auth'
 import { PasswordStrengthBar } from '../components/PasswordStrengthBar'
 
 type FormState = CrearUsuarioRequest & { confirmarPassword: string }
@@ -53,13 +56,21 @@ function resolveApiError(error: unknown): string {
 export function RegistroPage() {
   const navigate = useNavigate()
   const rol = useAuthStore((s) => s.rol)
+  const login = useAuthStore((s) => s.login)
   const [form, setForm] = useState<FormState>(INITIAL_FORM)
   const [errors, setErrors] = useState<FormErrors>({})
 
   const mutation = useMutation({
     mutationFn: crearUsuario,
-    onSuccess: () => {
-      navigate('/login?registered=1', { replace: true })
+    onSuccess: async (_data, variables) => {
+      try {
+        const tokenData = await loginApi(variables.email, variables.password)
+        login(tokenData.access_token)
+        const rolPortal = variables.rol.toLowerCase() as RolUsuario
+        navigate(HOME_BY_ROL[rolPortal] ?? '/atleta', { replace: true })
+      } catch {
+        navigate('/login', { replace: true, state: { autologinFailed: true } })
+      }
     },
     onError: (error) => {
       const message = resolveApiError(error)
