@@ -32,3 +32,25 @@ class Atleta:
             raise ValueError("INV-A-04: fecha_nacimiento debe ser en el pasado")
         if not self.club or not self.club.strip():
             raise ValueError("INV-A-05: club no puede ser vacío")
+
+    def actualizar(
+        self,
+        nombre: str | None = None,
+        apellido: str | None = None,
+        categoria: Categoria | None = None,
+        club: str | None = None,
+    ) -> None:
+        if nombre is not None:
+            if not nombre.strip():
+                raise ValueError("INV-A-01: nombre no puede ser vacío")
+            self.nombre = nombre
+        if apellido is not None:
+            if not apellido.strip():
+                raise ValueError("INV-A-01: apellido no puede ser vacío")
+            self.apellido = apellido
+        if categoria is not None:
+            self.categoria = categoria
+        if club is not None:
+            if not club.strip():
+                raise ValueError("INV-A-05: club no puede ser vacío")
+            self.club = club

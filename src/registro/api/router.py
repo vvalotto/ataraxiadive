@@ -23,6 +23,10 @@ from registro.application.commands.inscribir_atleta import (
     InscribirAtletaCommand,
     InscribirAtletaHandler,
 )
+from registro.application.commands.actualizar_atleta import (
+    ActualizarAtletaCommand,
+    ActualizarAtletaHandler,
+)
 from registro.application.commands.registrar_atleta import (
     RegistrarAtletaCommand,
     RegistrarAtletaHandler,
@@ -99,6 +103,13 @@ class AtletaResponse(BaseModel):
     categoria: Categoria
     club: str
     brevet: str | None
+
+
+class ActualizarAtletaMeRequest(BaseModel):
+    nombre: str | None = None
+    apellido: str | None = None
+    categoria: Categoria | None = None
+    club: str | None = None
 
 
 # ── Schemas — Inscripcion ─────────────────────────────────────────────────────
@@ -271,6 +282,38 @@ async def obtener_atleta_me(current_user: AtletaDep) -> JSONResponse:
     atleta = await repo.find_by_email(email)
     if atleta is None:
         return JSONResponse(status_code=404, content={"detail": "Atleta no encontrado"})
+    return JSONResponse(
+        status_code=200,
+        content=AtletaResponse(
+            atleta_id=atleta.atleta_id,
+            nombre=atleta.nombre,
+            apellido=atleta.apellido,
+            email=atleta.email,
+            fecha_nacimiento=atleta.fecha_nacimiento,
+            categoria=atleta.categoria,
+            club=atleta.club,
+            brevet=atleta.brevet,
+        ).model_dump(mode="json"),
+    )
+
+
+@router.patch("/atletas/me", status_code=200)
+async def actualizar_atleta_me(
+    body: ActualizarAtletaMeRequest, current_user: AtletaDep
+) -> JSONResponse:
+    email: str = current_user["email"]
+    try:
+        atleta = await ActualizarAtletaHandler(_repo()).handle(
+            ActualizarAtletaCommand(
+                email=email,
+                nombre=body.nombre,
+                apellido=body.apellido,
+                categoria=body.categoria,
+                club=body.club,
+            )
+        )
+    except AtletaNoEncontrado as exc:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
     return JSONResponse(
         status_code=200,
         content=AtletaResponse(
