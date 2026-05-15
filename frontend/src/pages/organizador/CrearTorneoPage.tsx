@@ -3,10 +3,12 @@ import type { FormEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   ApiError,
+  actualizarTorneo,
   asignarDisciplinas,
   crearTorneo,
   fetchTorneo,
   listarDisciplinasTorneo,
+  type ActualizarTorneoPayload,
   type CrearTorneoPayload,
   type DisciplinaCodigo,
   type GrupoEtario,
@@ -42,13 +44,16 @@ const INITIAL_FORM: FormState = {
   entidadTipo: '',
 }
 
-function inputClass(hasError: boolean): string {
+function inputClass(hasError: boolean, disabled = false): string {
   return [
     'mt-2 w-full rounded-lg border bg-slate-900 px-3 py-2 text-sm text-slate-100 outline-none transition placeholder:text-slate-500',
+    disabled ? 'cursor-not-allowed opacity-50' : '',
     hasError
       ? 'border-red-500/60 focus:border-red-400'
       : 'border-slate-700 focus:border-sky-400',
-  ].join(' ')
+  ]
+    .filter(Boolean)
+    .join(' ')
 }
 
 function getErrorMessage(error: unknown): string {
@@ -57,16 +62,28 @@ function getErrorMessage(error: unknown): string {
   return 'No se pudo completar la operacion'
 }
 
+type PageMode = 'crear' | 'editar-disciplinas' | 'editar-torneo'
+
+function detectMode(pathname: string, torneoId: string | undefined): PageMode {
+  if (!torneoId) return 'crear'
+  if (pathname.endsWith('/editar')) return 'editar-torneo'
+  return 'editar-disciplinas'
+}
+
 export function CrearTorneoPage() {
   const navigate = useNavigate()
   const { torneoId } = useParams<{ torneoId: string }>()
-  const isEditingDisciplinas = Boolean(torneoId)
+  const mode = detectMode(window.location.pathname, torneoId)
+  const isEditing = mode !== 'crear'
+  const isEditingDisciplinas = mode === 'editar-disciplinas'
+  const isEditingTorneo = mode === 'editar-torneo'
+
   const [form, setForm] = useState<FormState>(INITIAL_FORM)
   const [disciplinas, setDisciplinas] = useState<DisciplinaCodigo[]>([])
   const [gruposEtarios, setGruposEtarios] = useState<GrupoEtario[]>(['JUNIOR', 'SENIOR', 'MASTER'])
   const [errors, setErrors] = useState<FormErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isLoading, setIsLoading] = useState(isEditingDisciplinas)
+  const [isLoading, setIsLoading] = useState(isEditing)
   const [torneoCreadoSinDisciplinas, setTorneoCreadoSinDisciplinas] = useState<string | null>(null)
 
   useEffect(() => {
@@ -96,12 +113,22 @@ export function CrearTorneoPage() {
           entidadNombre: torneo.entidad_organizadora.nombre,
           entidadTipo: torneo.entidad_organizadora.tipo,
         })
+        setGruposEtarios(torneo.grupos_etarios)
         setDisciplinas(disciplinasActuales.map((item) => item.disciplina))
 
-        if (torneo.estado !== 'CREADO') {
+        if (isEditingDisciplinas && torneo.estado !== 'CREADO') {
           setErrors({
             general:
               'Solo se pueden modificar disciplinas mientras el torneo este en estado Creado.',
+          })
+        }
+        if (
+          isEditingTorneo &&
+          torneo.estado !== 'CREADO' &&
+          torneo.estado !== 'INSCRIPCION_ABIERTA'
+        ) {
+          setErrors({
+            general: 'Solo se pueden editar torneos en estado Creado o Inscripcion abierta.',
           })
         }
       } catch (error) {
@@ -117,7 +144,7 @@ export function CrearTorneoPage() {
     return () => {
       cancelled = true
     }
-  }, [torneoId])
+  }, [torneoId, isEditingDisciplinas, isEditingTorneo])
 
   function updateField(field: keyof FormState, value: string) {
     setForm((current) => ({ ...current, [field]: value }))
@@ -132,14 +159,13 @@ export function CrearTorneoPage() {
     if (form.fechaInicio && form.fechaFin && form.fechaFin < form.fechaInicio) {
       nextErrors.fechaFin = 'La fecha de fin debe ser igual o posterior a la de inicio'
     }
-
     if (!isEditingDisciplinas && gruposEtarios.length === 0) {
       nextErrors.gruposEtarios = 'Selecciona al menos una categoría'
     }
     return nextErrors
   }
 
-  function buildPayload(): CrearTorneoPayload {
+  function buildCrearPayload(): CrearTorneoPayload {
     return {
       nombre: form.nombre.trim(),
       descripcion: form.descripcion.trim(),
@@ -153,6 +179,21 @@ export function CrearTorneoPage() {
       entidad_organizadora: {
         nombre: form.entidadNombre.trim(),
         tipo: form.entidadTipo.trim(),
+      },
+      grupos_etarios: gruposEtarios,
+    }
+  }
+
+  function buildActualizarPayload(): ActualizarTorneoPayload {
+    return {
+      nombre: form.nombre.trim(),
+      descripcion: form.descripcion.trim(),
+      fecha_inicio: form.fechaInicio,
+      fecha_fin: form.fechaFin,
+      sede: {
+        nombre: form.sedeNombre.trim(),
+        ciudad: form.sedeCiudad.trim(),
+        pais: form.sedePais.trim(),
       },
       grupos_etarios: gruposEtarios,
     }
@@ -179,13 +220,19 @@ export function CrearTorneoPage() {
 
     setIsSubmitting(true)
     try {
+      if (isEditingTorneo && torneoId) {
+        await actualizarTorneo(torneoId, buildActualizarPayload())
+        navigate(`/organizador/torneo/${torneoId}`)
+        return
+      }
+
       if (isEditingDisciplinas && torneoId) {
         await asignarDisciplinas(torneoId, disciplinas)
         navigate(`/organizador/torneo/${torneoId}`)
         return
       }
 
-      const response = await crearTorneo(buildPayload())
+      const response = await crearTorneo(buildCrearPayload())
       if (disciplinas.length > 0) {
         try {
           await asignarDisciplinas(response.torneo_id, disciplinas)
@@ -203,14 +250,36 @@ export function CrearTorneoPage() {
     }
   }
 
+  const pageTitle = isEditingTorneo
+    ? 'Editar torneo'
+    : isEditingDisciplinas
+      ? 'Editar disciplinas'
+      : 'Nuevo torneo'
+
+  const pageSubtitle = isEditingTorneo
+    ? 'Actualiza el nombre, sede, fechas y categorías del torneo'
+    : isEditingDisciplinas
+      ? 'Mismo formulario de alta reutilizado para ajustar disciplinas mientras el torneo sigue en estado Creado'
+      : 'Alta del torneo y configuracion inicial de disciplinas'
+
+  const submitLabel = isSubmitting
+    ? isEditingTorneo
+      ? 'Guardando...'
+      : isEditingDisciplinas
+        ? 'Guardando...'
+        : 'Creando...'
+    : isEditingTorneo
+      ? 'Guardar cambios'
+      : isEditingDisciplinas
+        ? 'Guardar disciplinas'
+        : 'Crear Torneo'
+
+  const metadataDisabled = isEditingDisciplinas
+
   return (
     <OrganizadorLayout
-      title={isEditingDisciplinas ? 'Editar disciplinas' : 'Nuevo torneo'}
-      subtitle={
-        isEditingDisciplinas
-          ? 'Mismo formulario de alta reutilizado para ajustar disciplinas mientras el torneo sigue en estado Creado'
-          : 'Alta del torneo y configuracion inicial de disciplinas'
-      }
+      title={pageTitle}
+      subtitle={pageSubtitle}
       showTournamentNavigation={false}
       simpleHeader
       actions={
@@ -252,9 +321,9 @@ export function CrearTorneoPage() {
             <input
               value={form.nombre}
               onChange={(event) => updateField('nombre', event.target.value)}
-              className={inputClass(Boolean(errors.nombre))}
+              className={inputClass(Boolean(errors.nombre), metadataDisabled)}
               placeholder="BA 2026"
-              disabled={isEditingDisciplinas}
+              disabled={metadataDisabled}
             />
             {errors.nombre ? <span className="mt-1 block text-sm text-red-300">{errors.nombre}</span> : null}
           </label>
@@ -264,9 +333,9 @@ export function CrearTorneoPage() {
             <input
               value={form.descripcion}
               onChange={(event) => updateField('descripcion', event.target.value)}
-              className={inputClass(Boolean(errors.descripcion))}
+              className={inputClass(Boolean(errors.descripcion), metadataDisabled)}
               placeholder="Torneo nacional indoor"
-              disabled={isEditingDisciplinas}
+              disabled={metadataDisabled}
             />
           </label>
 
@@ -276,9 +345,9 @@ export function CrearTorneoPage() {
               type="date"
               value={form.fechaInicio}
               onChange={(event) => updateField('fechaInicio', event.target.value)}
-              className={inputClass(Boolean(errors.fechaInicio))}
+              className={inputClass(Boolean(errors.fechaInicio), metadataDisabled)}
               required
-              disabled={isEditingDisciplinas}
+              disabled={metadataDisabled}
             />
           </label>
 
@@ -288,9 +357,9 @@ export function CrearTorneoPage() {
               type="date"
               value={form.fechaFin}
               onChange={(event) => updateField('fechaFin', event.target.value)}
-              className={inputClass(Boolean(errors.fechaFin))}
+              className={inputClass(Boolean(errors.fechaFin), metadataDisabled)}
               required
-              disabled={isEditingDisciplinas}
+              disabled={metadataDisabled}
             />
             {errors.fechaFin ? (
               <span className="mt-1 block text-sm text-red-300">{errors.fechaFin}</span>
@@ -304,10 +373,10 @@ export function CrearTorneoPage() {
             <input
               value={form.sedeNombre}
               onChange={(event) => updateField('sedeNombre', event.target.value)}
-              className={inputClass(Boolean(errors.sedeNombre))}
+              className={inputClass(Boolean(errors.sedeNombre), metadataDisabled)}
               placeholder="Club Nautico"
               required
-              disabled={isEditingDisciplinas}
+              disabled={metadataDisabled}
             />
           </label>
 
@@ -316,10 +385,10 @@ export function CrearTorneoPage() {
             <input
               value={form.sedeCiudad}
               onChange={(event) => updateField('sedeCiudad', event.target.value)}
-              className={inputClass(Boolean(errors.sedeCiudad))}
+              className={inputClass(Boolean(errors.sedeCiudad), metadataDisabled)}
               placeholder="Buenos Aires"
               required
-              disabled={isEditingDisciplinas}
+              disabled={metadataDisabled}
             />
           </label>
 
@@ -328,38 +397,40 @@ export function CrearTorneoPage() {
             <input
               value={form.sedePais}
               onChange={(event) => updateField('sedePais', event.target.value)}
-              className={inputClass(Boolean(errors.sedePais))}
+              className={inputClass(Boolean(errors.sedePais), metadataDisabled)}
               required
-              disabled={isEditingDisciplinas}
+              disabled={metadataDisabled}
             />
           </label>
         </div>
 
-        <div className="mt-6 grid gap-5 lg:grid-cols-2">
-          <label className="block text-sm font-semibold text-slate-100">
-            Entidad organizadora
-            <input
-              value={form.entidadNombre}
-              onChange={(event) => updateField('entidadNombre', event.target.value)}
-              className={inputClass(Boolean(errors.entidadNombre))}
-              placeholder="FAAS"
-              required
-              disabled={isEditingDisciplinas}
-            />
-          </label>
+        {!isEditingTorneo ? (
+          <div className="mt-6 grid gap-5 lg:grid-cols-2">
+            <label className="block text-sm font-semibold text-slate-100">
+              Entidad organizadora
+              <input
+                value={form.entidadNombre}
+                onChange={(event) => updateField('entidadNombre', event.target.value)}
+                className={inputClass(Boolean(errors.entidadNombre), metadataDisabled)}
+                placeholder="FAAS"
+                required
+                disabled={metadataDisabled}
+              />
+            </label>
 
-          <label className="block text-sm font-semibold text-slate-100">
-            Tipo de entidad
-            <input
-              value={form.entidadTipo}
-              onChange={(event) => updateField('entidadTipo', event.target.value)}
-              className={inputClass(Boolean(errors.entidadTipo))}
-              placeholder="Federacion"
-              required
-              disabled={isEditingDisciplinas}
-            />
-          </label>
-        </div>
+            <label className="block text-sm font-semibold text-slate-100">
+              Tipo de entidad
+              <input
+                value={form.entidadTipo}
+                onChange={(event) => updateField('entidadTipo', event.target.value)}
+                className={inputClass(Boolean(errors.entidadTipo), metadataDisabled)}
+                placeholder="Federacion"
+                required
+                disabled={metadataDisabled}
+              />
+            </label>
+          </div>
+        ) : null}
 
         <div className="mt-6">
           {!isEditingDisciplinas ? (
@@ -392,14 +463,16 @@ export function CrearTorneoPage() {
             </fieldset>
           ) : null}
 
-          <DisciplinaSelector
-            value={disciplinas}
-            onChange={(nextValue) => {
-              setDisciplinas(nextValue)
-              setErrors((current) => ({ ...current, disciplinas: undefined, general: undefined }))
-            }}
-            error={errors.disciplinas}
-          />
+          {!isEditingTorneo ? (
+            <DisciplinaSelector
+              value={disciplinas}
+              onChange={(nextValue) => {
+                setDisciplinas(nextValue)
+                setErrors((current) => ({ ...current, disciplinas: undefined, general: undefined }))
+              }}
+              error={errors.disciplinas}
+            />
+          ) : null}
         </div>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
@@ -419,13 +492,7 @@ export function CrearTorneoPage() {
             }
             className="rounded-full bg-sky-500 px-5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950 disabled:cursor-not-allowed disabled:bg-slate-600 disabled:text-slate-300"
           >
-            {isSubmitting
-              ? isEditingDisciplinas
-                ? 'Guardando...'
-                : 'Creando...'
-              : isEditingDisciplinas
-                ? 'Guardar disciplinas'
-                : 'Crear Torneo'}
+            {submitLabel}
           </button>
         </div>
       </form>

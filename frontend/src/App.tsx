@@ -248,6 +248,14 @@ function App() {
           }
         />
         <Route
+          path="/organizador/torneos/:torneoId/editar"
+          element={
+            <RequireRole role="organizador">
+              <CrearTorneoPage />
+            </RequireRole>
+          }
+        />
+        <Route
           path="/organizador/usuarios"
           element={
             <RequireRole role="organizador">

@@ -28,3 +28,7 @@ class AsignacionNoPermitida(Exception):
 
 class DisciplinaObsoleta(Exception):
     pass
+
+
+class EdicionNoPermitida(Exception):
+    pass

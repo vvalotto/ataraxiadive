@@ -9,6 +9,7 @@ from torneo.domain.exceptions import (
     AsignacionNoPermitida,
     DisciplinaObsoleta,
     DisciplinaNoEnTorneo,
+    EdicionNoPermitida,
     TorneoCerrado,
     TransicionEstadoInvalida,
 )
@@ -36,6 +37,11 @@ _ESTADOS_ASIGNACION_VALIDOS = {
     EstadoTorneo.CREADO,
     EstadoTorneo.INSCRIPCION_ABIERTA,
     EstadoTorneo.PREPARACION,
+}
+
+_ESTADOS_EDICION_VALIDOS = {
+    EstadoTorneo.CREADO,
+    EstadoTorneo.INSCRIPCION_ABIERTA,
 }
 
 
@@ -85,6 +91,27 @@ class Torneo:
     def cancelar(self) -> None:
         self._validar_cancelacion()
         self.estado = EstadoTorneo.CANCELADO
+
+    def actualizar(
+        self,
+        nombre: str,
+        descripcion: str,
+        fecha_inicio: date,
+        fecha_fin: date,
+        sede: Sede,
+        grupos_etarios: frozenset[GrupoEtario],
+    ) -> None:
+        if self.estado not in _ESTADOS_EDICION_VALIDOS:
+            raise EdicionNoPermitida(f"No se puede editar un torneo en estado {self.estado.value}")
+        self.nombre = nombre
+        self.descripcion = descripcion
+        self.fecha_inicio = fecha_inicio
+        self.fecha_fin = fecha_fin
+        self.sede = sede
+        self.grupos_etarios = grupos_etarios
+        self._validar_nombre()
+        self._validar_fechas()
+        self._validar_grupos_etarios()
 
     def asignar_disciplinas(self, disciplinas: frozenset[Disciplina]) -> None:
         """Configura las disciplinas disponibles.

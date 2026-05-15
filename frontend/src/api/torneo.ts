@@ -183,6 +183,32 @@ export async function fetchTorneo(torneoId: string): Promise<TorneoDto> {
   return normalizarTorneo(torneo)
 }
 
+export interface ActualizarTorneoPayload {
+  nombre: string
+  descripcion: string
+  fecha_inicio: string
+  fecha_fin: string
+  sede: {
+    nombre: string
+    ciudad: string
+    pais: string
+  }
+  grupos_etarios: GrupoEtario[]
+}
+
+export async function actualizarTorneo(
+  torneoId: string,
+  payload: ActualizarTorneoPayload,
+): Promise<void> {
+  const response = await fetch(`/torneos/${torneoId}`, {
+    method: 'PUT',
+    headers: buildHeaders(),
+    body: JSON.stringify(payload),
+  })
+
+  await parseResponse<{ ok: boolean }>(response)
+}
+
 export async function crearTorneo(payload: CrearTorneoPayload): Promise<CrearTorneoResponse> {
   const response = await fetch('/torneos', {
     method: 'POST',
