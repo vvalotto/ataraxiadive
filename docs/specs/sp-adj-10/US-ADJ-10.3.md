@@ -1,6 +1,6 @@
 # US-ADJ-10.3: Email de bienvenida y auto-login post-registro — H-01-03/H-01-04 UAT SP6
 
-**Estado**: `Especificada`
+**Estado**: `Implementada`
 **Iteracion / Sprint**: SP-ADJ-10
 **Tipo**: fix funcional backend + UX frontend
 **Agregado principal afectado**: `Usuario`
