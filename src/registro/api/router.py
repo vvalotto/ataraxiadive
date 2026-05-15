@@ -110,6 +110,8 @@ class ActualizarAtletaMeRequest(BaseModel):
     apellido: str | None = None
     categoria: Categoria | None = None
     club: str | None = None
+    fecha_nacimiento: date | None = None
+    brevet: str | None = None
 
 
 # ── Schemas — Inscripcion ─────────────────────────────────────────────────────
@@ -310,10 +312,14 @@ async def actualizar_atleta_me(
                 apellido=body.apellido,
                 categoria=body.categoria,
                 club=body.club,
+                fecha_nacimiento=body.fecha_nacimiento,
+                brevet=body.brevet,
             )
         )
     except AtletaNoEncontrado as exc:
         return JSONResponse(status_code=404, content={"detail": str(exc)})
+    except ValueError as exc:
+        return JSONResponse(status_code=422, content={"detail": str(exc)})
     return JSONResponse(
         status_code=200,
         content=AtletaResponse(

@@ -50,26 +50,32 @@ export function AtletaHomePage() {
     enabled: Boolean(atletaId),
   })
 
-  const hayTorneoEnEjecucion = (query.data?.entries ?? []).some((entry) =>
-    ['PREPARACION', 'EJECUCION'].includes(entry.torneo.estado),
-  )
-  const nextOt = query.data?.entries
-    .filter((entry) => entry.ot && ['PREPARACION', 'EJECUCION'].includes(entry.torneo.estado))
+  const allEntries = query.data?.entries ?? []
+
+  const ESTADOS_ACTIVOS = ['INSCRIPCION_ABIERTA', 'PREPARACION', 'EJECUCION', 'PREMIACION']
+
+  const hayTorneoEnEjecucion = allEntries.some((e) => e.torneo.estado === 'EJECUCION')
+  const nextOt = allEntries
+    .filter((e) => e.ot && e.torneo.estado === 'EJECUCION')
     .sort((left, right) => new Date(left.ot ?? 0).getTime() - new Date(right.ot ?? 0).getTime())[0]
+
   const torneosActivos = Array.from(
     new Map(
-      (query.data?.entries ?? []).map((entry) => [
-        entry.torneo.torneo_id,
-        {
-          torneo: entry.torneo,
-          disciplinas: sortDisciplinasPorOt(
-            (query.data?.entries ?? []).filter(
-              (candidate) => candidate.torneo.torneo_id === entry.torneo.torneo_id,
+      allEntries
+        .filter((e) => ESTADOS_ACTIVOS.includes(e.torneo.estado))
+        .map((e) => [
+          e.torneo.torneo_id,
+          {
+            torneo: e.torneo,
+            disciplinas: allEntries.filter(
+              (c) => c.torneo.torneo_id === e.torneo.torneo_id && ESTADOS_ACTIVOS.includes(c.torneo.estado),
             ),
-          ),
-        },
-      ]),
+          },
+        ]),
     ).values(),
+  ).sort(
+    (left, right) =>
+      new Date(left.torneo.fecha_inicio).getTime() - new Date(right.torneo.fecha_inicio).getTime(),
   )
 
   return (
@@ -115,74 +121,71 @@ export function AtletaHomePage() {
           </section>
 
           {hayTorneoEnEjecucion ? (
-          <section className="rounded-[1.75rem] border border-slate-800 bg-slate-900 p-5">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-400">
-                  Tu próximo OT
-                </p>
-                <h3 className="mt-1 text-lg font-semibold text-white">Próxima salida</h3>
+            <section className="rounded-[1.75rem] border border-sky-500/20 bg-slate-900 p-5">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-400">
+                    En competencia
+                  </p>
+                  <h3 className="mt-1 text-lg font-semibold text-white">Torneo en ejecución</h3>
+                </div>
+                {nextOt?.competenciaId ? (
+                  <Link
+                    to={`/atleta/grilla/${nextOt.competenciaId}?disciplina=${encodeURIComponent(nextOt.disciplina)}`}
+                    className="text-sm font-semibold text-sky-300"
+                  >
+                    Ver grilla
+                  </Link>
+                ) : null}
               </div>
-              {nextOt?.torneo ? (
-                <Link
-                  to={
-                    nextOt.competenciaId
-                      ? `/atleta/grilla/${nextOt.competenciaId}?disciplina=${encodeURIComponent(nextOt.disciplina)}`
-                      : '/atleta/mis-inscripciones'
-                  }
-                  className="text-sm font-semibold text-sky-300"
-                >
-                  Ver grilla
-                </Link>
-              ) : null}
-            </div>
 
-            {nextOt ? (
-              <div className="mt-4 rounded-3xl border border-sky-500/30 bg-sky-500/10 p-4">
-                <p className="text-sm font-semibold text-white">{nextOt.torneo.nombre}</p>
-                <p className="mt-1 text-xs uppercase tracking-[0.18em] text-sky-300">
-                  {formatDisciplina(nextOt.disciplina)}
-                </p>
-                <p className="mt-3 text-3xl font-semibold text-white">{formatHora(nextOt.ot ?? '')}</p>
-                <p className="mt-2 text-sm text-slate-300">
-                  Andarivel {nextOt.andarivel ?? '—'} · Posición {nextOt.posicion ?? '—'}
-                </p>
-                <p className="mt-1 text-sm text-slate-300">
-                  AP {formatAp(nextOt.ap, nextOt.unidad)}
-                </p>
-              </div>
-            ) : (
-              <div className="mt-4 rounded-3xl border border-slate-800 bg-slate-950/70 p-4 text-sm text-slate-400">
-                Todavía no tenés OT asignado. Tus horarios aparecerán acá cuando la grilla esté publicada.
-              </div>
-            )}
-          </section>
+              {nextOt ? (
+                <div className="mt-4 rounded-3xl border border-sky-500/30 bg-sky-500/10 p-4">
+                  <p className="text-sm font-semibold text-white">{nextOt.torneo.nombre}</p>
+                  <p className="mt-1 text-xs uppercase tracking-[0.18em] text-sky-300">
+                    {formatDisciplina(nextOt.disciplina)}
+                  </p>
+                  <p className="mt-3 text-3xl font-semibold text-white">{formatHora(nextOt.ot ?? '')}</p>
+                  <p className="mt-2 text-sm text-slate-300">
+                    Andarivel {nextOt.andarivel ?? '—'} · Posición {nextOt.posicion ?? '—'}
+                  </p>
+                  <p className="mt-1 text-sm text-slate-300">
+                    AP {formatAp(nextOt.ap, nextOt.unidad)}
+                  </p>
+                </div>
+              ) : (
+                <div className="mt-4 rounded-3xl border border-slate-800 bg-slate-950/70 p-4 text-sm text-slate-400">
+                  Todavía no tenés OT asignado. Tus horarios aparecerán acá cuando la grilla esté publicada.
+                </div>
+              )}
+            </section>
           ) : null}
 
           <section className="rounded-[1.75rem] border border-slate-800 bg-slate-900 p-5">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-400">
-                  Mis inscripciones activas
+                  Mis inscripciones
                 </p>
-                <h3 className="mt-1 text-lg font-semibold text-white">Torneos vinculados</h3>
               </div>
-              <Link to="/atleta/torneos" className="text-sm font-semibold text-sky-300">
-                Explorar
-              </Link>
+              {torneosActivos.length > 0 ? (
+                <Link to="/atleta/mis-inscripciones" className="text-sm font-semibold text-sky-300">
+                  Ver detalle
+                </Link>
+              ) : null}
             </div>
 
             <div className="mt-4 space-y-3">
               {torneosActivos.length === 0 ? (
                 <div className="rounded-3xl border border-slate-800 bg-slate-950/70 p-4 text-sm text-slate-400">
-                  No hay torneos activos para mostrar.
+                  No tenés inscripciones activas.
                 </div>
               ) : null}
 
               {torneosActivos.map(({ torneo, disciplinas }) => (
                 <Link
                   key={torneo.torneo_id}
-                  to="/atleta/mis-inscripciones"
+                  to={`/atleta/torneos/${torneo.torneo_id}`}
                   className="block rounded-3xl border border-slate-800 bg-slate-950/70 p-4"
                 >
                   <div className="flex items-start justify-between gap-3">

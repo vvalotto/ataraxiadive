@@ -1,9 +1,21 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQueries, useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
 import { fetchTorneo } from '../../api/torneo'
 import { fetchAtletaMe, listarInscripcionesDeAtleta } from '../../api/registro'
+import { fetchOverall, fetchRankingCompetencia } from '../../api/resultados'
+import { fetchGrillaCompetencia } from '../../api/competencia'
 import { AtletaShell } from '../../components/atleta/AtletaShell'
-import { formatDisciplina, formatFecha, getEstadoTorneoLabel } from './portalData'
+import {
+  GrupoResultados,
+  findMiResultado,
+  type ResultadoEntry,
+} from '../../components/atleta/GrupoResultados'
+import {
+  formatDisciplina,
+  formatFecha,
+  getEstadoTorneoLabel,
+  loadAtletaPortalSnapshot,
+} from './portalData'
 
 async function loadTorneoDetalle(torneoId: string) {
   const [torneo, atleta] = await Promise.all([
@@ -23,6 +35,74 @@ export function AtletaTorneoDetallePage() {
     queryFn: () => loadTorneoDetalle(torneoId ?? ''),
     enabled: Boolean(torneoId),
   })
+
+  const esCerrado = query.data?.torneo.estado === 'CERRADO'
+  const tieneInscripcion = Boolean(query.data?.inscripcion)
+
+  const snapshotQuery = useQuery({
+    queryKey: ['atleta-torneo-detalle-snapshot', torneoId],
+    queryFn: loadAtletaPortalSnapshot,
+    enabled: esCerrado && tieneInscripcion,
+  })
+
+  const entradaTorneo = (snapshotQuery.data?.entries ?? []).filter(
+    (e) => e.torneo.torneo_id === torneoId,
+  )
+  const atletaId = snapshotQuery.data?.atleta?.atleta_id ?? ''
+
+  const rankingQueries = useQueries({
+    queries: entradaTorneo.map((entry) => ({
+      queryKey: ['atleta-ranking-detalle', entry.competenciaId, entry.disciplina],
+      queryFn: () => fetchRankingCompetencia(entry.competenciaId!, entry.disciplina),
+      enabled: Boolean(entry.competenciaId),
+      retry: false,
+    })),
+  })
+
+  const grillaQueries = useQueries({
+    queries: entradaTorneo.map((entry) => ({
+      queryKey: ['atleta-grilla-detalle', entry.competenciaId, entry.disciplina],
+      queryFn: () => fetchGrillaCompetencia(entry.competenciaId!, entry.disciplina),
+      enabled: Boolean(entry.competenciaId),
+      retry: false,
+    })),
+  })
+
+  const overallQuery = useQuery({
+    queryKey: ['atleta-overall-detalle', torneoId],
+    queryFn: () => fetchOverall(torneoId!),
+    enabled: esCerrado && tieneInscripcion && Boolean(torneoId),
+    retry: false,
+  })
+
+  const resultados: ResultadoEntry[] = entradaTorneo.map((entry, idx) => {
+    const ranking = rankingQueries[idx]?.data ?? null
+    return {
+      entry,
+      ranking,
+      miResultado: findMiResultado(ranking, atletaId),
+    }
+  })
+
+  const nombresPorCompetencia = new Map<string, Map<string, string>>()
+  entradaTorneo.forEach((entry, idx) => {
+    if (!entry.competenciaId) return
+    const grilla = grillaQueries[idx]?.data ?? []
+    const mapa = new Map<string, string>()
+    grilla.forEach((fila) => mapa.set(fila.atleta_id, fila.nombre_atleta))
+    nombresPorCompetencia.set(entry.competenciaId, mapa)
+  })
+
+  const overallPorTorneo = new Map([[torneoId ?? '', overallQuery.data ?? null]])
+
+  const grupo =
+    entradaTorneo.length > 0
+      ? {
+          torneoId: torneoId ?? '',
+          torneoNombre: query.data?.torneo.nombre ?? '',
+          resultados,
+        }
+      : null
 
   return (
     <AtletaShell title="Detalle del torneo" subtitle="Revisá condiciones, sede y disciplinas antes de inscribirte." showBack>
@@ -66,13 +146,33 @@ export function AtletaTorneoDetallePage() {
             </dl>
           </section>
 
-          {query.data.inscripcion ? (
+          {query.data.inscripcion && !esCerrado ? (
             <div className="rounded-3xl border border-emerald-500/30 bg-emerald-500/10 p-4">
               <p className="text-sm font-semibold text-emerald-100">Ya estás inscripto en este torneo.</p>
               <p className="mt-2 text-sm text-emerald-50/80">
                 Disciplinas: {query.data.inscripcion.disciplinas.map(formatDisciplina).join(' · ') || 'Por definir'}
               </p>
             </div>
+          ) : null}
+
+          {esCerrado && tieneInscripcion ? (
+            snapshotQuery.isLoading ? (
+              <div className="rounded-3xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-300">
+                Cargando resultados...
+              </div>
+            ) : grupo ? (
+              <GrupoResultados
+                grupo={grupo}
+                atletaId={atletaId}
+                nombresPorCompetencia={nombresPorCompetencia}
+                overallPorTorneo={overallPorTorneo}
+                titulo="Mis resultados"
+              />
+            ) : (
+              <div className="rounded-3xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-400">
+                No hay resultados registrados para este torneo.
+              </div>
+            )
           ) : null}
 
           {!query.data.inscripcion && query.data.torneo.estado === 'INSCRIPCION_ABIERTA' ? (

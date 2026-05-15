@@ -1,6 +1,6 @@
 # US-ADJ-10.4: Vista post-torneo en portal del atleta — observación post-UAT SP6
 
-**Estado**: `Especificada`
+**Estado**: `Implementada`
 **Iteracion / Sprint**: SP-ADJ-10
 **Tipo**: ajuste UX frontend
 **Agregado principal afectado**: —

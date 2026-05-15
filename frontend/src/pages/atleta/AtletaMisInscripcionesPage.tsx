@@ -92,13 +92,15 @@ export function AtletaMisInscripcionesPage() {
     enabled: Boolean(atletaId),
   })
 
-  const NO_INICIADOS = ['CREADO', 'INSCRIPCION_ABIERTA', 'PREPARACION']
+  const ESTADOS_PROXIMOS = ['CREADO', 'INSCRIPCION_ABIERTA', 'PREPARACION']
+  const ESTADOS_EN_CURSO = ['EJECUCION', 'PREMIACION']
+
   const noIniciados = (query.data?.entries ?? []).filter((entry) =>
-    NO_INICIADOS.includes(entry.torneo.estado),
+    ESTADOS_PROXIMOS.includes(entry.torneo.estado),
   )
   const enCursoGrupos = groupByTorneoId(
-    (query.data?.entries ?? []).filter(
-      (entry) => !NO_INICIADOS.includes(entry.torneo.estado),
+    (query.data?.entries ?? []).filter((entry) =>
+      ESTADOS_EN_CURSO.includes(entry.torneo.estado),
     ),
   )
 
