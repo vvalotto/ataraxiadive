@@ -92,6 +92,7 @@ interface GrupoResultadosProps {
   atletaId: string
   nombresPorCompetencia: Map<string, Map<string, string>>
   overallPorTorneo: Map<string, OverallDto | null>
+  titulo?: string
 }
 
 export function GrupoResultados({
@@ -99,6 +100,7 @@ export function GrupoResultados({
   atletaId,
   nombresPorCompetencia,
   overallPorTorneo,
+  titulo,
 }: GrupoResultadosProps) {
   const [tabIdx, setTabIdx] = useState(0)
   const { entry, miResultado, ranking } = grupo.resultados[tabIdx] ?? grupo.resultados[0]
@@ -126,8 +128,14 @@ export function GrupoResultados({
   return (
     <section className="space-y-3">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-400">Torneo</p>
-        <h2 className="mt-1 text-lg font-semibold text-white">{grupo.torneoNombre}</h2>
+        {titulo ? (
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-400">{titulo}</p>
+        ) : (
+          <>
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-400">Torneo</p>
+            <h2 className="mt-1 text-lg font-semibold text-white">{grupo.torneoNombre}</h2>
+          </>
+        )}
       </div>
 
       <div className="flex rounded-2xl border border-slate-800 bg-slate-900 overflow-hidden">

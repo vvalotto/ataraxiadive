@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import date
 
 from registro.domain.aggregates.atleta import Atleta
 from registro.domain.exceptions import AtletaNoEncontrado
@@ -15,6 +16,8 @@ class ActualizarAtletaCommand:
     apellido: str | None = None
     categoria: Categoria | None = None
     club: str | None = None
+    fecha_nacimiento: date | None = None
+    brevet: str | None = None
 
 
 class ActualizarAtletaHandler:
@@ -30,6 +33,8 @@ class ActualizarAtletaHandler:
             apellido=cmd.apellido,
             categoria=cmd.categoria,
             club=cmd.club,
+            fecha_nacimiento=cmd.fecha_nacimiento,
+            brevet=cmd.brevet,
         )
         await self._repo.save(atleta)
         return atleta

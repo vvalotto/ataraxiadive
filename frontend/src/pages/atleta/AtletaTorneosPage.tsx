@@ -58,11 +58,22 @@ async function loadTorneos() {
   )
 
   return {
+    cerrados: sortDetalleByFecha(
+      detalle
+        .map((item): TorneoInscriptoDetalle | null => {
+          const inscripcion = inscripcionesByTorneoId.get(item.torneo.torneo_id)
+          if (!inscripcion) return null
+          if (item.torneo.estado !== 'CERRADO') return null
+          return { ...item, inscripcion }
+        })
+        .filter((item): item is TorneoInscriptoDetalle => item !== null),
+    ).reverse(),
     misTorneos: sortDetalleByFecha(
       detalle
         .map((item): TorneoInscriptoDetalle | null => {
           const inscripcion = inscripcionesByTorneoId.get(item.torneo.torneo_id)
           if (!inscripcion) return null
+          if (!['EJECUCION', 'PREMIACION'].includes(item.torneo.estado)) return null
           return { ...item, inscripcion }
         })
         .filter((item): item is TorneoInscriptoDetalle => item !== null),
@@ -105,7 +116,7 @@ export function AtletaTorneosPage() {
             <div className="mt-3 space-y-3">
               {query.data.misTorneos.length === 0 ? (
                 <div className="rounded-3xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-400">
-                  Aún no estás inscripto en ningún torneo.
+                  No hay torneos activos en este momento.
                 </div>
               ) : null}
 
@@ -141,7 +152,9 @@ export function AtletaTorneosPage() {
                       </span>
                     ))}
                   </div>
-                  <p className="mt-3 text-sm font-semibold text-emerald-200">Ver detalle →</p>
+                  <div className="mt-3 flex min-h-9 items-center justify-center rounded-2xl border border-sky-400/30 bg-sky-400/10 px-4 py-2 text-sm font-semibold text-sky-300">
+                    Ver detalle
+                  </div>
                 </Link>
               ))}
             </div>
@@ -164,16 +177,11 @@ export function AtletaTorneosPage() {
                   to={`/atleta/torneos/${torneo.torneo_id}`}
                   className="block rounded-3xl border border-slate-800 bg-slate-900 p-4"
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <h2 className="text-base font-semibold text-white">{torneo.nombre}</h2>
-                      <p className="mt-1 text-sm text-slate-400">
-                        {formatFecha(torneo.fecha_inicio)} · {torneo.sede.nombre}, {torneo.sede.ciudad}
-                      </p>
-                    </div>
-                    <span className="rounded-full border border-sky-500/40 bg-sky-500/10 px-3 py-1 text-xs font-semibold text-sky-300">
-                      {getEstadoTorneoLabel(torneo.estado)}
-                    </span>
+                  <div>
+                    <h2 className="text-base font-semibold text-white">{torneo.nombre}</h2>
+                    <p className="mt-1 text-sm text-slate-400">
+                      {formatFecha(torneo.fecha_inicio)} · {torneo.sede.nombre}, {torneo.sede.ciudad}
+                    </p>
                   </div>
                   <p className="mt-3 text-sm text-slate-300">
                     Disciplinas: {disciplinas.map((item) => formatDisciplina(item.disciplina)).join(' · ') || 'Por definir'}
@@ -198,17 +206,50 @@ export function AtletaTorneosPage() {
               {query.data.proximos.map(({ torneo }) => (
                 <div
                   key={torneo.torneo_id}
-                  className="rounded-3xl border border-slate-800 bg-slate-900/70 p-4 opacity-80"
+                  className="flex items-center justify-between gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 px-4 py-3"
                 >
-                  <h2 className="text-base font-semibold text-white">{torneo.nombre}</h2>
-                  <p className="mt-1 text-sm text-slate-400">
-                    {formatFecha(torneo.fecha_inicio)} · {torneo.sede.ciudad}
-                  </p>
-                  <p className="mt-2 text-sm text-slate-500">Aún sin inscripción habilitada.</p>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-200">{torneo.nombre}</p>
+                    <p className="mt-0.5 text-xs text-slate-500">
+                      {formatFecha(torneo.fecha_inicio)} · {torneo.sede.ciudad}
+                    </p>
+                  </div>
+                  <span className="shrink-0 rounded-full border border-slate-700 px-2.5 py-1 text-xs font-semibold text-slate-500">
+                    Próximo
+                  </span>
                 </div>
               ))}
             </div>
           </section>
+
+          {query.data.cerrados.length > 0 ? (
+            <section>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-amber-400">
+                Historial
+              </p>
+              <div className="mt-3 space-y-3">
+                {query.data.cerrados.map(({ torneo }) => (
+                  <div
+                    key={torneo.torneo_id}
+                    className="rounded-3xl border border-slate-800 bg-slate-900 p-4"
+                  >
+                    <div>
+                      <h2 className="text-base font-semibold text-white">{torneo.nombre}</h2>
+                      <p className="mt-1 text-sm text-slate-400">
+                        {formatFecha(torneo.fecha_inicio)} · {torneo.sede.nombre}, {torneo.sede.ciudad}
+                      </p>
+                    </div>
+                    <Link
+                      to={`/atleta/torneos/${torneo.torneo_id}`}
+                      className="mt-3 flex min-h-9 items-center justify-center rounded-2xl border border-amber-400/30 bg-amber-400/10 px-4 py-2 text-sm font-semibold text-amber-300"
+                    >
+                      Ver resultados
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ) : null}
         </div>
       ) : null}
     </AtletaShell>

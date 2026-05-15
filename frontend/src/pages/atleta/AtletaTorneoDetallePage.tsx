@@ -166,6 +166,7 @@ export function AtletaTorneoDetallePage() {
                 atletaId={atletaId}
                 nombresPorCompetencia={nombresPorCompetencia}
                 overallPorTorneo={overallPorTorneo}
+                titulo="Mis resultados"
               />
             ) : (
               <div className="rounded-3xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-400">

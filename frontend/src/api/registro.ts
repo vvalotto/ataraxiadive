@@ -178,6 +178,8 @@ export interface ActualizarAtletaMePayload {
   apellido?: string
   categoria?: string
   club?: string
+  fecha_nacimiento?: string
+  brevet?: string
 }
 
 export async function actualizarAtletaMe(payload: ActualizarAtletaMePayload): Promise<AtletaDto> {
