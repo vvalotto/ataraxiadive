@@ -125,10 +125,10 @@ US-ADJ-10.4  Vista post-torneo atleta (frontend puro, reutiliza componentes exis
 
 ## Criterio de cierre de SP-ADJ-10
 
-- [ ] US-ADJ-10.1 — `PUT /torneos/{id}` implementado · organizador puede editar todos los campos del torneo desde la UI.
-- [ ] US-ADJ-10.2 — `PATCH /registro/atletas/me` implementado · atleta puede ver y editar sus datos desde `AtletaMisDatosPage`.
-- [ ] US-ADJ-10.3 — email de bienvenida enviado al registrar · post-registro redirige directamente al portal sin login manual.
-- [ ] US-ADJ-10.4 — `AtletaHomePage` muestra sección "Torneos finalizados" con resultados · `AtletaTorneoDetallePage` muestra resultados completos en estado CERRADO.
+- [x] US-ADJ-10.1 — `PUT /torneos/{id}` implementado · organizador puede editar todos los campos del torneo desde la UI.
+- [x] US-ADJ-10.2 — `PATCH /registro/atletas/me` implementado · atleta puede ver y editar sus datos desde `AtletaMisDatosPage`.
+- [x] US-ADJ-10.3 — email de bienvenida enviado al registrar · post-registro redirige directamente al portal sin login manual.
+- [x] US-ADJ-10.4 — `AtletaHomePage` muestra sección "Torneos finalizados" con resultados · `AtletaTorneoDetallePage` muestra resultados completos en estado CERRADO.
 - [ ] Frontend build/lint OK en todas las US.
 - [ ] Tests backend focalizados OK según alcance de cada US (domain · application).
 - [ ] DesignReviewer 0 CRITICAL al cierre del SP-ADJ.

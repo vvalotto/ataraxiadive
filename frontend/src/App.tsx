@@ -20,6 +20,7 @@ import { AtletaMisInscripcionesPage } from './pages/atleta/AtletaMisInscripcione
 import { AtletaDeclararAPPage } from './pages/atleta/AtletaDeclararAPPage'
 import { AtletaMiGrillaPage } from './pages/atleta/AtletaMiGrillaPage'
 import { AtletaResultadosPage } from './pages/atleta/AtletaResultadosPage'
+import { AtletaMisDatosPage } from './pages/atleta/AtletaMisDatosPage'
 import { DashboardPage } from './pages/organizador/DashboardPage'
 import { DashboardOperativoPage } from './pages/organizador/DashboardOperativoPage'
 import { CrearTorneoPage } from './pages/organizador/CrearTorneoPage'
@@ -184,6 +185,14 @@ function App() {
           }
         />
         <Route
+          path="/atleta/mis-datos"
+          element={
+            <RequireRole role="atleta">
+              <AtletaMisDatosPage />
+            </RequireRole>
+          }
+        />
+        <Route
           path="/organizador"
           element={<Navigate to="/organizador/torneo" replace />}
         />
@@ -241,6 +250,14 @@ function App() {
         />
         <Route
           path="/organizador/torneos/:torneoId/disciplinas"
+          element={
+            <RequireRole role="organizador">
+              <CrearTorneoPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/organizador/torneos/:torneoId/editar"
           element={
             <RequireRole role="organizador">
               <CrearTorneoPage />

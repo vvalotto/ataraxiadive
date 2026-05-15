@@ -143,8 +143,9 @@ async def registrar_usuario(
     body: RegistroRequest,
     repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
     password_hasher: Annotated[PasswordHashingPort, Depends(get_password_hasher)],
+    email_sender: Annotated[EmailPort, Depends(get_email_sender)],
 ) -> JSONResponse:
-    handler = RegistrarUsuarioHandler(repo, password_hasher)
+    handler = RegistrarUsuarioHandler(repo, password_hasher, email_sender)
     cmd = RegistrarUsuarioCommand(
         nombre=body.nombre,
         apellido=body.apellido,

@@ -7,7 +7,7 @@ from uuid import uuid4
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from identidad.api.dependencies import get_password_hasher, get_usuario_repository
+from identidad.api.dependencies import get_email_sender, get_password_hasher, get_usuario_repository
 from identidad.api.router import router
 from identidad.domain.aggregates.usuario import Usuario
 from identidad.domain.ports.password_hashing_port import PasswordHashingPort
@@ -42,11 +42,26 @@ class FakeUsuarioRepository:
         return list(self.usuarios)
 
 
-def _app(repo: FakeUsuarioRepository, password_hasher: PasswordHashingPort) -> TestClient:
+class SpyEmailSender:
+    def __init__(self) -> None:
+        self.calls: list[str] = []
+
+    async def enviar(self, destinatario, contenido):  # type: ignore[no-untyped-def]
+        self.calls.append(destinatario.email)
+        return "fake-id"
+
+
+def _app(
+    repo: FakeUsuarioRepository,
+    password_hasher: PasswordHashingPort,
+    email_sender: SpyEmailSender | None = None,
+) -> TestClient:
+    spy = email_sender or SpyEmailSender()
     app = FastAPI()
     app.include_router(router)
     app.dependency_overrides[get_usuario_repository] = lambda: repo
     app.dependency_overrides[get_password_hasher] = lambda: password_hasher
+    app.dependency_overrides[get_email_sender] = lambda: spy
     return TestClient(app)
 
 
@@ -136,3 +151,23 @@ def test_registro_rechaza_rol_admin() -> None:
 
     assert response.status_code == 403
     assert response.json()["detail"] == "El rol ADMIN no está permitido en el auto-registro"
+
+
+def test_registro_invoca_email_sender_al_crear_usuario() -> None:
+    repo = FakeUsuarioRepository()
+    spy = SpyEmailSender()
+    client = _app(repo, BcryptPasswordHasher(), spy)
+
+    response = client.post(
+        "/auth/registro",
+        json={
+            "nombre": "Marco",
+            "apellido": "Polo",
+            "email": "marco@email.com",
+            "password": "Apnea12345",
+            "rol": "ATLETA",
+        },
+    )
+
+    assert response.status_code == 201
+    assert spy.calls == ["marco@email.com"]

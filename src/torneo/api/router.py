@@ -12,6 +12,10 @@ from pydantic import BaseModel, field_validator, model_validator
 
 from shared.api.dependencies import OrganizadorDep
 from shared.domain.value_objects.disciplina import Disciplina
+from torneo.application.commands.actualizar_torneo import (
+    ActualizarTorneoCommand,
+    ActualizarTorneoHandler,
+)
 from torneo.application.commands.asignar_disciplinas import (
     AsignarDisciplinasCommand,
     AsignarDisciplinasHandler,
@@ -36,7 +40,13 @@ from torneo.application.queries.obtener_torneo import (
     ObtenerTorneoQuery,
 )
 from torneo.domain.aggregates.torneo import Torneo
-from torneo.domain.exceptions import AsignacionNoPermitida, DisciplinaNoEnTorneo, DisciplinaObsoleta
+from torneo.domain.exceptions import (
+    AsignacionNoPermitida,
+    DisciplinaNoEnTorneo,
+    DisciplinaObsoleta,
+    EdicionNoPermitida,
+    TorneoNoEncontrado,
+)
 from torneo.domain.value_objects.grupo_etario import GrupoEtario, ordenar_grupos_etarios
 from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTorneoRepository
 
@@ -106,6 +116,35 @@ class CrearTorneoRequest(BaseModel):
 
     @model_validator(mode="after")
     def fechas_coherentes(self) -> CrearTorneoRequest:
+        if self.fecha_fin < self.fecha_inicio:
+            raise ValueError("fecha_fin debe ser mayor o igual a fecha_inicio")
+        return self
+
+    @field_validator("grupos_etarios")
+    @classmethod
+    def grupos_etarios_no_vacio(cls, v: list[GrupoEtario]) -> list[GrupoEtario]:
+        if not v:
+            raise ValueError("Debe seleccionar al menos un grupo etario")
+        return v
+
+
+class ActualizarTorneoRequest(BaseModel):
+    nombre: str
+    descripcion: str
+    fecha_inicio: date
+    fecha_fin: date
+    sede: SedeSchema
+    grupos_etarios: list[GrupoEtario]
+
+    @field_validator("nombre")
+    @classmethod
+    def nombre_no_vacio(cls, v: str) -> str:
+        if not v or not v.strip():
+            raise ValueError("El nombre no puede estar vacío")
+        return v
+
+    @model_validator(mode="after")
+    def fechas_coherentes(self) -> ActualizarTorneoRequest:
         if self.fecha_fin < self.fecha_inicio:
             raise ValueError("fecha_fin debe ser mayor o igual a fecha_inicio")
         return self
@@ -198,6 +237,31 @@ async def obtener_torneo(torneo_id: UUID) -> TorneoResponse:
     handler = ObtenerTorneoHandler(_repo())
     torneo = await handler.handle(ObtenerTorneoQuery(torneo_id=torneo_id))
     return TorneoResponse.from_torneo(torneo)
+
+
+@router.put("/{torneo_id}", status_code=200)
+async def actualizar_torneo(
+    torneo_id: UUID, body: ActualizarTorneoRequest, _: OrganizadorDep
+) -> JSONResponse:
+    try:
+        await ActualizarTorneoHandler(_repo()).handle(
+            ActualizarTorneoCommand(
+                torneo_id=torneo_id,
+                nombre=body.nombre,
+                descripcion=body.descripcion,
+                fecha_inicio=body.fecha_inicio,
+                fecha_fin=body.fecha_fin,
+                sede_nombre=body.sede.nombre,
+                sede_ciudad=body.sede.ciudad,
+                sede_pais=body.sede.pais,
+                grupos_etarios=frozenset(body.grupos_etarios),
+            )
+        )
+    except TorneoNoEncontrado as exc:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
+    except EdicionNoPermitida as exc:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+    return JSONResponse(status_code=200, content={"ok": True})
 
 
 @router.put("/{torneo_id}/abrir-inscripcion", status_code=200)

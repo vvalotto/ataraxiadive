@@ -145,6 +145,15 @@ function DetalleTorneoContent({ torneoId }: DetalleTorneoContentProps) {
       subtitle="Gestión del torneo activo"
       actions={
         <>
+          {(torneoQuery.data?.estado === 'CREADO' ||
+            torneoQuery.data?.estado === 'INSCRIPCION_ABIERTA') ? (
+            <Link
+              to={`/organizador/torneos/${torneoId}/editar`}
+              className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
+            >
+              Editar torneo
+            </Link>
+          ) : null}
           {torneoQuery.data?.estado === 'CREADO' ? (
             <Link
               to={`/organizador/torneos/${torneoId}/disciplinas`}
