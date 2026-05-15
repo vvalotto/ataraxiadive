@@ -1,60 +1,62 @@
-# Plan de Implementación: US-ADJ-10.2 — Página "Mis Datos" del atleta
+# Plan de Implementación: US-ADJ-10.2
 
-**Patrón:** Hexagonal DDD + BC
-**Producto:** registro + frontend atleta
-**Estimación Total:** 1h 5min
-
----
-
-## Componentes a Implementar
-
-### 1. Domain — Atleta (hexagonal/domain)
-- [ ] `src/registro/domain/aggregates/atleta.py` — agregar método `actualizar()` (10 min)
-  - Parámetros opcionales: `nombre`, `apellido`, `categoria`, `club`
-  - Muta solo los campos provistos (semántica PATCH)
-  - Re-ejecuta validaciones de dominio tras la mutación
-
-### 2. Application — Command + Handler (hexagonal/application)
-- [ ] `src/registro/application/commands/actualizar_atleta.py` (10 min)
-  - `ActualizarAtletaCommand`: dataclass frozen con campos `Optional`
-  - `ActualizarAtletaHandler`: carga atleta por email, aplica `actualizar()`, persiste
-
-### 3. API — Endpoint PATCH (hexagonal/api)
-- [ ] `src/registro/api/router.py` — agregar `PATCH /registro/atletas/me` (10 min)
-  - Request body: `ActualizarAtletaMeRequest` (campos opcionales)
-  - Carga atleta por email del usuario autenticado (`AtletaDep`)
-  - Retorna 200 con perfil actualizado · 404 si no existe
-
-### 4. Frontend — API client
-- [ ] `frontend/src/api/registro.ts` — agregar `actualizarAtletaMe(data)` (5 min)
-  - Llama `PATCH /registro/atletas/me`
-  - Payload: campos opcionales del perfil
-
-### 5. Frontend — Nueva página
-- [ ] `frontend/src/pages/atleta/AtletaMisDatosPage.tsx` (20 min)
-  - Carga perfil actual con `fetchAtletaMe()` al montar
-  - Formulario pre-rellenado: nombre, apellido, categoría (selector enum), club
-  - Submit llama `actualizarAtletaMe()` y muestra confirmación/error
-  - Usa `AtletaShell` como layout
-
-### 6. Integración — Navegación y rutas
-- [ ] `frontend/src/components/atleta/AtletaShell.tsx` — agregar tab "Mis Datos" (5 min)
-  - Nuevo item en `TABS`: `{ label: 'Mis Datos', to: '/atleta/mis-datos' }`
-  - Cambiar `grid-cols-4` → `grid-cols-5`
-- [ ] `frontend/src/App.tsx` — agregar ruta `/atleta/mis-datos` (5 min)
-  - `<RequireRole role="atleta"><AtletaMisDatosPage /></RequireRole>`
+**Historia:** US-ADJ-10.2 — Página "Mis Datos" del atleta (H-01-06 UAT SP6)
+**Estimación:** 2 puntos
+**Estado:** ✅ COMPLETADO
+**Fecha completado:** 2026-05-15
 
 ---
 
-## Invariantes a garantizar
+## Contexto
 
-| INV | Dónde se verifica |
-|-----|-------------------|
-| INV-ADJ-10.2-01: campos opcionales (PATCH) | Domain `actualizar()` + Handler |
-| INV-ADJ-10.2-02: categoría válida | Pydantic validator en request schema |
-| INV-ADJ-10.2-03: opera sobre atleta propio | Handler usa email de `AtletaDep` |
-| INV-ADJ-10.2-04: 404 si sin perfil | Handler retorna → endpoint → 404 |
+Fix funcional post-UAT INC-6.5. No existía página de edición de perfil independiente del
+wizard de inscripción. El atleta no podía actualizar nombre, apellido, categoría ni club sin
+realizar una inscripción. Hallazgo H-01-06 UAT SP6 F-01.
 
 ---
 
-**Estado:** 0/6 tareas completadas
+## Invariantes
+
+| ID | Invariante | Implementado en |
+|----|------------|-----------------|
+| INV-ADJ-10.2-01 | Semántica PATCH: solo los campos provistos se actualizan | `Atleta.actualizar()` con params `Optional` |
+| INV-ADJ-10.2-02 | Categoría debe ser enum válido | `Categoria` enum + Pydantic en router |
+| INV-ADJ-10.2-03 | Opera sobre atleta del usuario autenticado — sin `atleta_id` externo | Endpoint usa `current_user.email` |
+| INV-ADJ-10.2-04 | Sin perfil en registro.db → 404 | Handler lanza `AtletaNoEncontrado` |
+
+---
+
+## Tareas de Implementación
+
+| ID | Tarea | Estimado | Real | Estado |
+|----|-------|----------|------|--------|
+| T1 | Agregar `Atleta.actualizar()` con semántica PATCH en dominio | 20 min | 20 min | ✅ |
+| T2 | `ActualizarAtletaCommand` + `ActualizarAtletaHandler` | 20 min | 20 min | ✅ |
+| T3 | Endpoint `PATCH /registro/atletas/me` + `ActualizarAtletaMeRequest` | 20 min | 25 min | ✅ |
+| T4 | `actualizarAtletaMe()` en `frontend/src/api/registro.ts` | 10 min | 10 min | ✅ |
+| T5 | `AtletaMisDatosPage` con carga de perfil, form y feedback | 30 min | 35 min | ✅ |
+| T6 | Tab "Mis Datos" en `AtletaShell` + ruta en `App.tsx` | 10 min | 10 min | ✅ |
+
+---
+
+## Métricas de Tiempo
+
+| Fase | Estimado | Real | Varianza |
+|------|----------|------|----------|
+| BDD Scenarios | 15 min | 15 min | 0 min |
+| Plan | 10 min | 10 min | 0 min |
+| Implementation | 110 min | 120 min | +10 min |
+| Unit Tests | 20 min | 25 min | +5 min |
+| Integration Tests | 15 min | 15 min | 0 min |
+| BDD Validation | 15 min | 15 min | 0 min |
+| Quality Gates | 10 min | 10 min | 0 min |
+| Documentation | 10 min | 10 min | 0 min |
+| **Total** | **205 min** | **220 min** | **+15 min** |
+
+---
+
+## Lecciones Aprendidas
+
+- ✅ Semántica PATCH correcta: `actualizar()` con todos los params `Optional` y validación inline solo cuando el campo es provisto
+- ⚠️ Handler retornando `None` en not-found (primera versión) — refactorizado para lanzar excepción; el endpoint captura limpiamente
+- 💡 `grid-cols-4` → `grid-cols-5` en `AtletaShell` es el único cambio para agregar una tab — el resto es solo añadir la entrada al array `TABS`
