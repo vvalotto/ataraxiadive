@@ -44,3 +44,11 @@ class JuezNoEncontrado(Exception):
 
 class JuezYaRegistrado(Exception):
     pass
+
+
+class OrganizadorNoEncontrado(Exception):
+    pass
+
+
+class OrganizadorYaRegistrado(Exception):
+    pass

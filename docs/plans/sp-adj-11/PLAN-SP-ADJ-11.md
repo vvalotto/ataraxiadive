@@ -146,12 +146,13 @@ frontend completo. Las 9 US están ordenadas por capa y dependencia.
 
 ---
 
-### US-ADJ-11.5 — BC Registro: entidad Organizador
+### US-ADJ-11.5 — BC Registro: entidad Organizador ✅
 
 **Prioridad:** Alta
 **Tipo:** nueva entidad backend
 **Área:** BC `registro` (domain · application · infrastructure · api)
 **Spec:** `docs/specs/sp-adj-11/US-ADJ-11.5.md`
+**Estado:** Implementada — branch `feature/US-ADJ-11.5-organizador` — 35 tests pasando (19 unit + 8 integration + 8 BDD)
 
 **Cambios:**
 1. `Organizador` aggregate: `organizador_id: UUID`, `email: str`, `nombre_organizacion: str | None`. Método `actualizar()`.
@@ -264,6 +265,7 @@ US-ADJ-11.8 y 11.9 pueden ejecutarse en paralelo entre sí.
 - [ ] El JWT mantiene la estructura actual — 0 cambios en los guards de autorización.
 - [ ] `GET /registro/jueces/me` y `GET /registro/organizadores/me` funcionan.
 - [x] Atleta tiene `dni` y `telefono` persistidos (BT-002 resuelto) — US-ADJ-11.3 ✅
+- [x] `GET /registro/jueces/me` y `GET /registro/organizadores/me` funcionan — US-ADJ-11.4 ✅ · US-ADJ-11.5 ✅
 - [ ] `AtletaMisDatosPage`, `JuezMisDatosPage`, `OrganizadorMisDatosPage` funcionan.
 - [ ] Usuarios existentes en DB migran correctamente (`rol` → `roles` JSON).
 - [ ] Tests backend: cobertura ≥ 90% en domain/ y application/ de los cambios.
