@@ -51,3 +51,23 @@ class TokenInvalido(Exception):
 class TokenResetInvalido(Exception):
     def __init__(self) -> None:
         super().__init__("Token de recuperación inválido o expirado")
+
+
+class RolYaAsignado(Exception):
+    def __init__(self, rol: str) -> None:
+        super().__init__(f"El usuario ya posee el rol {rol}")
+
+
+class RolNoEncontrado(Exception):
+    def __init__(self, rol: str) -> None:
+        super().__init__(f"El usuario no posee el rol {rol}")
+
+
+class RolesVacios(Exception):
+    def __init__(self) -> None:
+        super().__init__("El usuario debe tener al menos un rol")
+
+
+class RolDuplicado(Exception):
+    def __init__(self) -> None:
+        super().__init__("El usuario no puede tener el mismo rol más de una vez")

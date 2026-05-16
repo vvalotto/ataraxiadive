@@ -20,6 +20,7 @@ from identidad.api.dependencies import (
 from identidad.application.commands.autenticar_usuario import (
     AutenticarUsuarioCommand,
     AutenticarUsuarioHandler,
+    RoleSelectionRequired,
     TokenResponse,
 )
 from identidad.application.commands.cambiar_password import (
@@ -41,10 +42,10 @@ from identidad.application.commands.solicitar_reset_password import (
 from identidad.domain.exceptions import (
     CampoRequerido,
     CredencialesInvalidas,
-    EmailYaRegistrado,
     PasswordActualIncorrecto,
     PasswordDemasiadoCorto,
     RolNoPermitido,
+    RolYaAsignado,
     TokenResetInvalido,
     UsuarioInactivo,
     UsuarioNoEncontrado,
@@ -66,7 +67,7 @@ class RegistroRequest(BaseModel):
     apellido: str
     email: str
     password: str
-    rol: Rol
+    roles: list[Rol]
 
     @field_validator("nombre", "apellido")
     @classmethod
@@ -83,19 +84,18 @@ class RegistroRequest(BaseModel):
             raise ValueError("La contraseña debe tener al menos 8 caracteres")
         return v
 
-
-class RegistroResponse(BaseModel):
-    usuario_id: UUID
+    @field_validator("roles")
+    @classmethod
+    def roles_not_empty(cls, v: list[Rol]) -> list[Rol]:
+        if not v:
+            raise ValueError("Se debe especificar al menos un rol")
+        return v
 
 
 class LoginRequest(BaseModel):
     email: str
     password: str
-
-
-class LoginResponse(BaseModel):
-    access_token: str
-    token_type: str
+    rol_elegido: Rol | None = None
 
 
 class CambiarPasswordRequest(BaseModel):
@@ -126,15 +126,6 @@ class ResetPasswordRequest(BaseModel):
         return v
 
 
-class UsuarioResponse(BaseModel):
-    usuario_id: UUID
-    nombre: str
-    apellido: str
-    email: str
-    rol: Rol
-    activo: bool
-
-
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
 
@@ -143,27 +134,51 @@ async def registrar_usuario(
     body: RegistroRequest,
     repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
     password_hasher: Annotated[PasswordHashingPort, Depends(get_password_hasher)],
+    token_service: Annotated[TokenServicePort, Depends(get_token_service)],
     email_sender: Annotated[EmailPort, Depends(get_email_sender)],
 ) -> JSONResponse:
-    handler = RegistrarUsuarioHandler(repo, password_hasher, email_sender)
+    handler = RegistrarUsuarioHandler(repo, password_hasher, token_service, email_sender)
     cmd = RegistrarUsuarioCommand(
         nombre=body.nombre,
         apellido=body.apellido,
         email=body.email,
         password=body.password,
-        rol=body.rol,
+        roles=body.roles,
     )
     try:
-        usuario_id = await handler.handle(cmd)
+        resultado = await handler.handle(cmd)
     except CampoRequerido as exc:
         return JSONResponse(status_code=422, content={"detail": str(exc)})
     except PasswordDemasiadoCorto as exc:
         return JSONResponse(status_code=422, content={"detail": str(exc)})
-    except EmailYaRegistrado as exc:
+    except CredencialesInvalidas:
+        return JSONResponse(status_code=401, content={"detail": "Credenciales inválidas"})
+    except RolYaAsignado as exc:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
     except RolNoPermitido as exc:
         return JSONResponse(status_code=403, content={"detail": str(exc)})
-    return JSONResponse(status_code=201, content={"usuario_id": str(usuario_id)})
+
+    status = 201 if resultado.es_usuario_nuevo else 200
+
+    if resultado.requires_role_selection:
+        return JSONResponse(
+            status_code=status,
+            content={
+                "usuario_id": str(resultado.usuario_id),
+                "requires_role_selection": True,
+                "roles": [r.value for r in resultado.roles_disponibles],
+            },
+        )
+
+    assert resultado.token_response is not None
+    return JSONResponse(
+        status_code=status,
+        content={
+            "usuario_id": str(resultado.usuario_id),
+            "access_token": resultado.token_response.access_token,
+            "token_type": resultado.token_response.token_type,
+        },
+    )
 
 
 @router.post("/login", status_code=200)
@@ -174,16 +189,30 @@ async def autenticar_usuario(
     password_hasher: Annotated[PasswordHashingPort, Depends(get_password_hasher)],
 ) -> JSONResponse:
     handler = AutenticarUsuarioHandler(repo, token_service, password_hasher)
-    cmd = AutenticarUsuarioCommand(email=body.email, password=body.password)
+    cmd = AutenticarUsuarioCommand(
+        email=body.email,
+        password=body.password,
+        rol_elegido=body.rol_elegido,
+    )
     try:
-        token_response: TokenResponse = await handler.handle(cmd)
+        result = await handler.handle(cmd)
     except (CredencialesInvalidas, UsuarioInactivo):
         return JSONResponse(status_code=401, content={"detail": "Credenciales inválidas"})
+
+    if isinstance(result, RoleSelectionRequired):
+        return JSONResponse(
+            status_code=200,
+            content={
+                "requires_role_selection": True,
+                "roles": [r.value for r in result.roles],
+            },
+        )
+
     return JSONResponse(
         status_code=200,
         content={
-            "access_token": token_response.access_token,
-            "token_type": token_response.token_type,
+            "access_token": result.access_token,
+            "token_type": result.token_type,
         },
     )
 
@@ -268,7 +297,7 @@ async def listar_usuarios(
                 "nombre": usuario.nombre,
                 "apellido": usuario.apellido,
                 "email": usuario.email,
-                "rol": usuario.rol.value,
+                "roles": [r.value for r in usuario.roles],
                 "activo": usuario.activo,
             }
             for usuario in usuarios

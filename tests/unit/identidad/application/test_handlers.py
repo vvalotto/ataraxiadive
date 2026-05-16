@@ -12,6 +12,7 @@ import pytest
 from identidad.application.commands.autenticar_usuario import (
     AutenticarUsuarioCommand,
     AutenticarUsuarioHandler,
+    RoleSelectionRequired,
     TokenResponse,
 )
 from identidad.application.commands.cambiar_password import (
@@ -22,6 +23,7 @@ from identidad.application.commands.reset_password import ResetPasswordCommand, 
 from identidad.application.commands.registrar_usuario import (
     RegistrarUsuarioCommand,
     RegistrarUsuarioHandler,
+    RegistroResult,
 )
 from identidad.application.commands.solicitar_reset_password import (
     SolicitarResetPasswordCommand,
@@ -30,10 +32,10 @@ from identidad.application.commands.solicitar_reset_password import (
 from identidad.domain.aggregates.usuario import Usuario
 from identidad.domain.exceptions import (
     CredencialesInvalidas,
-    EmailYaRegistrado,
     PasswordActualIncorrecto,
     PasswordDemasiadoCorto,
     RolNoPermitido,
+    RolYaAsignado,
     TokenResetInvalido,
     UsuarioNoEncontrado,
     UsuarioInactivo,
@@ -75,32 +77,34 @@ def token_service(jwt_service: JWTService) -> TokenServicePort:
 
 @pytest.mark.asyncio
 async def test_registrar_usuario_exitoso(
-    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort, token_service: TokenServicePort
 ) -> None:
-    handler = RegistrarUsuarioHandler(mock_repo, password_hasher)
+    handler = RegistrarUsuarioHandler(mock_repo, password_hasher, token_service)
     cmd = RegistrarUsuarioCommand(
         nombre="Nuevo",
         apellido="Usuario",
         email="nuevo@test.com",
         password="Seguro1234",
-        rol=Rol.ORGANIZADOR,
+        roles=[Rol.ORGANIZADOR],
     )
-    usuario_id = await handler.handle(cmd)
-    assert usuario_id is not None
+    resultado = await handler.handle(cmd)
+    assert isinstance(resultado, RegistroResult)
+    assert resultado.usuario_id is not None
+    assert resultado.token_response is not None
     mock_repo.save.assert_called_once()
 
 
 @pytest.mark.asyncio
 async def test_registrar_guarda_hash_no_plain(
-    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort, token_service: TokenServicePort
 ) -> None:
-    handler = RegistrarUsuarioHandler(mock_repo, password_hasher)
+    handler = RegistrarUsuarioHandler(mock_repo, password_hasher, token_service)
     cmd = RegistrarUsuarioCommand(
         nombre="Ana",
         apellido="Garcia",
         email="t@t.com",
         password="Password10",
-        rol=Rol.ATLETA,
+        roles=[Rol.ATLETA],
     )
     await handler.handle(cmd)
     saved_usuario: Usuario = mock_repo.save.call_args[0][0]
@@ -111,34 +115,103 @@ async def test_registrar_guarda_hash_no_plain(
 
 
 @pytest.mark.asyncio
-async def test_registrar_email_duplicado_lanza_excepcion(
-    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+async def test_registrar_un_rol_devuelve_token(
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort, token_service: TokenServicePort
 ) -> None:
-    existente = Usuario(uuid.uuid4(), "Dup", "Existente", "dup@test.com", "$2b$hash", Rol.JUEZ)
-    mock_repo.find_by_email.return_value = existente
-    handler = RegistrarUsuarioHandler(mock_repo, password_hasher)
+    handler = RegistrarUsuarioHandler(mock_repo, password_hasher, token_service)
     cmd = RegistrarUsuarioCommand(
-        nombre="Dup",
-        apellido="Nuevo",
-        email="dup@test.com",
-        password="Password10",
-        rol=Rol.JUEZ,
+        nombre="Ana", apellido="Garcia", email="t@t.com", password="Password10", roles=[Rol.ATLETA]
     )
-    with pytest.raises(EmailYaRegistrado):
+    resultado = await handler.handle(cmd)
+    assert resultado.token_response is not None
+    assert not resultado.requires_role_selection
+
+
+@pytest.mark.asyncio
+async def test_registrar_multi_rol_devuelve_role_selection(
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort, token_service: TokenServicePort
+) -> None:
+    handler = RegistrarUsuarioHandler(mock_repo, password_hasher, token_service)
+    cmd = RegistrarUsuarioCommand(
+        nombre="Pedro",
+        apellido="Lopez",
+        email="p@t.com",
+        password="Password10",
+        roles=[Rol.JUEZ, Rol.ATLETA],
+    )
+    resultado = await handler.handle(cmd)
+    assert resultado.requires_role_selection
+    assert resultado.token_response is None
+    assert set(resultado.roles_disponibles) == {Rol.JUEZ, Rol.ATLETA}
+
+
+@pytest.mark.asyncio
+async def test_registrar_email_existente_agrega_rol_nuevo(
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort, token_service: TokenServicePort
+) -> None:
+    existente = _make_usuario("lucia@test.com", "Seguro1234", Rol.ATLETA)
+    mock_repo.find_by_email.return_value = existente
+    handler = RegistrarUsuarioHandler(mock_repo, password_hasher, token_service)
+    cmd = RegistrarUsuarioCommand(
+        nombre="Lucia",
+        apellido="Perez",
+        email="lucia@test.com",
+        password="Seguro1234",
+        roles=[Rol.JUEZ],
+    )
+    resultado = await handler.handle(cmd)
+    assert Rol.JUEZ in existente.roles
+    assert resultado.requires_role_selection
+    mock_repo.save.assert_called_once()
+
+
+@pytest.mark.asyncio
+async def test_registrar_email_existente_password_incorrecta_lanza_excepcion(
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort, token_service: TokenServicePort
+) -> None:
+    existente = _make_usuario("lucia@test.com", "Seguro1234", Rol.ATLETA)
+    mock_repo.find_by_email.return_value = existente
+    handler = RegistrarUsuarioHandler(mock_repo, password_hasher, token_service)
+    cmd = RegistrarUsuarioCommand(
+        nombre="Lucia",
+        apellido="Perez",
+        email="lucia@test.com",
+        password="WrongPass1!",
+        roles=[Rol.JUEZ],
+    )
+    with pytest.raises(CredencialesInvalidas):
+        await handler.handle(cmd)
+
+
+@pytest.mark.asyncio
+async def test_registrar_email_existente_rol_duplicado_lanza_excepcion(
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort, token_service: TokenServicePort
+) -> None:
+    existente = _make_usuario("lucia@test.com", "Seguro1234", Rol.ATLETA)
+    mock_repo.find_by_email.return_value = existente
+    handler = RegistrarUsuarioHandler(mock_repo, password_hasher, token_service)
+    cmd = RegistrarUsuarioCommand(
+        nombre="Lucia",
+        apellido="Perez",
+        email="lucia@test.com",
+        password="Seguro1234",
+        roles=[Rol.ATLETA],
+    )
+    with pytest.raises(RolYaAsignado):
         await handler.handle(cmd)
 
 
 @pytest.mark.asyncio
 async def test_registrar_password_corto_lanza_excepcion(
-    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort, token_service: TokenServicePort
 ) -> None:
-    handler = RegistrarUsuarioHandler(mock_repo, password_hasher)
+    handler = RegistrarUsuarioHandler(mock_repo, password_hasher, token_service)
     cmd = RegistrarUsuarioCommand(
         nombre="Ana",
         apellido="Garcia",
         email="t@t.com",
         password="corto",
-        rol=Rol.ATLETA,
+        roles=[Rol.ATLETA],
     )
     with pytest.raises(PasswordDemasiadoCorto):
         await handler.handle(cmd)
@@ -146,31 +219,31 @@ async def test_registrar_password_corto_lanza_excepcion(
 
 @pytest.mark.asyncio
 async def test_registrar_password_exactamente_10_es_valido(
-    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort, token_service: TokenServicePort
 ) -> None:
-    handler = RegistrarUsuarioHandler(mock_repo, password_hasher)
+    handler = RegistrarUsuarioHandler(mock_repo, password_hasher, token_service)
     cmd = RegistrarUsuarioCommand(
         nombre="Ana",
         apellido="Garcia",
         email="t@t.com",
         password="Valida1234",
-        rol=Rol.ATLETA,
+        roles=[Rol.ATLETA],
     )
-    usuario_id = await handler.handle(cmd)
-    assert usuario_id is not None
+    resultado = await handler.handle(cmd)
+    assert resultado.usuario_id is not None
 
 
 @pytest.mark.asyncio
 async def test_registrar_admin_lanza_excepcion(
-    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort, token_service: TokenServicePort
 ) -> None:
-    handler = RegistrarUsuarioHandler(mock_repo, password_hasher)
+    handler = RegistrarUsuarioHandler(mock_repo, password_hasher, token_service)
     cmd = RegistrarUsuarioCommand(
         nombre="Admin",
         apellido="Prohibido",
         email="admin@test.com",
         password="Valida1234",
-        rol=Rol.ADMIN,
+        roles=[Rol.ADMIN],
     )
     with pytest.raises(RolNoPermitido):
         await handler.handle(cmd)
@@ -268,12 +341,16 @@ class FailingEmailSender:
 
 @pytest.mark.asyncio
 async def test_registrar_usuario_envia_email_de_bienvenida(
-    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort, token_service: TokenServicePort
 ) -> None:
     email_sender = FakeEmailSender()
-    handler = RegistrarUsuarioHandler(mock_repo, password_hasher, email_sender)
+    handler = RegistrarUsuarioHandler(mock_repo, password_hasher, token_service, email_sender)
     cmd = RegistrarUsuarioCommand(
-        nombre="Ana", apellido="Garcia", email="ana@test.com", password="Seguro1234", rol=Rol.ATLETA
+        nombre="Ana",
+        apellido="Garcia",
+        email="ana@test.com",
+        password="Seguro1234",
+        roles=[Rol.ATLETA],
     )
     await handler.handle(cmd)
     assert len(email_sender.enviados) == 1
@@ -284,35 +361,37 @@ async def test_registrar_usuario_envia_email_de_bienvenida(
 
 @pytest.mark.asyncio
 async def test_registrar_usuario_no_falla_si_email_lanza_excepcion(
-    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort, token_service: TokenServicePort
 ) -> None:
-    handler = RegistrarUsuarioHandler(mock_repo, password_hasher, FailingEmailSender())
+    handler = RegistrarUsuarioHandler(
+        mock_repo, password_hasher, token_service, FailingEmailSender()
+    )
     cmd = RegistrarUsuarioCommand(
         nombre="Luis",
         apellido="Perez",
         email="luis@test.com",
         password="Seguro1234",
-        rol=Rol.JUEZ,
+        roles=[Rol.JUEZ],
     )
-    usuario_id = await handler.handle(cmd)
-    assert usuario_id is not None
+    resultado = await handler.handle(cmd)
+    assert resultado.usuario_id is not None
     mock_repo.save.assert_called_once()
 
 
 @pytest.mark.asyncio
 async def test_registrar_usuario_sin_email_sender_funciona(
-    mock_repo: AsyncMock, password_hasher: PasswordHashingPort
+    mock_repo: AsyncMock, password_hasher: PasswordHashingPort, token_service: TokenServicePort
 ) -> None:
-    handler = RegistrarUsuarioHandler(mock_repo, password_hasher)
+    handler = RegistrarUsuarioHandler(mock_repo, password_hasher, token_service)
     cmd = RegistrarUsuarioCommand(
         nombre="Sin",
         apellido="Email",
         email="sin@test.com",
         password="Seguro1234",
-        rol=Rol.ORGANIZADOR,
+        roles=[Rol.ORGANIZADOR],
     )
-    usuario_id = await handler.handle(cmd)
-    assert usuario_id is not None
+    resultado = await handler.handle(cmd)
+    assert resultado.usuario_id is not None
 
 
 @pytest.mark.asyncio
@@ -377,7 +456,7 @@ async def test_reset_password_rechaza_token_de_sesion(
 ) -> None:
     usuario = _make_usuario("juez@test.com", "clave1234")
     handler = ResetPasswordHandler(mock_repo, token_service, password_hasher)
-    token = token_service.generate(usuario)
+    token = token_service.generate(usuario, usuario.roles[0])
 
     with pytest.raises(TokenResetInvalido):
         await handler.handle(ResetPasswordCommand(token=token, password_nueva="NuevaPass456"))
@@ -398,7 +477,7 @@ async def test_reset_password_rechaza_password_corta(
 
 def _make_usuario(email: str, password: str, rol: Rol = Rol.JUEZ, activo: bool = True) -> Usuario:
     hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-    return Usuario(uuid.uuid4(), "Test", "Usuario", email, hashed, rol, activo)
+    return Usuario(uuid.uuid4(), "Test", "Usuario", email, hashed, [rol], activo)
 
 
 @pytest.mark.asyncio
@@ -415,6 +494,57 @@ async def test_autenticar_exitoso_retorna_token(
     assert isinstance(result, TokenResponse)
     assert result.token_type == "bearer"
     assert len(result.access_token) > 0
+
+
+@pytest.mark.asyncio
+async def test_autenticar_multi_rol_sin_rol_elegido_devuelve_selection(
+    mock_repo: AsyncMock,
+    token_service: TokenServicePort,
+    password_hasher: PasswordHashingPort,
+) -> None:
+    hashed = bcrypt.hashpw(b"clave1234", bcrypt.gensalt()).decode()
+    u = Usuario(uuid.uuid4(), "Pedro", "Lopez", "pedro@test.com", hashed, [Rol.JUEZ, Rol.ATLETA])
+    mock_repo.find_by_email.return_value = u
+    handler = AutenticarUsuarioHandler(mock_repo, token_service, password_hasher)
+    cmd = AutenticarUsuarioCommand(email="pedro@test.com", password="clave1234")
+    result = await handler.handle(cmd)
+    assert isinstance(result, RoleSelectionRequired)
+    assert set(result.roles) == {Rol.JUEZ, Rol.ATLETA}
+
+
+@pytest.mark.asyncio
+async def test_autenticar_multi_rol_con_rol_elegido_devuelve_token(
+    mock_repo: AsyncMock,
+    token_service: TokenServicePort,
+    password_hasher: PasswordHashingPort,
+) -> None:
+    hashed = bcrypt.hashpw(b"clave1234", bcrypt.gensalt()).decode()
+    u = Usuario(uuid.uuid4(), "Pedro", "Lopez", "pedro@test.com", hashed, [Rol.JUEZ, Rol.ATLETA])
+    mock_repo.find_by_email.return_value = u
+    handler = AutenticarUsuarioHandler(mock_repo, token_service, password_hasher)
+    cmd = AutenticarUsuarioCommand(
+        email="pedro@test.com", password="clave1234", rol_elegido=Rol.ATLETA
+    )
+    result = await handler.handle(cmd)
+    assert isinstance(result, TokenResponse)
+    payload = token_service.verify(result.access_token)
+    assert payload["rol"] == "ATLETA"
+
+
+@pytest.mark.asyncio
+async def test_autenticar_rol_elegido_no_poseido_lanza_credenciales_invalidas(
+    mock_repo: AsyncMock,
+    token_service: TokenServicePort,
+    password_hasher: PasswordHashingPort,
+) -> None:
+    u = _make_usuario("solo@test.com", "clave1234", Rol.ATLETA)
+    mock_repo.find_by_email.return_value = u
+    handler = AutenticarUsuarioHandler(mock_repo, token_service, password_hasher)
+    cmd = AutenticarUsuarioCommand(
+        email="solo@test.com", password="clave1234", rol_elegido=Rol.JUEZ
+    )
+    with pytest.raises(CredencialesInvalidas):
+        await handler.handle(cmd)
 
 
 @pytest.mark.asyncio
@@ -463,7 +593,7 @@ async def test_autenticar_usuario_inactivo_lanza_excepcion(
 
 def test_jwt_generate_y_verify_payload(jwt_service: JWTService) -> None:
     u = _make_usuario("admin@test.com", "pass1234", Rol.ADMIN)
-    token = jwt_service.generate(u)
+    token = jwt_service.generate(u, Rol.ADMIN)
     payload = jwt_service.verify(token)
     assert payload["sub"] == str(u.usuario_id)
     assert payload["email"] == "admin@test.com"

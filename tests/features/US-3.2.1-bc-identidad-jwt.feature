@@ -12,9 +12,9 @@ Feature: US-3.2.1 — BC Identidad JWT
     Then la respuesta es 201
     And la respuesta contiene un campo "usuario_id"
 
-  Scenario: registrar usuario con email duplicado retorna 409
+  Scenario: registrar usuario con email y rol ya existente retorna 409
     Given un usuario registrado con email "existente@test.com"
-    When POST /auth/registro con email "existente@test.com", password "Otralave1A", rol "ATLETA"
+    When POST /auth/registro con email "existente@test.com", password "Password1A", rol "ATLETA"
     Then la respuesta es 409
 
   Scenario: registrar usuario con password menor a 8 caracteres retorna 422
