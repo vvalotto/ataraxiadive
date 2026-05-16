@@ -203,7 +203,7 @@ async def crear_admin() -> None:
         apellido="BA2025",
         email=admin_email,
         password_hash=hasher.hash(PASSWORD),
-        rol=Rol.ADMIN,
+        roles=[Rol.ADMIN],
     )
     await repo.save(usuario)
     log(f"✓ ADMIN          {admin_email}")

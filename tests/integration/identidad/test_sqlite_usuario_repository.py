@@ -34,7 +34,7 @@ def _usuario(
         apellido=apellido,
         email=email,
         password_hash="$2b$12$fakehash",
-        rol=rol,
+        roles=[rol],
         activo=activo,
     )
 
@@ -49,7 +49,7 @@ async def test_save_y_find_by_id(repo: SQLiteUsuarioRepository) -> None:
     assert resultado.nombre == u.nombre
     assert resultado.apellido == u.apellido
     assert resultado.email == u.email
-    assert resultado.rol == Rol.ORGANIZADOR
+    assert Rol.ORGANIZADOR in resultado.roles
     assert resultado.activo is True
 
 
@@ -84,7 +84,7 @@ async def test_save_upsert_actualiza_registro(repo: SQLiteUsuarioRepository) -> 
         u.apellido,
         u.email,
         u.password_hash,
-        u.rol,
+        u.roles,
         activo=False,
     )
     await repo.save(u_inactivo)
@@ -94,12 +94,30 @@ async def test_save_upsert_actualiza_registro(repo: SQLiteUsuarioRepository) -> 
 
 
 @pytest.mark.asyncio
-async def test_save_persiste_rol_correctamente(repo: SQLiteUsuarioRepository) -> None:
+async def test_save_persiste_roles_correctamente(repo: SQLiteUsuarioRepository) -> None:
     u = _usuario(rol=Rol.ADMIN)
     await repo.save(u)
     resultado = await repo.find_by_id(u.usuario_id)
     assert resultado is not None
-    assert resultado.rol == Rol.ADMIN
+    assert Rol.ADMIN in resultado.roles
+
+
+@pytest.mark.asyncio
+async def test_save_persiste_multi_rol(repo: SQLiteUsuarioRepository) -> None:
+    u = Usuario(
+        usuario_id=uuid.uuid4(),
+        nombre="Pedro",
+        apellido="Lopez",
+        email="pedro@test.com",
+        password_hash="$2b$12$fakehash",
+        roles=[Rol.JUEZ, Rol.ATLETA],
+    )
+    await repo.save(u)
+    resultado = await repo.find_by_id(u.usuario_id)
+    assert resultado is not None
+    assert Rol.JUEZ in resultado.roles
+    assert Rol.ATLETA in resultado.roles
+    assert len(resultado.roles) == 2
 
 
 @pytest.mark.asyncio
@@ -114,7 +132,26 @@ async def test_list_by_rol_filtra_y_ordena_por_email(repo: SQLiteUsuarioReposito
 
 
 @pytest.mark.asyncio
-async def test_list_all_devuelve_todos_ordenados_por_rol_y_email(
+async def test_list_by_rol_incluye_multi_rol(repo: SQLiteUsuarioRepository) -> None:
+    multi = Usuario(
+        usuario_id=uuid.uuid4(),
+        nombre="Pedro",
+        apellido="Lopez",
+        email="pedro@test.com",
+        password_hash="hash",
+        roles=[Rol.JUEZ, Rol.ATLETA],
+    )
+    await repo.save(multi)
+    await repo.save(_usuario(email="solo@test.com", rol=Rol.ATLETA))
+
+    atletas = await repo.list_by_rol(Rol.ATLETA)
+    emails = [u.email for u in atletas]
+    assert "pedro@test.com" in emails
+    assert "solo@test.com" in emails
+
+
+@pytest.mark.asyncio
+async def test_list_all_devuelve_todos_ordenados_por_email(
     repo: SQLiteUsuarioRepository,
 ) -> None:
     await repo.save(_usuario(email="z-juez@test.com", rol=Rol.JUEZ))
@@ -124,11 +161,11 @@ async def test_list_all_devuelve_todos_ordenados_por_rol_y_email(
 
     usuarios = await repo.list_all()
 
-    assert [(usuario.rol, usuario.email) for usuario in usuarios] == [
-        (Rol.ATLETA, "atleta@test.com"),
-        (Rol.JUEZ, "a-juez@test.com"),
-        (Rol.JUEZ, "z-juez@test.com"),
-        (Rol.ORGANIZADOR, "org@test.com"),
+    assert [u.email for u in usuarios] == [
+        "a-juez@test.com",
+        "atleta@test.com",
+        "org@test.com",
+        "z-juez@test.com",
     ]
 
 
@@ -156,3 +193,32 @@ async def test_ensure_table_migra_columnas_nombre_y_apellido() -> None:
     assert resultado is not None
     assert resultado.nombre == "Ana"
     assert resultado.apellido == "Garcia"
+
+
+@pytest.mark.asyncio
+async def test_migracion_rol_a_roles_para_filas_existentes() -> None:
+    """Verifica que filas con columna 'rol' legacy se migran correctamente a 'roles' JSON."""
+    db_path = Path(tempfile.mktemp(suffix=".db"))
+    async with aiosqlite.connect(db_path) as conn:
+        await conn.execute("""
+            CREATE TABLE usuarios (
+                usuario_id TEXT PRIMARY KEY,
+                nombre TEXT NOT NULL DEFAULT '',
+                apellido TEXT NOT NULL DEFAULT '',
+                email TEXT UNIQUE NOT NULL,
+                password_hash TEXT NOT NULL,
+                rol TEXT NOT NULL,
+                activo INTEGER NOT NULL DEFAULT 1
+            )
+            """)
+        await conn.execute(
+            "INSERT INTO usuarios VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (str(uuid.uuid4()), "Carlos", "Perez", "carlos@test.com", "hash", "ORGANIZADOR", 1),
+        )
+        await conn.commit()
+
+    repo = SQLiteUsuarioRepository(db_path=str(db_path))
+    resultado = await repo.find_by_email("carlos@test.com")
+
+    assert resultado is not None
+    assert Rol.ORGANIZADOR in resultado.roles

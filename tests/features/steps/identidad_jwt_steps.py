@@ -60,7 +60,7 @@ def usuario_ya_registrado(client: TestClient, context: dict[str, Any], email: st
             "nombre": "Test",
             "apellido": "User",
             "password": "Password1A",
-            "rol": "ATLETA",
+            "roles": ["ATLETA"],
         },
     )
     context["email"] = email
@@ -79,7 +79,7 @@ def usuario_registrado_con_rol(
             "nombre": "Test",
             "apellido": "User",
             "password": password,
-            "rol": rol,
+            "roles": [rol],
         },
     )
     assert resp.status_code == 201
@@ -112,7 +112,7 @@ def post_registro(
             "nombre": "Test",
             "apellido": "User",
             "password": password,
-            "rol": rol,
+            "roles": [rol],
         },
     )
 

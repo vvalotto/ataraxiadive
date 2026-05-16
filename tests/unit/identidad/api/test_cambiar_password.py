@@ -23,7 +23,7 @@ class FakeUsuarioRepository:
             apellido="Segura",
             email="juez1@email.com",
             password_hash=password_hasher.hash("Apnea12345"),
-            rol=Rol.JUEZ,
+            roles=[Rol.JUEZ],
         )
 
     async def save(self, usuario: Usuario) -> None:
@@ -40,7 +40,7 @@ class FakeUsuarioRepository:
         return None
 
     async def list_by_rol(self, rol: Rol) -> list[Usuario]:
-        return [self.usuario] if self.usuario.rol == rol else []
+        return [self.usuario] if rol in self.usuario.roles else []
 
     async def list_all(self) -> list[Usuario]:
         return [self.usuario]
