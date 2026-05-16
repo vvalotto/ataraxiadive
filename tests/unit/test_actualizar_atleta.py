@@ -15,16 +15,16 @@ from registro.domain.exceptions import AtletaNoEncontrado
 from registro.domain.value_objects.categoria import Categoria
 
 
-def _atleta() -> Atleta:
-    return Atleta(
+def _atleta(**kwargs) -> Atleta:
+    defaults = dict(
         atleta_id=uuid4(),
         nombre="Ana",
         apellido="Garcia",
         email="ana@test.com",
         fecha_nacimiento=date(1990, 5, 10),
-        categoria=Categoria.SENIOR_FEMENINO,
-        club="Poseidon",
     )
+    defaults.update(kwargs)
+    return Atleta(**defaults)
 
 
 class TestAtletaActualizar:
@@ -43,8 +43,18 @@ class TestAtletaActualizar:
         atleta.actualizar(categoria=Categoria.MASTER_FEMENINO)
         assert atleta.categoria == Categoria.MASTER_FEMENINO
 
-    def test_patch_no_borra_campos_no_provistos(self) -> None:
+    def test_actualizar_dni(self) -> None:
         atleta = _atleta()
+        atleta.actualizar(dni="30123456")
+        assert atleta.dni == "30123456"
+
+    def test_actualizar_telefono(self) -> None:
+        atleta = _atleta()
+        atleta.actualizar(telefono="1155559999")
+        assert atleta.telefono == "1155559999"
+
+    def test_patch_no_borra_campos_no_provistos(self) -> None:
+        atleta = _atleta(club="Poseidon", categoria=Categoria.SENIOR_FEMENINO)
         atleta.actualizar(club="Neptuno")
         assert atleta.nombre == "Ana"
         assert atleta.apellido == "Garcia"
@@ -60,8 +70,18 @@ class TestAtletaActualizar:
         with pytest.raises(ValueError, match="club"):
             atleta.actualizar(club="")
 
-    def test_sin_argumentos_no_cambia_nada(self) -> None:
+    def test_dni_vacio_lanza_error(self) -> None:
         atleta = _atleta()
+        with pytest.raises(ValueError, match="dni"):
+            atleta.actualizar(dni="")
+
+    def test_telefono_vacio_lanza_error(self) -> None:
+        atleta = _atleta()
+        with pytest.raises(ValueError, match="telefono"):
+            atleta.actualizar(telefono="")
+
+    def test_sin_argumentos_no_cambia_nada(self) -> None:
+        atleta = _atleta(club="Poseidon")
         atleta.actualizar()
         assert atleta.nombre == "Ana"
         assert atleta.club == "Poseidon"
@@ -114,8 +134,21 @@ class TestActualizarAtletaHandler:
             )
 
     @pytest.mark.asyncio
-    async def test_handler_semántica_patch(self) -> None:
+    async def test_handler_actualiza_dni_y_telefono(self) -> None:
         atleta = _atleta()
+        repo = AsyncMock()
+        repo.find_by_email.return_value = atleta
+
+        await ActualizarAtletaHandler(repo).handle(
+            ActualizarAtletaCommand(email="ana@test.com", dni="30123456", telefono="1155559999")
+        )
+
+        assert atleta.dni == "30123456"
+        assert atleta.telefono == "1155559999"
+
+    @pytest.mark.asyncio
+    async def test_handler_semantica_patch(self) -> None:
+        atleta = _atleta(club="Poseidon", categoria=Categoria.SENIOR_FEMENINO)
         repo = AsyncMock()
         repo.find_by_email.return_value = atleta
 
