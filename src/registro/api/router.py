@@ -27,12 +27,21 @@ from registro.application.commands.actualizar_atleta import (
     ActualizarAtletaCommand,
     ActualizarAtletaHandler,
 )
+from registro.application.commands.actualizar_juez import (
+    ActualizarJuezCommand,
+    ActualizarJuezHandler,
+)
 from registro.application.commands.registrar_atleta import (
     RegistrarAtletaCommand,
     RegistrarAtletaHandler,
 )
+from registro.application.commands.registrar_juez import (
+    RegistrarJuezCommand,
+    RegistrarJuezHandler,
+)
 from registro.application.queries.listar_inscriptos import ListarInscriptosHandler
 from registro.application.queries.obtener_atleta import ObtenerAtletaHandler
+from registro.application.queries.obtener_juez import ObtenerJuezHandler
 from registro.application.queries.verificar_completitud_ap import (
     VerificarCompletitudAPHandler,
 )
@@ -45,6 +54,8 @@ from registro.domain.exceptions import (
     DisciplinaNoDisponible,
     DisciplinaNoInscripta,
     InscripcionNoEncontrada,
+    JuezNoEncontrado,
+    JuezYaRegistrado,
     PlazoCancelacionVencido,
     TorneoNoDisponible,
 )
@@ -57,7 +68,8 @@ from registro.infrastructure.repositories.sqlite_atleta_repository import SQLite
 from registro.infrastructure.repositories.sqlite_inscripcion_repository import (
     SQLiteInscripcionRepository,
 )
-from shared.api.dependencies import AtletaDep, OrganizadorDep
+from registro.infrastructure.repositories.sqlite_juez_repository import SQLiteJuezRepository
+from shared.api.dependencies import AtletaDep, JuezDep, OrganizadorDep
 from shared.domain.value_objects.disciplina import Disciplina
 
 router = APIRouter(prefix="/registro", tags=["registro"])
@@ -119,6 +131,26 @@ class ActualizarAtletaMeRequest(BaseModel):
     telefono: str | None = None
 
 
+# ── Schemas — Juez ───────────────────────────────────────────────────────────
+
+
+class RegistrarJuezRequest(BaseModel):
+    numero_licencia: str | None = None
+    federacion: str | None = None
+
+
+class JuezResponse(BaseModel):
+    juez_id: UUID
+    email: str
+    numero_licencia: str | None
+    federacion: str | None
+
+
+class ActualizarJuezMeRequest(BaseModel):
+    numero_licencia: str | None = None
+    federacion: str | None = None
+
+
 # ── Schemas — Inscripcion ─────────────────────────────────────────────────────
 
 
@@ -166,6 +198,10 @@ class DeclararAPInscripcionRequest(BaseModel):
 
 def _repo() -> SQLiteAtletaRepository:
     return SQLiteAtletaRepository()
+
+
+def _juez_repo() -> SQLiteJuezRepository:
+    return SQLiteJuezRepository()
 
 
 def _inscripcion_repo() -> SQLiteInscripcionRepository:
@@ -601,4 +637,71 @@ async def subir_constancia_pago(
         archivo,
         "constancia_pago",
         "adjuntar_constancia_pago",
+    )
+
+
+# ── Endpoints — Juez ──────────────────────────────────────────────────────────
+
+
+@router.post("/jueces", status_code=201)
+async def registrar_juez(body: RegistrarJuezRequest, current_user: JuezDep) -> JSONResponse:
+    repo = _juez_repo()
+    handler = RegistrarJuezHandler(repo)
+    try:
+        juez_id = await handler.handle(
+            RegistrarJuezCommand(
+                email=current_user["email"],
+                numero_licencia=body.numero_licencia,
+                federacion=body.federacion,
+            )
+        )
+    except JuezYaRegistrado:
+        return JSONResponse(status_code=409, content={"detail": "Perfil de juez ya registrado"})
+    juez = await repo.find_by_id(juez_id)
+    return JSONResponse(
+        status_code=201,
+        content=JuezResponse(
+            juez_id=juez.juez_id,  # type: ignore[union-attr]
+            email=juez.email,  # type: ignore[union-attr]
+            numero_licencia=juez.numero_licencia,  # type: ignore[union-attr]
+            federacion=juez.federacion,  # type: ignore[union-attr]
+        ).model_dump(mode="json"),
+    )
+
+
+@router.get("/jueces/me", status_code=200)
+async def obtener_juez_me(current_user: JuezDep) -> JSONResponse:
+    try:
+        juez = await ObtenerJuezHandler(_juez_repo()).handle(current_user["email"])
+    except JuezNoEncontrado:
+        return JSONResponse(status_code=404, content={"detail": "Juez no encontrado"})
+    return JSONResponse(
+        content=JuezResponse(
+            juez_id=juez.juez_id,
+            email=juez.email,
+            numero_licencia=juez.numero_licencia,
+            federacion=juez.federacion,
+        ).model_dump(mode="json")
+    )
+
+
+@router.patch("/jueces/me", status_code=200)
+async def actualizar_juez_me(body: ActualizarJuezMeRequest, current_user: JuezDep) -> JSONResponse:
+    try:
+        juez = await ActualizarJuezHandler(_juez_repo()).handle(
+            ActualizarJuezCommand(
+                email=current_user["email"],
+                numero_licencia=body.numero_licencia,
+                federacion=body.federacion,
+            )
+        )
+    except JuezNoEncontrado:
+        return JSONResponse(status_code=404, content={"detail": "Juez no encontrado"})
+    return JSONResponse(
+        content=JuezResponse(
+            juez_id=juez.juez_id,
+            email=juez.email,
+            numero_licencia=juez.numero_licencia,
+            federacion=juez.federacion,
+        ).model_dump(mode="json")
     )

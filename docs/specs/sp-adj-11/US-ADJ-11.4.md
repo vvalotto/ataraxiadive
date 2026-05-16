@@ -1,6 +1,6 @@
 # US-ADJ-11.4: BC Registro — entidad Juez
 
-**Estado**: `Especificada`
+**Estado**: `Implementada`
 **Iteracion / Sprint**: SP-ADJ-11
 **Tipo**: nueva entidad backend
 **Agregado principal afectado**: `Juez` (nuevo)
