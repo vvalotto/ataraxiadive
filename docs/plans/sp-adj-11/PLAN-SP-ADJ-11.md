@@ -126,12 +126,13 @@ frontend completo. Las 9 US están ordenadas por capa y dependencia.
 
 ---
 
-### US-ADJ-11.4 — BC Registro: entidad Juez
+### US-ADJ-11.4 — BC Registro: entidad Juez ✅
 
 **Prioridad:** Alta
 **Tipo:** nueva entidad backend
 **Área:** BC `registro` (domain · application · infrastructure · api)
 **Spec:** `docs/specs/sp-adj-11/US-ADJ-11.4.md`
+**Estado:** Implementada — branch `feature/US-ADJ-11.4-juez` — 35 tests pasando
 
 **Cambios:**
 1. `Juez` aggregate: `juez_id: UUID`, `email: str`, `numero_licencia: str | None`, `federacion: str | None`. Método `actualizar()`.

@@ -36,3 +36,11 @@ class APIncompletoParaPreparacion(Exception):
 
 class APYaDeclarado(Exception):
     pass
+
+
+class JuezNoEncontrado(Exception):
+    pass
+
+
+class JuezYaRegistrado(Exception):
+    pass
