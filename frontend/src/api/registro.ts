@@ -53,6 +53,8 @@ export interface AtletaDto {
   categoria: string
   club: string
   brevet: string | null
+  dni: string | null
+  telefono: string | null
 }
 
 export interface CrearAtletaPayload {
@@ -180,6 +182,8 @@ export interface ActualizarAtletaMePayload {
   club?: string
   fecha_nacimiento?: string
   brevet?: string
+  dni?: string
+  telefono?: string
 }
 
 export async function actualizarAtletaMe(payload: ActualizarAtletaMePayload): Promise<AtletaDto> {
