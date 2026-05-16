@@ -1,0 +1,105 @@
+{
+  "metadata": {
+    "us_id": "US-ADJ-11.8",
+    "us_title": "Frontend — Mis Datos Atleta — dni, telefono y campos opcionales",
+    "us_points": 2,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-05-16T21:43:59.328667+00:00",
+    "completed_at": "2026-05-16T21:47:00.468737+00:00",
+    "total_elapsed_seconds": 181,
+    "effective_seconds": 181,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-05-16T21:44:02.948025+00:00",
+      "completed_at": "2026-05-16T21:44:25.509603+00:00",
+      "elapsed_seconds": 22,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "BDD",
+      "started_at": "2026-05-16T21:44:30.274180+00:00",
+      "completed_at": "2026-05-16T21:44:47.336248+00:00",
+      "elapsed_seconds": 17,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan",
+      "started_at": "2026-05-16T21:44:47.439895+00:00",
+      "completed_at": "2026-05-16T21:45:02.901913+00:00",
+      "elapsed_seconds": 15,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-05-16T21:45:02.992156+00:00",
+      "completed_at": "2026-05-16T21:46:31.132827+00:00",
+      "elapsed_seconds": 88,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-05-16T21:46:31.213401+00:00",
+      "completed_at": "2026-05-16T21:46:56.195915+00:00",
+      "elapsed_seconds": 24,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-05-16T21:46:56.277390+00:00",
+      "completed_at": "2026-05-16T21:47:00.294929+00:00",
+      "elapsed_seconds": 4,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-05-16T21:47:00.384755+00:00",
+      "completed_at": null,
+      "elapsed_seconds": 0,
+      "status": "in_progress",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 0,
+    "completed_tasks": 0,
+    "total_phases": 7,
+    "estimated_total_minutes": 0,
+    "actual_total_minutes": 0,
+    "variance_minutes": 0,
+    "variance_percent": 0.0
+  }
+}
