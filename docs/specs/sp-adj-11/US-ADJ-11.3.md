@@ -1,6 +1,6 @@
 # US-ADJ-11.3: BC Registro — refactor Atleta (campos opcionales + BT-002: dni, telefono)
 
-**Estado**: `Especificada`
+**Estado**: `Implementada`
 **Iteracion / Sprint**: SP-ADJ-11
 **Tipo**: refactor backend + migración DB
 **Agregado principal afectado**: `Atleta`

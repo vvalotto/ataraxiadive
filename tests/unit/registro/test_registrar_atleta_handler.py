@@ -15,59 +15,86 @@ from registro.domain.value_objects.categoria import Categoria
 
 def _cmd(**kwargs) -> RegistrarAtletaCommand:
     defaults = dict(
-        atleta_id=uuid4(),
         nombre="Ana",
         apellido="García",
         email="ana@example.com",
         fecha_nacimiento=date(1990, 5, 15),
-        categoria=Categoria.SENIOR_FEMENINO,
-        club="Club Apnea Norte",
-        brevet=None,
     )
     defaults.update(kwargs)
     return RegistrarAtletaCommand(**defaults)
 
 
+def _atleta_existente(email: str = "ana@example.com") -> Atleta:
+    return Atleta(
+        atleta_id=uuid4(),
+        nombre="Ana",
+        apellido="García",
+        email=email,
+        fecha_nacimiento=date(1990, 5, 15),
+    )
+
+
 class TestRegistrarAtletaHandler:
-    async def test_happy_path(self):
+    async def test_happy_path_genera_atleta_id(self):
         repo = AsyncMock()
-        repo.find_by_id.return_value = None
+        repo.find_by_email.return_value = None
         handler = RegistrarAtletaHandler(repo)
-        cmd = _cmd()
 
-        atleta_id = await handler.handle(cmd)
+        atleta_id = await handler.handle(_cmd())
 
-        assert atleta_id == cmd.atleta_id
+        assert atleta_id is not None
         repo.save.assert_awaited_once()
+        saved: Atleta = repo.save.call_args[0][0]
+        assert saved.atleta_id == atleta_id
 
-    async def test_atleta_duplicado_lanza_excepcion(self):
+    async def test_email_duplicado_lanza_excepcion(self):
         repo = AsyncMock()
-        atleta_id = uuid4()
-        repo.find_by_id.return_value = Atleta(
-            atleta_id=atleta_id,
-            nombre="Ana",
-            apellido="García",
-            email="ana@example.com",
-            fecha_nacimiento=date(1990, 5, 15),
-            categoria=Categoria.SENIOR_FEMENINO,
-            club="Club Apnea Norte",
-        )
+        repo.find_by_email.return_value = _atleta_existente()
         handler = RegistrarAtletaHandler(repo)
-        cmd = _cmd(atleta_id=atleta_id)
 
         with pytest.raises(AtletaYaRegistrado):
-            await handler.handle(cmd)
+            await handler.handle(_cmd())
 
         repo.save.assert_not_awaited()
 
-    async def test_registra_sin_brevet(self):
+    async def test_registra_sin_club_ni_categoria(self):
         repo = AsyncMock()
-        repo.find_by_id.return_value = None
+        repo.find_by_email.return_value = None
         handler = RegistrarAtletaHandler(repo)
-        cmd = _cmd(brevet=None)
 
-        await handler.handle(cmd)
+        await handler.handle(_cmd())
 
         saved: Atleta = repo.save.call_args[0][0]
-        assert saved.club == "Club Apnea Norte"
-        assert saved.brevet is None
+        assert saved.club is None
+        assert saved.categoria is None
+
+    async def test_registra_con_dni_y_telefono(self):
+        repo = AsyncMock()
+        repo.find_by_email.return_value = None
+        handler = RegistrarAtletaHandler(repo)
+
+        await handler.handle(_cmd(dni="30123456", telefono="1155559999"))
+
+        saved: Atleta = repo.save.call_args[0][0]
+        assert saved.dni == "30123456"
+        assert saved.telefono == "1155559999"
+
+    async def test_registra_con_todos_los_campos(self):
+        repo = AsyncMock()
+        repo.find_by_email.return_value = None
+        handler = RegistrarAtletaHandler(repo)
+
+        await handler.handle(
+            _cmd(
+                club="Club Apnea BA",
+                categoria=Categoria.SENIOR_FEMENINO,
+                brevet="AIDA-3",
+                dni="28888999",
+                telefono="1133334444",
+            )
+        )
+
+        saved: Atleta = repo.save.call_args[0][0]
+        assert saved.club == "Club Apnea BA"
+        assert saved.categoria == Categoria.SENIOR_FEMENINO
+        assert saved.brevet == "AIDA-3"

@@ -77,14 +77,15 @@ def configure_inscripcion_notificaciones(
 
 
 class RegistrarAtletaRequest(BaseModel):
-    atleta_id: UUID
     nombre: str
     apellido: str
     email: str
     fecha_nacimiento: date
-    categoria: Categoria
-    club: str
+    categoria: Categoria | None = None
+    club: str | None = None
     brevet: str | None = None
+    dni: str | None = None
+    telefono: str | None = None
 
     @field_validator("nombre", "apellido")
     @classmethod
@@ -100,9 +101,11 @@ class AtletaResponse(BaseModel):
     apellido: str
     email: str
     fecha_nacimiento: date
-    categoria: Categoria
-    club: str
+    categoria: Categoria | None
+    club: str | None
     brevet: str | None
+    dni: str | None
+    telefono: str | None
 
 
 class ActualizarAtletaMeRequest(BaseModel):
@@ -112,6 +115,8 @@ class ActualizarAtletaMeRequest(BaseModel):
     club: str | None = None
     fecha_nacimiento: date | None = None
     brevet: str | None = None
+    dni: str | None = None
+    telefono: str | None = None
 
 
 # ── Schemas — Inscripcion ─────────────────────────────────────────────────────
@@ -146,8 +151,8 @@ class InscriptoDetalleResponse(BaseModel):
     fecha_inscripcion: datetime
     nombre: str
     apellido: str
-    categoria: Categoria
-    club: str
+    categoria: Categoria | None
+    club: str | None
     disciplinas: list[EstadoAPDisciplinaResponse]
 
 
@@ -259,7 +264,6 @@ async def registrar_atleta(body: RegistrarAtletaRequest, _: AtletaDep) -> JSONRe
     repo = _repo()
     handler = RegistrarAtletaHandler(repo)
     cmd = RegistrarAtletaCommand(
-        atleta_id=body.atleta_id,
         nombre=body.nombre,
         apellido=body.apellido,
         email=body.email,
@@ -267,6 +271,8 @@ async def registrar_atleta(body: RegistrarAtletaRequest, _: AtletaDep) -> JSONRe
         categoria=body.categoria,
         club=body.club,
         brevet=body.brevet,
+        dni=body.dni,
+        telefono=body.telefono,
     )
     try:
         atleta_id = await handler.handle(cmd)
@@ -295,6 +301,8 @@ async def obtener_atleta_me(current_user: AtletaDep) -> JSONResponse:
             categoria=atleta.categoria,
             club=atleta.club,
             brevet=atleta.brevet,
+            dni=atleta.dni,
+            telefono=atleta.telefono,
         ).model_dump(mode="json"),
     )
 
@@ -314,6 +322,8 @@ async def actualizar_atleta_me(
                 club=body.club,
                 fecha_nacimiento=body.fecha_nacimiento,
                 brevet=body.brevet,
+                dni=body.dni,
+                telefono=body.telefono,
             )
         )
     except AtletaNoEncontrado as exc:
@@ -331,6 +341,8 @@ async def actualizar_atleta_me(
             categoria=atleta.categoria,
             club=atleta.club,
             brevet=atleta.brevet,
+            dni=atleta.dni,
+            telefono=atleta.telefono,
         ).model_dump(mode="json"),
     )
 
@@ -354,6 +366,8 @@ async def obtener_atleta(atleta_id: UUID) -> JSONResponse:
             categoria=atleta.categoria,
             club=atleta.club,
             brevet=atleta.brevet,
+            dni=atleta.dni,
+            telefono=atleta.telefono,
         ).model_dump(mode="json"),
     )
 
