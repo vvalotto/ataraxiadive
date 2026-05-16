@@ -12,8 +12,14 @@ from identidad.domain.exceptions import (
     CredencialesInvalidas,
     EmailYaRegistrado,
     PasswordDemasiadoCorto,
+    RolDuplicado,
+    RolesVacios,
+    RolNoEncontrado,
     RolNoPermitido,
+    RolNoRemovible,
+    RolYaAsignado,
     TokenInvalido,
+    UltimoRolNoRemovible,
     UsuarioInactivo,
     UsuarioNoEncontrado,
 )
@@ -44,13 +50,13 @@ def test_usuario_creacion_basica() -> None:
         apellido="Garcia",
         email="test@test.com",
         password_hash="$2b$12$hash",
-        rol=Rol.ORGANIZADOR,
+        roles=[Rol.ORGANIZADOR],
     )
     assert u.usuario_id == uid
     assert u.nombre == "Ana"
     assert u.apellido == "Garcia"
     assert u.email == "test@test.com"
-    assert u.rol == Rol.ORGANIZADOR
+    assert Rol.ORGANIZADOR in u.roles
     assert u.activo is True
 
 
@@ -61,7 +67,7 @@ def test_usuario_inactivo_por_defecto_es_true() -> None:
         apellido="Garcia",
         email="a@b.com",
         password_hash="hash",
-        rol=Rol.ATLETA,
+        roles=[Rol.ATLETA],
     )
     assert u.activo is True
 
@@ -73,10 +79,24 @@ def test_usuario_puede_estar_inactivo() -> None:
         apellido="Garcia",
         email="a@b.com",
         password_hash="hash",
-        rol=Rol.ATLETA,
+        roles=[Rol.ATLETA],
         activo=False,
     )
     assert u.activo is False
+
+
+def test_usuario_multi_rol() -> None:
+    u = Usuario(
+        usuario_id=uuid.uuid4(),
+        nombre="Pedro",
+        apellido="Lopez",
+        email="pedro@b.com",
+        password_hash="hash",
+        roles=[Rol.JUEZ, Rol.ATLETA],
+    )
+    assert Rol.JUEZ in u.roles
+    assert Rol.ATLETA in u.roles
+    assert len(u.roles) == 2
 
 
 def test_usuario_trim_nombre_y_apellido() -> None:
@@ -86,7 +106,7 @@ def test_usuario_trim_nombre_y_apellido() -> None:
         apellido="  Garcia  ",
         email="a@b.com",
         password_hash="hash",
-        rol=Rol.ATLETA,
+        roles=[Rol.ATLETA],
     )
     assert u.nombre == "Ana"
     assert u.apellido == "Garcia"
@@ -103,8 +123,94 @@ def test_usuario_rechaza_nombre_o_apellido_vacios(campo: str, nombre: str, apell
             apellido=apellido,
             email="a@b.com",
             password_hash="hash",
-            rol=Rol.ATLETA,
+            roles=[Rol.ATLETA],
         )
+
+
+def test_usuario_rechaza_roles_vacios() -> None:
+    from identidad.domain.exceptions import RolesVacios
+
+    with pytest.raises(RolesVacios):
+        Usuario(
+            usuario_id=uuid.uuid4(),
+            nombre="Ana",
+            apellido="Garcia",
+            email="a@b.com",
+            password_hash="hash",
+            roles=[],
+        )
+
+
+def test_usuario_rechaza_rol_duplicado() -> None:
+    from identidad.domain.exceptions import RolDuplicado
+
+    with pytest.raises(RolDuplicado):
+        Usuario(
+            usuario_id=uuid.uuid4(),
+            nombre="Ana",
+            apellido="Garcia",
+            email="a@b.com",
+            password_hash="hash",
+            roles=[Rol.ATLETA, Rol.ATLETA],
+        )
+
+
+# ── agregar_rol / quitar_rol ──────────────────────────────────────────────────
+
+
+def _usuario_base(roles: list[Rol]) -> Usuario:
+    return Usuario(
+        usuario_id=uuid.uuid4(),
+        nombre="Test",
+        apellido="User",
+        email="test@email.com",
+        password_hash="hash",
+        roles=roles,
+    )
+
+
+def test_agregar_rol_nuevo() -> None:
+    u = _usuario_base([Rol.ATLETA])
+    u.agregar_rol(Rol.JUEZ)
+    assert Rol.JUEZ in u.roles
+    assert len(u.roles) == 2
+
+
+def test_agregar_rol_ya_asignado_lanza_excepcion() -> None:
+    u = _usuario_base([Rol.ATLETA, Rol.JUEZ])
+    with pytest.raises(RolYaAsignado):
+        u.agregar_rol(Rol.JUEZ)
+
+
+def test_agregar_rol_admin_lanza_excepcion() -> None:
+    u = _usuario_base([Rol.ATLETA])
+    with pytest.raises(RolNoPermitido):
+        u.agregar_rol(Rol.ADMIN)
+
+
+def test_quitar_rol_existente() -> None:
+    u = _usuario_base([Rol.JUEZ, Rol.ATLETA])
+    u.quitar_rol(Rol.JUEZ)
+    assert Rol.JUEZ not in u.roles
+    assert Rol.ATLETA in u.roles
+
+
+def test_quitar_rol_atleta_lanza_excepcion() -> None:
+    u = _usuario_base([Rol.ATLETA, Rol.JUEZ])
+    with pytest.raises(RolNoRemovible):
+        u.quitar_rol(Rol.ATLETA)
+
+
+def test_quitar_rol_no_poseido_lanza_excepcion() -> None:
+    u = _usuario_base([Rol.ATLETA])
+    with pytest.raises(RolNoEncontrado):
+        u.quitar_rol(Rol.JUEZ)
+
+
+def test_quitar_unico_rol_lanza_excepcion() -> None:
+    u = _usuario_base([Rol.JUEZ])
+    with pytest.raises(UltimoRolNoRemovible):
+        u.quitar_rol(Rol.JUEZ)
 
 
 # ── Exceptions ────────────────────────────────────────────────────────────────

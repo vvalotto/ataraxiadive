@@ -72,7 +72,7 @@ async def crear_admin_directo(email: str, password: str) -> None:
         apellido="UAT",
         email=email,
         password_hash=hasher.hash(password),
-        rol=Rol.ADMIN,
+        roles=[Rol.ADMIN],
     )
     await repo.save(usuario)
     log(f"admin creado: {email}")

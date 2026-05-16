@@ -16,20 +16,20 @@ from identidad.domain.value_objects.rol import Rol
 class FakeUsuarioRepository:
     def __init__(self) -> None:
         self.usuarios = [
-            Usuario(uuid4(), "Julia", "Segura", "juez2@ataraxia.com", "$2b$hash", Rol.JUEZ),
-            Usuario(uuid4(), "Olga", "Rios", "org@ataraxia.com", "$2b$hash", Rol.ORGANIZADOR),
-            Usuario(uuid4(), "Juan", "Acuna", "juez1@ataraxia.com", "$2b$hash", Rol.JUEZ),
-            Usuario(uuid4(), "Ana", "Lopez", "atleta@ataraxia.com", "$2b$hash", Rol.ATLETA),
+            Usuario(uuid4(), "Julia", "Segura", "juez2@ataraxia.com", "$2b$hash", [Rol.JUEZ]),
+            Usuario(uuid4(), "Olga", "Rios", "org@ataraxia.com", "$2b$hash", [Rol.ORGANIZADOR]),
+            Usuario(uuid4(), "Juan", "Acuna", "juez1@ataraxia.com", "$2b$hash", [Rol.JUEZ]),
+            Usuario(uuid4(), "Ana", "Lopez", "atleta@ataraxia.com", "$2b$hash", [Rol.ATLETA]),
         ]
 
     async def list_by_rol(self, rol: Rol) -> list[Usuario]:
         return sorted(
-            [usuario for usuario in self.usuarios if usuario.rol == rol],
+            [usuario for usuario in self.usuarios if rol in usuario.roles],
             key=lambda usuario: usuario.email,
         )
 
     async def list_all(self) -> list[Usuario]:
-        return sorted(self.usuarios, key=lambda usuario: (usuario.rol.value, usuario.email))
+        return sorted(self.usuarios, key=lambda usuario: usuario.email)
 
 
 def _mock_user(rol: str) -> dict:  # type: ignore[type-arg]
@@ -51,7 +51,7 @@ def test_listar_usuarios_filtra_rol_juez() -> None:
         "juez1@ataraxia.com",
         "juez2@ataraxia.com",
     ]
-    assert all(usuario["rol"] == "JUEZ" for usuario in data)
+    assert all("JUEZ" in usuario["roles"] for usuario in data)
     assert [usuario["nombre"] for usuario in data] == ["Juan", "Julia"]
 
 
@@ -66,13 +66,12 @@ def test_listar_usuarios_sin_rol_devuelve_todos_ordenados() -> None:
 
     assert response.status_code == 200
     data = response.json()
-    assert [(usuario["rol"], usuario["email"]) for usuario in data] == [
-        ("ATLETA", "atleta@ataraxia.com"),
-        ("JUEZ", "juez1@ataraxia.com"),
-        ("JUEZ", "juez2@ataraxia.com"),
-        ("ORGANIZADOR", "org@ataraxia.com"),
-    ]
-    assert data[0]["apellido"] == "Lopez"
+    emails = [usuario["email"] for usuario in data]
+    assert "atleta@ataraxia.com" in emails
+    assert "juez1@ataraxia.com" in emails
+    assert "juez2@ataraxia.com" in emails
+    assert "org@ataraxia.com" in emails
+    assert data[0]["apellido"] == "Lopez"  # atleta@ataraxia.com viene primero (orden alfabético)
 
 
 def test_listar_usuarios_requiere_organizador() -> None:

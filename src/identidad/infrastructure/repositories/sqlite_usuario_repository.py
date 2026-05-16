@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 from uuid import UUID
 
@@ -16,8 +17,9 @@ CREATE TABLE IF NOT EXISTS usuarios (
     apellido      TEXT NOT NULL DEFAULT '',
     email         TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
-    rol           TEXT NOT NULL,
-    activo        INTEGER NOT NULL DEFAULT 1
+    rol           TEXT NOT NULL DEFAULT 'ATLETA',
+    activo        INTEGER NOT NULL DEFAULT 1,
+    roles         TEXT NOT NULL DEFAULT '["ATLETA"]'
 )
 """
 
@@ -30,6 +32,8 @@ class SQLiteUsuarioRepository(UsuarioRepositoryPort):
         await conn.execute(_CREATE_TABLE)
         await _ensure_column(conn, "nombre", "TEXT NOT NULL DEFAULT ''")
         await _ensure_column(conn, "apellido", "TEXT NOT NULL DEFAULT ''")
+        await _ensure_column(conn, "roles", "TEXT NOT NULL DEFAULT '[\"ATLETA\"]'")
+        await _migrate_rol_to_roles(conn)
         await conn.commit()
 
     async def save(self, usuario: Usuario) -> None:
@@ -38,8 +42,8 @@ class SQLiteUsuarioRepository(UsuarioRepositoryPort):
             await conn.execute(
                 """
                 INSERT OR REPLACE INTO usuarios
-                    (usuario_id, nombre, apellido, email, password_hash, rol, activo)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                    (usuario_id, nombre, apellido, email, password_hash, rol, activo, roles)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     str(usuario.usuario_id),
@@ -47,8 +51,9 @@ class SQLiteUsuarioRepository(UsuarioRepositoryPort):
                     usuario.apellido,
                     usuario.email,
                     usuario.password_hash,
-                    usuario.rol.value,
+                    usuario.roles[0].value,
                     1 if usuario.activo else 0,
+                    _serialize_roles(usuario.roles),
                 ),
             )
             await conn.commit()
@@ -58,7 +63,7 @@ class SQLiteUsuarioRepository(UsuarioRepositoryPort):
             await self._ensure_table(conn)
             async with conn.execute(
                 """
-                SELECT usuario_id, nombre, apellido, email, password_hash, rol, activo
+                SELECT usuario_id, nombre, apellido, email, password_hash, activo, roles
                 FROM usuarios
                 WHERE usuario_id = ?
                 """,
@@ -72,7 +77,7 @@ class SQLiteUsuarioRepository(UsuarioRepositoryPort):
             await self._ensure_table(conn)
             async with conn.execute(
                 """
-                SELECT usuario_id, nombre, apellido, email, password_hash, rol, activo
+                SELECT usuario_id, nombre, apellido, email, password_hash, activo, roles
                 FROM usuarios
                 WHERE email = ?
                 """,
@@ -86,12 +91,12 @@ class SQLiteUsuarioRepository(UsuarioRepositoryPort):
             await self._ensure_table(conn)
             async with conn.execute(
                 """
-                SELECT usuario_id, nombre, apellido, email, password_hash, rol, activo
+                SELECT usuario_id, nombre, apellido, email, password_hash, activo, roles
                 FROM usuarios
-                WHERE rol = ?
+                WHERE roles LIKE ?
                 ORDER BY email
                 """,
-                (rol.value,),
+                (f'%"{rol.value}"%',),
             ) as cursor:
                 rows = await cursor.fetchall()
         return [_row_to_usuario(row) for row in rows]
@@ -100,23 +105,31 @@ class SQLiteUsuarioRepository(UsuarioRepositoryPort):
         async with aiosqlite.connect(self._db_path) as conn:
             await self._ensure_table(conn)
             async with conn.execute("""
-                SELECT usuario_id, nombre, apellido, email, password_hash, rol, activo
+                SELECT usuario_id, nombre, apellido, email, password_hash, activo, roles
                 FROM usuarios
-                ORDER BY rol, email
+                ORDER BY email
                 """) as cursor:
                 rows = await cursor.fetchall()
         return [_row_to_usuario(row) for row in rows]
 
 
+def _serialize_roles(roles: list[Rol]) -> str:
+    return json.dumps([r.value for r in roles])
+
+
+def _deserialize_roles(roles_str: str) -> list[Rol]:
+    return [Rol(r) for r in json.loads(roles_str)]
+
+
 def _row_to_usuario(row: tuple) -> Usuario:  # type: ignore[type-arg]
-    usuario_id, nombre, apellido, email, password_hash, rol, activo = row
+    usuario_id, nombre, apellido, email, password_hash, activo, roles_str = row
     return Usuario(
         usuario_id=UUID(usuario_id),
         nombre=nombre,
         apellido=apellido,
         email=email,
         password_hash=password_hash,
-        rol=Rol(rol),
+        roles=_deserialize_roles(roles_str),
         activo=bool(activo),
     )
 
@@ -127,3 +140,22 @@ async def _ensure_column(conn: aiosqlite.Connection, column: str, definition: st
     if any(row[1] == column for row in rows):
         return
     await conn.execute(f"ALTER TABLE usuarios ADD COLUMN {column} {definition}")
+
+
+async def _migrate_rol_to_roles(conn: aiosqlite.Connection) -> None:
+    """Convierte columna legacy 'rol' a 'roles' JSON para filas sin migrar."""
+    async with conn.execute("PRAGMA table_info(usuarios)") as cursor:
+        cols = {row[1] for row in await cursor.fetchall()}
+    if "rol" not in cols or "roles" not in cols:
+        return
+    # Solo actualiza filas donde roles está en el valor default vacío o mal formado
+    await conn.execute("""
+        UPDATE usuarios
+        SET roles = json_array(rol)
+        WHERE roles = '["ATLETA"]' AND rol != 'ATLETA'
+        """)
+    await conn.execute("""
+        UPDATE usuarios
+        SET roles = json_array(rol)
+        WHERE json_valid(roles) = 0
+        """)

@@ -3,12 +3,19 @@ from __future__ import annotations
 import logging
 import re
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from uuid import UUID
 
+from identidad.application.commands.autenticar_usuario import TokenResponse
 from identidad.domain.aggregates.usuario import Usuario
-from identidad.domain.exceptions import EmailYaRegistrado, PasswordDemasiadoCorto, RolNoPermitido
+from identidad.domain.exceptions import (
+    CredencialesInvalidas,
+    PasswordDemasiadoCorto,
+    RolNoPermitido,
+    RolYaAsignado,
+)
 from identidad.domain.ports.password_hashing_port import PasswordHashingPort
+from identidad.domain.ports.token_service_port import TokenServicePort
 from identidad.domain.ports.usuario_repository_port import UsuarioRepositoryPort
 from identidad.domain.value_objects.rol import Rol
 from notificaciones.domain.ports.email_port import EmailPort
@@ -25,7 +32,19 @@ class RegistrarUsuarioCommand:
     apellido: str
     email: str
     password: str  # plain — el handler hashea con bcrypt
-    rol: Rol
+    roles: list[Rol]
+
+
+@dataclass(frozen=True)
+class RegistroResult:
+    usuario_id: UUID
+    es_usuario_nuevo: bool = True
+    token_response: TokenResponse | None = None
+    roles_disponibles: list[Rol] = field(default_factory=list)
+
+    @property
+    def requires_role_selection(self) -> bool:
+        return self.token_response is None
 
 
 class RegistrarUsuarioHandler:
@@ -33,14 +52,15 @@ class RegistrarUsuarioHandler:
         self,
         repo: UsuarioRepositoryPort,
         password_hasher: PasswordHashingPort,
+        token_service: TokenServicePort,
         email_sender: EmailPort | None = None,
     ) -> None:
         self._repo = repo
         self._password_hasher = password_hasher
+        self._token_service = token_service
         self._email_sender = email_sender
 
-    async def handle(self, cmd: RegistrarUsuarioCommand) -> UUID:
-        # INV-ID-02: mínimo 10 caracteres, al menos 1 mayúscula y 1 número
+    async def handle(self, cmd: RegistrarUsuarioCommand) -> RegistroResult:
         if (
             len(cmd.password) < _MIN_PASSWORD_LENGTH
             or not re.search(r"[A-Z]", cmd.password)
@@ -48,24 +68,29 @@ class RegistrarUsuarioHandler:
         ):
             raise PasswordDemasiadoCorto()
 
-        if cmd.rol == Rol.ADMIN:
+        if Rol.ADMIN in cmd.roles:
             raise RolNoPermitido()
 
-        # INV-ID-01: email único
         existente = await self._repo.find_by_email(cmd.email)
         if existente is not None:
-            raise EmailYaRegistrado(cmd.email)
+            # Email ya registrado: validar password y agregar roles nuevos
+            if not self._password_hasher.verify(cmd.password, existente.password_hash):
+                raise CredencialesInvalidas()
+            for rol in cmd.roles:
+                if rol in existente.roles:
+                    raise RolYaAsignado(rol.value)
+                existente.roles.append(rol)
+            await self._repo.save(existente)
+            return self._build_result(existente, es_usuario_nuevo=False)
 
-        # INV-ID-03: hash bcrypt — nunca plain text
         password_hash = self._password_hasher.hash(cmd.password)
-
         usuario = Usuario(
             usuario_id=uuid.uuid4(),
             nombre=cmd.nombre,
             apellido=cmd.apellido,
             email=cmd.email,
             password_hash=password_hash,
-            rol=cmd.rol,
+            roles=list(cmd.roles),
         )
         await self._repo.save(usuario)
 
@@ -88,4 +113,18 @@ class RegistrarUsuarioHandler:
             except Exception:
                 _log.warning("No se pudo enviar email de bienvenida a %s", usuario.email)
 
-        return usuario.usuario_id
+        return self._build_result(usuario, es_usuario_nuevo=True)
+
+    def _build_result(self, usuario: Usuario, *, es_usuario_nuevo: bool) -> RegistroResult:
+        if len(usuario.roles) == 1:
+            token = self._token_service.generate(usuario, usuario.roles[0])
+            return RegistroResult(
+                usuario_id=usuario.usuario_id,
+                es_usuario_nuevo=es_usuario_nuevo,
+                token_response=TokenResponse(access_token=token),
+            )
+        return RegistroResult(
+            usuario_id=usuario.usuario_id,
+            es_usuario_nuevo=es_usuario_nuevo,
+            roles_disponibles=list(usuario.roles),
+        )

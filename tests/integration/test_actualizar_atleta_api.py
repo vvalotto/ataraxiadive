@@ -101,3 +101,41 @@ def test_patch_sin_perfil_retorna_404(ctx):
     )
 
     assert response.status_code == 404
+
+
+def test_patch_actualiza_fecha_nacimiento(ctx):
+    _seed_atleta(ctx["repo"])
+    _override_atleta(ctx["client"].app)
+
+    response = ctx["client"].patch(
+        "/registro/atletas/me",
+        json={"fecha_nacimiento": "1985-03-20"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["fecha_nacimiento"] == "1985-03-20"
+
+
+def test_patch_actualiza_brevet(ctx):
+    _seed_atleta(ctx["repo"])
+    _override_atleta(ctx["client"].app)
+
+    response = ctx["client"].patch(
+        "/registro/atletas/me",
+        json={"brevet": "AIDA-3"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["brevet"] == "AIDA-3"
+
+
+def test_patch_fecha_nacimiento_futura_retorna_error(ctx):
+    _seed_atleta(ctx["repo"])
+    _override_atleta(ctx["client"].app)
+
+    response = ctx["client"].patch(
+        "/registro/atletas/me",
+        json={"fecha_nacimiento": "2099-01-01"},
+    )
+
+    assert response.status_code in (400, 422)

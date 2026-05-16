@@ -22,6 +22,8 @@ interface FormState {
   apellido: string
   categoria: string
   club: string
+  fecha_nacimiento: string
+  brevet: string
 }
 
 function inputClass(hasError = false): string {
@@ -43,6 +45,8 @@ function toFormState(atleta: AtletaDto): FormState {
     apellido: atleta.apellido,
     categoria: atleta.categoria,
     club: atleta.club,
+    fecha_nacimiento: atleta.fecha_nacimiento ?? '',
+    brevet: atleta.brevet ?? '',
   }
 }
 
@@ -52,6 +56,8 @@ export function AtletaMisDatosPage() {
     apellido: '',
     categoria: '',
     club: '',
+    fecha_nacimiento: '',
+    brevet: '',
   })
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -97,6 +103,8 @@ export function AtletaMisDatosPage() {
         apellido: form.apellido.trim() || undefined,
         categoria: form.categoria || undefined,
         club: form.club.trim() || undefined,
+        fecha_nacimiento: form.fecha_nacimiento || undefined,
+        brevet: form.brevet.trim() || undefined,
       })
       setForm(toFormState(updated))
       setSuccess(true)
@@ -174,6 +182,26 @@ export function AtletaMisDatosPage() {
                 onChange={(e) => updateField('club', e.target.value)}
                 className={inputClass()}
                 placeholder="Club Atlético"
+              />
+            </label>
+
+            <label className="block text-sm font-semibold text-slate-100">
+              Fecha de nacimiento
+              <input
+                type="date"
+                value={form.fecha_nacimiento}
+                onChange={(e) => updateField('fecha_nacimiento', e.target.value)}
+                className={inputClass()}
+              />
+            </label>
+
+            <label className="block text-sm font-semibold text-slate-100">
+              Brevet
+              <input
+                value={form.brevet}
+                onChange={(e) => updateField('brevet', e.target.value)}
+                className={inputClass()}
+                placeholder="Número de brevet (opcional)"
               />
             </label>
           </div>

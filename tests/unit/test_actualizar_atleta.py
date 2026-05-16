@@ -66,6 +66,28 @@ class TestAtletaActualizar:
         assert atleta.nombre == "Ana"
         assert atleta.club == "Poseidon"
 
+    def test_actualizar_fecha_nacimiento(self) -> None:
+        atleta = _atleta()
+        nueva_fecha = date(1985, 3, 20)
+        atleta.actualizar(fecha_nacimiento=nueva_fecha)
+        assert atleta.fecha_nacimiento == nueva_fecha
+
+    def test_fecha_nacimiento_futura_lanza_error(self) -> None:
+        atleta = _atleta()
+        with pytest.raises(ValueError, match="fecha_nacimiento"):
+            atleta.actualizar(fecha_nacimiento=date(2099, 1, 1))
+
+    def test_actualizar_brevet(self) -> None:
+        atleta = _atleta()
+        atleta.actualizar(brevet="AIDA-3")
+        assert atleta.brevet == "AIDA-3"
+
+    def test_actualizar_brevet_vacio_lo_limpia(self) -> None:
+        atleta = _atleta()
+        atleta.actualizar(brevet="AIDA-3")
+        atleta.actualizar(brevet="")
+        assert atleta.brevet is None
+
 
 class TestActualizarAtletaHandler:
     @pytest.mark.asyncio

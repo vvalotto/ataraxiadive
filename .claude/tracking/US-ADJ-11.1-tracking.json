@@ -1,0 +1,20 @@
+{
+  "us_id": "US-ADJ-11.1",
+  "description": "BC Identidad: aggregate Usuario multi-rol + JWT + login/registro",
+  "branch": "feature/US-ADJ-11.1-identidad-multi-rol",
+  "started_at": "2026-05-16T12:30:00Z",
+  "status": "in_progress",
+  "current_phase": 0,
+  "phases": {
+    "0": {"name": "Validación de Contexto", "started_at": "2026-05-16T12:30:00Z", "status": "in_progress"},
+    "1": {"name": "BDD", "status": "pending"},
+    "2": {"name": "Planning", "status": "pending"},
+    "3": {"name": "Implementation", "status": "pending"},
+    "4": {"name": "Unit Tests", "status": "pending"},
+    "5": {"name": "Integration Tests", "status": "pending"},
+    "6": {"name": "BDD Validation", "status": "pending"},
+    "7": {"name": "Quality Gates", "status": "pending"},
+    "8": {"name": "Documentation", "status": "pending"},
+    "9": {"name": "Final Report", "status": "pending"}
+  }
+}

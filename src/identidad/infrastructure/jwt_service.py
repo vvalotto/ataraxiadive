@@ -8,6 +8,7 @@ import jwt
 from identidad.domain.aggregates.usuario import Usuario
 from identidad.domain.exceptions import TokenInvalido
 from identidad.domain.ports.token_service_port import TokenServicePort
+from identidad.domain.value_objects.rol import Rol
 
 _DEFAULT_EXPIRY_HOURS = 24
 _RESET_TOKEN_EXPIRY_HOURS = 1
@@ -25,13 +26,13 @@ class JWTService(TokenServicePort):
         self._expiry_hours = expiry_hours
         self._algorithm = "HS256"
 
-    def generate(self, usuario: Usuario) -> str:
+    def generate(self, usuario: Usuario, rol_activo: Rol) -> str:
         payload = {
             "sub": str(usuario.usuario_id),
             "email": usuario.email,
             "nombre": usuario.nombre,
             "apellido": usuario.apellido,
-            "rol": usuario.rol.value,
+            "rol": rol_activo.value,
             "exp": datetime.now(tz=timezone.utc) + timedelta(hours=self._expiry_hours),
         }
         return jwt.encode(payload, self._secret, algorithm=self._algorithm)

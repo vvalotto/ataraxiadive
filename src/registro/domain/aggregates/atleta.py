@@ -39,6 +39,8 @@ class Atleta:
         apellido: str | None = None,
         categoria: Categoria | None = None,
         club: str | None = None,
+        fecha_nacimiento: date | None = None,
+        brevet: str | None = None,
     ) -> None:
         if nombre is not None:
             if not nombre.strip():
@@ -54,3 +56,9 @@ class Atleta:
             if not club.strip():
                 raise ValueError("INV-A-05: club no puede ser vacío")
             self.club = club
+        if fecha_nacimiento is not None:
+            if fecha_nacimiento >= date.today():
+                raise ValueError("INV-A-04: fecha_nacimiento debe ser en el pasado")
+            self.fecha_nacimiento = fecha_nacimiento
+        if brevet is not None:
+            self.brevet = brevet or None
