@@ -28,6 +28,7 @@ interface NavItem {
     | 'jueces'
     | 'torneo'
     | 'audit'
+    | 'mis-datos'
   disabled?: boolean
 }
 
@@ -41,6 +42,7 @@ const NAV_ITEMS: NavItem[] = [
   { key: 'podios', label: 'Podios', to: '/organizador/podios' },
   { key: 'torneo', label: 'Torneo', to: '/organizador/torneo' },
   { key: 'audit', label: 'Audit Log', to: '/organizador/audit-log' },
+  { key: 'mis-datos', label: 'Mis Datos', to: '/organizador/mis-datos' },
 ]
 
 function currentSection(pathname: string): NavItem['key'] {
@@ -52,6 +54,7 @@ function currentSection(pathname: string): NavItem['key'] {
   if (pathname.startsWith('/organizador/podios')) return 'podios'
   if (pathname.startsWith('/organizador/jueces')) return 'jueces'
   if (pathname.startsWith('/organizador/audit-log')) return 'audit'
+  if (pathname.startsWith('/organizador/mis-datos')) return 'mis-datos'
   if (pathname.startsWith('/organizador/torneos/') && pathname.endsWith('/competencias')) {
     return 'audit'
   }
