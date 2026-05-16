@@ -118,3 +118,17 @@ class TestSQLiteAtletaRepository:
         assert result.club == "Club Norte"
         assert result.dni is None
         assert result.telefono is None
+
+    async def test_save_y_find_atleta_sin_fecha_nacimiento(self, repo: SQLiteAtletaRepository):
+        atleta = _atleta(fecha_nacimiento=None)
+        await repo.save(atleta)
+        result = await repo.find_by_id(atleta.atleta_id)
+        assert result is not None
+        assert result.fecha_nacimiento is None
+
+    async def test_find_by_email_atleta_sin_fecha_nacimiento(self, repo: SQLiteAtletaRepository):
+        atleta = _atleta(email="stub@test.com", fecha_nacimiento=None)
+        await repo.save(atleta)
+        result = await repo.find_by_email("stub@test.com")
+        assert result is not None
+        assert result.fecha_nacimiento is None

@@ -128,7 +128,7 @@ class AtletaResponse(BaseModel):
     nombre: str
     apellido: str
     email: str
-    fecha_nacimiento: date
+    fecha_nacimiento: date | None = None
     categoria: Categoria | None
     club: str | None
     brevet: str | None

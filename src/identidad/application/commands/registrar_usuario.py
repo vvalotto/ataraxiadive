@@ -15,6 +15,7 @@ from identidad.domain.exceptions import (
     RolYaAsignado,
 )
 from identidad.domain.ports.password_hashing_port import PasswordHashingPort
+from identidad.domain.ports.perfil_registro_port import PerfilRegistroPort
 from identidad.domain.ports.token_service_port import TokenServicePort
 from identidad.domain.ports.usuario_repository_port import UsuarioRepositoryPort
 from identidad.domain.value_objects.rol import Rol
@@ -33,6 +34,9 @@ class RegistrarUsuarioCommand:
     email: str
     password: str  # plain — el handler hashea con bcrypt
     roles: list[Rol]
+    numero_licencia: str | None = field(default=None)
+    federacion: str | None = field(default=None)
+    nombre_organizacion: str | None = field(default=None)
 
 
 @dataclass(frozen=True)
@@ -54,11 +58,13 @@ class RegistrarUsuarioHandler:
         password_hasher: PasswordHashingPort,
         token_service: TokenServicePort,
         email_sender: EmailPort | None = None,
+        perfil_registro: PerfilRegistroPort | None = None,
     ) -> None:
         self._repo = repo
         self._password_hasher = password_hasher
         self._token_service = token_service
         self._email_sender = email_sender
+        self._perfil_registro = perfil_registro
 
     async def handle(self, cmd: RegistrarUsuarioCommand) -> RegistroResult:
         if (
@@ -81,6 +87,7 @@ class RegistrarUsuarioHandler:
                     raise RolYaAsignado(rol.value)
                 existente.roles.append(rol)
             await self._repo.save(existente)
+            await self._crear_perfiles(cmd, existente.usuario_id)
             return self._build_result(existente, es_usuario_nuevo=False)
 
         password_hash = self._password_hasher.hash(cmd.password)
@@ -113,7 +120,22 @@ class RegistrarUsuarioHandler:
             except Exception:
                 _log.warning("No se pudo enviar email de bienvenida a %s", usuario.email)
 
+        await self._crear_perfiles(cmd, usuario.usuario_id)
         return self._build_result(usuario, es_usuario_nuevo=True)
+
+    async def _crear_perfiles(self, cmd: RegistrarUsuarioCommand, usuario_id: UUID) -> None:
+        if self._perfil_registro is None:
+            return
+        await self._perfil_registro.crear_perfiles(
+            usuario_id=usuario_id,
+            nombre=cmd.nombre,
+            apellido=cmd.apellido,
+            email=cmd.email,
+            roles=cmd.roles,
+            numero_licencia=cmd.numero_licencia,
+            federacion=cmd.federacion,
+            nombre_organizacion=cmd.nombre_organizacion,
+        )
 
     def _build_result(self, usuario: Usuario, *, es_usuario_nuevo: bool) -> RegistroResult:
         if len(usuario.roles) == 1:

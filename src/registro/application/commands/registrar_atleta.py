@@ -15,7 +15,7 @@ class RegistrarAtletaCommand:
     nombre: str
     apellido: str
     email: str
-    fecha_nacimiento: date
+    fecha_nacimiento: date | None = field(default=None)
     categoria: Categoria | None = field(default=None)
     club: str | None = field(default=None)
     brevet: str | None = field(default=None)
@@ -37,7 +37,7 @@ class RegistrarAtletaHandler:
             nombre=cmd.nombre,
             apellido=cmd.apellido,
             email=cmd.email,
-            fecha_nacimiento=cmd.fecha_nacimiento,
+            fecha_nacimiento=cmd.fecha_nacimiento,  # None si se completa luego en Mis Datos
             categoria=cmd.categoria,
             club=cmd.club,
             brevet=cmd.brevet,

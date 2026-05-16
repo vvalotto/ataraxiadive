@@ -1,0 +1,256 @@
+{
+  "metadata": {
+    "us_id": "US-ADJ-11.10",
+    "us_title": "Creación automática de perfiles BC Registro al registrarse",
+    "us_points": 5,
+    "producto": "registro",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-05-16T19:47:37.672500+00:00",
+    "completed_at": null,
+    "total_elapsed_seconds": 1047,
+    "effective_seconds": 1047,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-05-16T19:47:40.642723+00:00",
+      "completed_at": "2026-05-16T19:48:50.166313+00:00",
+      "elapsed_seconds": 69,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-05-16T19:48:50.256971+00:00",
+      "completed_at": "2026-05-16T19:49:29.182266+00:00",
+      "elapsed_seconds": 38,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de Implementación",
+      "started_at": "2026-05-16T19:49:29.270714+00:00",
+      "completed_at": "2026-05-16T19:50:07.049322+00:00",
+      "elapsed_seconds": 37,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-05-16T19:50:07.136850+00:00",
+      "completed_at": "2026-05-16T19:55:22.283353+00:00",
+      "elapsed_seconds": 315,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "T1",
+          "task_name": "Puerto PerfilRegistroPort",
+          "task_type": "implementation",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-05-16T19:50:10.642955+00:00",
+          "completed_at": "2026-05-16T19:50:18.681878+00:00",
+          "elapsed_seconds": 8,
+          "actual_minutes": 0.13,
+          "variance_minutes": -9.87,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T2",
+          "task_name": "Atleta.fecha_nacimiento opcional",
+          "task_type": "implementation",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-05-16T19:50:18.770605+00:00",
+          "completed_at": "2026-05-16T19:50:43.030523+00:00",
+          "elapsed_seconds": 24,
+          "actual_minutes": 0.4,
+          "variance_minutes": -14.6,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T3",
+          "task_name": "RegistrarAtletaCommand.fecha_nacimiento opcional",
+          "task_type": "implementation",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-05-16T19:50:43.243101+00:00",
+          "completed_at": "2026-05-16T19:51:07.873938+00:00",
+          "elapsed_seconds": 24,
+          "actual_minutes": 0.4,
+          "variance_minutes": -9.6,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T4",
+          "task_name": "SQLite repository — soportar null",
+          "task_type": "implementation",
+          "estimated_minutes": 20.0,
+          "started_at": "2026-05-16T19:51:07.964427+00:00",
+          "completed_at": "2026-05-16T19:51:41.131513+00:00",
+          "elapsed_seconds": 33,
+          "actual_minutes": 0.55,
+          "variance_minutes": -19.45,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T5",
+          "task_name": "PerfilRegistroAdapter",
+          "task_type": "implementation",
+          "estimated_minutes": 25.0,
+          "started_at": "2026-05-16T19:51:41.246972+00:00",
+          "completed_at": "2026-05-16T19:52:00.256341+00:00",
+          "elapsed_seconds": 19,
+          "actual_minutes": 0.32,
+          "variance_minutes": -24.68,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T6",
+          "task_name": "RegistrarUsuarioHandler — llamar el puerto",
+          "task_type": "implementation",
+          "estimated_minutes": 20.0,
+          "started_at": "2026-05-16T19:52:00.397975+00:00",
+          "completed_at": "2026-05-16T19:53:05.523286+00:00",
+          "elapsed_seconds": 65,
+          "actual_minutes": 1.08,
+          "variance_minutes": -18.92,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T7",
+          "task_name": "RegistroRequest — campos opcionales",
+          "task_type": "implementation",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-05-16T19:53:05.668132+00:00",
+          "completed_at": "2026-05-16T19:53:48.502624+00:00",
+          "elapsed_seconds": 42,
+          "actual_minutes": 0.7,
+          "variance_minutes": -14.3,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T8",
+          "task_name": "dependencies.py — get_perfil_registro",
+          "task_type": "implementation",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-05-16T19:53:48.607394+00:00",
+          "completed_at": "2026-05-16T19:54:49.680027+00:00",
+          "elapsed_seconds": 61,
+          "actual_minutes": 1.02,
+          "variance_minutes": -13.98,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T9",
+          "task_name": "app.py — wiring",
+          "task_type": "implementation",
+          "estimated_minutes": 20.0,
+          "started_at": "2026-05-16T19:54:49.828763+00:00",
+          "completed_at": "2026-05-16T19:55:22.185587+00:00",
+          "elapsed_seconds": 32,
+          "actual_minutes": 0.53,
+          "variance_minutes": -19.47,
+          "file_created": null,
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-05-16T19:55:33.845218+00:00",
+      "completed_at": "2026-05-16T19:56:43.009291+00:00",
+      "elapsed_seconds": 69,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-05-16T19:56:43.140848+00:00",
+      "completed_at": "2026-05-16T19:59:43.527367+00:00",
+      "elapsed_seconds": 180,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-05-16T19:59:43.712393+00:00",
+      "completed_at": "2026-05-16T20:00:12.846795+00:00",
+      "elapsed_seconds": 29,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-05-16T20:00:12.990689+00:00",
+      "completed_at": "2026-05-16T20:04:59.942515+00:00",
+      "elapsed_seconds": 286,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-05-16T20:05:00.359038+00:00",
+      "completed_at": "2026-05-16T20:05:04.804455+00:00",
+      "elapsed_seconds": 4,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-05-16T20:05:05.135361+00:00",
+      "completed_at": null,
+      "elapsed_seconds": 0,
+      "status": "in_progress",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 9,
+    "completed_tasks": 9,
+    "total_phases": 10,
+    "estimated_total_minutes": 150.0,
+    "actual_total_minutes": 5.13,
+    "variance_minutes": -144.87,
+    "variance_percent": -96.58
+  }
+}
