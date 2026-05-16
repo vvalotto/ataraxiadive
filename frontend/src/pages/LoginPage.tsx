@@ -18,11 +18,20 @@ function esDestinoCompatible(destino: string, rol: string): boolean {
   return false
 }
 
+const ROL_LABEL: Record<string, string> = {
+  ATLETA: 'Atleta',
+  JUEZ: 'Juez',
+  ORGANIZADOR: 'Organizador',
+}
+
 export function LoginPage() {
   const [searchParams] = useSearchParams()
   const location = useLocation()
   const autologinFailed =
     (location.state as { autologinFailed?: boolean } | null)?.autologinFailed ?? false
+  const requiresRoleSelectionOnLoad =
+    (location.state as { requiresRoleSelection?: boolean } | null)?.requiresRoleSelection ?? false
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const login = useAuthStore((s) => s.login)
@@ -33,12 +42,40 @@ export function LoginPage() {
     return redirect
   })
 
+  const [pendingRoles, setPendingRoles] = useState<string[] | null>(null)
+  const [pendingEmail, setPendingEmail] = useState('')
+  const [pendingPassword, setPendingPassword] = useState('')
+  const [roleSelectionError, setRoleSelectionError] = useState<string | null>(null)
+
   const mutation = useMutation({
     mutationFn: () => loginApi(email, password),
     onSuccess: (data) => {
-      login(data.access_token)
+      if ('requires_role_selection' in data && data.requires_role_selection) {
+        const roles = data.roles.filter((r) => r !== 'ADMIN')
+        if (roles.length === 0) {
+          setRoleSelectionError('Error: no hay roles disponibles para esta cuenta.')
+          return
+        }
+        setPendingRoles(roles)
+        setPendingEmail(email)
+        setPendingPassword(password)
+        return
+      }
+      if ('access_token' in data) {
+        login(data.access_token)
+      }
     },
   })
+
+  const rolMutation = useMutation({
+    mutationFn: (rolElegido: string) => loginApi(pendingEmail, pendingPassword, rolElegido),
+    onSuccess: (data) => {
+      if ('access_token' in data) {
+        login(data.access_token)
+      }
+    },
+  })
+
   const registered = searchParams.get('registered') === '1'
   const resetDone = searchParams.get('reset') === '1'
 
@@ -54,6 +91,56 @@ export function LoginPage() {
     mutation.mutate()
   }
 
+  if (pendingRoles !== null) {
+    return (
+      <div className="min-h-screen bg-slate-950 text-slate-100">
+        <div className="mx-auto flex min-h-screen w-full max-w-sm items-center px-4 py-6">
+          <div className="w-full rounded-[2rem] border border-slate-800 bg-slate-900/80 p-8 shadow-[0_24px_80px_-50px_rgba(34,211,238,0.7)]">
+            <p className="text-center text-xs font-semibold uppercase tracking-[0.24em] text-sky-400">
+              AtaraxiaDive
+            </p>
+            <h1 className="mb-2 mt-3 text-center text-3xl font-semibold text-slate-50">
+              Elegí tu rol
+            </h1>
+            <p className="mb-6 text-center text-sm text-slate-400">
+              Tu cuenta tiene varios roles. ¿Con cuál querés entrar?
+            </p>
+            {rolMutation.isError && (
+              <p className="mb-4 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-center text-sm text-red-100">
+                {rolMutation.error instanceof Error
+                  ? rolMutation.error.message
+                  : 'Error al iniciar sesión'}
+              </p>
+            )}
+            <div className="flex flex-col gap-3">
+              {pendingRoles.map((r) => (
+                <button
+                  key={r}
+                  onClick={() => rolMutation.mutate(r)}
+                  disabled={rolMutation.isPending}
+                  className="rounded-2xl border border-sky-500/40 bg-sky-500/10 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-sky-200 transition-colors hover:bg-sky-500/20 disabled:opacity-50"
+                >
+                  {ROL_LABEL[r] ?? r}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => {
+                setPendingRoles(null)
+                setPendingEmail('')
+                setPendingPassword('')
+                rolMutation.reset()
+              }}
+              className="mt-4 w-full text-center text-sm text-slate-500 hover:text-slate-400"
+            >
+              Volver al inicio de sesión
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto flex min-h-screen w-full max-w-sm items-center px-4 py-6">
@@ -67,6 +154,11 @@ export function LoginPage() {
           <p className="mb-6 text-center text-sm text-slate-400">
             Portal del juez, organizador y atleta
           </p>
+          {requiresRoleSelectionOnLoad ? (
+            <p className="mb-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-center text-sm text-amber-100">
+              Tu cuenta tiene varios roles. Iniciá sesión y elegí con cuál querés entrar.
+            </p>
+          ) : null}
           {registered ? (
             <p className="mb-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-center text-sm text-emerald-100">
               Cuenta creada. Inicia sesion.
@@ -80,6 +172,11 @@ export function LoginPage() {
           {resetDone ? (
             <p className="mb-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-center text-sm text-emerald-100">
               Contrasena actualizada. Inicia sesion con tu nueva clave.
+            </p>
+          ) : null}
+          {roleSelectionError ? (
+            <p className="mb-4 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-center text-sm text-red-100">
+              {roleSelectionError}
             </p>
           ) : null}
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">

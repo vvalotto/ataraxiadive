@@ -133,14 +133,17 @@ Scenario: Selector no aparece para usuario de un solo rol
 
 ## Notas de implementacion
 
-1. **Endpoint de selección de rol:** el backend (US-ADJ-11.1) expone `POST /auth/seleccionar-rol` con body `{ rol: string }` y retorna `{ access_token, token_type }`. El frontend llama este endpoint desde `seleccionarRolApi()`.
+1. **Endpoint de selección de rol (implementación real):** `POST /auth/seleccionar-rol` no existe. La selección de rol se realiza llamando nuevamente a `POST /auth/login` con `{ email, password, rol_elegido: "JUEZ" }` (uppercase). `loginApi()` acepta `rolElegido?: string` opcional. Las credenciales se conservan en estado local de `LoginPage` durante la selección.
 
-2. **Selector de rol UI:** botones tipo pill o cards (no dropdown) con los nombres de rol legibles. Mismo estilo visual que el resto de la pantalla de login.
+2. **Selector de rol UI:** botones tipo pill (no dropdown) con los nombres de rol legibles. El selector reemplaza el formulario inline en la misma pantalla `/login`.
 
 3. **`roles` en JWT:** si el backend emite un token con `roles: []` en el payload, `useAuthStore.login()` lo extrae directamente. Si no está, deriva `[rol]` del campo `rol` existente. Retrocompatibilidad garantizada.
 
 4. **`setRol` en store:** permite que el selector de rol post-login actualice el rol activo sin re-login completo si el token ya contiene todos los roles.
 
+5. **Auto-login post-registro multi-rol:** `RegistroPage` llama `loginApi` sin `rolElegido` para el auto-login. Si el backend retorna `requires_role_selection`, redirige a `/login` con `state: { requiresRoleSelection: true }` en lugar de intentar extraer un token inexistente.
+
 ---
 
-*Spec creada: 2026-05-16 — SP-ADJ-11*
+*Spec creada: 2026-05-16 — SP-ADJ-11*  
+*Actualizada: 2026-05-16 — post-implementación: contrato backend real documentado*
