@@ -15,9 +15,7 @@ from competencia.api.router import (
     configure_competencia_cross_bc_dependencies,
     configure_on_finalizada_callback,
 )
-from competencia.api.router import (
-    router as competencia_router,
-)
+from competencia.api.router import router as competencia_router
 from competencia.application.commands.iniciar_competencia import (
     IniciarCompetenciaCommand,
     IniciarCompetenciaHandler,
@@ -66,24 +64,25 @@ from registro.api.router import (
     build_cierre_inscripcion_precondition,
     configure_inscripcion_notificaciones,
 )
-from registro.api.router import (
-    router as registro_router,
-)
+from registro.api.router import router as registro_router
 from registro.application.commands.declarar_ap_inscripcion import (
     DeclararAPInscripcionCommand,
     DeclararAPInscripcionHandler,
 )
 from registro.domain.aggregates.inscripcion import Inscripcion
+from registro.infrastructure.perfil_registro_adapter import PerfilRegistroAdapter
 from registro.infrastructure.repositories.sqlite_atleta_repository import SQLiteAtletaRepository
 from registro.infrastructure.repositories.sqlite_inscripcion_repository import (
     SQLiteInscripcionRepository,
 )
+from registro.infrastructure.repositories.sqlite_juez_repository import SQLiteJuezRepository
+from registro.infrastructure.repositories.sqlite_organizador_repository import (
+    SQLiteOrganizadorRepository,
+)
 from resultados.api.router import (
     configure_resultados_cross_bc_dependencies,
 )
-from resultados.api.router import (
-    router as resultados_router,
-)
+from resultados.api.router import router as resultados_router
 from resultados.application.commands.calcular_overall import (
     CalcularOverallCommand,
     CalcularOverallHandler,
@@ -92,11 +91,11 @@ from resultados.application.commands.calcular_ranking import (
     CalcularRankingCommand,
     CalcularRankingHandler,
 )
-from resultados.domain.services.algoritmo_faas import AlgoritmoPuntajeFAAS
 from resultados.application.queries.obtener_ranking import (
     ObtenerRankingHandler,
     ObtenerRankingQuery,
 )
+from resultados.domain.services.algoritmo_faas import AlgoritmoPuntajeFAAS
 from resultados.infrastructure.repositories.atleta_categoria_adapter import (
     AtletaCategoriaAdapter,
 )
@@ -115,9 +114,7 @@ from torneo.api.router import (
     configure_ejecucion_precondition,
     configure_premiacion_precondition,
 )
-from torneo.api.router import (
-    router as torneo_router,
-)
+from torneo.api.router import router as torneo_router
 from torneo.domain.exceptions import EjecucionNoPermitida, PremiacionNoPermitida
 from torneo.infrastructure.repositories.sqlite_torneo_repository import SQLiteTorneoRepository
 
@@ -125,10 +122,16 @@ app = FastAPI(title="AtaraxiaDive", version="0.1.0")
 logger = logging.getLogger(__name__)
 
 if os.getenv("IDENTIDAD_JWT_SECRET"):
+    _registro_db = os.getenv("REGISTRO_DB_PATH", "data/registro.db")
     configure_identity_dependencies(
         token_service=JWTService(),
         password_hasher=BcryptPasswordHasher(),
         email_sender=ResendEmailAdapter() if os.getenv("RESEND_API_KEY") else LoggingEmailAdapter(),
+        perfil_registro=PerfilRegistroAdapter(
+            atleta_repo=SQLiteAtletaRepository(_registro_db),
+            juez_repo=SQLiteJuezRepository(_registro_db),
+            organizador_repo=SQLiteOrganizadorRepository(_registro_db),
+        ),
     )
 
 configure_competencia_cross_bc_dependencies(

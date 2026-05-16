@@ -7,6 +7,7 @@ from fastapi.security import OAuth2PasswordBearer
 
 from identidad.domain.exceptions import TokenInvalido
 from identidad.domain.ports.password_hashing_port import PasswordHashingPort
+from identidad.domain.ports.perfil_registro_port import PerfilRegistroPort
 from identidad.domain.ports.token_service_port import TokenServicePort
 from identidad.domain.ports.usuario_repository_port import UsuarioRepositoryPort
 from identidad.domain.value_objects.rol import Rol
@@ -22,6 +23,7 @@ _oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 _token_service: TokenServicePort | None = None
 _password_hasher: PasswordHashingPort | None = None
 _email_sender: EmailPort | None = None
+_perfil_registro: PerfilRegistroPort | None = None
 
 
 def configure_identity_dependencies(
@@ -29,12 +31,18 @@ def configure_identity_dependencies(
     token_service: TokenServicePort | None = None,
     password_hasher: PasswordHashingPort | None = None,
     email_sender: EmailPort | None = None,
+    perfil_registro: PerfilRegistroPort | None = None,
 ) -> None:
     """Permite configurar dependencias tecnicas desde el composition root."""
-    global _token_service, _password_hasher, _email_sender
+    global _token_service, _password_hasher, _email_sender, _perfil_registro
     _token_service = token_service
     _password_hasher = password_hasher
     _email_sender = email_sender
+    _perfil_registro = perfil_registro
+
+
+def get_perfil_registro() -> PerfilRegistroPort | None:
+    return _perfil_registro
 
 
 def get_usuario_repository() -> UsuarioRepositoryPort:

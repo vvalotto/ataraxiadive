@@ -21,7 +21,7 @@ class Atleta:
     nombre: str
     apellido: str
     email: str
-    fecha_nacimiento: date
+    fecha_nacimiento: date | None = field(default=None)
     categoria: Categoria | None = field(default=None)
     club: str | None = field(default=None)
     brevet: str | None = field(default=None)
@@ -35,7 +35,7 @@ class Atleta:
             raise ValueError("INV-A-01: apellido no puede ser vacío")
         if not _EMAIL_RE.match(self.email):
             raise ValueError("INV-A-02: email debe tener formato válido")
-        if self.fecha_nacimiento >= date.today():
+        if self.fecha_nacimiento is not None and self.fecha_nacimiento >= date.today():
             raise ValueError("INV-A-04: fecha_nacimiento debe ser en el pasado")
         _no_vacio_si_presente(self.club, "INV-11.3-04: club")
         _no_vacio_si_presente(self.dni, "INV-11.3-05: dni")
