@@ -141,7 +141,7 @@ export function UsuariosPage() {
       apellido: form.apellido.trim(),
       email: form.email.trim(),
       password: form.password,
-      rol: form.rol,
+      roles: [form.rol],
     })
   }
 

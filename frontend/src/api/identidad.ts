@@ -26,11 +26,18 @@ export interface CrearUsuarioRequest {
   apellido: string
   email: string
   password: string
-  rol: RolGestionUsuario
+  roles: RolGestionUsuario[]
+  numero_licencia?: string
+  federacion?: string
+  nombre_organizacion?: string
 }
 
 export interface CrearUsuarioResponse {
   usuario_id: string
+  access_token?: string
+  token_type?: string
+  requires_role_selection?: boolean
+  roles?: RolGestionUsuario[]
 }
 
 export interface CambiarPasswordRequest {
