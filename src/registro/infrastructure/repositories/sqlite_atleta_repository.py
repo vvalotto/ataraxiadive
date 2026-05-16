@@ -46,6 +46,37 @@ class SQLiteAtletaRepository(AtletaRepositoryPort):
                 await conn.execute(f"ALTER TABLE atletas ADD COLUMN {col}")
             except Exception:
                 pass
+        await self._migrate_fecha_nacimiento_nullable(conn)
+
+    @staticmethod
+    async def _migrate_fecha_nacimiento_nullable(conn: aiosqlite.Connection) -> None:
+        """Elimina el NOT NULL de fecha_nacimiento si la tabla legacy lo tiene."""
+        async with conn.execute("PRAGMA table_info(atletas)") as cur:
+            cols = await cur.fetchall()
+        # col[1]=name, col[3]=notnull
+        fn_col = next((c for c in cols if c[1] == "fecha_nacimiento"), None)
+        if fn_col is None or fn_col[3] == 0:
+            return  # ya es nullable o no existe — nada que hacer
+        await conn.executescript("""
+            CREATE TABLE IF NOT EXISTS atletas_new (
+                atleta_id        TEXT PRIMARY KEY,
+                nombre           TEXT NOT NULL,
+                apellido         TEXT NOT NULL,
+                email            TEXT NOT NULL UNIQUE,
+                fecha_nacimiento TEXT,
+                categoria        TEXT,
+                club             TEXT,
+                brevet           TEXT,
+                dni              TEXT,
+                telefono         TEXT
+            );
+            INSERT OR IGNORE INTO atletas_new
+                SELECT atleta_id, nombre, apellido, email, fecha_nacimiento,
+                       categoria, club, brevet, dni, telefono
+                FROM atletas;
+            DROP TABLE atletas;
+            ALTER TABLE atletas_new RENAME TO atletas;
+        """)
 
     async def save(self, atleta: Atleta) -> None:
         async with aiosqlite.connect(self._db_path) as conn:
