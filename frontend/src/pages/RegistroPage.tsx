@@ -89,9 +89,13 @@ export function RegistroPage() {
 
       try {
         const tokenData = await loginApi(variables.email, variables.password)
-        login(tokenData.access_token)
-        const primerRol = variables.roles[0]?.toLowerCase() as RolUsuario | undefined
-        navigate(HOME_BY_ROL[primerRol ?? 'atleta'] ?? '/atleta', { replace: true })
+        if ('access_token' in tokenData) {
+          login(tokenData.access_token)
+          const primerRol = variables.roles[0]?.toLowerCase() as RolUsuario | undefined
+          navigate(HOME_BY_ROL[primerRol ?? 'atleta'] ?? '/atleta', { replace: true })
+        } else {
+          navigate('/login', { replace: true, state: { requiresRoleSelection: true } })
+        }
       } catch {
         navigate('/login', { replace: true, state: { autologinFailed: true } })
       }

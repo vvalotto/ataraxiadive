@@ -1,0 +1,172 @@
+{
+  "metadata": {
+    "us_id": "US-ADJ-11.7",
+    "us_title": "Frontend — Login con selector de rol",
+    "us_points": 3,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-05-16T21:03:49.171171+00:00",
+    "completed_at": "2026-05-16T21:14:54.491693+00:00",
+    "total_elapsed_seconds": 665,
+    "effective_seconds": 665,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-05-16T21:03:52.312816+00:00",
+      "completed_at": "2026-05-16T21:05:02.598683+00:00",
+      "elapsed_seconds": 70,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-05-16T21:05:16.944299+00:00",
+      "completed_at": "2026-05-16T21:06:22.256506+00:00",
+      "elapsed_seconds": 65,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de Implementación",
+      "started_at": "2026-05-16T21:06:39.373305+00:00",
+      "completed_at": "2026-05-16T21:07:41.120342+00:00",
+      "elapsed_seconds": 61,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-05-16T21:08:21.036106+00:00",
+      "completed_at": "2026-05-16T21:10:32.322107+00:00",
+      "elapsed_seconds": 131,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "T1-types-auth",
+          "task_name": "Agregar roles y setRol a AuthState",
+          "task_type": "implementation",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-05-16T21:08:28.371425+00:00",
+          "completed_at": "2026-05-16T21:08:46.255657+00:00",
+          "elapsed_seconds": 17,
+          "actual_minutes": 0.28,
+          "variance_minutes": -4.72,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T2-api-auth",
+          "task_name": "Discriminated union + rolElegido en loginApi",
+          "task_type": "implementation",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-05-16T21:08:49.630917+00:00",
+          "completed_at": "2026-05-16T21:09:05.684940+00:00",
+          "elapsed_seconds": 16,
+          "actual_minutes": 0.27,
+          "variance_minutes": -9.73,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T3-store",
+          "task_name": "Extraer roles[] del JWT, setRol, persistir",
+          "task_type": "implementation",
+          "estimated_minutes": 10.0,
+          "started_at": "2026-05-16T21:09:10.013628+00:00",
+          "completed_at": "2026-05-16T21:09:30.926733+00:00",
+          "elapsed_seconds": 20,
+          "actual_minutes": 0.33,
+          "variance_minutes": -9.67,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T4-login-page",
+          "task_name": "Selector inline, aviso, manejo de errores",
+          "task_type": "implementation",
+          "estimated_minutes": 20.0,
+          "started_at": "2026-05-16T21:09:39.285176+00:00",
+          "completed_at": "2026-05-16T21:10:28.091159+00:00",
+          "elapsed_seconds": 48,
+          "actual_minutes": 0.8,
+          "variance_minutes": -19.2,
+          "file_created": null,
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-05-16T21:14:01.541234+00:00",
+      "completed_at": "2026-05-16T21:14:07.656839+00:00",
+      "elapsed_seconds": 6,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "T5-quality-gate",
+          "task_name": "npm run build — TypeScript + Vite",
+          "task_type": "implementation",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-05-16T21:14:04.909359+00:00",
+          "completed_at": "2026-05-16T21:14:05.008689+00:00",
+          "elapsed_seconds": 0,
+          "actual_minutes": 0.0,
+          "variance_minutes": -5.0,
+          "file_created": null,
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-05-16T21:14:11.941772+00:00",
+      "completed_at": "2026-05-16T21:14:45.256306+00:00",
+      "elapsed_seconds": 33,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-05-16T21:14:49.345680+00:00",
+      "completed_at": null,
+      "elapsed_seconds": 0,
+      "status": "in_progress",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 5,
+    "completed_tasks": 5,
+    "total_phases": 7,
+    "estimated_total_minutes": 50.0,
+    "actual_total_minutes": 1.68,
+    "variance_minutes": -48.32,
+    "variance_percent": -96.63
+  }
+}

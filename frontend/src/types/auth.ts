@@ -15,6 +15,8 @@ export interface AuthState {
   nombre: string | null
   apellido: string | null
   rol: RolUsuario | null
+  roles: RolUsuario[] | null
   login: (token: string) => void
   logout: () => void
+  setRol: (rol: RolUsuario) => void
 }
