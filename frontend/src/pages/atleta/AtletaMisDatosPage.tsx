@@ -41,10 +41,10 @@ function getErrorMessage(error: unknown): string {
 
 function toFormState(atleta: AtletaDto): FormState {
   return {
-    nombre: atleta.nombre,
-    apellido: atleta.apellido,
-    categoria: atleta.categoria,
-    club: atleta.club,
+    nombre: atleta.nombre ?? '',
+    apellido: atleta.apellido ?? '',
+    categoria: atleta.categoria ?? '',
+    club: atleta.club ?? '',
     fecha_nacimiento: atleta.fecha_nacimiento ?? '',
     brevet: atleta.brevet ?? '',
   }
