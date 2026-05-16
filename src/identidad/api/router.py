@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-
 from typing import Annotated
 from uuid import UUID
 
@@ -11,11 +10,15 @@ from pydantic import BaseModel, field_validator
 
 from identidad.api.dependencies import (
     OrganizadorDep,
-    get_email_sender,
     get_current_user,
+    get_email_sender,
     get_password_hasher,
     get_token_service,
     get_usuario_repository,
+)
+from identidad.application.commands.agregar_rol_usuario import (
+    AgregarRolUsuarioCommand,
+    AgregarRolUsuarioHandler,
 )
 from identidad.application.commands.autenticar_usuario import (
     AutenticarUsuarioCommand,
@@ -27,13 +30,17 @@ from identidad.application.commands.cambiar_password import (
     CambiarPasswordCommand,
     CambiarPasswordHandler,
 )
-from identidad.application.commands.reset_password import (
-    ResetPasswordCommand,
-    ResetPasswordHandler,
+from identidad.application.commands.quitar_rol_usuario import (
+    QuitarRolUsuarioCommand,
+    QuitarRolUsuarioHandler,
 )
 from identidad.application.commands.registrar_usuario import (
     RegistrarUsuarioCommand,
     RegistrarUsuarioHandler,
+)
+from identidad.application.commands.reset_password import (
+    ResetPasswordCommand,
+    ResetPasswordHandler,
 )
 from identidad.application.commands.solicitar_reset_password import (
     SolicitarResetPasswordCommand,
@@ -44,9 +51,12 @@ from identidad.domain.exceptions import (
     CredencialesInvalidas,
     PasswordActualIncorrecto,
     PasswordDemasiadoCorto,
+    RolNoEncontrado,
     RolNoPermitido,
+    RolNoRemovible,
     RolYaAsignado,
     TokenResetInvalido,
+    UltimoRolNoRemovible,
     UsuarioInactivo,
     UsuarioNoEncontrado,
 )
@@ -280,6 +290,54 @@ async def reset_password(
     except PasswordDemasiadoCorto as exc:
         return JSONResponse(status_code=422, content={"detail": str(exc)})
     return JSONResponse(status_code=204, content=None)
+
+
+class AgregarRolRequest(BaseModel):
+    rol: Rol
+
+
+@router.post("/usuarios/me/roles", status_code=200)
+async def agregar_rol(
+    body: AgregarRolRequest,
+    current_user: Annotated[dict, Depends(get_current_user)],
+    repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
+) -> JSONResponse:
+    handler = AgregarRolUsuarioHandler(repo)
+    cmd = AgregarRolUsuarioCommand(
+        usuario_id=UUID(current_user["sub"]),
+        nuevo_rol=body.rol,
+    )
+    try:
+        roles = await handler.handle(cmd)
+    except RolYaAsignado as exc:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+    except RolNoPermitido as exc:
+        return JSONResponse(status_code=403, content={"detail": str(exc)})
+    except UsuarioNoEncontrado:
+        return JSONResponse(status_code=401, content={"detail": "Token inválido o expirado"})
+    return JSONResponse(status_code=200, content={"roles": [r.value for r in roles]})
+
+
+@router.delete("/usuarios/me/roles/{rol}", status_code=200)
+async def quitar_rol(
+    rol: Rol,
+    current_user: Annotated[dict, Depends(get_current_user)],
+    repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
+) -> JSONResponse:
+    handler = QuitarRolUsuarioHandler(repo)
+    cmd = QuitarRolUsuarioCommand(
+        usuario_id=UUID(current_user["sub"]),
+        rol=rol,
+    )
+    try:
+        roles = await handler.handle(cmd)
+    except RolNoEncontrado as exc:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
+    except (RolNoRemovible, UltimoRolNoRemovible) as exc:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+    except UsuarioNoEncontrado:
+        return JSONResponse(status_code=401, content={"detail": "Token inválido o expirado"})
+    return JSONResponse(status_code=200, content={"roles": [r.value for r in roles]})
 
 
 @router.get("/usuarios", status_code=200)

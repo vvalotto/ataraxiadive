@@ -13,9 +13,13 @@ from identidad.domain.exceptions import (
     EmailYaRegistrado,
     PasswordDemasiadoCorto,
     RolDuplicado,
-    RolNoPermitido,
     RolesVacios,
+    RolNoEncontrado,
+    RolNoPermitido,
+    RolNoRemovible,
+    RolYaAsignado,
     TokenInvalido,
+    UltimoRolNoRemovible,
     UsuarioInactivo,
     UsuarioNoEncontrado,
 )
@@ -149,6 +153,64 @@ def test_usuario_rechaza_rol_duplicado() -> None:
             password_hash="hash",
             roles=[Rol.ATLETA, Rol.ATLETA],
         )
+
+
+# ── agregar_rol / quitar_rol ──────────────────────────────────────────────────
+
+
+def _usuario_base(roles: list[Rol]) -> Usuario:
+    return Usuario(
+        usuario_id=uuid.uuid4(),
+        nombre="Test",
+        apellido="User",
+        email="test@email.com",
+        password_hash="hash",
+        roles=roles,
+    )
+
+
+def test_agregar_rol_nuevo() -> None:
+    u = _usuario_base([Rol.ATLETA])
+    u.agregar_rol(Rol.JUEZ)
+    assert Rol.JUEZ in u.roles
+    assert len(u.roles) == 2
+
+
+def test_agregar_rol_ya_asignado_lanza_excepcion() -> None:
+    u = _usuario_base([Rol.ATLETA, Rol.JUEZ])
+    with pytest.raises(RolYaAsignado):
+        u.agregar_rol(Rol.JUEZ)
+
+
+def test_agregar_rol_admin_lanza_excepcion() -> None:
+    u = _usuario_base([Rol.ATLETA])
+    with pytest.raises(RolNoPermitido):
+        u.agregar_rol(Rol.ADMIN)
+
+
+def test_quitar_rol_existente() -> None:
+    u = _usuario_base([Rol.JUEZ, Rol.ATLETA])
+    u.quitar_rol(Rol.JUEZ)
+    assert Rol.JUEZ not in u.roles
+    assert Rol.ATLETA in u.roles
+
+
+def test_quitar_rol_atleta_lanza_excepcion() -> None:
+    u = _usuario_base([Rol.ATLETA, Rol.JUEZ])
+    with pytest.raises(RolNoRemovible):
+        u.quitar_rol(Rol.ATLETA)
+
+
+def test_quitar_rol_no_poseido_lanza_excepcion() -> None:
+    u = _usuario_base([Rol.ATLETA])
+    with pytest.raises(RolNoEncontrado):
+        u.quitar_rol(Rol.JUEZ)
+
+
+def test_quitar_unico_rol_lanza_excepcion() -> None:
+    u = _usuario_base([Rol.JUEZ])
+    with pytest.raises(UltimoRolNoRemovible):
+        u.quitar_rol(Rol.JUEZ)
 
 
 # ── Exceptions ────────────────────────────────────────────────────────────────
