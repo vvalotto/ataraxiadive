@@ -1,0 +1,145 @@
+{
+  "metadata": {
+    "us_id": "US-ADJ-11.6",
+    "us_title": "Frontend — Registro multi-rol",
+    "us_points": 3,
+    "producto": "frontend",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-05-16T19:02:36.153507+00:00",
+    "completed_at": "2026-05-16T19:09:25.728767+00:00",
+    "total_elapsed_seconds": 409,
+    "effective_seconds": 409,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-05-16T19:03:01.544391+00:00",
+      "completed_at": "2026-05-16T19:03:46.084978+00:00",
+      "elapsed_seconds": 44,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-05-16T19:03:46.197674+00:00",
+      "completed_at": "2026-05-16T19:04:14.067778+00:00",
+      "elapsed_seconds": 27,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de Implementación",
+      "started_at": "2026-05-16T19:04:14.307855+00:00",
+      "completed_at": "2026-05-16T19:05:14.810919+00:00",
+      "elapsed_seconds": 60,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-05-16T19:05:14.903561+00:00",
+      "completed_at": "2026-05-16T19:08:44.911954+00:00",
+      "elapsed_seconds": 210,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "T1",
+          "task_name": "api/identidad.ts — actualizar tipos",
+          "task_type": "implementation",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-05-16T19:05:19.751223+00:00",
+          "completed_at": "2026-05-16T19:05:32.963650+00:00",
+          "elapsed_seconds": 13,
+          "actual_minutes": 0.22,
+          "variance_minutes": -14.78,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T2",
+          "task_name": "RegistroPage.tsx — estado y tipos",
+          "task_type": "implementation",
+          "estimated_minutes": 20.0,
+          "started_at": "2026-05-16T19:05:33.054745+00:00",
+          "completed_at": "2026-05-16T19:06:32.048194+00:00",
+          "elapsed_seconds": 58,
+          "actual_minutes": 0.97,
+          "variance_minutes": -19.03,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T6",
+          "task_name": "npm run build — TypeScript",
+          "task_type": "quality",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-05-16T19:06:35.827749+00:00",
+          "completed_at": "2026-05-16T19:08:42.178761+00:00",
+          "elapsed_seconds": 126,
+          "actual_minutes": 2.1,
+          "variance_minutes": -2.9,
+          "file_created": null,
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-05-16T19:08:45.005854+00:00",
+      "completed_at": "2026-05-16T19:08:54.623023+00:00",
+      "elapsed_seconds": 9,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-05-16T19:08:54.711619+00:00",
+      "completed_at": "2026-05-16T19:09:22.180670+00:00",
+      "elapsed_seconds": 27,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-05-16T19:09:22.267980+00:00",
+      "completed_at": null,
+      "elapsed_seconds": 0,
+      "status": "in_progress",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 3,
+    "completed_tasks": 3,
+    "total_phases": 7,
+    "estimated_total_minutes": 40.0,
+    "actual_total_minutes": 3.28,
+    "variance_minutes": -36.72,
+    "variance_percent": -91.79
+  }
+}
