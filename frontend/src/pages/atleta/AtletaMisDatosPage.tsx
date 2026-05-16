@@ -168,6 +168,38 @@ export function AtletaMisDatosPage() {
             </label>
 
             <label className="block text-sm font-semibold text-slate-100">
+              Fecha de nacimiento
+              <input
+                type="date"
+                value={form.fecha_nacimiento}
+                onChange={(e) => updateField('fecha_nacimiento', e.target.value)}
+                className={inputClass()}
+              />
+            </label>
+
+            <label className="block text-sm font-semibold text-slate-100">
+              DNI <span className="ml-1 text-xs font-normal text-slate-400">(opcional)</span>
+              <input
+                value={form.dni}
+                onChange={(e) => updateField('dni', e.target.value)}
+                className={inputClass()}
+                placeholder="12345678"
+                inputMode="numeric"
+              />
+            </label>
+
+            <label className="block text-sm font-semibold text-slate-100">
+              Teléfono <span className="ml-1 text-xs font-normal text-slate-400">(opcional)</span>
+              <input
+                value={form.telefono}
+                onChange={(e) => updateField('telefono', e.target.value)}
+                className={inputClass()}
+                placeholder="1123456789"
+                inputMode="tel"
+              />
+            </label>
+
+            <label className="block text-sm font-semibold text-slate-100">
               Categoría
               <select
                 value={form.categoria}
@@ -194,44 +226,12 @@ export function AtletaMisDatosPage() {
             </label>
 
             <label className="block text-sm font-semibold text-slate-100">
-              Fecha de nacimiento
-              <input
-                type="date"
-                value={form.fecha_nacimiento}
-                onChange={(e) => updateField('fecha_nacimiento', e.target.value)}
-                className={inputClass()}
-              />
-            </label>
-
-            <label className="block text-sm font-semibold text-slate-100">
               Brevet
               <input
                 value={form.brevet}
                 onChange={(e) => updateField('brevet', e.target.value)}
                 className={inputClass()}
                 placeholder="Número de brevet (opcional)"
-              />
-            </label>
-
-            <label className="block text-sm font-semibold text-slate-100">
-              DNI <span className="ml-1 text-xs font-normal text-slate-400">(opcional)</span>
-              <input
-                value={form.dni}
-                onChange={(e) => updateField('dni', e.target.value)}
-                className={inputClass()}
-                placeholder="12345678"
-                inputMode="numeric"
-              />
-            </label>
-
-            <label className="block text-sm font-semibold text-slate-100">
-              Teléfono <span className="ml-1 text-xs font-normal text-slate-400">(opcional)</span>
-              <input
-                value={form.telefono}
-                onChange={(e) => updateField('telefono', e.target.value)}
-                className={inputClass()}
-                placeholder="1123456789"
-                inputMode="tel"
               />
             </label>
           </div>
