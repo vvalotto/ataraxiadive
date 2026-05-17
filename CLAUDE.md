@@ -91,6 +91,7 @@ SP-ADJ  → ajuste técnico o documental antes de cerrar la baseline
 | SP6 | Validación, Ajustes y Despliegue | `v1.0.0` | ⏳ En definición |
 
 **SP5 cerrado:** INC-5.1..5.7 + SP-ADJ-07/08/09 · portal organizador + portal atleta + FAAS + rankings · ArchitectAnalyst BL-005: `competencia` D=0.46↓ · `should_block=false`
+**SP-ADJ-11 cerrado:** 10/10 US ✅ · PRs #184–#193 · modelo multi-rol completo (Identidad + Registro + Frontend) · DesignReviewer 0 CRITICAL · ADR-020 implementado.
 **SP6 próximo:** validación funcional E2E, ajustes de defectos identificados, despliegue.
 
 ---

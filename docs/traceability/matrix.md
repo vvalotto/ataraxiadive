@@ -612,7 +612,28 @@ alcance vigente de SP5 salvo que se reabra explícitamente el scope.
 
 ---
 
-## 33. Trazabilidad: Discrepancias → US → Documentos a actualizar
+## 33. SP-ADJ-11 — Modelo de usuarios con múltiples roles
+
+**Contexto:** BT-001 — un usuario no puede tener más de un rol (bloqueaba casos reales de producción).  
+**ADR-020:** `Usuario.roles: list[Rol]` · perfiles Juez y Organizador en BC Registro · login con selector de rol.  
+**DesignReviewer cierre:** 0 CRITICAL · 287 WARNING.
+
+| US | Área | PRs | Descripción | Estado |
+|----|------|-----|-------------|--------|
+| US-ADJ-11.1 | BC Identidad | #184 | `Usuario.roles: list[Rol]` · JWT `rol_activo` · login condicional (selector vs token) · migración `rol→roles` | ✅ Done |
+| US-ADJ-11.2 | BC Identidad | #185 | `POST/DELETE /auth/usuarios/me/roles` · `AgregarRolUsuarioCommand` · guard no quitar ATLETA | ✅ Done |
+| US-ADJ-11.3 | BC Registro | #186 | Atleta: `club`/`categoria` opcionales · `dni`/`telefono` nuevos · migración `_ensure_columns` | ✅ Done |
+| US-ADJ-11.4 | BC Registro | #187 | Entidad `Juez` · `JuezRepositoryPort` · `GET/POST/PATCH /registro/jueces/me` | ✅ Done |
+| US-ADJ-11.5 | BC Registro | #188 | Entidad `Organizador` · `OrganizadorRepositoryPort` · `GET/POST/PATCH /registro/organizadores/me` | ✅ Done |
+| US-ADJ-11.6 | Frontend | #189 | `RegistroPage`: checkboxes multi-rol + secciones Juez/Organizador + `CrearUsuarioRequest.roles[]` | ✅ Done |
+| US-ADJ-11.7 | Frontend | #191 | `LoginPage`: selector de rol cuando `requires_role_selection: true` · `loginApi(rolElegido?)` | ✅ Done |
+| US-ADJ-11.8 | Frontend | #192 | `AtletaMisDatosPage`: campos `dni` y `telefono` · reordenamiento visual | ✅ Done |
+| US-ADJ-11.9 | Frontend | #193 | `JuezMisDatosPage` · `OrganizadorMisDatosPage` · rutas + nav | ✅ Done |
+| US-ADJ-11.10 | BC Registro | #190 | Creación automática de perfiles Atleta/Juez/Organizador al registrarse | ✅ Done |
+
+---
+
+## 34. Trazabilidad: Discrepancias → US → Documentos a actualizar
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -631,7 +652,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 33. Cobertura Total
+## 35. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -651,7 +672,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 34. US → Tests
+## 36. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -748,10 +769,20 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 | US-6.2.6 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #153) |
 | US-6.3.1 | frontend (build + eslint) · BDD waiver — frontend puro | ✅ Done (PR #154) |
 | US-6.3.2 | unit/registro + integration/registro + `tests/features/US-6.3.2` · frontend (build + eslint) · ruff focalizado | ✅ Done (PR #155) |
+| US-ADJ-11.1 | unit/identidad/domain + unit/identidad/application + integration/identidad · `tests/features/US-ADJ-11.1` · migración rol→roles | ✅ Done (PR #184) |
+| US-ADJ-11.2 | unit/identidad/application (AgregarRol/QuitarRol) + integration/identidad · `tests/features/US-ADJ-11.2` | ✅ Done (PR #185) |
+| US-ADJ-11.3 | unit/registro/domain + unit/registro/application + integration/registro · `tests/features/US-ADJ-11.3` · migración _ensure_columns | ✅ Done (PR #186) |
+| US-ADJ-11.4 | unit/registro/domain (Juez) + unit/registro/application + integration/registro · `tests/features/US-ADJ-11.4` · 35 tests | ✅ Done (PR #187) |
+| US-ADJ-11.5 | unit/registro/domain (Organizador) + unit/registro/application + integration/registro · `tests/features/US-ADJ-11.5` · 35 tests | ✅ Done (PR #188) |
+| US-ADJ-11.6 | frontend (build + tsc) · BDD waiver — frontend puro | ✅ Done (PR #189) |
+| US-ADJ-11.7 | frontend (build + tsc) · BDD waiver — frontend puro | ✅ Done (PR #191) |
+| US-ADJ-11.8 | frontend (build + tsc) · BDD waiver — frontend puro | ✅ Done (PR #192) |
+| US-ADJ-11.9 | frontend (build + tsc) · BDD waiver — frontend puro | ✅ Done (PR #193) |
+| US-ADJ-11.10 | unit/registro/application + integration/registro · frontend (build + tsc) · BDD waiver frontend | ✅ Done (PR #190) |
 
 ---
 
-## 35. US → ADR
+## 37. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -766,6 +797,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
+*v1.44 — 2026-05-16: SP-ADJ-11 cerrado (§33 nuevo · 10/10 US ✅ · PRs #184–#193 · DesignReviewer 0 CRITICAL · 287 WARNING) · §§ renumerados 34..37 · US→Tests SP-ADJ-11.x agregados*
 *v1.43 — 2026-05-09: US-6.4.5 completada · SQLiteInscripcionRepository sin DR-07 · DR-06 documentado como coordination handler*
 *v1.42 — 2026-05-09: US-6.4.4 completada · AlgoritmoPuntajeFAAS thin dispatcher · DesignReviewer 0 issues componente*
 *v1.42 — 2026-05-10: INC-6.4 cerrado · US-6.4.1/6.4.2 corregidas a Done · US-6.4.6 ✅ · BL-006 draft creado · ARCH-03/DR-01 decisiones cerradas*
