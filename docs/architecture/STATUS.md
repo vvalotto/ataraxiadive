@@ -67,6 +67,7 @@ docs/architecture/
 | `30-runtime-interactions.md` | Creado | Flujos síncronos y asíncronos entre BCs. |
 | `40-cross-cutting-concerns.md` | Creado | Preocupaciones transversales y estado de adopción. |
 | `50-offline-sync.md` | Creado | Arquitectura objetivo offline-first del juez y sincronización. |
+| `60-deployment-view.md` | Creado | Vista de despliegue en Fly.io — Dockerfile multi-stage, volumen SQLite, diagrama Mermaid. |
 
 ## Documentos pendientes
 

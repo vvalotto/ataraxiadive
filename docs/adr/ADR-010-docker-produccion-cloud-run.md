@@ -2,7 +2,7 @@
 
 | Campo | Valor |
 |-------|-------|
-| **Estado** | Aceptada |
+| **Estado** | Supersedida por ADR-021 |
 | **Fecha** | 2026-03-20 |
 | **Autores** | Victor Valotto |
 | **Relacionado** | ADR-007 (SQLite por BC) |

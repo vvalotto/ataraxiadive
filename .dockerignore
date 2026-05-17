@@ -1,0 +1,35 @@
+# Control de versiones
+.git
+.gitignore
+
+# Entornos de desarrollo
+.venv
+.env
+.env.*
+
+# Datos locales (se montan como volumen en producción)
+data/
+
+# Cache y artefactos de build Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Dependencias del frontend (se instalan en el build stage)
+frontend/node_modules/
+
+# Tests y documentación
+tests/
+docs/
+.claude/
+.work/
+quality/
+
+# Archivos de configuración de desarrollo
+.githooks/
+pyproject.toml
