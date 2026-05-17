@@ -275,30 +275,23 @@ Foco: UAT final con los tres roles sobre datos reales. Precondición: INC-6.1..6
 | A-07 | Consultar resultado propio | Víctor Valotto · STA | RP=04:32.98 en mm:ss · rank 1 MASTER MASC | MUX-08 + consulta |
 | A-08 | Portal público sin login | Visitante anónimo | Lista de torneos visible; botón "Inscribirse" → redirige a login → post-login va a formulario inscripción | INC-6.6 US-6.6.3 |
 
-### INC-6.7 — Despliegue
+### INC-6.7 — Despliegue  ⚠️ Diferido a SP7
 
-Foco: configuración y publicación del entorno productivo. Precondición: INC-6.5 sin bloqueos críticos.
-
-| US | Descripción |
-|----|-------------|
-| US-6.7.1 | Configuración entorno productivo (servidor, SSL, dominio, backup) |
-| US-6.7.2 | Despliegue `v1.0.0` + tag BL-006 + ArchitectAnalyst final |
+> INC-6.7 fue diferido a **SP7** por decisión de alcance tomada al cierre de SP6.
+> El despliegue se realizará en Fly.io con tag `v1.0.1`. Ver `docs/plans/sp7/PLAN-SP7.md`.
 
 ---
 
 ## 4. Criterio de Cierre SP6 (BL-006 / v1.0.0)
 
-- [ ] INC-6.1..6.4: DesignReviewer 0 CRITICAL en cada cierre de INC
-- [ ] AA-01 resuelto — ciclo ADP en `competencia/domain/aggregates` eliminado (ArchitectAnalyst 0 DependencyCycles)
-- [ ] MUX-04 corregido — BUG canSubmitBko resuelto y verificado en móvil
-- [ ] RF-IN-05/06 implementados — persistencia de adjuntos verificada E2E
-- [ ] ARCH-01 implementado — grilla carga O(1) verificado con dataset real
-- [ ] ARCH-02 corregido — 0 imports directos de infraestructura en routers
-- [ ] INC-6.6: portal público accesible sin login; acciones contextuales verificadas por estado de torneo
+- [x] INC-6.1..6.6: DesignReviewer 0 CRITICAL en cada cierre de INC
+- [x] AA-01 resuelto — ciclo ADP en `competencia/domain/aggregates` eliminado
+- [x] MUX-04 corregido — BUG canSubmitBko resuelto y verificado en móvil
+- [x] INC-6.6: portal público accesible sin login; acciones contextuales verificadas por estado de torneo
 - [x] INC-6.5: seed Buenos Aires 2025 ejecutable sin errores (US-6.5.0)
-- [x] INC-6.5: UAT E2E completado — F-01..F-10 PASS · 0 bloqueantes · hallazgos H-09-01..05 resueltos
-- [ ] INC-6.7: `v1.0.0` tageado en `main` + BL-006 registrado
-- [ ] ArchitectAnalyst BL-006: `should_block=false`
+- [x] INC-6.5: UAT E2E completado — F-01..F-10 PASS · 0 bloqueantes · hallazgos resueltos
+- [x] `v1.0.0` tageado en `main` · BL-006 registrado · 2026-05-16
+- [x] ArchitectAnalyst BL-006: `should_block=false`
 
 ---
 
