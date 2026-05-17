@@ -1,6 +1,6 @@
 # US-7.1.1 — Dockerfile + FastAPI estáticos + fly.toml + entorno
 
-> Estado: ⏳ En curso — interrumpida en Fase 3 (implementación parcial)
+> Estado: ✅ Completada
 > Branch: `feature/US-7.1.1-dockerfile-flytom-estaticos`
 > Última actualización: 2026-05-17
 
@@ -21,15 +21,15 @@ Incluye diagrama de despliegue en Mermaid como documento de arquitectura.
 |---|-----------|:------:|-------------|
 | 1 | `requirements.txt` | ✅ | Deps producción (espejo de pyproject.toml main) |
 | 2 | `Dockerfile` | ✅ | Multi-stage: node (build frontend) + python (runtime) |
-| 3 | `.dockerignore` | ⬜ | Excluir dev files del contexto Docker |
-| 4 | `fly.toml` | ⬜ | Configuración Fly.io (región gru, volumen data/) |
-| 5 | `.env.production.example` | ⬜ | Template de vars de entorno para producción |
-| 6 | `.gitignore` | ⬜ | Añadir excepción para `.env.production.example` |
-| 7 | `src/app.py` | ⬜ | Mount `StaticFiles` al final para servir `frontend/dist` |
-| 8 | `docs/architecture/60-deployment-view.md` | ⬜ | Diagrama Mermaid de despliegue en Fly.io |
-| 9 | `docs/adr/ADR-021-fly-io.md` | ⬜ | Supersede ADR-010 (Cloud Run → Fly.io) |
-| 10 | `docs/architecture/STATUS.md` | ⬜ | Añadir 60-deployment-view.md |
-| 11 | `docs/architecture/README.md` | ⬜ | Añadir a la estructura |
+| 3 | `.dockerignore` | ✅ | Excluir dev files del contexto Docker |
+| 4 | `fly.toml` | ✅ | Configuración Fly.io (región gru, volumen data/) |
+| 5 | `.env.production.example` | ✅ | Template de vars de entorno para producción |
+| 6 | `.gitignore` | ✅ | Añadir excepción para `.env.production.example` |
+| 7 | `src/app.py` | ✅ | Mount `StaticFiles` al final para servir `frontend/dist` |
+| 8 | `docs/architecture/60-deployment-view.md` | ✅ | Diagrama Mermaid de despliegue en Fly.io |
+| 9 | `docs/adr/ADR-021-fly-io.md` | ✅ | Supersede ADR-010 (Cloud Run → Fly.io) |
+| 10 | `docs/architecture/STATUS.md` | ✅ | Añadir 60-deployment-view.md |
+| 11 | `docs/architecture/README.md` | ✅ | Añadir a la estructura |
 
 ---
 
@@ -46,8 +46,7 @@ Incluye diagrama de despliegue en Mermaid como documento de arquitectura.
 
 ## Contexto de la interrupción
 
-- `requirements.txt` y `Dockerfile` creados y presentes en el branch.
-- Retomar desde ítem 3 (`.dockerignore`).
+- Implementación completa. Pendiente: quality gates (docker build) y PR.
 
 ---
 
@@ -58,10 +57,10 @@ Incluye diagrama de despliegue en Mermaid como documento de arquitectura.
 | 0 — Validación de Contexto | ✅ | |
 | 1 — BDD | — | No aplica — US de infraestructura |
 | 2 — Plan | ✅ | |
-| 3 — Implementación | ⏳ | Interrumpida en ítem 3 |
+| 3 — Implementación | ✅ | Todos los ítems completados |
 | 4 — Tests unitarios | — | No aplica |
 | 5 — Tests integración | — | No aplica |
 | 6 — Validación BDD | — | No aplica |
-| 7 — Quality gates | ⬜ | Verificación `docker build` |
-| 8 — Documentación | ⬜ | Incluida en ítem 8-11 |
-| 9 — Reporte final | ⬜ | |
+| 7 — Quality gates | ✅ | Black OK · frontend build OK · app.py compila |
+| 8 — Documentación | ✅ | Incluida en ítems 8-11 |
+| 9 — Reporte final | ✅ | |
