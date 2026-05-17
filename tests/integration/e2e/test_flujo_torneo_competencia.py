@@ -160,10 +160,8 @@ async def _registrar_e_inscribir(
     atleta_repo, inscripcion_repo, torneo_consulta, torneo_id: UUID
 ) -> UUID:
     """Registra un atleta e inscribe en disciplina STA. Retorna atleta_id."""
-    atleta_id = uuid4()
-    await RegistrarAtletaHandler(atleta_repo).handle(
+    atleta_id = await RegistrarAtletaHandler(atleta_repo).handle(
         RegistrarAtletaCommand(
-            atleta_id=atleta_id,
             nombre="Juan",
             apellido="Perez",
             email="juan@test.com",
@@ -306,10 +304,8 @@ async def test_atleta_sin_ap_no_aparece_en_grilla(infra):
         infra["atleta_repo"], infra["inscripcion_repo"], infra["torneo_consulta"], torneo_id
     )
     # Segundo atleta: registrado e inscripto pero sin AP
-    atleta_sin_ap = uuid4()
-    await RegistrarAtletaHandler(infra["atleta_repo"]).handle(
+    atleta_sin_ap = await RegistrarAtletaHandler(infra["atleta_repo"]).handle(
         RegistrarAtletaCommand(
-            atleta_id=atleta_sin_ap,
             nombre="Maria",
             apellido="Lopez",
             email="maria@test.com",
@@ -359,12 +355,11 @@ async def test_multiples_atletas_ordenados_por_ap_ascendente(infra):
         infra["event_store"], infra["competencias_por_torneo"], torneo_id
     )
 
-    atletas_y_aps = [(uuid4(), ap) for ap in [360, 300, 240]]
+    atletas_y_aps: list[tuple[UUID, int]] = []
 
-    for atleta_id, ap_segundos in atletas_y_aps:
-        await RegistrarAtletaHandler(infra["atleta_repo"]).handle(
+    for ap_segundos in [360, 300, 240]:
+        atleta_id = await RegistrarAtletaHandler(infra["atleta_repo"]).handle(
             RegistrarAtletaCommand(
-                atleta_id=atleta_id,
                 nombre="Atleta",
                 apellido=f"AP{ap_segundos}",
                 email=f"atleta{ap_segundos}@test.com",
@@ -373,6 +368,7 @@ async def test_multiples_atletas_ordenados_por_ap_ascendente(infra):
                 club="Club Test",
             )
         )
+        atletas_y_aps.append((atleta_id, ap_segundos))
         await InscribirAtletaHandler(infra["inscripcion_repo"], infra["torneo_consulta"]).handle(
             InscribirAtletaCommand(
                 atleta_id=atleta_id,

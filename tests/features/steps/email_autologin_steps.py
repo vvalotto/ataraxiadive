@@ -96,7 +96,7 @@ def registrar_usuario(context: dict[str, Any], client: TestClient, email: str, r
             "apellido": "BDD",
             "email": email,
             "password": _PASSWORD,
-            "rol": rol,
+            "roles": [rol],
         },
     )
 
