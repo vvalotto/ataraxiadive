@@ -12,6 +12,7 @@ import { RequireRole } from './components/RequireRole'
 import { DisciplinasPage } from './pages/juez/DisciplinasPage'
 import { GrillaPage } from './pages/juez/GrillaPage'
 import { PerformanceFlowPage } from './pages/juez/PerformanceFlowPage'
+import { JuezMisDatosPage } from './pages/juez/JuezMisDatosPage'
 import { AtletaHomePage } from './pages/atleta/AtletaHomePage'
 import { AtletaTorneosPage } from './pages/atleta/AtletaTorneosPage'
 import { AtletaTorneoDetallePage } from './pages/atleta/AtletaTorneoDetallePage'
@@ -34,6 +35,7 @@ import { AuditoriaCompetenciaPage } from './pages/organizador/AuditoriaCompetenc
 import { AuditoriaPerformancePage } from './pages/organizador/AuditoriaPerformancePage'
 import { ResultadosPage } from './pages/organizador/ResultadosPage'
 import { PodiosPage } from './pages/organizador/PodiosPage'
+import { OrganizadorMisDatosPage } from './pages/organizador/OrganizadorMisDatosPage'
 import { PublicTorneosPage } from './pages/PublicTorneosPage'
 import { PublicTorneoDetallePage } from './pages/PublicTorneoDetallePage'
 import { PublicTorneoResultadosPage } from './pages/PublicTorneoResultadosPage'
@@ -117,6 +119,14 @@ function App() {
           }
         />
         <Route
+          path="/juez/mis-datos"
+          element={
+            <RequireRole role="juez">
+              <JuezMisDatosPage />
+            </RequireRole>
+          }
+        />
+        <Route
           path="/atleta"
           element={
             <RequireRole role="atleta">
@@ -189,6 +199,14 @@ function App() {
           element={
             <RequireRole role="atleta">
               <AtletaMisDatosPage />
+            </RequireRole>
+          }
+        />
+        <Route
+          path="/organizador/mis-datos"
+          element={
+            <RequireRole role="organizador">
+              <OrganizadorMisDatosPage />
             </RequireRole>
           }
         />

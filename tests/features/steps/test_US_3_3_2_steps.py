@@ -183,13 +183,9 @@ async def _registrar_e_inscribir(
     nombre: str = "Juan",
     apellido: str = "Perez",
     email: str = "juan@test.com",
-    atleta_id: UUID | None = None,
 ) -> UUID:
-    if atleta_id is None:
-        atleta_id = uuid4()
-    await RegistrarAtletaHandler(atleta_repo).handle(
+    atleta_id = await RegistrarAtletaHandler(atleta_repo).handle(
         RegistrarAtletaCommand(
-            atleta_id=atleta_id,
             nombre=nombre,
             apellido=apellido,
             email=email,
@@ -329,9 +325,9 @@ def dos_atletas_uno_con_ap(ctx: dict[str, Any]) -> None:
 
 @given("tres atletas con APs de 360 300 y 240 segundos en STA")
 def tres_atletas_con_aps(ctx: dict[str, Any]) -> None:
-    atletas_y_aps = [(uuid4(), ap) for ap in [360, 300, 240]]
-    for atleta_id, ap in atletas_y_aps:
-        _run(
+    atletas_y_aps = []
+    for ap in [360, 300, 240]:
+        atleta_id = _run(
             _registrar_e_inscribir(
                 ctx["atleta_repo"],
                 ctx["inscripcion_repo"],
@@ -340,9 +336,9 @@ def tres_atletas_con_aps(ctx: dict[str, Any]) -> None:
                 nombre="Atleta",
                 apellido=f"AP{ap}",
                 email=f"atleta{ap}@test.com",
-                atleta_id=atleta_id,
             )
         )
+        atletas_y_aps.append((atleta_id, ap))
     ctx["atletas_y_aps"] = atletas_y_aps
 
 

@@ -5,7 +5,6 @@ import { useMutation } from '@tanstack/react-query'
 import {
   ApiError,
   crearUsuario,
-  type CrearUsuarioRequest,
   type RolGestionUsuario,
 } from '../api/identidad'
 import { loginApi } from '../api/auth'
@@ -14,7 +13,17 @@ import { HOME_BY_ROL } from '../utils/auth'
 import type { RolUsuario } from '../types/auth'
 import { PasswordStrengthBar } from '../components/PasswordStrengthBar'
 
-type FormState = CrearUsuarioRequest & { confirmarPassword: string }
+interface FormState {
+  nombre: string
+  apellido: string
+  email: string
+  password: string
+  confirmarPassword: string
+  roles: RolGestionUsuario[]
+  numero_licencia: string
+  federacion: string
+  nombre_organizacion: string
+}
 
 type FormErrors = Partial<Record<keyof FormState | 'general', string>>
 
@@ -24,13 +33,16 @@ const INITIAL_FORM: FormState = {
   email: '',
   password: '',
   confirmarPassword: '',
-  rol: 'ATLETA',
+  roles: ['ATLETA'],
+  numero_licencia: '',
+  federacion: '',
+  nombre_organizacion: '',
 }
 
-const ROLES: Array<{ value: RolGestionUsuario; label: string }> = [
-  { value: 'ATLETA', label: 'Atleta' },
-  { value: 'JUEZ', label: 'Juez' },
-  { value: 'ORGANIZADOR', label: 'Organizador' },
+const ROLES: Array<{ value: RolGestionUsuario; label: string; description: string }> = [
+  { value: 'ATLETA', label: 'Atleta', description: 'Competís en torneos de apnea' },
+  { value: 'JUEZ', label: 'Juez', description: 'Arbitrás competencias' },
+  { value: 'ORGANIZADOR', label: 'Organizador', description: 'Gestionás torneos' },
 ]
 
 function inputClass(hasError: boolean): string {
@@ -62,12 +74,28 @@ export function RegistroPage() {
 
   const mutation = useMutation({
     mutationFn: crearUsuario,
-    onSuccess: async (_data, variables) => {
+    onSuccess: async (data, variables) => {
+      if (data.requires_role_selection) {
+        navigate('/login', { replace: true, state: { requiresRoleSelection: true } })
+        return
+      }
+
+      if (data.access_token) {
+        login(data.access_token)
+        const primerRol = variables.roles[0]?.toLowerCase() as RolUsuario | undefined
+        navigate(HOME_BY_ROL[primerRol ?? 'atleta'] ?? '/atleta', { replace: true })
+        return
+      }
+
       try {
         const tokenData = await loginApi(variables.email, variables.password)
-        login(tokenData.access_token)
-        const rolPortal = variables.rol.toLowerCase() as RolUsuario
-        navigate(HOME_BY_ROL[rolPortal] ?? '/atleta', { replace: true })
+        if ('access_token' in tokenData) {
+          login(tokenData.access_token)
+          const primerRol = variables.roles[0]?.toLowerCase() as RolUsuario | undefined
+          navigate(HOME_BY_ROL[primerRol ?? 'atleta'] ?? '/atleta', { replace: true })
+        } else {
+          navigate('/login', { replace: true, state: { requiresRoleSelection: true } })
+        }
       } catch {
         navigate('/login', { replace: true, state: { autologinFailed: true } })
       }
@@ -95,6 +123,17 @@ export function RegistroPage() {
     setErrors((current) => ({ ...current, [field]: undefined, general: undefined }))
   }
 
+  function toggleRol(rolValue: RolGestionUsuario) {
+    setForm((current) => {
+      const already = current.roles.includes(rolValue)
+      const next = already
+        ? current.roles.filter((r) => r !== rolValue)
+        : [...current.roles, rolValue]
+      return { ...current, roles: next }
+    })
+    setErrors((current) => ({ ...current, roles: undefined, general: undefined }))
+  }
+
   function validate(): FormErrors {
     const nextErrors: FormErrors = {}
     if (!form.nombre.trim()) nextErrors.nombre = 'El nombre es requerido'
@@ -114,6 +153,9 @@ export function RegistroPage() {
     } else if (form.password !== form.confirmarPassword) {
       nextErrors.confirmarPassword = 'Las contrasenas no coinciden'
     }
+    if (form.roles.length === 0) {
+      nextErrors.roles = 'Seleccioná al menos un rol'
+    }
     return nextErrors
   }
 
@@ -125,14 +167,28 @@ export function RegistroPage() {
       return
     }
 
+    const hasJuez = form.roles.includes('JUEZ')
+    const hasOrganizador = form.roles.includes('ORGANIZADOR')
+
     mutation.mutate({
       nombre: form.nombre.trim(),
       apellido: form.apellido.trim(),
       email: form.email.trim(),
       password: form.password,
-      rol: form.rol,
+      roles: form.roles,
+      ...(hasJuez && form.numero_licencia.trim()
+        ? { numero_licencia: form.numero_licencia.trim() }
+        : {}),
+      ...(hasJuez && form.federacion.trim() ? { federacion: form.federacion.trim() } : {}),
+      ...(hasOrganizador && form.nombre_organizacion.trim()
+        ? { nombre_organizacion: form.nombre_organizacion.trim() }
+        : {}),
     })
   }
+
+  const hasJuez = form.roles.includes('JUEZ')
+  const hasOrganizador = form.roles.includes('ORGANIZADOR')
+  const rolesVacios = form.roles.length === 0
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
@@ -184,7 +240,9 @@ export function RegistroPage() {
                 onChange={(event) => updateField('email', event.target.value)}
                 className={inputClass(Boolean(errors.email))}
               />
-              {errors.email ? <span className="mt-1 block text-sm text-red-300">{errors.email}</span> : null}
+              {errors.email ? (
+                <span className="mt-1 block text-sm text-red-300">{errors.email}</span>
+              ) : null}
             </label>
 
             <label className="text-sm font-medium text-slate-300">
@@ -217,20 +275,92 @@ export function RegistroPage() {
               ) : null}
             </label>
 
-            <label className="text-sm font-medium text-slate-300">
-              Rol
-              <select
-                value={form.rol}
-                onChange={(event) => updateField('rol', event.target.value as RolGestionUsuario)}
-                className={inputClass(false)}
-              >
-                {ROLES.map((rolOption) => (
-                  <option key={rolOption.value} value={rolOption.value}>
-                    {rolOption.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+            {/* Selector multi-rol */}
+            <fieldset>
+              <legend className="mb-2 text-sm font-medium text-slate-300">Rol / Roles</legend>
+              <div className="flex flex-col gap-2">
+                {ROLES.map((rolOption) => {
+                  const checked = form.roles.includes(rolOption.value)
+                  return (
+                    <label
+                      key={rolOption.value}
+                      className={[
+                        'flex cursor-pointer items-start gap-3 rounded-2xl border px-4 py-3 transition-colors',
+                        checked
+                          ? 'border-sky-500/60 bg-sky-950/30'
+                          : 'border-slate-700 bg-slate-950 hover:border-slate-600',
+                      ].join(' ')}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggleRol(rolOption.value)}
+                        className="mt-0.5 h-4 w-4 rounded accent-sky-500"
+                      />
+                      <div>
+                        <span className="block text-sm font-semibold text-slate-100">
+                          {rolOption.label}
+                        </span>
+                        <span className="block text-xs text-slate-400">{rolOption.description}</span>
+                      </div>
+                    </label>
+                  )
+                })}
+              </div>
+              {errors.roles ? (
+                <span className="mt-1 block text-sm text-red-300">{errors.roles}</span>
+              ) : null}
+            </fieldset>
+
+            {/* Sección Juez */}
+            {hasJuez ? (
+              <div className="rounded-2xl border border-slate-700 bg-slate-950/60 px-4 py-4">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-sky-400">
+                  Datos de Juez (opcionales)
+                </p>
+                <div className="flex flex-col gap-3">
+                  <label className="text-sm font-medium text-slate-300">
+                    Número de licencia
+                    <input
+                      type="text"
+                      value={form.numero_licencia}
+                      onChange={(event) => updateField('numero_licencia', event.target.value)}
+                      placeholder="Ej: AIDA-12345"
+                      className={inputClass(false)}
+                    />
+                  </label>
+                  <label className="text-sm font-medium text-slate-300">
+                    Federación
+                    <input
+                      type="text"
+                      value={form.federacion}
+                      onChange={(event) => updateField('federacion', event.target.value)}
+                      placeholder="Ej: AIDA, CMAS"
+                      className={inputClass(false)}
+                    />
+                  </label>
+                </div>
+              </div>
+            ) : null}
+
+            {/* Sección Organizador */}
+            {hasOrganizador ? (
+              <div className="rounded-2xl border border-slate-700 bg-slate-950/60 px-4 py-4">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-sky-400">
+                  Datos de Organizador (opcionales)
+                </p>
+                <label className="text-sm font-medium text-slate-300">
+                  Nombre de organización
+                  <input
+                    type="text"
+                    value={form.nombre_organizacion}
+                    onChange={(event) => updateField('nombre_organizacion', event.target.value)}
+                    placeholder="Ej: Club Apnea Buenos Aires"
+                    className={inputClass(false)}
+                  />
+                </label>
+              </div>
+            ) : null}
 
             {errors.general ? (
               <p className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-center text-sm text-red-100">
@@ -240,7 +370,7 @@ export function RegistroPage() {
 
             <button
               type="submit"
-              disabled={mutation.isPending}
+              disabled={mutation.isPending || rolesVacios}
               className="rounded-2xl bg-sky-500 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950 transition-colors hover:bg-sky-400 disabled:opacity-50"
             >
               {mutation.isPending ? 'Creando cuenta...' : 'Registrarme'}

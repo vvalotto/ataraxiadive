@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 
 from registro.domain.aggregates.atleta import Atleta
@@ -12,12 +12,14 @@ from registro.domain.value_objects.categoria import Categoria
 @dataclass(frozen=True)
 class ActualizarAtletaCommand:
     email: str
-    nombre: str | None = None
-    apellido: str | None = None
-    categoria: Categoria | None = None
-    club: str | None = None
-    fecha_nacimiento: date | None = None
-    brevet: str | None = None
+    nombre: str | None = field(default=None)
+    apellido: str | None = field(default=None)
+    categoria: Categoria | None = field(default=None)
+    club: str | None = field(default=None)
+    fecha_nacimiento: date | None = field(default=None)
+    brevet: str | None = field(default=None)
+    dni: str | None = field(default=None)
+    telefono: str | None = field(default=None)
 
 
 class ActualizarAtletaHandler:
@@ -35,6 +37,8 @@ class ActualizarAtletaHandler:
             club=cmd.club,
             fecha_nacimiento=cmd.fecha_nacimiento,
             brevet=cmd.brevet,
+            dni=cmd.dni,
+            telefono=cmd.telefono,
         )
         await self._repo.save(atleta)
         return atleta

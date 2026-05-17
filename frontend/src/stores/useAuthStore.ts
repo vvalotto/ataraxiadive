@@ -12,16 +12,22 @@ const useAuthStore = create<AuthState>()(
       nombre: null,
       apellido: null,
       rol: null,
+      roles: null,
 
       login: (token: string) => {
         const payload = decodeJwtPayload(token)
+        const rolActivo = payload.rol.toLowerCase() as RolUsuario
+        const rolesCompletos: RolUsuario[] = payload.roles
+          ? payload.roles.map((r) => r.toLowerCase() as RolUsuario)
+          : [rolActivo]
         set({
           token,
           userId: payload.sub,
           email: payload.email,
           nombre: payload.nombre,
           apellido: payload.apellido,
-          rol: payload.rol.toLowerCase() as RolUsuario,
+          rol: rolActivo,
+          roles: rolesCompletos,
         })
       },
 
@@ -33,7 +39,12 @@ const useAuthStore = create<AuthState>()(
           nombre: null,
           apellido: null,
           rol: null,
+          roles: null,
         })
+      },
+
+      setRol: (rol: RolUsuario) => {
+        set({ rol })
       },
     }),
     {
@@ -46,6 +57,7 @@ const useAuthStore = create<AuthState>()(
         nombre: state.nombre,
         apellido: state.apellido,
         rol: state.rol,
+        roles: state.roles,
       }),
     },
   ),

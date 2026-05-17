@@ -24,6 +24,8 @@ interface FormState {
   club: string
   fecha_nacimiento: string
   brevet: string
+  dni: string
+  telefono: string
 }
 
 function inputClass(hasError = false): string {
@@ -41,12 +43,14 @@ function getErrorMessage(error: unknown): string {
 
 function toFormState(atleta: AtletaDto): FormState {
   return {
-    nombre: atleta.nombre,
-    apellido: atleta.apellido,
-    categoria: atleta.categoria,
-    club: atleta.club,
+    nombre: atleta.nombre ?? '',
+    apellido: atleta.apellido ?? '',
+    categoria: atleta.categoria ?? '',
+    club: atleta.club ?? '',
     fecha_nacimiento: atleta.fecha_nacimiento ?? '',
     brevet: atleta.brevet ?? '',
+    dni: atleta.dni ?? '',
+    telefono: atleta.telefono ?? '',
   }
 }
 
@@ -58,6 +62,8 @@ export function AtletaMisDatosPage() {
     club: '',
     fecha_nacimiento: '',
     brevet: '',
+    dni: '',
+    telefono: '',
   })
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -105,6 +111,8 @@ export function AtletaMisDatosPage() {
         club: form.club.trim() || undefined,
         fecha_nacimiento: form.fecha_nacimiento || undefined,
         brevet: form.brevet.trim() || undefined,
+        dni: form.dni.trim() || undefined,
+        telefono: form.telefono.trim() || undefined,
       })
       setForm(toFormState(updated))
       setSuccess(true)
@@ -160,6 +168,38 @@ export function AtletaMisDatosPage() {
             </label>
 
             <label className="block text-sm font-semibold text-slate-100">
+              Fecha de nacimiento
+              <input
+                type="date"
+                value={form.fecha_nacimiento}
+                onChange={(e) => updateField('fecha_nacimiento', e.target.value)}
+                className={inputClass()}
+              />
+            </label>
+
+            <label className="block text-sm font-semibold text-slate-100">
+              DNI <span className="ml-1 text-xs font-normal text-slate-400">(opcional)</span>
+              <input
+                value={form.dni}
+                onChange={(e) => updateField('dni', e.target.value)}
+                className={inputClass()}
+                placeholder="12345678"
+                inputMode="numeric"
+              />
+            </label>
+
+            <label className="block text-sm font-semibold text-slate-100">
+              Teléfono <span className="ml-1 text-xs font-normal text-slate-400">(opcional)</span>
+              <input
+                value={form.telefono}
+                onChange={(e) => updateField('telefono', e.target.value)}
+                className={inputClass()}
+                placeholder="1123456789"
+                inputMode="tel"
+              />
+            </label>
+
+            <label className="block text-sm font-semibold text-slate-100">
               Categoría
               <select
                 value={form.categoria}
@@ -182,16 +222,6 @@ export function AtletaMisDatosPage() {
                 onChange={(e) => updateField('club', e.target.value)}
                 className={inputClass()}
                 placeholder="Club Atlético"
-              />
-            </label>
-
-            <label className="block text-sm font-semibold text-slate-100">
-              Fecha de nacimiento
-              <input
-                type="date"
-                value={form.fecha_nacimiento}
-                onChange={(e) => updateField('fecha_nacimiento', e.target.value)}
-                className={inputClass()}
               />
             </label>
 

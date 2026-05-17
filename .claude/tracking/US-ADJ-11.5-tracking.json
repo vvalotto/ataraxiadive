@@ -1,0 +1,243 @@
+{
+  "metadata": {
+    "us_id": "US-ADJ-11.5",
+    "us_title": "BC Registro: entidad Organizador",
+    "us_points": 3,
+    "producto": "registro",
+    "tracking_version": "1.0"
+  },
+  "timeline": {
+    "started_at": "2026-05-16T18:37:43.216956+00:00",
+    "completed_at": null,
+    "total_elapsed_seconds": 597,
+    "effective_seconds": 597,
+    "paused_seconds": 0
+  },
+  "phases": [
+    {
+      "phase_number": 0,
+      "phase_name": "Validación de Contexto",
+      "started_at": "2026-05-16T18:37:48.046996+00:00",
+      "completed_at": "2026-05-16T18:38:15.215180+00:00",
+      "elapsed_seconds": 27,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 1,
+      "phase_name": "Generación de Escenarios BDD",
+      "started_at": "2026-05-16T18:38:22.250655+00:00",
+      "completed_at": "2026-05-16T18:38:43.534293+00:00",
+      "elapsed_seconds": 21,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 2,
+      "phase_name": "Plan de Implementación",
+      "started_at": "2026-05-16T18:38:55.383315+00:00",
+      "completed_at": "2026-05-16T18:39:17.982182+00:00",
+      "elapsed_seconds": 22,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 3,
+      "phase_name": "Implementación",
+      "started_at": "2026-05-16T18:39:56.353946+00:00",
+      "completed_at": "2026-05-16T18:43:25.180319+00:00",
+      "elapsed_seconds": 208,
+      "status": "completed",
+      "tasks": [
+        {
+          "task_id": "T1",
+          "task_name": "Aggregate Organizador",
+          "task_type": "domain",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-05-16T18:40:08.104858+00:00",
+          "completed_at": "2026-05-16T18:40:20.991806+00:00",
+          "elapsed_seconds": 12,
+          "actual_minutes": 0.2,
+          "variance_minutes": -4.8,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T2",
+          "task_name": "OrganizadorRepositoryPort",
+          "task_type": "domain",
+          "estimated_minutes": 3.0,
+          "started_at": "2026-05-16T18:40:27.797729+00:00",
+          "completed_at": "2026-05-16T18:40:35.321752+00:00",
+          "elapsed_seconds": 7,
+          "actual_minutes": 0.12,
+          "variance_minutes": -2.88,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T3",
+          "task_name": "Excepciones Organizador",
+          "task_type": "domain",
+          "estimated_minutes": 2.0,
+          "started_at": "2026-05-16T18:40:38.972417+00:00",
+          "completed_at": "2026-05-16T18:40:50.126998+00:00",
+          "elapsed_seconds": 11,
+          "actual_minutes": 0.18,
+          "variance_minutes": -1.82,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T4",
+          "task_name": "SQLiteOrganizadorRepository",
+          "task_type": "infrastructure",
+          "estimated_minutes": 8.0,
+          "started_at": "2026-05-16T18:40:52.977706+00:00",
+          "completed_at": "2026-05-16T18:41:05.791532+00:00",
+          "elapsed_seconds": 12,
+          "actual_minutes": 0.2,
+          "variance_minutes": -7.8,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T5",
+          "task_name": "RegistrarOrganizadorCommand",
+          "task_type": "application",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-05-16T18:41:09.371777+00:00",
+          "completed_at": "2026-05-16T18:41:17.436113+00:00",
+          "elapsed_seconds": 8,
+          "actual_minutes": 0.13,
+          "variance_minutes": -4.87,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T6",
+          "task_name": "ActualizarOrganizadorCommand",
+          "task_type": "application",
+          "estimated_minutes": 5.0,
+          "started_at": "2026-05-16T18:41:20.238455+00:00",
+          "completed_at": "2026-05-16T18:41:28.620528+00:00",
+          "elapsed_seconds": 8,
+          "actual_minutes": 0.13,
+          "variance_minutes": -4.87,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T7",
+          "task_name": "ObtenerOrganizadorHandler",
+          "task_type": "application",
+          "estimated_minutes": 3.0,
+          "started_at": "2026-05-16T18:41:31.192913+00:00",
+          "completed_at": "2026-05-16T18:41:37.768934+00:00",
+          "elapsed_seconds": 6,
+          "actual_minutes": 0.1,
+          "variance_minutes": -2.9,
+          "file_created": null,
+          "status": "completed"
+        },
+        {
+          "task_id": "T8",
+          "task_name": "Schemas + endpoints router",
+          "task_type": "api",
+          "estimated_minutes": 15.0,
+          "started_at": "2026-05-16T18:41:40.908639+00:00",
+          "completed_at": "2026-05-16T18:43:22.397784+00:00",
+          "elapsed_seconds": 101,
+          "actual_minutes": 1.68,
+          "variance_minutes": -13.32,
+          "file_created": null,
+          "status": "completed"
+        }
+      ],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 4,
+      "phase_name": "Tests Unitarios",
+      "started_at": "2026-05-16T18:43:29.601196+00:00",
+      "completed_at": "2026-05-16T18:44:17.919087+00:00",
+      "elapsed_seconds": 48,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 5,
+      "phase_name": "Tests de Integración",
+      "started_at": "2026-05-16T18:44:21.202237+00:00",
+      "completed_at": "2026-05-16T18:44:46.975037+00:00",
+      "elapsed_seconds": 25,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 6,
+      "phase_name": "Validación BDD",
+      "started_at": "2026-05-16T18:44:50.079671+00:00",
+      "completed_at": "2026-05-16T18:45:37.293054+00:00",
+      "elapsed_seconds": 47,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 7,
+      "phase_name": "Quality Gates",
+      "started_at": "2026-05-16T18:45:40.332094+00:00",
+      "completed_at": "2026-05-16T18:46:54.136850+00:00",
+      "elapsed_seconds": 73,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 8,
+      "phase_name": "Documentación",
+      "started_at": "2026-05-16T18:47:02.143690+00:00",
+      "completed_at": "2026-05-16T18:47:36.404497+00:00",
+      "elapsed_seconds": 34,
+      "status": "completed",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    },
+    {
+      "phase_number": 9,
+      "phase_name": "Reporte Final",
+      "started_at": "2026-05-16T18:47:40.295235+00:00",
+      "completed_at": null,
+      "elapsed_seconds": 0,
+      "status": "in_progress",
+      "tasks": [],
+      "auto_approved": true,
+      "user_approval_time_seconds": 0
+    }
+  ],
+  "pauses": [],
+  "summary": {
+    "total_tasks": 8,
+    "completed_tasks": 8,
+    "total_phases": 10,
+    "estimated_total_minutes": 46.0,
+    "actual_total_minutes": 2.75,
+    "variance_minutes": -43.25,
+    "variance_percent": -94.02
+  }
+}

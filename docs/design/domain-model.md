@@ -315,7 +315,9 @@ classDiagram
 
 | Aggregate | Tipo | Responsabilidad |
 |-----------|------|-----------------|
-| `Atleta` | Aggregate root | Datos personales, club, brevet, cuenta de usuario |
+| `Atleta` | Aggregate root | Datos personales (club, brevet, dni, telefono, categoria), cuenta de usuario |
+| `Juez` | Aggregate root | Perfil de juez: numero_licencia, federacion (ambos opcionales) |
+| `Organizador` | Aggregate root | Perfil de organizador: nombre_organizacion (opcional) |
 | `Inscripcion` | Aggregate | Participación de un atleta en un torneo específico |
 
 ### Eventos principales
@@ -361,7 +363,7 @@ classDiagram
 |-----------|-----------------|
 | `Usuario` | Credenciales, roles (organizador, juez, atleta, admin), perfil básico |
 
-**Contrato de salida:** JWT con `{ userId, role, exp }` — consumido por todos los BCs.
+**Contrato de salida:** JWT con `{ userId, rol, roles, exp }` — `rol` es el rol activo elegido en login; `roles` lista todos los roles del usuario. Consumido por todos los BCs. (ADR-020)
 
 ---
 

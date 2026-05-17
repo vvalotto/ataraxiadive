@@ -53,6 +53,8 @@ export interface AtletaDto {
   categoria: string
   club: string
   brevet: string | null
+  dni: string | null
+  telefono: string | null
 }
 
 export interface CrearAtletaPayload {
@@ -173,6 +175,28 @@ export async function fetchAtletaMe(): Promise<AtletaDto> {
   return parseResponse<AtletaDto>(response)
 }
 
+export interface JuezDto {
+  juez_id: string
+  email: string
+  numero_licencia: string | null
+  federacion: string | null
+}
+
+export interface ActualizarJuezMePayload {
+  numero_licencia?: string
+  federacion?: string
+}
+
+export interface OrganizadorDto {
+  organizador_id: string
+  email: string
+  nombre_organizacion: string | null
+}
+
+export interface ActualizarOrganizadorMePayload {
+  nombre_organizacion?: string
+}
+
 export interface ActualizarAtletaMePayload {
   nombre?: string
   apellido?: string
@@ -180,6 +204,8 @@ export interface ActualizarAtletaMePayload {
   club?: string
   fecha_nacimiento?: string
   brevet?: string
+  dni?: string
+  telefono?: string
 }
 
 export async function actualizarAtletaMe(payload: ActualizarAtletaMePayload): Promise<AtletaDto> {
@@ -301,4 +327,56 @@ export async function subirConstanciaPago(
     body: formData,
   })
   return parseResponse<{ path: string }>(response)
+}
+
+export async function fetchJuezMe(): Promise<JuezDto | null> {
+  const response = await fetch('/registro/jueces/me', { headers: buildHeaders() })
+  if (response.status === 404) return null
+  return parseResponse<JuezDto>(response)
+}
+
+export async function crearJuezMe(payload: ActualizarJuezMePayload = {}): Promise<JuezDto> {
+  const response = await fetch('/registro/jueces', {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify(payload),
+  })
+  return parseResponse<JuezDto>(response)
+}
+
+export async function actualizarJuezMe(payload: ActualizarJuezMePayload): Promise<JuezDto> {
+  const response = await fetch('/registro/jueces/me', {
+    method: 'PATCH',
+    headers: buildHeaders(),
+    body: JSON.stringify(payload),
+  })
+  return parseResponse<JuezDto>(response)
+}
+
+export async function fetchOrganizadorMe(): Promise<OrganizadorDto | null> {
+  const response = await fetch('/registro/organizadores/me', { headers: buildHeaders() })
+  if (response.status === 404) return null
+  return parseResponse<OrganizadorDto>(response)
+}
+
+export async function crearOrganizadorMe(
+  payload: ActualizarOrganizadorMePayload = {},
+): Promise<OrganizadorDto> {
+  const response = await fetch('/registro/organizadores', {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify(payload),
+  })
+  return parseResponse<OrganizadorDto>(response)
+}
+
+export async function actualizarOrganizadorMe(
+  payload: ActualizarOrganizadorMePayload,
+): Promise<OrganizadorDto> {
+  const response = await fetch('/registro/organizadores/me', {
+    method: 'PATCH',
+    headers: buildHeaders(),
+    body: JSON.stringify(payload),
+  })
+  return parseResponse<OrganizadorDto>(response)
 }

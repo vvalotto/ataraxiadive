@@ -107,30 +107,32 @@ frontend completo. Las 9 US están ordenadas por capa y dependencia.
 
 ---
 
-### US-ADJ-11.3 — BC Registro: refactor Atleta (campos opcionales + BT-002)
+### US-ADJ-11.3 — BC Registro: refactor Atleta (campos opcionales + BT-002) ✅
 
 **Prioridad:** Alta
 **Tipo:** refactor backend + migración DB
 **Área:** BC `registro` (domain · application · infrastructure · api) — solo entidad Atleta
 **Spec:** `docs/specs/sp-adj-11/US-ADJ-11.3.md`
+**Estado:** Implementada — branch `feature/US-ADJ-11.3-atleta-refactor` — 104 tests pasando
 
-**Cambios:**
-1. `Atleta.club: str | None` y `Atleta.categoria: Categoria | None` — eliminadas las validaciones que exigen valor. La INV-A-05 pasa a ser opcional.
-2. `Atleta.dni: str | None` y `Atleta.telefono: str | None` — nuevos campos (resuelve BT-002).
-3. `SQLiteAtletaRepository`: columnas `dni TEXT`, `telefono TEXT`, migración automática.
+**Cambios implementados:**
+1. `Atleta.club: str | None` y `Atleta.categoria: Categoria | None` — opcionales. INV-A-05: si se informa club, no puede ser vacío.
+2. `Atleta.dni: str | None` y `Atleta.telefono: str | None` — nuevos campos (BT-002 resuelto).
+3. `SQLiteAtletaRepository`: columnas `dni TEXT`, `telefono TEXT`, migración automática vía `_ensure_columns` (idempotente).
 4. `RegistrarAtletaCommand` / `ActualizarAtletaCommand`: incluyen los nuevos campos.
 5. Router: `RegistrarAtletaRequest`, `AtletaResponse`, `ActualizarAtletaMeRequest` actualizados.
 
-**Nota:** `RegistrarAtletaRequest` actualmente exige `atleta_id` desde el cliente. Evaluar si el backend debe generarlo — anotado para revisión durante la implementación.
+**Decisión tomada en implementación:** `atleta_id` ya no se recibe del cliente — el backend lo genera internamente (UUID). La detección de duplicados se hace por `email` en lugar de `atleta_id`. Patrón sentinel (None = "no actualizar") diferido; PATCH club=null no soportado en esta US.
 
 ---
 
-### US-ADJ-11.4 — BC Registro: entidad Juez
+### US-ADJ-11.4 — BC Registro: entidad Juez ✅
 
 **Prioridad:** Alta
 **Tipo:** nueva entidad backend
 **Área:** BC `registro` (domain · application · infrastructure · api)
 **Spec:** `docs/specs/sp-adj-11/US-ADJ-11.4.md`
+**Estado:** Implementada — branch `feature/US-ADJ-11.4-juez` — 35 tests pasando
 
 **Cambios:**
 1. `Juez` aggregate: `juez_id: UUID`, `email: str`, `numero_licencia: str | None`, `federacion: str | None`. Método `actualizar()`.
@@ -144,12 +146,13 @@ frontend completo. Las 9 US están ordenadas por capa y dependencia.
 
 ---
 
-### US-ADJ-11.5 — BC Registro: entidad Organizador
+### US-ADJ-11.5 — BC Registro: entidad Organizador ✅
 
 **Prioridad:** Alta
 **Tipo:** nueva entidad backend
 **Área:** BC `registro` (domain · application · infrastructure · api)
 **Spec:** `docs/specs/sp-adj-11/US-ADJ-11.5.md`
+**Estado:** Implementada — branch `feature/US-ADJ-11.5-organizador` — 35 tests pasando (19 unit + 8 integration + 8 BDD)
 
 **Cambios:**
 1. `Organizador` aggregate: `organizador_id: UUID`, `email: str`, `nombre_organizacion: str | None`. Método `actualizar()`.
@@ -261,7 +264,8 @@ US-ADJ-11.8 y 11.9 pueden ejecutarse en paralelo entre sí.
 - [ ] Un juez-atleta puede loguearse con email+contraseña, elegir el rol activo y acceder al portal correspondiente.
 - [ ] El JWT mantiene la estructura actual — 0 cambios en los guards de autorización.
 - [ ] `GET /registro/jueces/me` y `GET /registro/organizadores/me` funcionan.
-- [ ] Atleta tiene `dni` y `telefono` persistidos (BT-002 resuelto).
+- [x] Atleta tiene `dni` y `telefono` persistidos (BT-002 resuelto) — US-ADJ-11.3 ✅
+- [x] `GET /registro/jueces/me` y `GET /registro/organizadores/me` funcionan — US-ADJ-11.4 ✅ · US-ADJ-11.5 ✅
 - [ ] `AtletaMisDatosPage`, `JuezMisDatosPage`, `OrganizadorMisDatosPage` funcionan.
 - [ ] Usuarios existentes en DB migran correctamente (`rol` → `roles` JSON).
 - [ ] Tests backend: cobertura ≥ 90% en domain/ y application/ de los cambios.

@@ -11,36 +11,8 @@ import {
   formatHora,
   getEstadoTorneoLabel,
   loadAtletaPortalSnapshot,
-  type AtletaPortalEntry,
 } from './portalData'
 
-function getOtTimestamp(entry: AtletaPortalEntry): number | null {
-  if (!entry.ot) return null
-  const timestamp = new Date(entry.ot).getTime()
-  return Number.isNaN(timestamp) ? null : timestamp
-}
-
-function sortDisciplinasPorOt(entries: AtletaPortalEntry[], now = new Date()): AtletaPortalEntry[] {
-  const nowTimestamp = now.getTime()
-
-  return [...entries].sort((left, right) => {
-    const leftTimestamp = getOtTimestamp(left)
-    const rightTimestamp = getOtTimestamp(right)
-    const leftFuture = leftTimestamp !== null && leftTimestamp > nowTimestamp
-    const rightFuture = rightTimestamp !== null && rightTimestamp > nowTimestamp
-    const leftPast = leftTimestamp !== null && leftTimestamp <= nowTimestamp
-    const rightPast = rightTimestamp !== null && rightTimestamp <= nowTimestamp
-
-    if (leftFuture && rightFuture) return leftTimestamp - rightTimestamp
-    if (leftFuture) return -1
-    if (rightFuture) return 1
-    if (!leftPast && !rightPast) return 0
-    if (!leftPast) return -1
-    if (!rightPast) return 1
-    if (leftTimestamp !== null && rightTimestamp !== null) return leftTimestamp - rightTimestamp
-    return 0
-  })
-}
 
 export function AtletaHomePage() {
   const atletaId = useAuthStore((state) => state.userId)

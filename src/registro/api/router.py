@@ -27,12 +27,32 @@ from registro.application.commands.actualizar_atleta import (
     ActualizarAtletaCommand,
     ActualizarAtletaHandler,
 )
+from registro.application.commands.actualizar_juez import (
+    ActualizarJuezCommand,
+    ActualizarJuezHandler,
+)
+from registro.application.commands.actualizar_organizador import (
+    ActualizarOrganizadorCommand,
+    ActualizarOrganizadorHandler,
+)
 from registro.application.commands.registrar_atleta import (
     RegistrarAtletaCommand,
     RegistrarAtletaHandler,
 )
+from registro.application.commands.registrar_juez import (
+    RegistrarJuezCommand,
+    RegistrarJuezHandler,
+)
+from registro.application.commands.registrar_organizador import (
+    RegistrarOrganizadorCommand,
+    RegistrarOrganizadorHandler,
+)
 from registro.application.queries.listar_inscriptos import ListarInscriptosHandler
 from registro.application.queries.obtener_atleta import ObtenerAtletaHandler
+from registro.application.queries.obtener_juez import ObtenerJuezHandler
+from registro.application.queries.obtener_organizador import (
+    ObtenerOrganizadorHandler as ObtenerOrganizadorQueryHandler,
+)
 from registro.application.queries.verificar_completitud_ap import (
     VerificarCompletitudAPHandler,
 )
@@ -45,6 +65,10 @@ from registro.domain.exceptions import (
     DisciplinaNoDisponible,
     DisciplinaNoInscripta,
     InscripcionNoEncontrada,
+    JuezNoEncontrado,
+    JuezYaRegistrado,
+    OrganizadorNoEncontrado,
+    OrganizadorYaRegistrado,
     PlazoCancelacionVencido,
     TorneoNoDisponible,
 )
@@ -57,7 +81,11 @@ from registro.infrastructure.repositories.sqlite_atleta_repository import SQLite
 from registro.infrastructure.repositories.sqlite_inscripcion_repository import (
     SQLiteInscripcionRepository,
 )
-from shared.api.dependencies import AtletaDep, OrganizadorDep
+from registro.infrastructure.repositories.sqlite_juez_repository import SQLiteJuezRepository
+from registro.infrastructure.repositories.sqlite_organizador_repository import (
+    SQLiteOrganizadorRepository,
+)
+from shared.api.dependencies import AtletaDep, JuezDep, OrganizadorDep
 from shared.domain.value_objects.disciplina import Disciplina
 
 router = APIRouter(prefix="/registro", tags=["registro"])
@@ -77,14 +105,15 @@ def configure_inscripcion_notificaciones(
 
 
 class RegistrarAtletaRequest(BaseModel):
-    atleta_id: UUID
     nombre: str
     apellido: str
     email: str
     fecha_nacimiento: date
-    categoria: Categoria
-    club: str
+    categoria: Categoria | None = None
+    club: str | None = None
     brevet: str | None = None
+    dni: str | None = None
+    telefono: str | None = None
 
     @field_validator("nombre", "apellido")
     @classmethod
@@ -99,10 +128,12 @@ class AtletaResponse(BaseModel):
     nombre: str
     apellido: str
     email: str
-    fecha_nacimiento: date
-    categoria: Categoria
-    club: str
+    fecha_nacimiento: date | None = None
+    categoria: Categoria | None
+    club: str | None
     brevet: str | None
+    dni: str | None
+    telefono: str | None
 
 
 class ActualizarAtletaMeRequest(BaseModel):
@@ -112,6 +143,45 @@ class ActualizarAtletaMeRequest(BaseModel):
     club: str | None = None
     fecha_nacimiento: date | None = None
     brevet: str | None = None
+    dni: str | None = None
+    telefono: str | None = None
+
+
+# ── Schemas — Juez ───────────────────────────────────────────────────────────
+
+
+class RegistrarJuezRequest(BaseModel):
+    numero_licencia: str | None = None
+    federacion: str | None = None
+
+
+class JuezResponse(BaseModel):
+    juez_id: UUID
+    email: str
+    numero_licencia: str | None
+    federacion: str | None
+
+
+class ActualizarJuezMeRequest(BaseModel):
+    numero_licencia: str | None = None
+    federacion: str | None = None
+
+
+# ── Schemas — Organizador ────────────────────────────────────────────────────
+
+
+class RegistrarOrganizadorRequest(BaseModel):
+    nombre_organizacion: str | None = None
+
+
+class OrganizadorResponse(BaseModel):
+    organizador_id: UUID
+    email: str
+    nombre_organizacion: str | None
+
+
+class ActualizarOrganizadorMeRequest(BaseModel):
+    nombre_organizacion: str | None = None
 
 
 # ── Schemas — Inscripcion ─────────────────────────────────────────────────────
@@ -146,8 +216,8 @@ class InscriptoDetalleResponse(BaseModel):
     fecha_inscripcion: datetime
     nombre: str
     apellido: str
-    categoria: Categoria
-    club: str
+    categoria: Categoria | None
+    club: str | None
     disciplinas: list[EstadoAPDisciplinaResponse]
 
 
@@ -161,6 +231,14 @@ class DeclararAPInscripcionRequest(BaseModel):
 
 def _repo() -> SQLiteAtletaRepository:
     return SQLiteAtletaRepository()
+
+
+def _juez_repo() -> SQLiteJuezRepository:
+    return SQLiteJuezRepository()
+
+
+def _organizador_repo() -> SQLiteOrganizadorRepository:
+    return SQLiteOrganizadorRepository()
 
 
 def _inscripcion_repo() -> SQLiteInscripcionRepository:
@@ -259,7 +337,6 @@ async def registrar_atleta(body: RegistrarAtletaRequest, _: AtletaDep) -> JSONRe
     repo = _repo()
     handler = RegistrarAtletaHandler(repo)
     cmd = RegistrarAtletaCommand(
-        atleta_id=body.atleta_id,
         nombre=body.nombre,
         apellido=body.apellido,
         email=body.email,
@@ -267,6 +344,8 @@ async def registrar_atleta(body: RegistrarAtletaRequest, _: AtletaDep) -> JSONRe
         categoria=body.categoria,
         club=body.club,
         brevet=body.brevet,
+        dni=body.dni,
+        telefono=body.telefono,
     )
     try:
         atleta_id = await handler.handle(cmd)
@@ -295,6 +374,8 @@ async def obtener_atleta_me(current_user: AtletaDep) -> JSONResponse:
             categoria=atleta.categoria,
             club=atleta.club,
             brevet=atleta.brevet,
+            dni=atleta.dni,
+            telefono=atleta.telefono,
         ).model_dump(mode="json"),
     )
 
@@ -314,6 +395,8 @@ async def actualizar_atleta_me(
                 club=body.club,
                 fecha_nacimiento=body.fecha_nacimiento,
                 brevet=body.brevet,
+                dni=body.dni,
+                telefono=body.telefono,
             )
         )
     except AtletaNoEncontrado as exc:
@@ -331,6 +414,8 @@ async def actualizar_atleta_me(
             categoria=atleta.categoria,
             club=atleta.club,
             brevet=atleta.brevet,
+            dni=atleta.dni,
+            telefono=atleta.telefono,
         ).model_dump(mode="json"),
     )
 
@@ -354,6 +439,8 @@ async def obtener_atleta(atleta_id: UUID) -> JSONResponse:
             categoria=atleta.categoria,
             club=atleta.club,
             brevet=atleta.brevet,
+            dni=atleta.dni,
+            telefono=atleta.telefono,
         ).model_dump(mode="json"),
     )
 
@@ -587,4 +674,155 @@ async def subir_constancia_pago(
         archivo,
         "constancia_pago",
         "adjuntar_constancia_pago",
+    )
+
+
+# ── Endpoints — Juez ──────────────────────────────────────────────────────────
+
+
+@router.post("/jueces", status_code=201)
+async def registrar_juez(body: RegistrarJuezRequest, current_user: JuezDep) -> JSONResponse:
+    repo = _juez_repo()
+    handler = RegistrarJuezHandler(repo)
+    try:
+        juez_id = await handler.handle(
+            RegistrarJuezCommand(
+                email=current_user["email"],
+                numero_licencia=body.numero_licencia,
+                federacion=body.federacion,
+            )
+        )
+    except JuezYaRegistrado:
+        return JSONResponse(status_code=409, content={"detail": "Perfil de juez ya registrado"})
+    juez = await repo.find_by_id(juez_id)
+    return JSONResponse(
+        status_code=201,
+        content=JuezResponse(
+            juez_id=juez.juez_id,  # type: ignore[union-attr]
+            email=juez.email,  # type: ignore[union-attr]
+            numero_licencia=juez.numero_licencia,  # type: ignore[union-attr]
+            federacion=juez.federacion,  # type: ignore[union-attr]
+        ).model_dump(mode="json"),
+    )
+
+
+@router.get("/jueces/me", status_code=200)
+async def obtener_juez_me(current_user: JuezDep) -> JSONResponse:
+    try:
+        juez = await ObtenerJuezHandler(_juez_repo()).handle(current_user["email"])
+    except JuezNoEncontrado:
+        return JSONResponse(status_code=404, content={"detail": "Juez no encontrado"})
+    return JSONResponse(
+        content=JuezResponse(
+            juez_id=juez.juez_id,
+            email=juez.email,
+            numero_licencia=juez.numero_licencia,
+            federacion=juez.federacion,
+        ).model_dump(mode="json")
+    )
+
+
+@router.patch("/jueces/me", status_code=200)
+async def actualizar_juez_me(body: ActualizarJuezMeRequest, current_user: JuezDep) -> JSONResponse:
+    try:
+        juez = await ActualizarJuezHandler(_juez_repo()).handle(
+            ActualizarJuezCommand(
+                email=current_user["email"],
+                numero_licencia=body.numero_licencia,
+                federacion=body.federacion,
+            )
+        )
+    except JuezNoEncontrado:
+        return JSONResponse(status_code=404, content={"detail": "Juez no encontrado"})
+    return JSONResponse(
+        content=JuezResponse(
+            juez_id=juez.juez_id,
+            email=juez.email,
+            numero_licencia=juez.numero_licencia,
+            federacion=juez.federacion,
+        ).model_dump(mode="json")
+    )
+
+
+# ── Endpoints — Organizador ───────────────────────────────────────────────────
+
+
+@router.post("/organizadores", status_code=201)
+async def registrar_organizador(
+    body: RegistrarOrganizadorRequest, current_user: OrganizadorDep
+) -> JSONResponse:
+    repo = _organizador_repo()
+    try:
+        organizador_id = await RegistrarOrganizadorHandler(repo).handle(
+            RegistrarOrganizadorCommand(
+                email=current_user["email"],
+                nombre_organizacion=body.nombre_organizacion,
+            )
+        )
+    except OrganizadorYaRegistrado:
+        return JSONResponse(
+            status_code=409, content={"detail": "Perfil de organizador ya registrado"}
+        )
+    except ValueError as exc:
+        return JSONResponse(status_code=422, content={"detail": str(exc)})
+    organizador = await repo.find_by_id(organizador_id)
+    return JSONResponse(
+        status_code=201,
+        content=OrganizadorResponse(
+            organizador_id=organizador.organizador_id,  # type: ignore[union-attr]
+            email=organizador.email,  # type: ignore[union-attr]
+            nombre_organizacion=organizador.nombre_organizacion,  # type: ignore[union-attr]
+        ).model_dump(mode="json"),
+    )
+
+
+@router.get("/organizadores/me", status_code=200)
+async def obtener_organizador_me(current_user: OrganizadorDep) -> JSONResponse:
+    try:
+        organizador = await ObtenerOrganizadorQueryHandler(_organizador_repo()).handle(
+            current_user["email"]
+        )
+    except OrganizadorNoEncontrado:
+        return JSONResponse(status_code=404, content={"detail": "Organizador no encontrado"})
+    return JSONResponse(
+        content=OrganizadorResponse(
+            organizador_id=organizador.organizador_id,
+            email=organizador.email,
+            nombre_organizacion=organizador.nombre_organizacion,
+        ).model_dump(mode="json")
+    )
+
+
+@router.patch("/organizadores/me", status_code=200)
+async def actualizar_organizador_me(
+    body: ActualizarOrganizadorMeRequest, current_user: OrganizadorDep
+) -> JSONResponse:
+    email: str = current_user["email"]
+    # Patch parcial: si el campo no fue enviado en el JSON, preservar valor actual.
+    # Si fue enviado (incluso null), actualizar al valor recibido.
+    if "nombre_organizacion" not in body.model_fields_set:
+        organizador_actual = await _organizador_repo().find_by_email(email)
+        if organizador_actual is None:
+            return JSONResponse(status_code=404, content={"detail": "Organizador no encontrado"})
+        nombre_final = organizador_actual.nombre_organizacion
+    else:
+        nombre_final = body.nombre_organizacion
+
+    try:
+        organizador = await ActualizarOrganizadorHandler(_organizador_repo()).handle(
+            ActualizarOrganizadorCommand(
+                email=email,
+                nombre_organizacion=nombre_final,
+            )
+        )
+    except OrganizadorNoEncontrado:
+        return JSONResponse(status_code=404, content={"detail": "Organizador no encontrado"})
+    except ValueError as exc:
+        return JSONResponse(status_code=422, content={"detail": str(exc)})
+    return JSONResponse(
+        content=OrganizadorResponse(
+            organizador_id=organizador.organizador_id,
+            email=organizador.email,
+            nombre_organizacion=organizador.nombre_organizacion,
+        ).model_dump(mode="json")
     )

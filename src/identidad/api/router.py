@@ -13,6 +13,7 @@ from identidad.api.dependencies import (
     get_current_user,
     get_email_sender,
     get_password_hasher,
+    get_perfil_registro,
     get_token_service,
     get_usuario_repository,
 )
@@ -29,10 +30,6 @@ from identidad.application.commands.autenticar_usuario import (
 from identidad.application.commands.cambiar_password import (
     CambiarPasswordCommand,
     CambiarPasswordHandler,
-)
-from identidad.application.commands.quitar_rol_usuario import (
-    QuitarRolUsuarioCommand,
-    QuitarRolUsuarioHandler,
 )
 from identidad.application.commands.registrar_usuario import (
     RegistrarUsuarioCommand,
@@ -61,6 +58,7 @@ from identidad.domain.exceptions import (
     UsuarioNoEncontrado,
 )
 from identidad.domain.ports.password_hashing_port import PasswordHashingPort
+from identidad.domain.ports.perfil_registro_port import PerfilRegistroPort
 from identidad.domain.ports.token_service_port import TokenServicePort
 from identidad.domain.ports.usuario_repository_port import UsuarioRepositoryPort
 from identidad.domain.value_objects.rol import Rol
@@ -78,6 +76,9 @@ class RegistroRequest(BaseModel):
     email: str
     password: str
     roles: list[Rol]
+    numero_licencia: str | None = None
+    federacion: str | None = None
+    nombre_organizacion: str | None = None
 
     @field_validator("nombre", "apellido")
     @classmethod
@@ -146,14 +147,20 @@ async def registrar_usuario(
     password_hasher: Annotated[PasswordHashingPort, Depends(get_password_hasher)],
     token_service: Annotated[TokenServicePort, Depends(get_token_service)],
     email_sender: Annotated[EmailPort, Depends(get_email_sender)],
+    perfil_registro: Annotated[PerfilRegistroPort | None, Depends(get_perfil_registro)],
 ) -> JSONResponse:
-    handler = RegistrarUsuarioHandler(repo, password_hasher, token_service, email_sender)
+    handler = RegistrarUsuarioHandler(
+        repo, password_hasher, token_service, email_sender, perfil_registro
+    )
     cmd = RegistrarUsuarioCommand(
         nombre=body.nombre,
         apellido=body.apellido,
         email=body.email,
         password=body.password,
         roles=body.roles,
+        numero_licencia=body.numero_licencia,
+        federacion=body.federacion,
+        nombre_organizacion=body.nombre_organizacion,
     )
     try:
         resultado = await handler.handle(cmd)

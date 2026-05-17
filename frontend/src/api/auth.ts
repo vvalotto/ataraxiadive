@@ -1,9 +1,16 @@
 import type { RolUsuario } from '../types/auth'
 
-interface LoginResponse {
+export interface LoginResponseToken {
   access_token: string
   token_type: string
 }
+
+export interface LoginResponseRoleSelection {
+  requires_role_selection: true
+  roles: string[]
+}
+
+export type LoginResponse = LoginResponseToken | LoginResponseRoleSelection
 
 interface JwtPayload {
   sub: string
@@ -11,14 +18,22 @@ interface JwtPayload {
   nombre: string
   apellido: string
   rol: RolUsuario
+  roles?: string[]
   [key: string]: unknown
 }
 
-export async function loginApi(email: string, password: string): Promise<LoginResponse> {
+export async function loginApi(
+  email: string,
+  password: string,
+  rolElegido?: string,
+): Promise<LoginResponse> {
+  const body: Record<string, string> = { email, password }
+  if (rolElegido) body.rol_elegido = rolElegido
+
   const response = await fetch('/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify(body),
   })
 
   if (response.status === 401) {
