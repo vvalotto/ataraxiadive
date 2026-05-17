@@ -1,5 +1,9 @@
 # Análisis de Discrepancias — Dataset Real vs. Modelo de la App
 
+> Estado documental: evidencia
+> Registra el análisis del dataset real "Apnea Indoor Buenos Aires 2025" contra el modelo del dominio.
+> Insumo primario de HITO-17. Migrado de `.work/` en Iteración 5 adecuación documental (2026-05-17).
+
 | Campo | Valor |
 |-------|-------|
 | **Fuente** | `data/datasets/buenos_aires_2025/` |

@@ -1,5 +1,10 @@
+> Estado documental: evidencia
+> Hallazgos de validación UAT por rol (Juez, Organizador, Atleta).
+> Migrado de `.work/` en Iteración 5 adecuación documental (2026-05-17).
 
-Rol Juez
+# Hallazgos de Validación UAT — AtaraxiaDive
+
+## Rol Juez
 
 En la página de inicio:
 • Cambiar Mis disciplinas por Mis asignaciones

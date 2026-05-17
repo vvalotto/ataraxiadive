@@ -1,4 +1,8 @@
 # Reporte Estadístico — AtaraxiaDive Tracking
+
+> Estado documental: evidencia
+> Métricas estadísticas del experimento IEDD: 85 historias analizadas al 2026-04-25.
+> Migrado de `.work/` en Iteración 5 adecuación documental (2026-05-17).
 _Generado: 2026-04-25 06:57 · 85 historias analizadas_
 
 > **Nota sobre Eje 5:** los campos `tests`, `cobertura` y `codeguard` en el resumen

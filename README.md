@@ -10,10 +10,11 @@ Plataforma web para gestión de torneos de apnea (freediving).
 | Subproyecto | Tag | Estado |
 |---|---|---|
 | SP1–SP5 (Fases 1-5) | v0.2.0–v0.6.0 | ✅ Completadas |
-| **SP6** (Validación, Ajustes, Despliegue) | v1.0.0 | ⏳ En definición |
+| SP6 (Validación, Ajustes, Despliegue) | v1.0.0 | ✅ Cerrado 2026-05-16 |
+| **SP7** (Despliegue y Documentación) | v1.0.1 | ⏳ En curso |
 
-**Última versión estable:** v0.6.0 (`main` branch) · SP5 completó ciclo funcional.  
-**Próxima entrega:** SP6 — validación funcional E2E, ajustes de defectos, despliegue.
+**Versión en producción:** v1.0.1 · `https://ataraxiadive.fly.dev/`  
+**Estado operativo:** ver [CLAUDE.md](CLAUDE.md).
 
 ## Stack
 

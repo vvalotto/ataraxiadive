@@ -2,7 +2,7 @@
 
 > Estado documental: vigente
 > Fuente de verdad para: estrategia de adecuación documental
-> Última actualización: 2026-05-02
+> Última actualización: 2026-05-17
 
 ## 1. Propósito del plan
 
@@ -105,6 +105,8 @@ Cuando haya contradicción entre documentación y código, debe revisarse el có
 - Creación de un mapa documental.
 - Reducción de duplicaciones innecesarias.
 - Definición de reglas editoriales para futuras actualizaciones.
+- Resolución de ADRs supersedidos y numeración duplicada.
+- Clasificación y limpieza de `.work/` y `memory/` operativa.
 
 ### 5.2 No incluido en esta primera etapa
 
@@ -119,64 +121,86 @@ Cuando haya contradicción entre documentación y código, debe revisarse el có
 
 ## 6. Fases del plan
 
-| Fase | Nombre | Resultado esperado |
-|---|---|---|
-| 1 | Inventario y clasificación documental | Tabla de inventario inicial y lista de inconsistencias. |
-| 2 | Definición de fuentes de verdad | Jerarquía documental y reglas de autoridad. |
-| 3 | Mapa documental mínimo | `docs/DOCUMENTATION-MAP.md`. |
-| 4 | Limpieza de documentos de entrada | README y CLAUDE.md alineados y simplificados. |
-| 5 | Auditoría de estado y trazabilidad | Matriz con estados claros y evidencia mínima. |
-| 6 | Auditoría arquitectura contra implementación | Arquitectura documentada alineada con el sistema real. |
-| 7 | Marcado de documentos históricos | Documentos históricos rotulados y enlazados. |
-| 8 | Índice de evidencia experimental | HITOs y baselines más navegables. |
+| Fase | Nombre | Resultado esperado | Estado |
+|---|---|---|---|
+| 1 | Inventario y clasificación documental | Tabla de inventario inicial y lista de inconsistencias. | ✅ Completada 2026-05-02 |
+| 2 | Definición de fuentes de verdad | Jerarquía documental y reglas de autoridad. | ✅ Completada 2026-05-02 |
+| 3 | Mapa documental mínimo | `docs/DOCUMENTATION-MAP.md`. | ✅ Completada 2026-04-27 |
+| 4 | Limpieza de documentos de entrada | README y CLAUDE.md alineados y simplificados. | ⏳ Parcial (50%) — README desactualizado |
+| 5 | Auditoría de estado y trazabilidad | Matriz con estados claros y evidencia mínima. | ⏳ Parcial (60%) — RF-IN-05/06 pendientes |
+| 6 | Auditoría arquitectura contra implementación | Arquitectura documentada alineada con el sistema real. | ⏳ Parcial (40%) — architecture.md desfasado (Cloud Run vs Fly.io) |
+| 7 | Marcado de documentos históricos | Documentos históricos rotulados y enlazados. | ⏳ Parcial (20%) — encabezados no aplicados |
+| 8 | Índice de evidencia experimental | HITOs y baselines más navegables. | ⏳ Parcial (70%) — HITO-30/31/32 sin indexar |
+| 9 | Limpieza operativa | `.work/`, `memory/` y ADRs saneados. | ⏳ Pendiente |
 
 ---
 
-## 7. Backlog inicial de adecuación
+## 7. Backlog de adecuación
 
-| Prioridad | Tarea | Archivo(s) | Resultado esperado |
+| Prioridad | Tarea | Archivo(s) | Estado |
 |---|---|---|---|
-| Alta | Crear auditoría documental inicial | `docs/inventario/INVENTARIO-DOCUMENTAL.md` | Registro claro de inconsistencias y decisiones de limpieza. |
-| Alta | Crear mapa documental | `docs/DOCUMENTATION-MAP.md` | Guía de lectura y fuentes de verdad. |
-| Alta | Actualizar README | `README.md` | Entrada simple y estado resumido correcto. |
-| Alta | Revisar estados en matriz | `docs/traceability/matrix.md` | Diferenciar planificado, especificado, implementado y validado. |
-| Media | Verificar arquitectura contra código | `architecture.md`, `src/`, `frontend/` | Diagramas y texto alineados con implementación real. |
-| Media | Marcar documentos históricos | documentos históricos | Menor riesgo de confusión. |
-| Media | Crear índice de HITOs | `docs/contexto/INDEX-HITOS.md` | Mejor acceso a aprendizajes del experimento. |
-| Baja | Homogeneizar encabezados documentales | varios | Convención editorial consistente. |
+| ✅ | Crear inventario documental inicial | `docs/inventario/INVENTARIO-DOCUMENTAL.md` | Completado 2026-05-02 |
+| ✅ | Crear fuentes de verdad documental | `docs/inventario/FUENTES-DE-VERDAD-DOCUMENTAL.md` | Completado 2026-05-02 |
+| ✅ | Crear mapa documental | `docs/inventario/DOCUMENTATION-MAP.md` | Completado 2026-04-27 |
+| Alta | Actualizar README | `README.md` | SP6 aparece como "⏳ En definición" — debe marcarse ✅ y agregar SP7 |
+| Alta | Corregir inconsistencia arquitectura producción | `docs/design/architecture.md` | Reemplazar Cloud Run por Fly.io; referenciar ADR-021 |
+| Alta | Marcar ADR-010 como supersedido | `docs/adr/ADR-010-*.md` | Agregar encabezado "Supersedido por ADR-021" |
+| Alta | Resolver ADR-015 duplicado | `docs/adr/ADR-015-*.md` (dos archivos) | Renombrar uno a ADR-022 |
+| Alta | Actualizar matrix.md §RF-IN-05/06 | `docs/traceability/matrix.md` | Cambiar "⏳ Deuda técnica" → "✅ Implementado (SP-ADJ-10.3)" |
+| Media | Marcar documentos históricos con encabezado | `docs/dominio/02, 04`, `docs/contexto/ANALISIS-*.md` | Aplicar convención definida en Fase 2 |
+| Media | Actualizar INDICE-HITOS con HITO-30/31/32 | `docs/contexto/INDICE-HITOS.md` | Cubrir aprendizajes de SP6 |
+| Media | Clasificar y limpiar `.work/` | `.work/` (38 archivos) | Archivar evidencia útil, eliminar temporales, mover `formacion/` fuera del alcance de producto |
+| Media | Limpiar `memory/` obsoleto | `memory/project_faz_faas_pendiente.md`, `memory/project_sp_adj_05_pendiente.md` | Eliminar entradas de tracking ya completadas |
+| Baja | Crear índice de especificaciones | `docs/specs/README.md` | Tabla navegable de US-IEDD por SP/INC |
+| Baja | Crear índice de arquitectura BC | `docs/architecture/INDEX.md` | Tabla BC → archivo → responsabilidades |
+| Baja | Homogeneizar encabezados documentales | varios | Convención editorial consistente en toda la documentación |
 
 ---
 
 ## 8. Orden recomendado de ejecución
 
-### Iteración 1 — Entrada y estado
+### Iteración 1 — Entrada y estado ✅ Completada
 
-1. Crear inventario documental.
-2. Crear fuentes de verdad documental.
-3. Crear mapa documental.
-4. Actualizar README y CLAUDE.md.
+1. ✅ Crear inventario documental.
+2. ✅ Crear fuentes de verdad documental.
+3. ✅ Crear mapa documental.
+4. ✅ CLAUDE.md actualizado; README pendiente → ver Iteración 2.
 
-### Iteración 2 — Trazabilidad
+### Iteración 2 — Correcciones críticas ⏳ En curso
 
-1. Revisar `docs/traceability/matrix.md`.
-2. Agregar o ajustar estados normalizados.
-3. Agregar evidencia mínima cuando sea necesario.
-4. Resolver inconsistencias de RFs pendientes o parcialmente implementados.
+1. Actualizar README: tabla de SPs, referencia a SP7, enlace a CLAUDE.md como fuente operativa.
+2. Actualizar `docs/design/architecture.md`: producción = Fly.io, referenciar ADR-021.
+3. Marcar `ADR-010` como supersedido por ADR-021.
+4. Renombrar ADR-015 duplicado a ADR-022.
+5. Corregir `matrix.md` §RF-IN-05/06: cambiar estado a implementado.
 
-### Iteración 3 — Arquitectura
+### Iteración 3 — Trazabilidad
+
+1. Revisar `docs/traceability/matrix.md` completo.
+2. Normalizar estados (Planificado / Especificado / Implementado / Validado / Diferido).
+3. Verificar cobertura SP7 (INC-7.1, INC-7.2).
+4. Resolver inconsistencias restantes de RFs.
+
+### Iteración 4 — Arquitectura
 
 1. Revisar estructura real de `src/`.
 2. Revisar estructura real de `frontend/`.
-3. Comparar con `architecture.md`.
+3. Verificar `architecture.md` y `context-map.md` contra implementación.
 4. Separar arquitectura vigente de arquitectura objetivo.
 5. Crear ADR si aparece una decisión no documentada.
 
-### Iteración 4 — Historia y evidencia
+### Iteración 5 — Historia y evidencia
 
-1. Marcar documentos históricos.
-2. Crear índice de HITOs.
+1. Marcar documentos históricos con encabezado de Fase 2.
+2. Actualizar `INDICE-HITOS.md` con HITO-30/31/32.
 3. Revisar baselines como evidencia de cierre.
 4. Enlazar fuentes vigentes desde documentos históricos.
+
+### Iteración 6 — Limpieza operativa
+
+1. Clasificar `.work/`: archivar evidencia útil en `docs/contexto/`, eliminar temporales, mover `formacion/` fuera del repo de producto.
+2. Eliminar entradas obsoletas de `memory/`.
+3. Crear índices navegables para `docs/specs/` y `docs/architecture/`.
 
 ---
 
@@ -184,14 +208,16 @@ Cuando haya contradicción entre documentación y código, debe revisarse el có
 
 El plan se considera cumplido cuando:
 
-1. Existe un mapa documental claro.
+1. ✅ Existe un mapa documental claro.
 2. README y CLAUDE.md no se contradicen.
 3. La matriz de trazabilidad distingue estado documental, implementación y validación.
-4. Los documentos históricos están rotulados.
-5. La arquitectura documentada coincide con la implementación o explicita qué partes son objetivo/candidatas.
-6. Las fuentes de verdad están definidas.
+4. Los documentos históricos están rotulados con la convención de encabezado definida en Fase 2.
+5. La arquitectura documentada coincide con la implementación real (Fly.io, no Cloud Run).
+6. ✅ Las fuentes de verdad están definidas.
 7. Las duplicaciones críticas de estado fueron eliminadas o reducidas.
 8. Un lector nuevo puede entender el proyecto sin recorrer documentos en círculo.
+9. `.work/` no contiene archivos temporales ni material fuera del scope del producto.
+10. Los ADRs supersedidos están marcados y la numeración no tiene duplicados.
 
 ---
 

@@ -330,7 +330,8 @@ con persistencia relacional estándar en SQLite. No requieren L3 detallado en Fa
 | ADR-007 | SQLite como motor de persistencia — un archivo `.db` por Bounded Context |
 | ADR-008 | Event Store como tabla `events` append-only en el SQLite del BC |
 | ADR-009 | Migraciones Alembic independientes por BC |
-| ADR-010 | Docker solo para producción — Cloud Run (GCP) + Litestream para backup de SQLite |
+| ADR-010 | ~~Docker solo para producción — Cloud Run (GCP) + Litestream~~ — supersedida por ADR-021 |
+| ADR-021 | Fly.io + volumen persistente como plataforma de producción (SP7) |
 | ADR-011 | structlog para logging estructurado (JSON en prod, texto en dev) |
 | ADR-012 | RFC 7807 (Problem Details) como convención de errores HTTP |
 
@@ -338,57 +339,45 @@ Ver `docs/adr/` para justificación completa de cada decisión.
 
 ---
 
-## 7. L4 — Deployment (candidato)
+## 7. L4 — Deployment (vigente — SP7)
 
-> **Candidato:** la configuración definitiva de producción (región, memoria, concurrencia de Cloud Run,
-> bucket GCS, pipeline CI/CD) se completa en SP5. Este diagrama refleja las decisiones de ADR-010.
+> **Vigente desde SP7 (2026-05-17):** ADR-021 reemplaza ADR-010 (Cloud Run + Litestream).
+> La plataforma de producción es Fly.io. Ver ADR-021 para el contexto de la decisión.
 
 Dos entornos con estrategias distintas. El desarrollo es directo (`uv run`), sin Docker.
-La producción es un contenedor stateless en Cloud Run cuya persistencia SQLite
-se replica en tiempo real a GCS mediante Litestream.
+La producción es un contenedor en Fly.io con volumen persistente para los SQLite.
 
 ```mermaid
 graph TB
     subgraph DEV["💻 Desarrollo Local"]
         direction TB
-        DEV_CMD["uv run fastapi dev src/app.py"]
+        DEV_CMD["uv run uvicorn src.app:app --reload"]
         DEV_DB[("data/\ncompetencia.db · torneo.db\nregistro.db · resultados.db\nidentidad.db · notificaciones.db")]
         DEV_CMD --> DEV_DB
     end
 
     subgraph GH["GitHub"]
-        direction LR
         REPO["Repositorio\nAtaraxiaDive"]
-        GHA["GitHub Actions\nCI/CD Pipeline\n(SP5)"]
-        REPO -->|"push a main"| GHA
     end
 
-    subgraph GAR["Google Artifact Registry"]
-        IMG["imagen Docker\nataraxiadive:latest"]
-    end
-
-    subgraph GCP["☁️ Google Cloud Platform"]
+    subgraph FLY["☁️ Fly.io — región gru (São Paulo)"]
         direction TB
-        subgraph CR["Cloud Run — instancia stateless"]
+        subgraph VM["VM 256 MB · 1 CPU shared"]
             direction LR
-            APP["FastAPI\n(Dockerfile)"]
-            LS["Litestream\n(proceso paralelo)"]
-            APP -.- LS
+            APP["FastAPI + frontend/dist/\n(Dockerfile multi-stage)"]
         end
-        subgraph GCS["Cloud Storage"]
-            BUCKET[("Bucket GCS\nreplicas de data/*.db")]
+        subgraph VOL["Volumen ataraxiadive_data"]
+            DB[("/app/data/\n6 archivos SQLite")]
         end
-        LS -->|"replica en tiempo real"| BUCKET
-        BUCKET -->|"restaura al arrancar\nnueva instancia"| LS
+        APP -->|"lee/escribe"| DB
     end
 
     subgraph EXT["Servicios Externos"]
-        SMTP["Proveedor Email HTTP\n(ej: Resend / SendGrid / SES)"]
+        SMTP["Proveedor Email HTTP\n(ej: Resend / SendGrid)"]
         FCM["FCM\nPush Notifications"]
     end
 
-    GHA -->|"build + push imagen"| GAR
-    GAR -->|"deploy"| CR
+    REPO -->|"fly deploy (manual)"| FLY
     APP -->|"HTTPS API"| SMTP
     APP -->|"HTTPS"| FCM
 ```
@@ -397,33 +386,30 @@ graph TB
 
 ```
 1. git push → main (baseline tag)
-2. GitHub Actions: pytest + designreviewer + build Dockerfile
-3. push imagen → Google Artifact Registry
-4. Cloud Run: despliega nueva revisión
-5. Al arrancar: Litestream restaura data/*.db desde GCS
-6. Instancia sirve tráfico
-7. Durante operación: Litestream replica cada write a GCS en tiempo real
+2. fly deploy  ←  build Dockerfile multi-stage local + push a Fly.io
+3. Fly.io monta volumen ataraxiadive_data en /app/data
+4. Instancia sirve tráfico en https://ataraxiadive.fly.dev/
 ```
 
-### Flujo de backup / recuperación (Litestream)
+### Estrategia de persistencia
 
 ```
-Escritura SQLite → WAL → Litestream detecta → replica a GCS (< 1s)
-                                                      ↓
-Nueva instancia Cloud Run ← restaura desde GCS ← punto de recuperación
+data/*.db (6 SQLite)  →  volumen Fly.io (1 GB, región gru)
+                          sobrevive a deploys y reinicios
+                          sin backup externo (demo IEDD — aceptable)
 ```
 
 ### Elementos
 
 | Elemento | Rol | Notas |
 |----------|-----|-------|
-| `uv run fastapi dev` | Servidor de desarrollo | Sin Docker — ADR-010 |
+| `uv run uvicorn` | Servidor de desarrollo | Sin Docker — ADR-010 |
 | `data/<bc>.db` (local) | Persistencia en dev | 6 archivos SQLite, excluidos de git |
-| GitHub Actions | CI/CD | Pipeline completo en SP5; en SP1-SP4 se ejecuta manualmente |
-| Google Artifact Registry | Registro de imágenes | Imagen de producción optimizada |
-| Cloud Run | Runtime de producción | Stateless — escala a cero entre torneos |
-| Litestream | Replicación SQLite | Proceso paralelo al servidor; replica WAL a GCS |
-| Cloud Storage (GCS) | Backup continuo de SQLite | Punto de restauración al arrancar nueva instancia |
+| Fly CLI (`fly deploy`) | Despliegue a producción | Manual — sin CI/CD automatizado |
+| Dockerfile (multi-stage) | Imagen de producción | Stage 1: npm build frontend; Stage 2: Python + API + estáticos |
+| Fly.io (región gru) | Runtime de producción | VM 256 MB, scale-to-zero, SSL automático |
+| Volumen `ataraxiadive_data` | Persistencia en producción | 1 GB, montado en `/app/data` |
+| `https://ataraxiadive.fly.dev/` | URL de producción | FastAPI sirve API + frontend estático |
 | SMTP externo | Envío de emails | Delegado — SendGrid u otro proveedor |
 | FCM | Push notifications | Delegado — Firebase Cloud Messaging |
 

@@ -44,3 +44,4 @@ frontend/.next/
 frontend/dist/
 frontend/build/
 .claude/worktrees/
+.work/formacion/

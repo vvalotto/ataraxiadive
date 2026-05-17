@@ -1,4 +1,4 @@
-# ADR-015: Ubicación del Value Object `Categoria`
+# ADR-022: Ubicación del Value Object `Categoria`
 
 Fecha: 2026-05-02
 Estado: Accepted
