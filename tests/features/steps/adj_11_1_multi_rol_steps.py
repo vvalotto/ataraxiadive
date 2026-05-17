@@ -18,6 +18,7 @@ scenarios("../US-ADJ-11.1-identidad-multi-rol.feature")
 def context(tmp_path: Any, monkeypatch: Any) -> dict[str, Any]:
     db_path = str(tmp_path / "identidad_adj11_test.db")
     monkeypatch.setenv("IDENTIDAD_DB_PATH", db_path)
+    monkeypatch.setenv("REGISTRO_DB_PATH", str(tmp_path / "registro_adj11_test.db"))
     monkeypatch.setenv("IDENTIDAD_JWT_SECRET", "test-secret-adj11-32-chars-min!!")
     return {}
 
