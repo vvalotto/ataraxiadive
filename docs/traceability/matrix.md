@@ -2,16 +2,16 @@
 
 > Estado documental: vigente  
 > Fuente de verdad para: trazabilidad RF → BC → incremento → US-IEDD · estados de implementación  
-> Última actualización: 2026-05-02  
+> Última actualización: 2026-05-17  
 > Jerarquía de autoridad: [FUENTES-DE-VERDAD-DOCUMENTAL.md](../inventario/FUENTES-DE-VERDAD-DOCUMENTAL.md)
 
 | Campo | Valor |
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-05-01 |
+| **Fecha** | 2026-05-17 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.42 — SP6 INC-6.1 ✅ · INC-6.2 ✅ · INC-6.3 ✅ · INC-6.4 ✅ cerrado |
+| **Estado** | ✅ v1.45 — SP6 ✅ cerrado 2026-05-16 · SP7 ⏳ INC-7.1 ✅ · INC-7.2 pendiente |
 
 ---
 
@@ -66,7 +66,14 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | SP5 SP-ADJ-09 | Frontend organizador | Refactoring UX organizador: shell dark, routing, home, dashboard, resultados, arquitectura + declarar AP en inscripción (US-ADJ-9.1..9.7) — PRs #129–#136 |
 | SP5 INC-5.7 | Portal Atleta + Resultados | Portal del atleta: mis torneos, mi grilla, mis resultados, rankings/podios + fix resultados provisionales (US-5.7.1..5.7.4) — PRs #137–#140 |
 | SP5 INC-5.8 | — | Desestimado — contenido absorbido en SP6 |
-| Futuro / fuera de scope SP5 | Integración externa | RF-IG-01..04, RF-IN-07 |
+| SP6 INC-6.1 | Frontend (juez) | Ajustes UX flujo juez — 5 US · PRs #143–#147 |
+| SP6 INC-6.2 | Frontend (organizador) | Ajustes UX portal organizador — 6 US · PRs #148–#153 |
+| SP6 INC-6.3 | Registro + Frontend | Ajustes portal atleta: AP inline + persistencia apto médico y pago (RF-IN-05/06) — 2 US · PRs #154–#155 |
+| SP6 INC-6.4 | Competencia + Resultados + Registro | Deuda técnica sistema — 6 US · PRs #157–#160 · DesignReviewer 0 CRITICAL |
+| SP6 SP-ADJ-10 | Identidad + Registro + Frontend | Correcciones post-UAT — US-ADJ-10.x |
+| SP6 SP-ADJ-11 | Identidad + Registro + Frontend | Modelo multi-rol (ADR-020) — 10 US · PRs #184–#193 · DesignReviewer 0 CRITICAL |
+| SP7 INC-7.1 | Infra + Deploy | Despliegue en Fly.io (ADR-021) — Dockerfile multi-stage + fly.toml + StaticFiles · PRs #194 · `https://ataraxiadive.fly.dev/` |
+| Futuro / fuera de scope v1.0 | Integración externa | RF-IG-01..04, RF-IN-07 |
 
 ---
 
@@ -76,13 +83,13 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-GT-01 | Un torneo tiene una sola sede | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
+| RF-GT-01 | Un torneo tiene una sola sede | Torneo | SP3 | 3.1 | US-3.1.x | ✅ implementado |
 | RF-GT-02 | Disciplinas configurables (STA, DNF, DBF, DYN, SPE y variantes) | Torneo | SP3/SP4 | 3.1 / 4.1 | US-3.1.x / US-4.1.3 | ✅ completado — acrónimos corregidos en SP-ADJ-04; variantes SPE_2X50/4X50/8X50/16X50 agregadas en INC-4.1 |
-| RF-GT-03 | Múltiples torneos activos simultáneamente | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
-| RF-GT-04 | Cancelar = estado Cancelado, datos preservados | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
-| RF-GT-05 | Restricciones de transición entre fases (con retroceso Ejecución → Preparación) | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
-| RF-GT-06 | Cierre no implica exportación automática | Torneo | SP3 | 3.5 | US-3.5.x | ✅ definido |
-| RF-GT-07 | Registrar EntidadOrganizadora (federación/club) | Torneo | SP3 | 3.1 | US-3.1.x | ✅ definido |
+| RF-GT-03 | Múltiples torneos activos simultáneamente | Torneo | SP3 | 3.1 | US-3.1.x | ✅ implementado |
+| RF-GT-04 | Cancelar = estado Cancelado, datos preservados | Torneo | SP3 | 3.1 | US-3.1.x | ✅ implementado |
+| RF-GT-05 | Restricciones de transición entre fases (con retroceso Ejecución → Preparación) | Torneo | SP3 | 3.1 | US-3.1.x | ✅ implementado |
+| RF-GT-06 | Cierre no implica exportación automática | Torneo | SP3 | 3.5 | US-3.5.x | ✅ implementado |
+| RF-GT-07 | Registrar EntidadOrganizadora (federación/club) | Torneo | SP3 | 3.1 | US-3.1.x | ✅ implementado |
 
 ---
 
@@ -94,8 +101,8 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-IN-02 | Brevet no obligatorio | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 | RF-IN-03 | Sin límite de atletas por torneo o disciplina | Registro | SP3 | 3.2 | US-3.2.3 | ✅ implementado |
 | RF-IN-04 | Cancelar inscripción hasta el día anterior | Registro | SP3 | 3.2 | US-3.2.3 | ✅ implementado |
-| RF-IN-05 | Apto médico como requisito de inscripción | Registro | SP5 | 5.4 | US-5.4.1 | ⏳ Deuda técnica — UI implementado (frontend/src/pages/atleta/AtletaInscripcionPage.tsx step 3); persistencia backend pendiente. Evidencia: tests/features/US-5.5.1-inscripcion-atleta-ap.feature; docs/reports/US-5.5.1-report.md; docs/plans/sp5/US-5.5.1-implementation-notes.md; PRs #120–#122. Aceptación: adjuntos son validados en UI; almacenamiento backend pospuesto a SP6. |
-| RF-IN-06 | Constancia de pago como requisito | Registro | SP5 | 5.4 | US-5.4.1 | ⏳ Deuda técnica — UI implementado (frontend/src/pages/atleta/AtletaInscripcionPage.tsx step 3); persistencia backend pendiente. Evidencia: tests/features/US-5.5.1-inscripcion-atleta-ap.feature; docs/reports/US-5.5.1-report.md; docs/plans/sp5/US-5.5.1-implementation-notes.md; PRs #120–#122. Aceptación: adjuntos son validados en UI; almacenamiento backend pospuesto a SP6. |
+| RF-IN-05 | Apto médico como requisito de inscripción | Registro | SP6 | 6.3 | US-6.3.2 | ✅ implementado — persistencia backend completada en SP6 INC-6.3 (PR #155). |
+| RF-IN-06 | Constancia de pago como requisito | Registro | SP6 | 6.3 | US-6.3.2 | ✅ implementado — persistencia backend completada en SP6 INC-6.3 (PR #155). |
 | RF-IN-07 | Conflicto de datos con BD FAAS | Registro | Futuro | — | — | — fuera de scope SP5/v1.0; depende de integración FAAS |
 | RF-IN-08 | Género solo para categorización — sin otro efecto | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
 | RF-IN-09 | Atleta no puede cambiar categoría por disciplina | Registro | SP3 | 3.2 | US-3.2.2 | ✅ implementado |
@@ -107,14 +114,14 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-PR-01 | AP = marca declarada por el atleta | Competencia | SP1 | 1.2 | US-P-01 | ✅ definido |
-| RF-PR-02 | AP > 0, sin negativos ni cero (INV-P-01) | Competencia | SP1 | 1.2 | US-P-01 | ✅ definido |
-| RF-PR-03 | AP no modificable una vez registrado (INV-P-02) | Competencia | SP1 | 1.2 | US-P-01 | ✅ definido |
-| RF-PR-04 | Atleta sin AP no compite — no aparece en grilla (P-05) | Competencia | SP2 | 2.1 | US-C-02 | ✅ definido |
+| RF-PR-01 | AP = marca declarada por el atleta | Competencia | SP1 | 1.2 | US-P-01 | ✅ implementado |
+| RF-PR-02 | AP > 0, sin negativos ni cero (INV-P-01) | Competencia | SP1 | 1.2 | US-P-01 | ✅ implementado |
+| RF-PR-03 | AP no modificable una vez registrado (INV-P-02) | Competencia | SP1 | 1.2 | US-P-01 | ✅ implementado |
+| RF-PR-04 | Atleta sin AP no compite — no aparece en grilla (P-05) | Competencia | SP2 | 2.1 | US-C-02 | ✅ implementado |
 | RF-PR-05 | Orden de grilla: AP ascendente (DNF/DYN/DBF/STA) o descendente (SPE) | Competencia | SP2 / SP-ADJ-04 / SP4 | 2.1 / — / 4.1 | US-C-02 / US-ADJ-4.2 / US-4.1.4 | ✅ completado en INC-4.1 — SPE usa orden descendente (mayor AP primero) per reglamento CMAS/FAAS |
-| RF-PR-06 | Andariveles simultáneos — varios atletas compiten en paralelo | Competencia | SP2 | 2.3 | US-C-02 | ✅ definido |
-| RF-PR-07 | Organizador puede ajustar manualmente el orden de la grilla | Competencia | SP2 | 2.1 | US-C-03 | ✅ definido |
-| RF-PR-08 | Intervalo entre OTs configurable por competencia (P-02) | Competencia | SP2 | 2.1 | US-C-01 | ✅ definido |
+| RF-PR-06 | Andariveles simultáneos — varios atletas compiten en paralelo | Competencia | SP2 | 2.3 | US-C-02 | ✅ implementado |
+| RF-PR-07 | Organizador puede ajustar manualmente el orden de la grilla | Competencia | SP2 | 2.1 | US-C-03 | ✅ implementado |
+| RF-PR-08 | Intervalo entre OTs configurable por competencia (P-02) | Competencia | SP2 | 2.1 | US-C-01 | ✅ implementado |
 
 ---
 
@@ -122,16 +129,16 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 | RF | Descripción | BC | SP | Inc. | US-IEDD candidata | Estado |
 |----|-------------|----|----|------|-------------------|--------|
-| RF-EJ-01 | Más de un juez asignado a una disciplina | Identidad / Torneo | SP3 | 3.4 | US-3.4.x | ✅ definido |
-| RF-EJ-02 | DNS = descalificación inmediata, sin espera (P-07, INV-P-08) | Competencia | SP1 | 1.4 | US-P-05 | ✅ definido |
-| RF-EJ-03 | Tarjetas amarillas con penalizaciones configurables | Competencia | SP4 | 4.4 | US-4.4.x | ✅ definido |
+| RF-EJ-01 | Más de un juez asignado a una disciplina | Identidad / Torneo | SP3 | 3.4 | US-3.4.x | ✅ implementado |
+| RF-EJ-02 | DNS = descalificación inmediata, sin espera (P-07, INV-P-08) | Competencia | SP1 | 1.4 | US-P-05 | ✅ implementado |
+| RF-EJ-03 | Tarjetas amarillas con penalizaciones configurables | Competencia | SP4 | 4.4 | US-4.4.x | ✅ implementado |
 | RF-EJ-04 | Códigos de penalización (AIDA/CMAS) | Competencia | SP4 | 4.4 | US-4.4.x | ✅ implementado — dominio: competencia/domain/value_objects/tipo_penalizacion.py; spec US-4.1.2 |
-| RF-EJ-05 | Cronometraje manual — juez ingresa el tiempo | Competencia | SP1 | 1.4 | US-P-03 | ✅ definido |
-| RF-EJ-06 | Corrección con ventana de impugnación (INV-P-15, HS-P2 ✅) | Competencia | SP4 | 4.4 | US-P-06 | ✅ definido |
-| RF-EJ-07 | Black-out registra el hecho y la distancia alcanzada | Competencia | SP1 | 1.4 | US-P-04 | ✅ definido |
-| RF-EJ-08 | Distancia con decimales (metros) | Competencia | SP1/SP2 | 1.2 / 2.2 | US-P-01 / US-P-03 | ✅ definido |
+| RF-EJ-05 | Cronometraje manual — juez ingresa el tiempo | Competencia | SP1 | 1.4 | US-P-03 | ✅ implementado |
+| RF-EJ-06 | Corrección con ventana de impugnación (INV-P-15, HS-P2 ✅) | Competencia | SP4 | 4.4 | US-P-06 | ✅ implementado |
+| RF-EJ-07 | Black-out registra el hecho y la distancia alcanzada | Competencia | SP1 | 1.4 | US-P-04 | ✅ implementado |
+| RF-EJ-08 | Distancia con decimales (metros) | Competencia | SP1/SP2 | 1.2 / 2.2 | US-P-01 / US-P-03 | ✅ implementado |
 | RF-EJ-09 | Protocolo de superficie no evaluado por el sistema | — | — | — | — | — fuera de alcance v1 |
-| RF-EJ-10 | Solo se registra resultado de tarjeta (no el SP en sí) | Competencia | SP1 | 1.4 | US-P-04 | ✅ definido |
+| RF-EJ-10 | Solo se registra resultado de tarjeta (no el SP en sí) | Competencia | SP1 | 1.4 | US-P-04 | ✅ implementado |
 
 ---
 
@@ -155,8 +162,8 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 | RF-US-01 | Un organizador por torneo (no multi-organizador) | Identidad / Torneo | SP3 | 3.2 | US-3.2.1 | ✅ implementado |
 | RF-US-02 | Un usuario puede tener múltiples roles | Identidad | SP3 | 3.2 | US-3.2.1 | ✅ implementado |
 | RF-US-03 | Autenticación mail + contraseña | Identidad | SP3 | 3.2 | US-3.2.1 | ✅ implementado |
-| RF-US-04 | Juez asignado a disciplina específica por el organizador | Identidad / Torneo | SP3 | 3.4 | US-3.4.x | ✅ definido |
-| RF-US-05 | Atletas solo ven resultados finales (no resultados en curso) | Identidad / Resultados | SP3 | 3.5 | US-3.5.x | ✅ definido |
+| RF-US-04 | Juez asignado a disciplina específica por el organizador | Identidad / Torneo | SP3 | 3.4 | US-3.4.x | ✅ implementado |
+| RF-US-05 | Atletas solo ven resultados finales (no resultados en curso) | Identidad / Resultados | SP3 | 3.5 | US-3.5.x | ✅ implementado |
 
 ---
 
@@ -184,15 +191,15 @@ el incremento donde se implementa y la US-IEDD candidata que lo especifica.
 
 ## 4. RFs Pendientes de Definición
 
-Deben resolverse antes del incremento futuro que los involucre. No bloquean el
-alcance vigente de SP5 salvo que se reabra explícitamente el scope.
+RFs sin implementar en v1.0. No bloquean el scope actual (SP7 — despliegue y documentación).
 
-| RF | Descripción | Bloquea | Resolver antes de |
-|----|-------------|---------|-------------------|
-| RF-IN-07 | ¿Qué pasa si los datos del atleta difieren de la BD FAAS? | Futuro | Post-SP5 |
-| RF-EJ-04 | Códigos de penalización (AIDA/CMAS u otra federación) | — | Resuelto (implementado) |
-| RF-NT-03 | ¿Juez u organizador reciben notificaciones durante ejecución? | Futuro | Post-SP5 |
-| RF-IG-01..04 | Integración completa con BD FAAS / exportación a rankings | Futuro | Post-SP5 |
+| RF | Descripción | Estado | Resolver antes de |
+|----|-------------|--------|-------------------|
+| RF-IN-07 | ¿Qué pasa si los datos del atleta difieren de la BD FAAS? | — fuera de scope v1.0 | Post-v1.0 (requiere integración FAAS) |
+| RF-EJ-04 | Códigos de penalización (AIDA/CMAS u otra federación) | ✅ implementado | Resuelto en INC-4.1 |
+| RF-NT-02 | Recordatorio al atleta cuando se acerca el plazo de AP | Especificado — pendiente impl. | Post-v1.0 |
+| RF-NT-03 | ¿Juez u organizador reciben notificaciones durante ejecución? | ⏳ pendiente | Post-v1.0 |
+| RF-IG-01..04 | Integración completa con BD FAAS / exportación a rankings | — fuera de scope v1.0 | Post-v1.0 |
 
 ---
 
@@ -797,6 +804,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
+*v1.45 — 2026-05-17: Iteración 3 adecuación documental — §2 SP6/SP7 agregados · 23 "✅ definido" normalizados a "✅ implementado" en SPs cerrados · §4 actualizado a scope v1.0 · header fecha/estado actualizado*
 *v1.44 — 2026-05-16: SP-ADJ-11 cerrado (§33 nuevo · 10/10 US ✅ · PRs #184–#193 · DesignReviewer 0 CRITICAL · 287 WARNING) · §§ renumerados 34..37 · US→Tests SP-ADJ-11.x agregados*
 *v1.43 — 2026-05-09: US-6.4.5 completada · SQLiteInscripcionRepository sin DR-07 · DR-06 documentado como coordination handler*
 *v1.42 — 2026-05-09: US-6.4.4 completada · AlgoritmoPuntajeFAAS thin dispatcher · DesignReviewer 0 issues componente*

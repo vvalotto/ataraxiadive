@@ -21,6 +21,7 @@ coverage.xml
 .env
 .env.*
 !.env.example
+!.env.production.example
 
 # IDE
 .idea/
@@ -43,3 +44,4 @@ frontend/.next/
 frontend/dist/
 frontend/build/
 .claude/worktrees/
+.work/formacion/

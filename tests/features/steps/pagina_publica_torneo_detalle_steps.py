@@ -20,7 +20,9 @@ import sys
 
 from identidad.api.dependencies import get_current_user
 from torneo.api.exception_handlers import register_torneo_exception_handlers
-from torneo.api.router import router as torneo_router  # noqa: F401 — side-effect: loads module into sys.modules
+from torneo.api.router import (
+    router as torneo_router,
+)  # noqa: F401 — side-effect: loads module into sys.modules
 
 _torneo_router_mod = sys.modules["torneo.api.router"]
 

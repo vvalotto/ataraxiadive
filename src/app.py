@@ -8,6 +8,7 @@ from uuid import UUID
 
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from competencia.api.exception_handlers import register_exception_handlers
 from competencia.api.router import (
@@ -686,3 +687,8 @@ configure_ap_registrado_callback(build_on_ap_registrado_callback())
 async def health_check() -> dict[str, str]:
     """Health-check endpoint — verifica que la aplicación está activa."""
     return {"status": "ok"}
+
+
+_frontend_dist = os.getenv("FRONTEND_DIST_PATH", "frontend/dist")
+if os.path.isdir(_frontend_dist):
+    app.mount("/", StaticFiles(directory=_frontend_dist, html=True), name="frontend")

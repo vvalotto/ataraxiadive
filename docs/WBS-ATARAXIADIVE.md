@@ -490,13 +490,13 @@ correcciones UX detectadas en UAT. 5 USs implementadas.
 ---
 
 #### ───────────────────────────────────────────
-#### SP6 — Validación, Ajustes y Despliegue  ⏳  `v1.0.0`
+#### SP6 — Validación, Ajustes y Despliegue  ✅  `v1.0.0`  2026-05-16
 
 > **Objetivo:** cerrar el ciclo v1.0. Corregir defectos y mejoras UX identificados en validación SP5,
-> resolver deuda técnica crítica, ejecutar UAT completo con los tres roles y desplegar en producción.
+> resolver deuda técnica crítica, ejecutar UAT completo con los tres roles.
 >
-> **Demo del SP:** torneo completo con los 3 roles (organizador, juez, atleta) sin bloqueos;
-> `v1.0.0` publicado y accesible en producción.
+> **Nota:** el despliegue productivo (INC-6.7) fue diferido a SP7 por decisión de alcance.
+> El UAT se completó con 10/10 flows (F-09/F-10 con waiver). BL-006 taggeado como `v1.0.0`.
 
 ##### INC-6.1 — Ajustes Juez  ⏳
 **DoD:** BUG MUX-04 corregido y verificado en móvil; flujo de 6 pasos con secuencia correcta tarjeta→marca;
@@ -569,7 +569,37 @@ materializada; violación D-05 corregida en routers; refactoring FAAS e Inscripc
 | US-6.5.4 | Configuración entorno productivo (servidor, SSL, dominio, backup) |
 | US-6.5.5 | Despliegue `v1.0.0` + tag BL-006 + ArchitectAnalyst final |
 
-**Hito SP6:** `BL-006` · tag `v1.0.0` · ⏳ pendiente
+**Hito SP6:** `BL-006` · tag `v1.0.0` · ✅ 2026-05-16
+
+---
+
+#### SP7 — Despliegue y Documentación  ⏳  `v1.0.1`
+
+> **Objetivo:** publicar AtaraxiaDive en producción (Fly.io) y producir el manual de usuario
+> para los tres roles.
+>
+> **Demo del SP:** URL pública accesible · manual de usuario completo en `docs/manual/`.
+
+##### INC-7.1 — Despliegue en Fly.io  ⏳
+**DoD:** app accesible en URL pública Fly.io con SSL; los 6 SQLite persistidos en volumen;
+frontend servido por FastAPI; login y flujo básico verificados post-deploy.
+
+| US | Descripción |
+|----|-------------|
+| US-7.1.1 | Dockerfile + FastAPI sirve frontend/dist como estáticos + fly.toml + variables de entorno |
+| US-7.1.2 | `fly deploy` + verificación de flujos críticos + tag `v1.0.1` |
+
+##### INC-7.2 — Manual de Usuario  ⏳
+**DoD:** carpeta `docs/manual/` con un documento Markdown por rol; cubre los flujos principales
+verificados en UAT SP6.
+
+| US | Descripción |
+|----|-------------|
+| US-7.2.1 | Manual organizador — crear torneo, inscripciones, grilla, ejecución, cierre |
+| US-7.2.2 | Manual juez — acceso al panel, flujo de performance, tarjetas |
+| US-7.2.3 | Manual atleta — registro, inscripción, AP, consulta de resultados |
+
+**Hito SP7:** `BL-007` · tag `v1.0.1` · ⏳ pendiente
 
 ---
 
@@ -583,7 +613,8 @@ materializada; violación D-05 corregida en routers; refactoring FAAS e Inscripc
 | BL-003 | SP3 El Torneo + SP-ADJ-03 + SP-ADJ-04 | `v0.4.0` | 2026-04-04 | ✅ |
 | BL-004 | SP4 La Plataforma + SP-ADJ-06 | `v0.5.0` | 2026-04-18 | ✅ |
 | BL-005 | SP5 La Puesta en Marcha + SP-ADJ-07/08/09 | `v0.6.0` | 2026-05-01 | ✅ |
-| BL-006 | SP6 Validación, Ajustes y Despliegue | `v1.0.0` | — | ⏳ |
+| BL-006 | SP6 Validación, Ajustes y Despliegue | `v1.0.0` | 2026-05-16 | ✅ |
+| BL-007 | SP7 Despliegue y Documentación | `v1.0.1` | — | ⏳ |
 
 ---
 
@@ -597,7 +628,8 @@ materializada; violación D-05 corregida en routers; refactoring FAAS e Inscripc
 | SP3 | El Torneo | BC Torneo + BC Registro + BC Identidad + extensiones + UAT BA 2025 | HITO-14 a HITO-17 (secuencialidad IEDD, CQRS/ES, oráculo real) |
 | SP4 | La Plataforma | Frontend PWA completo + offline-first + BC Notificaciones + auditoría | HITO-18 a HITO-25 (UX formal, Event Sourcing criptográfico, offline) |
 | SP5 | La Puesta en Marcha | Portal organizador + portal atleta + algoritmo FAAS + rankings por categoría/género | HITO-26+ (UX formal, FAAS, portales completos) |
-| SP6 | Validación, Ajustes y Despliegue | Sistema corregido y desplegado en producción (`v1.0.0`) | Paper IEDD + capítulos libro DDD + caso estudio IS |
+| SP6 | Validación, Ajustes y Despliegue | Sistema corregido y validado E2E (`v1.0.0`) | Paper IEDD + capítulos libro DDD + caso estudio IS |
+| SP7 | Despliegue y Documentación | App publicada en Fly.io + manual de usuario 3 roles (`v1.0.1`) | Cierre del experimento IEDD |
 
 ---
 
@@ -605,12 +637,12 @@ materializada; violación D-05 corregida en routers; refactoring FAAS e Inscripc
 
 | Métrica | Valor |
 |---------|-------|
-| Subproyectos | 6 + Fase 0 |
-| Incrementos planificados | 28 (22 SP1–SP5 + 6 SP6) |
-| Incrementos completados | 22 de 22 SP1–SP5 (100%) + 0 de 6 SP6 |
-| US-IEDD completadas | ~87 (SP1–SP5) + 29 planificadas SP6 |
-| Sprints de ajuste (SP-ADJ) | 6 completados (ADJ-01 a ADJ-09, numeración no correlativa) |
-| Hitos (Baselines) | 6 cerrados (BL-000 a BL-005) + BL-006 pendiente |
+| Subproyectos | 7 + Fase 0 |
+| Incrementos planificados | 30 (22 SP1–SP5 + 6 SP6 + 2 SP7) |
+| Incrementos completados | 28 de 28 SP1–SP6 (100%) + 0 de 2 SP7 |
+| US-IEDD completadas | ~116 (SP1–SP6) + 5 planificadas SP7 |
+| Sprints de ajuste (SP-ADJ) | 11 completados (ADJ-01 a ADJ-11) |
+| Hitos (Baselines) | 7 cerrados (BL-000 a BL-006) + BL-007 pendiente |
 | Bounded Contexts | 6 (Competencia, Torneo, Registro, Resultados, Identidad, Notificaciones) |
 | ADRs documentados | 14 |
 | HITOs de aprendizaje | 25+ |

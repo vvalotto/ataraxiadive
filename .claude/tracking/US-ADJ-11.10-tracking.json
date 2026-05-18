@@ -8,9 +8,9 @@
   },
   "timeline": {
     "started_at": "2026-05-16T19:47:37.672500+00:00",
-    "completed_at": null,
-    "total_elapsed_seconds": 1047,
-    "effective_seconds": 1047,
+    "completed_at": "2026-05-16T20:05:55.348381+00:00",
+    "total_elapsed_seconds": 1097,
+    "effective_seconds": 1097,
     "paused_seconds": 0
   },
   "phases": [
@@ -235,9 +235,9 @@
       "phase_number": 9,
       "phase_name": "Reporte Final",
       "started_at": "2026-05-16T20:05:05.135361+00:00",
-      "completed_at": null,
-      "elapsed_seconds": 0,
-      "status": "in_progress",
+      "completed_at": "2026-05-16T20:05:54.956153+00:00",
+      "elapsed_seconds": 49,
+      "status": "completed",
       "tasks": [],
       "auto_approved": true,
       "user_approval_time_seconds": 0

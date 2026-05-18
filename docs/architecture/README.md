@@ -69,6 +69,7 @@ docs/architecture/
   30-runtime-interactions.md
   40-cross-cutting-concerns.md
   50-offline-sync.md
+  60-deployment-view.md
   diagrams/
 ```
 

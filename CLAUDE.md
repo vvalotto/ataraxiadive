@@ -88,11 +88,13 @@ SP-ADJ  → ajuste técnico o documental antes de cerrar la baseline
 | SP3 | El Torneo | `v0.4.0` | ✅ Cerrado 2026-04-04 |
 | SP4 | La Plataforma | `v0.5.0` | ✅ Cerrado 2026-04-18 |
 | SP5 | La Puesta en Marcha | `v0.6.0` | ✅ Cerrado 2026-05-01 |
-| SP6 | Validación, Ajustes y Despliegue | `v1.0.0` | ⏳ En definición |
+| SP6 | Validación, Ajustes y Despliegue | `v1.0.0` | ✅ Cerrado 2026-05-16 |
+| SP7 | Despliegue y Documentación | `v1.0.1` | ⏳ En curso |
 
 **SP5 cerrado:** INC-5.1..5.7 + SP-ADJ-07/08/09 · portal organizador + portal atleta + FAAS + rankings · ArchitectAnalyst BL-005: `competencia` D=0.46↓ · `should_block=false`
 **SP-ADJ-11 cerrado:** 10/10 US ✅ · PRs #184–#193 · modelo multi-rol completo (Identidad + Registro + Frontend) · DesignReviewer 0 CRITICAL · ADR-020 implementado.
-**SP6 próximo:** validación funcional E2E, ajustes de defectos identificados, despliegue.
+**SP6 cerrado:** INC-6.1..6.6 + SP-ADJ-10/11 · UAT 10/10 flows · BL-006 ✅ · tag `v1.0.0` · despliegue diferido a SP7.
+**SP7 en curso:** INC-7.1 Despliegue en Fly.io · INC-7.2 Manual de usuario.
 
 ---
 
@@ -185,4 +187,4 @@ memory/
 
 ---
 
-*Última actualización: 2026-05-02 — SP5 ✅ v0.6.0 · SP6 ⏳ definición*
+*Última actualización: 2026-05-17 — SP6 ✅ v1.0.0 · SP7 ⏳ Despliegue y Documentación*

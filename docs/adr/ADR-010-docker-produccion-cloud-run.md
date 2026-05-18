@@ -1,8 +1,13 @@
 # ADR-010: Docker solo para producción — Cloud Run (GCP) + Litestream
 
+> Estado documental: histórico
+> Conservado como evidencia de planificación o decisión previa.
+> No usar como fuente de verdad para el estado actual.
+> Fuente vigente relacionada: `docs/adr/ADR-021-fly-io.md`
+
 | Campo | Valor |
 |-------|-------|
-| **Estado** | Aceptada |
+| **Estado** | Supersedida por ADR-021 |
 | **Fecha** | 2026-03-20 |
 | **Autores** | Victor Valotto |
 | **Relacionado** | ADR-007 (SQLite por BC) |

@@ -55,7 +55,7 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | SP3 (El Torneo) | 14, 15, 16 | Proyecciones CQRS emergentes, secuencialidad del pipeline y gobierno del proceso |
 | SP4 (La Plataforma) | 17, 18, 19, 20, 21, 22, 23, 24, 25 | Datos reales como oráculo, validación UX, captura formal de hallazgos estructurales, gobierno secuencial del tracker, integridad criptográfica, auditoría navegable por composición de read models, exportación portable, restricción técnica como driver de buen diseño |
 | SP5 (La Puesta en Marcha) | 26, 27, 28, 29 | Cobertura asimétrica del event storming, deriva documental, validación con UAT exploratorio, anti-patrones de validación tardía |
-| SP6 (Validación y Despliegue) | 30 | Deriva silenciosa de tests por evolución de invariantes de dominio |
+| SP6 (Validación y Despliegue) | 30, 31, 32 | Deriva silenciosa de tests: unitarios, integración y BDD en proyectos IEDD+LLM |
 
 ---
 
@@ -82,8 +82,12 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | Cobertura asimétrica del Event Storming genera especificaciones incompletas | HITO-26 | ✅ Evidencia identificada en SP5 |
 | Especificar después de implementación introduce sesgos en cobertura | HITO-29 | ✅ Anti-patrón identificado |
 | El testing exploratorio (vibe) complementa el pipeline formal | HITO-28 | ✅ Evidencia inicial |
+| Los tests unitarios derivan silenciosamente cuando no se ejecutan en cada PR de un proyecto LLM | HITO-30 | ✅ Evidencia documentada en SP6 |
+| Los tests de integración concentran fallas de wiring e invariantes incorrectos en proyectos LLM | HITO-31 | ✅ Evidencia documentada en SP6 |
+| Los tests BDD son el nivel con mayor deriva semántica en proyectos IEDD+LLM | HITO-32 | ✅ Evidencia documentada en SP6 |
 
 ---
 
 *Creado: 2026-03-28 — SP-ADJ-02-doc*
+*Actualizado: 2026-05-17 — Iteración 4 adecuación documental: HITO-31/32 en §Distribución · hipótesis SP6 agregadas*
 *Mantenido por: Claude Cowork + Victor Valotto*
