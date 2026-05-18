@@ -26,6 +26,8 @@ docs/metricas/
 │   ├── backend-mi.md             ← índice de mantenibilidad por módulo
 │   ├── backend-halstead.md       ← métricas Halstead
 │   ├── backend-por-capa.md       ← métricas cruzadas BC × capa hexagonal
+│   ├── backend-ck.md             ← suite CK: LCOM + CBO/FanOut por BC
+│   ├── backend-acoplamiento.md   ← Ca / Ce / I (estabilidad) por BC
 │   ├── frontend-raw.md           ← cloc frontend
 │   ├── frontend-estructura.md    ← distribución páginas/componentes/hooks
 │   └── frontend-duplicacion.md  ← jscpd
@@ -38,6 +40,7 @@ docs/metricas/
     ├── velocidad-sp.md              ← US/SP, PRs/SP, commits/SP
     ├── overhead-pipeline.md         ← tiempo por fase IEDD (tracker)
     ├── sp-adj-ratio.md              ← deuda técnica formalizada por SP
+    ├── tamano-funcional.md          ← escenarios BDD + endpoints + story points
     └── cobertura-rf.md              ← RFs implementados por área y SP
 ```
 
@@ -108,6 +111,49 @@ done > docs/metricas/estructurales/backend-por-capa.md
 ```
 
 **Hipótesis a verificar:** CC promedio de `domain/` en BC Competencia (ES) > CC promedio de `domain/` en BCs CRUD (Torneo, Registro, Resultados)
+
+### A.1.6 Suite Chidamber/Kemerer parcial — LCOM y CBO por BC
+
+**Fuente:** `quality/reports/designreviewer/BL-006-report.json` (LCOMAnalyzer + FanOutAnalyzer)  
+**Cobertura:** LCOM (falta de cohesión) y CBO/FanOut (acoplamiento eferente) — las 2 métricas CK disponibles en el stack actual  
+**Excluidas:** DIT y NOC (irrelevantes en Python hexagonal con composición sobre herencia) · RFC (requiere call-graph no disponible)
+
+```python
+# Extraer LCOM y FanOut por módulo del reporte BL-006
+import json
+
+with open("quality/reports/designreviewer/BL-006-report.json") as f:
+    data = json.load(f)
+
+lcom = [r for r in data["results"] if r["analyzer"] == "LCOMAnalyzer"]
+fanout = [r for r in data["results"] if r["analyzer"] == "FanOutAnalyzer"]
+
+# Agrupar por BC (extraer de r["file"] o r["module"])
+```
+
+**Hipótesis a verificar:** LCOM más bajo (mayor cohesión) en `domain/` que en `infrastructure/` — el dominio hexagonal debería ser más cohesivo.
+
+### A.1.7 Cohesión y Acoplamiento — Ca / Ce / I por BC
+
+**Fuente:** `quality/reports/architectanalyst/BL-006-report.json` (CouplingAnalyzer + DistanceAnalyzer)  
+**Métricas:**
+- **Ca** = acoplamiento aferente (quién depende de este módulo)
+- **Ce** = acoplamiento eferente (de quién depende este módulo)
+- **I** = inestabilidad = Ce / (Ca + Ce)  ∈ [0, 1]  (0 = estable, 1 = inestable)
+- **A** = abstracción = interfaces / (interfaces + implementaciones)
+- **D** = distancia = |A + I − 1|
+
+```python
+import json
+
+with open(".cm/baselines/BL-006-report.json") as f:
+    data = json.load(f)
+
+coupling = [r for r in data["results"] if r["analyzer"] == "CouplingAnalyzer"]
+# Extraer Ca, Ce, I por BC y presentar tabla de estabilidad
+```
+
+**Hipótesis a verificar:** BCs ES (competencia, notificaciones) tienen I (inestabilidad) más baja que BCs CRUD — el dominio ES tiende a ser más estable porque los demás dependen de él, no al revés.
 
 ### A.2 Frontend TypeScript/React
 
@@ -256,6 +302,46 @@ done
 
 **Métricas:** US/SP · PRs/SP · commits/SP · días/SP
 
+### C.0 Tamaño Funcional
+
+**Fuente:** `.feature` files (escenarios BDD) · `src/*/api/router.py` (endpoints) · `matrix.md` (story points)  
+**Propósito:** medir cuánto producto funcional fue entregado — complemento al tamaño estructural (SLOC)
+
+#### C.0.1 Escenarios BDD por BC
+
+```bash
+# Total de escenarios Gherkin
+grep -r "^\s*Scenario:" tests/features/ | wc -l
+grep -r "^\s*Scenario Outline:" tests/features/ | wc -l
+
+# Por BC (infiriendo BC del nombre del .feature)
+for bc in competencia torneo registro resultados identidad notificaciones; do
+  count=$(grep -rl "$bc" tests/features/*.feature | xargs grep -h "^\s*Scenario" | wc -l)
+  echo "$bc: $count escenarios"
+done
+```
+
+**Interpretación:** cada escenario BDD = un comportamiento funcional verificable entregado. Total de escenarios ≈ tamaño funcional del sistema en términos de comportamientos.
+
+#### C.0.2 Endpoints REST por BC
+
+```bash
+# Contar rutas HTTP por router
+for bc in competencia torneo registro resultados identidad notificaciones; do
+  file="src/$bc/api/router.py"
+  [ -f "$file" ] && count=$(grep -c "@router\.\(get\|post\|put\|patch\|delete\)" "$file") || count=0
+  echo "$bc: $count endpoints"
+done
+```
+
+**Interpretación:** endpoints = superficie funcional de la API = función-punto proxy para comparar con SLOC.
+
+#### C.0.3 Story Points por SP
+
+**Fuente:** `matrix.md` — story points asignados por US
+
+**Métricas:** SP points totales · puntos funcionales vs puntos de ajuste · velocidad en puntos/día
+
 ### C.2 Overhead del Pipeline IEDD (tiempo por fase)
 
 **Fuente:** archivos de tracker en `docs/reports/*/tracker-*.md` o `.cm/tracking/`
@@ -302,16 +388,19 @@ find .cm -name "*tracker*" | head -20
 
 ## 6. Orden de ejecución
 
-| Prioridad | Categoría | Tiempo estimado | Resultado |
-|-----------|-----------|:---------------:|-----------|
-| 1 | A.1.1 a A.1.4 — Backend raw/CC/MI/Halstead | 30 min | 4 archivos en `estructurales/` |
-| 2 | A.1.5 — Backend por capa hexagonal | 30 min | análisis cruzado BC × capa |
-| 3 | B.3/B.4 — Cobertura y ratio tests | 20 min | pytest-cov ejecutado |
-| 4 | B.1/B.2 — DesignReviewer + ArchitectAnalyst | 30 min | serie temporal extraída |
-| 5 | A.2 — Frontend LOC + duplicación | 20 min | cloc + jscpd ejecutados |
-| 6 | C.1/C.3 — Velocidad SP + ratio ADJ | 30 min | datos de git + matrix |
-| 7 | C.2 — Overhead pipeline (tracker) | 45 min | requiere localizar archivos tracker |
-| 8 | Síntesis | 60 min | reporte integrado `REPORTE-METRICAS.md` |
+| Prioridad | Categoría | Tiempo estimado | Resultado | Estado |
+|-----------|-----------|:---------------:|-----------|:------:|
+| 1 | A.1.1 a A.1.4 — Backend raw/CC/MI/Halstead | 30 min | 4 archivos en `estructurales/` | ✅ |
+| 2 | A.1.5 — Backend por capa hexagonal | 30 min | análisis cruzado BC × capa | ✅ |
+| 3 | B.3/B.4 — Cobertura y ratio tests | 20 min | pytest-cov ejecutado | ✅ |
+| 4 | B.1/B.2 — DesignReviewer + ArchitectAnalyst | 30 min | serie temporal extraída | ✅ |
+| 5 | A.2 — Frontend LOC + duplicación | 20 min | cloc + jscpd ejecutados | ✅ |
+| 6 | C.1/C.3 — Velocidad SP + ratio ADJ | 30 min | datos de git + matrix | ✅ |
+| 7 | C.2 — Overhead pipeline (tracker) | 45 min | 34 US con timing, mediana 20 min | ✅ |
+| 8 | A.1.6 — Suite CK: LCOM + CBO/FanOut | 20 min | `backend-ck.md` | ⏳ |
+| 9 | A.1.7 — Cohesión y acoplamiento Ca/Ce/I | 15 min | `backend-acoplamiento.md` | ⏳ |
+| 10 | C.0 — Tamaño funcional (BDD + endpoints + SP) | 20 min | `tamano-funcional.md` | ⏳ |
+| 11 | Síntesis | 60 min | reporte integrado `REPORTE-METRICAS.md` | ⏳ |
 
 ---
 
@@ -320,11 +409,13 @@ find .cm -name "*tracker*" | head -20
 Al completar todas las categorías, generar `docs/metricas/REPORTE-METRICAS.md` con:
 
 1. Resumen ejecutivo (tablas y valores clave)
-2. Análisis estructural backend: CC/MI por BC y por capa
-3. Análisis estructural frontend: LOC y distribución
-4. Calidad: evolución DesignReviewer + cobertura tests
-5. Productividad: velocidad + overhead + ratio SP-ADJ
-6. Conclusiones para el paper IEDD
+2. Análisis estructural backend: CC/MI/Halstead por BC y por capa
+3. Métricas OO: LCOM + CBO (CK parcial) · Ca/Ce/I por BC
+4. Análisis estructural frontend: LOC, distribución y duplicación
+5. Tamaño funcional: escenarios BDD + endpoints + story points
+6. Calidad: evolución DesignReviewer + cobertura tests
+7. Productividad: velocidad + overhead + ratio SP-ADJ
+8. Conclusiones para el paper IEDD
 
 ---
 
