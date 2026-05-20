@@ -404,7 +404,7 @@ características. Ver Apéndice A para el contenido completo.
 
 ---
 
-### Fase 1 — Ingest fundacional 🔄 En progreso (3/7 fuentes)
+### Fase 1 — Ingest fundacional 🔄 En progreso (5/7 fuentes)
 
 **Objetivo:** Construir el grafo base de conocimiento a partir de fuentes inmutables.
 
@@ -415,15 +415,15 @@ características. Ver Apéndice A para el contenido completo.
 | 1 | `docs/dominio/01-dominio_torneos_apnea.md` | 8 conceptos de dominio (torneo, performance, disciplina, grilla, atleta, anuncio, tarjeta, roles) | ✅ |
 | 2 | `docs/dominio/03-atributos_calidad.md` | 1 página (atributos-calidad); enriquece mapa ADR→BC | ✅ |
 | 3 | `docs/dominio/05-requerimientos_funcionales.md` | 8 semillas de trazabilidad por área RF; enriquece 3 conceptos | ✅ |
-| 4 | `docs/iedd/` | Marco metodológico (referencia para vista de investigación) | ⏳ |
-| 5 | `docs/adr/ADR-001..022` | Páginas de decisión (una por ADR; hay 22 ADRs) | ⏳ |
+| 4 | `docs/iedd/` | Marco metodológico (referencia para vista de investigación) | ✅ |
+| 5 | `docs/adr/ADR-001..022` | 22 páginas de decisión (una por ADR) | ✅ |
 | 6 | `docs/architecture/` (todos) | Páginas de BC (una por BC), mapa de contexto | ⏳ |
 | 7 | `docs/contexto/ANALISIS-*.md` | Enriquecimiento de BCs y vista de investigación | ⏳ |
 
 Al final del ingest de cada fuente, el LLM actualiza `wiki/index.md` y agrega
 una entrada en `wiki/log.md`.
 
-**Progreso actual:** 17 páginas creadas (9 conceptos, 8 semillas RF).
+**Progreso actual:** 42 páginas creadas (9 conceptos, 8 semillas RF, 3 investigación, 22 decisiones).
 
 **Resultado esperado:** ~35-45 páginas wiki, BCs documentados con ADRs vinculados,
 lenguaje ubicuo del dominio capturado, `index.md` navegable.
@@ -554,7 +554,7 @@ Una vez validado el POC manualmente, automatizar el ingest ante eventos semánti
 | Hito | Entregable | Criterio de éxito | Estado |
 |------|------------|-------------------|--------|
 | H-0 | Gaps G-01/02/03 resueltos | CLAUDE.md con jerarquía de verdad, WIKI.md creado | ✅ |
-| H-1 | Ingest fundacional completo | 35+ páginas wiki, BCs documentados, index.md navegable | 🔄 17/35+ páginas, 3/7 fuentes |
+| H-1 | Ingest fundacional completo | 35+ páginas wiki, BCs documentados, index.md navegable | 🔄 42/35+ páginas, 5/7 fuentes |
 | H-2 | Vistas construidas | 6 páginas de vistas operativas, recorridos validados | ⏳ |
 | H-3 | Ingest de estado completo | Página de estado unificada, trazabilidad por US visible | ⏳ |
 | H-4 | Primer lint ejecutado | Página de salud con inconsistencias identificadas | ⏳ |

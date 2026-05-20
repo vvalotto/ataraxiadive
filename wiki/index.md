@@ -5,7 +5,7 @@
 > Leer este archivo primero al responder cualquier consulta.
 
 **Última actualización:** 2026-05-20
-**Total de páginas:** 17
+**Total de páginas:** 42
 
 ---
 
@@ -14,13 +14,13 @@
 | Sección | Páginas | Estado |
 |---------|---------|--------|
 | Bounded Contexts | 0 / 6 | ⏳ Pendiente ingest fundacional |
-| Decisiones (ADRs) | 0 / 22 | ⏳ Pendiente ingest fundacional |
+| Decisiones (ADRs) | 22 / 22 | ✅ Ingest completo |
 | Trazabilidad (US) | 0 | ⏳ Pendiente ingest de estado (Fase 3) |
-| Trazabilidad (RF semilla) | 8 | 🔄 Ingest parcial (fuente 2/6) |
-| Conceptos de dominio | 8 | 🔄 Ingest parcial (fuente 1/6 + enriquecimiento) |
+| Trazabilidad (RF semilla) | 8 | 🔄 Ingest parcial (fuente 3/7) |
+| Investigación | 3 | 🔄 Ingest parcial (fuente 4/7) |
+| Conceptos de dominio | 9 | 🔄 Ingest parcial (fuente 1/6 + enriquecimiento) |
 | Impacto | 0 | ⏳ Pendiente construcción de vistas |
 | Estado del proyecto | 0 | ⏳ Pendiente ingest de estado |
-| Investigación | 0 | ⏳ Pendiente ingest de estado |
 | Salud / lint | 0 | ⏳ Pendiente primer lint |
 | Vistas | 6 / 6 | ✅ Inicializadas |
 
@@ -32,7 +32,30 @@
 
 ## Decisiones
 
-*Vacío — pendiente Fase 1 (ingest fundacional)*
+| Página | Fecha | Estado | BCs afectados |
+|--------|-------|--------|---------------|
+| [[ADR-001-event-sourcing-competencia]] | 2026-02-10 | Aceptada | competencia |
+| [[ADR-002-fastapi-backend]] | 2026-02-12 | Aceptada | todos |
+| [[ADR-003-offline-first-pwa]] | 2026-02-15 | Aceptada | — |
+| [[ADR-004-reglas-como-datos]] | 2026-02-20 | Aceptada | torneo, competencia |
+| [[ADR-005-bounded-contexts-ddd-estrategico]] | 2026-02-24 | Aceptada | todos |
+| [[ADR-006-estructura-bc-first]] | 2026-02-27 | Aceptada | todos |
+| [[ADR-007-sqlite-persistencia-bc]] | 2026-03-01 | Aceptada | todos |
+| [[ADR-008-event-store-sqlite]] | 2026-03-05 | Aceptada | competencia, notificaciones |
+| [[ADR-009-migraciones-por-bc]] | 2026-03-10 | Aceptada | todos |
+| [[ADR-010-docker-cloud-run]] | 2026-03-12 | **Supersedida** por ADR-021 | — |
+| [[ADR-011-structlog-logging]] | 2026-03-15 | Aceptada | todos |
+| [[ADR-012-rfc7807-errores-http]] | 2026-03-20 | Aceptada | todos |
+| [[ADR-013-exception-management]] | 2026-03-26 | Aceptada | todos |
+| [[ADR-014-penalizaciones-acumulables]] | 2026-04-08 | Aceptada | competencia, resultados |
+| [[ADR-015-dexie-indexeddb-frontend]] | 2026-04-13 | Aceptada | — |
+| [[ADR-016-resend-email-provider]] | 2026-04-16 | Aceptada | notificaciones |
+| [[ADR-017-notificaciones-event-sourcing]] | 2026-04-16 | Aceptada | notificaciones |
+| [[ADR-018-hash-sha256-auditoria]] | 2026-04-16 | Aceptada | competencia |
+| [[ADR-019-politica-contrasenas]] | 2026-04-24 | Aceptada | identidad |
+| [[ADR-020-modelo-usuarios-roles]] | 2026-05-16 | Aceptada | identidad, registro |
+| [[ADR-021-fly-io]] | 2026-05-17 | Aceptada | todos |
+| [[ADR-022-categoria-shared]] | 2026-05-02 | Aceptada | registro, competencia, resultados |
 
 ## Trazabilidad
 
@@ -77,7 +100,11 @@
 
 ## Investigación
 
-*Vacío — pendiente Fase 3 (ingest de estado)*
+| Página | Descripción |
+|--------|-------------|
+| [[iedd-marco-conceptual]] | Modelo de 5 capas IEDD; tesis central; rol de DDD y la IA |
+| [[iedd-hipotesis-experimento]] | Hipótesis del ensayo; qué está confirmado; qué sigue abierto; tesis provisional |
+| [[uat-metodologia]] | Política de UAT controlado; proceso por fase; vibe coding; datos reales como oráculo |
 
 ## Salud
 

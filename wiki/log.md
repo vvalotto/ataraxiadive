@@ -6,6 +6,39 @@
 
 ---
 
+## [2026-05-20] ingest | docs/adr/ (22 archivos — ADR-001 a ADR-022)
+
+Páginas creadas: 22 | Páginas actualizadas: 0
+
+**Páginas creadas (wiki/decisiones/):**
+- ADR-001 a ADR-016: creadas en sesión anterior
+- ADR-017: Event Sourcing en BC Notificaciones (exactly-once delivery)
+- ADR-018: Hash SHA-256 para integridad de resultados — `CalculadorHashCompetencia`
+- ADR-019: Política de contraseñas (10+, mayúscula, número) + `PasswordStrengthBar.tsx`
+- ADR-020: `Usuario.roles: list[Rol]` + perfiles Juez y Organizador en BC Registro
+- ADR-021: Fly.io + volumen persistente (supersede ADR-010 Cloud Run + Litestream)
+- ADR-022: `Categoria` StrEnum movida a `shared/domain/value_objects/`
+
+**ADR-010 marcada como SUPERSEDIDA por ADR-021.**
+**Cobertura de decisiones:** 22/22 ADRs del proyecto. Vista Decisiones completa.
+
+---
+
+## [2026-05-20] ingest | docs/iedd/ (6 archivos)
+
+Páginas creadas: 3 | Páginas actualizadas: 0
+
+**Páginas creadas:**
+- `wiki/investigacion/iedd-marco-conceptual.md` — modelo de 5 capas, tesis central, rol de DDD e IA
+- `wiki/investigacion/iedd-hipotesis-experimento.md` — hipótesis del ensayo, 5 puntos confirmados, tesis provisional, qué sigue abierto
+- `wiki/investigacion/uat-metodologia.md` — política UAT: principios, proceso 5 pasos, vibe coding, datos reales como oráculo
+
+**Fuentes ingresadas:** 01, 02, 03 (marco conceptual 5 capas), 04 (hipótesis), UAT-POLITICA-CONTROLADA.md, US-IEDD-template.md (referenciado, no creado como página propia)
+
+**Hallazgo metodológico:** el framework IEDD se auto-documenta al usarse en AtaraxiaDive — el proyecto es simultáneamente laboratorio del experimento y producto del mismo.
+
+---
+
 ## [2026-05-20] ingest | docs/dominio/03-atributos_calidad.md
 
 Páginas creadas: 1 | Páginas actualizadas: 0
