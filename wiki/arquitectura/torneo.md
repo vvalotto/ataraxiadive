@@ -1,0 +1,73 @@
+---
+title: "BC Torneo — Supporting Domain"
+type: arquitectura
+last_updated: "2026-05-20"
+sources:
+  - docs/architecture/11-bc-torneo.md
+tipo_ddd: Supporting Domain
+persistencia: CRUD
+db: torneo.db
+---
+
+# BC Torneo — Supporting Domain
+
+## Rol
+
+**Supporting Domain.** Modela el contenedor organizativo sobre el que se apoyan inscripción, ejecución deportiva, publicación de resultados y cierre del evento.
+
+**Responsabilidades:** crear torneos, administrar el ciclo de vida, conservar datos de sede y entidad organizadora, habilitar operativamente la inscripción, proveer contexto read-only a otros BCs.
+
+## Persistencia
+
+CRUD sobre `torneo.db`. Tabla principal: `torneos`. El estado se actualiza por reemplazo de fila (`INSERT OR REPLACE`). Sin Event Sourcing.
+
+`Sede` y `EntidadOrganizadora` se persisten embebidas en la fila del aggregate como JSON.
+
+## Aggregate principal: Torneo
+
+**Máquina de estados `EstadoTorneo`:**
+
+```
+CREADO → INSCRIPCION_ABIERTA → PREPARACION → EJECUCION → PREMIACION → CERRADO
+                                                                    ↘ CANCELADO
+```
+
+**Invariantes:** nombre no vacío, fechas coherentes (inicio < fin), transiciones de estado válidas, acciones bloqueadas sobre torneo cerrado o cancelado.
+
+## Value Objects
+
+| VO | Descripción |
+|----|-------------|
+| `EstadoTorneo` | StrEnum; 7 estados posibles |
+| `Sede` | nombre, ciudad, país |
+| `EntidadOrganizadora` | nombre, tipo |
+
+## Estructura de capas
+
+| Capa | Responsabilidad |
+|------|----------------|
+| `api/` | Endpoints: crear, listar, obtener, transiciones de estado; `exception_handlers.py` → RFC 7807 |
+| `application/` | `CrearTorneoHandler`, `ObtenerTorneoHandler`, `ListarTorneosHandler`, handlers de transición |
+| `domain/` | Aggregate `Torneo`, `EstadoTorneo`, `Sede`, `EntidadOrganizadora`, `TorneoRepositoryPort` |
+| `infrastructure/` | `SQLiteTorneoRepository` → `torneo.db` |
+
+## Integraciones de salida
+
+| Destino | Mecanismo | Datos |
+|---------|-----------|-------|
+| [[registro]] | Evento `InscripcionHabilitada` | `torneoId`, `fechaFinInscripcion`, `disciplinasDisponibles` |
+| [[resultados]] | Consulta read-only por `torneoId` | nombre, sede, fechas |
+| [[notificaciones]] | Eventos de dominio | cierre, cancelación |
+
+## Diferencias implementación actual vs. modelo de referencia
+
+- `EntidadOrganizadora` y `Sede` son candidatos a catálogos CRUD propios (no implementado aún).
+- `FormulaPuntos` y `VentanaImpugnacion` no forman parte del aggregate implementado.
+- Los eventos de dominio para integración (`InscripcionHabilitada`) aún no están materializados en código.
+
+## ADRs relacionados
+
+- [[ADR-004-reglas-como-datos]] — `discipline_config` y `category_config` en `torneo.db`
+- [[ADR-005-bounded-contexts-ddd-estrategico]] — posición en el mapa estratégico
+- [[ADR-007-sqlite-persistencia-bc]] — persistencia CRUD en SQLite
+- [[ADR-012-rfc7807-errores-http]] — exception handlers en la capa API

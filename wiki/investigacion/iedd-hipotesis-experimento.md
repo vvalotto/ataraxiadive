@@ -4,6 +4,8 @@ type: investigacion
 last_updated: "2026-05-20"
 sources:
   - docs/iedd/04-Hipotesis_Ensayo_IA_Ingenieria_Human_In_The_Loop.md
+  - docs/contexto/INDICE-HITOS.md
+  - docs/contexto/PLAN-EXPERIMENTO.md
 ---
 
 # IEDD — Hipótesis del Experimento
@@ -151,8 +153,38 @@ Lo alcanzado hasta ahora es una **validación inicial de factibilidad y coherenc
 
 ---
 
+## Hipótesis por HITO — tabla de evidencia
+
+| Hipótesis | HITOs | Estado |
+|-----------|-------|--------|
+| H-4.1: overhead del ecosistema converge (~18 min estable) | HITO-4, HITO-5 | ✅ Confirmada |
+| SP-ADJ como etapa necesaria del ciclo IEDD | HITO-13 | ✅ Confirmada |
+| Gates de texto no son barreras efectivas para LLMs | HITO-12 | ✅ Confirmada |
+| La secuencialidad del pipeline es parte del método | HITO-16 | ✅ Confirmada |
+| La secuencialidad incluye también al tracker | HITO-21 | ✅ Confirmada |
+| El ES puede sostener auditoría e integridad criptográfica con la misma traza | HITO-22 | ✅ Confirmada |
+| La evidencia del ES solo es operable cuando se navega desde read models y UI | HITO-23 | ✅ Confirmada |
+| La evidencia puede exportarse como read model portable sin persistencia paralela | HITO-24 | ✅ Confirmada |
+| El incremento es la unidad correcta para leer deuda estructural acumulada | HITO-19 | ✅ Confirmada |
+| La restricción técnica offline-first produce mejor arquitectura | HITO-25 | ✅ Confirmada |
+| Las proyecciones CQRS emergen como consecuencia estructural del ES | HITO-15 | ✅ Confirmada |
+| Los datos reales de dominio detectan inconsistencias que los tests formales no ven | HITO-17 | ✅ Confirmada |
+| El prototipo navegable es una etapa necesaria con frontend | HITO-18 | ✅ Confirmada |
+| Los invariantes correctos pueden ser incompletos frente a variantes no anticipadas | HITO-20 | ✅ Confirmada |
+| Cobertura asimétrica del Event Storming genera specs incompletas | HITO-26 | ✅ Evidencia |
+| Especificar después de implementación introduce sesgos en cobertura | HITO-29 | ✅ Anti-patrón |
+| El testing exploratorio complementa el pipeline formal | HITO-28 | ✅ Evidencia inicial |
+| Tests unitarios derivan silenciosamente en proyectos IEDD+LLM | HITO-30 | ✅ Evidencia |
+| Tests de integración concentran fallas de wiring en proyectos IEDD+LLM | HITO-31 | ✅ Evidencia |
+| Tests BDD tienen mayor deriva semántica en proyectos IEDD+LLM | HITO-32 | ✅ Evidencia |
+| RQ1: fricción de coordinación entre herramientas | HITO-4..8, HITO-11 | 🔄 En evaluación |
+| RQ2: IEDD mejora calidad de especificaciones | HITO-1, HITO-4, HITO-6 | 🔄 En evaluación |
+
+---
+
 ## Relaciones
 
-- Ver [[iedd-marco-conceptual]] para el modelo de 5 capas que fundamenta la hipótesis.
-- Los HITOs del proyecto son la evidencia empírica acumulada — ver `docs/contexto/INDICE-HITOS.md`.
-- Ver [[uat-metodologia]] para la política de validación E2E que instrumenta el proceso.
+- [[iedd-marco-conceptual]] — el modelo de 5 capas que fundamenta la hipótesis
+- [[hitos-catalog]] — los 32 HITOs como evidencia empírica completa, organizados por SP y tema
+- [[experimento-plan]] — los 3 horizontes del experimento y la jerarquía de trabajo
+- [[uat-metodologia]] — política de validación E2E (HITO-9, HITO-17, HITO-20, HITO-28)

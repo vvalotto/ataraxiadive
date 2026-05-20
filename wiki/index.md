@@ -5,7 +5,7 @@
 > Leer este archivo primero al responder cualquier consulta.
 
 **Última actualización:** 2026-05-20
-**Total de páginas:** 42
+**Total de páginas:** 51
 
 ---
 
@@ -13,7 +13,7 @@
 
 | Sección | Páginas | Estado |
 |---------|---------|--------|
-| Bounded Contexts | 0 / 6 | ⏳ Pendiente ingest fundacional |
+| Bounded Contexts | 7 / 7 | ✅ Ingest completo (6 BCs + context map) |
 | Decisiones (ADRs) | 22 / 22 | ✅ Ingest completo |
 | Trazabilidad (US) | 0 | ⏳ Pendiente ingest de estado (Fase 3) |
 | Trazabilidad (RF semilla) | 8 | 🔄 Ingest parcial (fuente 3/7) |
@@ -28,7 +28,15 @@
 
 ## Bounded Contexts
 
-*Vacío — pendiente Fase 1 (ingest fundacional)*
+| Página | Tipo DDD | Persistencia | Responsabilidad |
+|--------|----------|-------------|-----------------|
+| [[competencia]] | Core Domain | Event Sourcing | Grilla, performances, tarjetas, trazabilidad deportiva |
+| [[torneo]] | Supporting | CRUD | Ciclo de vida del torneo, sede, entidad organizadora |
+| [[registro]] | Supporting | CRUD | Atletas, inscripciones, validación de participación |
+| [[resultados]] | Supporting | CRUD + stream | Rankings derivados, overall, exportación |
+| [[identidad]] | Generic | CRUD | Usuarios, roles, JWT — cross-cutting |
+| [[notificaciones]] | Generic | Event Sourcing | Ciclo de vida de notificaciones, exactly-once delivery |
+| [[context-map]] | — | — | Integraciones y patrones entre los 6 BCs |
 
 ## Decisiones
 
@@ -103,8 +111,10 @@
 | Página | Descripción |
 |--------|-------------|
 | [[iedd-marco-conceptual]] | Modelo de 5 capas IEDD; tesis central; rol de DDD y la IA |
-| [[iedd-hipotesis-experimento]] | Hipótesis del ensayo; qué está confirmado; qué sigue abierto; tesis provisional |
+| [[iedd-hipotesis-experimento]] | Hipótesis del ensayo; tabla completa de 22 hipótesis confirmadas; tesis provisional |
 | [[uat-metodologia]] | Política de UAT controlado; proceso por fase; vibe coding; datos reales como oráculo |
+| [[hitos-catalog]] | Catálogo de 32 HITOs; evidencia empírica del experimento; agrupados por SP y tema |
+| [[experimento-plan]] | Plan del experimento; 3 horizontes; jerarquía SP→Incremento→US; capitalización de conocimiento |
 
 ## Salud
 

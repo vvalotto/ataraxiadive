@@ -6,6 +6,39 @@
 
 ---
 
+## [2026-05-20] ingest | docs/contexto/ (ANALISIS-*.md, INDICE-HITOS.md, PLAN-EXPERIMENTO.md)
+
+Páginas creadas: 2 | Páginas actualizadas: 1
+
+**Páginas creadas (wiki/investigacion/):**
+- `hitos-catalog.md` — catálogo de los 32 HITOs; tabla por SP; agrupación por tema (ecosistema, DDD/ES, calidad, validación, arquitectura emergente)
+- `experimento-plan.md` — el objetivo real del experimento (no construir software sino demostrar factibilidad empírica); 3 horizontes; jerarquía de trabajo; tabla de capitalización de conocimiento
+
+**Página enriquecida:**
+- `iedd-hipotesis-experimento.md` — tabla completa de 22 hipótesis con estado (✅/🔄) y HITOs de evidencia; links a nuevas páginas
+
+**Hallazgo:** 20 hipótesis confirmadas de 22 a mayo 2026 (SP6 en curso). Las dos en evaluación son las más amplias: RQ1 (fricción de coordinación) y RQ2 (IEDD mejora calidad de specs).
+
+---
+
+## [2026-05-20] ingest | docs/architecture/ (14 archivos)
+
+Páginas creadas: 7 | Páginas actualizadas: 0
+
+**Páginas creadas (wiki/arquitectura/):**
+- `context-map.md` — 6 BCs, 11 integraciones, principios de cruce de fronteras, tabla resumen
+- `competencia.md` — Core Domain; ES; aggregates Competencia y Performance; integración Registro/Resultados/Notificaciones
+- `torneo.md` — Supporting; CRUD; máquina de estados EstadoTorneo (7 estados); integración Registro/Resultados/Notificaciones
+- `registro.md` — Supporting; CRUD; aggregates Atleta e Inscripcion; ACL read-only a Torneo; upstream de Competencia
+- `resultados.md` — Supporting; stream propio; RankingCompetencia; deuda técnica cross-BC (ranking provisional)
+- `identidad.md` — Generic; CRUD; JWT cross-cutting; multi-rol desde ADR-020; política contraseñas ADR-019
+- `notificaciones.md` — Generic; ES por idempotencia; P-10 y P-11 implementadas; ResendEmailAdapter + LoggingEmailAdapter
+
+**Hallazgo:** Resultados usa Event Sourcing (stream propio) aunque clasificado como CRUD en diseño general.
+**Deuda técnica documentada:** `ObtenerRankingProvisionalHandler` lee `competencia.db` directamente — lectura cross-BC fuera de ACL formal.
+
+---
+
 ## [2026-05-20] ingest | docs/adr/ (22 archivos — ADR-001 a ADR-022)
 
 Páginas creadas: 22 | Páginas actualizadas: 0
