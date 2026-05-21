@@ -5,7 +5,7 @@
 > Leer este archivo primero al responder cualquier consulta.
 
 **Última actualización:** 2026-05-21
-**Total de páginas:** 224
+**Total de páginas:** 229
 
 ---
 
@@ -15,7 +15,7 @@
 |---------|---------|--------|
 | Bounded Contexts | 7 / 7 | ✅ Ingest completo (6 BCs + context map) |
 | Decisiones (ADRs) | 22 / 22 | ✅ Ingest completo |
-| Trazabilidad (US) | 164 | 🔄 SP1–SP6 completos + SP-ADJ-01 a SP-ADJ-11; pendiente SP7 y SP-ADJ-10 |
+| Trazabilidad (US) | 169 | 🔄 SP1–SP6 + SP-ADJ-01 a SP-ADJ-11 completos; SP7 INC-7.1.1 ✅ + INC-7.1.2/INC-7.2 ⏳ |
 | Trazabilidad (RF semilla) | 8 | 🔄 Ingest parcial (fuente 3/7) |
 | Investigación | 5 | ✅ Ingest completo (HITOs + experimento) |
 | Conceptos de dominio | 9 | 🔄 Ingest parcial (fuente 1/6 + enriquecimiento) |

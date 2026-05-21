@@ -6,6 +6,25 @@
 
 ---
 
+## [2026-05-21] ingest | Fase 3 — páginas US SP7 (INC-7.1 + INC-7.2)
+
+Páginas creadas: 5
+
+**Páginas creadas (wiki/trazabilidad/):**
+
+*INC-7.1 — Despliegue en Fly.io (2 US):*
+- `US-7.1.1` — Dockerfile multi-stage + fly.toml + FastAPI estáticos + ADR-021 ✅ completada 2026-05-17
+- `US-7.1.2` — `fly deploy` + verificación flujos críticos + tag `v1.0.1` ⏳ planificada
+
+*INC-7.2 — Manual de Usuario (3 US):*
+- `US-7.2.1` — Manual organizador ⏳ planificada
+- `US-7.2.2` — Manual juez ⏳ planificada
+- `US-7.2.3` — Manual atleta ⏳ planificada
+
+**Estado del wiki:** SP7 ingresado. US-7.1.1 completada; US-7.1.2 y US-7.2.x pendientes de implementación. Fase 3 completa (SP1–SP7 + SP-ADJ-01 a SP-ADJ-11). Próximo: Fase 4 (primer lint) o actualizar páginas SP7 cuando se completen INC-7.1.2 e INC-7.2.
+
+---
+
 ## [2026-05-21] ingest | Fase 3 — páginas US SP6 completo (INC-6.1 a INC-6.4 + SP-ADJ-11)
 
 Páginas creadas: 29
