@@ -6,6 +6,18 @@
 
 ---
 
+## [2026-05-21] ingest | Fase 3 — snapshot de calidad BL-006 (wiki/salud/)
+
+Páginas creadas: 1
+
+- `wiki/salud/calidad-BL-006.md` — síntesis de los 3 quality gates al cierre de SP6/v1.0.0
+  - DesignReviewer: 0 CRITICAL · 287 WARNING · evolución BL-002→BL-006
+  - ArchitectAnalyst: 3 CRITICAL (Zone of Pain) · 62 WARNING (falsos positivos hexagonales) · D por BC
+  - UAT: 10/10 flows PASS (F-09/F-10 con waiver)
+  - Decisiones de aceptación de deuda: DR-01, AA-02, AA-04, ARCH-03, ADP-01
+
+---
+
 ## [2026-05-21] ingest | Fase 3 — métricas de salud en páginas de BC (quality/reports/)
 
 Páginas actualizadas: 6

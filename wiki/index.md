@@ -5,7 +5,7 @@
 > Leer este archivo primero al responder cualquier consulta.
 
 **Última actualización:** 2026-05-21
-**Total de páginas:** 230
+**Total de páginas:** 231
 
 ---
 
@@ -21,7 +21,7 @@
 | Conceptos de dominio | 9 | 🔄 Ingest parcial (fuente 1/6 + enriquecimiento) |
 | Impacto | 0 | ⏳ Pendiente Fase 3 final |
 | Estado del proyecto | 1 | ✅ Fase 3 completa — síntesis BL-000..BL-006 + SP7 en curso |
-| Salud / lint | 0 | ⏳ Pendiente Fase 4 (primer lint) |
+| Salud / lint | 1 | 🔄 calidad-BL-006 ingresado; lint-001 pendiente Fase 4 |
 | Vistas | 6 / 6 | ✅ Fase 2 completa — 6 vistas operativas |
 
 ---
@@ -220,7 +220,9 @@
 
 ## Salud
 
-*Vacío — pendiente Fase 4 (primer lint)*
+| Página | Descripción |
+|--------|-------------|
+| [[calidad-BL-006]] | Snapshot de calidad al cierre de SP6 — 3 gates: DesignReviewer, ArchitectAnalyst, UAT |
 
 ## Vistas
 
