@@ -1,0 +1,40 @@
+---
+title: "US-ADJ-1.3 — Refactoring application: _stream_ids.py fuente única"
+type: trazabilidad-us
+sp: SP-ADJ-01
+inc: SP-ADJ-01
+bc: competencia
+estado: completado
+fecha_cierre: "2026-03-28"
+last_updated: "2026-05-21"
+sources:
+  - docs/traceability/matrix.md §7
+---
+
+# US-ADJ-1.3 — Refactoring application: _stream_ids.py fuente única
+
+## Descripción
+
+Elimina duplicación de IDs de stream del Event Store creando un módulo centralizado `_stream_ids.py`.
+
+## Capas afectadas
+
+`competencia/application/`
+
+## Issues resueltos
+
+| Issue | Cambio |
+|-------|--------|
+| ADJ-09 | `_stream_ids.py` — fuente única de verdad para IDs de stream; 11 duplicaciones DRY eliminadas |
+
+## Motivación
+
+Los IDs de stream estaban dispersos como strings literales en múltiples handlers. Cualquier cambio requería editar 11 lugares distintos — riesgo de inconsistencia.
+
+## Tests
+
+BDD waiver — refactoring DRY sin comportamiento nuevo.
+
+## Estado
+
+✅ Completado — 2026-03-28
