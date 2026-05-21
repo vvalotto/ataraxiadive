@@ -6,6 +6,27 @@
 
 ---
 
+## [2026-05-21] ingest | Fase 3 — estado del proyecto (baselines BL-000..BL-006)
+
+Páginas creadas: 1
+
+**Página creada:**
+- `wiki/estado/proyecto.md` — síntesis de los 7 baselines cerrados (BL-000 a BL-006) + SP7 en curso
+
+**Contenido sintetizado:**
+- Situación actual: BL-006 vigente · v1.0.0 · 2026-05-16 · SP7 en curso
+- Historia de todos los baselines con métricas: tests, DesignReviewer, ArchitectAnalyst
+- Estado de BCs con valores D de DistanceAnalyzer al cierre de SP6
+- Evolución DesignReviewer (0 CRITICAL en todos los SPs)
+- UAT por SP (SP1–SP6)
+- Cobertura RF por área
+- Deuda técnica conocida post-v1.0.0
+- Progreso SP7: US-7.1.1 ✅ · US-7.1.2 y US-7.2.x ⏳
+
+**Solución a D-02** (múltiples fuentes de verdad para el estado del proyecto): esta página unifica en un único documento navegable el estado que antes estaba disperso en README, CLAUDE.md, matrix.md, planes y reportes.
+
+---
+
 ## [2026-05-21] ingest | Fase 3 — páginas US SP7 (INC-7.1 + INC-7.2)
 
 Páginas creadas: 5

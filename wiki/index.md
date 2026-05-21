@@ -5,7 +5,7 @@
 > Leer este archivo primero al responder cualquier consulta.
 
 **Última actualización:** 2026-05-21
-**Total de páginas:** 229
+**Total de páginas:** 230
 
 ---
 
@@ -20,7 +20,7 @@
 | Investigación | 5 | ✅ Ingest completo (HITOs + experimento) |
 | Conceptos de dominio | 9 | 🔄 Ingest parcial (fuente 1/6 + enriquecimiento) |
 | Impacto | 0 | ⏳ Pendiente Fase 3 final |
-| Estado del proyecto | 0 | ⏳ Pendiente ingest de estado |
+| Estado del proyecto | 1 | ✅ Fase 3 completa — síntesis BL-000..BL-006 + SP7 en curso |
 | Salud / lint | 0 | ⏳ Pendiente Fase 4 (primer lint) |
 | Vistas | 6 / 6 | ✅ Fase 2 completa — 6 vistas operativas |
 
