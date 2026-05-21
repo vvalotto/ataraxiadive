@@ -1,11 +1,10 @@
 ---
 title: "Vista de Trazabilidad"
 type: vista
-last_updated: "2026-05-20"
+last_updated: "2026-05-21"
 sources:
+  - wiki/trazabilidad/
   - docs/traceability/matrix.md
-  - docs/plans/
-  - docs/reports/
 ---
 
 # Vista de Trazabilidad
@@ -14,54 +13,137 @@ sources:
 
 ## Propósito
 
-Responder preguntas sobre qué implementa cada requerimiento, qué tests lo
-verifican y qué evidencia existe de su cierre. Navegar la cadena completa
-RF → US → código → tests → reporte. Es la vista para análisis de cobertura,
-auditorías y comprensión de qué está implementado y con qué calidad.
+Responder preguntas sobre qué requerimiento funcional implementa cada parte del sistema, qué tests lo verifican y cuál es el estado de cobertura. Es la vista del QA, el auditor y el desarrollador que necesita entender el alcance antes de modificar algo.
 
 ## Stakeholder principal
 
-QA, auditor, desarrollador implementando un cambio, responsable de calidad.
+QA, auditor de calidad, desarrollador implementando o modificando un requerimiento.
 
-## Preguntas características
+---
 
-1. ¿Qué US implementa el requerimiento RF-CO-03?
-2. ¿Qué tests cubren la historia US-3.3.1?
-3. ¿Hay requerimientos funcionales sin tests asociados?
-4. ¿Qué archivos de código implementan el registro de performance?
-5. ¿Está cerrada y verificada la US-3.5.1?
-6. ¿Qué US del BC Competencia están pendientes de implementación?
-7. ¿Qué cobertura de tests tiene el SP3 completo?
+## Estado actual del wiki
 
-## Mapa de subproyectos
+> ⚠️ **Fase 3 pendiente.** Las páginas de trazabilidad por US no existen todavía en el wiki.
+> Existen las 8 páginas RF semilla (requerimientos por área), pero no la cadena
+> RF → US → código → tests → cierre.
+>
+> Para trazabilidad vigente hasta que se complete la Fase 3, la fuente primaria es:
+> **`docs/traceability/matrix.md`** — la matriz canónica del proyecto.
 
-| SP | Nombre | BCs involucrados | Estado estimado |
-|----|--------|-----------------|-----------------|
-| SP1 | La Performance | Competencia (core) | ✅ Cerrado |
-| SP2 | La Competencia | Competencia (ampliado) | ✅ Cerrado |
-| SP3 | El Torneo | Torneo + Registro | ✅ Cerrado |
-| SP4 | La Plataforma | Identidad + Notificaciones | ✅ Cerrado |
-| SP5 | La Puesta en Marcha | Todos + Resultados | En progreso |
-| SP6+ | Incrementos adicionales | Varios | En progreso |
+---
 
-## Recorridos sugeridos
+## Preguntas características y recorridos
 
-**Para verificar cobertura de un requerimiento:**
-`[[estado/proyecto]]` → buscar RF en index → `[[trazabilidad/US-X.X.X]]`
-→ tests asociados → `[[trazabilidad/US-X.X.X-report]]`
+### 1. ¿Qué requerimientos cubre el área de ejecución?
 
-**Para entender qué cubre un BC:**
-`[[competencia]]` → lista de US implementadas → páginas de trazabilidad
-por US → reportes de cierre
+El área de ejecución concentra las reglas más complejas del dominio: tarjetas, DNS, black-out, correcciones del juez, cronometraje manual.
 
-**Para auditoría de cobertura total:**
-`[[salud/lint-actual]]` → sección "requerimientos sin tests" → gaps identificados
+**Recorrido (estado actual):**
+`[[RF-ejecucion]]` → `[[performance]]` → `[[tarjeta]]` → `[[arquitectura/competencia]]` → `[[ADR-014-penalizaciones-acumulables]]`
+
+**Recorrido completo (disponible en Fase 3):**
+`[[RF-ejecucion]]` → `US-X.Y.Z` → código en `src/competencia/` → tests en `tests/features/` → reporte de cierre
+
+**Requerimiento pendiente de elicitación:** RF-EJ-04 (códigos de penalización AIDA/CMAS).
+
+---
+
+### 2. ¿Qué requerimientos cubre el ciclo de vida del torneo?
+
+Gestión del torneo incluye: creación, configuración de disciplinas, inscripciones, etapas reversibles, y cierre sin eliminación de datos.
+
+**Recorrido (estado actual):**
+`[[RF-gestion-torneo]]` → `[[torneo]]` (concepto) → `[[arquitectura/torneo]]`
+
+**Regla clave documentada:** las disciplinas son configurables; el set inicial es STA, DNF, DBF, DYN, SPE. Las transiciones entre fases son reversibles.
+
+---
+
+### 3. ¿Qué requerimientos cubre la inscripción de atletas?
+
+Inscripción define: categorías, brevet, límites de participantes, apto médico, constancia de pago, datos del club.
+
+**Recorrido (estado actual):**
+`[[RF-inscripcion-atletas]]` → `[[atleta]]` → `[[arquitectura/registro]]`
+
+**Requerimiento pendiente:** RF-IN-07 (resolución de conflictos con BD externa) — sin implementar.
+
+---
+
+### 4. ¿Qué requerimientos de preparación generan la grilla?
+
+La preparación comprende: generación de grilla, anuncios de marcas, configuración de disciplinas.
+
+**Recorrido (estado actual):**
+`[[RF-preparacion]]` → `[[grilla]]` → `[[anuncio]]` → `[[arquitectura/competencia]]`
+
+---
+
+### 5. ¿Qué áreas de requerimientos tienen pendientes sin implementar?
+
+| Área RF | Página | Pendientes |
+|---------|--------|-----------|
+| Inscripción | [[RF-inscripcion-atletas]] | RF-IN-07 (conflicto BD externa) |
+| Ejecución | [[RF-ejecucion]] | RF-EJ-04 (códigos penalización) |
+| Resultados | [[RF-resultados]] | RF-PM-01 (sistema de puntos) |
+| Notificaciones | [[RF-notificaciones]] | RF-NT-03 |
+| Integración | [[RF-integracion]] | Toda el área (4 RFs pendientes) |
+| Gestión torneo | [[RF-gestion-torneo]] | Ninguno |
+| Preparación | [[RF-preparacion]] | Ninguno |
+| Usuarios/roles | [[RF-usuarios-roles]] | Ninguno |
+
+---
+
+### 6. ¿Cómo se traza un requerimiento hasta su implementación?
+
+La cadena canónica en AtaraxiaDive es:
+
+```
+RF (área) → US (historia de usuario) → código en src/<bc>/ → tests en tests/ → reporte en docs/reports/
+```
+
+Esta cadena vive en `docs/traceability/matrix.md`. Cuando se complete la Fase 3 del wiki, cada US tendrá su propia página con el ciclo completo navegable.
+
+**Recorrido de referencia para navegar hoy:**
+`[[RF-ejecucion]]` → `docs/traceability/matrix.md` (fuente externa) → `docs/reports/US-X.md`
+
+---
+
+### 7. ¿Qué BC implementa cada área de requerimientos?
+
+| Área RF | BC principal | BC secundario |
+|---------|-------------|--------------|
+| Gestión del torneo | [[arquitectura/torneo]] | [[arquitectura/competencia]] |
+| Inscripción de atletas | [[arquitectura/registro]] | — |
+| Preparación | [[arquitectura/competencia]] | [[arquitectura/registro]] |
+| Ejecución | [[arquitectura/competencia]] | — |
+| Resultados | [[arquitectura/resultados]] | [[arquitectura/competencia]] |
+| Usuarios y roles | [[arquitectura/identidad]] | — |
+| Notificaciones | [[arquitectura/notificaciones]] | — |
+| Integración externa | [[RF-integracion]] | (sin BC asignado aún) |
+
+---
+
+## Páginas de RF semilla disponibles
+
+| Página | Área |
+|--------|------|
+| [[RF-gestion-torneo]] | Gestión del torneo — sin pendientes |
+| [[RF-inscripcion-atletas]] | Inscripción de atletas — 1 pendiente |
+| [[RF-preparacion]] | Preparación de competencias — sin pendientes |
+| [[RF-ejecucion]] | Ejecución de competencias — 1 pendiente |
+| [[RF-resultados]] | Premiación y resultados — 1 pendiente |
+| [[RF-usuarios-roles]] | Usuarios, roles y permisos — sin pendientes |
+| [[RF-notificaciones]] | Notificaciones — 1 pendiente |
+| [[RF-integracion]] | Integración externa — toda el área pendiente |
+
+---
 
 ## Páginas hub de esta vista
 
-- [[estado/proyecto]] — punto de entrada al estado de implementación
-- `wiki/trazabilidad/` — todas las US con su ciclo completo
-- [[salud/lint-actual]] — gaps de trazabilidad detectados
-
----
-*Vista pendiente de poblarse — requiere Fase 3 (ingest de estado)*
+| Página | Por qué es hub |
+|--------|----------------|
+| `[[RF-ejecucion]]` | Área más compleja; concentra reglas de negocio del Core Domain |
+| `[[arquitectura/competencia]]` | Implementa la mayoría de los RFs de ejecución y preparación |
+| `[[arquitectura/context-map]]` | Muestra qué BC implementa qué área |
+| `docs/traceability/matrix.md` | Fuente primaria de trazabilidad hasta que se complete Fase 3 |
