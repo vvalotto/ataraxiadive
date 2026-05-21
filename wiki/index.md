@@ -4,7 +4,7 @@
 > El LLM actualiza este archivo en cada operación de ingest.
 > Leer este archivo primero al responder cualquier consulta.
 
-**Última actualización:** 2026-05-20
+**Última actualización:** 2026-05-21
 **Total de páginas:** 51
 
 ---
@@ -22,7 +22,7 @@
 | Impacto | 0 | ⏳ Pendiente construcción de vistas |
 | Estado del proyecto | 0 | ⏳ Pendiente ingest de estado |
 | Salud / lint | 0 | ⏳ Pendiente primer lint |
-| Vistas | 6 / 6 | ✅ Inicializadas |
+| Vistas | 6 / 6 | ✅ Fase 2 completa — 6 vistas operativas |
 
 ---
 

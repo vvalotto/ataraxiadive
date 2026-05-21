@@ -6,6 +6,22 @@
 
 ---
 
+## [2026-05-21] vistas | Fase 2 — 6 vistas operativas construidas
+
+Páginas actualizadas: 6
+
+**Vistas completadas (wiki/vistas/):**
+- `dominio.md` — 6 preguntas + recorridos + tabla de BCs + glosario del lenguaje ubicuo
+- `decisiones.md` — 7 preguntas + tabla de ADRs por área + ADR-010 supersedido documentado
+- `trazabilidad.md` — 7 preguntas + tabla de pendientes RF + mapa RF→BC + remisión a matrix.md
+- `salud.md` — 7 preguntas + tabla D-02/D-03/D-05/D-06/D-09 + instrucción para primer lint
+- `impacto.md` — 7 preguntas + mapa de dependencias reales + tabla de interfaces críticas
+- `investigacion.md` — 7 preguntas + HITOs para el paper + capitalización por producto intelectual
+
+**Estado del wiki:** H-2 completado. Próximo paso: Fase 3 (ingest de estado).
+
+---
+
 ## [2026-05-20] ingest | docs/contexto/ (ANALISIS-*.md, INDICE-HITOS.md, PLAN-EXPERIMENTO.md)
 
 Páginas creadas: 2 | Páginas actualizadas: 1
