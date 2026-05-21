@@ -6,6 +6,58 @@
 
 ---
 
+## [2026-05-21] ingest | Fase 3 — páginas US SP5 (INC-5.1 a INC-5.7 + SP-ADJ-08 y SP-ADJ-09)
+
+Páginas creadas: 39
+
+**Páginas creadas (wiki/trazabilidad/):**
+
+*INC-5.1 — Panel del Organizador (6 US + 4 ADJ post-UAT):*
+- `US-5.1.1` a `US-5.1.6` — `CrearTorneoPage`, `DetalleTorneoPage` + tabs, `InscriptosPanel`, `GrillaPanel`, `JuecesPanel`, `EjecucionPanel`
+- `US-5.1.7` a `US-5.1.10` — ajustes post-UAT: política de tabs por fase, `TorneoCompetenciasPage` composición, precondición grilla para juez, normalización `estado` en `fetchTorneo`
+
+*INC-5.2 — Ejecución por Disciplina (2 US):*
+- `US-5.2.1` — maestro-detalle por disciplina con `Habilitar disciplina`
+- `US-5.2.2` — acción `Finalizar prueba` con distinción cierre manual/automático
+
+*SP-ADJ-08 — Ajuste post-UAT INC-5.2 (3 US):*
+- `US-ADJ-8.1` a `US-ADJ-8.3` — UX paneles, selector grilla filtrado, cancelar torneo con confirmación fuerte
+
+*INC-5.3 — Gestión de Usuarios (2 US):*
+- `US-5.3.1` — `UsuariosPage` organizador
+- `US-5.3.2` — `AtletaDashboardPage` con inscripción
+
+*INC-5.4 — Identidad Extendida (3 US):*
+- `US-5.4.1` — auto-registro público
+- `US-5.4.2` — cambiar contraseña
+- `US-5.4.3` — recuperar contraseña vía JWT
+
+*INC-5.5 — Portal Atleta e Inscripción con AP (2 US):*
+- `US-5.5.1` — portal atleta completo: shell dark + wizard inscripción 3 pasos + AP
+- `US-5.5.2` — vista organizador: inscriptos con datos completos
+
+*INC-5.6 — Algoritmo de Puntaje y Rankings (6 US):*
+- `US-5.6.1` a `US-5.6.6` — puerto `AlgoritmoPuntaje`, `TipoReglamento`, `RankingCompetencia` con puntos, `RankingOverall`, `ResultadosPage`, podios por división
+
+*SP-ADJ-09 — Refactoring UX Organizador (7 US):*
+- `US-ADJ-9.1` a `US-ADJ-9.7` — shell dark organizador, routing reestructurado, home, dashboard operativo, `ResultadosPage` integrada, arquitectura UX formalizada, declarar AP en wizard
+
+*INC-5.7 — Portal del Atleta (4 US):*
+- `US-5.7.1` a `US-5.7.4` — Mis torneos, Mi grilla, Mis resultados, Rankings y podios
+
+**Hitos DesignReviewer acumulados a fin de SP5:**
+- Post-INC-5.1: 0 CRITICAL · 208 WARNING
+- Post-INC-5.2: 0 CRITICAL · 215 WARNING
+- Post-INC-5.3: 0 CRITICAL · 215 WARNING
+- Post-INC-5.4: 0 CRITICAL · 222 WARNING (+7 endpoints identidad)
+- Post-INC-5.5: 0 CRITICAL · 227 WARNING (+5 LongMethod/DataClumps/LCOM)
+- Post-INC-5.6 + SP-ADJ-09: 0 CRITICAL · 252 WARNING (+25 LCOM/FanOut ranking)
+- Post-INC-5.7: 0 CRITICAL · 256 WARNING (+4 `_rankear_categoria` aceptado)
+
+**Estado del wiki:** SP5 completo. Próximo: SP6 (INC-6.1 a INC-6.4) + SP-ADJ-11.
+
+---
+
 ## [2026-05-21] vistas | Fase 2 — 6 vistas operativas construidas
 
 Páginas actualizadas: 6

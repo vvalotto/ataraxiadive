@@ -5,7 +5,7 @@
 > Leer este archivo primero al responder cualquier consulta.
 
 **Última actualización:** 2026-05-21
-**Total de páginas:** 51
+**Total de páginas:** 195
 
 ---
 
@@ -15,13 +15,13 @@
 |---------|---------|--------|
 | Bounded Contexts | 7 / 7 | ✅ Ingest completo (6 BCs + context map) |
 | Decisiones (ADRs) | 22 / 22 | ✅ Ingest completo |
-| Trazabilidad (US) | 0 | ⏳ Pendiente ingest de estado (Fase 3) |
+| Trazabilidad (US) | 135 | 🔄 SP1–SP5 completos + SP-ADJ-01 a SP-ADJ-09; pendiente SP6 |
 | Trazabilidad (RF semilla) | 8 | 🔄 Ingest parcial (fuente 3/7) |
-| Investigación | 3 | 🔄 Ingest parcial (fuente 4/7) |
+| Investigación | 5 | ✅ Ingest completo (HITOs + experimento) |
 | Conceptos de dominio | 9 | 🔄 Ingest parcial (fuente 1/6 + enriquecimiento) |
-| Impacto | 0 | ⏳ Pendiente construcción de vistas |
+| Impacto | 0 | ⏳ Pendiente Fase 3 final |
 | Estado del proyecto | 0 | ⏳ Pendiente ingest de estado |
-| Salud / lint | 0 | ⏳ Pendiente primer lint |
+| Salud / lint | 0 | ⏳ Pendiente Fase 4 (primer lint) |
 | Vistas | 6 / 6 | ✅ Fase 2 completa — 6 vistas operativas |
 
 ---
@@ -82,7 +82,89 @@
 
 ### Trazabilidad por US
 
-*Vacío — pendiente Fase 3 (ingest de estado)*
+#### SP1 (INC-1.1 a INC-1.4)
+
+[[US-1.1.1]] · [[US-1.2.1]] [[US-1.2.2]] [[US-1.2.3]] [[US-1.2.4]] [[US-1.2.5]] [[US-1.2.6]] · [[US-1.3.1]] · [[US-1.4.1]] [[US-1.4.2]]
+
+#### SP-ADJ-01
+
+[[US-ADJ-1.1]] [[US-ADJ-1.2]] [[US-ADJ-1.3]] [[US-ADJ-1.4]] [[US-ADJ-1.5]]
+
+#### SP-ADJ-02
+
+[[US-ADJ-2.6]] [[US-ADJ-2.7]] [[US-ADJ-2.8]]
+
+#### SP2 (INC-2.0 a INC-2.4)
+
+[[US-2.0]] · [[US-2.1.1]] [[US-2.1.2]] [[US-2.1.3]] [[US-2.1.4]] · [[US-2.2.1]] [[US-2.2.2]] · [[US-2.3.1]] · [[US-2.4.1]] [[US-2.4.2]]
+
+#### SP-ADJ-03
+
+[[US-ADJ-3.1]] [[US-ADJ-3.2]] [[US-ADJ-3.3]] [[US-ADJ-3.4]] [[US-ADJ-3.5]] [[US-ADJ-3.6]] [[US-ADJ-3.7]] [[US-ADJ-3.8]]
+
+#### SP-ADJ-04
+
+[[US-ADJ-4.1]] [[US-ADJ-4.2]] [[US-ADJ-4.3]] [[US-ADJ-4.4]] [[US-ADJ-4.5]] [[US-ADJ-4.6]]
+
+#### SP3 (INC-3.1 a INC-3.5)
+
+[[US-3.1.1]] [[US-3.1.2]] · [[US-3.2.1]] [[US-3.2.2]] [[US-3.2.3]] · [[US-3.3.1]] [[US-3.3.2]] · [[US-3.4.1]] [[US-3.4.2]] · [[US-3.5.1]] [[US-3.5.2]] [[US-3.5.3]]
+
+#### SP4 (INC-4.1 a INC-4.6)
+
+[[US-4.1.1]] [[US-4.1.2]] [[US-4.1.3]] [[US-4.1.4]] [[US-4.1.5]] [[US-4.1.6]] [[US-4.1.7]] [[US-4.1.8]] · [[US-4.2.1]] [[US-4.2.2]] · [[US-4.3.1]] [[US-4.3.2]] [[US-4.3.3]] [[US-4.3.4]] [[US-4.3.5]] · [[US-4.4.1]] [[US-4.4.2]] [[US-4.4.3]] · [[US-4.5.1]] [[US-4.5.2]] [[US-4.5.3]] [[US-4.5.4]] [[US-4.5.5]] · [[US-4.6.1]] [[US-4.6.2]] [[US-4.6.3]] [[US-4.6.4]]
+
+#### SP-ADJ-05
+
+[[US-ADJ-5.1]] [[US-ADJ-5.2]] [[US-ADJ-5.3]] [[US-ADJ-5.4]] [[US-ADJ-5.5]]
+
+#### SP-ADJ-06
+
+[[US-ADJ-6.1]] [[US-ADJ-6.2]] [[US-ADJ-6.3]] [[US-ADJ-6.4]] [[US-ADJ-6.5]] [[US-ADJ-6.6]] [[US-ADJ-6.7]]
+
+#### SP-ADJ-07
+
+[[US-ADJ-7.1]] [[US-ADJ-7.2]] [[US-ADJ-7.3]]
+
+#### SP5 — Panel Organizador (INC-5.1)
+
+[[US-5.1.1]] [[US-5.1.2]] [[US-5.1.3]] [[US-5.1.4]] [[US-5.1.5]] [[US-5.1.6]]
+
+#### SP5 — INC-5.1-ADJ (ajuste post-UAT)
+
+[[US-5.1.7]] [[US-5.1.8]] [[US-5.1.9]] [[US-5.1.10]]
+
+#### SP5 — Ejecución por Disciplina (INC-5.2)
+
+[[US-5.2.1]] [[US-5.2.2]]
+
+#### SP-ADJ-08
+
+[[US-ADJ-8.1]] [[US-ADJ-8.2]] [[US-ADJ-8.3]]
+
+#### SP5 — Gestión de Usuarios (INC-5.3)
+
+[[US-5.3.1]] [[US-5.3.2]]
+
+#### SP5 — Identidad Extendida (INC-5.4)
+
+[[US-5.4.1]] [[US-5.4.2]] [[US-5.4.3]]
+
+#### SP5 — Portal Atleta e Inscripción con AP (INC-5.5)
+
+[[US-5.5.1]] [[US-5.5.2]]
+
+#### SP5 — Algoritmo de Puntaje y Rankings (INC-5.6)
+
+[[US-5.6.1]] [[US-5.6.2]] [[US-5.6.3]] [[US-5.6.4]] [[US-5.6.5]] [[US-5.6.6]]
+
+#### SP-ADJ-09
+
+[[US-ADJ-9.1]] [[US-ADJ-9.2]] [[US-ADJ-9.3]] [[US-ADJ-9.4]] [[US-ADJ-9.5]] [[US-ADJ-9.6]] [[US-ADJ-9.7]]
+
+#### SP5 — Portal del Atleta (INC-5.7)
+
+[[US-5.7.1]] [[US-5.7.2]] [[US-5.7.3]] [[US-5.7.4]]
 
 ## Conceptos de dominio
 
