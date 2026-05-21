@@ -86,3 +86,26 @@ Callbacks in-process registrados en el composition root (`src/app.py`). El route
 - [[ADR-017-notificaciones-event-sourcing]] — justificación del ES en un BC genérico; flujo de idempotencia
 - [[ADR-016-resend-email-provider]] — proveedor de email; sandbox `onboarding@resend.dev`; `LoggingEmailAdapter`
 - [[ADR-008-event-store-sqlite]] — infraestructura compartida con Competencia
+
+## Salud (BL-006 · v1.0.0 · 2026-05-16)
+
+### ArchitectAnalyst
+
+| Métrica | Valor | Severidad | Tendencia |
+|---------|-------|-----------|-----------|
+| Distancia (D) | 0.450 | WARNING | = estable |
+| should_block | false | — | — |
+
+D=0.450, estable desde BL-005. BC genérico con Event Sourcing — el patrón incrementa la abstracción de forma estructural (puertos + adaptadores + aggregate). Sin ciclos de dependencia.
+
+### DesignReviewer
+
+| Total WARNING | Top smells |
+|:---:|---|
+| **18** | LongMethod (10) · FeatureEnvy (7) |
+
+Segundo menor volumen WARNING. LongMethod en `EnviarNotificacionHandler` (orquestación idempotente con múltiples pasos). FeatureEnvy refleja el acceso al Event Store y al adapter de email. Sin CRITICAL.
+
+### Cobertura
+
+Tests desde SP4 (INC-4.5). Política de exactly-once delivery verificada en integración.

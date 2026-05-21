@@ -13,7 +13,7 @@
 
 | Sección | Páginas | Estado |
 |---------|---------|--------|
-| Bounded Contexts | 7 / 7 | ✅ Ingest completo (6 BCs + context map) |
+| Bounded Contexts | 7 / 7 | ✅ Ingest completo + métricas de salud BL-006 (ArchitectAnalyst + DesignReviewer) |
 | Decisiones (ADRs) | 22 / 22 | ✅ Ingest completo |
 | Trazabilidad (US) | 169 | 🔄 SP1–SP6 + SP-ADJ-01 a SP-ADJ-11 completos; SP7 INC-7.1.1 ✅ + INC-7.1.2/INC-7.2 ⏳ |
 | Trazabilidad (RF semilla) | 8 | 🔄 Ingest parcial (fuente 3/7) |

@@ -6,6 +6,22 @@
 
 ---
 
+## [2026-05-21] ingest | Fase 3 — métricas de salud en páginas de BC (quality/reports/)
+
+Páginas actualizadas: 6
+
+**Sección `## Salud` agregada a:**
+- `wiki/arquitectura/competencia.md` — D=0.459 WARNING · 130W (LongMethod/FeatureEnvy) · DependencyCycle aceptado
+- `wiki/arquitectura/torneo.md` — D=0.479 WARNING · 15W (FeatureEnvy/LongMethod)
+- `wiki/arquitectura/registro.md` — D=0.583 CRITICAL↑ · 37W (LongMethod/FeatureEnvy) · degradación por SP-ADJ-11
+- `wiki/arquitectura/resultados.md` — D < umbral alerta · 40W (LongMethod) · DR-01 aceptado
+- `wiki/arquitectura/identidad.md` — D=0.652 CRITICAL↓ · 21W (LongMethod/FeatureEnvy) · AA-02 diferido
+- `wiki/arquitectura/notificaciones.md` — D=0.450 WARNING · 18W (LongMethod/FeatureEnvy)
+
+**Fuentes:** `quality/reports/architectanalyst/BL-005-report.json` · `.cm/baselines/BL-006-report.json` · `quality/reports/designreviewer/current-report.json` (2026-05-18, 287W total)
+
+---
+
 ## [2026-05-21] ingest | Fase 3 — estado del proyecto (baselines BL-000..BL-006)
 
 Páginas creadas: 1

@@ -71,3 +71,26 @@ CREADO → INSCRIPCION_ABIERTA → PREPARACION → EJECUCION → PREMIACION → 
 - [[ADR-005-bounded-contexts-ddd-estrategico]] — posición en el mapa estratégico
 - [[ADR-007-sqlite-persistencia-bc]] — persistencia CRUD en SQLite
 - [[ADR-012-rfc7807-errores-http]] — exception handlers en la capa API
+
+## Salud (BL-006 · v1.0.0 · 2026-05-16)
+
+### ArchitectAnalyst
+
+| Métrica | Valor | Severidad | Tendencia |
+|---------|-------|-----------|-----------|
+| Distancia (D) | 0.479 | WARNING | ↓ mejorando |
+| should_block | false | — | — |
+
+D=0.479 en zona de control. BC CRUD — la estabilidad es deseable por diseño DDD (alta abstracción, baja inestabilidad). Sin ciclos de dependencia.
+
+### DesignReviewer
+
+| Total WARNING | Top smells |
+|:---:|---|
+| **15** | FeatureEnvy (8) · LongMethod (2) |
+
+El menor volumen WARNING de los BCs funcionales. FeatureEnvy estructural en los handlers que orquestan Torneo + Registro + Competencia (cross-BC por diseño). Sin CRITICAL.
+
+### Cobertura
+
+Tests de integración y BDD desde SP3. BC estable sin cambios arquitectónicos desde BL-003.

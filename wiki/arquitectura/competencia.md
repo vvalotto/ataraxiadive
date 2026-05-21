@@ -87,3 +87,27 @@ No existe entidad `Participante` materializada. El BC opera con `participante_id
 - [[ADR-014-penalizaciones-acumulables]] — `BlancaConPenalizaciones`; `rp_medido` / `rp_penalizado`
 - [[ADR-018-hash-sha256-auditoria]] — hash SHA-256 en `CompetenciaCerrada`
 - [[ADR-006-estructura-bc-first]] — organización hexagonal por capas
+
+## Salud (BL-006 · v1.0.0 · 2026-05-16)
+
+### ArchitectAnalyst
+
+| Métrica | Valor | Severidad | Tendencia |
+|---------|-------|-----------|-----------|
+| Distancia (D) | 0.459 | WARNING | ↓ mejorando |
+| DependencyCycle | `domain/aggregates` ↔ `domain/aggregates/performance` | CRITICAL | = estable |
+| should_block | false | — | — |
+
+D=0.459 está en zona de control (< 0.5). El ciclo ADP en `domain/aggregates` fue auditado en INC-6.4 (US-6.4.1) y clasificado como aceptable por la estructura del aggregate. No bloquea.
+
+### DesignReviewer
+
+| Total WARNING | Top smells |
+|:---:|---|
+| **130** | LongMethod (74) · FeatureEnvy (36) · DataClumps (9) |
+
+**Contexto:** 130 W es el mayor volumen por BC, proporcional a ser el Core Domain. LongMethod es inherente a los handlers hexagonales (un comando = un método con invariantes complejas). FeatureEnvy refleja el patrón CQRS donde los handlers acceden al aggregate + proyecciones + puertos. Ningún CRITICAL.
+
+### Cobertura
+
+Tests presentes desde SP1. Cobertura `domain/` + `application/` ≥ 90% (verificado en BL-001..BL-006). BDD features en `tests/features/`.

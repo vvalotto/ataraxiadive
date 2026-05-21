@@ -68,3 +68,26 @@ Mínimo 10 caracteres + 1 mayúscula + 1 número. Aplicada en `RegistrarUsuarioH
 - [[ADR-020-modelo-usuarios-roles]] — `roles: list[Rol]`; perfiles por rol en BC Registro
 - [[ADR-007-sqlite-persistencia-bc]] — persistencia CRUD en SQLite
 - [[ADR-012-rfc7807-errores-http]] — mapeo de excepciones a HTTP
+
+## Salud (BL-006 · v1.0.0 · 2026-05-16)
+
+### ArchitectAnalyst
+
+| Métrica | Valor | Severidad | Tendencia |
+|---------|-------|-----------|-----------|
+| Distancia (D) | 0.652 | **CRITICAL** | ↓ mejorando |
+| should_block | false | — | — |
+
+D=0.652, el valor más alto de los BCs. Es el Zone of Pain esperado para un BC de autenticación CRUD puro: alta abstracción (interfaces y puertos), baja inestabilidad (pocos cambios). La tendencia es positiva: 0.87 (BL-004) → 0.67 (BL-005) → 0.65 (BL-006). Diferido para evaluación post-v1.0 (decisión AA-02 en BL-006).
+
+### DesignReviewer
+
+| Total WARNING | Top smells |
+|:---:|---|
+| **21** | LongMethod (8) · FeatureEnvy (8) · DataClumps (2) |
+
+Volumen bajo. LongMethod y FeatureEnvy en los handlers de autenticación (JWT + hashing + validaciones multi-campo). Sin CRITICAL.
+
+### Cobertura
+
+Tests desde SP3. BC genérico con pocos cambios post-SP-ADJ-11.

@@ -61,3 +61,26 @@ La consulta HTTP no recalcula el ranking en runtime. Carga el stream, reconstitu
 - [[ADR-001-event-sourcing-competencia]] — la fuente de datos de este BC
 - [[ADR-005-bounded-contexts-ddd-estrategico]] — posición downstream de Competencia
 - [[ADR-014-penalizaciones-acumulables]] — `BlancaConPenalizaciones` es tarjeta válida para ranking
+
+## Salud (BL-006 · v1.0.0 · 2026-05-16)
+
+### ArchitectAnalyst
+
+| Métrica | Valor | Severidad | Tendencia |
+|---------|-------|-----------|-----------|
+| Distancia (D) | < umbral alerta | INFO | — |
+| should_block | false | — | — |
+
+BC Resultados no aparece en los reportes de alerta de DistanceAnalyzer en BL-005 ni BL-006 — su D está por debajo del umbral de aviso. El mejor indicador de salud arquitectónica de los BCs funcionales.
+
+### DesignReviewer
+
+| Total WARNING | Top smells |
+|:---:|---|
+| **40** | LongMethod (27) · FeatureEnvy (3) |
+
+LongMethod concentrado en `RankingCompetencia` y `RankingOverall` — clases con lógica de cálculo compleja por diseño (FAAS, agrupación por categoría/género, empates). El patrón fue auditado en BL-006 (decisión DR-01: LCOM=2 en `RankingCompetencia` es falso positivo de Event Sourcing). Sin CRITICAL.
+
+### Cobertura
+
+Suite más densa del proyecto: 91 tests en `US-5.6.4` solos. Tests de integración y BDD desde SP2.
