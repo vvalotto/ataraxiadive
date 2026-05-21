@@ -6,6 +6,43 @@
 
 ---
 
+## [2026-05-21] ingest | Fase 3 — páginas US SP6 completo (INC-6.1 a INC-6.4 + SP-ADJ-11)
+
+Páginas creadas: 29
+
+**Páginas creadas (wiki/trazabilidad/):**
+
+*INC-6.1 — Ajustes Juez (5 US):*
+- `US-6.1.1` — fix `canSubmitBko` + reorden flujo juez (tarjeta → marca)
+- `US-6.1.2` — colores tarjeta outline/filled + heading corregido
+- `US-6.1.3` — grilla ordenada por estado + keypad visible móvil
+- `US-6.1.4` — rediseño inicio juez + STA mm:ss + tarjeta amarilla
+- `US-6.1.5` — `AtletaCard` variante compact en paso de RpSelector
+
+*INC-6.2 — Ajustes Organizador (6 US):*
+- `US-6.2.1` a `US-6.2.6` — torneos por fecha, categoría legible, resultados sin PTS, alertas, grupos etarios, PodiosPage
+
+*INC-6.3 — Ajustes Atleta (2 US):*
+- `US-6.3.1` — inicio atleta: indicador En línea + disciplinas por OT
+- `US-6.3.2` — inscripción: AP inline + apto médico + constancia de pago
+
+*INC-6.4 — Deuda Técnica Sistema (6 US):*
+- `US-6.4.1` — romper ciclo ADP en `competencia/domain/aggregates` (AA-01 CRITICAL)
+- `US-6.4.2` — proyección `competencias_por_torneo` materializada (ARCH-01)
+- `US-6.4.3` — corregir imports cross-BC en `resultados/api` y `competencia/api`
+- `US-6.4.4` — `AlgoritmoPuntajeFAAS` dispatch explícito + CodeGuard
+- `US-6.4.5` — `DeclararAPInscripcionHandler` + `from_row()` refactoring
+- `US-6.4.6` — cierre ARCH-03 + SRP `RankingCompetencia` + BL-006
+
+*SP-ADJ-11 — Modelo multi-rol (10 US):*
+- `US-ADJ-11.1` a `US-ADJ-11.10` — `Usuario.roles: list[Rol]`, JWT `rol_activo`, login condicional, entidades `Juez`/`Organizador` en BC Registro, frontend multi-rol, creación automática de perfiles
+
+**Hito DesignReviewer SP6:** Post-INC-6.4: 0 CRITICAL · 253 WARNING (−5 por refactoring). Post-SP-ADJ-11: 0 CRITICAL · 287 WARNING (+34, complejidad multi-rol).
+
+**Estado del wiki:** SP6 + SP-ADJ-11 completos. Próximo: SP7 y SP-ADJ-10.
+
+---
+
 ## [2026-05-21] ingest | Fase 3 — páginas US SP5 (INC-5.1 a INC-5.7 + SP-ADJ-08 y SP-ADJ-09)
 
 Páginas creadas: 39

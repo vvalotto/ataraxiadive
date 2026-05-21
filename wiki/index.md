@@ -5,7 +5,7 @@
 > Leer este archivo primero al responder cualquier consulta.
 
 **Última actualización:** 2026-05-21
-**Total de páginas:** 195
+**Total de páginas:** 224
 
 ---
 
@@ -15,7 +15,7 @@
 |---------|---------|--------|
 | Bounded Contexts | 7 / 7 | ✅ Ingest completo (6 BCs + context map) |
 | Decisiones (ADRs) | 22 / 22 | ✅ Ingest completo |
-| Trazabilidad (US) | 135 | 🔄 SP1–SP5 completos + SP-ADJ-01 a SP-ADJ-09; pendiente SP6 |
+| Trazabilidad (US) | 164 | 🔄 SP1–SP6 completos + SP-ADJ-01 a SP-ADJ-11; pendiente SP7 y SP-ADJ-10 |
 | Trazabilidad (RF semilla) | 8 | 🔄 Ingest parcial (fuente 3/7) |
 | Investigación | 5 | ✅ Ingest completo (HITOs + experimento) |
 | Conceptos de dominio | 9 | 🔄 Ingest parcial (fuente 1/6 + enriquecimiento) |
@@ -165,6 +165,26 @@
 #### SP5 — Portal del Atleta (INC-5.7)
 
 [[US-5.7.1]] [[US-5.7.2]] [[US-5.7.3]] [[US-5.7.4]]
+
+#### SP6 — Ajustes Juez (INC-6.1)
+
+[[US-6.1.1]] [[US-6.1.2]] [[US-6.1.3]] [[US-6.1.4]] [[US-6.1.5]]
+
+#### SP6 — Ajustes Organizador (INC-6.2)
+
+[[US-6.2.1]] [[US-6.2.2]] [[US-6.2.3]] [[US-6.2.4]] [[US-6.2.5]] [[US-6.2.6]]
+
+#### SP6 — Ajustes Atleta (INC-6.3)
+
+[[US-6.3.1]] [[US-6.3.2]]
+
+#### SP6 — Deuda Técnica Sistema (INC-6.4)
+
+[[US-6.4.1]] [[US-6.4.2]] [[US-6.4.3]] [[US-6.4.4]] [[US-6.4.5]] [[US-6.4.6]]
+
+#### SP-ADJ-11 — Modelo de usuarios con múltiples roles
+
+[[US-ADJ-11.1]] [[US-ADJ-11.2]] [[US-ADJ-11.3]] [[US-ADJ-11.4]] [[US-ADJ-11.5]] [[US-ADJ-11.6]] [[US-ADJ-11.7]] [[US-ADJ-11.8]] [[US-ADJ-11.9]] [[US-ADJ-11.10]]
 
 ## Conceptos de dominio
 
