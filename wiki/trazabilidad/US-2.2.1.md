@@ -1,0 +1,38 @@
+---
+title: "US-2.2.1 — DisciplinaDescriptor value object + port"
+type: trazabilidad-us
+sp: SP2
+inc: INC-2.2
+bc: competencia, shared
+estado: completado
+fecha_cierre: "2026-03-28"
+last_updated: "2026-05-21"
+sources:
+  - docs/traceability/matrix.md §5
+---
+
+# US-2.2.1 — DisciplinaDescriptor value object + port
+
+## Descripción
+
+Introduce el value object `DisciplinaDescriptor` que encapsula las reglas de cada disciplina (unidad de medida, orden de grilla, etc.) y su puerto abstracto correspondiente.
+
+## RFs cubiertos
+
+| RF | Descripción |
+|----|-------------|
+| RF-EJ-08 | Distancia con decimales (metros) / tiempo en segundos según disciplina |
+
+## Contenido implementado
+
+- VO `DisciplinaDescriptor` con propiedades: `unidad_medida`, `orden_ascendente`, `es_disciplina_tiempo`
+- Port abstracto para inyectar el descriptor en handlers
+- Variantes: STA/tiempo, DNF/distancia
+
+## Tests
+
+Sin entrada explícita en §36 — validado como parte de la suite acumulada de INC-2.2.
+
+## Estado
+
+✅ Completado — 2026-03-28
