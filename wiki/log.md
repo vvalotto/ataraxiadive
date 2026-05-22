@@ -6,6 +6,21 @@
 
 ---
 
+## [2026-05-22] ingest | L6 lint-001 — 7 conceptos de dominio sin página (resolución de gap menor)
+
+Páginas creadas: 7 | Páginas actualizadas: 1 (index.md)
+
+**Conceptos creados:**
+- `wiki/conceptos/inscripcion.md` — aggregate de BC Registro; estados ACTIVA/CANCELADA; invariantes de unicidad y ventana de inscripción
+- `wiki/conceptos/categoria.md` — StrEnum en shared/ (ADR-022); usado por Registro, Competencia y Resultados
+- `wiki/conceptos/penalizacion.md` — infracción técnica; modelo rp_medido/rp_penalizado; BlancaConPenalizaciones (ADR-014)
+- `wiki/conceptos/ranking.md` — dos tipos (competencia + overall); reglas de ordenamiento; separación cálculo/lectura
+- `wiki/conceptos/dns.md` — Did Not Start; evento terminal de Performance; posición al final sin número
+- `wiki/conceptos/sede.md` — value object embebido en Torneo; nombre, ciudad, país
+- `wiki/conceptos/entidad-organizadora.md` — organismo institucional del torneo; distinción con rol Organizador
+
+---
+
 ## [2026-05-22] lint | lint-001 — Primera auditoría del wiki (Fase 4)
 
 Páginas auditadas: 232 | Hallazgos: 8 categorías

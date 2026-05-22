@@ -18,7 +18,7 @@
 | Trazabilidad (US) | 185 | ✅ SP1–SP7 + SP-ADJ-01 a SP-ADJ-11 completos; SP7 INC-7.1 + INC-7.2 documentados |
 | Trazabilidad (RF semilla) | 8 | 🔄 Ingest parcial (fuente 3/7) |
 | Investigación | 5 | ✅ Ingest completo (HITOs + experimento) |
-| Conceptos de dominio | 9 | 🔄 Ingest parcial (fuente 1/6 + enriquecimiento) |
+| Conceptos de dominio | 16 | ✅ 9 originales + 7 nuevos (L6 lint-001 resuelto) |
 | Impacto | 0 | ⏳ Pendiente Fase 3 final |
 | Estado del proyecto | 1 | ✅ Fase 3 completa — síntesis BL-000..BL-006 + SP7 en curso |
 | Salud / lint | 2 | ✅ calidad-BL-006 + lint-001 ejecutado (Fase 4 completa) |
@@ -211,6 +211,13 @@
 | [[atleta]] | Participante del torneo; datos de identidad deportiva |
 | [[roles]] | Organizador, Juez, Atleta, Administrador |
 | [[atributos-calidad]] | Drivers no funcionales: rendimiento, disponibilidad, usabilidad, confiabilidad, etc. |
+| [[inscripcion]] | Aggregate de participación de un atleta en un torneo; estados ACTIVA/CANCELADA |
+| [[categoria]] | StrEnum compartido (shared/); clasifica atletas; importado por Registro, Competencia y Resultados |
+| [[penalizacion]] | Infracción técnica que reduce RP sin descalificar; introduce BlancaConPenalizaciones |
+| [[ranking]] | Ordenamiento de performances; dos tipos: por competencia y overall; separación cálculo/lectura |
+| [[dns]] | Did Not Start; evento de atleta no presentado; aparece al final del ranking sin posición |
+| [[sede]] | Value object de Torneo; ubicación física del evento (nombre, ciudad, país) |
+| [[entidad-organizadora]] | Value object de Torneo; organismo institucional responsable; distinto del rol Organizador |
 
 ## Impacto
 
