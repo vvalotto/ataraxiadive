@@ -53,7 +53,7 @@ El área de ejecución concentra las reglas más complejas del dominio: tarjetas
 Gestión del torneo incluye: creación, configuración de disciplinas, inscripciones, etapas reversibles, y cierre sin eliminación de datos.
 
 **Recorrido (estado actual):**
-`[[RF-gestion-torneo]]` → `[[torneo]]` (concepto) → `[[arquitectura/torneo]]`
+`[[RF-gestion-torneo]]` → `[[torneo]]` (concepto) → `[[arquitectura/bc-torneo]]`
 
 **Regla clave documentada:** las disciplinas son configurables; el set inicial es STA, DNF, DBF, DYN, SPE. Las transiciones entre fases son reversibles.
 
@@ -113,7 +113,7 @@ Esta cadena vive en `docs/traceability/matrix.md`. Cuando se complete la Fase 3 
 
 | Área RF | BC principal | BC secundario |
 |---------|-------------|--------------|
-| Gestión del torneo | [[arquitectura/torneo]] | [[arquitectura/competencia]] |
+| Gestión del torneo | [[arquitectura/bc-torneo]] | [[arquitectura/competencia]] |
 | Inscripción de atletas | [[arquitectura/registro]] | — |
 | Preparación | [[arquitectura/competencia]] | [[arquitectura/registro]] |
 | Ejecución | [[arquitectura/competencia]] | — |

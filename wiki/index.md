@@ -4,8 +4,8 @@
 > El LLM actualiza este archivo en cada operación de ingest.
 > Leer este archivo primero al responder cualquier consulta.
 
-**Última actualización:** 2026-05-21
-**Total de páginas:** 231
+**Última actualización:** 2026-05-22
+**Total de páginas:** 235
 
 ---
 
@@ -19,7 +19,7 @@
 | Trazabilidad (RF semilla) | 8 | 🔄 Ingest parcial (fuente 3/7) |
 | Investigación | 5 | ✅ Ingest completo (HITOs + experimento) |
 | Conceptos de dominio | 16 | ✅ 9 originales + 7 nuevos (L6 lint-001 resuelto) |
-| Impacto | 0 | ⏳ Pendiente Fase 3 final |
+| Impacto | 4 | ✅ 4 páginas de análisis (L5 lint-001 resuelto) |
 | Estado del proyecto | 1 | ✅ Fase 3 completa — síntesis BL-000..BL-006 + SP7 en curso |
 | Salud / lint | 2 | ✅ calidad-BL-006 + lint-001 ejecutado (Fase 4 completa) |
 | Vistas | 6 / 6 | ✅ Fase 2 completa — 6 vistas operativas |
@@ -31,7 +31,7 @@
 | Página | Tipo DDD | Persistencia | Responsabilidad |
 |--------|----------|-------------|-----------------|
 | [[competencia]] | Core Domain | Event Sourcing | Grilla, performances, tarjetas, trazabilidad deportiva |
-| [[torneo]] | Supporting | CRUD | Ciclo de vida del torneo, sede, entidad organizadora |
+| [[bc-torneo]] | Supporting | CRUD | Ciclo de vida del torneo, sede, entidad organizadora |
 | [[registro]] | Supporting | CRUD | Atletas, inscripciones, validación de participación |
 | [[resultados]] | Supporting | CRUD + stream | Rankings derivados, overall, exportación |
 | [[identidad]] | Generic | CRUD | Usuarios, roles, JWT — cross-cutting |
@@ -221,9 +221,12 @@
 
 ## Impacto
 
-*Vacío — pendiente construcción (acción prioritaria lint-001 L5)*
-
-Ver vista [[impacto]] para guía de construcción. Candidatos identificados: EventStorePort, AtletaRepositoryPort, CategoriaShared, BC-Identidad.
+| Página | Componente | Riesgo |
+|--------|-----------|--------|
+| [[event-store-port]] | EventStorePort — contrato append-only; 2 BCs Event Sourcing | Muy alto |
+| [[atleta-nombre-port]] | AtletaNombrePort / registro.db cross-BC — lectura directa desde Competencia y Resultados | Medio |
+| [[categoria-shared]] | Categoria StrEnum — ADR-022 pendiente; imports cross-BC desde Resultados | Medio |
+| [[bc-identidad]] | BC Identidad JWT — 3 BCs Conformist; cambio de claims impacta todos | Muy alto |
 
 ## Estado del proyecto
 

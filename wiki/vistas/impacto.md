@@ -51,7 +51,7 @@ Resultados ──eventos──► Notificaciones
 ### 1. ¿Qué BCs se ven afectados si cambio el contrato JWT de Identidad?
 
 **Todos los BCs** consumen JWT de Identidad con patrón Conformist. Un cambio en el esquema de claims (`userId`, `rol`) impacta:
-- `[[arquitectura/torneo]]` — valida JWT en cada request
+- `[[arquitectura/bc-torneo]]` — valida JWT en cada request
 - `[[arquitectura/registro]]` — valida JWT en cada request
 - `[[arquitectura/competencia]]` — valida JWT en cada request
 
@@ -106,7 +106,7 @@ Torneo es upstream de Registro. El evento `InscripcionHabilitada` transporta:
 Un cambio en cualquiera de estos campos impacta la lógica de Registro que los consume.
 
 **Recorrido:**
-`[[arquitectura/torneo]]` → `[[arquitectura/context-map]]` sección "Torneo → Registro" → `[[arquitectura/registro]]`
+`[[arquitectura/bc-torneo]]` → `[[arquitectura/context-map]]` sección "Torneo → Registro" → `[[arquitectura/registro]]`
 
 **Riesgo:** medio. Cambio de contrato de evento requiere migración coordinada.
 
@@ -150,13 +150,13 @@ El esquema de `events` (tabla SQLite) está definido en [[ADR-008-event-store-sq
 Las reglas de tarjetas y disciplinas se modelan como datos configurables ([[ADR-004-reglas-como-datos]]). El código no asume un conjunto fijo.
 
 **Partes a revisar:**
-- `[[arquitectura/torneo]]` — gestiona el catálogo de disciplinas
+- `[[arquitectura/bc-torneo]]` — gestiona el catálogo de disciplinas
 - `[[arquitectura/competencia]]` — valida y registra según las reglas vigentes
 - `[[ADR-014-penalizaciones-acumulables]]` — lógica de acumulación; ¿el nuevo tipo la sigue?
 - Tests BDD en `tests/features/` que asumen disciplinas o tarjetas específicas
 
 **Recorrido:**
-`[[ADR-004-reglas-como-datos]]` → `[[ADR-014-penalizaciones-acumulables]]` → `[[arquitectura/torneo]]` → `[[arquitectura/competencia]]`
+`[[ADR-004-reglas-como-datos]]` → `[[ADR-014-penalizaciones-acumulables]]` → `[[arquitectura/bc-torneo]]` → `[[arquitectura/competencia]]`
 
 ---
 

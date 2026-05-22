@@ -20,7 +20,7 @@ bcs_afectados: [todos]
 | BC | Tipo | Persistencia | Rol |
 |----|------|:-----------:|-----|
 | [[competencia]] | Core Domain | Event Sourcing | Lógica no trivial; auditoría regulatoria |
-| [[torneo]] | Supporting | CRUD | Ciclo de vida del torneo; catálogos de disciplinas/categorías |
+| [[bc-torneo]] | Supporting | CRUD | Ciclo de vida del torneo; catálogos de disciplinas/categorías |
 | [[registro]] | Supporting | CRUD | Datos de atletas; inscripciones; anuncios |
 | [[resultados]] | Supporting | CRUD + proyecciones | Cálculo derivado de eventos de Competencia |
 | [[identidad]] | Generic | CRUD | Cross-cutting de autenticación y roles |

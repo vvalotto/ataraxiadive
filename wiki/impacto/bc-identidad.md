@@ -37,7 +37,7 @@ Los guards de autorización (`AtletaDep`, `JuezDep`, `OrganizadorDep`) se define
 | BC | Rol | Tipo de dependencia |
 |----|-----|-------------------|
 | [[arquitectura/identidad]] | Emisor del JWT — propietario del contrato | — |
-| [[arquitectura/torneo]] | Conformist | Valida JWT en cada request via `OrganizadorDep` |
+| [[arquitectura/bc-torneo]] | Conformist | Valida JWT en cada request via `OrganizadorDep` |
 | [[arquitectura/registro]] | Conformist | Valida JWT en cada request via `AtletaDep`, `JuezDep`, `OrganizadorDep` |
 | [[arquitectura/competencia]] | Conformist | Valida JWT en cada request via `JuezDep`, `OrganizadorDep` |
 | [[arquitectura/notificaciones]] | Sin dependencia directa | Downstream de eventos, no de requests de usuario |
@@ -102,7 +102,7 @@ Request con JWT → BC Torneo/Registro/Competencia
 [[arquitectura/identidad]]
   → [[ADR-020-modelo-usuarios-roles]] (multi-rol + perfiles en Registro)
   → [[arquitectura/context-map]] sección "Identidad → Torneo, Registro, Competencia"
-  → [[arquitectura/torneo]] / [[arquitectura/registro]] / [[arquitectura/competencia]]
+  → [[arquitectura/bc-torneo]] / [[arquitectura/registro]] / [[arquitectura/competencia]]
     (cada uno, sección "Auth / Restricciones")
 ```
 

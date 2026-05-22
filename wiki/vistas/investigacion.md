@@ -80,7 +80,7 @@ AtaraxiaDive es un caso de estudio excepcionalmente bueno: dominio de primera ma
 |--------------|---------------|-------------|
 | Performance aggregate + invariantes | Semana 4 — Aggregates y DDD | `[[arquitectura/competencia]]` + `[[performance]]` |
 | Event Sourcing para auditoría | Semana 8 — Eventos de dominio | `[[ADR-001-event-sourcing-competencia]]` |
-| Máquina de estados del Torneo | Semana 6 — State machines como UL | `[[arquitectura/torneo]]` + `[[torneo]]` |
+| Máquina de estados del Torneo | Semana 6 — State machines como UL | `[[arquitectura/bc-torneo]]` + `[[torneo]]` |
 | Reglas como datos (disciplinas) | Semana 10 — Configurabilidad | `[[ADR-004-reglas-como-datos]]` |
 | Pattern UAT híbrido sin POST | Semana 12 — Testing de dominio | `[[uat-metodologia]]` |
 

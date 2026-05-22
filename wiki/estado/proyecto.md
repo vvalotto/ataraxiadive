@@ -67,7 +67,7 @@ sources:
 |----|----------|:---:|:---:|:---:|---|
 | [[competencia]] | Core Domain · Event Sourcing | 0.459 | = | WARNING | estable |
 | [[notificaciones]] | Generic · Event Sourcing | 0.450 | = | WARNING | estable |
-| [[torneo]] | Supporting · CRUD | 0.479 | ↑ leve | WARNING | estable |
+| [[bc-torneo]] | Supporting · CRUD | 0.479 | ↑ leve | WARNING | estable |
 | [[registro]] | Supporting · CRUD | 0.583 | ↑ | **CRITICAL** | SP-ADJ-11 agregó Juez+Organizador (infra nueva) |
 | [[identidad]] | Generic · CRUD | 0.652 | ↓ mejora | **CRITICAL** | SP-ADJ-11 refactorizó domain; mejora de 0.87→0.67→0.65 |
 | [[shared]] | Cross-cutting | 0.635 | = | **CRITICAL** | diferido post-v1.0 — fan-out estructural |

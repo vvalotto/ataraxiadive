@@ -14,7 +14,7 @@ sources:
 | BC | Tipo DDD | Persistencia | Responsabilidad |
 |----|----------|--------------|-----------------|
 | [[competencia]] | Core Domain | Event Sourcing | Ejecución deportiva: grilla, performances, tarjetas |
-| [[torneo]] | Supporting | CRUD | Ciclo de vida del torneo y contexto organizativo |
+| [[bc-torneo]] | Supporting | CRUD | Ciclo de vida del torneo y contexto organizativo |
 | [[registro]] | Supporting | CRUD | Atletas, inscripciones y participación |
 | [[resultados]] | Supporting | CRUD + stream propio | Rankings derivados y publicación |
 | [[identidad]] | Generic | CRUD | Usuarios, roles, JWT |

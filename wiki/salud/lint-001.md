@@ -92,7 +92,7 @@ Todos los BCs tienen una sección `### Cobertura` en sus páginas. Sin embargo, 
 | [[competencia]] | ✅ Numérica: "≥ 90% (BL-001..BL-006)" + BDD features referenciadas |
 | [[registro]] | ✅ Numérica: "≥ 90% domain/ + application/" |
 | [[resultados]] | ✅ Cualitativa con dato concreto: "91 tests en US-5.6.4" |
-| [[torneo]] | 🟡 Solo prosa: "estable sin cambios desde BL-003" |
+| [[bc-torneo]] | 🟡 Solo prosa: "estable sin cambios desde BL-003" |
 | [[identidad]] | 🟡 Solo prosa: "BC genérico con pocos cambios" |
 | [[notificaciones]] | 🟡 Solo prosa: "política exactly-once verificada" |
 
@@ -136,7 +136,7 @@ Conceptos presentes en el código fuente (`src/`) sin página propia:
 | `penalizacion` | `competencia/domain/` | Concepto con tipos (técnica, DQ), invariantes de acumulación (ADR-014) |
 | `ranking` | `resultados/domain/` | Dos tipos: por competencia y overall; algoritmos FAAS/CMAS/AIDA diferenciados |
 | `dns` (Did-Not-Start) | `competencia/domain/events/` | Evento crítico: atleta que no completa la performance; afecta ranking |
-| `sede` | `torneo/domain/` | Entidad de dominio: localización del torneo; no cubierta en [[torneo]] |
+| `sede` | `torneo/domain/` | Entidad de dominio: localización del torneo; no cubierta en [[bc-torneo]] |
 | `entidad_organizadora` | `torneo/domain/` | Organismo responsable del torneo; relacionado con tipo de reglamento |
 
 **Nota:** El concepto `ap` (anuncio previo / announced performance) está parcialmente cubierto en [[anuncio]], pero el término técnico `ap_declarado` vs `ap_registrado` no está diferenciado.

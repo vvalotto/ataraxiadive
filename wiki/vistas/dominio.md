@@ -30,7 +30,7 @@ Domain expert, nuevo integrante del equipo, product owner.
 AtaraxiaDive gestiona torneos de apnea competitiva: desde la inscripción de atletas hasta el registro de performances en tiempo real y la publicación de resultados.
 
 **Recorrido:**
-`[[torneo]]` (concepto) → `[[arquitectura/torneo]]` → `[[arquitectura/competencia]]` → `[[arquitectura/resultados]]`
+`[[torneo]]` (concepto) → `[[arquitectura/bc-torneo]]` → `[[arquitectura/competencia]]` → `[[arquitectura/resultados]]`
 
 ---
 
@@ -82,7 +82,7 @@ El sistema aplica DDD estratégico: cada BC tiene una base de datos propia, sin 
 | BC | Tipo DDD | Responsabilidad |
 |----|----------|----------------|
 | [[arquitectura/competencia]] | Core Domain | Grilla, performances, tarjetas, trazabilidad deportiva |
-| [[arquitectura/torneo]] | Supporting | Ciclo de vida del torneo, sede, disciplinas |
+| [[arquitectura/bc-torneo]] | Supporting | Ciclo de vida del torneo, sede, disciplinas |
 | [[arquitectura/registro]] | Supporting | Atletas, inscripciones, validación de participación |
 | [[arquitectura/resultados]] | Supporting | Rankings derivados, overall, exportación |
 | [[arquitectura/identidad]] | Generic | Usuarios, roles, JWT — cross-cutting |

@@ -43,7 +43,7 @@ sources:
 | `app.py` (cross-cutting) | **21** | LongMethod (14) · DataClumps (5) |
 | [[arquitectura/identidad]] | **21** | LongMethod (8) · FeatureEnvy (8) · DataClumps (2) |
 | [[arquitectura/notificaciones]] | **18** | LongMethod (10) · FeatureEnvy (7) |
-| [[arquitectura/torneo]] | **15** | FeatureEnvy (8) · LongMethod (2) |
+| [[arquitectura/bc-torneo]] | **15** | FeatureEnvy (8) · LongMethod (2) |
 | `shared/` | **5** | LongMethod (5) |
 | **Total** | **287** | |
 
@@ -93,7 +93,7 @@ sources:
 |----|:---:|:---:|:---:|:---:|---------|
 | [[arquitectura/notificaciones]] | 0.450 | 0.450 | = | WARNING | Aceptado |
 | [[arquitectura/competencia]] | 0.459 | 0.459 | = | WARNING | Aceptado |
-| [[arquitectura/torneo]] | 0.479 | 0.476 | ↑ leve | WARNING | Aceptado |
+| [[arquitectura/bc-torneo]] | 0.479 | 0.476 | ↑ leve | WARNING | Aceptado |
 | [[arquitectura/resultados]] | < umbral | < umbral | = | INFO | ✅ Saludable |
 | [[arquitectura/registro]] | 0.583 | 0.592 | ↑ | **CRITICAL** | Diferido post-v1.0 |
 | `shared/` | 0.635 | 0.635 | = | **CRITICAL** | Diferido post-v1.0 (AA-04) |

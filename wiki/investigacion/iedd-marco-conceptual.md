@@ -103,4 +103,4 @@ La implementación resulta **derivable** a partir de esa especificación.
 - Ver [[iedd-hipotesis-experimento]] para la hipótesis central del ensayo y la evidencia acumulada.
 - Ver [[uat-metodologia]] para la política de validación funcional E2E.
 - AtaraxiaDive es el laboratorio experimental de este marco — ver [[investigacion/hipotesis-experimento]].
-- Los BCs del proyecto materializan el modelo: [[competencia]], [[torneo]], [[registro]], [[resultados]], [[identidad]], [[notificaciones]].
+- Los BCs del proyecto materializan el modelo: [[competencia]], [[bc-torneo]], [[registro]], [[resultados]], [[identidad]], [[notificaciones]].

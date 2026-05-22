@@ -25,8 +25,8 @@ Disciplinas, categorías y reglas de tarjetas se almacenan en la base de datos y
 
 | Tabla | BC propietario | SQLite |
 |-------|---------------|--------|
-| `discipline_config` | [[torneo]] | `torneo.db` |
-| `category_config` | [[torneo]] | `torneo.db` |
+| `discipline_config` | [[bc-torneo]] | `torneo.db` |
+| `category_config` | [[bc-torneo]] | `torneo.db` |
 | `card_rule_config` | [[competencia]] | `competencia.db` |
 
 - Las **invariantes de dominio** (ej: "una performance cerrada no puede modificarse") siguen en el código — son modelo, no configuración.
