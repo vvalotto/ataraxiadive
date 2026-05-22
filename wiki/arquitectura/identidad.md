@@ -90,4 +90,10 @@ Volumen bajo. LongMethod y FeatureEnvy en los handlers de autenticación (JWT + 
 
 ### Cobertura
 
-Tests desde SP3. BC genérico con pocos cambios post-SP-ADJ-11.
+Tests desde SP3. Suite ampliada en SP-ADJ-11 (modelo multi-rol — 10 US nuevas).
+
+**UAT SP6 — flows que ejercen este BC:**
+- F-01 Setup inicial y configuración (login, JWT) ✅
+- Todos los flows requieren autenticación válida (Identidad es cross-cutting) ✅
+
+**Nota:** % de cobertura numérico no disponible en BL-006 — pendiente de `pytest --cov`. D mejora sostenidamente (0.87 BL-004 → 0.65 BL-006), lo que indica incremento de tests relativos a la complejidad del BC.

@@ -32,9 +32,18 @@ Requerimientos funcionales del área de resultados. Fuente: elicitación inicial
 
 ## Pendientes en elicitación
 
-| ID | Pendiente |
-|----|-----------|
-| RF-PM-01 | Sistema de puntos vs marca absoluta — regla de negocio configurable no definida |
+| ID | Pendiente | Clasificación |
+|----|-----------|---------------|
+| RF-PM-01 | Sistema de puntos vs marca absoluta — regla de negocio configurable no definida | **Backlog activo** — la decisión de diseño es pendiente; el algoritmo FAAS existe |
+
+## Estado de implementación (lint-001)
+
+RF-PM-01 no tiene US asociada explícita como "sistema de puntos", pero hay implementación parcial:
+- SP5 implementó `AlgoritmoPuntaje` (US-5.6.1..US-5.6.6) con método de puntaje FAAS
+- El ranking actual usa **marca absoluta** como criterio primario
+- El puntaje FAAS es opcional y no está integrado en el flujo principal de ranking
+
+**Lo que falta:** decidir si el sistema de puntos reemplaza o complementa el ranking por marca. Candidato a US en SP8 una vez definida la regla de negocio con el dominio experto.
 
 ## BCs que implementan esta área
 

@@ -39,9 +39,18 @@ Requerimientos funcionales del área de ejecución. Fuente: elicitación inicial
 
 ## Pendientes en elicitación
 
-| ID | Pendiente |
-|----|-----------|
-| RF-EJ-04 | Códigos de penalización específicos (AIDA/CMAS u otro reglamento) |
+| ID | Pendiente | Clasificación |
+|----|-----------|---------------|
+| RF-EJ-04 | Códigos de penalización específicos (AIDA/CMAS u otro reglamento) | **Backlog activo** — la infraestructura técnica existe; solo falta definir los códigos |
+
+## Estado de implementación (lint-001)
+
+RF-EJ-04 no tiene US asociada, pero la infraestructura para penalizaciones está implementada:
+- El modelo `PenalizacionTecnica` (código + deducción) existe en [[competencia]]
+- Los códigos son configurables como datos ([[ADR-004-reglas-como-datos]] — `card_rule_config`)
+- El concepto está documentado en [[penalizacion]]
+
+**Lo que falta:** definir y cargar los códigos de penalización AIDA/CMAS/FAAS en `card_rule_config`. No requiere cambio de código — solo de configuración. Candidato a US en SP8.
 
 ## BCs que implementan esta área
 

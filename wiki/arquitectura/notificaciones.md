@@ -108,4 +108,10 @@ Segundo menor volumen WARNING. LongMethod en `EnviarNotificacionHandler` (orques
 
 ### Cobertura
 
-Tests desde SP4 (INC-4.5). Política de exactly-once delivery verificada en integración.
+Tests de integración desde SP4 (INC-4.5). Suite cubre el ciclo de vida completo de `Notificacion` y la política de idempotencia (`EventoFuenteId`).
+
+**UAT SP6 — flows que ejercen este BC:**
+- F-04 Inscripción abierta — email de confirmación vía P-10 ✅
+- F-09 Resultados publicados — email a atletas vía P-11 ✅ (waiver: dataset parcial)
+
+**Nota:** % de cobertura numérico no disponible en BL-006 — pendiente de `pytest --cov`. El adaptador `LoggingEmailAdapter` permite tests sin depender de Resend API.

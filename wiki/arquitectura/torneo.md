@@ -93,4 +93,11 @@ El menor volumen WARNING de los BCs funcionales. FeatureEnvy estructural en los 
 
 ### Cobertura
 
-Tests de integración y BDD desde SP3. BC estable sin cambios arquitectónicos desde BL-003.
+Tests de integración desde SP3. BC estable sin cambios arquitectónicos desde BL-003; sin US nueva desde SP-ADJ-07.
+
+**UAT SP6 — flows que ejercen este BC:**
+- F-02 Creación de torneo ✅
+- F-05 Preparación de competencia (transición de estado) ✅
+- F-10 Cierre de torneo ✅
+
+**Nota:** % de cobertura numérico no disponible en BL-006 — pendiente de `pytest --cov` en próximo gate. Los 3 flows UAT pasaron sin waiver.

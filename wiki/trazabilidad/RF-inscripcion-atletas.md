@@ -38,9 +38,15 @@ Requerimientos funcionales del área de inscripción. Fuente: elicitación inici
 
 ## Pendientes en elicitación
 
-| ID | Pendiente |
-|----|-----------|
-| RF-IN-07 | Resolución de conflictos entre datos ingresados y BD externa de atletas |
+| ID | Pendiente | Clasificación |
+|----|-----------|---------------|
+| RF-IN-07 | Resolución de conflictos entre datos ingresados y BD externa de atletas | **Indefinido** — depende de definir RF-IG-01 (¿existe BD externa FAAS? ¿qué protocolo?) |
+
+## Estado de implementación (lint-001)
+
+RF-IN-07 no tiene US asociada. La indefinición es de negocio, no técnica: la integración con BD externa está en el área RF-IG sin definir desde la elicitación inicial (feb 2026).
+
+**Acción si se planea SP8:** definir primero el área RF-IG completa antes de derivar US para RF-IN-07.
 
 ## BCs que implementan esta área
 

@@ -6,6 +6,23 @@
 
 ---
 
+## [2026-05-22] ingest | L3+L4 lint-001 — RFs pendientes clasificados + cobertura BC enriquecida
+
+Páginas actualizadas: 7 (4 RF + 3 BC)
+
+**L3 — RFs pendientes clasificados:**
+- `RF-inscripcion-atletas.md` — RF-IN-07 marcado como Indefinido (depende de RF-IG)
+- `RF-ejecucion.md` — RF-EJ-04 marcado como Backlog activo (infraestructura lista, faltan códigos config)
+- `RF-resultados.md` — RF-PM-01 marcado como Backlog activo (AlgoritmoPuntaje implementado pero no integrado)
+- `RF-notificaciones.md` — RF-NT-03 marcado como Backlog activo (P-10/P-11 existen; falta PushAdapter + triggers)
+
+**L4 — Cobertura BC enriquecida:**
+- `wiki/arquitectura/torneo.md` — flows UAT F-02/F-05/F-10; nota % pendiente `pytest --cov`
+- `wiki/arquitectura/identidad.md` — flows UAT F-01 + cross-cutting; tendencia D positiva documentada
+- `wiki/arquitectura/notificaciones.md` — flows UAT F-04/F-09; nota LoggingEmailAdapter para tests sin Resend
+
+---
+
 ## [2026-05-22] ingest | L6 lint-001 — 7 conceptos de dominio sin página (resolución de gap menor)
 
 Páginas creadas: 7 | Páginas actualizadas: 1 (index.md)

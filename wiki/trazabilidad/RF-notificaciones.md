@@ -32,9 +32,18 @@ Requerimientos funcionales del área de notificaciones. Fuente: elicitación ini
 
 ## Pendientes en elicitación
 
-| ID | Pendiente |
-|----|-----------|
-| RF-NT-03 | Notificaciones al juez u organizador durante ejecución |
+| ID | Pendiente | Clasificación |
+|----|-----------|---------------|
+| RF-NT-03 | Notificaciones al juez u organizador durante ejecución | **Backlog activo** — la infraestructura de notificaciones existe; falta definir triggers |
+
+## Estado de implementación (lint-001)
+
+RF-NT-03 no tiene US asociada. Las notificaciones implementadas son todas hacia atletas (P-10, P-11). Notificaciones hacia el juez u organizador durante ejecución requieren:
+1. Definir qué eventos disparan la notificación (¿llamado de atleta? ¿DNS? ¿inicio de disciplina?)
+2. Definir canal (email no aplica durante ejecución — posiblemente push)
+3. El adaptador `PushPort` está diseñado pero no implementado (solo existe `EmailPort`)
+
+**Lo que falta:** definir triggers + implementar `PushAdapter`. El BC [[notificaciones]] está preparado para recibir nuevas políticas. Candidato a US en SP8.
 
 ## BCs que implementan esta área
 
