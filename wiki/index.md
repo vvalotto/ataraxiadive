@@ -5,7 +5,7 @@
 > Leer este archivo primero al responder cualquier consulta.
 
 **Última actualización:** 2026-05-22
-**Total de páginas:** 235
+**Total de páginas:** 236
 
 ---
 
@@ -227,6 +227,12 @@
 | [[atleta-nombre-port]] | AtletaNombrePort / registro.db cross-BC — lectura directa desde Competencia y Resultados | Medio |
 | [[categoria-shared]] | Categoria StrEnum — ADR-022 pendiente; imports cross-BC desde Resultados | Medio |
 | [[bc-identidad]] | BC Identidad JWT — 3 BCs Conformist; cambio de claims impacta todos | Muy alto |
+
+## Guía de uso
+
+| Página | Descripción |
+|--------|-------------|
+| [[guia-uso]] | Cómo interactuar con el wiki: consultas, vistas, ingest, lint, triggers y componentes de alto riesgo |
 
 ## Estado del proyecto
 
