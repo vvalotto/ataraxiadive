@@ -23,12 +23,9 @@ QA, auditor de calidad, desarrollador implementando o modificando un requerimien
 
 ## Estado actual del wiki
 
-> ⚠️ **Fase 3 pendiente.** Las páginas de trazabilidad por US no existen todavía en el wiki.
-> Existen las 8 páginas RF semilla (requerimientos por área), pero no la cadena
-> RF → US → código → tests → cierre.
->
-> Para trazabilidad vigente hasta que se complete la Fase 3, la fuente primaria es:
-> **`docs/traceability/matrix.md`** — la matriz canónica del proyecto.
+✅ **Fase 3 completa.** 185 páginas de trazabilidad por US disponibles (SP1–SP7 + SP-ADJ-01 a SP-ADJ-11).
+
+La cadena `RF → US → código → tests → cierre` es navegable directamente desde el wiki para todos los SPs cerrados. La fuente complementaria sigue siendo `docs/traceability/matrix.md` para búsquedas tabulares.
 
 ---
 
