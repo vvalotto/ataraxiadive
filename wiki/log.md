@@ -6,6 +6,24 @@
 
 ---
 
+## [2026-05-22] lint | lint-001 — Primera auditoría del wiki (Fase 4)
+
+Páginas auditadas: 232 | Hallazgos: 8 categorías
+
+**Resultados:**
+- L1 (PostgreSQL vigente): ✅ LIMPIO
+- L2 (ADRs contradictorios): ✅ LIMPIO
+- L3 (RFs sin US): 🟡 8 RFs pendientes (4 backlog real + 4 integración indefinida)
+- L4 (BCs sin cobertura numérica): 🟡 torneo/identidad/notificaciones solo tienen cobertura en prosa
+- L5 (impacto vacío): 🔴 wiki/impacto/ tiene 0 páginas — prioridad 1
+- L6 (conceptos sin página): 🟡 7 conceptos (inscripcion y categoria, prioritarios)
+- L7 (páginas huérfanas): 🟡 14 páginas sin wikilink en index (SP6-INC-6.6, SP-ADJ-10, SP7, proyecto)
+- L8 (inconsistencias estructurales): 🔴 directorio arquitectura/ vs bounded-contexts/ + index desactualizado
+
+**Páginas creadas:** `wiki/salud/lint-001.md`
+
+---
+
 ## [2026-05-21] ingest | Fase 3 — snapshot de calidad BL-006 (wiki/salud/)
 
 Páginas creadas: 1

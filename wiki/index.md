@@ -15,13 +15,13 @@
 |---------|---------|--------|
 | Bounded Contexts | 7 / 7 | ✅ Ingest completo + métricas de salud BL-006 (ArchitectAnalyst + DesignReviewer) |
 | Decisiones (ADRs) | 22 / 22 | ✅ Ingest completo |
-| Trazabilidad (US) | 169 | 🔄 SP1–SP6 + SP-ADJ-01 a SP-ADJ-11 completos; SP7 INC-7.1.1 ✅ + INC-7.1.2/INC-7.2 ⏳ |
+| Trazabilidad (US) | 185 | ✅ SP1–SP7 + SP-ADJ-01 a SP-ADJ-11 completos; SP7 INC-7.1 + INC-7.2 documentados |
 | Trazabilidad (RF semilla) | 8 | 🔄 Ingest parcial (fuente 3/7) |
 | Investigación | 5 | ✅ Ingest completo (HITOs + experimento) |
 | Conceptos de dominio | 9 | 🔄 Ingest parcial (fuente 1/6 + enriquecimiento) |
 | Impacto | 0 | ⏳ Pendiente Fase 3 final |
 | Estado del proyecto | 1 | ✅ Fase 3 completa — síntesis BL-000..BL-006 + SP7 en curso |
-| Salud / lint | 1 | 🔄 calidad-BL-006 ingresado; lint-001 pendiente Fase 4 |
+| Salud / lint | 2 | ✅ calidad-BL-006 + lint-001 ejecutado (Fase 4 completa) |
 | Vistas | 6 / 6 | ✅ Fase 2 completa — 6 vistas operativas |
 
 ---
@@ -182,9 +182,21 @@
 
 [[US-6.4.1]] [[US-6.4.2]] [[US-6.4.3]] [[US-6.4.4]] [[US-6.4.5]] [[US-6.4.6]]
 
+#### SP6 — API Pública (INC-6.6)
+
+[[US-6.6.1]] [[US-6.6.2]] [[US-6.6.3]] [[US-6.6.4]]
+
+#### SP-ADJ-10 — Edición de torneo post-cierre
+
+[[US-ADJ-10.1]] [[US-ADJ-10.2]] [[US-ADJ-10.3]] [[US-ADJ-10.4]]
+
 #### SP-ADJ-11 — Modelo de usuarios con múltiples roles
 
 [[US-ADJ-11.1]] [[US-ADJ-11.2]] [[US-ADJ-11.3]] [[US-ADJ-11.4]] [[US-ADJ-11.5]] [[US-ADJ-11.6]] [[US-ADJ-11.7]] [[US-ADJ-11.8]] [[US-ADJ-11.9]] [[US-ADJ-11.10]]
+
+#### SP7 — Despliegue (INC-7.1 + INC-7.2)
+
+[[US-7.1.1]] [[US-7.1.2]] · [[US-7.2.1]] [[US-7.2.2]] [[US-7.2.3]]
 
 ## Conceptos de dominio
 
@@ -202,11 +214,15 @@
 
 ## Impacto
 
-*Vacío — pendiente Fase 2 (construcción de vistas)*
+*Vacío — pendiente construcción (acción prioritaria lint-001 L5)*
+
+Ver vista [[impacto]] para guía de construcción. Candidatos identificados: EventStorePort, AtletaRepositoryPort, CategoriaShared, BC-Identidad.
 
 ## Estado del proyecto
 
-*Vacío — pendiente Fase 3 (ingest de estado)*
+| Página | Descripción |
+|--------|-------------|
+| [[proyecto]] | Estado unificado del proyecto — síntesis BL-000..BL-006, SP activo, US cerradas |
 
 ## Investigación
 
