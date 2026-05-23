@@ -30,7 +30,7 @@ Domain expert, nuevo integrante del equipo, product owner.
 AtaraxiaDive gestiona torneos de apnea competitiva: desde la inscripción de atletas hasta el registro de performances en tiempo real y la publicación de resultados.
 
 **Recorrido:**
-`[[torneo]]` (concepto) → `[[arquitectura/bc-torneo]]` → `[[arquitectura/competencia]]` → `[[arquitectura/resultados]]`
+[[torneo]] (concepto) → [[arquitectura/bc-torneo]] → [[arquitectura/competencia]] → [[arquitectura/resultados]]
 
 ---
 
@@ -39,7 +39,7 @@ AtaraxiaDive gestiona torneos de apnea competitiva: desde la inscripción de atl
 Una [[performance]] es la actuación de un atleta en una disciplina. Es el concepto más rico del dominio: puede terminar en válida (tarjeta blanca), descalificación (tarjeta roja), DNS o black-out.
 
 **Recorrido:**
-`[[performance]]` → `[[tarjeta]]` → `[[anuncio]]` → `[[arquitectura/competencia]]`
+[[performance]] → [[tarjeta]] → [[anuncio]] → [[arquitectura/competencia]]
 
 El aggregate `Performance` en el BC Competencia es el custodio del ciclo de vida completo. Las correcciones de resultado no mutan estado previo: agregan nuevos eventos.
 
@@ -55,7 +55,7 @@ El aggregate `Performance` en el BC Competencia es el custodio del ciclo de vida
 | [[grilla]] | Planilla de salida: qué atleta compite en qué orden dentro de una disciplina. Se genera y puede ajustarse en Preparación. |
 
 **Recorrido:**
-`[[disciplina]]` → `[[grilla]]` → `[[arquitectura/competencia]]` → `[[ADR-004-reglas-como-datos]]`
+[[disciplina]] → [[grilla]] → [[arquitectura/competencia]] → [[ADR-004-reglas-como-datos]]
 
 ---
 
@@ -71,7 +71,7 @@ El sistema define cuatro roles con responsabilidades diferenciadas. Ver [[roles]
 | Administrador | Gestiona usuarios y acceso al sistema |
 
 **Recorrido:**
-`[[roles]]` → `[[arquitectura/identidad]]` → `[[ADR-020-modelo-usuarios-roles]]`
+[[roles]] → [[arquitectura/identidad]] → [[ADR-020-modelo-usuarios-roles]]
 
 ---
 
@@ -89,7 +89,7 @@ El sistema aplica DDD estratégico: cada BC tiene una base de datos propia, sin 
 | [[arquitectura/notificaciones]] | Generic | Ciclo de vida de notificaciones, exactly-once delivery |
 
 **Recorrido:**
-`[[arquitectura/context-map]]` → `[[ADR-005-bounded-contexts-ddd-estrategico]]` → `[[ADR-006-estructura-bc-first]]`
+[[arquitectura/context-map]] → [[ADR-005-bounded-contexts-ddd-estrategico]] → [[ADR-006-estructura-bc-first]]
 
 ---
 
@@ -104,7 +104,7 @@ Reglas clave con impacto directo en el modelo:
 - El [[anuncio]] previo es la marca declarada por el atleta, que condiciona el puntaje final
 
 **Recorrido:**
-`[[ADR-004-reglas-como-datos]]` → `[[ADR-014-penalizaciones-acumulables]]` → `[[performance]]` → `[[tarjeta]]`
+[[ADR-004-reglas-como-datos]] → [[ADR-014-penalizaciones-acumulables]] → [[performance]] → [[tarjeta]]
 
 ---
 
@@ -114,12 +114,12 @@ Estas páginas son el punto de entrada más frecuente para consultas de dominio:
 
 | Página | Por qué es hub |
 |--------|----------------|
-| `[[arquitectura/competencia]]` | Core Domain; concentra la mayor lógica de negocio |
-| `[[performance]]` | Concepto más rico; relaciona tarjeta, disciplina, atleta, anuncio |
-| `[[roles]]` | Describe quién hace qué en cada etapa del torneo |
-| `[[grilla]]` | Estructura de la competencia; punto de entrada a la ejecución |
-| `[[arquitectura/context-map]]` | Mapa de integración entre los seis BCs |
-| `[[torneo]]` (concepto) | Punto de partida del ciclo de vida completo |
+| [[arquitectura/competencia]] | Core Domain; concentra la mayor lógica de negocio |
+| [[performance]] | Concepto más rico; relaciona tarjeta, disciplina, atleta, anuncio |
+| [[roles]] | Describe quién hace qué en cada etapa del torneo |
+| [[grilla]] | Estructura de la competencia; punto de entrada a la ejecución |
+| [[arquitectura/context-map]] | Mapa de integración entre los seis BCs |
+| [[torneo]] (concepto) | Punto de partida del ciclo de vida completo |
 
 ---
 

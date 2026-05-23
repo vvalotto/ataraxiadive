@@ -24,7 +24,7 @@ Desarrollador planificando una modificación, tech lead evaluando el alcance de 
 
 ## Mapa de dependencias del sistema
 
-Fuente: `[[arquitectura/context-map]]`. Las flechas indican dependencia (downstream depende de upstream).
+Fuente: [[arquitectura/context-map]]. Las flechas indican dependencia (downstream depende de upstream).
 
 ```
 Identidad ──Conformist (JWT)──► Torneo
@@ -51,14 +51,14 @@ Resultados ──eventos──► Notificaciones
 ### 1. ¿Qué BCs se ven afectados si cambio el contrato JWT de Identidad?
 
 **Todos los BCs** consumen JWT de Identidad con patrón Conformist. Un cambio en el esquema de claims (`userId`, `rol`) impacta:
-- `[[arquitectura/bc-torneo]]` — valida JWT en cada request
-- `[[arquitectura/registro]]` — valida JWT en cada request
-- `[[arquitectura/competencia]]` — valida JWT en cada request
+- [[arquitectura/bc-torneo]] — valida JWT en cada request
+- [[arquitectura/registro]] — valida JWT en cada request
+- [[arquitectura/competencia]] — valida JWT en cada request
 
 Notificaciones y Resultados no consumen JWT directamente (son downstream de eventos, no de requests del usuario).
 
 **Recorrido:**
-`[[arquitectura/identidad]]` → `[[arquitectura/context-map]]` → `[[ADR-020-modelo-usuarios-roles]]` → BCs afectados
+[[arquitectura/identidad]] → [[arquitectura/context-map]] → [[ADR-020-modelo-usuarios-roles]] → BCs afectados
 
 **Riesgo:** cambio de alto impacto transversal. Requiere actualización sincronizada en tres BCs.
 
@@ -69,11 +69,11 @@ Notificaciones y Resultados no consumen JWT directamente (son downstream de even
 `CompetenciaFinalizada` es el evento que desencadena el cálculo de rankings en Resultados. Es el acoplamiento más crítico del sistema.
 
 **Consumidores:**
-- `[[arquitectura/resultados]]` — fuente de verdad para el ranking final; no puede calcular sin este evento
-- `[[arquitectura/notificaciones]]` — puede recibir este evento como trigger (callbacks in-process en SP4)
+- [[arquitectura/resultados]] — fuente de verdad para el ranking final; no puede calcular sin este evento
+- [[arquitectura/notificaciones]] — puede recibir este evento como trigger (callbacks in-process en SP4)
 
 **Recorrido:**
-`[[arquitectura/competencia]]` → `[[ADR-001-event-sourcing-competencia]]` → `[[arquitectura/resultados]]` → `[[arquitectura/context-map]]`
+[[arquitectura/competencia]] → [[ADR-001-event-sourcing-competencia]] → [[arquitectura/resultados]] → [[arquitectura/context-map]]
 
 **Riesgo:** alto. Resultados depende estructuralmente de este evento para generar rankings.
 
@@ -86,11 +86,11 @@ Notificaciones y Resultados no consumen JWT directamente (son downstream de even
 **Ubicación esperada:** `src/competencia/infrastructure/adapters/atleta_nombre_adapter.py`
 
 **Impacto de un cambio:**
-- Solo `[[arquitectura/competencia]]` — el adaptador está contenido en su `infrastructure/`
+- Solo [[arquitectura/competencia]] — el adaptador está contenido en su `infrastructure/`
 - Si cambia el contrato del puerto (no solo la implementación): también los tests de integración del adaptador
 
 **Recorrido:**
-`[[arquitectura/registro]]` → `[[arquitectura/context-map]]` sección "Registro → Competencia" → `[[arquitectura/competencia]]` sección "Integraciones"
+[[arquitectura/registro]] → [[arquitectura/context-map]] sección "Registro → Competencia" → [[arquitectura/competencia]] sección "Integraciones"
 
 **Riesgo:** medio. El patrón de puerto/adaptador limita el impacto al BC consumidor. La evolución objetivo es reemplazarlo por evento `AtletaInscripto` + ACL formal.
 
@@ -106,7 +106,7 @@ Torneo es upstream de Registro. El evento `InscripcionHabilitada` transporta:
 Un cambio en cualquiera de estos campos impacta la lógica de Registro que los consume.
 
 **Recorrido:**
-`[[arquitectura/bc-torneo]]` → `[[arquitectura/context-map]]` sección "Torneo → Registro" → `[[arquitectura/registro]]`
+[[arquitectura/bc-torneo]] → [[arquitectura/context-map]] sección "Torneo → Registro" → [[arquitectura/registro]]
 
 **Riesgo:** medio. Cambio de contrato de evento requiere migración coordinada.
 
@@ -126,20 +126,20 @@ Un cambio en cualquiera de estos campos impacta la lógica de Registro que los c
 Además, concentra: dos aggregates bajo Event Sourcing, el esquema del event store, el hash SHA-256 de auditoría, las reglas de penalización y la interfaz offline del juez.
 
 **Recorrido:**
-`[[arquitectura/competencia]]` → `[[ADR-001-event-sourcing-competencia]]` → `[[ADR-008-event-store-sqlite]]` → `[[arquitectura/context-map]]`
+[[arquitectura/competencia]] → [[ADR-001-event-sourcing-competencia]] → [[ADR-008-event-store-sqlite]] → [[arquitectura/context-map]]
 
 ---
 
 ### 6. Si cambio el esquema del event store, ¿qué se ve afectado?
 
 El esquema de `events` (tabla SQLite) está definido en [[ADR-008-event-store-sqlite]]. Impacta:
-- `[[arquitectura/competencia]]` — usa el event store como fuente de verdad
-- `[[arquitectura/notificaciones]]` — tiene su propio event store con el mismo patrón
+- [[arquitectura/competencia]] — usa el event store como fuente de verdad
+- [[arquitectura/notificaciones]] — tiene su propio event store con el mismo patrón
 - Migraciones Alembic de ambos BCs (ver [[ADR-009-migraciones-por-bc]])
 - El hash SHA-256 ([[ADR-018-hash-sha256-auditoria]]) que opera sobre la secuencia de eventos
 
 **Recorrido:**
-`[[ADR-008-event-store-sqlite]]` → `[[ADR-009-migraciones-por-bc]]` → `[[ADR-018-hash-sha256-auditoria]]` → `[[arquitectura/competencia]]` → `[[arquitectura/notificaciones]]`
+[[ADR-008-event-store-sqlite]] → [[ADR-009-migraciones-por-bc]] → [[ADR-018-hash-sha256-auditoria]] → [[arquitectura/competencia]] → [[arquitectura/notificaciones]]
 
 **Riesgo:** muy alto. Cambio de esquema del event store requiere migración de datos históricos.
 
@@ -150,13 +150,13 @@ El esquema de `events` (tabla SQLite) está definido en [[ADR-008-event-store-sq
 Las reglas de tarjetas y disciplinas se modelan como datos configurables ([[ADR-004-reglas-como-datos]]). El código no asume un conjunto fijo.
 
 **Partes a revisar:**
-- `[[arquitectura/bc-torneo]]` — gestiona el catálogo de disciplinas
-- `[[arquitectura/competencia]]` — valida y registra según las reglas vigentes
-- `[[ADR-014-penalizaciones-acumulables]]` — lógica de acumulación; ¿el nuevo tipo la sigue?
+- [[arquitectura/bc-torneo]] — gestiona el catálogo de disciplinas
+- [[arquitectura/competencia]] — valida y registra según las reglas vigentes
+- [[ADR-014-penalizaciones-acumulables]] — lógica de acumulación; ¿el nuevo tipo la sigue?
 - Tests BDD en `tests/features/` que asumen disciplinas o tarjetas específicas
 
 **Recorrido:**
-`[[ADR-004-reglas-como-datos]]` → `[[ADR-014-penalizaciones-acumulables]]` → `[[arquitectura/bc-torneo]]` → `[[arquitectura/competencia]]`
+[[ADR-004-reglas-como-datos]] → [[ADR-014-penalizaciones-acumulables]] → [[arquitectura/bc-torneo]] → [[arquitectura/competencia]]
 
 ---
 
@@ -199,8 +199,8 @@ GROUP BY tipo
 
 | Página | Por qué es hub |
 |--------|----------------|
-| `[[arquitectura/context-map]]` | Mapa completo de dependencias entre BCs |
-| `[[arquitectura/competencia]]` | BC de mayor complejidad y más dependencias entrantes |
-| `[[arquitectura/identidad]]` | BC transversal del que todos dependen vía JWT |
-| `[[ADR-008-event-store-sqlite]]` | Define el esquema del componente más crítico |
-| `[[ADR-001-event-sourcing-competencia]]` | Justifica la arquitectura del Core Domain |
+| [[arquitectura/context-map]] | Mapa completo de dependencias entre BCs |
+| [[arquitectura/competencia]] | BC de mayor complejidad y más dependencias entrantes |
+| [[arquitectura/identidad]] | BC transversal del que todos dependen vía JWT |
+| [[ADR-008-event-store-sqlite]] | Define el esquema del componente más crítico |
+| [[ADR-001-event-sourcing-competencia]] | Justifica la arquitectura del Core Domain |

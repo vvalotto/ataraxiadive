@@ -42,10 +42,10 @@ SORT length(rows) DESC
 El área de ejecución concentra las reglas más complejas del dominio: tarjetas, DNS, black-out, correcciones del juez, cronometraje manual.
 
 **Recorrido (estado actual):**
-`[[RF-ejecucion]]` → `[[performance]]` → `[[tarjeta]]` → `[[arquitectura/competencia]]` → `[[ADR-014-penalizaciones-acumulables]]`
+[[RF-ejecucion]] → [[performance]] → [[tarjeta]] → [[arquitectura/competencia]] → [[ADR-014-penalizaciones-acumulables]]
 
 **Recorrido completo (disponible en Fase 3):**
-`[[RF-ejecucion]]` → `US-X.Y.Z` → código en `src/competencia/` → tests en `tests/features/` → reporte de cierre
+[[RF-ejecucion]] → `US-X.Y.Z` → código en `src/competencia/` → tests en `tests/features/` → reporte de cierre
 
 **Requerimiento pendiente de elicitación:** RF-EJ-04 (códigos de penalización AIDA/CMAS).
 
@@ -56,7 +56,7 @@ El área de ejecución concentra las reglas más complejas del dominio: tarjetas
 Gestión del torneo incluye: creación, configuración de disciplinas, inscripciones, etapas reversibles, y cierre sin eliminación de datos.
 
 **Recorrido (estado actual):**
-`[[RF-gestion-torneo]]` → `[[torneo]]` (concepto) → `[[arquitectura/bc-torneo]]`
+[[RF-gestion-torneo]] → [[torneo]] (concepto) → [[arquitectura/bc-torneo]]
 
 **Regla clave documentada:** las disciplinas son configurables; el set inicial es STA, DNF, DBF, DYN, SPE. Las transiciones entre fases son reversibles.
 
@@ -67,7 +67,7 @@ Gestión del torneo incluye: creación, configuración de disciplinas, inscripci
 Inscripción define: categorías, brevet, límites de participantes, apto médico, constancia de pago, datos del club.
 
 **Recorrido (estado actual):**
-`[[RF-inscripcion-atletas]]` → `[[atleta]]` → `[[arquitectura/registro]]`
+[[RF-inscripcion-atletas]] → [[atleta]] → [[arquitectura/registro]]
 
 **Requerimiento pendiente:** RF-IN-07 (resolución de conflictos con BD externa) — sin implementar.
 
@@ -78,7 +78,7 @@ Inscripción define: categorías, brevet, límites de participantes, apto médic
 La preparación comprende: generación de grilla, anuncios de marcas, configuración de disciplinas.
 
 **Recorrido (estado actual):**
-`[[RF-preparacion]]` → `[[grilla]]` → `[[anuncio]]` → `[[arquitectura/competencia]]`
+[[RF-preparacion]] → [[grilla]] → [[anuncio]] → [[arquitectura/competencia]]
 
 ---
 
@@ -108,7 +108,7 @@ RF (área) → US (historia de usuario) → código en src/<bc>/ → tests en te
 Esta cadena vive en `docs/traceability/matrix.md` y es navegable directamente en el wiki — cada US tiene su propia página con el ciclo completo.
 
 **Recorrido de referencia:**
-`[[RF-ejecucion]]` → `[[US-X.Y.Z]]` → código en `src/<bc>/` → tests en `tests/features/`
+[[RF-ejecucion]] → [[US-X.Y.Z]] → código en `src/<bc>/` → tests en `tests/features/`
 
 ---
 
@@ -200,7 +200,7 @@ SORT test_coverage ASC
 
 | Página | Por qué es hub |
 |--------|----------------|
-| `[[RF-ejecucion]]` | Área más compleja; concentra reglas de negocio del Core Domain |
-| `[[arquitectura/competencia]]` | Implementa la mayoría de los RFs de ejecución y preparación |
-| `[[arquitectura/context-map]]` | Muestra qué BC implementa qué área |
+| [[RF-ejecucion]] | Área más compleja; concentra reglas de negocio del Core Domain |
+| [[arquitectura/competencia]] | Implementa la mayoría de los RFs de ejecución y preparación |
+| [[arquitectura/context-map]] | Muestra qué BC implementa qué área |
 | `docs/traceability/matrix.md` | Fuente primaria de trazabilidad hasta que se complete Fase 3 |

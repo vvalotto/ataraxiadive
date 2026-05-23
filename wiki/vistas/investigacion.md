@@ -32,7 +32,7 @@ Victor como investigador y autor.
 | H2 — Construir | SP3 + SP4 | ✅ Completado — BL-004 generada |
 | H3 — Producir | SP5 + SP6 + capitalización | 🔄 En progreso — SP6 activo |
 
-**32 HITOs** documentados. Fuente: `[[hitos-catalog]]`.
+**32 HITOs** documentados. Fuente: [[hitos-catalog]].
 
 ---
 
@@ -51,7 +51,7 @@ IEDD es el marco metodológico experimental del proyecto. Su tesis central: la I
 - HITO-16: secuencialidad prescriptiva de `/implement-us` es parte del método, no preferencia operativa
 
 **Recorrido:**
-`[[iedd-hipotesis-experimento]]` → `[[hitos-catalog]]` → `[[iedd-marco-conceptual]]` → `[[experimento-plan]]`
+[[iedd-hipotesis-experimento]] → [[hitos-catalog]] → [[iedd-marco-conceptual]] → [[experimento-plan]]
 
 ---
 
@@ -66,7 +66,7 @@ El aggregate `Performance` bajo Event Sourcing en el Core Domain produjo evidenc
 - Solo dos BCs usan ES — la decisión de cuándo NO usar ES tiene tanto valor como cuándo sí
 
 **Recorrido:**
-`[[iedd-hipotesis-experimento]]` → `[[arquitectura/competencia]]` → `[[ADR-001-event-sourcing-competencia]]` → `[[ADR-008-event-store-sqlite]]`
+[[iedd-hipotesis-experimento]] → [[arquitectura/competencia]] → [[ADR-001-event-sourcing-competencia]] → [[ADR-008-event-store-sqlite]]
 
 **Destino:** Libro DDD — caps. "Aggregates con invariantes reales" + "Domain Events como memoria del dominio"
 
@@ -78,14 +78,14 @@ AtaraxiaDive es un caso de estudio excepcionalmente bueno: dominio de primera ma
 
 | Caso práctico | Tema del curso | Páginas wiki |
 |--------------|---------------|-------------|
-| Performance aggregate + invariantes | Semana 4 — Aggregates y DDD | `[[arquitectura/competencia]]` + `[[performance]]` |
-| Event Sourcing para auditoría | Semana 8 — Eventos de dominio | `[[ADR-001-event-sourcing-competencia]]` |
-| Máquina de estados del Torneo | Semana 6 — State machines como UL | `[[arquitectura/bc-torneo]]` + `[[torneo]]` |
-| Reglas como datos (disciplinas) | Semana 10 — Configurabilidad | `[[ADR-004-reglas-como-datos]]` |
-| Pattern UAT híbrido sin POST | Semana 12 — Testing de dominio | `[[uat-metodologia]]` |
+| Performance aggregate + invariantes | Semana 4 — Aggregates y DDD | [[arquitectura/competencia]] + [[performance]] |
+| Event Sourcing para auditoría | Semana 8 — Eventos de dominio | [[ADR-001-event-sourcing-competencia]] |
+| Máquina de estados del Torneo | Semana 6 — State machines como UL | [[arquitectura/bc-torneo]] + [[torneo]] |
+| Reglas como datos (disciplinas) | Semana 10 — Configurabilidad | [[ADR-004-reglas-como-datos]] |
+| Pattern UAT híbrido sin POST | Semana 12 — Testing de dominio | [[uat-metodologia]] |
 
 **Recorrido:**
-`[[experimento-plan]]` sección "Capitalización" → caso específico → páginas correspondientes
+[[experimento-plan]] sección "Capitalización" → caso específico → páginas correspondientes
 
 ---
 
@@ -99,7 +99,7 @@ HITO-14 es el hallazgo metodológico más relevante sobre el costo de las fuente
 - El LLM Wiki es la respuesta directa: una fuente sintetizada y mantenida reemplaza la dispersión
 
 **Recorrido:**
-`[[hitos-catalog]]` fila HITO-14 → `[[vistas/salud]]` (D-02/D-03) → `[[ADR-007-sqlite-persistencia-bc]]`
+[[hitos-catalog]] fila HITO-14 → [[vistas/salud]] (D-02/D-03) → [[ADR-007-sqlite-persistencia-bc]]
 
 **Destino:** Paper IEDD — sección sobre fricción documental y memoria explícita como prerrequisito del desarrollo con IA
 
@@ -120,18 +120,18 @@ Los HITOs más generalizables (confirmados, no específicos del dominio de apnea
 | HITO-15 | Proyecciones CQRS emergen del ES como consecuencia estructural, no como diseño adicional |
 
 **Recorrido:**
-`[[hitos-catalog]]` → HITOs marcados ✅ → `[[iedd-marco-conceptual]]` → `[[iedd-hipotesis-experimento]]`
+[[hitos-catalog]] → HITOs marcados ✅ → [[iedd-marco-conceptual]] → [[iedd-hipotesis-experimento]]
 
 ---
 
 ### 6. ¿Cuál es el estado de validación de las hipótesis del experimento?
 
-Ver `[[iedd-hipotesis-experimento]]` para la tabla completa de 22 hipótesis con estado de confirmación.
+Ver [[iedd-hipotesis-experimento]] para la tabla completa de 22 hipótesis con estado de confirmación.
 
 **Tesis provisional (mayo 2026):** la IA no sustituye al ingeniero — desplaza el cuello de botella hacia la especificación y el juicio de diseño. Cuanto mayor la automatización de la implementación, mayor la necesidad de intervención humana en dominio, especificación, evaluación de trade-offs y formalización del conocimiento.
 
 **Recorrido:**
-`[[iedd-hipotesis-experimento]]` → tabla de 22 hipótesis → `[[hitos-catalog]]` para evidencia empírica de cada una
+[[iedd-hipotesis-experimento]] → tabla de 22 hipótesis → [[hitos-catalog]] para evidencia empírica de cada una
 
 ---
 
@@ -161,7 +161,7 @@ Libro DDD / Curso IS / Paper IEDD / Material de gestión
 | SP6 — Validación y Despliegue | BL-006 (en curso) | Deriva de tests, wiki, producción | HITO 30–32 |
 
 **Recorrido:**
-`[[experimento-plan]]` → sección "Subproyectos y Baselines" → `[[hitos-catalog]]` por SP
+[[experimento-plan]] → sección "Subproyectos y Baselines" → [[hitos-catalog]] por SP
 
 ---
 
@@ -169,8 +169,8 @@ Libro DDD / Curso IS / Paper IEDD / Material de gestión
 
 | Página | Por qué es hub |
 |--------|----------------|
-| `[[iedd-hipotesis-experimento]]` | 22 hipótesis con estado de confirmación — material central del paper |
-| `[[hitos-catalog]]` | 32 HITOs: evidencia empírica agrupada por SP y tema |
-| `[[experimento-plan]]` | Estructura del experimento, 3 horizontes, tabla de capitalización |
-| `[[iedd-marco-conceptual]]` | Marco teórico de 5 capas — referencia para el paper |
-| `[[uat-metodologia]]` | Patrón UAT híbrido — caso generalizable documentado |
+| [[iedd-hipotesis-experimento]] | 22 hipótesis con estado de confirmación — material central del paper |
+| [[hitos-catalog]] | 32 HITOs: evidencia empírica agrupada por SP y tema |
+| [[experimento-plan]] | Estructura del experimento, 3 horizontes, tabla de capitalización |
+| [[iedd-marco-conceptual]] | Marco teórico de 5 capas — referencia para el paper |
+| [[uat-metodologia]] | Patrón UAT híbrido — caso generalizable documentado |

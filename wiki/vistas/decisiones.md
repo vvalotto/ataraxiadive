@@ -28,7 +28,7 @@ Arquitecto, desarrollador senior, quien va a tomar la próxima decisión técnic
 El sistema opera con ~4 torneos/año, ~100 atletas, ~500 performances/torneo y pico de 50 usuarios concurrentes. La contención es mínima porque cada juez opera en su andarivel propio. SQLite en modo WAL cubre el caso con cero infraestructura de servidor.
 
 **Recorrido:**
-`[[ADR-007-sqlite-persistencia-bc]]` → `[[ADR-009-migraciones-por-bc]]` → `[[ADR-021-fly-io]]`
+[[ADR-007-sqlite-persistencia-bc]] → [[ADR-009-migraciones-por-bc]] → [[ADR-021-fly-io]]
 
 > La condición de escape está documentada en ADR-007: migrar a PostgreSQL si supera 200 escrituras simultáneas sostenidas, requiere full-text search avanzado, o necesita replicación multi-servidor.
 
@@ -39,7 +39,7 @@ El sistema opera con ~4 torneos/año, ~100 atletas, ~500 performances/torneo y p
 Event Sourcing se aplicó únicamente donde hay auditoría regulatoria o idempotencia crítica: Competencia (correcciones del juez ante la FAAS) y Notificaciones (exactly-once delivery). Los BCs de soporte usan CRUD porque no requieren historia de cambios.
 
 **Recorrido:**
-`[[ADR-001-event-sourcing-competencia]]` → `[[ADR-017-notificaciones-event-sourcing]]` → `[[ADR-008-event-store-sqlite]]` → `[[ADR-018-hash-sha256-auditoria]]`
+[[ADR-001-event-sourcing-competencia]] → [[ADR-017-notificaciones-event-sourcing]] → [[ADR-008-event-store-sqlite]] → [[ADR-018-hash-sha256-auditoria]]
 
 > El hash SHA-256 al cerrar una disciplina es posible precisamente porque los eventos son inmutables y ordenados.
 
@@ -50,7 +50,7 @@ Event Sourcing se aplicó únicamente donde hay auditoría regulatoria o idempot
 La interfaz del juez debe funcionar sin conexión (AC-DS-03): la competencia no se detiene por el sistema. Se descartó app nativa (requiere stores y dos codebases) en favor de PWA + IndexedDB. Solo la pantalla del juez opera offline; el resto requiere conexión.
 
 **Recorrido:**
-`[[ADR-003-offline-first-pwa]]` → `[[ADR-015-dexie-indexeddb-frontend]]` → `[[arquitectura/competencia]]`
+[[ADR-003-offline-first-pwa]] → [[ADR-015-dexie-indexeddb-frontend]] → [[arquitectura/competencia]]
 
 ---
 
@@ -67,7 +67,7 @@ Competencia es el Core Domain y el más regulado. Cinco ADRs lo gobiernan direct
 | [[ADR-006-estructura-bc-first]] | Organización hexagonal por capas (api/application/domain/infrastructure) |
 
 **Recorrido:**
-`[[arquitectura/competencia]]` → `[[ADR-001-event-sourcing-competencia]]` → `[[ADR-008-event-store-sqlite]]` → `[[ADR-014-penalizaciones-acumulables]]`
+[[arquitectura/competencia]] → [[ADR-001-event-sourcing-competencia]] → [[ADR-008-event-store-sqlite]] → [[ADR-014-penalizaciones-acumulables]]
 
 ---
 
@@ -80,7 +80,7 @@ Competencia es el Core Domain y el más regulado. Cinco ADRs lo gobiernan direct
 - Documentos en `docs/dominio/` anteriores a ADR-007 mencionan PostgreSQL como base vigente. La jerarquía de fuentes de verdad establece que ADR-007 prevalece.
 
 **Recorrido:**
-`[[ADR-010-docker-cloud-run]]` → `[[ADR-021-fly-io]]` (para ver la transición de despliegue)
+[[ADR-010-docker-cloud-run]] → [[ADR-021-fly-io]] (para ver la transición de despliegue)
 
 ---
 
@@ -89,7 +89,7 @@ Competencia es el Core Domain y el más regulado. Cinco ADRs lo gobiernan direct
 ADR-005 define los 6 BCs como unidades de negocio. ADR-006 los materializa en la estructura del repositorio: cada BC tiene su propia carpeta con capas `api/`, `application/`, `domain/`, `infrastructure/`. No hay imports directos entre BCs.
 
 **Recorrido:**
-`[[ADR-005-bounded-contexts-ddd-estrategico]]` → `[[ADR-006-estructura-bc-first]]` → `[[arquitectura/context-map]]`
+[[ADR-005-bounded-contexts-ddd-estrategico]] → [[ADR-006-estructura-bc-first]] → [[arquitectura/context-map]]
 
 > Dato experimental documentado en ADR-005: el Event Storming produjo un modelo más simple que el análisis estático de RFs. El BC Configuración fue eliminado porque ningún evento le pertenecía exclusivamente.
 
@@ -135,8 +135,8 @@ Hay ADRs transversales que aplican sin excepción a los seis BCs:
 
 | Página | Por qué es hub |
 |--------|----------------|
-| `[[ADR-001-event-sourcing-competencia]]` | Decisión fundacional del Core Domain |
-| `[[ADR-005-bounded-contexts-ddd-estrategico]]` | Diseño estratégico; define los 6 BCs |
-| `[[ADR-006-estructura-bc-first]]` | Materialización del diseño en código |
-| `[[ADR-007-sqlite-persistencia-bc]]` | Decisión de persistencia con mayor impacto cruzado; reemplaza PostgreSQL |
-| `[[ADR-021-fly-io]]` | Estado vigente del despliegue (supersede ADR-010) |
+| [[ADR-001-event-sourcing-competencia]] | Decisión fundacional del Core Domain |
+| [[ADR-005-bounded-contexts-ddd-estrategico]] | Diseño estratégico; define los 6 BCs |
+| [[ADR-006-estructura-bc-first]] | Materialización del diseño en código |
+| [[ADR-007-sqlite-persistencia-bc]] | Decisión de persistencia con mayor impacto cruzado; reemplaza PostgreSQL |
+| [[ADR-021-fly-io]] | Estado vigente del despliegue (supersede ADR-010) |

@@ -31,7 +31,7 @@ Tech lead, responsable de calidad, Victor evaluando el experimento.
 > ⚠️ **Fase 4 pendiente.** No hay resultados de lint todavía. Las páginas en `wiki/salud/` están vacías.
 >
 > Lo que existe: los problemas conocidos (catalogados en HITO-14) y los atributos de calidad
-> elicitados (`[[atributos-calidad]]`), que proveen los umbrales de referencia para el diagnóstico.
+> elicitados ([[atributos-calidad]]), que proveen los umbrales de referencia para el diagnóstico.
 
 ---
 
@@ -56,7 +56,7 @@ Estos problemas serán los primeros hallazgos del lint cuando se ejecute la Fase
 La desalineación más conocida (D-03): documentos de `docs/dominio/` anteriores a ADR-007 mencionan PostgreSQL. La jerarquía de fuentes de verdad establece que `docs/adr/` prevalece sobre `docs/dominio/`.
 
 **Recorrido:**
-`[[ADR-007-sqlite-persistencia-bc]]` → buscar "PostgreSQL" en `docs/dominio/` → verificar encabezado de documento histórico
+[[ADR-007-sqlite-persistencia-bc]] → buscar "PostgreSQL" en `docs/dominio/` → verificar encabezado de documento histórico
 
 **Acción esperada del lint:** detectar páginas del wiki que mencionen PostgreSQL como tecnología vigente y marcarlas para revisión.
 
@@ -67,7 +67,7 @@ La desalineación más conocida (D-03): documentos de `docs/dominio/` anteriores
 El caso confirmado: [[ADR-010-docker-cloud-run]] fue supersedido por [[ADR-021-fly-io]]. Las páginas del wiki reflejan el estado vigente, pero otras partes del repositorio pueden seguir referenciando Cloud Run.
 
 **Recorrido:**
-`[[ADR-010-docker-cloud-run]]` → verificar que su estado diga "Supersedida" → `[[ADR-021-fly-io]]`
+[[ADR-010-docker-cloud-run]] → verificar que su estado diga "Supersedida" → [[ADR-021-fly-io]]
 
 ---
 
@@ -76,10 +76,10 @@ El caso confirmado: [[ADR-010-docker-cloud-run]] fue supersedido por [[ADR-021-f
 Esta información vive en los quality gate reports (CodeGuard, DesignReviewer, ArchitectAnalyst) que se ingestarán en Fase 3. Hasta entonces, la referencia es `docs/traceability/matrix.md`.
 
 **Recorrido (disponible en Fase 3):**
-`[[arquitectura/competencia]]` → campo `test_coverage` → quality reports de `quality/reports/`
+[[arquitectura/competencia]] → campo `test_coverage` → quality reports de `quality/reports/`
 
 **Recorrido actual:**
-`[[arquitectura/competencia]]` → sección "ADRs" → verificar si hay US registradas en matrix.md
+[[arquitectura/competencia]] → sección "ADRs" → verificar si hay US registradas en matrix.md
 
 ---
 
@@ -104,7 +104,7 @@ Los baselines del proyecto (.cm/baselines/BL-*.md) registran el estado de calida
 - US cerradas por SP
 
 **Recorrido (disponible en Fase 3):**
-`[[estado/proyecto]]` → historial de baselines → métricas por BC → tendencia
+[[estado/proyecto]] → historial de baselines → métricas por BC → tendencia
 
 ---
 
@@ -112,7 +112,7 @@ Los baselines del proyecto (.cm/baselines/BL-*.md) registran el estado de calida
 
 El grafo de wikilinks puede tener páginas que nadie referencia. Estas son candidatas a páginas de baja utilidad o a gaps en el grafo de conocimiento.
 
-**Recorrido del lint:** leer todos los `[[wikilinks]]` del wiki → construir grafo de enlaces → detectar nodos sin aristas entrantes
+**Recorrido del lint:** leer todos los [[wikilinks]] del wiki → construir grafo de enlaces → detectar nodos sin aristas entrantes
 
 ---
 
@@ -151,6 +151,6 @@ Cuando se ejecute `/wiki-lint`, el resultado debe ir a `wiki/salud/lint-001.md` 
 | Página | Por qué es hub |
 |--------|----------------|
 | `wiki/salud/lint-001.md` | Primera radiografía del wiki (disponible en Fase 4) |
-| `[[atributos-calidad]]` | Umbrales de referencia para evaluar el cumplimiento |
-| `[[arquitectura/context-map]]` | Mapa de integraciones — útil para detectar imports ilegales |
-| `[[ADR-007-sqlite-persistencia-bc]]` | Referencia para detectar D-03 (documentos con PostgreSQL) |
+| [[atributos-calidad]] | Umbrales de referencia para evaluar el cumplimiento |
+| [[arquitectura/context-map]] | Mapa de integraciones — útil para detectar imports ilegales |
+| [[ADR-007-sqlite-persistencia-bc]] | Referencia para detectar D-03 (documentos con PostgreSQL) |
