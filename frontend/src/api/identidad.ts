@@ -122,11 +122,15 @@ export async function crearUsuario(body: CrearUsuarioRequest): Promise<CrearUsua
   return parseResponse<CrearUsuarioResponse>(response)
 }
 
-export async function agregarRolUsuario(
-  usuarioId: string,
+export async function refrescarToken(): Promise<{ access_token: string; token_type: string }> {
+  const response = await fetch('/auth/me/token', { headers: buildHeaders() })
+  return parseResponse(response)
+}
+
+export async function agregarRolPropio(
   rol: RolGestionUsuario,
 ): Promise<{ usuario_id: string; roles: RolIdentidad[] }> {
-  const response = await fetch(`/auth/usuarios/${encodeURIComponent(usuarioId)}/roles`, {
+  const response = await fetch('/auth/me/roles', {
     method: 'POST',
     headers: buildHeaders(),
     body: JSON.stringify({ rol }),
@@ -134,14 +138,13 @@ export async function agregarRolUsuario(
   return parseResponse(response)
 }
 
-export async function quitarRolUsuario(
-  usuarioId: string,
+export async function quitarRolPropio(
   rol: RolGestionUsuario,
 ): Promise<{ usuario_id: string; roles: RolIdentidad[] }> {
-  const response = await fetch(
-    `/auth/usuarios/${encodeURIComponent(usuarioId)}/roles/${encodeURIComponent(rol)}`,
-    { method: 'DELETE', headers: buildHeaders() },
-  )
+  const response = await fetch(`/auth/me/roles/${encodeURIComponent(rol)}`, {
+    method: 'DELETE',
+    headers: buildHeaders(),
+  })
   return parseResponse(response)
 }
 
