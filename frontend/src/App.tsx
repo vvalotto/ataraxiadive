@@ -30,7 +30,6 @@ import { OrganizadorInscriptosPage } from './pages/organizador/OrganizadorInscri
 import { OrganizadorGrillaPage } from './pages/organizador/OrganizadorGrillaPage'
 import { OrganizadorJuecesPage } from './pages/organizador/OrganizadorJuecesPage'
 import { TorneoCompetenciasPage } from './pages/organizador/TorneoCompetenciasPage'
-import { UsuariosPage } from './pages/organizador/UsuariosPage'
 import { AuditoriaCompetenciaPage } from './pages/organizador/AuditoriaCompetenciaPage'
 import { AuditoriaPerformancePage } from './pages/organizador/AuditoriaPerformancePage'
 import { ResultadosPage } from './pages/organizador/ResultadosPage'
@@ -279,14 +278,6 @@ function App() {
           element={
             <RequireRole role="organizador">
               <CrearTorneoPage />
-            </RequireRole>
-          }
-        />
-        <Route
-          path="/organizador/usuarios"
-          element={
-            <RequireRole role="organizador">
-              <UsuariosPage />
             </RequireRole>
           }
         />
