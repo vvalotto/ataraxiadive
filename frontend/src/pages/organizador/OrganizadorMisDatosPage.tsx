@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
 import {
   actualizarOrganizadorMe,
@@ -23,6 +24,8 @@ function getErrorMessage(error: unknown): string {
 }
 
 export function OrganizadorMisDatosPage() {
+  const [searchParams] = useSearchParams()
+  const torneoId = searchParams.get('torneo_id')
   const [perfilExiste, setPerfilExiste] = useState<boolean | null>(null)
   const [form, setForm] = useState<FormState>({ nombre_organizacion: '' })
   const [isLoading, setIsLoading] = useState(true)
@@ -97,6 +100,7 @@ export function OrganizadorMisDatosPage() {
       title="Mis Datos"
       subtitle="Perfil de organizador"
       showTournamentNavigation={true}
+      activeTournamentId={torneoId ?? undefined}
     >
       {isLoading ? (
         <div className="rounded-2xl border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
