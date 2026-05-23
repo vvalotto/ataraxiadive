@@ -296,6 +296,66 @@ async def reset_password(
     return JSONResponse(status_code=204, content=None)
 
 
+@router.post("/me/roles", status_code=200)
+async def agregar_rol_propio(
+    body: AgregarRolRequest,
+    current_user: Annotated[dict, Depends(get_current_user)],
+    repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
+) -> JSONResponse:
+    handler = AgregarRolHandler(repo)
+    usuario_id = UUID(current_user["sub"])
+    try:
+        await handler.handle(AgregarRolCommand(usuario_id=usuario_id, rol=body.rol))
+    except UsuarioNoEncontrado as exc:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
+    except RolYaAsignado as exc:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+    usuario = await repo.find_by_id(usuario_id)
+    assert usuario is not None
+    return JSONResponse(
+        status_code=200,
+        content={"usuario_id": str(usuario.usuario_id), "roles": [r.value for r in usuario.roles]},
+    )
+
+
+@router.delete("/me/roles/{rol}", status_code=200)
+async def quitar_rol_propio(
+    rol: Rol,
+    current_user: Annotated[dict, Depends(get_current_user)],
+    repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
+) -> JSONResponse:
+    handler = QuitarRolHandler(repo)
+    usuario_id = UUID(current_user["sub"])
+    try:
+        await handler.handle(QuitarRolCommand(usuario_id=usuario_id, rol=rol))
+    except UsuarioNoEncontrado as exc:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
+    except RolNoEncontrado as exc:
+        return JSONResponse(status_code=409, content={"detail": str(exc)})
+    except RolesVacios as exc:
+        return JSONResponse(status_code=422, content={"detail": str(exc)})
+    usuario = await repo.find_by_id(usuario_id)
+    assert usuario is not None
+    return JSONResponse(
+        status_code=200,
+        content={"usuario_id": str(usuario.usuario_id), "roles": [r.value for r in usuario.roles]},
+    )
+
+
+@router.get("/me/token", status_code=200)
+async def refrescar_token(
+    current_user: Annotated[dict, Depends(get_current_user)],
+    repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
+    token_service: Annotated[TokenServicePort, Depends(get_token_service)],
+) -> JSONResponse:
+    usuario = await repo.find_by_id(UUID(current_user["sub"]))
+    if usuario is None:
+        return JSONResponse(status_code=404, content={"detail": "Usuario no encontrado"})
+    rol_activo = Rol(current_user["rol"])
+    new_token = token_service.generate(usuario, rol_activo)
+    return JSONResponse(status_code=200, content={"access_token": new_token, "token_type": "bearer"})
+
+
 @router.get("/usuarios", status_code=200)
 async def listar_usuarios(
     _: OrganizadorDep,
@@ -321,55 +381,3 @@ async def listar_usuarios(
 
 class AgregarRolRequest(BaseModel):
     rol: Rol
-
-
-@router.post("/usuarios/{usuario_id}/roles", status_code=200)
-async def agregar_rol_usuario(
-    usuario_id: UUID,
-    body: AgregarRolRequest,
-    _: OrganizadorDep,
-    repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
-) -> JSONResponse:
-    handler = AgregarRolHandler(repo)
-    try:
-        await handler.handle(AgregarRolCommand(usuario_id=usuario_id, rol=body.rol))
-    except UsuarioNoEncontrado as exc:
-        return JSONResponse(status_code=404, content={"detail": str(exc)})
-    except RolYaAsignado as exc:
-        return JSONResponse(status_code=409, content={"detail": str(exc)})
-    usuario = await repo.find_by_id(usuario_id)
-    assert usuario is not None
-    return JSONResponse(
-        status_code=200,
-        content={
-            "usuario_id": str(usuario.usuario_id),
-            "roles": [r.value for r in usuario.roles],
-        },
-    )
-
-
-@router.delete("/usuarios/{usuario_id}/roles/{rol}", status_code=200)
-async def quitar_rol_usuario(
-    usuario_id: UUID,
-    rol: Rol,
-    _: OrganizadorDep,
-    repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
-) -> JSONResponse:
-    handler = QuitarRolHandler(repo)
-    try:
-        await handler.handle(QuitarRolCommand(usuario_id=usuario_id, rol=rol))
-    except UsuarioNoEncontrado as exc:
-        return JSONResponse(status_code=404, content={"detail": str(exc)})
-    except RolNoEncontrado as exc:
-        return JSONResponse(status_code=409, content={"detail": str(exc)})
-    except RolesVacios as exc:
-        return JSONResponse(status_code=422, content={"detail": str(exc)})
-    usuario = await repo.find_by_id(usuario_id)
-    assert usuario is not None
-    return JSONResponse(
-        status_code=200,
-        content={
-            "usuario_id": str(usuario.usuario_id),
-            "roles": [r.value for r in usuario.roles],
-        },
-    )

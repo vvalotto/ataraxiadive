@@ -122,6 +122,32 @@ export async function crearUsuario(body: CrearUsuarioRequest): Promise<CrearUsua
   return parseResponse<CrearUsuarioResponse>(response)
 }
 
+export async function refrescarToken(): Promise<{ access_token: string; token_type: string }> {
+  const response = await fetch('/auth/me/token', { headers: buildHeaders() })
+  return parseResponse(response)
+}
+
+export async function agregarRolPropio(
+  rol: RolGestionUsuario,
+): Promise<{ usuario_id: string; roles: RolIdentidad[] }> {
+  const response = await fetch('/auth/me/roles', {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({ rol }),
+  })
+  return parseResponse(response)
+}
+
+export async function quitarRolPropio(
+  rol: RolGestionUsuario,
+): Promise<{ usuario_id: string; roles: RolIdentidad[] }> {
+  const response = await fetch(`/auth/me/roles/${encodeURIComponent(rol)}`, {
+    method: 'DELETE',
+    headers: buildHeaders(),
+  })
+  return parseResponse(response)
+}
+
 export async function cambiarPassword(body: CambiarPasswordRequest): Promise<void> {
   const response = await fetch('/auth/cambiar-password', {
     method: 'POST',

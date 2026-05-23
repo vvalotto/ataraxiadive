@@ -33,6 +33,7 @@ class JWTService(TokenServicePort):
             "nombre": usuario.nombre,
             "apellido": usuario.apellido,
             "rol": rol_activo.value,
+            "roles": [r.value for r in usuario.roles],
             "exp": datetime.now(tz=timezone.utc) + timedelta(hours=self._expiry_hours),
         }
         return jwt.encode(payload, self._secret, algorithm=self._algorithm)

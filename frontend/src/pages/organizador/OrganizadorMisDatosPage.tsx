@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
+import { RolesSection } from '../../components/shared/RolesSection'
 import {
   actualizarOrganizadorMe,
   crearOrganizadorMe,
@@ -102,6 +103,7 @@ export function OrganizadorMisDatosPage() {
       showTournamentNavigation={true}
       activeTournamentId={torneoId ?? undefined}
     >
+      <RolesSection />
       {isLoading ? (
         <div className="rounded-2xl border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando perfil...
