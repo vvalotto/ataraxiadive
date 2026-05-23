@@ -640,7 +640,23 @@ RFs sin implementar en v1.0. No bloquean el scope actual (SP7 — despliegue y d
 
 ---
 
-## 34. Trazabilidad: Discrepancias → US → Documentos a actualizar
+## 34. SP-ADJ-12 — Correcciones y mejoras de producción post-SP7
+
+**Contexto:** Bugs e issues (#198–#204) detectados en producción (https://ataraxiadive.fly.dev) durante operación real post-despliegue SP7.  
+**Plan:** `docs/plans/sp-adj-12/PLAN-SP-ADJ-12.md`.
+
+| US | Área | PRs | Descripción | Estado |
+|----|------|-----|-------------|--------|
+| US-ADJ-12.1 | Frontend | — | Fixes layout/nav/filtros: JuecesPanel rol→roles, InscriptosPanel mensaje, OrganizadorLayout nav, DisciplinasPage botones · #198 #199 #201 #203 | ⏳ Pendiente |
+| US-ADJ-12.2 | BC Identidad | — | `agregar_rol()` / `quitar_rol()` en aggregate · `AgregarRolCommand` + `QuitarRolCommand` · `POST/DELETE /auth/usuarios/{id}/roles` · #204 backend | ⏳ Pendiente |
+| US-ADJ-12.3 | Frontend | — | `UsuarioDto.roles[]` · `agregarRolUsuario()` / `quitarRolUsuario()` · chips inline en UsuariosPage · #204 frontend | ⏳ Pendiente |
+| US-ADJ-12.4 | Frontend | — | Portal atleta: precarga doc/tel en inscripción · club fallback · invalidación caché post-inscripción · #200 | ⏳ Pendiente |
+| US-ADJ-12.5 | BC Registro | — | `Inscripcion.estado_aceptacion` (ACEPTADO/RECHAZADO) · `PATCH /inscripciones/{id}/aceptacion` · `GET /inscripciones/{id}/detalle` · #202 backend | ⏳ Pendiente |
+| US-ADJ-12.6 | Frontend | — | Popup inscripto: datos atleta + adjuntos + control aceptación · badge estado en tabla · #202 frontend | ⏳ Pendiente |
+
+---
+
+## 36. Trazabilidad: Discrepancias → US → Documentos a actualizar
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -659,7 +675,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 35. Cobertura Total
+## 37. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -679,7 +695,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 36. US → Tests
+## 38. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -789,7 +805,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 37. US → ADR
+## 39. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -804,6 +820,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
+*v1.46 — 2026-05-23: SP-ADJ-12 planificado (§34 nuevo · 6 US · issues #198–#204 producción) · §§ renumerados 35..39*
 *v1.45 — 2026-05-17: Iteración 3 adecuación documental — §2 SP6/SP7 agregados · 23 "✅ definido" normalizados a "✅ implementado" en SPs cerrados · §4 actualizado a scope v1.0 · header fecha/estado actualizado*
 *v1.44 — 2026-05-16: SP-ADJ-11 cerrado (§33 nuevo · 10/10 US ✅ · PRs #184–#193 · DesignReviewer 0 CRITICAL · 287 WARNING) · §§ renumerados 34..37 · US→Tests SP-ADJ-11.x agregados*
 *v1.43 — 2026-05-09: US-6.4.5 completada · SQLiteInscripcionRepository sin DR-07 · DR-06 documentado como coordination handler*
