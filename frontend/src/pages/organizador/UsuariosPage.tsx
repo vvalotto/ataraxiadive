@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   ApiError,
+  agregarRolUsuario,
   crearUsuario,
   listarTodosLosUsuarios,
+  quitarRolUsuario,
   type RolGestionUsuario,
   type UsuarioDto,
 } from '../../api/identidad'
@@ -71,6 +73,7 @@ export function UsuariosPage() {
   const queryClient = useQueryClient()
   const [form, setForm] = useState<FormState>(INITIAL_FORM)
   const [errors, setErrors] = useState<FormErrors>({})
+  const [addingRolFor, setAddingRolFor] = useState<string | null>(null)
   const usuariosQuery = useQuery({
     queryKey: ['usuarios'],
     queryFn: listarTodosLosUsuarios,
@@ -97,6 +100,21 @@ export function UsuariosPage() {
         return
       }
       setErrors((current) => ({ ...current, general: message }))
+    },
+  })
+  const agregarRolMutation = useMutation({
+    mutationFn: ({ usuarioId, rol }: { usuarioId: string; rol: RolGestionUsuario }) =>
+      agregarRolUsuario(usuarioId, rol),
+    onSuccess: async () => {
+      setAddingRolFor(null)
+      await queryClient.invalidateQueries({ queryKey: ['usuarios'] })
+    },
+  })
+  const quitarRolMutation = useMutation({
+    mutationFn: ({ usuarioId, rol }: { usuarioId: string; rol: RolGestionUsuario }) =>
+      quitarRolUsuario(usuarioId, rol),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['usuarios'] })
     },
   })
 
@@ -194,32 +212,108 @@ export function UsuariosPage() {
                     <th className="px-4 py-3 font-semibold">Nombre</th>
                     <th className="px-4 py-3 font-semibold">Apellido</th>
                     <th className="px-4 py-3 font-semibold">Email</th>
-                    <th className="px-4 py-3 font-semibold">Rol</th>
+                    <th className="px-4 py-3 font-semibold">Roles</th>
                     <th className="px-4 py-3 font-semibold">Estado</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-stone-200">
-                  {usuarios.map((usuario) => (
-                    <tr key={usuario.usuario_id} className="bg-white">
-                      <td className="px-4 py-3 text-stone-900">{usuario.nombre}</td>
-                      <td className="px-4 py-3 text-stone-900">{usuario.apellido}</td>
-                      <td className="px-4 py-3 font-medium text-stone-900">{usuario.email}</td>
-                      <td className="px-4 py-3 text-stone-700">
-                        {usuario.roles.map((r) => ROL_LABELS[r] ?? r).join(', ')}
-                      </td>
-                      <td className="px-4 py-3">
-                        <span
-                          className={
-                            usuario.activo
-                              ? 'inline-flex rounded-lg bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-800'
-                              : 'inline-flex rounded-lg bg-stone-100 px-2 py-1 text-xs font-semibold text-stone-600'
-                          }
-                        >
-                          {usuario.activo ? 'Activo' : 'Inactivo'}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                  {usuarios.map((usuario) => {
+                    const rolesGestionables = usuario.roles.filter(
+                      (r): r is RolGestionUsuario => r !== 'ADMIN',
+                    )
+                    const rolesDisponibles = ROLES_GESTIONABLES.filter(
+                      (r) => !usuario.roles.includes(r.value),
+                    )
+                    const isAddingThis = addingRolFor === usuario.usuario_id
+                    return (
+                      <tr key={usuario.usuario_id} className="bg-white">
+                        <td className="px-4 py-3 text-stone-900">{usuario.nombre}</td>
+                        <td className="px-4 py-3 text-stone-900">{usuario.apellido}</td>
+                        <td className="px-4 py-3 font-medium text-stone-900">{usuario.email}</td>
+                        <td className="px-4 py-3">
+                          <div className="flex flex-wrap items-center gap-1">
+                            {rolesGestionables.map((rol) => (
+                              <span
+                                key={rol}
+                                className="inline-flex items-center gap-1 rounded-full bg-stone-100 px-2 py-0.5 text-xs font-semibold text-stone-700"
+                              >
+                                {ROL_LABELS[rol] ?? rol}
+                                {rolesGestionables.length > 1 ? (
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      quitarRolMutation.mutate({
+                                        usuarioId: usuario.usuario_id,
+                                        rol,
+                                      })
+                                    }
+                                    disabled={quitarRolMutation.isPending}
+                                    className="ml-0.5 text-stone-400 hover:text-red-600 disabled:opacity-40"
+                                    title={`Quitar rol ${ROL_LABELS[rol]}`}
+                                  >
+                                    ×
+                                  </button>
+                                ) : null}
+                              </span>
+                            ))}
+                            {usuario.roles.includes('ADMIN') ? (
+                              <span className="inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-800">
+                                Admin
+                              </span>
+                            ) : null}
+                            {rolesDisponibles.length > 0 ? (
+                              isAddingThis ? (
+                                <select
+                                  autoFocus
+                                  className="rounded border border-stone-300 px-1 py-0.5 text-xs text-stone-900 outline-none focus:border-emerald-600"
+                                  defaultValue=""
+                                  onChange={(e) => {
+                                    const rol = e.target.value as RolGestionUsuario
+                                    if (rol) {
+                                      agregarRolMutation.mutate({
+                                        usuarioId: usuario.usuario_id,
+                                        rol,
+                                      })
+                                    }
+                                  }}
+                                  onBlur={() => setAddingRolFor(null)}
+                                >
+                                  <option value="" disabled>
+                                    Agregar...
+                                  </option>
+                                  {rolesDisponibles.map((r) => (
+                                    <option key={r.value} value={r.value}>
+                                      {r.label}
+                                    </option>
+                                  ))}
+                                </select>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => setAddingRolFor(usuario.usuario_id)}
+                                  className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-stone-300 text-xs text-stone-400 hover:border-emerald-600 hover:text-emerald-700"
+                                  title="Agregar rol"
+                                >
+                                  +
+                                </button>
+                              )
+                            ) : null}
+                          </div>
+                        </td>
+                        <td className="px-4 py-3">
+                          <span
+                            className={
+                              usuario.activo
+                                ? 'inline-flex rounded-lg bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-800'
+                                : 'inline-flex rounded-lg bg-stone-100 px-2 py-1 text-xs font-semibold text-stone-600'
+                            }
+                          >
+                            {usuario.activo ? 'Activo' : 'Inactivo'}
+                          </span>
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
             </div>
