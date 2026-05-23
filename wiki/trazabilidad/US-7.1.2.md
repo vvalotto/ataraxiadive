@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP7
 inc: INC-7.1
 bc: infraestructura
-estado: planificado
+estado: pendiente
 fecha_cierre: null
 last_updated: "2026-05-21"
 sources:
   - docs/plans/sp7/PLAN-SP7.md §INC-7.1
+us_id: US-7.1.2
+tests_count: null
 ---
 
 # US-7.1.2 — fly deploy + verificación flujos críticos + tag v1.0.1

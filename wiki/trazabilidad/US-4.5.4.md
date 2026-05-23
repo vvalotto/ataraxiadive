@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP4
 inc: INC-4.5
 bc: notificaciones, resultados
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-18"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §16
+us_id: US-4.5.4
+tests_count: null
 ---
 
 # US-4.5.4 — Política P-11: email a atletas al publicar resultados

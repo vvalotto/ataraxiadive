@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP-ADJ-06
 inc: SP-ADJ-06
 bc: tests
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-18"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §18
+us_id: US-ADJ-6.2
+tests_count: null
 ---
 
 # US-ADJ-6.2 — Renombrar FAZ→FAAS en tests

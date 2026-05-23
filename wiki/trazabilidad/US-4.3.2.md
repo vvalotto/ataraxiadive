@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP4
 inc: INC-4.3
 bc: frontend, competencia
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-11"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §14
+us_id: US-4.3.2
+tests_count: null
 ---
 
 # US-4.3.2 — GrillaPage operativa + wizard móvil de performance

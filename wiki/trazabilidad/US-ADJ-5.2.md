@@ -4,12 +4,14 @@ type: trazabilidad-us
 sp: SP-ADJ-05
 inc: SP-ADJ-05
 bc: docs
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-04"
 last_updated: "2026-05-21"
 sources:
   - docs/plans/sp-adj-05/PLAN-SP-ADJ-05.md
   - commit 415fa10
+us_id: US-ADJ-5.2
+tests_count: null
 ---
 
 # US-ADJ-5.2 — Consistencia documental residual

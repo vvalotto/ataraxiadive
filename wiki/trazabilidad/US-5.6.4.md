@@ -4,12 +4,14 @@ type: trazabilidad-us
 sp: SP5
 inc: INC-5.6
 bc: resultados
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-28"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §26
   - docs/plans/sp5/US-5.6.4-plan.md
+us_id: US-5.6.4
+tests_count: null
 ---
 
 # US-5.6.4 — RankingOverall: puntos acumulados por categoría y género

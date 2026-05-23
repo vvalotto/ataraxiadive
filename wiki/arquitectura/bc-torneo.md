@@ -1,12 +1,13 @@
 ---
 title: "BC Torneo — Supporting Domain"
 type: arquitectura
-last_updated: "2026-05-20"
+last_updated: "2026-05-23"
 sources:
   - docs/architecture/11-bc-torneo.md
-tipo_ddd: Supporting Domain
+tipo_ddd: supporting
 persistencia: CRUD
 db: torneo.db
+test_coverage: null
 ---
 
 # BC Torneo — Supporting Domain

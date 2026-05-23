@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP3
 inc: INC-3.2
 bc: identidad
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-03-30"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §9
+us_id: US-3.2.1
+tests_count: null
 ---
 
 # US-3.2.1 — BC Identidad: Usuario + JWT mínimo + /auth

@@ -4,12 +4,14 @@ type: trazabilidad-us
 sp: SP-ADJ-07
 inc: SP-ADJ-07
 bc: notificaciones, resultados, competencia
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-19"
 last_updated: "2026-05-21"
 sources:
   - docs/plans/sp-adj-07/PLAN-SP-ADJ-07.md
   - docs/plans/sp-adj-07/US-ADJ-7.3-plan.md
+us_id: US-ADJ-7.3
+tests_count: null
 ---
 
 # US-ADJ-7.3 — SCOPE-SP4-001: cablear P-11 a CompetenciaFinalizada

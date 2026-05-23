@@ -4,10 +4,12 @@ type: trazabilidad-us
 sp: SP-ADJ-11
 inc: SP-ADJ-11
 bc: frontend, identidad
-estado: completado
+estado: cerrada
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §33
+us_id: US-ADJ-11.6
+tests_count: null
 ---
 
 # US-ADJ-11.6 — RegistroPage: checkboxes multi-rol + secciones Juez/Organizador

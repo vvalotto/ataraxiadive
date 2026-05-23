@@ -9,6 +9,8 @@ fecha_cierre: "2026-04-04"
 last_updated: "2026-05-21"
 sources:
   - docs/plans/sp-adj-05/PLAN-SP-ADJ-05.md
+us_id: US-ADJ-5.4
+tests_count: null
 ---
 
 # US-ADJ-5.4 — Marcar vigencia de documentos históricos fundacionales

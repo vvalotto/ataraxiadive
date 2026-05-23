@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP7
 inc: INC-7.2
 bc: registro, resultados
-estado: planificado
+estado: pendiente
 fecha_cierre: null
 last_updated: "2026-05-21"
 sources:
   - docs/plans/sp7/PLAN-SP7.md §INC-7.2
+us_id: US-7.2.3
+tests_count: null
 ---
 
 # US-7.2.3 — Manual atleta

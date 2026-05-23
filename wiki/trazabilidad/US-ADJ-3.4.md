@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP-ADJ-03
 inc: SP-ADJ-03
 bc: shared, identidad, torneo, registro
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-03"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §10
+us_id: US-ADJ-3.4
+tests_count: null
 ---
 
 # US-ADJ-3.4 — Mover deps auth a shared/api/dependencies.py (DIP cross-BC)

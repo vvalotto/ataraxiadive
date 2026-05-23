@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP1
 inc: INC-1.1
 bc: competencia
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-03-21"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §6
+us_id: US-1.1.1
+tests_count: null
 ---
 
 # US-1.1.1 — Setup: esqueleto BC Competencia

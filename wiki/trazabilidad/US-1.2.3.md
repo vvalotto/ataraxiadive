@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP1
 inc: INC-1.2
 bc: competencia
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-03-22"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §6
+us_id: US-1.2.3
+tests_count: 65
 ---
 
 # US-1.2.3 — RegistrarResultado
@@ -19,8 +21,8 @@ Permite al juez registrar el resultado real (RP — Resultado de Performance) de
 
 ## RFs cubiertos
 
-| RF | Descripción |
-|----|-------------|
+| RF       | Descripción                                  |
+| -------- | -------------------------------------------- |
 | RF-EJ-05 | Cronometraje manual — juez ingresa el tiempo |
 
 ## Comando principal

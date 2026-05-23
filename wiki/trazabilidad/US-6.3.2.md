@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP6
 inc: INC-6.3
 bc: registro, frontend
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-05-08"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §31
+us_id: US-6.3.2
+tests_count: null
 ---
 
 # US-6.3.2 — Inscripción atleta: AP inline + apto médico + constancia pago

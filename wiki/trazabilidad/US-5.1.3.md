@@ -4,12 +4,14 @@ type: trazabilidad-us
 sp: SP5
 inc: INC-5.1
 bc: registro
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-21"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §19
   - docs/plans/sp5/US-5.1.3-plan.md
+us_id: US-5.1.3
+tests_count: null
 ---
 
 # US-5.1.3 — InscriptosPanel: lista de atletas con estado AP

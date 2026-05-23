@@ -4,12 +4,14 @@ type: trazabilidad-us
 sp: SP5
 inc: INC-5.5
 bc: registro, competencia
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-26"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §25
   - docs/plans/sp5/US-5.5.2-plan.md
+us_id: US-5.5.2
+tests_count: null
 ---
 
 # US-5.5.2 — Vista organizador: inscriptos con datos completos y estado AP

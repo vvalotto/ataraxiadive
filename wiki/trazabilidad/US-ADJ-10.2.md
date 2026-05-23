@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP-ADJ-10
 inc: SP-ADJ-10
 bc: registro, frontend
-estado: completado
+estado: cerrada
 last_updated: "2026-05-21"
 sources:
   - docs/plans/sp-adj-10/PLAN-SP-ADJ-10.md
   - docs/plans/sp-adj-10/US-ADJ-10.2-plan.md
+us_id: US-ADJ-10.2
+tests_count: null
 ---
 
 # US-ADJ-10.2 — Página Mis Datos del atleta (PATCH /registro/atletas/me)

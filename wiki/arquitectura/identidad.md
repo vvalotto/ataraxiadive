@@ -1,12 +1,13 @@
 ---
 title: "BC Identidad — Generic Domain"
 type: arquitectura
-last_updated: "2026-05-20"
+last_updated: "2026-05-23"
 sources:
   - docs/architecture/14-bc-identidad.md
-tipo_ddd: Generic Domain
+tipo_ddd: generic
 persistencia: CRUD
 db: identidad.db
+test_coverage: null
 ---
 
 # BC Identidad — Generic Domain

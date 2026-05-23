@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP3
 inc: INC-3.5
 bc: resultados
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-02"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §9
+us_id: US-3.5.1
+tests_count: null
 ---
 
 # US-3.5.1 — Aggregate RankingOverall + CalcularOverallHandler

@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP-ADJ-10
 inc: SP-ADJ-10
 bc: torneo, frontend
-estado: completado
+estado: cerrada
 last_updated: "2026-05-21"
 sources:
   - docs/plans/sp-adj-10/PLAN-SP-ADJ-10.md
   - docs/plans/sp-adj-10/US-ADJ-10.1-plan.md
+us_id: US-ADJ-10.1
+tests_count: null
 ---
 
 # US-ADJ-10.1 — Edición completa del torneo (PUT /torneos/{id})

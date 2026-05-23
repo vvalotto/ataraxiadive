@@ -4,12 +4,14 @@ type: trazabilidad-us
 sp: SP5
 inc: INC-5.3
 bc: identidad, registro
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-23"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §23
   - docs/plans/sp5/US-5.3.2-plan.md
+us_id: US-5.3.2
+tests_count: null
 ---
 
 # US-5.3.2 — AtletaDashboardPage: perfil + inscripción a torneos

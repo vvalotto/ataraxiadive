@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP-ADJ-03
 inc: SP-ADJ-03
 bc: competencia
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-03"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §10
+us_id: US-ADJ-3.5
+tests_count: null
 ---
 
 # US-ADJ-3.5 — Limpiar imports cross-module en ports de Competencia

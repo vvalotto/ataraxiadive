@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP4
 inc: INC-4.4
 bc: frontend
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-18"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §15
+us_id: US-4.4.1
+tests_count: null
 ---
 
 # US-4.4.1 — Dexie.js: cache local de grilla + expiración 24h

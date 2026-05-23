@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP4
 inc: INC-4.1
 bc: competencia
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-08"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §12
+us_id: US-4.1.6
+tests_count: 36
 ---
 
 # US-4.1.6 — _handler_utils.py: helpers comunes para handlers

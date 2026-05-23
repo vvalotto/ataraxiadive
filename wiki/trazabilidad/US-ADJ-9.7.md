@@ -4,12 +4,14 @@ type: trazabilidad-us
 sp: SP-ADJ-09
 inc: SP-ADJ-09
 bc: registro, competencia
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-28"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §27
   - docs/plans/sp-adj-09/PLAN-SP-ADJ-09.md
+us_id: US-ADJ-9.7
+tests_count: null
 ---
 
 # US-ADJ-9.7 — SP-ADJ-09: declarar AP en el wizard de inscripción

@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP-ADJ-06
 inc: SP-ADJ-06
 bc: competencia, notificaciones, shared
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-18"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §18
+us_id: US-ADJ-6.1
+tests_count: null
 ---
 
 # US-ADJ-6.1 — Renombrar FAZ→FAAS en código

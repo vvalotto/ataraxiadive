@@ -4,13 +4,15 @@ type: trazabilidad-us
 sp: SP-ADJ-07
 inc: SP-ADJ-07
 bc: competencia, frontend
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-19"
 last_updated: "2026-05-21"
 sources:
   - docs/plans/sp-adj-07/PLAN-SP-ADJ-07.md
   - docs/plans/sp-adj-07/US-ADJ-7.2-plan.md
   - commit 4007259, PR #92
+us_id: US-ADJ-7.2
+tests_count: null
 ---
 
 # US-ADJ-7.2 — BUG-SP4-004: exponer tarjeta_asignada en /grilla

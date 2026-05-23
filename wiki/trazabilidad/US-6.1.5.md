@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP6
 inc: INC-6.1
 bc: frontend
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-05-04"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §29
+us_id: US-6.1.5
+tests_count: null
 ---
 
 # US-6.1.5 — AtletaCard compacta en paso de RpSelector

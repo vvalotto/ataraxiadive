@@ -1,12 +1,13 @@
 ---
 title: "BC Competencia — Core Domain"
 type: arquitectura
-last_updated: "2026-05-20"
+last_updated: "2026-05-23"
 sources:
   - docs/architecture/10-bc-competencia.md
-tipo_ddd: Core Domain
+tipo_ddd: core
 persistencia: Event Sourcing
 db: competencia.db
+test_coverage: 90
 ---
 
 # BC Competencia — Core Domain

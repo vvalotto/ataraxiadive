@@ -4,12 +4,14 @@ type: trazabilidad-us
 sp: SP5
 inc: INC-5.3
 bc: identidad
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-23"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §23
   - docs/plans/sp5/US-5.3.1-plan.md
+us_id: US-5.3.1
+tests_count: null
 ---
 
 # US-5.3.1 — UsuariosPage: gestión de usuarios para el organizador

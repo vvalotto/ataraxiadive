@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP-ADJ-01
 inc: SP-ADJ-01
 bc: competencia
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-03-28"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §7
+us_id: US-ADJ-1.4
+tests_count: null
 ---
 
 # US-ADJ-1.4 — Refactoring api: DIP en router + P-08 a composition root

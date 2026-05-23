@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP6
 inc: INC-6.4
 bc: competencia
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-05-10"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §32
+us_id: US-6.4.1
+tests_count: null
 ---
 
 # US-6.4.1 — Romper ciclo ADP en competencia/domain/aggregates

@@ -4,13 +4,15 @@ type: trazabilidad-us
 sp: SP-ADJ-07
 inc: SP-ADJ-07
 bc: competencia
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-19"
 last_updated: "2026-05-21"
 sources:
   - docs/plans/sp-adj-07/PLAN-SP-ADJ-07.md
   - docs/plans/sp-adj-07/US-ADJ-7.1-plan.md
   - commit e1ac34b, PR #93
+us_id: US-ADJ-7.1
+tests_count: null
 ---
 
 # US-ADJ-7.1 — BUG-SP4-003: CorregirResultadoTrasDNS

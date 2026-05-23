@@ -4,12 +4,14 @@ type: trazabilidad-us
 sp: SP5
 inc: INC-5.1
 bc: torneo, identidad
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-21"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §19
   - docs/plans/sp5/US-5.1.5-plan.md
+us_id: US-5.1.5
+tests_count: null
 ---
 
 # US-5.1.5 — JuecesPanel: asignación de juez por disciplina

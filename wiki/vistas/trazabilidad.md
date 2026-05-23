@@ -1,7 +1,7 @@
 ---
 title: "Vista de Trazabilidad"
 type: vista
-last_updated: "2026-05-21"
+last_updated: "2026-05-23"
 sources:
   - wiki/trazabilidad/
   - docs/traceability/matrix.md
@@ -23,9 +23,15 @@ QA, auditor de calidad, desarrollador implementando o modificando un requerimien
 
 ## Estado actual del wiki
 
-✅ **Fase 3 completa.** 185 páginas de trazabilidad por US disponibles (SP1–SP7 + SP-ADJ-01 a SP-ADJ-11).
-
-La cadena `RF → US → código → tests → cierre` es navegable directamente desde el wiki para todos los SPs cerrados. La fuente complementaria sigue siendo `docs/traceability/matrix.md` para búsquedas tabulares.
+```dataview
+TABLE WITHOUT ID
+  length(rows) AS "Total US",
+  estado AS "Estado"
+FROM "wiki/trazabilidad"
+WHERE type = "trazabilidad-us"
+GROUP BY estado
+SORT length(rows) DESC
+```
 
 ---
 
@@ -99,10 +105,10 @@ La cadena canónica en AtaraxiaDive es:
 RF (área) → US (historia de usuario) → código en src/<bc>/ → tests en tests/ → reporte en docs/reports/
 ```
 
-Esta cadena vive en `docs/traceability/matrix.md`. Cuando se complete la Fase 3 del wiki, cada US tendrá su propia página con el ciclo completo navegable.
+Esta cadena vive en `docs/traceability/matrix.md` y es navegable directamente en el wiki — cada US tiene su propia página con el ciclo completo.
 
-**Recorrido de referencia para navegar hoy:**
-`[[RF-ejecucion]]` → `docs/traceability/matrix.md` (fuente externa) → `docs/reports/US-X.md`
+**Recorrido de referencia:**
+`[[RF-ejecucion]]` → `[[US-X.Y.Z]]` → código en `src/<bc>/` → tests en `tests/features/`
 
 ---
 
@@ -118,6 +124,60 @@ Esta cadena vive en `docs/traceability/matrix.md`. Cuando se complete la Fase 3 
 | Usuarios y roles | [[arquitectura/identidad]] | — |
 | Notificaciones | [[arquitectura/notificaciones]] | — |
 | Integración externa | [[RF-integracion]] | (sin BC asignado aún) |
+
+---
+
+## Vistas dinámicas
+
+### US por estado
+
+```dataview
+TABLE us_id, bc, sp, tests_count
+FROM "wiki/trazabilidad"
+WHERE type = "trazabilidad-us"
+SORT sp ASC, us_id ASC
+GROUP BY estado
+```
+
+### US pendientes
+
+```dataview
+TABLE us_id, bc, sp, inc
+FROM "wiki/trazabilidad"
+WHERE type = "trazabilidad-us" AND estado = "pendiente"
+SORT sp ASC
+```
+
+### US por BC
+
+```dataview
+TABLE WITHOUT ID
+  bc AS "BC",
+  length(rows) AS "Total US",
+  length(filter(rows, (r) => r.estado = "cerrada")) AS "Cerradas"
+FROM "wiki/trazabilidad"
+WHERE type = "trazabilidad-us"
+GROUP BY bc
+SORT bc ASC
+```
+
+### US con cobertura de tests registrada
+
+```dataview
+TABLE us_id, bc, sp, tests_count
+FROM "wiki/trazabilidad"
+WHERE type = "trazabilidad-us" AND tests_count != null
+SORT tests_count DESC
+```
+
+### Cobertura por BC (arquitectura)
+
+```dataview
+TABLE tipo_ddd, test_coverage
+FROM "wiki/arquitectura"
+WHERE tipo_ddd != null
+SORT test_coverage ASC
+```
 
 ---
 

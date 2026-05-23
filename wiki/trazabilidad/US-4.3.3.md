@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP4
 inc: INC-4.3
 bc: frontend, competencia
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-12"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §14
+us_id: US-4.3.3
+tests_count: null
 ---
 
 # US-4.3.3 — Wizard extendido: DNS, BKO, tarjeta roja con MotivoDQ

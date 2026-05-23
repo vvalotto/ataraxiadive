@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP2
 inc: INC-2.0
 bc: competencia, shared
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-03-28"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §5
+us_id: US-2.0
+tests_count: null
 ---
 
 # INC-2.0 — Exception management cross-BC

@@ -4,13 +4,15 @@ type: trazabilidad-us
 sp: SP7
 inc: INC-7.1
 bc: infraestructura
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-05-17"
 last_updated: "2026-05-21"
 sources:
   - docs/plans/sp7/US-7.1.1-plan.md
   - docs/adr/ADR-021-fly-io.md
   - docs/architecture/60-deployment-view.md
+us_id: US-7.1.1
+tests_count: null
 ---
 
 # US-7.1.1 — Dockerfile + FastAPI estáticos + fly.toml + entorno producción

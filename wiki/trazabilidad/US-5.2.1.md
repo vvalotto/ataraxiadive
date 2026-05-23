@@ -4,12 +4,14 @@ type: trazabilidad-us
 sp: SP5
 inc: INC-5.2
 bc: competencia, torneo
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-22"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §21
   - docs/plans/sp5/US-5.2.1-plan.md
+us_id: US-5.2.1
+tests_count: null
 ---
 
 # US-5.2.1 — TorneoCompetenciasPage: maestro-detalle por disciplina

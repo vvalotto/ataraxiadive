@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP1
 inc: INC-1.2
 bc: competencia
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-03-22"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §6
+us_id: US-1.2.2
+tests_count: 41
 ---
 
 # US-1.2.2 — LlamarAtleta

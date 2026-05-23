@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP3
 inc: INC-3.5
 bc: resultados, torneo
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-02"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §9
+us_id: US-3.5.2
+tests_count: null
 ---
 
 # US-3.5.2 — Política P-09: overall automático al cerrar torneo

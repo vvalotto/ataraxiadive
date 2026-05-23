@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP5
 inc: INC-5.6
 bc: torneo, resultados
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-28"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §26
+us_id: US-5.6.2
+tests_count: null
 ---
 
 # US-5.6.2 — TipoReglamento en Torneo + DI en CalcularRankingHandler

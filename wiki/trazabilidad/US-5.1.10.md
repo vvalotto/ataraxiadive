@@ -4,12 +4,14 @@ type: trazabilidad-us
 sp: SP5
 inc: INC-5.1-ADJ
 bc: torneo
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-21"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §20
   - docs/plans/sp5/US-5.1.10-plan.md
+us_id: US-5.1.10
+tests_count: null
 ---
 
 # US-5.1.10 — Normalización del campo estado en fetchTorneo

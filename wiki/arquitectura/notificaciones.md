@@ -1,12 +1,13 @@
 ---
 title: "BC Notificaciones — Generic Domain"
 type: arquitectura
-last_updated: "2026-05-20"
+last_updated: "2026-05-23"
 sources:
   - docs/architecture/15-bc-notificaciones.md
-tipo_ddd: Generic Domain
+tipo_ddd: generic
 persistencia: Event Sourcing
 db: notificaciones.db
+test_coverage: null
 ---
 
 # BC Notificaciones — Generic Domain

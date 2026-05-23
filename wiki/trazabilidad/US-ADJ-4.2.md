@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP-ADJ-04
 inc: SP-ADJ-04
 bc: competencia
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-03"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §11
+us_id: US-ADJ-4.2
+tests_count: null
 ---
 
 # US-ADJ-4.2 — Corregir orden grilla STA: ascendente

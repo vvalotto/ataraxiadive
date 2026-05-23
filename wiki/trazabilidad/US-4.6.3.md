@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP4
 inc: INC-4.6
 bc: frontend
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-18"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §17
+us_id: US-4.6.3
+tests_count: null
 ---
 
 # US-4.6.3 — UI auditoría para organizador: timeline + hash

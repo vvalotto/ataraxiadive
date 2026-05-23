@@ -4,12 +4,14 @@ type: trazabilidad-us
 sp: SP5
 inc: INC-5.1
 bc: competencia
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-21"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §19
   - docs/plans/sp5/US-5.1.4-plan.md
+us_id: US-5.1.4
+tests_count: null
 ---
 
 # US-5.1.4 — GrillaPanel: generar y confirmar grilla por disciplina

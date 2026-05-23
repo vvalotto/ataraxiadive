@@ -4,11 +4,13 @@ type: trazabilidad-us
 sp: SP6
 inc: INC-6.6
 bc: frontend, identidad
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-05-10"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §SP6
+us_id: US-6.6.3
+tests_count: null
 ---
 
 # US-6.6.3 — Navegación contextual: redirect post-login y RootRedirect

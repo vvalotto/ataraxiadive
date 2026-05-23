@@ -1,12 +1,13 @@
 ---
 title: "BC Resultados — Supporting Domain"
 type: arquitectura
-last_updated: "2026-05-20"
+last_updated: "2026-05-23"
 sources:
   - docs/architecture/13-bc-resultados.md
-tipo_ddd: Supporting Domain
+tipo_ddd: supporting
 persistencia: CRUD + stream propio
 db: resultados.db
+test_coverage: null
 ---
 
 # BC Resultados — Supporting Domain

@@ -1,12 +1,13 @@
 ---
 title: "BC Registro — Supporting Domain"
 type: arquitectura
-last_updated: "2026-05-20"
+last_updated: "2026-05-23"
 sources:
   - docs/architecture/12-bc-registro.md
-tipo_ddd: Supporting Domain
+tipo_ddd: supporting
 persistencia: CRUD
 db: registro.db
+test_coverage: 90
 ---
 
 # BC Registro — Supporting Domain

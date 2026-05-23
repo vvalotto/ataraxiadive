@@ -4,12 +4,14 @@ type: trazabilidad-us
 sp: SP-ADJ-08
 inc: SP-ADJ-08
 bc: torneo, competencia
-estado: completado
+estado: cerrada
 fecha_cierre: "2026-04-22"
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §22
   - docs/plans/sp-adj-08/PLAN-SP-ADJ-08.md
+us_id: US-ADJ-8.2
+tests_count: null
 ---
 
 # US-ADJ-8.2 — SP-ADJ-08: selector de grilla filtrado y transición a premiación

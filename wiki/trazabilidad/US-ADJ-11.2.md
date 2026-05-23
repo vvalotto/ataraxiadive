@@ -4,10 +4,12 @@ type: trazabilidad-us
 sp: SP-ADJ-11
 inc: SP-ADJ-11
 bc: identidad
-estado: completado
+estado: cerrada
 last_updated: "2026-05-21"
 sources:
   - docs/traceability/matrix.md §33
+us_id: US-ADJ-11.2
+tests_count: null
 ---
 
 # US-ADJ-11.2 — POST/DELETE /auth/usuarios/me/roles + guard no quitar ATLETA
