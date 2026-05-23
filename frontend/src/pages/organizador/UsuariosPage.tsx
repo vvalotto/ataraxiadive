@@ -61,7 +61,7 @@ function getUsuarioError(error: unknown): string {
 
 function ordenarUsuarios(usuarios: UsuarioDto[]): UsuarioDto[] {
   return [...usuarios].sort((a, b) => {
-    const rolCompare = a.rol.localeCompare(b.rol)
+    const rolCompare = (a.roles[0] ?? '').localeCompare(b.roles[0] ?? '')
     if (rolCompare !== 0) return rolCompare
     return a.email.localeCompare(b.email)
   })
@@ -205,7 +205,7 @@ export function UsuariosPage() {
                       <td className="px-4 py-3 text-stone-900">{usuario.apellido}</td>
                       <td className="px-4 py-3 font-medium text-stone-900">{usuario.email}</td>
                       <td className="px-4 py-3 text-stone-700">
-                        {ROL_LABELS[usuario.rol] ?? usuario.rol}
+                        {usuario.roles.map((r) => ROL_LABELS[r] ?? r).join(', ')}
                       </td>
                       <td className="px-4 py-3">
                         <span

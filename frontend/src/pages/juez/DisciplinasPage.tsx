@@ -16,7 +16,7 @@ export function DisciplinasPage() {
       title="Mis asignaciones"
       subtitle={subtitle}
       actions={
-        <div className="flex gap-2">
+        <div className="flex shrink-0 flex-col gap-2">
           <Link
             to="/juez/mis-datos"
             className="rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 hover:text-slate-200"
