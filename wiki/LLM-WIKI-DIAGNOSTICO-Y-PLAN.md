@@ -534,6 +534,40 @@ esa perspectiva usando el wiki como base de conocimiento.
 
 ---
 
+### Extensión opcional — Graphify (grafo estructural del código)
+
+[Graphify](https://graphify.net) es una herramienta open-source (abril 2026) que combina
+análisis estático con Tree-sitter y extracción semántica por LLM para generar un grafo
+de conocimiento del codebase. Opera de forma complementaria al LLM Wiki: donde el wiki
+responde *por qué* se construyó algo de cierta manera, Graphify responde *cómo está
+conectado* el código estructuralmente.
+
+**Punto de integración en el plan:** Fase 5, una vez que el wiki fundacional está estable.
+
+**Flujo de integración:**
+
+```
+graphify run ./src/          → genera GRAPH_REPORT.md + graph.json
+/wiki-ingest GRAPH_REPORT.md → el LLM ingesta el reporte como fuente nivel 5
+                               → actualiza wiki/bounded-contexts/ con dependencias reales
+                               → enriquece wiki/impacto/ con nodos de acoplamiento del código
+```
+
+**Jerarquía de fuentes:** `GRAPH_REPORT.md` se ingesta como fuente nivel 5
+(arquitectura técnica de soporte), subordinada a baselines, ADRs y CLAUDE.md.
+
+**Valor diferencial para AtaraxiaDive:**
+- Los 6 BCs tienen su implementación en `src/`; Graphify mapea las dependencias reales
+  entre ellos (no las declaradas en los docs).
+- La Vista de Impacto del wiki gana precisión: en lugar de inferir dependencias del LLM,
+  las lee del grafo estructural.
+- Detecta acoplamiento no documentado entre BCs que los ADRs no registraron.
+
+**Cuándo ejecutarlo:** Al cierre de cada Sprint, junto con el baseline. Trigger sugerido:
+nuevo `.cm/baselines/BL-*.md` → ejecutar `graphify` → ingestar `GRAPH_REPORT.md`.
+
+---
+
 ### Triggers de sincronización (post-POC)
 
 Una vez validado el POC manualmente, automatizar el ingest ante eventos semánticos:
@@ -546,6 +580,7 @@ Una vez validado el POC manualmente, automatizar el ingest ante eventos semánti
 | Nuevo baseline en `.cm/baselines/` | Actualizar página de estado del proyecto |
 | Nuevo ADR | Crear página de decisión → lint de páginas que podrían verse afectadas |
 | Cierre de SP | Ingestar HITOs del SP → actualizar vista de investigación |
+| Nuevo baseline en `.cm/baselines/` *(Graphify)* | Ejecutar `graphify run ./src/` → ingestar `GRAPH_REPORT.md` → actualizar `wiki/bounded-contexts/` e `wiki/impacto/` con dependencias estructurales reales |
 
 ---
 
@@ -555,7 +590,7 @@ Una vez validado el POC manualmente, automatizar el ingest ante eventos semánti
 |------|------------|-------------------|--------|
 | H-0 | Gaps G-01/02/03 resueltos | CLAUDE.md con jerarquía de verdad, WIKI.md creado | ✅ |
 | H-1 | Ingest fundacional completo | 35+ páginas wiki, BCs documentados, index.md navegable | ✅ 51 páginas, 7/7 fuentes |
-| H-2 | Vistas construidas | 6 páginas de vistas operativas, recorridos validados | ⏳ |
+| H-2 | Vistas construidas | 6 páginas de vistas operativas, recorridos validados | ✅ |
 | H-3 | Ingest de estado completo | Página de estado unificada, trazabilidad por US visible | ⏳ |
 | H-4 | Primer lint ejecutado | Página de salud con inconsistencias identificadas | ⏳ |
 | H-5 | Primera consulta de impacto | Respuesta fundamentada archivada como página del wiki | ⏳ |
