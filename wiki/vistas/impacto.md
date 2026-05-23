@@ -1,7 +1,7 @@
 ---
 title: "Vista de Impacto"
 type: vista
-last_updated: "2026-05-21"
+last_updated: "2026-05-23"
 sources:
   - wiki/arquitectura/context-map.md
   - wiki/arquitectura/
@@ -162,14 +162,36 @@ Las reglas de tarjetas y disciplinas se modelan como datos configurables ([[ADR-
 
 ## Interfaces críticas (puntos de mayor riesgo)
 
-| Interfaz / Componente | BCs involucrados | Riesgo de cambio |
-|----------------------|-----------------|-----------------|
-| JWT / claims de Identidad | Identidad → Torneo, Registro, Competencia | Muy alto (transversal) |
-| `CompetenciaFinalizada` (evento) | Competencia → Resultados | Alto (ranking depende de él) |
-| Esquema del event store | Competencia, Notificaciones | Muy alto (datos históricos) |
-| `AtletaNombrePort` | Registro → Competencia | Medio (contenido en adaptador) |
-| `InscripcionHabilitada` (evento) | Torneo → Registro | Medio (contrato de evento) |
-| Hash SHA-256 | Competencia → (auditoría externa) | Alto (integridad regulatoria) |
+```dataview
+TABLE componente, tipo, riesgo, bcs_afectados
+FROM "wiki/impacto"
+SORT riesgo ASC
+```
+
+---
+
+## Vistas dinámicas
+
+### Componentes de riesgo muy alto
+
+```dataview
+TABLE componente, tipo, bcs_afectados
+FROM "wiki/impacto"
+WHERE riesgo = "muy_alto"
+```
+
+### Componentes por tipo
+
+```dataview
+TABLE WITHOUT ID
+  tipo AS "Tipo",
+  componente AS "Componente",
+  riesgo AS "Riesgo",
+  bcs_afectados AS "BCs afectados"
+FROM "wiki/impacto"
+SORT tipo ASC, riesgo ASC
+GROUP BY tipo
+```
 
 ---
 
