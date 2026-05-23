@@ -122,6 +122,29 @@ export async function crearUsuario(body: CrearUsuarioRequest): Promise<CrearUsua
   return parseResponse<CrearUsuarioResponse>(response)
 }
 
+export async function agregarRolUsuario(
+  usuarioId: string,
+  rol: RolGestionUsuario,
+): Promise<{ usuario_id: string; roles: RolIdentidad[] }> {
+  const response = await fetch(`/auth/usuarios/${encodeURIComponent(usuarioId)}/roles`, {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({ rol }),
+  })
+  return parseResponse(response)
+}
+
+export async function quitarRolUsuario(
+  usuarioId: string,
+  rol: RolGestionUsuario,
+): Promise<{ usuario_id: string; roles: RolIdentidad[] }> {
+  const response = await fetch(
+    `/auth/usuarios/${encodeURIComponent(usuarioId)}/roles/${encodeURIComponent(rol)}`,
+    { method: 'DELETE', headers: buildHeaders() },
+  )
+  return parseResponse(response)
+}
+
 export async function cambiarPassword(body: CambiarPasswordRequest): Promise<void> {
   const response = await fetch('/auth/cambiar-password', {
     method: 'POST',
