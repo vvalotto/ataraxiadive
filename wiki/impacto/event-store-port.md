@@ -7,8 +7,9 @@ sources:
   - wiki/arquitectura/competencia.md
   - wiki/arquitectura/notificaciones.md
 componente: EventStorePort
-riesgo: muy-alto
+riesgo: muy_alto
 bcs_afectados: [competencia, notificaciones]
+tipo: interfaz
 ---
 
 # Impacto: `EventStorePort`

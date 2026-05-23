@@ -10,6 +10,7 @@ sources:
 componente: AtletaNombrePort
 riesgo: medio
 bcs_afectados: [registro, competencia, resultados]
+tipo: interfaz
 ---
 
 # Impacto: `AtletaNombrePort` / `registro.db` cross-BC

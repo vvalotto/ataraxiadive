@@ -7,8 +7,9 @@ sources:
   - wiki/decisiones/ADR-020-modelo-usuarios-roles.md
   - wiki/arquitectura/context-map.md
 componente: BC Identidad (JWT / claims)
-riesgo: muy-alto
+riesgo: muy_alto
 bcs_afectados: [torneo, registro, competencia, identidad]
+tipo: cross_bc
 ---
 
 # Impacto: BC Identidad — dependencia transversal de auth

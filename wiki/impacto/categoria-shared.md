@@ -10,6 +10,7 @@ sources:
 componente: Categoria (shared value object)
 riesgo: medio
 bcs_afectados: [registro, resultados, competencia]
+tipo: shared
 ---
 
 # Impacto: `Categoria` (valor compartido cross-BC)
