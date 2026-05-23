@@ -78,7 +78,7 @@ export function JuecesPanel({ torneoId }: JuecesPanelProps) {
 
   const disciplinas = useMemo(() => disciplinasQuery.data ?? [], [disciplinasQuery.data])
   const jueces = useMemo(
-    () => (juecesQuery.data ?? []).filter((usuario) => usuario.rol === 'JUEZ' && usuario.activo),
+    () => (juecesQuery.data ?? []).filter((usuario) => usuario.roles.includes('JUEZ') && usuario.activo),
     [juecesQuery.data],
   )
   const rows = useMemo<FilaJuezPerformance[]>(() => {

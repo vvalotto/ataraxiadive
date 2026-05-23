@@ -94,10 +94,6 @@ export function OrganizadorLayout({
 
   function shouldShowNavItem(item: NavItem): boolean {
     if (item.key === 'torneo') return Boolean(activeTournamentId)
-    if (item.key === 'podios') return Boolean(activeTournamentId) || seccionActiva === 'podios'
-    if (item.key === 'inscriptos') {
-      return Boolean(activeTournamentId) || seccionActiva === 'inscriptos'
-    }
     return true
   }
 

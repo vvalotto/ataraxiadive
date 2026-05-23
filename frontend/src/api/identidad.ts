@@ -17,7 +17,7 @@ export interface UsuarioDto {
   nombre: string
   apellido: string
   email: string
-  rol: RolIdentidad
+  roles: RolIdentidad[]
   activo: boolean
 }
 

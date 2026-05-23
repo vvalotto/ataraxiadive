@@ -110,11 +110,6 @@ export function InscriptosPanel({ torneoId, torneoEstado }: InscriptosPanelProps
             Revisa inscripciones, disciplinas activas y el estado de AP por atleta.
           </p>
         </div>
-        <div className="max-w-sm rounded-2xl border border-slate-700 bg-slate-950/70 px-4 py-3 text-xs text-slate-300">
-          {editable
-            ? 'La edición de AP está habilitada. El torneo solo puede pasar a preparación cuando no queden pendientes.'
-            : 'El torneo ya no está en inscripción abierta. Los AP se muestran en solo lectura como referencia operativa.'}
-        </div>
       </div>
 
       <div className="rounded-[1.5rem] border border-slate-700 bg-slate-950/70 p-4">

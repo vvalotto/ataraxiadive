@@ -1,13 +1,11 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { JuezLayout } from '../../components/juez/JuezLayout'
 import { useDisciplinasJuez } from '../../hooks/useDisciplinasJuez'
-import useAuthStore from '../../stores/useAuthStore'
 import useCompetenciaStore from '../../stores/useCompetenciaStore'
 
 export function DisciplinasPage() {
   const location = useLocation()
   const navigate = useNavigate()
-  const logout = useAuthStore((s) => s.logout)
   const seleccionarCompetencia = useCompetenciaStore((s) => s.seleccionarCompetencia)
   const { torneoActivo, disciplinas, subtitle, isLoading, hasError } = useDisciplinasJuez()
 
@@ -15,23 +13,6 @@ export function DisciplinasPage() {
     <JuezLayout
       title="Mis asignaciones"
       subtitle={subtitle}
-      actions={
-        <div className="flex gap-2">
-          <Link
-            to="/juez/mis-datos"
-            className="rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 hover:text-slate-200"
-          >
-            Mis Datos
-          </Link>
-          <button
-            type="button"
-            onClick={logout}
-            className="rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-200"
-          >
-            Salir
-          </button>
-        </div>
-      }
     >
       {location.state && (location.state as { passwordUpdated?: boolean }).passwordUpdated ? (
         <section className="rounded-3xl border border-emerald-500/30 bg-emerald-500/10 p-5 text-sm text-emerald-100">
