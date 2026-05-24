@@ -16,6 +16,7 @@ def context(tmp_path: Any, monkeypatch: Any) -> dict[str, Any]:
     db_path = str(tmp_path / "identidad_adj112_test.db")
     monkeypatch.setenv("IDENTIDAD_DB_PATH", db_path)
     monkeypatch.setenv("IDENTIDAD_JWT_SECRET", "test-secret-adj112-32chars-min!")
+    monkeypatch.setenv("REGISTRO_DB_PATH", str(tmp_path / "registro_adj112_test.db"))
     return {}
 
 
