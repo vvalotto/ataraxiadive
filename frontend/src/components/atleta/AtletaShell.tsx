@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { type ReactNode, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import useAuthStore from '../../stores/useAuthStore'
 
@@ -35,6 +35,11 @@ export function AtletaShell({
   const location = useLocation()
   const navigate = useNavigate()
   const logout = useAuthStore((state) => state.logout)
+
+  useEffect(() => {
+    document.title = 'AtaraxiaDive · Atleta'
+    return () => { document.title = 'AtaraxiaDive' }
+  }, [])
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">

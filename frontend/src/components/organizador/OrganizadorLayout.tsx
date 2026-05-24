@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { type ReactNode, useEffect } from 'react'
 import type { EstadoTorneo } from '../../api/torneo'
 import { Link, useLocation } from 'react-router-dom'
 import { HealthCheck } from '../HealthCheck'
@@ -86,6 +86,11 @@ export function OrganizadorLayout({
 }: OrganizadorLayoutProps) {
   void activeTournamentState
   const location = useLocation()
+
+  useEffect(() => {
+    document.title = 'AtaraxiaDive · Organizador'
+    return () => { document.title = 'AtaraxiaDive' }
+  }, [])
   const email = useAuthStore((s) => s.email)
   const nombre = useAuthStore((s) => s.nombre)
   const apellido = useAuthStore((s) => s.apellido)

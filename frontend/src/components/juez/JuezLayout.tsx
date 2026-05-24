@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { type ReactNode, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import useAuthStore from '../../stores/useAuthStore'
 import { HealthCheck } from '../HealthCheck'
@@ -14,6 +14,11 @@ interface JuezLayoutProps {
 export function JuezLayout({ title, subtitle, actions, children }: JuezLayoutProps) {
   const logout = useAuthStore((s) => s.logout)
   const { pathname } = useLocation()
+
+  useEffect(() => {
+    document.title = 'AtaraxiaDive · Juez'
+    return () => { document.title = 'AtaraxiaDive' }
+  }, [])
   const enMisDatos = pathname === '/juez/mis-datos'
 
   return (
