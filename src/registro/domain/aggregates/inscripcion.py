@@ -9,6 +9,7 @@ from uuid import UUID, uuid4
 
 from registro.domain.exceptions import DisciplinaNoInscripta, PlazoCancelacionVencido
 from registro.domain.value_objects.ap_declarado import APDeclarado
+from registro.domain.value_objects.estado_aceptacion import EstadoAceptacion
 from registro.domain.value_objects.estado_inscripcion import EstadoInscripcion
 from shared.domain.value_objects.disciplina import Disciplina
 from shared.domain.value_objects.unidad_medida import UnidadMedida
@@ -25,6 +26,7 @@ class Inscripcion:
     ap_por_disciplina: dict[Disciplina, APDeclarado] = field(default_factory=dict)
     apto_medico_path: str | None = None
     constancia_pago_path: str | None = None
+    estado_aceptacion: EstadoAceptacion = EstadoAceptacion.ACEPTADO
 
     @classmethod
     def from_row(cls, data: Mapping[str, Any]) -> Inscripcion:
@@ -39,6 +41,9 @@ class Inscripcion:
             ap_por_disciplina=_parse_ap_por_disciplina(data.get("ap_por_disciplina")),
             apto_medico_path=data.get("apto_medico_path"),
             constancia_pago_path=data.get("constancia_pago_path"),
+            estado_aceptacion=EstadoAceptacion(
+                data.get("estado_aceptacion") or EstadoAceptacion.ACEPTADO
+            ),
         )
 
     def cancelar(self, fecha_actual: date, fecha_inicio_torneo: date) -> None:
@@ -61,6 +66,9 @@ class Inscripcion:
 
     def tiene_ap_completo(self) -> bool:
         return all(self.obtener_ap(disciplina) is not None for disciplina in self.disciplinas)
+
+    def cambiar_aceptacion(self, nuevo_estado: EstadoAceptacion) -> None:
+        self.estado_aceptacion = nuevo_estado
 
     def adjuntar_apto_medico(self, path: str) -> None:
         if not path or not path.strip():

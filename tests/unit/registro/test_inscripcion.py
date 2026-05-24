@@ -8,6 +8,7 @@ import pytest
 
 from registro.domain.aggregates.inscripcion import Inscripcion
 from registro.domain.exceptions import PlazoCancelacionVencido
+from registro.domain.value_objects.estado_aceptacion import EstadoAceptacion
 from registro.domain.value_objects.estado_inscripcion import EstadoInscripcion
 from shared.domain.value_objects.disciplina import Disciplina
 from shared.domain.value_objects.unidad_medida import UnidadMedida
@@ -124,6 +125,59 @@ def test_from_row_reconstituye_inscripcion_con_ap_y_adjuntos():
     assert ins.ap_por_disciplina[Disciplina.DNF].unidad == UnidadMedida.Metros
     assert ins.apto_medico_path == "data/adjuntos/ins/apto.pdf"
     assert ins.constancia_pago_path == "data/adjuntos/ins/pago.pdf"
+
+
+def test_estado_aceptacion_default_es_aceptado():
+    ins = _inscripcion()
+    assert ins.estado_aceptacion == EstadoAceptacion.ACEPTADO
+
+
+def test_cambiar_aceptacion_a_rechazado():
+    ins = _inscripcion()
+    ins.cambiar_aceptacion(EstadoAceptacion.RECHAZADO)
+    assert ins.estado_aceptacion == EstadoAceptacion.RECHAZADO
+
+
+def test_cambiar_aceptacion_volver_a_aceptado():
+    ins = _inscripcion()
+    ins.cambiar_aceptacion(EstadoAceptacion.RECHAZADO)
+    ins.cambiar_aceptacion(EstadoAceptacion.ACEPTADO)
+    assert ins.estado_aceptacion == EstadoAceptacion.ACEPTADO
+
+
+def test_from_row_reconstruye_estado_aceptacion_rechazado():
+    ins = Inscripcion.from_row(
+        {
+            "inscripcion_id": str(uuid4()),
+            "atleta_id": str(uuid4()),
+            "torneo_id": str(uuid4()),
+            "disciplinas": '["STA"]',
+            "estado": "ACTIVA",
+            "fecha_inscripcion": "2026-05-09T12:30:00",
+            "ap_por_disciplina": "{}",
+            "apto_medico_path": None,
+            "constancia_pago_path": None,
+            "estado_aceptacion": "RECHAZADO",
+        }
+    )
+    assert ins.estado_aceptacion == EstadoAceptacion.RECHAZADO
+
+
+def test_from_row_sin_estado_aceptacion_usa_default():
+    ins = Inscripcion.from_row(
+        {
+            "inscripcion_id": str(uuid4()),
+            "atleta_id": str(uuid4()),
+            "torneo_id": str(uuid4()),
+            "disciplinas": '["STA"]',
+            "estado": "ACTIVA",
+            "fecha_inscripcion": "2026-05-09T12:30:00",
+            "ap_por_disciplina": "{}",
+            "apto_medico_path": None,
+            "constancia_pago_path": None,
+        }
+    )
+    assert ins.estado_aceptacion == EstadoAceptacion.ACEPTADO
 
 
 def test_from_row_reconstituye_ap_vacio():

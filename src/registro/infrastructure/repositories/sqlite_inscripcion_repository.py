@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS inscripciones (
     estado            TEXT NOT NULL,
     fecha_inscripcion TEXT NOT NULL,
     apto_medico_path  TEXT,
-    constancia_pago_path TEXT
+    constancia_pago_path TEXT,
+    estado_aceptacion TEXT NOT NULL DEFAULT 'ACEPTADO'
 )
 """
 
@@ -125,9 +126,10 @@ INSERT OR REPLACE INTO inscripciones
         estado,
         fecha_inscripcion,
         apto_medico_path,
-        constancia_pago_path
+        constancia_pago_path,
+        estado_aceptacion
     )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 """
 
 
@@ -149,6 +151,10 @@ async def _ensure_schema(conn: aiosqlite.Connection) -> None:
         await conn.execute("ALTER TABLE inscripciones ADD COLUMN apto_medico_path TEXT")
     if "constancia_pago_path" not in columns:
         await conn.execute("ALTER TABLE inscripciones ADD COLUMN constancia_pago_path TEXT")
+    if "estado_aceptacion" not in columns:
+        await conn.execute(
+            "ALTER TABLE inscripciones ADD COLUMN estado_aceptacion TEXT NOT NULL DEFAULT 'ACEPTADO'"
+        )
     await conn.commit()
 
 
@@ -171,4 +177,5 @@ def _inscripcion_to_values(inscripcion: Inscripcion) -> tuple[object, ...]:
         inscripcion.fecha_inscripcion.isoformat(),
         inscripcion.apto_medico_path,
         inscripcion.constancia_pago_path,
+        inscripcion.estado_aceptacion.value,
     )
