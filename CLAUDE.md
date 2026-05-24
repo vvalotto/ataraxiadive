@@ -95,6 +95,7 @@ SP-ADJ  → ajuste técnico o documental antes de cerrar la baseline
 **SP-ADJ-11 cerrado:** 10/10 US ✅ · PRs #184–#193 · modelo multi-rol completo (Identidad + Registro + Frontend) · DesignReviewer 0 CRITICAL · ADR-020 implementado.
 **SP6 cerrado:** INC-6.1..6.6 + SP-ADJ-10/11 · UAT 10/10 flows · BL-006 ✅ · tag `v1.0.0` · despliegue diferido a SP7.
 **SP7 en curso:** INC-7.1 Despliegue en Fly.io · INC-7.2 Manual de usuario.
+**SP-ADJ-12 cerrado:** 6/6 US ✅ + 3 fixes post-revisión · PRs #205–#210 · issues #198–#204 · DesignReviewer 0 CRITICAL · 1049 tests.
 
 ---
 
@@ -220,4 +221,4 @@ memory/
 
 ---
 
-*Última actualización: 2026-05-20 — SP6 ✅ v1.0.0 · SP7 ⏳ Despliegue y Documentación · G-02 LLM Wiki ✅*
+*Última actualización: 2026-05-24 — SP6 ✅ v1.0.0 · SP7 ⏳ en curso · SP-ADJ-12 ✅ cerrado*

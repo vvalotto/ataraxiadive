@@ -7,7 +7,7 @@
 | **Fuentes** | GitHub Issues #198–#204 |
 | **Incremento asociado** | INC-7.1 (SP7 en curso) |
 | **Branch base** | `develop` |
-| **Estado** | Planificado |
+| **Estado** | ✅ Cerrado 2026-05-24 |
 
 ---
 
