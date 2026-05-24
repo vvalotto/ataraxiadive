@@ -3,11 +3,12 @@ from __future__ import annotations
 from collections.abc import Awaitable, Callable
 from datetime import date, datetime
 from decimal import Decimal
+from pathlib import Path
 from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, UploadFile
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, field_validator
 
 from identidad.api.dependencies import get_current_user
@@ -704,6 +705,31 @@ async def subir_constancia_pago(
         "constancia_pago",
         "adjuntar_constancia_pago",
     )
+
+
+@router.get("/inscripciones/{inscripcion_id}/adjuntos/{tipo}", status_code=200)
+async def descargar_adjunto_inscripcion(
+    inscripcion_id: UUID,
+    tipo: str,
+    _: OrganizadorDep,
+) -> FileResponse:
+    if tipo not in ("apto_medico", "constancia_pago"):
+        return JSONResponse(status_code=400, content={"detail": "Tipo de adjunto inválido"})
+    inscripcion = await _inscripcion_repo().find_by_id(inscripcion_id)
+    if inscripcion is None:
+        return JSONResponse(status_code=404, content={"detail": "Inscripción no encontrada"})
+    ruta = (
+        inscripcion.apto_medico_path if tipo == "apto_medico" else inscripcion.constancia_pago_path
+    )
+    if not ruta:
+        return JSONResponse(status_code=404, content={"detail": "Adjunto no disponible"})
+    path = Path(ruta)
+    if not path.exists():
+        return JSONResponse(
+            status_code=404, content={"detail": "Archivo no encontrado en el servidor"}
+        )
+    filename = f"{tipo}_{inscripcion_id}{path.suffix}"
+    return FileResponse(path=path, filename=filename, media_type="application/octet-stream")
 
 
 @router.patch("/inscripciones/{inscripcion_id}/aceptacion", status_code=200)

@@ -22,17 +22,15 @@ function Campo({ label, valor }: { label: string; valor: string | null | undefin
   )
 }
 
-function AdjuntoLink({ label, url }: { label: string; url: string | null | undefined }) {
-  if (!url) return null
+function AdjuntoLink({ label, url }: { label: string; url: string }) {
   return (
     <a
       href={url}
-      target="_blank"
-      rel="noopener noreferrer"
+      download
       className="flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800/60 px-3 py-2 text-xs font-semibold text-sky-400 hover:border-sky-500/50 hover:text-sky-300 transition-colors"
     >
       <svg className="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
       </svg>
       {label}
     </a>
@@ -157,8 +155,18 @@ export function InscripcionDetalleDrawer({ inscripcionId, torneoId, onClose }: P
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
                   Adjuntos
                 </p>
-                <AdjuntoLink label="Ver apto médico" url={detalle.apto_medico_url} />
-                <AdjuntoLink label="Ver constancia de pago" url={detalle.constancia_pago_url} />
+                {detalle.apto_medico_url && (
+                  <AdjuntoLink
+                    label="Descargar apto médico"
+                    url={`/registro/inscripciones/${detalle.inscripcion_id}/adjuntos/apto_medico`}
+                  />
+                )}
+                {detalle.constancia_pago_url && (
+                  <AdjuntoLink
+                    label="Descargar constancia de pago"
+                    url={`/registro/inscripciones/${detalle.inscripcion_id}/adjuntos/constancia_pago`}
+                  />
+                )}
               </div>
             )}
 
