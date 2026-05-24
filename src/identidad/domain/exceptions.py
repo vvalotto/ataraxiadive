@@ -71,3 +71,13 @@ class RolesVacios(Exception):
 class RolDuplicado(Exception):
     def __init__(self) -> None:
         super().__init__("El usuario no puede tener el mismo rol más de una vez")
+
+
+class RolNoRemovible(Exception):
+    def __init__(self, rol: str) -> None:
+        super().__init__(f"El rol {rol} no puede ser removido")
+
+
+class UltimoRolNoRemovible(Exception):
+    def __init__(self) -> None:
+        super().__init__("No se puede quitar el único rol del usuario")
