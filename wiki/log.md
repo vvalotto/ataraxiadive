@@ -6,6 +6,140 @@
 
 ---
 
+## [2026-05-23] ingest | Fase D plan-c4-nivel3 — cross-referencias impacto → componentes C4 L3
+
+Páginas actualizadas: 4 en `wiki/impacto/`
+
+| Página | Componentes C4 L3 agregados |
+|--------|---------------------------|
+| `event-store-port.md` | `[[arquitectura/competencia/event-store-port]]` · `[[arquitectura/notificaciones/sqlite-notificacion-event-store]]` |
+| `atleta-nombre-port.md` | `[[arquitectura/competencia/atleta-nombre-port]]` · `[[arquitectura/resultados/resultados-competencia-port]]` · `[[arquitectura/registro/sqlite-repositories]]` |
+| `bc-identidad.md` | `[[arquitectura/identidad/router-identidad]]` · `[[arquitectura/identidad/jwt-service]]` · `[[arquitectura/identidad/command-handlers-identidad]]` · `[[arquitectura/identidad/sqlite-usuario-repository]]` |
+| `categoria-shared.md` | `[[arquitectura/resultados/resultados-competencia-port]]` · `[[arquitectura/resultados/algoritmo-faas]]` · `[[arquitectura/registro/sqlite-repositories]]` · `[[arquitectura/registro/command-handlers]]` |
+
+---
+
+## [2026-05-23] ingest | Fase C plan-c4-nivel3 — vista arquitectura C4 L2+L3
+
+Páginas creadas: 1 (`wiki/vistas/arquitectura.md`)
+Páginas actualizadas: 1 (`wiki/index.md`)
+
+Queries Dataview incluidas: C4 L2 (BCs), C4 L3 por BC (6 tablas), componentes por tipo, ports, tabla global. Preguntas características con recorridos de navegación para 6 escenarios clave.
+
+---
+
+## [2026-05-23] ingest | Fase B6 plan-c4-nivel3 — componentes C4 L3 BC Notificaciones
+
+Páginas creadas: 3 en `wiki/arquitectura/notificaciones/`
+Páginas actualizadas: 2 (`wiki/arquitectura/notificaciones.md` + `wiki/index.md`)
+
+| Componente | Tipo | Capa |
+|-----------|------|------|
+| `notificacion-aggregate` | aggregate (ES) | domain |
+| `sqlite-notificacion-event-store` | event-store + adapters | infrastructure |
+| `command-handlers-notificaciones` | handlers + políticas | application |
+
+Componentes totales documentados: **41 / ~47**
+
+---
+
+## [2026-05-23] ingest | Fase B5 plan-c4-nivel3 — componentes C4 L3 BC Identidad
+
+Páginas creadas: 5 en `wiki/arquitectura/identidad/`
+Páginas actualizadas: 2 (`wiki/arquitectura/identidad.md` + `wiki/index.md`)
+
+| Componente | Tipo | Capa |
+|-----------|------|------|
+| `usuario-aggregate` | aggregate | domain |
+| `jwt-service` | adapter ×2 (JWT + bcrypt) | infrastructure |
+| `sqlite-usuario-repository` | repository | infrastructure |
+| `command-handlers-identidad` | handler ×5 | application |
+| `router-identidad` | router + dependencies | api |
+
+---
+
+## [2026-05-23] ingest | Fase B4 plan-c4-nivel3 — componentes C4 L3 BC Resultados
+
+Páginas creadas: 7 en `wiki/arquitectura/resultados/`
+Páginas actualizadas: 2 (`wiki/arquitectura/resultados.md` + `wiki/index.md`)
+
+| Componente | Tipo | Capa |
+|-----------|------|------|
+| `ranking-competencia` | aggregate (ES) | domain |
+| `ranking-overall` | aggregate (ES) | domain |
+| `resultados-competencia-port` | port + adapters ×2 | domain / infrastructure |
+| `algoritmo-faas` | service | domain |
+| `command-handlers-resultados` | handler ×2 | application |
+| `query-handlers-resultados` | handler ×4 | application |
+| `router-resultados` | router | api |
+
+---
+
+## [2026-05-23] ingest | Fase B3 plan-c4-nivel3 — componentes C4 L3 BC Torneo
+
+Páginas creadas: 5 en `wiki/arquitectura/torneo/`
+Páginas actualizadas: 2 (`wiki/arquitectura/bc-torneo.md` + `wiki/index.md`)
+
+| Componente | Tipo | Capa |
+|-----------|------|------|
+| `torneo-aggregate` | aggregate | domain |
+| `sqlite-torneo-repository` | repository | infrastructure |
+| `command-handlers-torneo` | handler ×9 | application |
+| `query-handlers-torneo` | handler ×3 | application |
+| `router-torneo` | router | api |
+
+---
+
+## [2026-05-23] ingest | Fase B2 plan-c4-nivel3 — componentes C4 L3 BC Registro
+
+Páginas creadas: 9 en `wiki/arquitectura/registro/`
+Páginas actualizadas: 2 (`wiki/arquitectura/registro.md` + `wiki/index.md`)
+
+| Componente | Tipo | Capa |
+|-----------|------|------|
+| `atleta` | aggregate | domain |
+| `inscripcion` | aggregate | domain |
+| `juez-organizador` | aggregate | domain |
+| `torneo-consulta-port` | port + adapter (ACL) | domain / infrastructure |
+| `sqlite-repositories-registro` | repository ×4 | infrastructure |
+| `perfil-registro-adapter` | adapter | infrastructure |
+| `command-handlers-registro` | handler ×10 | application |
+| `query-handlers-registro` | handler ×5 | application |
+| `router-registro` | router | api |
+
+---
+
+## [2026-05-23] ingest | Fase B1 plan-c4-nivel3 — componentes C4 L3 BC Competencia
+
+Páginas creadas: 12 en `wiki/arquitectura/competencia/`
+Página actualizada: `wiki/arquitectura/competencia.md` (campo `componentes:`)
+
+| Componente | Tipo | Capa |
+|-----------|------|------|
+| `competencia-aggregate` | aggregate | domain |
+| `performance-aggregate` | aggregate | domain |
+| `grilla-de-salida` | aggregate (entidad interna) | domain |
+| `event-store-port` | port | domain |
+| `atleta-nombre-port` | port | domain |
+| `performances-ap-port` | port | domain |
+| `calculador-hash-competencia` | service | domain |
+| `sqlite-event-store` | adapter | infrastructure |
+| `handler-utils` | service | application |
+| `command-handlers` | handler | application |
+| `query-handlers` | handler | application |
+| `router-competencia` | router | api |
+
+---
+
+## [2026-05-23] schema | Fase A plan-c4-nivel3 — tipo arquitectura-componente + estructura C4 L3
+
+Páginas actualizadas: 2 (WIKI.md + wiki/index.md)
+
+- `WIKI.md` — nueva estructura de carpetas con `wiki/arquitectura/<bc>/`; nuevo tipo `arquitectura-componente` con frontmatter (bc, capa, tipo_componente, responsabilidad, interfaces_out, adr_refs); campo `componentes:[]` agregado al tipo `arquitectura`; nueva vista `arquitectura` en tabla de vistas; tipo `plan` declarado
+- `wiki/index.md` — sección Vistas actualizada con entrada `[[arquitectura]]`; nueva sección Planes con `[[plan-c4-nivel3]]` y `[[plan-trazabilidad-rf-us-si-tu]]`; total de páginas: 238
+
+---
+
 ## [2026-05-22] ingest | L3+L4 lint-001 — RFs pendientes clasificados + cobertura BC enriquecida
 
 Páginas actualizadas: 7 (4 RF + 3 BC)

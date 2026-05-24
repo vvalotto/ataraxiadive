@@ -8,6 +8,12 @@ tipo_ddd: supporting
 persistencia: CRUD
 db: torneo.db
 test_coverage: null
+componentes:
+  - torneo-aggregate
+  - sqlite-torneo-repository
+  - command-handlers-torneo
+  - query-handlers-torneo
+  - router-torneo
 ---
 
 # BC Torneo — Supporting Domain

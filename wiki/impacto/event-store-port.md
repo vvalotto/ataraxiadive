@@ -1,7 +1,7 @@
 ---
 title: "Impacto: EventStorePort"
 type: impacto
-last_updated: "2026-05-22"
+last_updated: "2026-05-23"
 sources:
   - wiki/decisiones/ADR-008-event-store-sqlite.md
   - wiki/arquitectura/competencia.md
@@ -81,12 +81,21 @@ Afecta todas las lecturas por `stream_id` en ambos BCs. Los stream IDs están ha
 - Los contratos HTTP de la API — el puerto es interno al BC.
 - El contrato del evento `CompetenciaFinalizada` — ese es un evento de dominio de salida, no el esquema del store.
 
+## Componentes C4 L3 — implementaciones concretas
+
+| BC | Componente wiki | Descripción |
+|----|----------------|-------------|
+| Competencia | [[arquitectura/competencia/event-store-port]] | `EventStorePort` ABC + `SQLiteEventStore`; tabla `events`; `load_from(from_version)` |
+| Notificaciones | [[arquitectura/notificaciones/sqlite-notificacion-event-store]] | `SQLiteNotificacionEventStore`; tabla `notificaciones_events`; índice sobre `evento_fuente_id` |
+
+**Diferencia clave entre implementaciones:** Competencia usa `SQLiteEventStore` (tabla `events` con `id TEXT PK`, `stream_pos`, `metadata`, hash SHA-256); Notificaciones usa `SQLiteNotificacionEventStore` (tabla `notificaciones_events` con `id INTEGER PK AUTOINCREMENT`, índice `json_extract` para idempotencia). Son implementaciones independientes — no comparten código de infraestructura.
+
 ## Recorrido en el wiki
 
 ```
 [[ADR-008-event-store-sqlite]]
-  → [[arquitectura/competencia]] sección "Persistencia"
-  → [[arquitectura/notificaciones]]
+  → [[arquitectura/competencia/event-store-port]] (implementación Competencia)
+  → [[arquitectura/notificaciones/sqlite-notificacion-event-store]] (implementación Notificaciones)
   → [[ADR-001-event-sourcing-competencia]]
   → [[ADR-018-hash-sha256-auditoria]]
   → [[ADR-009-migraciones-por-bc]]

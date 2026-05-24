@@ -8,6 +8,19 @@ tipo_ddd: core
 persistencia: Event Sourcing
 db: competencia.db
 test_coverage: 90
+componentes:
+  - arquitectura/competencia/competencia-aggregate
+  - arquitectura/competencia/performance-aggregate
+  - arquitectura/competencia/grilla-de-salida
+  - arquitectura/competencia/event-store-port
+  - arquitectura/competencia/atleta-nombre-port
+  - arquitectura/competencia/performances-ap-port
+  - arquitectura/competencia/calculador-hash-competencia
+  - arquitectura/competencia/sqlite-event-store
+  - arquitectura/competencia/handler-utils
+  - arquitectura/competencia/command-handlers
+  - arquitectura/competencia/query-handlers
+  - arquitectura/competencia/router-competencia
 ---
 
 # BC Competencia — Core Domain

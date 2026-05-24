@@ -1,7 +1,7 @@
 ---
 title: "Impacto: BC Identidad — dependencia transversal de auth"
 type: impacto
-last_updated: "2026-05-22"
+last_updated: "2026-05-23"
 sources:
   - wiki/arquitectura/identidad.md
   - wiki/decisiones/ADR-020-modelo-usuarios-roles.md
@@ -97,10 +97,22 @@ Request con JWT → BC Torneo/Registro/Competencia
                    └→ aplica guard de rol (AtletaDep / JuezDep / OrganizadorDep)
 ```
 
+## Componentes C4 L3 — implementaciones concretas
+
+| Componente | Página wiki | Descripción |
+|-----------|-------------|-------------|
+| Guards cross-cutting | [[arquitectura/identidad/router-identidad]] | `dependencies.py` con `OrganizadorDep`, `JuezDep`, `AtletaDep`; `require_rol()` factory; `get_current_user()` |
+| Emisión y verificación JWT | [[arquitectura/identidad/jwt-service]] | `JWTService` HS256; `BcryptPasswordHasher`; vars `IDENTIDAD_JWT_SECRET`, expiración 24h/1h reset |
+| Flujos de login multi-rol | [[arquitectura/identidad/command-handlers-identidad]] | `AutenticarUsuarioHandler` (`TokenResponse \| RoleSelectionRequired`); `RegistrarUsuarioHandler` (agrega roles a usuario existente) |
+| Persistencia usuarios | [[arquitectura/identidad/sqlite-usuario-repository]] | Migración `rol` → `roles` (JSON); `list_by_rol` con `LIKE` sobre JSON string |
+
 ## Recorrido en el wiki
 
 ```
 [[arquitectura/identidad]]
+  → [[arquitectura/identidad/router-identidad]] (guards OrganizadorDep / JuezDep / AtletaDep)
+  → [[arquitectura/identidad/jwt-service]] (JWTService + BcryptPasswordHasher)
+  → [[arquitectura/identidad/command-handlers-identidad]] (login multi-rol)
   → [[ADR-020-modelo-usuarios-roles]] (multi-rol + perfiles en Registro)
   → [[arquitectura/context-map]] sección "Identidad → Torneo, Registro, Competencia"
   → [[arquitectura/bc-torneo]] / [[arquitectura/registro]] / [[arquitectura/competencia]]

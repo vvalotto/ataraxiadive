@@ -8,6 +8,10 @@ tipo_ddd: generic
 persistencia: Event Sourcing
 db: notificaciones.db
 test_coverage: null
+componentes:
+  - notificacion-aggregate
+  - sqlite-notificacion-event-store
+  - command-handlers-notificaciones
 ---
 
 # BC Notificaciones — Generic Domain

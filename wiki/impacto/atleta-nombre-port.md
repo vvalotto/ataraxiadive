@@ -1,7 +1,7 @@
 ---
 title: "Impacto: AtletaNombrePort / registro.db cross-BC"
 type: impacto
-last_updated: "2026-05-22"
+last_updated: "2026-05-23"
 sources:
   - wiki/arquitectura/context-map.md
   - wiki/arquitectura/competencia.md
@@ -12,7 +12,7 @@ riesgo: medio
 bcs_afectados: [registro, competencia, resultados]
 tipo: interfaz
 ---
-
+qui
 # Impacto: `AtletaNombrePort` / `registro.db` cross-BC
 
 ## Qué es
@@ -81,13 +81,21 @@ Afecta `AtletaInfoAdapter` en Resultados — campo ausente genera error en runti
 
 `AtletaNombreAdapter.get_nombre()` se invoca en `ObtenerGrillaHandler` de Competencia, que necesita el nombre del atleta para construir el read model de la grilla. Es una consulta de enriquecimiento — no valida lógica de negocio.
 
+## Componentes C4 L3 — implementaciones concretas
+
+| BC | Componente wiki | Descripción |
+|----|----------------|-------------|
+| Competencia | [[arquitectura/competencia/atleta-nombre-port]] | `AtletaNombrePort` ABC + `AtletaNombreAdapter`; lee `SELECT nombre, apellido FROM atletas WHERE atleta_id = ?` en `registro.db` |
+| Resultados | [[arquitectura/resultados/resultados-competencia-port]] | `AtletaCategoriaPort` ABC + `AtletaCategoriaAdapter`; lee `registro.db`; campo `categoria` necesario para agrupar FAAS |
+| Registro | [[arquitectura/registro/sqlite-repositories]] | `SQLiteAtletaRepository`; propietario de la tabla `atletas` con `nombre`, `apellido`, `categoria`, `club` |
+
 ## Recorrido en el wiki
 
 ```
 [[arquitectura/context-map]] sección "Registro → Competencia"
-  → [[arquitectura/competencia]] sección "Integraciones"
-  → [[arquitectura/registro]]
-  → [[arquitectura/resultados]]
+  → [[arquitectura/competencia/atleta-nombre-port]] (puerto + adaptador cross-BC)
+  → [[arquitectura/resultados/resultados-competencia-port]] (AtletaCategoriaAdapter análogo)
+  → [[arquitectura/registro/sqlite-repositories]] (propietario de registro.db)
   → [[ADR-006-estructura-bc-first]] (regla de imports cross-BC)
 ```
 

@@ -1,7 +1,7 @@
 ---
 title: "Impacto: Categoria (valor compartido cross-BC)"
 type: impacto
-last_updated: "2026-05-22"
+last_updated: "2026-05-23"
 sources:
   - wiki/decisiones/ADR-022-categoria-shared.md
   - wiki/arquitectura/registro.md
@@ -92,13 +92,23 @@ Impacto técnico acotado pero amplio en cantidad de archivos:
 
 Esta discrepancia es la deuda técnica de mayor superficie cross-BC abierta en el proyecto.
 
+## Componentes C4 L3 — implementaciones concretas
+
+| BC | Componente wiki | Descripción |
+|----|----------------|-------------|
+| Resultados | [[arquitectura/resultados/resultados-competencia-port]] | `AtletaCategoriaPort` ABC + `AtletaCategoriaAdapter`; usa `Categoria` desde `registro.domain` para agrupar rankings FAAS |
+| Resultados | [[arquitectura/resultados/algoritmo-faas]] | `AlgoritmoPuntajeFAAS`; agrupa performances por `Categoria`; si ADR-022 completa, importaría desde `shared` |
+| Registro | [[arquitectura/registro/sqlite-repositories]] | `SQLiteAtletaRepository`; columna `categoria` en tabla `atletas` — fuente de datos |
+| Registro | [[arquitectura/registro/command-handlers]] | `RegistrarAtletaHandler` / `ActualizarAtletaHandler`; validan que `Categoria` sea un valor del enum |
+
 ## Recorrido en el wiki
 
 ```
 [[ADR-022-categoria-shared]]
   → [[ADR-006-estructura-bc-first]] (regla de imports cross-BC)
-  → [[arquitectura/registro]] sección "Value Objects"
-  → [[arquitectura/resultados]] sección "Dependencias"
+  → [[arquitectura/resultados/resultados-competencia-port]] (AtletaCategoriaAdapter — importa desde registro.domain)
+  → [[arquitectura/resultados/algoritmo-faas]] (usa Categoria para agrupar FAAS)
+  → [[arquitectura/registro/sqlite-repositories]] (propietario de atletas.categoria)
   → [[impacto/atleta-nombre-port]] (patrón análogo de cross-BC directo)
 ```
 

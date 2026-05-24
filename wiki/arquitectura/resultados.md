@@ -8,6 +8,14 @@ tipo_ddd: supporting
 persistencia: CRUD + stream propio
 db: resultados.db
 test_coverage: null
+componentes:
+  - ranking-competencia
+  - ranking-overall
+  - resultados-competencia-port
+  - algoritmo-faas
+  - command-handlers-resultados
+  - query-handlers-resultados
+  - router-resultados
 ---
 
 # BC Resultados — Supporting Domain

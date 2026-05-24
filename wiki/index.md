@@ -4,8 +4,8 @@
 > El LLM actualiza este archivo en cada operación de ingest.
 > Leer este archivo primero al responder cualquier consulta.
 
-**Última actualización:** 2026-05-22
-**Total de páginas:** 236
+**Última actualización:** 2026-05-23
+**Total de páginas:** 250
 
 ---
 
@@ -14,6 +14,7 @@
 | Sección | Páginas | Estado |
 |---------|---------|--------|
 | Bounded Contexts | 7 / 7 | ✅ Ingest completo + métricas de salud BL-006 (ArchitectAnalyst + DesignReviewer) |
+| Componentes C4 L3 | 41 / ~47 | 🔄 Fases B1–B6 completas (Competencia + Registro + Torneo + Resultados + Identidad + Notificaciones); Fase C pendiente |
 | Decisiones (ADRs) | 22 / 22 | ✅ Ingest completo |
 | Trazabilidad (US) | 185 | ✅ SP1–SP7 + SP-ADJ-01 a SP-ADJ-11 completos; SP7 INC-7.1 + INC-7.2 documentados |
 | Trazabilidad (RF semilla) | 8 | 🔄 Ingest parcial (fuente 3/7) |
@@ -22,7 +23,7 @@
 | Impacto | 4 | ✅ 4 páginas de análisis (L5 lint-001 resuelto) |
 | Estado del proyecto | 1 | ✅ Fase 3 completa — síntesis BL-000..BL-006 + SP7 en curso |
 | Salud / lint | 2 | ✅ calidad-BL-006 + lint-001 ejecutado (Fase 4 completa) |
-| Vistas | 6 / 6 | ✅ Fase 2 completa — 6 vistas operativas |
+| Vistas | 7 / 7 | ✅ Fase 2 completa + Fase C plan-c4-nivel3 — vista arquitectura C4 L2+L3 |
 
 ---
 
@@ -266,3 +267,11 @@
 | [[impacto]] | El sistema visto desde las dependencias y el riesgo de cambio |
 | [[salud]] | El sistema visto desde la deuda técnica y la calidad |
 | [[investigacion]] | El sistema visto como fuente de conocimiento intelectual |
+| [[arquitectura]] | El sistema visto desde su estructura interna — C4 L2 (BCs) y C4 L3 (componentes) ⏳ pendiente Fase C |
+
+## Planes
+
+| Página | Descripción | Estado |
+|--------|-------------|--------|
+| [[plan-c4-nivel3]] | Plan de ingest C4 L3 — componentes internos por BC | 🔄 en curso |
+| [[plan-trazabilidad-rf-us-si-tu]] | Plan de trazabilidad RF → US → Software Item → Test Unit | ⏳ pendiente |

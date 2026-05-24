@@ -8,6 +8,12 @@ tipo_ddd: generic
 persistencia: CRUD
 db: identidad.db
 test_coverage: null
+componentes:
+  - usuario-aggregate
+  - jwt-service
+  - sqlite-usuario-repository
+  - command-handlers-identidad
+  - router-identidad
 ---
 
 # BC Identidad — Generic Domain

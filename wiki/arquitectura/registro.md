@@ -8,6 +8,16 @@ tipo_ddd: supporting
 persistencia: CRUD
 db: registro.db
 test_coverage: 90
+componentes:
+  - atleta
+  - inscripcion
+  - juez-organizador
+  - torneo-consulta-port
+  - sqlite-repositories-registro
+  - perfil-registro-adapter
+  - command-handlers-registro
+  - query-handlers-registro
+  - router-registro
 ---
 
 # BC Registro — Supporting Domain

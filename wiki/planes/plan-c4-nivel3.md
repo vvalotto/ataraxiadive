@@ -1,7 +1,7 @@
 ---
 title: "Plan: Vista C4 Nivel 3 — Componentes internos de cada BC"
 type: plan
-estado: pendiente
+estado: completado
 fecha: "2026-05-23"
 fases: [A, B1, B2, B3, B4, B5, B6, C, D]
 ---
