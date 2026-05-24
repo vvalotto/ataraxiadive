@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §30
 us_id: US-6.2.5
 tests_count: null
+rf: []
 ---
 
 # US-6.2.5 — Nuevo torneo con grupos etarios JUNIOR/SENIOR/MASTER

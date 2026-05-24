@@ -11,6 +11,21 @@ sources:
   - docs/traceability/matrix.md §9
 us_id: US-3.2.1
 tests_count: null
+rf:
+  - RF-US-01
+  - RF-US-02
+  - RF-US-03
+  - RF-US-04
+  - RF-US-05
+software_items:
+  - src/identidad/domain/aggregates/usuario.py
+  - src/identidad/application/commands/autenticar_usuario.py
+  - src/identidad/infrastructure/jwt_service.py
+  - src/identidad/infrastructure/repositories/sqlite_usuario_repository.py
+test_units:
+  - tests/features/US-3.2.1-bc-identidad-jwt.feature
+  - tests/integration/identidad/test_sqlite_usuario_repository.py
+origen_tipo: rf
 ---
 
 # US-3.2.1 — BC Identidad: Usuario + JWT mínimo + /auth

@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §29
 us_id: US-6.1.4
 tests_count: null
+rf: []
 ---
 
 # US-6.1.4 — Rediseño inicio juez + STA mm:ss + tarjeta amarilla

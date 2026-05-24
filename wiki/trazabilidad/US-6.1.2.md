@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §29
 us_id: US-6.1.2
 tests_count: null
+rf: []
 ---
 
 # US-6.1.2 — Colores tarjeta outline/filled + heading paso 5 corregido

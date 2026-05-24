@@ -11,6 +11,13 @@ sources:
   - docs/traceability/matrix.md §5
 us_id: US-2.4.1
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/application/_p08_finalizacion.py
+test_units:
+  - tests/features/US-2.4.1-competencia-finalizada.feature
+  - tests/integration/competencia/test_competencia_finalizada_integration.py
+origen_tipo: plataforma
 ---
 
 # US-2.4.1 — CompetenciaFinalizada automático (política P-08)

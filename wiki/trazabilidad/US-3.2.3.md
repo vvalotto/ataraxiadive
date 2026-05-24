@@ -11,6 +11,17 @@ sources:
   - docs/traceability/matrix.md §9
 us_id: US-3.2.3
 tests_count: null
+rf:
+  - RF-IN-03
+  - RF-IN-04
+software_items:
+  - src/registro/application/commands/inscribir_atleta.py
+  - src/registro/domain/aggregates/inscripcion.py
+  - src/registro/infrastructure/repositories/sqlite_inscripcion_repository.py
+test_units:
+  - tests/features/US-3.2.3-inscripcion-atleta.feature
+  - tests/integration/registro/test_sqlite_inscripcion_repository.py
+origen_tipo: rf
 ---
 
 # US-3.2.3 — Aggregate Inscripcion: inscribir, cancelar y listar

@@ -11,6 +11,12 @@ sources:
   - docs/traceability/matrix.md §17
 us_id: US-4.6.4
 tests_count: null
+rf: []
+software_items:
+  - src/resultados/application/queries/exportar_resultados.py
+test_units:
+  - tests/features/US-4.6.4-exportacion-resultados.feature
+origen_tipo: plataforma
 ---
 
 # US-4.6.4 — ExportarResultados: descarga CSV/JSON del torneo

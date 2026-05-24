@@ -11,6 +11,13 @@ sources:
   - docs/traceability/matrix.md §18
 us_id: US-ADJ-6.4
 tests_count: null
+rf: []
+software_items:
+  - src/notificaciones/application/policies/politica_p10.py
+  - src/notificaciones/application/policies/politica_p11.py
+  - src/notificaciones/application/policies/_helpers.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-6.4 — Eliminar duplicación P-10/P-11 y @staticmethod innecesario

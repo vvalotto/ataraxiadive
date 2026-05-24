@@ -11,6 +11,7 @@ sources:
   - docs/plans/sp-adj-05/PLAN-SP-ADJ-05.md
 us_id: US-ADJ-5.4
 tests_count: null
+rf: []
 ---
 
 # US-ADJ-5.4 — Marcar vigencia de documentos históricos fundacionales

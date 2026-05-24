@@ -11,6 +11,14 @@ sources:
   - docs/traceability/matrix.md §5
 us_id: US-2.1.1
 tests_count: null
+rf:
+  - RF-PR-08
+software_items:
+  - src/competencia/application/commands/configurar_intervalo_ot.py
+test_units:
+  - tests/features/US-2.1.1-configurar-intervalo-ot.feature
+  - tests/integration/competencia/test_configurar_intervalo_ot_integration.py
+origen_tipo: rf
 ---
 
 # US-2.1.1 — ConfigurarIntervaloOT + scaffold aggregate Competencia

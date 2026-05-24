@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.1.7-plan.md
 us_id: US-5.1.7
 tests_count: null
+rf: []
+software_items:
+  - src/torneo/application/queries/obtener_torneo.py
+test_units:
+  - tests/features/US-5.1.7-politica-tabs.feature
+origen_tipo: plataforma
 ---
 
 # US-5.1.7 — Política de tabs por fase en DetalleTorneoPage

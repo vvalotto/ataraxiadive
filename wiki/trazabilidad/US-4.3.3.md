@@ -11,6 +11,9 @@ sources:
   - docs/traceability/matrix.md §14
 us_id: US-4.3.3
 tests_count: null
+rf:
+  - RF-EJ-07
+  - RF-EJ-08
 ---
 
 # US-4.3.3 — Wizard extendido: DNS, BKO, tarjeta roja con MotivoDQ

@@ -12,6 +12,13 @@ sources:
   - docs/plans/sp5/US-5.4.3-plan.md
 us_id: US-5.4.3
 tests_count: null
+rf: []
+software_items:
+  - src/identidad/application/commands/solicitar_reset_password.py
+  - src/identidad/application/commands/reset_password.py
+test_units:
+  - tests/features/US-5.4.3-recuperar-password.feature
+origen_tipo: plataforma
 ---
 
 # US-5.4.3 — Recuperar contraseña vía token JWT

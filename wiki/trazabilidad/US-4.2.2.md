@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §13
 us_id: US-4.2.2
 tests_count: null
+rf: []
 ---
 
 # US-4.2.2 — Auth store + login + routing + guards de rol

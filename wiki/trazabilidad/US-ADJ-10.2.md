@@ -11,6 +11,12 @@ sources:
   - docs/plans/sp-adj-10/US-ADJ-10.2-plan.md
 us_id: US-ADJ-10.2
 tests_count: null
+rf: []
+software_items:
+  - src/registro/application/commands/actualizar_atleta.py
+test_units:
+  - tests/features/US-ADJ-10.2-mis-datos-atleta.feature
+origen_tipo: plataforma
 ---
 
 # US-ADJ-10.2 — Página Mis Datos del atleta (PATCH /registro/atletas/me)

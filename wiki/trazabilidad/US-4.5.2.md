@@ -11,6 +11,18 @@ sources:
   - docs/traceability/matrix.md §16
 us_id: US-4.5.2
 tests_count: null
+rf:
+  - RF-NT-01
+software_items:
+  - src/notificaciones/domain/ports/email_port.py
+  - src/notificaciones/infrastructure/email/resend_email_adapter.py
+  - src/notificaciones/infrastructure/email/logging_email_adapter.py
+test_units:
+  - tests/features/US-4.5.2-adaptador-email.feature
+  - tests/integration/notificaciones/test_resend_email_adapter.py
+origen_tipo: adr
+origen_refs:
+  - ADR-016
 ---
 
 # US-4.5.2 — EmailPort + ResendEmailAdapter

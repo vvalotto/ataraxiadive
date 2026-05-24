@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §17
 us_id: US-4.6.3
 tests_count: null
+rf: []
 ---
 
 # US-4.6.3 — UI auditoría para organizador: timeline + hash

@@ -11,6 +11,14 @@ sources:
   - docs/traceability/matrix.md §32
 us_id: US-6.4.2
 tests_count: null
+rf: []
+software_items:
+  - src/resultados/application/commands/calcular_overall.py
+test_units:
+  - tests/features/US-6.4.2-proyeccion-overall.feature
+origen_tipo: calidad
+origen_refs:
+  - BL-005
 ---
 
 # US-6.4.2 — Materializar proyección competencias_por_torneo en CalcularOverallHandler

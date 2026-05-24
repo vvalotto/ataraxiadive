@@ -11,6 +11,15 @@ sources:
   - docs/traceability/matrix.md §5
 us_id: US-2.4.2
 tests_count: null
+rf:
+  - RF-PM-03
+software_items:
+  - src/resultados/application/commands/calcular_ranking.py
+  - src/resultados/domain/aggregates/ranking_competencia.py
+test_units:
+  - tests/features/US-2.4.2-calcular-ranking.feature
+  - tests/integration/resultados/test_calcular_ranking_integration.py
+origen_tipo: rf
 ---
 
 # US-2.4.2 — CalcularRanking — BC Resultados núcleo

@@ -11,6 +11,12 @@ sources:
   - docs/traceability/matrix.md §32
 us_id: US-6.4.3
 tests_count: null
+rf: []
+software_items:
+  - src/resultados/api/router.py
+test_units:
+  - tests/features/US-6.4.3-routers-sin-infra-crossbc.feature
+origen_tipo: calidad
 ---
 
 # US-6.4.3 — Corregir D-05: imports cross-BC en resultados/api y competencia/api

@@ -11,6 +11,15 @@ sources:
   - docs/traceability/matrix.md §9
 us_id: US-3.4.1
 tests_count: null
+rf:
+  - RF-EJ-01
+software_items:
+  - src/torneo/application/commands/asignar_disciplinas.py
+  - src/torneo/application/commands/asignar_juez.py
+test_units:
+  - tests/features/US-3.4.1-asignar-disciplinas-juez.feature
+  - tests/integration/torneo/test_disciplinas_torneo_api.py
+origen_tipo: rf
 ---
 
 # US-3.4.1 — AsignarDisciplinas + AsignarJuez en Torneo

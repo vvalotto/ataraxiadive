@@ -12,6 +12,13 @@ sources:
   - docs/plans/sp5/US-5.4.1-plan.md
 us_id: US-5.4.1
 tests_count: null
+rf: []
+software_items:
+  - src/identidad/application/commands/registrar_usuario.py
+test_units:
+  - tests/features/US-5.4.1-auto-registro.feature
+  - tests/integration/identidad/test_registro_email_handler.py
+origen_tipo: plataforma
 ---
 
 # US-5.4.1 — Auto-registro público de usuarios

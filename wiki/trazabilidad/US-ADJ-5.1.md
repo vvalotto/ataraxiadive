@@ -12,6 +12,7 @@ sources:
   - commit 5109eff
 us_id: US-ADJ-5.1
 tests_count: null
+rf: []
 ---
 
 # US-ADJ-5.1 — Poda metodológica: clasificar artefactos

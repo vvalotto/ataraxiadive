@@ -11,6 +11,10 @@ sources:
   - docs/plans/sp7/PLAN-SP7.md §INC-7.2
 us_id: US-7.2.2
 tests_count: null
+rf: []
+software_items: null
+test_units: null
+origen_tipo: plataforma
 ---
 
 # US-7.2.2 — Manual juez

@@ -11,6 +11,12 @@ sources:
   - docs/plans/sp-adj-10/US-ADJ-10.1-plan.md
 us_id: US-ADJ-10.1
 tests_count: null
+rf: []
+software_items:
+  - src/torneo/application/commands/actualizar_torneo.py
+test_units:
+  - tests/features/US-ADJ-10.1-edicion-torneo.feature
+origen_tipo: plataforma
 ---
 
 # US-ADJ-10.1 — Edición completa del torneo (PUT /torneos/{id})

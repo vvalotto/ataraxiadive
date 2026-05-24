@@ -11,6 +11,17 @@ sources:
   - docs/traceability/matrix.md §9
 us_id: US-3.3.1
 tests_count: null
+rf:
+  - RF-PM-01
+  - RF-PM-02
+  - RF-PM-05
+software_items:
+  - src/competencia/domain/aggregates/competencia.py
+  - src/competencia/infrastructure/repositories/sqlite_competencias_por_torneo.py
+test_units:
+  - tests/features/US-3.3.1-torneo-id-competencia.feature
+  - tests/integration/competencia/test_torneo_id_integration.py
+origen_tipo: rf
 ---
 
 # US-3.3.1 — torneo_id opcional en Competencia para overall

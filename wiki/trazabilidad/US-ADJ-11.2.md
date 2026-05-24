@@ -10,6 +10,15 @@ sources:
   - docs/traceability/matrix.md §33
 us_id: US-ADJ-11.2
 tests_count: null
+rf: []
+software_items:
+  - src/identidad/application/commands/agregar_rol_usuario.py
+  - src/identidad/application/commands/quitar_rol_usuario.py
+test_units:
+  - tests/features/US-ADJ-11.2-agregar-quitar-rol.feature
+origen_tipo: adr
+origen_refs:
+  - ADR-020
 ---
 
 # US-ADJ-11.2 — POST/DELETE /auth/usuarios/me/roles + guard no quitar ATLETA

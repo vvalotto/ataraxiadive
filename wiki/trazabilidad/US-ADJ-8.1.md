@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp-adj-08/PLAN-SP-ADJ-08.md
 us_id: US-ADJ-8.1
 tests_count: null
+rf: []
+software_items:
+  - src/torneo/api/router.py
+test_units:
+  - tests/features/US-ADJ-8.1-claridad-operativa-panel-organizador.feature
+origen_tipo: calidad
 ---
 
 # US-ADJ-8.1 — SP-ADJ-08: UX paneles organizador post-UAT INC-5.2

@@ -11,6 +11,11 @@ sources:
   - docs/traceability/matrix.md §12
 us_id: US-4.1.8
 tests_count: 91
+rf: []
+software_items:
+  - src/torneo/infrastructure/repositories/sqlite_torneo_repository.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-4.1.8 — Limpieza Torneo, SQLiteTorneoRepository, DisciplinaDescriptor, TarjetaAsignacion

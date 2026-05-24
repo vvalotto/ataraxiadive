@@ -11,6 +11,13 @@ sources:
   - docs/plans/sp-adj-10/US-ADJ-10.3-plan.md
 us_id: US-ADJ-10.3
 tests_count: null
+rf: []
+software_items:
+  - src/identidad/application/commands/registrar_usuario.py
+test_units:
+  - tests/features/US-ADJ-10.3-email-autologin-post-registro.feature
+  - tests/integration/identidad/test_registro_email_handler.py
+origen_tipo: plataforma
 ---
 
 # US-ADJ-10.3 — Email de bienvenida y auto-login post-registro

@@ -11,6 +11,11 @@ sources:
   - docs/traceability/matrix.md §11
 us_id: US-ADJ-4.6
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/domain/value_objects/ap.py
+test_units: null
+origen_tipo: plataforma
 ---
 
 # US-ADJ-4.6 — Value Object TiempoAP: parsear MM:SS → segundos

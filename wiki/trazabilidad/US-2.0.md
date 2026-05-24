@@ -11,6 +11,14 @@ sources:
   - docs/traceability/matrix.md §5
 us_id: US-2.0
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/api/exception_handlers.py
+test_units:
+  - tests/unit/competencia/api/test_exception_handlers.py
+origen_tipo: adr
+origen_refs:
+  - ADR-012
 ---
 
 # INC-2.0 — Exception management cross-BC

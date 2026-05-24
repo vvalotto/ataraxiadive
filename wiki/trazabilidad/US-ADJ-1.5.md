@@ -11,6 +11,12 @@ sources:
   - docs/traceability/matrix.md §7
 us_id: US-ADJ-1.5
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/api/schemas.py
+  - src/competencia/api/dependencies.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-1.5 — Refactoring api: SRP router en schemas.py + dependencies.py

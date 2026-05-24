@@ -1,7 +1,7 @@
 ---
 title: "Vista de Trazabilidad"
 type: vista
-last_updated: "2026-05-23"
+last_updated: "2026-05-24"
 sources:
   - wiki/trazabilidad/
   - docs/traceability/matrix.md
@@ -124,6 +124,75 @@ Esta cadena vive en `docs/traceability/matrix.md` y es navegable directamente en
 | Usuarios y roles | [[arquitectura/identidad]] | — |
 | Notificaciones | [[arquitectura/notificaciones]] | — |
 | Integración externa | [[RF-integracion]] | (sin BC asignado aún) |
+
+---
+
+## Trazabilidad RF → Software Item → Test Unit
+
+> Cadena completa disponible desde 2026-05-24. Todos los BCs poblados: Competencia · Registro · Torneo · Resultados · Identidad · Notificaciones.
+
+### Cadena completa RF → código → test
+
+```dataview
+TABLE us_id, rf, software_items, test_units
+FROM "wiki/trazabilidad"
+WHERE type = "trazabilidad-us" AND rf != null AND length(rf) > 0
+SORT rf ASC, us_id ASC
+```
+
+### Distribución por origen — radiografía de trazabilidad
+
+```dataview
+TABLE WITHOUT ID
+  origen_tipo AS "Origen",
+  length(rows) AS "US",
+  map(rows, (r) => r.us_id) AS "Ejemplos"
+FROM "wiki/trazabilidad"
+WHERE type = "trazabilidad-us"
+GROUP BY origen_tipo
+```
+
+### Cobertura de RFs
+
+```dataview
+TABLE us_refs, length(us_refs) AS "US count"
+FROM "wiki/trazabilidad"
+WHERE type = "trazabilidad-rf"
+SORT length(us_refs) DESC
+```
+
+### Gaps de origen (US cerradas sin origen_tipo)
+
+```dataview
+TABLE us_id, bc, sp
+FROM "wiki/trazabilidad"
+WHERE type = "trazabilidad-us"
+  AND estado = "cerrada"
+  AND origen_tipo = null
+SORT bc ASC
+```
+
+### Gaps de trazabilidad — US cerradas sin Software Item
+
+```dataview
+TABLE us_id, bc, sp, origen_tipo
+FROM "wiki/trazabilidad"
+WHERE type = "trazabilidad-us"
+  AND estado = "cerrada"
+  AND software_items = null
+SORT bc ASC
+```
+
+### Gaps de trazabilidad — US cerradas sin Test Unit
+
+```dataview
+TABLE us_id, bc, sp, origen_tipo
+FROM "wiki/trazabilidad"
+WHERE type = "trazabilidad-us"
+  AND estado = "cerrada"
+  AND test_units = null
+SORT bc ASC
+```
 
 ---
 

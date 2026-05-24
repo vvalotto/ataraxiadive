@@ -11,6 +11,13 @@ sources:
   - docs/traceability/matrix.md §5
 us_id: US-2.2.2
 tests_count: null
+rf:
+  - RF-EJ-08
+software_items:
+  - src/competencia/api/router.py
+test_units:
+  - tests/features/US-2.2.2-api-disciplina-aware.feature
+origen_tipo: rf
 ---
 
 # US-2.2.2 — API disciplina-aware + validación de unidades

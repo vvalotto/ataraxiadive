@@ -11,6 +11,11 @@ sources:
   - docs/traceability/matrix.md §10
 us_id: US-ADJ-3.8
 tests_count: null
+rf: []
+software_items:
+  - src/resultados/infrastructure/repositories/resultados_competencia_adapter.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-3.8 — Desacoplar ACL resultados de BC Competencia

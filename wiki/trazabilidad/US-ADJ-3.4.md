@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §10
 us_id: US-ADJ-3.4
 tests_count: null
+rf: []
 ---
 
 # US-ADJ-3.4 — Mover deps auth a shared/api/dependencies.py (DIP cross-BC)

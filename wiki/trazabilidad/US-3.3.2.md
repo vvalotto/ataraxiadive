@@ -11,6 +11,18 @@ sources:
   - docs/traceability/matrix.md §9
 us_id: US-3.3.2
 tests_count: null
+rf:
+  - RF-GT-02
+  - RF-GT-03
+  - RF-IN-01
+  - RF-IN-02
+  - RF-IN-03
+  - RF-IN-04
+software_items:
+  - src/competencia/infrastructure/repositories/sqlite_competencias_por_torneo.py
+test_units:
+  - tests/features/US-3.3.2-flujo-e2e-torneo-competencia.feature
+origen_tipo: rf
 ---
 
 # US-3.3.2 — ACL Torneo/Registro → Competencia: crear competencias por disciplina

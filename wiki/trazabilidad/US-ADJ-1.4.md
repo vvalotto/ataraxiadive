@@ -11,6 +11,12 @@ sources:
   - docs/traceability/matrix.md §7
 us_id: US-ADJ-1.4
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/api/router.py
+  - src/competencia/application/_p08_finalizacion.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-1.4 — Refactoring api: DIP en router + P-08 a composition root

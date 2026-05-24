@@ -11,6 +11,12 @@ sources:
   - docs/traceability/matrix.md §11
 us_id: US-ADJ-4.5
 tests_count: null
+rf:
+  - RF-PM-05
+software_items:
+  - src/resultados/domain/aggregates/ranking_competencia.py
+test_units: null
+origen_tipo: rf
 ---
 
 # US-ADJ-4.5 — Ranking por (disciplina, categoría) en BC Resultados

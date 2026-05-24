@@ -1,7 +1,7 @@
 ---
 title: "Plan: Trazabilidad completa RF → US → Software Item → Test Unit"
 type: plan
-estado: pendiente
+estado: completado
 fecha: "2026-05-23"
 fases: [A, B, C, D, E]
 ---
@@ -73,7 +73,7 @@ WHERE type = "trazabilidad-us" AND test_units = null AND estado = "cerrada"
 
 ## Fase A — Schema (1 sesión, ~15 min)
 
-**Estado:** pendiente
+**Estado:** ✅ completado — 2026-05-23
 
 Actualizar `WIKI.md` con los nuevos campos del tipo `trazabilidad-us` y del
 tipo `trazabilidad-rf`.
@@ -85,7 +85,7 @@ lo respeten.
 
 ## Fase B — Poblar `rf:` en las 177 US (1 sesión, ~20 min)
 
-**Estado:** pendiente  
+**Estado:** ✅ completado — 2026-05-23  
 **Herramienta:** script Python (mismo patrón que el enriquecimiento de frontmatter anterior)
 
 Los RF ya están en la narrativa de cada US en la sección `## RFs cubiertos`.
@@ -112,7 +112,7 @@ rf_pattern = re.compile(r'\bRF-[A-Z]{2}-\d+\b')
 
 ## Fase C — Poblar `us_refs:` en las 8 páginas RF (1 sesión, ~15 min)
 
-**Estado:** pendiente  
+**Estado:** ✅ completado — 2026-05-23  
 **Herramienta:** script Python (derivado de Fase B)
 
 Una vez que todas las US tienen `rf:` en su frontmatter, se invierte la relación:
@@ -130,8 +130,12 @@ Las 8 páginas RF están en `wiki/trazabilidad/RF-*.md`.
 
 ## Fase D — Poblar `software_items:` y `test_units:` (6 sesiones, ~30 min c/u)
 
-**Estado:** pendiente  
-**Herramienta:** Claude Code lee `src/<bc>/` y `tests/` → agrega campos a las US del BC
+**Estado D1:** ✅ completado — 2026-05-24  
+**Herramienta:** script Python (poblar_d1_competencia.py) — mapeo explícito de 57 US  
+**Distribución origen_tipo (competencia):** rf:21 · calidad:23 · plataforma:10 · adr:2 · setup:1  
+
+**Estado D2–D6:** pendiente  
+**Herramienta:** script Python por BC — mismo patrón que D1
 
 Una sesión por BC. Claude lee la estructura real del código y los tests, y para
 cada US del BC determina:
@@ -154,23 +158,30 @@ Los BDD features siguen el patrón `tests/features/US-X.Y.Z/`.
 
 | Sesión | BC | US en ese BC | Estado |
 |--------|----|-------------|--------|
-| D1 | competencia | ~35 US | pendiente |
-| D2 | registro | ~20 US | pendiente |
-| D3 | bc-torneo | ~25 US | pendiente |
-| D4 | resultados | ~20 US | pendiente |
-| D5 | identidad | ~15 US | pendiente |
-| D6 | notificaciones | ~15 US | pendiente |
+| D1 | competencia | 57 US | ✅ completado — 2026-05-24 |
+| D2 | registro | 17 US | ✅ completado — 2026-05-24 |
+| D3 | bc-torneo | 18 US | ✅ completado — 2026-05-24 |
+| D4 | resultados | 18 US | ✅ completado — 2026-05-24 |
+| D5 | identidad | 11 US | ✅ completado — 2026-05-24 |
+| D6 | notificaciones | 7 US | ✅ completado — 2026-05-24 |
 
 ### Instrucción estándar por sesión
 
 ```
-Leé src/competencia/ y tests/ (structure + feature files).
-Para cada US en wiki/trazabilidad/ donde bc = "competencia":
+Leé src/<bc>/ y tests/ (structure + feature files).
+Para cada US en wiki/trazabilidad/ donde bc = "<bc>":
   - Determiná el/los software_items (paths relativos desde raíz del proyecto)
   - Determiná el/los test_units (paths relativos desde raíz del proyecto)
-  - Agregá ambos campos al frontmatter de la US
-  - Si no encontrás un software item claro, marcá software_items: null
-  - Si no encontrás test, marcá test_units: null
+  - Determiná origen_tipo y origen_refs según estas reglas:
+      · Si rf: [...] no vacío → origen_tipo: rf (no agregar origen_refs)
+      · Si la US implementa un ADR → origen_tipo: adr, origen_refs: [ADR-NNN]
+      · Si surge de DesignReviewer/ArchitectAnalyst/BL → origen_tipo: calidad, origen_refs: [BL-NNN]
+      · Si emerge del diseño de portales/auth/PWA/infra → origen_tipo: plataforma
+      · Si es precondición técnica inicial → origen_tipo: setup
+  - Agregá los tres campos (software_items, test_units, origen_tipo) al frontmatter
+  - Si no encontrás un software item claro → software_items: null
+  - Si no encontrás test → test_units: null
+  - origen_tipo nunca debe quedar null en una US cerrada
 No inventés paths. Solo referenciá archivos que existan en src/.
 ```
 
@@ -180,12 +191,13 @@ Los ajustes técnicos (US-ADJ-X.Y) no siguen el patrón handler/feature.
 Para estas US:
 - `software_items:` los archivos refactoreados (inferibles del título)
 - `test_units:` null o el test de regresión más cercano
+- `origen_tipo:` típicamente `calidad` (DesignReviewer/ArchitectAnalyst) o `adr` según el contexto del ajuste
 
 ---
 
 ## Fase E — Vista de trazabilidad actualizada (1 sesión, ~20 min)
 
-**Estado:** pendiente
+**Estado:** ✅ completado — 2026-05-24
 
 Actualizar `wiki/vistas/trazabilidad.md` con las nuevas queries que aprovechan
 la cadena completa RF→US→SI→TU.
@@ -200,9 +212,30 @@ WHERE type = "trazabilidad-us" AND rf != null
 SORT rf ASC, us_id ASC
 ```
 
-**Gaps de trazabilidad (US cerradas sin Software Item)**
+**Distribución por origen — radiografía de trazabilidad**
+```dataview
+TABLE WITHOUT ID
+  origen_tipo AS "Origen",
+  length(rows) AS "US",
+  map(rows, (r) => r.us_id) AS "Ejemplos"
+FROM "wiki/trazabilidad"
+WHERE type = "trazabilidad-us"
+GROUP BY origen_tipo
+```
+
+**Gaps de origen (US cerradas sin origen_tipo)**
 ```dataview
 TABLE us_id, bc, sp
+FROM "wiki/trazabilidad"
+WHERE type = "trazabilidad-us"
+  AND estado = "cerrada"
+  AND origen_tipo = null
+SORT bc ASC
+```
+
+**Gaps de trazabilidad (US cerradas sin Software Item)**
+```dataview
+TABLE us_id, bc, sp, origen_tipo
 FROM "wiki/trazabilidad"
 WHERE type = "trazabilidad-us"
   AND estado = "cerrada"
@@ -212,7 +245,7 @@ SORT bc ASC
 
 **Gaps de trazabilidad (US cerradas sin Test Unit)**
 ```dataview
-TABLE us_id, bc, sp
+TABLE us_id, bc, sp, origen_tipo
 FROM "wiki/trazabilidad"
 WHERE type = "trazabilidad-us"
   AND estado = "cerrada"

@@ -11,6 +11,7 @@ sources:
   - docs/plans/sp-adj-10/US-ADJ-10.4-plan.md
 us_id: US-ADJ-10.4
 tests_count: null
+rf: []
 ---
 
 # US-ADJ-10.4 — Vista post-torneo en portal del atleta

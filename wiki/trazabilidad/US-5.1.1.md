@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.1.1-plan.md
 us_id: US-5.1.1
 tests_count: null
+rf: []
+software_items:
+  - src/torneo/application/commands/crear_torneo.py
+test_units:
+  - tests/features/US-5.1.1-crear-torneo-ui.feature
+origen_tipo: plataforma
 ---
 
 # US-5.1.1 — CrearTorneoPage: formulario de creación para el organizador

@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp-adj-09/PLAN-SP-ADJ-09.md
 us_id: US-ADJ-9.7
 tests_count: null
+rf: []
+software_items:
+  - src/registro/application/commands/declarar_ap_inscripcion.py
+test_units:
+  - tests/features/US-ADJ-9.7-ap-inscripcion-preparacion.feature
+origen_tipo: plataforma
 ---
 
 # US-ADJ-9.7 — SP-ADJ-09: declarar AP en el wizard de inscripción

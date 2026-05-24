@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §14
 us_id: US-4.3.1
 tests_count: null
+rf: []
 ---
 
 # US-4.3.1 — MisDisciplinas juez: vista real en React

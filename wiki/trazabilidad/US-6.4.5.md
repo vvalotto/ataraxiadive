@@ -11,6 +11,13 @@ sources:
   - docs/traceability/matrix.md §32
 us_id: US-6.4.5
 tests_count: null
+rf: []
+software_items:
+  - src/registro/application/commands/declarar_ap_inscripcion.py
+  - src/registro/infrastructure/repositories/sqlite_inscripcion_repository.py
+test_units:
+  - tests/features/US-6.4.5-refactor-registro-designreviewer.feature
+origen_tipo: calidad
 ---
 
 # US-6.4.5 — Refactoring DeclararAPInscripcionHandler + SQLiteInscripcionRepository

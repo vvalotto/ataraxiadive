@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.7.2-plan.md
 us_id: US-5.7.2
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/application/queries/obtener_grilla.py
+test_units:
+  - tests/features/US-5.7.2-mi-grilla.feature
+origen_tipo: plataforma
 ---
 
 # US-5.7.2 — Mi grilla: posición del atleta por disciplina

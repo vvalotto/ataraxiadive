@@ -11,6 +11,11 @@ sources:
   - docs/traceability/matrix.md §18
 us_id: US-ADJ-6.1
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/domain/aggregates/competencia.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-6.1 — Renombrar FAZ→FAAS en código

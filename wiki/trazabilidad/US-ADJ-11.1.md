@@ -10,6 +10,15 @@ sources:
   - docs/traceability/matrix.md §33
 us_id: US-ADJ-11.1
 tests_count: null
+rf: []
+software_items:
+  - src/identidad/domain/aggregates/usuario.py
+  - src/identidad/infrastructure/jwt_service.py
+test_units:
+  - tests/features/US-ADJ-11.1-identidad-multi-rol.feature
+origen_tipo: adr
+origen_refs:
+  - ADR-020
 ---
 
 # US-ADJ-11.1 — Usuario.roles: list[Rol] + JWT rol_activo + login condicional

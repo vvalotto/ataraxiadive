@@ -11,6 +11,11 @@ sources:
   - docs/traceability/matrix.md §10
 us_id: US-ADJ-3.7
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/infrastructure/repositories/sqlite_competencias_por_torneo.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-3.7 — Proyección competencias_por_torneo O(n)→O(1)

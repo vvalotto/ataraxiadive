@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §15
 us_id: US-4.4.3
 tests_count: null
+rf: []
 ---
 
 # US-4.4.3 — Service Worker con Background Sync + SyncStatusBadge

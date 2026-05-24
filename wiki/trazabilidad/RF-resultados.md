@@ -1,9 +1,16 @@
 ---
 title: "RF — Premiación y Resultados"
-type: trazabilidad
+type: trazabilidad-rf
 last_updated: "2026-05-20"
 sources:
   - docs/dominio/05-requerimientos_funcionales.md
+us_refs:
+  - US-2.4.2
+  - US-3.3.1
+  - US-3.5.1
+  - US-3.5.2
+  - US-3.5.3
+  - US-ADJ-4.5
 ---
 
 # RF — Premiación y Resultados

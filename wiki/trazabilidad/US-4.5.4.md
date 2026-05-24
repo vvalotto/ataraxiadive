@@ -11,6 +11,15 @@ sources:
   - docs/traceability/matrix.md §16
 us_id: US-4.5.4
 tests_count: null
+rf:
+  - RF-NT-04
+software_items:
+  - src/notificaciones/application/policies/politica_p11.py
+  - src/notificaciones/infrastructure/templates/resultados_publicados_template.py
+test_units:
+  - tests/features/US-4.5.4-politica-p11.feature
+  - tests/integration/notificaciones/test_politica_p11_integration.py
+origen_tipo: rf
 ---
 
 # US-4.5.4 — Política P-11: email a atletas al publicar resultados

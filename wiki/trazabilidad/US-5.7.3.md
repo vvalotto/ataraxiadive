@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.7.3-plan.md
 us_id: US-5.7.3
 tests_count: null
+rf: []
+software_items:
+  - src/resultados/application/queries/obtener_ranking.py
+test_units:
+  - tests/features/US-5.7.3-mis-resultados.feature
+origen_tipo: plataforma
 ---
 
 # US-5.7.3 — Mis resultados: ResultHero + DisciplinaPendienteCard

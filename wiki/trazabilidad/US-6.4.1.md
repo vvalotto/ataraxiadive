@@ -11,6 +11,14 @@ sources:
   - docs/traceability/matrix.md §32
 us_id: US-6.4.1
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/domain/aggregates/competencia.py
+test_units:
+  - tests/features/US-6.4.1-romper-ciclo-adp.feature
+origen_tipo: calidad
+origen_refs:
+  - BL-005
 ---
 
 # US-6.4.1 — Romper ciclo ADP en competencia/domain/aggregates

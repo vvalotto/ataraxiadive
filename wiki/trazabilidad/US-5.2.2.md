@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.2.2-plan.md
 us_id: US-5.2.2
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/application/commands/finalizar_competencia_manual.py
+test_units:
+  - tests/features/US-5.2.2-finalizacion-manual.feature
+origen_tipo: plataforma
 ---
 
 # US-5.2.2 — Acción Finalizar prueba por disciplina

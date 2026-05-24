@@ -11,6 +11,11 @@ sources:
   - docs/traceability/matrix.md §18
 us_id: US-ADJ-6.3
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/application/_p08_finalizacion.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-6.3 — Eliminar inspect.signature: callback on_finalizada unificado

@@ -11,6 +11,14 @@ sources:
   - docs/traceability/matrix.md §17
 us_id: US-4.6.2
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/domain/services/calculador_hash_competencia.py
+test_units:
+  - tests/features/US-4.6.2-hash-cierre-disciplina.feature
+origen_tipo: adr
+origen_refs:
+  - ADR-018
 ---
 
 # US-4.6.2 — CalculadorHashCompetencia: hash SHA-256 de integridad

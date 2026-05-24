@@ -11,6 +11,14 @@ sources:
   - docs/traceability/matrix.md §12
 us_id: US-4.1.5
 tests_count: 82
+rf: []
+software_items:
+  - src/competencia/domain/aggregates/performance.py
+  - src/competencia/domain/aggregates/performance_state.py
+test_units: null
+origen_tipo: calidad
+origen_refs:
+  - BL-004
 ---
 
 # US-4.1.5 — Descomponer aggregate Performance en módulos especializados

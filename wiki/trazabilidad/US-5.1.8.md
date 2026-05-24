@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.1.8-plan.md
 us_id: US-5.1.8
 tests_count: null
+rf: []
+software_items:
+  - src/torneo/application/queries/obtener_torneo.py
+test_units:
+  - tests/features/US-5.1.8-componer-competencias.feature
+origen_tipo: plataforma
 ---
 
 # US-5.1.8 — TorneoCompetenciasPage: composición disciplinas + competencias

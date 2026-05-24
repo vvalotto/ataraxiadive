@@ -11,6 +11,14 @@ sources:
   - docs/traceability/matrix.md §6
 us_id: US-1.2.2
 tests_count: 41
+rf:
+  - RF-EJ-02
+software_items:
+  - src/competencia/application/commands/llamar_atleta.py
+test_units:
+  - tests/features/US-1.2.2-llamar-atleta.feature
+  - tests/integration/competencia/test_llamar_atleta_integration.py
+origen_tipo: rf
 ---
 
 # US-1.2.2 — LlamarAtleta

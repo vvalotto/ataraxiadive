@@ -11,6 +11,11 @@ sources:
   - docs/traceability/matrix.md §18
 us_id: US-ADJ-6.7
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/api/router.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-6.7 — UAT SP4 + bugs + UX fixes organizador

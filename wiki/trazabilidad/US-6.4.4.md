@@ -11,6 +11,12 @@ sources:
   - docs/traceability/matrix.md §32
 us_id: US-6.4.4
 tests_count: null
+rf: []
+software_items:
+  - src/resultados/domain/services/algoritmo_faas.py
+test_units:
+  - tests/features/US-6.4.4-refactor-faas-codeguard.feature
+origen_tipo: calidad
 ---
 
 # US-6.4.4 — Refactoring AlgoritmoPuntajeFAAS + correcciones CodeGuard

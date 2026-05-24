@@ -12,6 +12,7 @@ sources:
   - docs/plans/sp-adj-09/PLAN-SP-ADJ-09.md
 us_id: US-ADJ-9.6
 tests_count: null
+rf: []
 ---
 
 # US-ADJ-9.6 — SP-ADJ-09: arquitectura UX organizador formalizada

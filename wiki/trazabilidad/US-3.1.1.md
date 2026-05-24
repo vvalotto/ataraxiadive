@@ -11,6 +11,19 @@ sources:
   - docs/traceability/matrix.md §9
 us_id: US-3.1.1
 tests_count: null
+rf:
+  - RF-GT-01
+  - RF-GT-03
+  - RF-GT-04
+  - RF-GT-05
+  - RF-GT-07
+software_items:
+  - src/torneo/domain/aggregates/torneo.py
+  - src/torneo/infrastructure/repositories/sqlite_torneo_repository.py
+test_units:
+  - tests/features/US-3.1.1-aggregate-torneo.feature
+  - tests/integration/torneo/test_torneo_domain_integration.py
+origen_tipo: rf
 ---
 
 # US-3.1.1 — Aggregate Torneo: máquina de estados

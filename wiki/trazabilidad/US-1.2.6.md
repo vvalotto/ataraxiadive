@@ -11,6 +11,14 @@ sources:
   - docs/traceability/matrix.md §6
 us_id: US-1.2.6
 tests_count: 128
+rf:
+  - RF-EJ-06
+software_items:
+  - src/competencia/application/commands/corregir_resultado.py
+test_units:
+  - tests/features/US-1.2.6-corregir-resultado.feature
+  - tests/integration/competencia/test_corregir_resultado_integration.py
+origen_tipo: rf
 ---
 
 # US-1.2.6 — CorregirResultado

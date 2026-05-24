@@ -11,6 +11,12 @@ sources:
   - docs/traceability/matrix.md §32
 us_id: US-6.4.6
 tests_count: null
+rf: []
+software_items:
+  - src/resultados/domain/aggregates/ranking_competencia.py
+test_units:
+  - tests/features/US-6.4.6-cierre-arch-decisiones.feature
+origen_tipo: calidad
 ---
 
 # US-6.4.6 — Cierre ARCH-03 + SRP RankingCompetencia + monitoreo identidad/shared

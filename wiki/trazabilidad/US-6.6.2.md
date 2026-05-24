@@ -12,6 +12,7 @@ sources:
   - docs/plans/sp6/US-6.6.1-plan.md
 us_id: US-6.6.2
 tests_count: null
+rf: []
 ---
 
 # US-6.6.2 — PublicTorneosPage: página pública de lista de torneos

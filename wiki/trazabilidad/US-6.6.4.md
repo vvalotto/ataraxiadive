@@ -12,6 +12,7 @@ sources:
   - docs/plans/sp6/US-6.6.4-plan.md
 us_id: US-6.6.4
 tests_count: null
+rf: []
 ---
 
 # US-6.6.4 — PublicTorneoDetallePage: torneo en ejecución para visitantes

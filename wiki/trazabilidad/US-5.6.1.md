@@ -11,6 +11,13 @@ sources:
   - docs/traceability/matrix.md §26
 us_id: US-5.6.1
 tests_count: null
+rf: []
+software_items:
+  - src/resultados/domain/services/algoritmo_faas.py
+  - src/resultados/domain/ports/algoritmo_puntaje.py
+test_units:
+  - tests/features/US-5.6.1-algoritmo-puntaje-faas.feature
+origen_tipo: plataforma
 ---
 
 # US-5.6.1 — Puerto AlgoritmoPuntaje + implementación FAAS

@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.3.2-plan.md
 us_id: US-5.3.2
 tests_count: null
+rf: []
+software_items:
+  - src/identidad/application/commands/autenticar_usuario.py
+test_units:
+  - tests/features/US-5.3.2-vista-atleta.feature
+origen_tipo: plataforma
 ---
 
 # US-5.3.2 — AtletaDashboardPage: perfil + inscripción a torneos

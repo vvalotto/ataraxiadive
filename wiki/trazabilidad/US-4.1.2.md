@@ -11,6 +11,13 @@ sources:
   - docs/traceability/matrix.md §12
 us_id: US-4.1.2
 tests_count: 107
+rf: []
+software_items:
+  - src/competencia/domain/value_objects/penalizacion_tecnica.py
+  - src/competencia/domain/aggregates/performance.py
+test_units:
+  - tests/features/US-4.1.2-tarjeta-blanca-penalizaciones.feature
+origen_tipo: rf
 ---
 
 # US-4.1.2 — TipoTarjeta.BlancaConPenalizaciones + PenalizacionTecnica VO

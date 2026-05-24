@@ -11,6 +11,13 @@ sources:
   - docs/traceability/matrix.md §12
 us_id: US-4.1.1
 tests_count: 102
+rf: []
+software_items:
+  - src/competencia/domain/value_objects/motivo_dq.py
+  - src/competencia/application/commands/asignar_tarjeta.py
+test_units:
+  - tests/features/US-4.1.1-motivos-tarjeta-roja.feature
+origen_tipo: rf
 ---
 
 # US-4.1.1 — MotivoDQ StrEnum + TarjetaAsignacion extendida

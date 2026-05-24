@@ -6,6 +6,64 @@
 
 ---
 
+## [2026-05-23] ingest | Fase C plan-trazabilidad-rf-us-si-tu — us_refs: en 8 páginas RF
+
+Script: `poblar_us_refs.py`
+Archivos modificados: 8 (`wiki/trazabilidad/RF-*.md`)
+
+- type: trazabilidad → trazabilidad-rf en los 8 archivos
+- 7 archivos con us_refs: [...] (total 77 referencias RF→US)
+- 1 archivo con us_refs: [] (RF-integracion — sus RF-IG-* no son referenciados por ninguna US)
+- Script idempotente: reejecutar → SKIP si ya tiene us_refs:
+
+---
+
+## [2026-05-23] ingest | Schema extendido — campo origen en trazabilidad-us
+
+Archivos actualizados: 2 (`WIKI.md`, `wiki/planes/plan-trazabilidad-rf-us-si-tu.md`)
+
+Motivación: rf: [] no implica que la US carezca de origen — implica que su origen no es
+un RF de la elicitación inicial. Para trazabilidad completa (contexto IEDD / IEC 62304),
+toda US cerrada debe tener un origen registrado.
+
+Nuevos campos en trazabilidad-us:
+  - origen_tipo: rf | adr | calidad | plataforma | setup
+  - origen_refs: [ADR-NNN | BL-NNN] (omitido si origen_tipo = rf)
+
+Convención: US con rf: [...] no vacío → origen_tipo: rf automático.
+US con rf: [] → origen_tipo debe ser adr | calidad | plataforma | setup + origen_refs cuando aplica.
+
+Fase D actualizada: poblar origen_tipo + origen_refs junto con software_items y test_units.
+Fase E actualizada: query de distribución por origen + gap de origen_tipo = null.
+
+---
+
+## [2026-05-23] ingest | Fase B plan-trazabilidad-rf-us-si-tu — campo rf: en 177 US
+
+Script: `poblar_rf.py`
+Archivos modificados: 177 (`wiki/trazabilidad/US-*.md`)
+
+- 42 US recibieron `rf: [RF-XX-NN, ...]` (RFs extraídos del body)
+- 135 US recibieron `rf: []` (sin RFs en el body: US de setup, ADJs técnicos, SP4+)
+- Script idempotente: reejecutar sobre archivos ya procesados → SKIP
+
+---
+
+## [2026-05-23] ingest | Fase A plan-trazabilidad-rf-us-si-tu — schema extendido trazabilidad
+
+Archivos actualizados: 1 (`WIKI.md`)
+
+Cambios:
+- `type` enum extendido con `trazabilidad-us` y `trazabilidad-rf` (ya existían en páginas, ahora formalizados en schema)
+- Tabla de tipos: agregado `trazabilidad-rf` con ubicación `wiki/trazabilidad/RF-*.md`
+- Frontmatter `trazabilidad-us` ampliado con 3 nuevos campos opcionales:
+  · `rf: [RF-XX-NN, ...]` — RFs que implementa la US
+  · `software_items: [path, ...]` — artefactos de código
+  · `test_units: [path, ...]` — tests que verifican la US
+- Nuevo bloque `trazabilidad-rf`: campo `us_refs: [US-X.Y.Z, ...]`
+
+---
+
 ## [2026-05-23] ingest | Fase D plan-c4-nivel3 — cross-referencias impacto → componentes C4 L3
 
 Páginas actualizadas: 4 en `wiki/impacto/`

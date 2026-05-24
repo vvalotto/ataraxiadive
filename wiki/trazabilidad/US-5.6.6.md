@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.6.6-plan.md
 us_id: US-5.6.6
 tests_count: null
+rf: []
+software_items:
+  - src/resultados/application/queries/obtener_overall.py
+test_units:
+  - tests/features/US-5.6.6-ui-podios.feature
+origen_tipo: plataforma
 ---
 
 # US-5.6.6 — UI podios por división (6 divisiones fijas)

@@ -11,6 +11,13 @@ sources:
   - docs/traceability/matrix.md §17
 us_id: US-4.6.1
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/application/queries/obtener_audit_log.py
+test_units:
+  - tests/features/US-4.6.1-audit-log-performance.feature
+  - tests/integration/competencia/test_audit_log_api.py
+origen_tipo: plataforma
 ---
 
 # US-4.6.1 — ObtenerAuditLog por performance

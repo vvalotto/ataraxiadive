@@ -12,6 +12,7 @@ sources:
   - commit 3eb095f
 us_id: US-ADJ-5.5
 tests_count: null
+rf: []
 ---
 
 # US-ADJ-5.5 — Corregir deuda tooling .claude/tracking/

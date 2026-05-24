@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp-adj-07/US-ADJ-7.3-plan.md
 us_id: US-ADJ-7.3
 tests_count: null
+rf: []
+software_items:
+  - src/app.py
+test_units:
+  - tests/features/US-ADJ-7.3-p11-competencia-finalizada.feature
+origen_tipo: plataforma
 ---
 
 # US-ADJ-7.3 — SCOPE-SP4-001: cablear P-11 a CompetenciaFinalizada

@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.2.1-plan.md
 us_id: US-5.2.1
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/application/queries/obtener_competencias_por_torneo.py
+test_units:
+  - tests/features/US-5.2.1-ejecucion-disciplinas.feature
+origen_tipo: plataforma
 ---
 
 # US-5.2.1 — TorneoCompetenciasPage: maestro-detalle por disciplina

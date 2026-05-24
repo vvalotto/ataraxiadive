@@ -13,6 +13,12 @@ sources:
   - commit e1ac34b, PR #93
 us_id: US-ADJ-7.1
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/application/commands/corregir_resultado_tras_dns.py
+test_units:
+  - tests/integration/competencia/test_corregir_resultado_tras_dns_integration.py
+origen_tipo: calidad
 ---
 
 # US-ADJ-7.1 — BUG-SP4-003: CorregirResultadoTrasDNS

@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §SP6
 us_id: US-6.6.3
 tests_count: null
+rf: []
 ---
 
 # US-6.6.3 — Navegación contextual: redirect post-login y RootRedirect

@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §30
 us_id: US-6.2.6
 tests_count: null
+rf: []
 ---
 
 # US-6.2.6 — PodiosPage para el organizador

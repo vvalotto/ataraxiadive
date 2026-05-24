@@ -10,6 +10,17 @@ sources:
   - docs/traceability/matrix.md §33
 us_id: US-ADJ-11.4
 tests_count: null
+rf: []
+software_items:
+  - src/registro/domain/aggregates/juez.py
+  - src/registro/application/commands/registrar_juez.py
+  - src/registro/infrastructure/repositories/sqlite_juez_repository.py
+test_units:
+  - tests/features/US-ADJ-11.4-juez.feature
+  - tests/integration/registro/test_sqlite_juez_repository.py
+origen_tipo: adr
+origen_refs:
+  - ADR-020
 ---
 
 # US-ADJ-11.4 — Entidad Juez + JuezRepositoryPort + endpoints /registro/jueces/me

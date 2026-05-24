@@ -13,6 +13,7 @@ sources:
   - docs/architecture/60-deployment-view.md
 us_id: US-7.1.1
 tests_count: null
+rf: []
 ---
 
 # US-7.1.1 — Dockerfile + FastAPI estáticos + fly.toml + entorno producción

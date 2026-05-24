@@ -12,6 +12,13 @@ sources:
   - docs/plans/sp5/US-5.1.4-plan.md
 us_id: US-5.1.4
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/application/commands/generar_grilla.py
+  - src/competencia/application/commands/confirmar_grilla.py
+test_units:
+  - tests/features/US-5.1.4-generacion-ajuste-grilla.feature
+origen_tipo: plataforma
 ---
 
 # US-5.1.4 — GrillaPanel: generar y confirmar grilla por disciplina

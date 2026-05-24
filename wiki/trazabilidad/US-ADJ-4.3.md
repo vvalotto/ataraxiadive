@@ -11,6 +11,11 @@ sources:
   - docs/traceability/matrix.md §11
 us_id: US-ADJ-4.3
 tests_count: null
+rf: []
+software_items:
+  - src/registro/domain/value_objects/categoria.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-4.3 — Renombrar JUVENIL→JUNIOR en enum Categoria

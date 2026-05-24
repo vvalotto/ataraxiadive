@@ -11,6 +11,12 @@ sources:
   - docs/traceability/matrix.md §10
 us_id: US-ADJ-3.6
 tests_count: null
+rf: []
+software_items:
+  - src/identidad/domain/ports/token_service_port.py
+  - src/identidad/domain/ports/password_hashing_port.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-3.6 — TokenServicePort + PasswordHashingPort (DIP en Identidad)

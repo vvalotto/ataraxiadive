@@ -11,6 +11,13 @@ sources:
   - docs/traceability/matrix.md §12
 us_id: US-4.1.4
 tests_count: 68
+rf:
+  - RF-PR-05
+software_items:
+  - src/competencia/domain/aggregates/competencia.py
+test_units:
+  - tests/features/US-4.1.4-orden-grilla-reglamentario.feature
+origen_tipo: rf
 ---
 
 # US-4.1.4 — Orden SPE descendente en GrillaDeSalida

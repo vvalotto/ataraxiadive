@@ -11,6 +11,8 @@ sources:
   - docs/traceability/matrix.md §12
 us_id: US-4.1.3
 tests_count: 73
+rf:
+  - RF-GT-02
 ---
 
 # US-4.1.3 — Subdisciplinas SPE: variantes de piscina

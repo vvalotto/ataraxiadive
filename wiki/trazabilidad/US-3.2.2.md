@@ -11,6 +11,18 @@ sources:
   - docs/traceability/matrix.md §9
 us_id: US-3.2.2
 tests_count: null
+rf:
+  - RF-IN-01
+  - RF-IN-02
+  - RF-IN-08
+  - RF-IN-09
+software_items:
+  - src/registro/domain/aggregates/atleta.py
+  - src/registro/infrastructure/repositories/sqlite_atleta_repository.py
+test_units:
+  - tests/features/US-3.2.2-bc-registro-aggregate-atleta.feature
+  - tests/integration/registro/test_sqlite_atleta_repository.py
+origen_tipo: rf
 ---
 
 # US-3.2.2 — Aggregate Atleta: registro, consulta y repositorio SQLite

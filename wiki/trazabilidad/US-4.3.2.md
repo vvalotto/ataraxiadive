@@ -11,6 +11,9 @@ sources:
   - docs/traceability/matrix.md §14
 us_id: US-4.3.2
 tests_count: null
+rf:
+  - RF-EJ-05
+  - RF-EJ-06
 ---
 
 # US-4.3.2 — GrillaPage operativa + wizard móvil de performance

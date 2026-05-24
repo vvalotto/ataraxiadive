@@ -11,6 +11,14 @@ sources:
   - docs/traceability/matrix.md §6
 us_id: US-1.2.3
 tests_count: 65
+rf:
+  - RF-EJ-05
+software_items:
+  - src/competencia/application/commands/registrar_resultado.py
+test_units:
+  - tests/features/US-1.2.3-registrar-resultado.feature
+  - tests/integration/competencia/test_registrar_resultado_integration.py
+origen_tipo: rf
 ---
 
 # US-1.2.3 — RegistrarResultado

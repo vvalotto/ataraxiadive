@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.1.2-plan.md
 us_id: US-5.1.2
 tests_count: null
+rf: []
+software_items:
+  - src/torneo/application/queries/obtener_torneo.py
+test_units:
+  - tests/features/US-5.1.2-gestion-fases-torneo.feature
+origen_tipo: plataforma
 ---
 
 # US-5.1.2 — DetalleTorneoPage: tabs y panel de acciones de fase

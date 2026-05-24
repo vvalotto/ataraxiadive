@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §8
 us_id: US-ADJ-2.6
 tests_count: null
+rf: []
 ---
 
 # US-ADJ-2.6 — Refactoring cross-BC: VOs y EventStore a shared/

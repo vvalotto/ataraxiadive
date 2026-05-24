@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §29
 us_id: US-6.1.1
 tests_count: null
+rf: []
 ---
 
 # US-6.1.1 — Fix canSubmitBko + reorden flujo juez (tarjeta → marca)

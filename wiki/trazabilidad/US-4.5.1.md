@@ -11,6 +11,16 @@ sources:
   - docs/traceability/matrix.md §16
 us_id: US-4.5.1
 tests_count: null
+rf:
+  - RF-NT-01
+software_items:
+  - src/notificaciones/domain/aggregates/notificacion.py
+  - src/notificaciones/infrastructure/event_store/sqlite_notificacion_event_store.py
+  - src/notificaciones/infrastructure/repositories/sqlite_notificacion_repository.py
+test_units:
+  - tests/features/US-4.5.1-notificacion-idempotencia.feature
+  - tests/integration/notificaciones/test_sqlite_notificacion_repository.py
+origen_tipo: rf
 ---
 
 # US-4.5.1 — Aggregate Notificacion: ciclo de vida + idempotencia

@@ -1,9 +1,12 @@
 ---
 title: "RF — Usuarios, Roles y Permisos"
-type: trazabilidad
+type: trazabilidad-rf
 last_updated: "2026-05-20"
 sources:
   - docs/dominio/05-requerimientos_funcionales.md
+us_refs:
+  - US-3.2.1
+  - US-3.4.2
 ---
 
 # RF — Usuarios, Roles y Permisos

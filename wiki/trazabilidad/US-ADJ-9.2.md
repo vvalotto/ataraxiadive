@@ -12,6 +12,7 @@ sources:
   - docs/plans/sp-adj-09/PLAN-SP-ADJ-09.md
 us_id: US-ADJ-9.2
 tests_count: null
+rf: []
 ---
 
 # US-ADJ-9.2 — SP-ADJ-09: routing organizador reestructurado

@@ -11,6 +11,12 @@ sources:
   - docs/traceability/matrix.md §11
 us_id: US-ADJ-4.4
 tests_count: null
+rf:
+  - RF-IN-10
+software_items:
+  - src/registro/domain/aggregates/atleta.py
+test_units: null
+origen_tipo: rf
 ---
 
 # US-ADJ-4.4 — Agregar campo club a aggregate Atleta

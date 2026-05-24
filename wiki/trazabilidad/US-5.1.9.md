@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.1.9-plan.md
 us_id: US-5.1.9
 tests_count: null
+rf: []
+software_items:
+  - src/torneo/application/commands/asignar_juez.py
+test_units:
+  - tests/features/US-5.1.9-bloquear-jueces-sin-grilla.feature
+origen_tipo: plataforma
 ---
 
 # US-5.1.9 — Precondición de grilla para asignación de juez

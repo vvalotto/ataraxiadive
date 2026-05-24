@@ -11,6 +11,13 @@ sources:
   - docs/traceability/matrix.md §5
 us_id: US-2.1.4
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/application/commands/confirmar_grilla.py
+test_units:
+  - tests/features/US-2.1.4-confirmar-grilla.feature
+  - tests/integration/competencia/test_confirmar_grilla_integration.py
+origen_tipo: rf
 ---
 
 # US-2.1.4 — ConfirmarGrilla + IniciarCompetencia

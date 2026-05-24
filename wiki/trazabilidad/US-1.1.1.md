@@ -11,6 +11,12 @@ sources:
   - docs/traceability/matrix.md §6
 us_id: US-1.1.1
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/domain/aggregates/performance.py
+  - src/competencia/infrastructure/event_store/sqlite_event_store.py
+test_units: null
+origen_tipo: setup
 ---
 
 # US-1.1.1 — Setup: esqueleto BC Competencia

@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §30
 us_id: US-6.2.1
 tests_count: null
+rf: []
 ---
 
 # US-6.2.1 — Torneos ordenados por fecha desc en lista organizador

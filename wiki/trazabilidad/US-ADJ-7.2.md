@@ -13,6 +13,12 @@ sources:
   - commit 4007259, PR #92
 us_id: US-ADJ-7.2
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/api/router.py
+test_units:
+  - tests/integration/competencia/test_grilla_tarjeta_asignada_api.py
+origen_tipo: calidad
 ---
 
 # US-ADJ-7.2 — BUG-SP4-004: exponer tarjeta_asignada en /grilla

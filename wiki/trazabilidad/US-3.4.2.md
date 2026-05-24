@@ -11,6 +11,15 @@ sources:
   - docs/traceability/matrix.md §9
 us_id: US-3.4.2
 tests_count: null
+rf:
+  - RF-US-02
+  - RF-US-03
+  - RF-US-04
+software_items:
+  - src/identidad/api/dependencies.py
+test_units:
+  - tests/features/US-3.4.2-auth-jwt-middleware.feature
+origen_tipo: rf
 ---
 
 # US-3.4.2 — Auth por rol en APIs escribibles con JWT middleware

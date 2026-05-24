@@ -11,6 +11,16 @@ sources:
   - docs/traceability/matrix.md §9
 us_id: US-3.5.1
 tests_count: null
+rf:
+  - RF-PM-01
+  - RF-PM-02
+software_items:
+  - src/resultados/domain/aggregates/ranking_overall.py
+  - src/resultados/application/commands/calcular_overall.py
+test_units:
+  - tests/features/US-3.5.1-ranking-overall.feature
+  - tests/integration/resultados/test_calcular_overall_integration.py
+origen_tipo: rf
 ---
 
 # US-3.5.1 — Aggregate RankingOverall + CalcularOverallHandler

@@ -11,6 +11,14 @@ sources:
   - docs/traceability/matrix.md §31
 us_id: US-6.3.2
 tests_count: null
+rf: []
+software_items:
+  - src/registro/application/commands/declarar_ap_inscripcion.py
+  - src/registro/infrastructure/adjuntos/local_adjunto_storage.py
+test_units:
+  - tests/features/US-6.3.2-inscripcion-ap-adjuntos.feature
+  - tests/integration/registro/test_adjuntos_inscripcion_endpoint.py
+origen_tipo: plataforma
 ---
 
 # US-6.3.2 — Inscripción atleta: AP inline + apto médico + constancia pago

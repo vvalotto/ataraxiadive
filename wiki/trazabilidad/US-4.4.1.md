@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §15
 us_id: US-4.4.1
 tests_count: null
+rf: []
 ---
 
 # US-4.4.1 — Dexie.js: cache local de grilla + expiración 24h

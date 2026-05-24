@@ -11,6 +11,12 @@ sources:
   - docs/traceability/matrix.md §11
 us_id: US-ADJ-4.2
 tests_count: null
+rf:
+  - RF-PR-05
+software_items:
+  - src/competencia/domain/aggregates/competencia.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-4.2 — Corregir orden grilla STA: ascendente

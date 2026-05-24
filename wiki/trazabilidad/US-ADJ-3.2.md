@@ -11,6 +11,11 @@ sources:
   - docs/traceability/matrix.md §10
 us_id: US-ADJ-3.2
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/domain/value_objects/tarjeta_asignacion.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-3.2 — Extraer TarjetaAsignacion VO

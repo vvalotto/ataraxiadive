@@ -11,6 +11,13 @@ sources:
   - docs/traceability/matrix.md §12
 us_id: US-4.1.6
 tests_count: 36
+rf: []
+software_items:
+  - src/competencia/application/commands/_handler_utils.py
+test_units: null
+origen_tipo: calidad
+origen_refs:
+  - BL-004
 ---
 
 # US-4.1.6 — _handler_utils.py: helpers comunes para handlers

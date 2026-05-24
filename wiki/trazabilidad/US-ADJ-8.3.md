@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp-adj-08/PLAN-SP-ADJ-08.md
 us_id: US-ADJ-8.3
 tests_count: null
+rf: []
+software_items:
+  - src/torneo/application/commands/transicionar_torneo.py
+test_units:
+  - tests/features/US-ADJ-8.3-cancelacion-fuerte-torneo.feature
+origen_tipo: calidad
 ---
 
 # US-ADJ-8.3 — SP-ADJ-08: cancelar torneo con confirmación fuerte

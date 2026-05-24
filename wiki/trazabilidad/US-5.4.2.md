@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.4.2-plan.md
 us_id: US-5.4.2
 tests_count: null
+rf: []
+software_items:
+  - src/identidad/application/commands/cambiar_password.py
+test_units:
+  - tests/features/US-5.4.2-cambiar-password.feature
+origen_tipo: plataforma
 ---
 
 # US-5.4.2 — Cambiar contraseña para usuario autenticado

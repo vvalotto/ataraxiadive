@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §13
 us_id: US-4.2.1
 tests_count: null
+rf: []
 ---
 
 # US-4.2.1 — Scaffold frontend: Vite + React + TypeScript + PWA

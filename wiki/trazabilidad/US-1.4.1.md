@@ -11,6 +11,13 @@ sources:
   - docs/traceability/matrix.md §6
 us_id: US-1.4.1
 tests_count: 189
+rf:
+  - RF-EJ-07
+software_items:
+  - src/competencia/domain/aggregates/performance.py
+test_units:
+  - tests/features/US-1.4.1-blackout-con-distancia.feature
+origen_tipo: rf
 ---
 
 # US-1.4.1 — AsignarTarjeta roja + black-out con distancia

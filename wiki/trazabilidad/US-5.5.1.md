@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.5.1-plan.md
 us_id: US-5.5.1
 tests_count: null
+rf: []
+software_items:
+  - src/registro/application/commands/inscribir_atleta.py
+test_units:
+  - tests/features/US-5.5.1-inscripcion-atleta-ap.feature
+origen_tipo: plataforma
 ---
 
 # US-5.5.1 — Portal atleta completo: shell + inscripción + AP

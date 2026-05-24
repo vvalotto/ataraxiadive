@@ -11,6 +11,12 @@ sources:
   - docs/traceability/matrix.md §11
 us_id: US-ADJ-4.1
 tests_count: null
+rf:
+  - RF-GT-02
+software_items:
+  - src/competencia/domain/value_objects/disciplina.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-4.1 — Renombrar DYNB→DBF y SPE2X50→SPE

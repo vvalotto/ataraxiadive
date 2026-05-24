@@ -12,6 +12,13 @@ sources:
   - docs/plans/sp5/US-5.6.3-plan.md
 us_id: US-5.6.3
 tests_count: null
+rf: []
+software_items:
+  - src/resultados/application/commands/calcular_ranking.py
+  - src/resultados/domain/aggregates/ranking_competencia.py
+test_units:
+  - tests/features/US-5.6.3-ranking-puntos-faas.feature
+origen_tipo: plataforma
 ---
 
 # US-5.6.3 — RankingCompetencia con puntos por categoría

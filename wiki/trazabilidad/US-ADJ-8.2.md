@@ -12,6 +12,13 @@ sources:
   - docs/plans/sp-adj-08/PLAN-SP-ADJ-08.md
 us_id: US-ADJ-8.2
 tests_count: null
+rf: []
+software_items:
+  - src/torneo/application/commands/transicionar_torneo.py
+test_units:
+  - tests/features/US-ADJ-8.2-restringir-operaciones-torneo-fase.feature
+  - tests/integration/torneo/test_ejecucion_precondicion.py
+origen_tipo: calidad
 ---
 
 # US-ADJ-8.2 — SP-ADJ-08: selector de grilla filtrado y transición a premiación

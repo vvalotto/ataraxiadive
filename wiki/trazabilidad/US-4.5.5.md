@@ -11,6 +11,13 @@ sources:
   - docs/traceability/matrix.md §16
 us_id: US-4.5.5
 tests_count: null
+rf:
+  - RF-NT-01
+software_items:
+  - src/app.py
+test_units:
+  - tests/features/US-4.5.5-cablear-p10-inscripcion.feature
+origen_tipo: rf
 ---
 
 # US-4.5.5 — Cableado P-10 al endpoint POST /registro/inscripciones

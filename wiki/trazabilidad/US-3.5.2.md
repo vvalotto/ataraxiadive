@@ -11,6 +11,13 @@ sources:
   - docs/traceability/matrix.md §9
 us_id: US-3.5.2
 tests_count: null
+rf:
+  - RF-PM-05
+software_items:
+  - src/resultados/application/commands/calcular_overall.py
+test_units:
+  - tests/features/US-3.5.2-politica-p09.feature
+origen_tipo: rf
 ---
 
 # US-3.5.2 — Política P-09: overall automático al cerrar torneo

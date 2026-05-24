@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.3.1-plan.md
 us_id: US-5.3.1
 tests_count: null
+rf: []
+software_items:
+  - src/identidad/api/router.py
+test_units:
+  - tests/features/US-5.3.1-gestion-usuarios.feature
+origen_tipo: plataforma
 ---
 
 # US-5.3.1 — UsuariosPage: gestión de usuarios para el organizador

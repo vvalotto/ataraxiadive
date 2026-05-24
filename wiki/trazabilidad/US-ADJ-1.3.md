@@ -11,6 +11,11 @@ sources:
   - docs/traceability/matrix.md §7
 us_id: US-ADJ-1.3
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/application/commands/_stream_ids.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-1.3 — Refactoring application: _stream_ids.py fuente única

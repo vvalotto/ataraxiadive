@@ -12,6 +12,13 @@ sources:
   - docs/plans/sp5/US-5.5.2-plan.md
 us_id: US-5.5.2
 tests_count: null
+rf: []
+software_items:
+  - src/registro/application/queries/listar_inscriptos.py
+test_units:
+  - tests/features/US-5.5.2-organizador-inscriptos-ap.feature
+  - tests/integration/registro/test_inscriptos_detalle_endpoint.py
+origen_tipo: plataforma
 ---
 
 # US-5.5.2 — Vista organizador: inscriptos con datos completos y estado AP

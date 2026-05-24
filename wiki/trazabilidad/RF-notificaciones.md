@@ -1,9 +1,15 @@
 ---
 title: "RF — Notificaciones"
-type: trazabilidad
+type: trazabilidad-rf
 last_updated: "2026-05-20"
 sources:
   - docs/dominio/05-requerimientos_funcionales.md
+us_refs:
+  - US-4.5.1
+  - US-4.5.2
+  - US-4.5.3
+  - US-4.5.4
+  - US-4.5.5
 ---
 
 # RF — Notificaciones

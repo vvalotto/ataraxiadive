@@ -1,9 +1,14 @@
 ---
 title: "RF — Inscripción de Atletas"
-type: trazabilidad
+type: trazabilidad-rf
 last_updated: "2026-05-20"
 sources:
   - docs/dominio/05-requerimientos_funcionales.md
+us_refs:
+  - US-3.2.2
+  - US-3.2.3
+  - US-3.3.2
+  - US-ADJ-4.4
 ---
 
 # RF — Inscripción de Atletas

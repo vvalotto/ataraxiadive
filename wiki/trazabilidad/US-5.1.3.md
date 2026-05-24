@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.1.3-plan.md
 us_id: US-5.1.3
 tests_count: null
+rf: []
+software_items:
+  - src/registro/application/queries/listar_inscriptos.py
+test_units:
+  - tests/features/US-5.1.3-vista-inscriptos-ap.feature
+origen_tipo: plataforma
 ---
 
 # US-5.1.3 — InscriptosPanel: lista de atletas con estado AP

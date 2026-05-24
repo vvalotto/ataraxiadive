@@ -12,6 +12,7 @@ sources:
   - docs/plans/sp-adj-09/PLAN-SP-ADJ-09.md
 us_id: US-ADJ-9.1
 tests_count: null
+rf: []
 ---
 
 # US-ADJ-9.1 — SP-ADJ-09: shell dark del portal organizador

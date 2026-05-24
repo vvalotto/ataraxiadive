@@ -1,9 +1,10 @@
 ---
 title: "RF — Integración con Sistemas Externos"
-type: trazabilidad
+type: trazabilidad-rf
 last_updated: "2026-05-20"
 sources:
   - docs/dominio/05-requerimientos_funcionales.md
+us_refs: []
 ---
 
 # RF — Integración con Sistemas Externos

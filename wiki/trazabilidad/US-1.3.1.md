@@ -11,6 +11,14 @@ sources:
   - docs/traceability/matrix.md §6
 us_id: US-1.3.1
 tests_count: 174
+rf:
+  - RF-EJ-05
+software_items:
+  - src/competencia/application/queries/obtener_performance_actual.py
+test_units:
+  - tests/features/US-1.3.1-interfaz-juez.feature
+  - tests/integration/competencia/test_api_interfaz_juez.py
+origen_tipo: rf
 ---
 
 # US-1.3.1 — Read Models

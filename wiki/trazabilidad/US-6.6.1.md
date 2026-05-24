@@ -12,6 +12,13 @@ sources:
   - docs/plans/sp6/US-6.6.1-plan.md
 us_id: US-6.6.1
 tests_count: null
+rf: []
+software_items:
+  - src/torneo/api/router.py
+test_units:
+  - tests/features/US-6.6.1-endpoint-publico-torneos.feature
+  - tests/integration/torneo/test_torneos_publicos_api.py
+origen_tipo: plataforma
 ---
 
 # US-6.6.1 — Endpoint público GET /torneos sin autenticación

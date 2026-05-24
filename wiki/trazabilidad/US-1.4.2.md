@@ -11,6 +11,16 @@ sources:
   - docs/traceability/matrix.md §6
 us_id: US-1.4.2
 tests_count: 207
+rf:
+  - RF-EJ-05
+  - RF-EJ-10
+software_items:
+  - src/competencia/domain/aggregates/performance.py
+  - src/competencia/domain/aggregates/competencia.py
+test_units:
+  - tests/features/US-1.4.2-flujo-e2e.feature
+  - tests/integration/competencia/test_flujo_e2e.py
+origen_tipo: rf
 ---
 
 # US-1.4.2 — Flujo E2E + audit log GET /events

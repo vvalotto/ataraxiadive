@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §29
 us_id: US-6.1.3
 tests_count: null
+rf: []
 ---
 
 # US-6.1.3 — Grilla ordenada por estado + keypad visible en móvil

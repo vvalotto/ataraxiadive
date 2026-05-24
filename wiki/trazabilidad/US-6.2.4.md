@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §30
 us_id: US-6.2.4
 tests_count: null
+rf: []
 ---
 
 # US-6.2.4 — Panel torneo: alertas sin botón Resolver + jueces sin nombre

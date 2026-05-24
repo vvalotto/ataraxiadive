@@ -11,6 +11,11 @@ sources:
   - docs/traceability/matrix.md §8
 us_id: US-ADJ-2.8
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/api/dependencies.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-2.8 — Refactoring api: DIP fix EventStoreDep tipado como puerto abstracto

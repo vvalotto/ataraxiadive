@@ -11,6 +11,14 @@ sources:
   - docs/traceability/matrix.md §26
 us_id: US-5.6.2
 tests_count: null
+rf: []
+software_items:
+  - src/torneo/domain/value_objects/tipo_reglamento.py
+  - src/torneo/infrastructure/repositories/sqlite_torneo_repository.py
+test_units:
+  - tests/features/US-5.6.2-tipo-reglamento-di-ranking.feature
+  - tests/integration/torneo/test_tipo_reglamento_repository.py
+origen_tipo: plataforma
 ---
 
 # US-5.6.2 — TipoReglamento en Torneo + DI en CalcularRankingHandler

@@ -11,6 +11,11 @@ sources:
   - docs/traceability/matrix.md §12
 us_id: US-4.1.7
 tests_count: 32
+rf: []
+software_items:
+  - src/competencia/domain/aggregates/competencia.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-4.1.7 — Descomponer GrillaDeSalida.ajustar() y RankingCompetencia

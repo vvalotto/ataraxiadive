@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §18
 us_id: US-ADJ-6.6
 tests_count: null
+rf: []
 ---
 
 # US-ADJ-6.6 — Corrección acrónimo FAZ→FAAS en documentación

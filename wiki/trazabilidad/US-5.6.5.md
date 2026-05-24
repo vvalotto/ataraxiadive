@@ -11,6 +11,12 @@ sources:
   - docs/traceability/matrix.md §26
 us_id: US-5.6.5
 tests_count: null
+rf: []
+software_items:
+  - src/resultados/application/queries/obtener_ranking.py
+test_units:
+  - tests/features/US-5.6.5-ui-tabla-resultados.feature
+origen_tipo: plataforma
 ---
 
 # US-5.6.5 — UI ResultadosPage: tabla de resultados por disciplina

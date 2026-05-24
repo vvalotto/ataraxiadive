@@ -10,6 +10,14 @@ sources:
   - docs/traceability/matrix.md §33
 us_id: US-ADJ-11.3
 tests_count: null
+rf: []
+software_items:
+  - src/registro/domain/aggregates/atleta.py
+test_units:
+  - tests/features/US-ADJ-11.3-atleta-refactor.feature
+origen_tipo: adr
+origen_refs:
+  - ADR-020
 ---
 
 # US-ADJ-11.3 — Atleta: club/categoría opcionales + dni/telefono + migración

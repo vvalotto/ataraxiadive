@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.1.10-plan.md
 us_id: US-5.1.10
 tests_count: null
+rf: []
+software_items:
+  - src/torneo/application/queries/obtener_torneo.py
+test_units:
+  - tests/features/US-5.1.10-acciones-fase.feature
+origen_tipo: calidad
 ---
 
 # US-5.1.10 — Normalización del campo estado en fetchTorneo

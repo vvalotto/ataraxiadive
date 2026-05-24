@@ -11,6 +11,13 @@ sources:
   - docs/traceability/matrix.md §14
 us_id: US-4.3.4
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/application/commands/resolver_revision.py
+  - src/competencia/domain/value_objects/tipo_tarjeta.py
+test_units:
+  - tests/features/US-4.3.4-tarjeta-amarilla.feature
+origen_tipo: plataforma
 ---
 
 # US-4.3.4 — Estado EnRevision + ResolverRevision + UI tarjeta amarilla

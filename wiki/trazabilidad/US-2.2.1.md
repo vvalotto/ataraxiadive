@@ -11,6 +11,14 @@ sources:
   - docs/traceability/matrix.md §5
 us_id: US-2.2.1
 tests_count: null
+rf:
+  - RF-EJ-08
+software_items:
+  - src/competencia/domain/value_objects/disciplina_descriptor.py
+test_units:
+  - tests/features/US-2.2.1-disciplina-descriptor.feature
+  - tests/integration/competencia/test_disciplina_descriptor_integration.py
+origen_tipo: rf
 ---
 
 # US-2.2.1 — DisciplinaDescriptor value object + port

@@ -11,6 +11,11 @@ sources:
   - docs/traceability/matrix.md §10
 us_id: US-ADJ-3.3
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/infrastructure/event_store/sqlite_event_store.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-3.3 — Refactorizar build_app() + constante event type

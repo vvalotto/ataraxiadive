@@ -11,6 +11,14 @@ sources:
   - docs/traceability/matrix.md §6
 us_id: US-1.2.5
 tests_count: 108
+rf:
+  - RF-EJ-02
+software_items:
+  - src/competencia/application/commands/registrar_dns.py
+test_units:
+  - tests/features/US-1.2.5-registrar-dns.feature
+  - tests/integration/competencia/test_registrar_dns_integration.py
+origen_tipo: rf
 ---
 
 # US-1.2.5 — RegistrarDNS

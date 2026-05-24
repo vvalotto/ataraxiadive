@@ -12,6 +12,7 @@ sources:
   - commit 415fa10
 us_id: US-ADJ-5.2
 tests_count: null
+rf: []
 ---
 
 # US-ADJ-5.2 — Consistencia documental residual

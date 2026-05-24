@@ -1,9 +1,17 @@
 ---
 title: "RF — Preparación de Competencias"
-type: trazabilidad
+type: trazabilidad-rf
 last_updated: "2026-05-20"
 sources:
   - docs/dominio/05-requerimientos_funcionales.md
+us_refs:
+  - US-1.2.1
+  - US-2.1.1
+  - US-2.1.2
+  - US-2.1.3
+  - US-2.3.1
+  - US-4.1.4
+  - US-ADJ-4.2
 ---
 
 # RF — Preparación de Competencias

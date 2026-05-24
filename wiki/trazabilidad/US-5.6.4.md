@@ -12,6 +12,13 @@ sources:
   - docs/plans/sp5/US-5.6.4-plan.md
 us_id: US-5.6.4
 tests_count: null
+rf: []
+software_items:
+  - src/resultados/application/commands/calcular_overall.py
+  - src/resultados/domain/aggregates/ranking_overall.py
+test_units:
+  - tests/features/US-5.6.4-ranking-overall-puntos.feature
+origen_tipo: plataforma
 ---
 
 # US-5.6.4 — RankingOverall: puntos acumulados por categoría y género

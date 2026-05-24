@@ -12,6 +12,7 @@ sources:
   - commit 4cf8ca0
 us_id: US-ADJ-5.3
 tests_count: null
+rf: []
 ---
 
 # US-ADJ-5.3 — Marcar madurez de BCs en context-map

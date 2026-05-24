@@ -11,6 +11,7 @@ sources:
   - docs/traceability/matrix.md §31
 us_id: US-6.3.1
 tests_count: null
+rf: []
 ---
 
 # US-6.3.1 — Inicio atleta: indicador En línea + disciplinas por OT

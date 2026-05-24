@@ -11,6 +11,21 @@ sources:
   - docs/traceability/matrix.md §9
 us_id: US-3.1.2
 tests_count: null
+rf:
+  - RF-GT-01
+  - RF-GT-02
+  - RF-GT-03
+  - RF-GT-04
+  - RF-GT-05
+  - RF-GT-07
+software_items:
+  - src/torneo/application/commands/crear_torneo.py
+  - src/torneo/application/commands/transicionar_torneo.py
+  - src/torneo/api/router.py
+test_units:
+  - tests/features/US-3.1.2-api-rest-torneo.feature
+  - tests/integration/torneo/test_sqlite_torneo_repository.py
+origen_tipo: rf
 ---
 
 # US-3.1.2 — API REST Torneo: CRUD + transiciones + repositorio SQLite

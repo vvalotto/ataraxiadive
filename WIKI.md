@@ -69,6 +69,7 @@ wiki/
 | Componente BC (C4 L3) | `wiki/arquitectura/<nombre-bc>/<componente>.md` | `src/<bc>/` |
 | Decisión | `wiki/decisiones/ADR-NNN-<slug>.md` | `docs/adr/` |
 | Trazabilidad US | `wiki/trazabilidad/US-<id>.md` | `docs/plans/`, `docs/reports/`, `docs/traceability/` |
+| Trazabilidad RF | `wiki/trazabilidad/RF-<slug>.md` | `docs/dominio/`, `docs/traceability/matrix.md` |
 | Concepto de dominio | `wiki/conceptos/<concepto>.md` | `docs/dominio/`, `docs/architecture/` |
 | Análisis de impacto | `wiki/impacto/<componente>.md` | `src/`, `docs/adr/`, páginas de BC |
 | Estado del proyecto | `wiki/estado/proyecto.md` | `.cm/baselines/`, `docs/reports/` |
@@ -86,7 +87,7 @@ Todas las páginas deben incluir:
 ```yaml
 ---
 title: "Título de la página"
-type: arquitectura | arquitectura-componente | decision | trazabilidad | concepto | impacto | estado | investigacion | salud | vista | plan
+type: arquitectura | arquitectura-componente | decision | trazabilidad | trazabilidad-us | trazabilidad-rf | concepto | impacto | estado | investigacion | salud | vista | plan
 last_updated: "YYYY-MM-DD"
 sources:
   - ruta/o/nombre/de/la/fuente
@@ -120,7 +121,7 @@ interfaces_out:
 adr_refs: [ADR-001, ADR-008]
 ```
 
-**trazabilidad:**
+**trazabilidad-us** (Historia de Usuario):
 ```yaml
 us_id: US-3.3.1
 bc: competencia
@@ -128,6 +129,35 @@ sp: SP3
 estado: cerrada | en-progreso | pendiente
 tests_count: 28
 report_path: docs/reports/US-3.3.1-report.md
+# Campos de trazabilidad extendida (plan-trazabilidad-rf-us-si-tu)
+rf:                           # RFs que esta US implementa ([] si no aplica)
+  - RF-EJ-05
+  - RF-EJ-06
+origen_tipo: rf | adr | calidad | plataforma | setup
+                              # rf        → deriva de requerimiento funcional elicitado
+                              # adr       → deriva de una decisión arquitectónica (ADR-NNN)
+                              # calidad   → deriva de quality gate (DesignReviewer/ArchitectAnalyst/BL-NNN)
+                              # plataforma→ emerge del diseño de la solución (portales, auth, PWA, infra)
+                              # setup     → precondición técnica inicial del proyecto
+origen_refs:                  # Referencia específica al trigger (omitir si rf — ya está en rf:)
+  - ADR-020                   # para origen_tipo: adr
+  - BL-004                    # para origen_tipo: calidad
+software_items:               # Paths relativos al artefacto de código principal
+  - src/competencia/application/commands/registrar_resultado.py
+  - src/competencia/infrastructure/repositories/competencia_repository.py
+test_units:                   # Paths relativos al/los test(s) que verifican esta US
+  - tests/features/US-3.3.1/registrar_resultado.feature
+  - tests/integration/competencia/test_registrar_resultado.py
+```
+
+**Convención origen:** toda US cerrada debe tener `origen_tipo` poblado. Las US con `rf: [...]` no vacío tienen `origen_tipo: rf` y pueden omitir `origen_refs` (la referencia ya está en `rf:`). Las US con `rf: []` deben tener `origen_tipo` distinto de `rf` y `origen_refs` con la referencia al trigger específico (ADR, BL, o descripción).
+
+**trazabilidad-rf** (Requerimiento Funcional):
+```yaml
+# Campo adicional en páginas RF-*.md
+us_refs:                      # US que implementan este RF (derivado de los campos rf: de las US)
+  - US-1.2.1
+  - US-1.2.3
 ```
 
 ---

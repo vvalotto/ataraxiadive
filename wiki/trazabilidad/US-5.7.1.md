@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.7.1-plan.md
 us_id: US-5.7.1
 tests_count: null
+rf: []
+software_items:
+  - src/registro/application/queries/listar_inscriptos.py
+test_units:
+  - tests/features/US-5.7.1-mis-torneos.feature
+origen_tipo: plataforma
 ---
 
 # US-5.7.1 — Mis torneos: lista de torneos inscriptos del atleta

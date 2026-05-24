@@ -11,6 +11,8 @@ sources:
   - docs/traceability/matrix.md §14
 us_id: US-4.3.5
 tests_count: null
+rf:
+  - RF-EJ-02
 ---
 
 # US-4.3.5 — Adaptación wizard para STA (vías respiratorias)

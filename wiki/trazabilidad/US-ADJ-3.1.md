@@ -11,6 +11,11 @@ sources:
   - docs/traceability/matrix.md §10
 us_id: US-ADJ-3.1
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/domain/aggregates/competencia.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-3.1 — Extraer GrillaDeSalida VO + eliminar _DISCIPLINAS_SP3

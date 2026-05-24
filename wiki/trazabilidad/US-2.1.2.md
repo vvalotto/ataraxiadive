@@ -11,6 +11,15 @@ sources:
   - docs/traceability/matrix.md §5
 us_id: US-2.1.2
 tests_count: null
+rf:
+  - RF-PR-04
+  - RF-PR-05
+software_items:
+  - src/competencia/application/commands/generar_grilla.py
+test_units:
+  - tests/features/US-2.1.2-generar-grilla.feature
+  - tests/integration/competencia/test_generar_grilla_integration.py
+origen_tipo: rf
 ---
 
 # US-2.1.2 — GenerarGrilla / RegenerarGrilla

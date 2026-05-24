@@ -11,6 +11,11 @@ sources:
   - docs/traceability/matrix.md §7
 us_id: US-ADJ-1.2
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/domain/aggregates/performance.py
+test_units: null
+origen_tipo: calidad
 ---
 
 # US-ADJ-1.2 — Refactoring domain: helpers _recalcular_ots + _aplicar_swap_posicion

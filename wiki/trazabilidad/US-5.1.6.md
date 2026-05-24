@@ -12,6 +12,12 @@ sources:
   - docs/plans/sp5/US-5.1.6-plan.md
 us_id: US-5.1.6
 tests_count: null
+rf: []
+software_items:
+  - src/competencia/application/queries/obtener_progreso.py
+test_units:
+  - tests/features/US-5.1.6-monitor-ejecucion.feature
+origen_tipo: plataforma
 ---
 
 # US-5.1.6 — EjecucionPanel: monitor de competencias activas
