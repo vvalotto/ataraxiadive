@@ -17,7 +17,6 @@ export function RolesSection() {
   const userId = useAuthStore((s) => s.userId)
   const roles = useAuthStore((s) => s.roles)
   const login = useAuthStore((s) => s.login)
-  const token = useAuthStore((s) => s.token)
   const [error, setError] = useState<string | null>(null)
   const queryClient = useQueryClient()
 

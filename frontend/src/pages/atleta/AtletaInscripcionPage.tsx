@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchTorneo, listarDisciplinasTorneo } from '../../api/torneo'
@@ -36,6 +36,7 @@ function getInscripcionError(error: unknown): string {
 export function AtletaInscripcionPage() {
   const { torneoId } = useParams<{ torneoId: string }>()
   const atletaId = useAuthStore((state) => state.userId)
+  const queryClient = useQueryClient()
   const email = useAuthStore((state) => state.email)
   const authNombre = useAuthStore((state) => state.nombre)
   const authApellido = useAuthStore((state) => state.apellido)
@@ -143,6 +144,7 @@ export function AtletaInscripcionPage() {
       return { inscripcionId, warnings }
     },
     onSuccess: ({ warnings }) => {
+      queryClient.invalidateQueries({ queryKey: ['atleta-mis-datos'] })
       if (warnings.length > 0) {
         setPostSubmitWarning(
           `La inscripción fue creada, pero quedaron datos pendientes: ${warnings.join('; ')}`,
@@ -158,6 +160,8 @@ export function AtletaInscripcionPage() {
   const fechaNacimientoValue = fechaNacimiento || atleta?.fecha_nacimiento || ''
   const categoriaValue = categoria || atleta?.categoria || ''
   const brevetValue = brevet || atleta?.brevet || ''
+  const documentoNumeroValue = documentoNumero || atleta?.dni || ''
+  const telefonoValue = telefono || atleta?.telefono || ''
 
   function toggleDisciplina(disciplina: string) {
     setDisciplinasSeleccionadas((current) => {
@@ -175,7 +179,7 @@ export function AtletaInscripcionPage() {
 
   function nextStep() {
     if (step === 1) {
-      if (!nombreCompletoValue || !fechaNacimientoValue || !documentoNumero || !telefono) {
+      if (!nombreCompletoValue || !fechaNacimientoValue || !documentoNumeroValue || !telefonoValue) {
         setValidationError('Completá todos los datos personales obligatorios.')
         return
       }
@@ -307,7 +311,7 @@ export function AtletaInscripcionPage() {
                 <label className="block text-sm text-slate-300">
                   Documento *
                   <input
-                    value={documentoNumero}
+                    value={documentoNumeroValue}
                     onChange={(event) => setDocumentoNumero(event.target.value.replace(/\D/g, ''))}
                     inputMode="numeric"
                     className="mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100"
@@ -317,7 +321,7 @@ export function AtletaInscripcionPage() {
               <label className="block text-sm text-slate-300">
                 Teléfono *
                 <input
-                  value={telefono}
+                  value={telefonoValue}
                   onChange={(event) => setTelefono(event.target.value.replace(/\D/g, ''))}
                   inputMode="numeric"
                   className="mt-2 w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-100"

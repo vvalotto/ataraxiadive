@@ -87,7 +87,7 @@ export function AtletaHomePage() {
               </div>
               <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-3">
                 <dt className="text-xs uppercase tracking-[0.18em] text-slate-500">Club</dt>
-                <dd className="mt-1 font-semibold text-white">{query.data.atleta.club}</dd>
+                <dd className="mt-1 font-semibold text-white">{query.data.atleta.club || '—'}</dd>
               </div>
             </dl>
           </section>
