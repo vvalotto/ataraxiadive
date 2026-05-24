@@ -40,7 +40,14 @@ el estado actual del sistema. Usarlos solo para contexto de dominio.
 wiki/
 ├── index.md                  ← Catálogo de todas las páginas (actualizar en cada ingest)
 ├── log.md                    ← Registro cronológico append-only
-├── bounded-contexts/         ← Una página por BC
+├── arquitectura/             ← C4 L2: una página por BC + context-map
+│   ├── competencia.md
+│   ├── competencia/          ← C4 L3: componentes internos del BC
+│   │   ├── performance.md
+│   │   └── ...
+│   ├── bc-torneo.md
+│   ├── bc-torneo/
+│   └── ...
 ├── decisiones/               ← Una página por ADR (síntesis vigente)
 ├── trazabilidad/             ← Una página por US (ciclo completo)
 ├── conceptos/                ← Lenguaje ubicuo del dominio
@@ -48,7 +55,8 @@ wiki/
 ├── estado/                   ← Estado actual del proyecto (única fuente de verdad)
 ├── salud/                    ← Resultados de lint periódico
 ├── investigacion/            ← Aprendizajes y matriz de conocimiento
-└── vistas/                   ← Puntos de entrada por perspectiva (6 archivos)
+├── planes/                   ← Planes de ingest y evolución del wiki
+└── vistas/                   ← Puntos de entrada por perspectiva (7 archivos: +arquitectura)
 ```
 
 ---
@@ -57,7 +65,8 @@ wiki/
 
 | Tipo | Ubicación | Generado a partir de |
 |------|-----------|----------------------|
-| Bounded Context | `wiki/bounded-contexts/<nombre-bc>.md` | `docs/architecture/`, `docs/adr/`, `src/` |
+| Bounded Context (C4 L2) | `wiki/arquitectura/<nombre-bc>.md` | `docs/architecture/`, `docs/adr/`, `src/` |
+| Componente BC (C4 L3) | `wiki/arquitectura/<nombre-bc>/<componente>.md` | `src/<bc>/` |
 | Decisión | `wiki/decisiones/ADR-NNN-<slug>.md` | `docs/adr/` |
 | Trazabilidad US | `wiki/trazabilidad/US-<id>.md` | `docs/plans/`, `docs/reports/`, `docs/traceability/` |
 | Concepto de dominio | `wiki/conceptos/<concepto>.md` | `docs/dominio/`, `docs/architecture/` |
@@ -66,6 +75,7 @@ wiki/
 | Investigación | `wiki/investigacion/<slug>.md` | `docs/contexto/HITO-*.md`, `PLAN-EXPERIMENTO.md` |
 | Salud / lint | `wiki/salud/lint-NNN.md` | Auditoría del wiki completo |
 | Vista | `wiki/vistas/<nombre-vista>.md` | Síntesis de recorridos sobre el wiki |
+| Plan | `wiki/planes/<slug>.md` | Diseño de sesiones de ingest o evolución del wiki |
 
 ---
 
@@ -76,7 +86,7 @@ Todas las páginas deben incluir:
 ```yaml
 ---
 title: "Título de la página"
-type: bounded-context | decision | trazabilidad | concepto | impacto | estado | investigacion | salud | vista
+type: arquitectura | arquitectura-componente | decision | trazabilidad | concepto | impacto | estado | investigacion | salud | vista | plan
 last_updated: "YYYY-MM-DD"
 sources:
   - ruta/o/nombre/de/la/fuente
@@ -85,13 +95,29 @@ sources:
 
 Campos adicionales por tipo:
 
-**bounded-context:**
+**arquitectura** (C4 L2 — Bounded Context):
 ```yaml
 bc_name: nombre
+tipo_ddd: core | supporting | generic
 persistence_style: event-sourcing | crud
 adrs: [ADR-001, ADR-007]
 us_implementadas: 12
 test_coverage: "94%"
+componentes:
+  - arquitectura/competencia/performance
+  - arquitectura/competencia/grilla
+```
+
+**arquitectura-componente** (C4 L3 — componente interno de un BC):
+```yaml
+bc: competencia
+capa: domain | application | infrastructure | api
+tipo_componente: aggregate | port | handler | repository | adapter | router | service | value-object
+responsabilidad: "descripción breve"
+interfaces_out:
+  - EventStorePort
+  - AtletaNombrePort
+adr_refs: [ADR-001, ADR-008]
 ```
 
 **trazabilidad:**
@@ -135,6 +161,7 @@ Al recibir una pregunta, identificá la vista más relevante y navegá desde ese
 | Impacto | `wiki/vistas/impacto.md` | Preguntas sobre consecuencias de un cambio o dependencias |
 | Salud | `wiki/vistas/salud.md` | Preguntas sobre calidad, deuda técnica, inconsistencias |
 | Investigación | `wiki/vistas/investigacion.md` | Preguntas sobre aprendizajes, experimento, productos intelectuales |
+| Arquitectura | `wiki/vistas/arquitectura.md` | Preguntas sobre estructura interna de BCs, componentes, C4 L2+L3 |
 
 Para iniciar una sesión desde una vista específica:
 ```
