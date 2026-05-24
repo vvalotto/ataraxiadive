@@ -36,12 +36,31 @@ export interface InscriptoDetalleDto {
   atleta_id: string
   torneo_id: string
   estado: string
+  estado_aceptacion: 'ACEPTADO' | 'RECHAZADO'
   fecha_inscripcion: string
   nombre: string
   apellido: string
   categoria: string
   club: string
   disciplinas: InscriptoDisciplinaDetalleDto[]
+}
+
+export interface InscripcionDetalleDto {
+  inscripcion_id: string
+  atleta_id: string
+  torneo_id: string
+  estado: string
+  estado_aceptacion: 'ACEPTADO' | 'RECHAZADO'
+  fecha_inscripcion: string
+  nombre: string
+  apellido: string
+  categoria: string | null
+  club: string | null
+  brevet: string | null
+  dni: string | null
+  telefono: string | null
+  apto_medico_url: string | null
+  constancia_pago_url: string | null
 }
 
 export interface AtletaDto {
@@ -379,4 +398,25 @@ export async function actualizarOrganizadorMe(
     body: JSON.stringify(payload),
   })
   return parseResponse<OrganizadorDto>(response)
+}
+
+export async function fetchInscripcionDetalle(
+  inscripcionId: string,
+): Promise<InscripcionDetalleDto> {
+  const response = await fetch(`/registro/inscripciones/${inscripcionId}/detalle`, {
+    headers: buildHeaders(),
+  })
+  return parseResponse<InscripcionDetalleDto>(response)
+}
+
+export async function cambiarAceptacionInscripcion(
+  inscripcionId: string,
+  estado: 'ACEPTADO' | 'RECHAZADO',
+): Promise<{ ok: boolean; estado: string }> {
+  const response = await fetch(`/registro/inscripciones/${inscripcionId}/aceptacion`, {
+    method: 'PATCH',
+    headers: buildHeaders(),
+    body: JSON.stringify({ estado }),
+  })
+  return parseResponse<{ ok: boolean; estado: string }>(response)
 }

@@ -652,7 +652,7 @@ RFs sin implementar en v1.0. No bloquean el scope actual (SP7 — despliegue y d
 | US-ADJ-12.3 | Frontend | — | `UsuarioDto.roles[]` · `agregarRolUsuario()` / `quitarRolUsuario()` · chips inline en UsuariosPage · #204 frontend | ⏳ Pendiente |
 | US-ADJ-12.4 | Frontend | — | Portal atleta: precarga doc/tel en inscripción · club fallback · invalidación caché post-inscripción · #200 | ⏳ Pendiente |
 | US-ADJ-12.5 | BC Registro | — | `Inscripcion.estado_aceptacion` (ACEPTADO/RECHAZADO) · `PATCH /inscripciones/{id}/aceptacion` · `GET /inscripciones/{id}/detalle` · #202 backend | ⏳ Pendiente |
-| US-ADJ-12.6 | Frontend | — | Popup inscripto: datos atleta + adjuntos + control aceptación · badge estado en tabla · #202 frontend | ⏳ Pendiente |
+| US-ADJ-12.6 | Frontend | — | Popup inscripto: datos atleta + adjuntos + control aceptación · badge estado en tabla · #202 frontend | ✅ Implementado |
 
 ---
 
