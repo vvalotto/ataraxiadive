@@ -353,7 +353,9 @@ async def refrescar_token(
         return JSONResponse(status_code=404, content={"detail": "Usuario no encontrado"})
     rol_activo = Rol(current_user["rol"])
     new_token = token_service.generate(usuario, rol_activo)
-    return JSONResponse(status_code=200, content={"access_token": new_token, "token_type": "bearer"})
+    return JSONResponse(
+        status_code=200, content={"access_token": new_token, "token_type": "bearer"}
+    )
 
 
 @router.get("/usuarios", status_code=200)

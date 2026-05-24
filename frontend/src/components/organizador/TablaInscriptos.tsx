@@ -28,6 +28,7 @@ export interface InscriptoRow {
   club: string
   categoria: string
   estadoInscripcion: string
+  estadoAceptacion: 'ACEPTADO' | 'RECHAZADO'
   disciplinas: string[]
   estadoApPorDisciplina: Record<string, EstadoAP>
 }
@@ -38,6 +39,8 @@ interface TablaInscriptosProps {
   editable?: boolean
   onGuardarAp?: (payload: { inscripcionId: string; disciplina: string; valorAp: string }) => void
   savingKey?: string | null
+  onRowClick?: (inscripcionId: string) => void
+  selectedInscripcionId?: string | null
 }
 
 function puedeDeclararAp(estado?: EstadoAP): boolean {
@@ -48,12 +51,29 @@ function formatCategoria(categoria: string): string {
   return CATEGORIA_LABELS[categoria] ?? categoria
 }
 
+function AceptacionBadge({ estado }: { estado: 'ACEPTADO' | 'RECHAZADO' }) {
+  if (estado === 'ACEPTADO') {
+    return (
+      <span className="inline-block rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs font-semibold text-emerald-400">
+        ACEPTADO
+      </span>
+    )
+  }
+  return (
+    <span className="inline-block rounded-full bg-red-500/20 px-2 py-0.5 text-xs font-semibold text-red-400">
+      RECHAZADO
+    </span>
+  )
+}
+
 export function TablaInscriptos({
   rows,
   disciplinas,
   editable = false,
   onGuardarAp,
   savingKey = null,
+  onRowClick,
+  selectedInscripcionId = null,
 }: TablaInscriptosProps) {
   const [disciplinaFiltro, setDisciplinaFiltro] = useState('TODAS')
   const [drafts, setDrafts] = useState<Record<string, string>>({})
@@ -113,6 +133,7 @@ export function TablaInscriptos({
                 <th className="px-4 py-3 text-center">Atleta</th>
                 <th className="px-4 py-3 text-center">Club</th>
                 <th className="px-4 py-3 text-center">Categoria</th>
+                <th className="px-4 py-3 text-center">Estado</th>
                 {disciplinasVisibles.map((disciplina) => (
                   <th key={disciplina} className="px-4 py-3 text-center">
                     Anuncio · {disciplina}
@@ -122,11 +143,24 @@ export function TablaInscriptos({
             </thead>
             <tbody className="divide-y divide-slate-800 bg-slate-900/70">
               {rowsFiltradas.map((row) => (
-                <tr key={row.inscripcionId}>
+                <tr
+                  key={row.inscripcionId}
+                  onClick={() => onRowClick?.(row.inscripcionId)}
+                  className={`transition-colors ${onRowClick ? 'cursor-pointer' : ''} ${
+                    selectedInscripcionId === row.inscripcionId
+                      ? 'bg-slate-700/60'
+                      : onRowClick
+                        ? 'hover:bg-slate-800/60'
+                        : ''
+                  }`}
+                >
                   <td className="px-4 py-3 font-semibold text-white">{row.nombre}</td>
                   <td className="px-4 py-3 text-slate-300">{row.club}</td>
                   <td className="px-4 py-3 text-center text-slate-300">
                     {formatCategoria(row.categoria)}
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    <AceptacionBadge estado={row.estadoAceptacion} />
                   </td>
                   {disciplinasVisibles.map((disciplina) => {
                     if (!row.disciplinas.includes(disciplina)) {
