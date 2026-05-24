@@ -2,16 +2,16 @@
 
 > Estado documental: vigente  
 > Fuente de verdad para: trazabilidad RF → BC → incremento → US-IEDD · estados de implementación  
-> Última actualización: 2026-05-17  
+> Última actualización: 2026-05-24  
 > Jerarquía de autoridad: [FUENTES-DE-VERDAD-DOCUMENTAL.md](../inventario/FUENTES-DE-VERDAD-DOCUMENTAL.md)
 
 | Campo | Valor |
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-05-17 |
+| **Fecha** | 2026-05-24 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.45 — SP6 ✅ cerrado 2026-05-16 · SP7 ⏳ INC-7.1 ✅ · INC-7.2 pendiente |
+| **Estado** | ✅ v1.47 — SP-ADJ-12 ✅ cerrado 2026-05-24 · SP7 ⏳ INC-7.2 pendiente |
 
 ---
 
@@ -640,7 +640,25 @@ RFs sin implementar en v1.0. No bloquean el scope actual (SP7 — despliegue y d
 
 ---
 
-## 34. Trazabilidad: Discrepancias → US → Documentos a actualizar
+## 34. SP-ADJ-12 — Correcciones y mejoras de producción post-SP7
+
+**Contexto:** Bugs e issues (#198–#204) detectados en producción (https://ataraxiadive.fly.dev) durante operación real post-despliegue SP7.  
+**Plan:** `docs/plans/sp-adj-12/PLAN-SP-ADJ-12.md`.  
+**Estado:** ✅ Cerrado 2026-05-24 · 6/6 US + 3 fixes post-revisión · DesignReviewer 0 CRITICAL · 1049 tests.
+
+| US | Área | PRs | Descripción | Estado |
+|----|------|-----|-------------|--------|
+| US-ADJ-12.1 | Frontend | #205 | Fixes layout/nav/filtros: JuecesPanel rol→roles, InscriptosPanel mensaje, OrganizadorLayout nav, DisciplinasPage botones · #198 #199 #201 #203 | ✅ Implementado |
+| US-ADJ-12.2 | BC Identidad | #206 | `agregar_rol()` / `quitar_rol()` en aggregate · `AgregarRolCommand` + `QuitarRolCommand` · `POST/DELETE /auth/me/roles` · #204 backend | ✅ Implementado |
+| US-ADJ-12.3 | Frontend | #207 | `UsuarioDto.roles[]` · `agregarRolUsuario()` / `quitarRolUsuario()` · `RolesSection` en Mis Datos · JWT incluye `roles[]` · #204 frontend | ✅ Implementado |
+| US-ADJ-12.4 | Frontend | #208 | Portal atleta: precarga doc/tel en inscripción · club fallback · invalidación caché post-inscripción · #200 | ✅ Implementado |
+| US-ADJ-12.5 | BC Registro | #209 | `Inscripcion.estado_aceptacion` (ACEPTADO/RECHAZADO) · `PATCH /inscripciones/{id}/aceptacion` · `GET /inscripciones/{id}/detalle` · #202 backend | ✅ Implementado |
+| US-ADJ-12.6 | Frontend | #210 | Popup inscripto: datos atleta + adjuntos + control aceptación · badge estado en tabla · #202 frontend | ✅ Implementado |
+| fix-adjuntos | Registro + Frontend | — | Endpoint descarga adjuntos con auth ORGANIZADOR · fetch+Bearer+blob URL (evita 401 en `<a download>`) · título pestaña por portal · favicon buzo SVG | ✅ Implementado |
+
+---
+
+## 36. Trazabilidad: Discrepancias → US → Documentos a actualizar
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
 
@@ -659,7 +677,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 35. Cobertura Total
+## 37. Cobertura Total
 
 | Área | Total RFs | Definidos | Pendientes | Fuera de alcance v1 |
 |------|:---------:|:---------:|:----------:|:-------------------:|
@@ -679,7 +697,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 36. US → Tests
+## 38. US → Tests
 
 | US-IEDD | Suite de tests | Estado |
 |---------|---------------|--------|
@@ -789,7 +807,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
-## 37. US → ADR
+## 39. US → ADR
 
 | US-IEDD | ADR relacionado | Relación |
 |---------|----------------|---------|
@@ -804,6 +822,8 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
+*v1.47 — 2026-05-24: SP-ADJ-12 cerrado (§34 · 6 US + 3 fixes · PRs #205–#210 · issues #198–#204 cerrados)*
+*v1.46 — 2026-05-23: SP-ADJ-12 planificado (§34 nuevo · 6 US · issues #198–#204 producción) · §§ renumerados 35..39*
 *v1.45 — 2026-05-17: Iteración 3 adecuación documental — §2 SP6/SP7 agregados · 23 "✅ definido" normalizados a "✅ implementado" en SPs cerrados · §4 actualizado a scope v1.0 · header fecha/estado actualizado*
 *v1.44 — 2026-05-16: SP-ADJ-11 cerrado (§33 nuevo · 10/10 US ✅ · PRs #184–#193 · DesignReviewer 0 CRITICAL · 287 WARNING) · §§ renumerados 34..37 · US→Tests SP-ADJ-11.x agregados*
 *v1.43 — 2026-05-09: US-6.4.5 completada · SQLiteInscripcionRepository sin DR-07 · DR-06 documentado como coordination handler*

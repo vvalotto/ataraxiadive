@@ -212,7 +212,15 @@
       "Bash(mkdir -p /Users/victor/PycharmProjects/ataraxiadive/quality/reports/uat/SP6/F-02-creacion-torneo)",
       "Bash(mkdir -p /Users/victor/PycharmProjects/ataraxiadive/quality/reports/uat/SP6/F-03-seed-b)",
       "Bash(git reset *)",
-      "Bash(git worktree *)"
+      "Bash(git worktree *)",
+      "Bash(mkdir -p /Users/victor/PycharmProjects/ataraxiadive/docs/plans/sp-adj-12)",
+      "Bash(mkdir -p /Users/victor/PycharmProjects/ataraxiadive/docs/specs/sp-adj-12)",
+      "Bash(node -e \"const {chromium} = require\\('playwright'\\); console.log\\('ok'\\)\")",
+      "Bash(npx playwright *)",
+      "Bash(open *)",
+      "Bash(git revert *)",
+      "Bash(pkill -f uvicorn)",
+      "Bash(git rm *)"
     ]
   }
 }

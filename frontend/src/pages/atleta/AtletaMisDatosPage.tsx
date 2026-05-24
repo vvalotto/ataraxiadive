@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { AtletaShell } from '../../components/atleta/AtletaShell'
+import { RolesSection } from '../../components/shared/RolesSection'
 import {
   actualizarAtletaMe,
   fetchAtletaMe,
@@ -125,6 +126,7 @@ export function AtletaMisDatosPage() {
 
   return (
     <AtletaShell title="Mis Datos" subtitle="Actualizá tu perfil de atleta">
+      <RolesSection />
       {isLoading ? (
         <div className="rounded-2xl border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando perfil...

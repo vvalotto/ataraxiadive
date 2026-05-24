@@ -8,6 +8,7 @@ import pytest
 import pytest_asyncio
 
 from registro.domain.aggregates.inscripcion import Inscripcion
+from registro.domain.value_objects.estado_aceptacion import EstadoAceptacion
 from registro.domain.value_objects.estado_inscripcion import EstadoInscripcion
 from registro.infrastructure.repositories.sqlite_inscripcion_repository import (
     SQLiteInscripcionRepository,
@@ -126,6 +127,75 @@ async def test_adjuntos_persisten_correctamente(repo):
     assert found is not None
     assert found.apto_medico_path == "data/adjuntos/ins/apto_medico.pdf"
     assert found.constancia_pago_path == "data/adjuntos/ins/constancia_pago.pdf"
+
+
+@pytest.mark.asyncio
+async def test_estado_aceptacion_persiste_como_rechazado(repo):
+    ins = _inscripcion()
+    ins.cambiar_aceptacion(EstadoAceptacion.RECHAZADO)
+    await repo.save(ins)
+
+    found = await repo.find_by_id(ins.inscripcion_id)
+    assert found is not None
+    assert found.estado_aceptacion == EstadoAceptacion.RECHAZADO
+
+
+@pytest.mark.asyncio
+async def test_estado_aceptacion_default_en_db_es_aceptado(repo):
+    ins = _inscripcion()
+    await repo.save(ins)
+
+    found = await repo.find_by_id(ins.inscripcion_id)
+    assert found is not None
+    assert found.estado_aceptacion == EstadoAceptacion.ACEPTADO
+
+
+@pytest.mark.asyncio
+async def test_migracion_legacy_sin_estado_aceptacion_usa_aceptado(tmp_path):
+    db_path = tmp_path / "legacy_sin_aceptacion.db"
+    inscripcion_id = uuid4()
+    atleta_id = uuid4()
+    torneo_id = uuid4()
+
+    async with aiosqlite.connect(db_path) as conn:
+        await conn.execute("""
+            CREATE TABLE inscripciones (
+                inscripcion_id    TEXT PRIMARY KEY,
+                atleta_id         TEXT NOT NULL,
+                torneo_id         TEXT NOT NULL,
+                disciplinas       TEXT NOT NULL,
+                ap_por_disciplina TEXT NOT NULL DEFAULT '{}',
+                estado            TEXT NOT NULL,
+                fecha_inscripcion TEXT NOT NULL,
+                apto_medico_path  TEXT,
+                constancia_pago_path TEXT
+            )
+            """)
+        await conn.execute(
+            """
+            INSERT INTO inscripciones (
+                inscripcion_id, atleta_id, torneo_id,
+                disciplinas, ap_por_disciplina, estado, fecha_inscripcion
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                str(inscripcion_id),
+                str(atleta_id),
+                str(torneo_id),
+                '["STA"]',
+                "{}",
+                EstadoInscripcion.ACTIVA.value,
+                "2026-05-07T12:00:00",
+            ),
+        )
+        await conn.commit()
+
+    repo = SQLiteInscripcionRepository(db_path=str(db_path))
+    found = await repo.find_by_id(inscripcion_id)
+
+    assert found is not None
+    assert found.estado_aceptacion == EstadoAceptacion.ACEPTADO
 
 
 @pytest.mark.asyncio

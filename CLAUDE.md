@@ -95,6 +95,7 @@ SP-ADJ  → ajuste técnico o documental antes de cerrar la baseline
 **SP-ADJ-11 cerrado:** 10/10 US ✅ · PRs #184–#193 · modelo multi-rol completo (Identidad + Registro + Frontend) · DesignReviewer 0 CRITICAL · ADR-020 implementado.
 **SP6 cerrado:** INC-6.1..6.6 + SP-ADJ-10/11 · UAT 10/10 flows · BL-006 ✅ · tag `v1.0.0` · despliegue diferido a SP7.
 **SP7 en curso:** INC-7.1 Despliegue en Fly.io · INC-7.2 Manual de usuario.
+**SP-ADJ-12 cerrado:** 6/6 US ✅ + 3 fixes post-revisión · PRs #205–#210 · issues #198–#204 · DesignReviewer 0 CRITICAL · 1049 tests.
 
 ---
 
@@ -167,7 +168,40 @@ black src/ tests/ && isort src/ tests/
 
 ---
 
-## 9. Gestión de Sesión
+## 9. LLM Wiki
+
+El branch `wiki` contiene un wiki mantenido por LLM — **no código, no documentación operativa**. Es una capa de conocimiento sintetizado sobre el proyecto.
+
+**Schema y reglas del wiki:** `WIKI.md` (en el root del branch `wiki`)  
+**Plan de implementación:** `LLM-WIKI-DIAGNOSTICO-Y-PLAN.md` (en el root del branch `wiki`)
+
+### Jerarquía de fuentes (para ingest)
+
+El LLM ingestor debe priorizar fuentes en este orden. Ante contradicción, prevalece la fuente de mayor jerarquía:
+
+| Prioridad | Fuente | Descripción |
+|-----------|--------|-------------|
+| 1 — Más alta | `.cm/baselines/BL-*.md` · `docs/reports/` | Verdad de cierre: lo que fue verificado y etiquetado |
+| 2 | `docs/adr/ADR-*.md` | Decisiones arquitectónicas ratificadas |
+| 3 | `CLAUDE.md` (este archivo) | Contexto operativo vigente |
+| 4 | `README.md` | Descripción pública del proyecto |
+| 5 | `docs/architecture/` · `docs/design/` | Documentación técnica de soporte |
+| 6 | `docs/plans/` · `docs/traceability/` | Planificación e historias de usuario |
+| 7 — Más baja | `docs/dominio/` | Elicitación histórica — puede estar desactualizada |
+
+### Operaciones del wiki
+
+```
+/wiki-ingest <fuente>   → procesar fuente y actualizar páginas del wiki
+/wiki-query  <pregunta> → navegar el wiki y responder desde conocimiento sintetizado
+/wiki-lint              → auditar coherencia, detectar contradicciones, generar salud/lint-NNN.md
+```
+
+> El LLM wiki es un **experto que propone, no implementa**. Las páginas del wiki son síntesis y análisis — no sustituyen a las fuentes origen.
+
+---
+
+## 10. Gestión de Sesión
 
 - **Al iniciar:** si el hook muestra flag pendiente → `/resume` antes de cualquier acción
 - **Durante:** `/checkpoint` al completar tareas significativas, tomar decisiones, antes de operaciones riesgosas, y cuando el usuario da señales de cierre
@@ -187,4 +221,4 @@ memory/
 
 ---
 
-*Última actualización: 2026-05-17 — SP6 ✅ v1.0.0 · SP7 ⏳ Despliegue y Documentación*
+*Última actualización: 2026-05-24 — SP6 ✅ v1.0.0 · SP7 ⏳ en curso · SP-ADJ-12 ✅ cerrado*

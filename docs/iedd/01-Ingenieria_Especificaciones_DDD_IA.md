@@ -1,263 +1,212 @@
-Ingeniería de Especificaciones Basada en Dominio
+# Ingeniería de Especificaciones Basada en Dominio
 
-DDD + Ingeniería de Especificaciones + IA como traductor de
-comportamiento
+DDD + Ingeniería de Especificaciones + IA como traductor de comportamiento
 
-1\. Planteo del problema
+---
 
-Durante décadas la enseñanza y práctica del software se organizó
-alrededor de los lenguajes de programación.
+## 1. Planteo del problema
+
+Durante décadas la enseñanza y práctica del software se organizó alrededor de los lenguajes de programación.
 
 El proceso típico era:
 
+```
 lenguaje → programación → sistema
+```
 
 Este enfoque tiene dos limitaciones:
 
-\- pone el foco en la implementación
-
-\- oculta el problema central del software: la especificación del
-comportamiento del sistema
+- pone el foco en la implementación
+- oculta el problema central del software: la especificación del comportamiento del sistema
 
 La mayor dificultad del software está en:
 
-\- especificar correctamente el sistema
-
-\- diseñar su comportamiento
-
-\- verificar su corrección
+- especificar correctamente el sistema
+- diseñar su comportamiento
+- verificar su corrección
 
 no en escribir código.
 
-La aparición de la IA generativa hace visible esta realidad:
+La aparición de la IA generativa hace visible esta realidad: la implementación puede automatizarse parcialmente, la especificación no.
 
-la implementación puede automatizarse parcialmente, la especificación
-no.
+---
 
-2\. La tesis central
+## 2. La tesis central
 
-La ingeniería de software puede reinterpretarse como una disciplina
-compuesta por tres capas:
+La ingeniería de software puede reinterpretarse como una disciplina compuesta por cinco capas:
 
+```
 Dominio
-
-↓
-
-Modelo conceptual
-
-↓
-
-Especificación del comportamiento
-
-↓
-
+  ↓
+Modelo
+  ↓
+Especificación
+  ↓
+Arquitectura
+  ↓
 Implementación
+```
 
 En este marco:
 
-\- Domain‑Driven Design proporciona la construcción del modelo
-conceptual del dominio
+- Domain-Driven Design proporciona la construcción del modelo del dominio
+- la ingeniería de especificaciones formaliza el comportamiento esperado
+- la arquitectura organiza el sistema para implementar la especificación
+- la IA actúa como traductor entre especificación e implementación
 
-\- la ingeniería de especificaciones formaliza el comportamiento
-esperado
+---
 
-\- la IA actúa como traductor entre especificación y sistema ejecutable
+## 3. El aporte de Domain-Driven Design
 
-3\. El aporte de Domain‑Driven Design
-
-DDD propone que el software debe construirse a partir de un modelo
-explícito del dominio.
+DDD propone que el software debe construirse a partir de un modelo explícito del dominio.
 
 Conceptos fundamentales:
 
-\- entidades
+- entidades
+- objetos de valor
+- agregados
+- servicios de dominio
+- eventos
+- contextos delimitados
+- lenguaje ubicuo
 
-\- objetos de valor
+El objetivo es capturar las reglas del dominio. El modelo define comportamiento, restricciones e invariantes. Por lo tanto el modelo del dominio puede interpretarse como una especificación conceptual del sistema.
 
-\- agregados
+---
 
-\- servicios de dominio
+## 4. Ingeniería de especificaciones
 
-\- eventos
-
-\- contextos delimitados
-
-\- lenguaje ubicuo
-
-El objetivo es capturar las reglas del dominio.
-
-El modelo define:
-
-\- comportamiento
-
-\- restricciones
-
-\- invariantes
-
-Por lo tanto el modelo del dominio puede interpretarse como una
-especificación conceptual del sistema.
-
-4\. Ingeniería de especificaciones
-
-La ingeniería de especificaciones describe con precisión el
-comportamiento esperado de un sistema.
+La ingeniería de especificaciones describe con precisión el comportamiento esperado de un sistema.
 
 Incluye:
 
-\- operaciones
-
-\- precondiciones
-
-\- postcondiciones
-
-\- invariantes
-
-\- estados
-
-\- eventos
+- operaciones
+- precondiciones
+- postcondiciones
+- invariantes
+- estados
+- eventos
 
 Ejemplo conceptual:
 
+```
 Entidad: Cuenta
-
-Invariante:
-
-saldo ≥ 0
+  Invariante: saldo ≥ 0
 
 Operación: transferir
+  Precondición:  saldo_origen ≥ monto
+  Postcondición: saldo_origen disminuye
+                 saldo_destino aumenta
+```
 
-Precondición:
+Esta descripción define comportamiento sin referirse a ninguna tecnología.
 
-saldo\_origen ≥ monto
+---
 
-Postcondición:
+## 5. La IA como traductor de especificaciones
 
-saldo\_origen disminuye
-
-saldo\_destino aumenta
-
-Esta descripción define comportamiento sin referirse a ninguna
-tecnología.
-
-5\. La IA como traductor de especificaciones
-
-Los modelos de lenguaje permiten transformar descripciones de alto nivel
-en implementaciones.
+Los modelos de lenguaje permiten transformar descripciones de alto nivel en implementaciones.
 
 Flujo conceptual:
 
+```
 modelo del dominio
-
-↓
-
+  ↓
 especificación del comportamiento
-
-↓
-
+  ↓
 IA
-
-↓
-
+  ↓
 implementación ejecutable
+```
 
-La IA funciona como un compilador conceptual.
+La IA funciona como un compilador conceptual. La calidad del resultado depende de:
 
-La calidad del resultado depende de:
+- claridad del modelo
+- precisión de la especificación
+- ausencia de ambigüedad
 
-\- claridad del modelo
+---
 
-\- precisión de la especificación
+## 6. Cambio de foco en la ingeniería de software
 
-\- ausencia de ambigüedad
+Antes: programar sistemas.
 
-6\. Cambio de foco en la ingeniería de software
-
-Antes:
-
-programar sistemas
-
-Ahora:
-
-especificar sistemas
+Ahora: modelar, especificar y diseñar sistemas.
 
 La actividad principal del ingeniero pasa a ser:
 
-\- comprender el dominio
-
-\- construir el modelo conceptual
-
-\- definir el comportamiento esperado
-
-\- eliminar ambigüedades
+- comprender el dominio
+- construir el modelo
+- definir el comportamiento esperado
+- diseñar la arquitectura que lo realiza
+- eliminar ambigüedades
 
 La implementación pasa a ser derivable.
 
-7\. Consecuencias para la enseñanza
+---
+
+## 7. Consecuencias para la enseñanza
 
 Orden tradicional:
 
+```
 lenguajes → programación → diseño
+```
 
 Orden propuesto:
 
-dominio → modelo → especificación → implementación
+```
+dominio → modelo → especificación → arquitectura → implementación
+```
 
 Los estudiantes deben entrenarse primero en:
 
-\- modelado conceptual
-
-\- lenguaje ubicuo
-
-\- especificación de comportamiento
-
-\- identificación de ambigüedades
+- modelado conceptual
+- lenguaje ubicuo
+- especificación de comportamiento
+- decisiones de arquitectura
+- identificación de ambigüedades
 
 antes de centrarse en lenguajes específicos.
 
-8\. Un nuevo rol para la ingeniería de software
+---
+
+## 8. Un nuevo rol para la ingeniería de software
 
 La ingeniería de software puede definirse como:
 
-la disciplina que modela dominios complejos y especifica sistemas
-capaces de representar y ejecutar ese modelo.
+> la disciplina que modela dominios complejos y especifica sistemas capaces de representar y ejecutar ese modelo.
 
 Los lenguajes de programación pasan a ser medios de materialización.
 
-9\. Síntesis conceptual
+---
 
+## 9. Síntesis conceptual
+
+```
 Dominio real
-
-↓
-
-Modelo conceptual (DDD)
-
-↓
-
-Especificación del comportamiento
-
-↓
-
+  ↓
+Modelo (DDD)
+  ↓
+Especificación
+  ↓
+Arquitectura
+  ↓
 IA como traductor
-
-↓
-
+  ↓
 Sistema ejecutable
+```
 
-10\. Conclusión
+---
 
-La aparición de herramientas de generación de código basadas en IA no
-elimina la necesidad de ingeniería de software.
+## 10. Conclusión
+
+La aparición de herramientas de generación de código basadas en IA no elimina la necesidad de ingeniería de software.
 
 Por el contrario, enfatiza su núcleo:
 
-\- comprender sistemas complejos
+- comprender sistemas complejos
+- construir modelos conceptuales
+- especificar comportamientos con precisión
 
-\- construir modelos conceptuales
-
-\- especificar comportamientos con precisión
-
-En este contexto, enfoques como Domain‑Driven Design adquieren una nueva
-relevancia,
-
-ya que proporcionan el marco para construir modelos que pueden
-transformarse en sistemas ejecutables.
+En este contexto, enfoques como Domain-Driven Design adquieren una nueva relevancia, ya que proporcionan el marco para construir modelos que pueden transformarse en sistemas ejecutables.

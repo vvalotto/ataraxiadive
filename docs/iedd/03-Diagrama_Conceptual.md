@@ -1,110 +1,86 @@
-Este documento presenta un marco conceptual para comprender la
-construcción de sistemas digitales como una cadena de transformación que
-va desde el conocimiento del dominio hasta el comportamiento ejecutable.
-El modelo integra Domain-Driven Design (DDD), ingeniería de
-especificaciones y el rol de la IA como traductor de especificaciones
-hacia implementaciones.
+# Diagrama Conceptual: Marco de 5 Capas
 
-Diagrama conceptual
-===================
+Este documento presenta un marco conceptual para comprender la construcción de sistemas digitales como una cadena de transformación que va desde el conocimiento del dominio hasta el comportamiento ejecutable. El modelo integra Domain-Driven Design (DDD), ingeniería de especificaciones y el rol de la IA como traductor de especificaciones hacia implementaciones.
 
-┌───────────────────────────┐\
-│ DOMINIO │\
-│ Realidad del problema │\
-│ actores, procesos, reglas│\
-└─────────────┬─────────────┘\
-│\
-▼\
-┌───────────────────────────┐\
-│ MODELO │\
-│ (Domain-Driven Design) │\
-│ entidades, agregados, │\
-│ eventos, lenguaje ubicuo │\
-└─────────────┬─────────────┘\
-│\
-▼\
-┌───────────────────────────┐\
-│ ESPECIFICACIÓN │\
-│ comportamiento del sistema│\
-│ invariantes, reglas, │\
-│ pre/post condiciones │\
-└─────────────┬─────────────┘\
-│\
-┌──────┴──────┐\
-│ IA │\
-│ Traductor │\
-│ conceptual │\
-└──────┬──────┘\
-│\
-▼\
-┌───────────────────────────┐\
-│ ARQUITECTURA │\
-│ organización del sistema │\
-│ componentes, contextos, │\
-│ eventos, persistencia │\
-└─────────────┬─────────────┘\
-│\
-▼\
-┌───────────────────────────┐\
-│ IMPLEMENTACIÓN │\
-│ código, APIs, bases │\
-│ frameworks, infraestructura│\
+---
+
+## Diagrama conceptual
+
+```
+┌───────────────────────────┐
+│          DOMINIO          │
+│   Realidad del problema   │
+│  actores, procesos, reglas│
+└─────────────┬─────────────┘
+              │
+              ▼
+┌───────────────────────────┐
+│          MODELO           │
+│   (Domain-Driven Design)  │
+│   entidades, agregados,   │
+│  eventos, lenguaje ubicuo │
+└─────────────┬─────────────┘
+              │
+              ▼
+┌───────────────────────────┐
+│      ESPECIFICACIÓN       │
+│ comportamiento del sistema│
+│    invariantes, reglas,   │
+│   pre/post condiciones    │
+└─────────────┬─────────────┘
+              │
+         ┌────┴────┐
+         │   IA    │
+         │Traductor│
+         │conceptual│
+         └────┬────┘
+              │
+              ▼
+┌───────────────────────────┐
+│       ARQUITECTURA        │
+│  organización del sistema │
+│  componentes, contextos,  │
+│  eventos, persistencia    │
+└─────────────┬─────────────┘
+              │
+              ▼
+┌───────────────────────────┐
+│      IMPLEMENTACIÓN       │
+│   código, APIs, bases     │
+│ frameworks, infraestructura│
 └───────────────────────────┘
+```
 
-Interpretación del modelo
-=========================
+---
 
-1. Dominio
-----------
+## Interpretación del modelo
 
-Representa la realidad que el sistema intenta modelar. Incluye actores,
-procesos, reglas de negocio y restricciones del mundo real. En esta
-etapa el objetivo es comprender el problema y el contexto.
+### 1. Dominio
 
-2. Modelo (DDD)
----------------
+Representa la realidad que el sistema intenta modelar. Incluye actores, procesos, reglas de negocio y restricciones del mundo real. En esta etapa el objetivo es comprender el problema y el contexto.
 
-El modelo es una representación conceptual del dominio. Siguiendo el
-enfoque de Domain-Driven Design, incluye entidades, objetos de valor,
-agregados, eventos y contextos delimitados. El modelo captura
-principalmente las reglas del dominio y los invariantes.
+### 2. Modelo (DDD)
 
-3. Especificación
------------------
+El modelo es una representación conceptual del dominio. Siguiendo el enfoque de Domain-Driven Design, incluye entidades, objetos de valor, agregados, eventos y contextos delimitados. El modelo captura principalmente las reglas del dominio y los invariantes.
 
-La especificación describe el comportamiento que el sistema debe
-implementar. Incluye operaciones, precondiciones, postcondiciones,
-invariantes, estados y eventos. Define qué debe hacer el sistema sin
-depender de una tecnología específica.
+### 3. Especificación
 
-4. IA como traductor conceptual
--------------------------------
+La especificación describe el comportamiento que el sistema debe implementar. Incluye operaciones, precondiciones, postcondiciones, invariantes, estados y eventos. Define qué debe hacer el sistema sin depender de una tecnología específica.
 
-La IA puede actuar como un traductor entre especificaciones de alto
-nivel y su implementación técnica. Funciona de manera similar a un
-compilador conceptual. La calidad de los resultados depende de la
-claridad del modelo y de la precisión de la especificación.
+### 4. IA como traductor conceptual
 
-5. Arquitectura
----------------
+La IA puede actuar como un traductor entre especificaciones de alto nivel y su implementación técnica. Funciona de manera similar a un compilador conceptual. La calidad de los resultados depende de la claridad del modelo y de la precisión de la especificación.
 
-La arquitectura organiza el sistema para implementar la especificación.
-Define componentes, contextos, comunicación entre servicios,
-persistencia y manejo de eventos.
+### 5. Arquitectura
 
-6. Implementación
------------------
+La arquitectura organiza el sistema para implementar la especificación. Define componentes, contextos, comunicación entre servicios, persistencia y manejo de eventos.
 
-La implementación materializa el sistema en tecnología concreta: código,
-APIs, bases de datos, frameworks e infraestructura. En esta capa
-aparecen los lenguajes de programación.
+### 6. Implementación
 
-Idea central del marco conceptual
-=================================
+La implementación materializa el sistema en tecnología concreta: código, APIs, bases de datos, frameworks e infraestructura. En esta capa aparecen los lenguajes de programación.
 
-La ingeniería de software puede entenderse como la disciplina que
-transforma conocimiento del dominio en comportamiento ejecutable
-mediante modelos y especificaciones. En este enfoque, los lenguajes de
-programación se convierten en tecnologías de implementación, mientras
-que el núcleo de la disciplina pasa a ser el modelado y la
-especificación precisa.
+---
+
+## Idea central del marco conceptual
+
+La ingeniería de software puede entenderse como la disciplina que transforma conocimiento del dominio en comportamiento ejecutable mediante modelos y especificaciones. En este enfoque, los lenguajes de programación se convierten en tecnologías de implementación, mientras que el núcleo de la disciplina pasa a ser el modelado y la especificación precisa.

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { JuezLayout } from '../../components/juez/JuezLayout'
 import { actualizarJuezMe, crearJuezMe, fetchJuezMe, ApiError } from '../../api/registro'
+import { RolesSection } from '../../components/shared/RolesSection'
 
 interface FormState {
   numero_licencia: string
@@ -97,6 +98,7 @@ export function JuezMisDatosPage() {
 
   return (
     <JuezLayout title="Mis Datos" subtitle="Perfil de juez">
+      <RolesSection />
       {isLoading ? (
         <div className="rounded-2xl border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando perfil...

@@ -9,6 +9,8 @@ from unittest.mock import AsyncMock
 import bcrypt
 import pytest
 
+from identidad.application.commands.agregar_rol import AgregarRolCommand, AgregarRolHandler
+from identidad.application.commands.quitar_rol import QuitarRolCommand, QuitarRolHandler
 from identidad.application.commands.autenticar_usuario import (
     AutenticarUsuarioCommand,
     AutenticarUsuarioHandler,
@@ -34,8 +36,10 @@ from identidad.domain.exceptions import (
     CredencialesInvalidas,
     PasswordActualIncorrecto,
     PasswordDemasiadoCorto,
+    RolNoEncontrado,
     RolNoPermitido,
     RolYaAsignado,
+    RolesVacios,
     TokenResetInvalido,
     UsuarioNoEncontrado,
     UsuarioInactivo,
@@ -586,6 +590,93 @@ async def test_autenticar_usuario_inactivo_lanza_excepcion(
     cmd = AutenticarUsuarioCommand(email="juez@test.com", password="clave1234")
     with pytest.raises(UsuarioInactivo):
         await handler.handle(cmd)
+
+
+# ── AgregarRolHandler / QuitarRolHandler ─────────────────────────────────────
+
+
+def _make_usuario_con_roles(roles: list[Rol]) -> Usuario:
+    return Usuario(
+        usuario_id=uuid.uuid4(),
+        nombre="Test",
+        apellido="Usuario",
+        email="test@test.com",
+        password_hash="$2b$12$hash",
+        roles=roles,
+    )
+
+
+@pytest.mark.asyncio
+async def test_agregar_rol_handler_exitoso(mock_repo: AsyncMock) -> None:
+    uid = uuid.uuid4()
+    usuario = _make_usuario_con_roles([Rol.ATLETA])
+    usuario.usuario_id = uid
+    mock_repo.find_by_id = AsyncMock(return_value=usuario)
+    handler = AgregarRolHandler(mock_repo)
+    await handler.handle(AgregarRolCommand(usuario_id=uid, rol=Rol.JUEZ))
+    mock_repo.save.assert_called_once()
+    assert Rol.JUEZ in usuario.roles
+
+
+@pytest.mark.asyncio
+async def test_agregar_rol_handler_usuario_no_encontrado(mock_repo: AsyncMock) -> None:
+    mock_repo.find_by_id = AsyncMock(return_value=None)
+    handler = AgregarRolHandler(mock_repo)
+    with pytest.raises(UsuarioNoEncontrado):
+        await handler.handle(AgregarRolCommand(usuario_id=uuid.uuid4(), rol=Rol.JUEZ))
+
+
+@pytest.mark.asyncio
+async def test_agregar_rol_handler_rol_ya_asignado(mock_repo: AsyncMock) -> None:
+    uid = uuid.uuid4()
+    usuario = _make_usuario_con_roles([Rol.ATLETA])
+    usuario.usuario_id = uid
+    mock_repo.find_by_id = AsyncMock(return_value=usuario)
+    handler = AgregarRolHandler(mock_repo)
+    with pytest.raises(RolYaAsignado):
+        await handler.handle(AgregarRolCommand(usuario_id=uid, rol=Rol.ATLETA))
+
+
+@pytest.mark.asyncio
+async def test_quitar_rol_handler_exitoso(mock_repo: AsyncMock) -> None:
+    uid = uuid.uuid4()
+    usuario = _make_usuario_con_roles([Rol.ATLETA, Rol.JUEZ])
+    usuario.usuario_id = uid
+    mock_repo.find_by_id = AsyncMock(return_value=usuario)
+    handler = QuitarRolHandler(mock_repo)
+    await handler.handle(QuitarRolCommand(usuario_id=uid, rol=Rol.JUEZ))
+    mock_repo.save.assert_called_once()
+    assert Rol.JUEZ not in usuario.roles
+
+
+@pytest.mark.asyncio
+async def test_quitar_rol_handler_usuario_no_encontrado(mock_repo: AsyncMock) -> None:
+    mock_repo.find_by_id = AsyncMock(return_value=None)
+    handler = QuitarRolHandler(mock_repo)
+    with pytest.raises(UsuarioNoEncontrado):
+        await handler.handle(QuitarRolCommand(usuario_id=uuid.uuid4(), rol=Rol.JUEZ))
+
+
+@pytest.mark.asyncio
+async def test_quitar_rol_handler_rol_no_asignado(mock_repo: AsyncMock) -> None:
+    uid = uuid.uuid4()
+    usuario = _make_usuario_con_roles([Rol.ATLETA])
+    usuario.usuario_id = uid
+    mock_repo.find_by_id = AsyncMock(return_value=usuario)
+    handler = QuitarRolHandler(mock_repo)
+    with pytest.raises(RolNoEncontrado):
+        await handler.handle(QuitarRolCommand(usuario_id=uid, rol=Rol.JUEZ))
+
+
+@pytest.mark.asyncio
+async def test_quitar_rol_handler_unico_rol(mock_repo: AsyncMock) -> None:
+    uid = uuid.uuid4()
+    usuario = _make_usuario_con_roles([Rol.ATLETA])
+    usuario.usuario_id = uid
+    mock_repo.find_by_id = AsyncMock(return_value=usuario)
+    handler = QuitarRolHandler(mock_repo)
+    with pytest.raises(RolesVacios):
+        await handler.handle(QuitarRolCommand(usuario_id=uid, rol=Rol.ATLETA))
 
 
 # ── JWTService ────────────────────────────────────────────────────────────────

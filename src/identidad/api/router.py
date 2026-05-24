@@ -17,16 +17,14 @@ from identidad.api.dependencies import (
     get_token_service,
     get_usuario_repository,
 )
-from identidad.application.commands.agregar_rol_usuario import (
-    AgregarRolUsuarioCommand,
-    AgregarRolUsuarioHandler,
-)
+from identidad.application.commands.agregar_rol import AgregarRolCommand, AgregarRolHandler
 from identidad.application.commands.autenticar_usuario import (
     AutenticarUsuarioCommand,
     AutenticarUsuarioHandler,
     RoleSelectionRequired,
     TokenResponse,
 )
+from identidad.application.commands.quitar_rol import QuitarRolCommand, QuitarRolHandler
 from identidad.application.commands.cambiar_password import (
     CambiarPasswordCommand,
     CambiarPasswordHandler,
@@ -50,10 +48,9 @@ from identidad.domain.exceptions import (
     PasswordDemasiadoCorto,
     RolNoEncontrado,
     RolNoPermitido,
-    RolNoRemovible,
     RolYaAsignado,
+    RolesVacios,
     TokenResetInvalido,
-    UltimoRolNoRemovible,
     UsuarioInactivo,
     UsuarioNoEncontrado,
 )
@@ -299,52 +296,66 @@ async def reset_password(
     return JSONResponse(status_code=204, content=None)
 
 
-class AgregarRolRequest(BaseModel):
-    rol: Rol
-
-
-@router.post("/usuarios/me/roles", status_code=200)
-async def agregar_rol(
+@router.post("/me/roles", status_code=200)
+async def agregar_rol_propio(
     body: AgregarRolRequest,
     current_user: Annotated[dict, Depends(get_current_user)],
     repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
 ) -> JSONResponse:
-    handler = AgregarRolUsuarioHandler(repo)
-    cmd = AgregarRolUsuarioCommand(
-        usuario_id=UUID(current_user["sub"]),
-        nuevo_rol=body.rol,
-    )
+    handler = AgregarRolHandler(repo)
+    usuario_id = UUID(current_user["sub"])
     try:
-        roles = await handler.handle(cmd)
+        await handler.handle(AgregarRolCommand(usuario_id=usuario_id, rol=body.rol))
+    except UsuarioNoEncontrado as exc:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
     except RolYaAsignado as exc:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
-    except RolNoPermitido as exc:
-        return JSONResponse(status_code=403, content={"detail": str(exc)})
-    except UsuarioNoEncontrado:
-        return JSONResponse(status_code=401, content={"detail": "Token inválido o expirado"})
-    return JSONResponse(status_code=200, content={"roles": [r.value for r in roles]})
+    usuario = await repo.find_by_id(usuario_id)
+    assert usuario is not None
+    return JSONResponse(
+        status_code=200,
+        content={"usuario_id": str(usuario.usuario_id), "roles": [r.value for r in usuario.roles]},
+    )
 
 
-@router.delete("/usuarios/me/roles/{rol}", status_code=200)
-async def quitar_rol(
+@router.delete("/me/roles/{rol}", status_code=200)
+async def quitar_rol_propio(
     rol: Rol,
     current_user: Annotated[dict, Depends(get_current_user)],
     repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
 ) -> JSONResponse:
-    handler = QuitarRolUsuarioHandler(repo)
-    cmd = QuitarRolUsuarioCommand(
-        usuario_id=UUID(current_user["sub"]),
-        rol=rol,
-    )
+    handler = QuitarRolHandler(repo)
+    usuario_id = UUID(current_user["sub"])
     try:
-        roles = await handler.handle(cmd)
-    except RolNoEncontrado as exc:
+        await handler.handle(QuitarRolCommand(usuario_id=usuario_id, rol=rol))
+    except UsuarioNoEncontrado as exc:
         return JSONResponse(status_code=404, content={"detail": str(exc)})
-    except (RolNoRemovible, UltimoRolNoRemovible) as exc:
+    except RolNoEncontrado as exc:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
-    except UsuarioNoEncontrado:
-        return JSONResponse(status_code=401, content={"detail": "Token inválido o expirado"})
-    return JSONResponse(status_code=200, content={"roles": [r.value for r in roles]})
+    except RolesVacios as exc:
+        return JSONResponse(status_code=422, content={"detail": str(exc)})
+    usuario = await repo.find_by_id(usuario_id)
+    assert usuario is not None
+    return JSONResponse(
+        status_code=200,
+        content={"usuario_id": str(usuario.usuario_id), "roles": [r.value for r in usuario.roles]},
+    )
+
+
+@router.get("/me/token", status_code=200)
+async def refrescar_token(
+    current_user: Annotated[dict, Depends(get_current_user)],
+    repo: Annotated[UsuarioRepositoryPort, Depends(get_usuario_repository)],
+    token_service: Annotated[TokenServicePort, Depends(get_token_service)],
+) -> JSONResponse:
+    usuario = await repo.find_by_id(UUID(current_user["sub"]))
+    if usuario is None:
+        return JSONResponse(status_code=404, content={"detail": "Usuario no encontrado"})
+    rol_activo = Rol(current_user["rol"])
+    new_token = token_service.generate(usuario, rol_activo)
+    return JSONResponse(
+        status_code=200, content={"access_token": new_token, "token_type": "bearer"}
+    )
 
 
 @router.get("/usuarios", status_code=200)
@@ -368,3 +379,7 @@ async def listar_usuarios(
             for usuario in usuarios
         ],
     )
+
+
+class AgregarRolRequest(BaseModel):
+    rol: Rol

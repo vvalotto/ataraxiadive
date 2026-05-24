@@ -3,14 +3,19 @@ from __future__ import annotations
 from collections.abc import Awaitable, Callable
 from datetime import date, datetime
 from decimal import Decimal
+from pathlib import Path
 from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, UploadFile
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, field_validator
 
 from identidad.api.dependencies import get_current_user
+from registro.application.commands.cambiar_aceptacion_inscripcion import (
+    CambiarAceptacionInscripcionCommand,
+    CambiarAceptacionInscripcionHandler,
+)
 from registro.application.commands.cancelar_inscripcion import (
     CancelarInscripcionCommand,
     CancelarInscripcionHandler,
@@ -74,6 +79,7 @@ from registro.domain.exceptions import (
 )
 from registro.domain.ports.adjunto_storage_port import AdjuntoStoragePort
 from registro.domain.value_objects.categoria import Categoria
+from registro.domain.value_objects.estado_aceptacion import EstadoAceptacion
 from registro.domain.value_objects.estado_inscripcion import EstadoInscripcion
 from registro.infrastructure.acl.sqlite_torneo_consulta import SQLiteTorneoConsulta
 from registro.infrastructure.adjuntos.local_adjunto_storage import LocalAdjuntoStorage
@@ -213,6 +219,7 @@ class InscriptoDetalleResponse(BaseModel):
     atleta_id: UUID
     torneo_id: UUID
     estado: EstadoInscripcion
+    estado_aceptacion: EstadoAceptacion
     fecha_inscripcion: datetime
     nombre: str
     apellido: str
@@ -224,6 +231,28 @@ class InscriptoDetalleResponse(BaseModel):
 class DeclararAPInscripcionRequest(BaseModel):
     disciplina: Disciplina
     valor_ap: Decimal
+
+
+class CambiarAceptacionRequest(BaseModel):
+    estado: EstadoAceptacion
+
+
+class InscripcionDetalleResponse(BaseModel):
+    inscripcion_id: UUID
+    atleta_id: UUID
+    torneo_id: UUID
+    estado: EstadoInscripcion
+    estado_aceptacion: EstadoAceptacion
+    fecha_inscripcion: datetime
+    nombre: str
+    apellido: str
+    categoria: Categoria | None
+    club: str | None
+    brevet: str | None
+    dni: str | None
+    telefono: str | None
+    apto_medico_url: str | None
+    constancia_pago_url: str | None
 
 
 # ── Helpers de dependencias ───────────────────────────────────────────────────
@@ -582,6 +611,7 @@ async def listar_inscriptos_detalle(torneo_id: UUID, _: OrganizadorDep) -> JSONR
                 atleta_id=inscripcion.atleta_id,
                 torneo_id=inscripcion.torneo_id,
                 estado=inscripcion.estado,
+                estado_aceptacion=inscripcion.estado_aceptacion,
                 fecha_inscripcion=inscripcion.fecha_inscripcion,
                 nombre=atleta.nombre,
                 apellido=atleta.apellido,
@@ -674,6 +704,83 @@ async def subir_constancia_pago(
         archivo,
         "constancia_pago",
         "adjuntar_constancia_pago",
+    )
+
+
+@router.get("/inscripciones/{inscripcion_id}/adjuntos/{tipo}", status_code=200)
+async def descargar_adjunto_inscripcion(
+    inscripcion_id: UUID,
+    tipo: str,
+    _: OrganizadorDep,
+) -> FileResponse:
+    if tipo not in ("apto_medico", "constancia_pago"):
+        return JSONResponse(status_code=400, content={"detail": "Tipo de adjunto inválido"})
+    inscripcion = await _inscripcion_repo().find_by_id(inscripcion_id)
+    if inscripcion is None:
+        return JSONResponse(status_code=404, content={"detail": "Inscripción no encontrada"})
+    ruta = (
+        inscripcion.apto_medico_path if tipo == "apto_medico" else inscripcion.constancia_pago_path
+    )
+    if not ruta:
+        return JSONResponse(status_code=404, content={"detail": "Adjunto no disponible"})
+    path = Path(ruta)
+    if not path.exists():
+        return JSONResponse(
+            status_code=404, content={"detail": "Archivo no encontrado en el servidor"}
+        )
+    filename = f"{tipo}_{inscripcion_id}{path.suffix}"
+    return FileResponse(path=path, filename=filename, media_type="application/octet-stream")
+
+
+@router.patch("/inscripciones/{inscripcion_id}/aceptacion", status_code=200)
+async def cambiar_aceptacion_inscripcion(
+    inscripcion_id: UUID,
+    body: CambiarAceptacionRequest,
+    _: OrganizadorDep,
+) -> JSONResponse:
+    handler = CambiarAceptacionInscripcionHandler(_inscripcion_repo())
+    try:
+        await handler.handle(
+            CambiarAceptacionInscripcionCommand(
+                inscripcion_id=inscripcion_id,
+                nuevo_estado=body.estado,
+            )
+        )
+    except InscripcionNoEncontrada as exc:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
+    return JSONResponse(status_code=200, content={"ok": True, "estado": body.estado.value})
+
+
+@router.get("/inscripciones/{inscripcion_id}/detalle", status_code=200)
+async def obtener_inscripcion_detalle(
+    inscripcion_id: UUID,
+    _: OrganizadorDep,
+) -> JSONResponse:
+    inscripcion = await _inscripcion_repo().find_by_id(inscripcion_id)
+    if inscripcion is None:
+        return JSONResponse(status_code=404, content={"detail": "Inscripción no encontrada"})
+    atleta = await _repo().find_by_id(inscripcion.atleta_id)
+    if atleta is None:
+        return JSONResponse(status_code=404, content={"detail": "Atleta no encontrado"})
+    return JSONResponse(
+        status_code=200,
+        content=InscripcionDetalleResponse(
+            inscripcion_id=inscripcion.inscripcion_id,
+            atleta_id=inscripcion.atleta_id,
+            torneo_id=inscripcion.torneo_id,
+            estado=inscripcion.estado,
+            estado_aceptacion=inscripcion.estado_aceptacion,
+            fecha_inscripcion=inscripcion.fecha_inscripcion,
+            nombre=atleta.nombre,
+            apellido=atleta.apellido,
+            categoria=atleta.categoria,
+            club=atleta.club,
+            brevet=atleta.brevet,
+            dni=atleta.dni,
+            telefono=atleta.telefono,
+            apto_medico_url=inscripcion.apto_medico_path,
+            constancia_pago_url=inscripcion.constancia_pago_path,
+        ).model_dump(mode="json"),
     )
 
 

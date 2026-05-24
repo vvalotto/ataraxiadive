@@ -1,13 +1,14 @@
 # US-NNN: [Título de la Historia de Usuario]
 
-**Estado**: `Pendiente` | `En progreso` | `Implementada` | `Verificada`
-**Iteración / Sprint**: S-NNN
+**Estado**: `Especificada` | `En progreso` | `Implementada` | `Verificada`
+**Iteracion / Sprint**: `SP-N` | `INC-N.N` | `SP-ADJ-N`
+**Tipo**: `feat backend` | `feat frontend` | `refactor` | `fix` | `docs`
 **Agregado principal afectado**: [nombre del agregado DDD]
 **Bounded Context**: [nombre del contexto delimitado]
 
 ---
 
-## Descripción (lenguaje de negocio)
+## Descripcion (lenguaje de negocio)
 
 Como **[actor/rol]**,
 quiero **[acción o capacidad]**
@@ -17,68 +18,47 @@ para **[beneficio o valor de negocio]**.
 
 ## Contexto del dominio
 
+### Problema
+
+[Descripción breve del gap o situación que esta US resuelve, en términos del dominio.]
+
 ### Modelo involucrado
 
-| Elemento DDD | Nombre | Responsabilidad |
+| Elemento | Nombre | Responsabilidad |
 |---|---|---|
-| Entidad / Agregado | [nombre] | [qué representa] |
-| Objeto de valor | [nombre] | [qué encapsula] |
-| Evento de dominio | [nombre] | [qué señala] |
-
-### Lenguaje ubicuo relevante
-
-> Definir aquí los términos del dominio que aparecen en esta US,
-> tal como los usaría un experto del dominio (no términos técnicos).
-
-- **[Término]**: [definición en lenguaje del dominio]
-- **[Término]**: [definición en lenguaje del dominio]
+| Aggregate | `[nombre]` | [qué representa] |
+| Value Object | `[nombre]` | [qué encapsula] |
+| Domain Event | `[nombre]` | [qué señala] |
+| Port | `[nombre]` | [contrato que define] |
+| Command | `[nombre]` | [operación que dispara] |
 
 ---
 
-## Especificación del comportamiento
+## Especificacion del comportamiento
 
-### Invariantes del agregado
+### Precondicion
 
-> Condiciones que deben ser verdaderas SIEMPRE, antes y después de
-> cualquier operación sobre este agregado. Si se viola una invariante,
-> la operación debe rechazarse.
+- [Estado que debe existir para que la operación sea válida]
+- [Condición adicional si aplica]
 
-- INV-1: [condición que nunca puede violarse]
-- INV-2: [condición que nunca puede violarse]
+### Postcondicion
 
-### Operación principal
+- [Estado garantizado si la operación se ejecutó correctamente]
+- [Evento generado o estado secundario]
 
-**Nombre de la operación**: `[nombreOperacion(parámetros)]`
+### Invariantes
 
-| | Descripción |
-|---|---|
-| **Precondición** | Estado que debe existir para que la operación sea válida |
-| **Postcondición** | Estado garantizado si la operación se ejecutó correctamente |
-| **Eventos generados** | Eventos de dominio que se disparan al completarse |
-| **Excepciones** | Condiciones bajo las cuales la operación se rechaza |
-
-**Ejemplo concreto:**
-
-```
-Precondición:  [descripción de estado inicial con valores ejemplo]
-Operación:     [nombreOperacion(valor1, valor2)]
-Postcondición: [descripción de estado final con valores ejemplo]
-Evento:        [NombreEvento{datos relevantes}]
-```
+| ID | Invariante |
+|----|------------|
+| INV-N.N-01 | [Condición que debe ser verdadera siempre, antes y después de cualquier operación] |
+| INV-N.N-02 | [Condición que nunca puede violarse — si se viola, la operación se rechaza] |
 
 ---
 
-## Criterios de aceptación (BDD)
-
-> Los escenarios BDD son la traducción de las pre/postcondiciones al
-> lenguaje del negocio. Cada escenario debe poder derivarse de la
-> especificación formal de arriba.
+## Criterios de aceptacion
 
 ```gherkin
 Feature: [título de la funcionalidad]
-
-  Background:
-    Given [contexto base común a todos los escenarios]
 
   Scenario: [caso principal — camino feliz]
     Given [precondición en lenguaje de negocio]
@@ -99,34 +79,48 @@ Feature: [título de la funcionalidad]
 
 ---
 
-## Impacto arquitectónico
+## Impacto arquitectonico
 
-**¿Esta US requiere una decisión arquitectónica?**
+**¿Esta US requiere una decision arquitectonica?**
 - [ ] No — se implementa con la arquitectura existente
 - [ ] Sí → crear `ADR-NNN` antes de implementar
 
 **Capa(s) afectadas:**
-- [ ] Domain (entidades, value objects, servicios de dominio)
-- [ ] Application (casos de uso, comandos, consultas)
-- [ ] Infrastructure (persistencia, APIs externas, adaptadores)
+- [ ] Domain — entidades, value objects, eventos, puertos
+- [ ] Application — comandos, handlers, queries
+- [ ] Infrastructure — repositorios, adaptadores, servicios externos
+- [ ] API — routers, schemas, responses
+- [ ] Frontend — páginas, componentes, stores, hooks
+
+---
+
+## Artefactos a modificar
+
+| Artefacto | Cambio |
+|---|---|
+| `src/[bc]/domain/[archivo].py` | [descripción del cambio] |
+| `src/[bc]/application/[archivo].py` | [descripción del cambio] |
+| `src/[bc]/infrastructure/[archivo].py` | [descripción del cambio] |
+| `src/[bc]/api/[archivo].py` | [descripción del cambio] |
+| `frontend/src/[ruta]/[archivo].tsx` | [descripción del cambio] |
 
 ---
 
 ## Referencias
 
-- Relacionada con: `US-NNN`, `ADR-NNN`, `RFC-NNN`
+- Relacionada con: `US-NNN`, `ADR-NNN`
 - Modelo de dominio: `docs/design/domain-model.md` (sección: [nombre])
-- Especificación de arquitectura: `docs/design/architecture.md`
+- Arquitectura: `docs/design/architecture.md`
 
 ---
 
-## Notas de implementación
+## Notas de implementacion
 
 > [Campo opcional — completar solo si hay decisiones técnicas relevantes
-> que el desarrollador / Claude Code debe conocer antes de implementar.
+> que el desarrollador debe conocer antes de implementar.
 > NO es el lugar para describir código, sino para aclarar restricciones
 > o contexto que la especificación no cubre.]
 
 ---
 
-*Template versión 1.0 — IEDD + claude-dev-kitc — Marzo 2026*
+*Template versión 2.0 — IEDD + Claude Dev Kit — Mayo 2026*
