@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AtaraxiaDive · Design Structure Matrix</title>
+<style>
+  :root {
+    --bg:      #070d1a;
+    --surface: #0d1627;
+    --card:    #111e33;
+    --border:  #1e3050;
+    --text:    #e2e8f0;
+    --muted:   #64748b;
+    --dim:     #334155;
+
+    --c-shared:   #6366f1;
+    --c-notif:    #06b6d4;
+    --c-ident:    #8b5cf6;
+    --c-reg:      #f59e0b;
+    --c-comp:     #10b981;
+    --c-torneo:   #3b82f6;
+    --c-res:      #ec4899;
+
+    --dep-port:    #10b981;   /* green  — via domain.ports ✅ */
+    --dep-shared:  #6366f1;   /* indigo — shared dependency */
+    --dep-vo:      #f59e0b;   /* amber  — via value_objects ⚠️ */
+    --dep-exc:     #f97316;   /* orange — via domain.exceptions ⚠️ */
+    --dep-api:     #ef4444;   /* red    — via api layer ❌ */
+    --dep-mixed:   #a78bfa;   /* violet — mixed port+vo */
+
+    --cell: 72px;
+    --label-w: 110px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(7,13,26,.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: .75rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo { font-size: .82rem; font-weight: 700; color: #06b6d4; letter-spacing: .08em; }
+  .logo span { color: var(--muted); font-weight: 400; }
+  nav a { font-size: .72rem; color: var(--muted); text-decoration: none; margin-left: 1.5rem; text-transform: uppercase; letter-spacing: .06em; transition: color .2s; }
+  nav a:hover { color: var(--text); }
+
+  /* LAYOUT */
+  main { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+  section { margin-bottom: 4rem; }
+
+  h1 { font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 800; letter-spacing: -.02em; margin-bottom: .4rem; }
+  h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: .25rem; }
+  .sub { font-size: .85rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.6; max-width: 700px; }
+
+  .tag {
+    display: inline-block;
+    font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 700;
+    padding: .25rem .7rem; border-radius: 99px; margin-bottom: .8rem;
+  }
+
+  /* ── DSM MATRIX ── */
+  .dsm-wrap {
+    overflow-x: auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+  }
+
+  .dsm-grid {
+    display: grid;
+    /* col labels + 7 data cols */
+    grid-template-columns: var(--label-w) repeat(7, var(--cell));
+    grid-template-rows: auto repeat(7, var(--cell));
+    gap: 3px;
+    position: relative;
+  }
+
+  /* corner cell */
+  .dsm-corner {
+    grid-column: 1; grid-row: 1;
+    display: flex; align-items: flex-end; justify-content: flex-end;
+    padding: 0 6px 6px 0;
+  }
+  .dsm-corner-text { font-size: .6rem; color: var(--muted); text-align: right; line-height: 1.3; }
+
+  /* column headers (rotated) */
+  .dsm-col-header {
+    height: 80px;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 6px;
+    position: relative;
+  }
+  .dsm-col-header-inner {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: .72rem; font-weight: 600;
+    white-space: nowrap;
+    padding: 4px 0;
+  }
+  .dsm-col-idx {
+    position: absolute; top: 4px; left: 50%; transform: translateX(-50%);
+    font-size: .6rem; color: var(--muted); font-weight: 400;
+  }
+
+  /* row headers */
+  .dsm-row-header {
+    display: flex; align-items: center; justify-content: flex-end;
+    padding-right: 10px; gap: 6px;
+  }
+  .dsm-row-label { font-size: .76rem; font-weight: 600; text-align: right; }
+  .dsm-row-idx {
+    font-size: .6rem; color: var(--muted); min-width: 14px; text-align: right;
+  }
+  .bc-badge {
+    font-size: .55rem; letter-spacing: .05em; text-transform: uppercase;
+    padding: .15rem .4rem; border-radius: 3px; font-weight: 700;
+    background: rgba(255,255,255,.06); color: var(--muted);
+  }
+
+  /* cells */
+  .dsm-cell {
+    width: var(--cell); height: var(--cell);
+    border-radius: 6px;
+    position: relative;
+    cursor: default;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .dsm-cell:hover { transform: scale(1.08); z-index: 10; }
+
+  /* diagonal */
+  .dsm-cell.diagonal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .dsm-cell.diagonal::after {
+    content: '×';
+    font-size: .9rem; color: var(--dim);
+  }
+
+  /* empty */
+  .dsm-cell.empty {
+    background: rgba(13,22,39,.7);
+    border: 1px solid rgba(30,48,80,.4);
+  }
+
+  /* dependency cells */
+  .dsm-cell.dep {
+    border: none;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 3px;
+  }
+  .dsm-cell.dep:hover { box-shadow: 0 0 0 2px rgba(255,255,255,.3), 0 8px 24px rgba(0,0,0,.5); }
+
+  .dep-icon { font-size: 1.2rem; line-height: 1; }
+  .dep-type-label { font-size: .5rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: rgba(255,255,255,.7); }
+
+  /* types */
+  .dsm-cell.type-port     { background: rgba(16,185,129,.18); border: 1.5px solid rgba(16,185,129,.5); }
+  .dsm-cell.type-shared   { background: rgba(99,102,241,.15); border: 1.5px solid rgba(99,102,241,.4); }
+  .dsm-cell.type-vo       { background: rgba(245,158,11,.15); border: 1.5px solid rgba(245,158,11,.4); }
+  .dsm-cell.type-exception{ background: rgba(249,115,22,.15); border: 1.5px solid rgba(249,115,22,.4); }
+  .dsm-cell.type-api      { background: rgba(239,68,68,.2);   border: 1.5px solid rgba(239,68,68,.6); }
+  .dsm-cell.type-mixed    { background: rgba(167,139,250,.15);border: 1.5px solid rgba(167,139,250,.5); }
+
+  /* TOOLTIP */
+  .tooltip {
+    display: none;
+    position: absolute;
+    background: #0a1628;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .8rem 1rem;
+    width: 260px;
+    z-index: 100;
+    pointer-events: none;
+    box-shadow: 0 12px 32px rgba(0,0,0,.6);
+    font-size: .75rem;
+    line-height: 1.5;
+    top: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  }
+  .dsm-cell:hover .tooltip { display: block; }
+  .tooltip-title { font-weight: 700; color: var(--text); margin-bottom: .3rem; font-size: .78rem; }
+  .tooltip-from  { color: var(--muted); font-size: .68rem; margin-bottom: .5rem; }
+  .tooltip-detail { color: #94a3b8; font-size: .7rem; font-family: 'Courier New', monospace; word-break: break-all; }
+  .tooltip-badge {
+    display: inline-block; font-size: .6rem; padding: .15rem .5rem;
+    border-radius: 3px; font-weight: 700; margin-bottom: .4rem;
+    letter-spacing: .06em; text-transform: uppercase;
+  }
+
+  /* LEGEND */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: .75rem;
+    margin-top: 1.5rem;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: .5rem;
+    font-size: .75rem; color: var(--muted);
+  }
+  .legend-swatch {
+    width: 20px; height: 20px; border-radius: 4px; flex-shrink: 0;
+  }
+
+  /* ANALYSIS CARDS */
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem 1.1rem;
+  }
+  .card-bc { font-size: .65rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+  .card-metric { font-size: 1.8rem; font-weight: 800; line-height: 1.1; margin: .2rem 0; }
+  .card-note { font-size: .72rem; color: var(--muted); }
+
+  /* LAYER DSM */
+  .layer-dsm-grid {
+    display: grid;
+    grid-template-columns: 120px repeat(4, 90px);
+    grid-template-rows: 60px repeat(4, 90px);
+    gap: 3px;
+  }
+  .layer-cell {
+    border-radius: 6px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: .72rem; text-align: center;
+    gap: 3px; padding: 4px;
+    position: relative; cursor: default;
+    transition: transform .15s;
+  }
+  .layer-cell:hover { transform: scale(1.05); z-index: 5; }
+  .layer-cell.lc-header {
+    background: transparent; height: 60px;
+    font-size: .72rem; font-weight: 600;
+    writing-mode: vertical-rl; transform: rotate(180deg);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .layer-cell.lc-row-header {
+    writing-mode: initial; transform: none;
+    font-size: .76rem; font-weight: 600;
+    justify-content: flex-end; padding-right: 10px;
+    text-align: right;
+  }
+  .layer-cell.lc-diag {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--dim); font-size: .9rem; writing-mode: initial; transform: none;
+  }
+  .layer-cell.lc-empty {
+    background: rgba(13,22,39,.7);
+    border: 1px solid rgba(30,48,80,.3);
+    writing-mode: initial; transform: none;
+  }
+  .layer-cell.lc-dep {
+    writing-mode: initial; transform: none;
+  }
+  .layer-cell.lc-dep:hover { transform: scale(1.06); }
+  .lc-icon { font-size: 1.3rem; }
+  .lc-label { font-size: .55rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+
+  .lc-dep-green  { background: rgba(16,185,129,.2);  border: 1.5px solid rgba(16,185,129,.5); color: #6ee7b7; }
+  .lc-dep-blue   { background: rgba(59,130,246,.15); border: 1.5px solid rgba(59,130,246,.4); color: #93c5fd; }
+  .lc-dep-amber  { background: rgba(245,158,11,.15); border: 1.5px solid rgba(245,158,11,.4); color: #fcd34d; }
+  .lc-dep-red    { background: rgba(239,68,68,.18);  border: 1.5px solid rgba(239,68,68,.5);  color: #fca5a5; }
+  .lc-dep-none   { background: rgba(13,22,39,.8);    border: 1px solid rgba(30,48,80,.3); }
+
+  /* INSIGHT */
+  .insight {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem 1.3rem;
+    display: flex; gap: .8rem; align-items: flex-start;
+    margin-top: 1.2rem; font-size: .83rem; color: #94a3b8; line-height: 1.65;
+  }
+  .insight-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: .1rem; }
+  .insight strong { color: var(--text); }
+
+  /* DAG info */
+  .dag-fact {
+    display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem;
+  }
+  .dag-fact-item {
+    flex: 1; min-width: 140px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: .9rem 1rem;
+    text-align: center;
+  }
+  .dag-fact-val { font-size: 2rem; font-weight: 800; line-height: 1; margin-bottom: .2rem; }
+  .dag-fact-lbl { font-size: .68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; }
+
+  /* SCROLLABLE on small screens */
+  @media (max-width: 700px) {
+    .dsm-wrap { padding: .75rem; }
+    :root { --cell: 54px; --label-w: 84px; }
+    .tooltip { width: 200px; font-size: .68rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">AtaraxiaDive · <span>Design Structure Matrix</span></div>
+  <nav>
+    <a href="#bc-dsm">BC DSM</a>
+    <a href="#layer-dsm">Capas</a>
+    <a href="#analysis">Análisis</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- INTRO -->
+  <section>
+    <div class="tag" style="background:rgba(6,182,212,.1);color:#06b6d4;border:1px solid rgba(6,182,212,.3)">
+      Arquitectura · v1.0.2
+    </div>
+    <h1>Design Structure Matrix</h1>
+    <p class="sub">
+      Representación matricial de las dependencias reales entre los Bounded Contexts de AtaraxiaDive,
+      extraídas del código fuente. Una celda marcada en la fila <em>i</em>, columna <em>j</em>
+      indica que el BC <em>i</em> importa desde el BC <em>j</em>.
+      Los BCs están ordenados de más estable (mayor Ca) a menos estable (mayor Ce)
+      — el resultado debería ser una <strong>matriz triangular inferior</strong> si la arquitectura no tiene ciclos.
+    </p>
+  </section>
+
+  <!-- BC-LEVEL DSM -->
+  <section id="bc-dsm">
+    <div class="tag" style="background:rgba(16,185,129,.1);color:#10b981;border:1px solid rgba(16,185,129,.3)">
+      Nivel: Bounded Context
+    </div>
+    <h2>DSM de Bounded Contexts (7 × 7)</h2>
+    <p class="sub">
+      Dependencias cruzadas entre BCs. Ordenados por estabilidad descendente
+      (shared más estable → resultados más inestable). La diagonal principal es la identidad de cada BC.
+    </p>
+
+    <div class="dsm-wrap">
+      <div class="dsm-grid" id="bc-matrix">
+        <!-- populated by JS -->
+      </div>
+
+      <!-- LEGEND -->
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:rgba(99,102,241,.15);border:1.5px solid rgba(99,102,241,.4)"></div>
+          Shared (dependencia universal)
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:rgba(16,185,129,.18);border:1.5px solid rgba(16,185,129,.5)"></div>
+          Port ✅ — vía domain.ports (correcto)
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:rgba(167,139,250,.15);border:1.5px solid rgba(167,139,250,.5)"></div>
+          Port + VO ✅⚠️ — port correcto + value objects
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:rgba(245,158,11,.15);border:1.5px solid rgba(245,158,11,.4)"></div>
+          Value Object ⚠️ — VO leaking entre BCs
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:rgba(249,115,22,.15);border:1.5px solid rgba(249,115,22,.4)"></div>
+          Exception ⚠️ — excepción de dominio leaking
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:rgba(239,68,68,.2);border:1.5px solid rgba(239,68,68,.6)"></div>
+          API Violation ❌ — acceso a capa api/ de otro BC
+        </div>
+      </div>
+    </div>
+
+    <div class="insight">
+      <div class="insight-icon">📐</div>
+      <div>
+        <strong>La matriz es triangular inferior — cero ciclos.</strong>
+        Todos los arcos de dependencia apuntan hacia BCs más estables (columnas a la izquierda).
+        Esto confirma que la arquitectura es un DAG. La única celda roja
+        (<strong>registro → identidad.api</strong>) es la deuda arquitectural identificada:
+        accede a la capa API de otro BC en lugar de usar un port.
+      </div>
+    </div>
+
+    <!-- DAG facts -->
+    <div class="dag-fact">
+      <div class="dag-fact-item">
+        <div class="dag-fact-val" style="color:#10b981">0</div>
+        <div class="dag-fact-lbl">Ciclos detectados</div>
+      </div>
+      <div class="dag-fact-item">
+        <div class="dag-fact-val" style="color:#10b981">8</div>
+        <div class="dag-fact-lbl">Deps vía port ✅</div>
+      </div>
+      <div class="dag-fact-item">
+        <div class="dag-fact-val" style="color:#f59e0b">3</div>
+        <div class="dag-fact-lbl">VO / Exception ⚠️</div>
+      </div>
+      <div class="dag-fact-item">
+        <div class="dag-fact-val" style="color:#ef4444">1</div>
+        <div class="dag-fact-lbl">API Violation ❌</div>
+      </div>
+      <div class="dag-fact-item">
+        <div class="dag-fact-val" style="color:#6366f1">6</div>
+        <div class="dag-fact-lbl">Deps a shared</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAYER DSM -->
+  <section id="layer-dsm">
+    <div class="tag" style="background:rgba(59,130,246,.1);color:#3b82f6;border:1px solid rgba(59,130,246,.3)">
+      Nivel: Capas Hexagonales
+    </div>
+    <h2>DSM de Capas Hexagonales (4 × 4)</h2>
+    <p class="sub">
+      Dependencias entre capas dentro de la arquitectura hexagonal.
+      El patrón correcto es <strong>triangular inferior</strong>:
+      domain/ es el núcleo estable (nadie sobre él), api/ es la hoja inestable (depende de todos).
+      Cada celda representa si esa capa (fila) importa desde otra capa (columna).
+    </p>
+
+    <div class="dsm-wrap">
+      <div class="layer-dsm-grid" id="layer-matrix">
+        <!-- populated by JS -->
+      </div>
+
+      <div class="legend" style="margin-top:1.2rem">
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:rgba(16,185,129,.2);border:1.5px solid rgba(16,185,129,.5)"></div>
+          Dependencia correcta (buen sentido hexagonal)
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:rgba(239,68,68,.18);border:1.5px solid rgba(239,68,68,.5)"></div>
+          Dependencia invertida (violación — no ocurre en este proyecto)
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:rgba(13,22,39,.8);border:1px solid rgba(30,48,80,.3)"></div>
+          Sin dependencia entre estas capas
+        </div>
+      </div>
+
+      <div class="insight" style="margin-top:1.2rem">
+        <div class="insight-icon">🔵</div>
+        <div>
+          <strong>El gradiente I(domain=0.26) → I(api=0.91) es la firma de esta matriz.</strong>
+          domain/ nunca importa de ninguna otra capa. application/ solo importa domain/.
+          infrastructure/ implementa los puertos definidos en domain/ — mismo sentido.
+          api/ es la única capa que importa de todas las demás (hoja del grafo).
+          <strong>Ninguna celda roja — cero violaciones de capas en los 6 BCs.</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANALYSIS -->
+  <section id="analysis">
+    <div class="tag" style="background:rgba(139,92,246,.1);color:#8b5cf6;border:1px solid rgba(139,92,246,.3)">
+      Análisis de Acoplamiento
+    </div>
+    <h2>Perfil de acoplamiento por BC</h2>
+    <p class="sub">
+      Ca = acoplamiento aferente (cuántos BCs dependen de este).
+      Ce = acoplamiento eferente (cuántos BCs usa este).
+      I = inestabilidad = Ce / (Ca + Ce).
+    </p>
+
+    <div class="cards" id="coupling-cards">
+      <!-- populated by JS -->
+    </div>
+
+    <div class="insight">
+      <div class="insight-icon">🎯</div>
+      <div>
+        <strong>shared</strong> tiene el perfil ideal para un módulo de infraestructura compartida: Ca=6, Ce=0, I=0.
+        <strong>resultados</strong> es el extremo opuesto: Ca=0, Ce=4 — el BC que más consume sin que nadie lo consuma.
+        <strong>notificaciones</strong> es el BC más aislado del dominio funcional: Ca=1, Ce=1, solo acoplado
+        con identidad (que lo usa para enviar emails) y shared.
+      </div>
+    </div>
+
+    <!-- Dependency graph text description -->
+    <div class="dsm-wrap" style="margin-top:1.5rem">
+      <h2 style="margin-bottom:.5rem;font-size:1rem">Grafo de dependencias — lectura textual</h2>
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:1rem">Flujo de dependencias desde los BCs más inestables hacia los más estables.</p>
+      <div id="dep-graph-text" style="font-family:'Courier New',monospace;font-size:.78rem;color:#94a3b8;line-height:2"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer style="text-align:center;padding:2rem;border-top:1px solid var(--border);font-size:.7rem;color:var(--muted)">
+  AtaraxiaDive · Design Structure Matrix · Datos reales extraídos del código fuente · v1.0.2 · 2026
+</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+
+const BCS = [
+  { id: 'shared',        label: 'shared',        short: 'SH', type: 'Shared',   color: '#6366f1', ca: 6, ce: 0 },
+  { id: 'notificaciones',label: 'notificaciones', short: 'NT', type: 'ES',       color: '#06b6d4', ca: 1, ce: 1 },
+  { id: 'identidad',     label: 'identidad',      short: 'ID', type: 'CRUD',     color: '#8b5cf6', ca: 1, ce: 2 },
+  { id: 'registro',      label: 'registro',       short: 'RG', type: 'CRUD',     color: '#f59e0b', ca: 3, ce: 2 },
+  { id: 'competencia',   label: 'competencia',    short: 'CM', type: 'ES Core',  color: '#10b981', ca: 1, ce: 2 },
+  { id: 'torneo',        label: 'torneo',         short: 'TR', type: 'CRUD',     color: '#3b82f6', ca: 1, ce: 2 },
+  { id: 'resultados',    label: 'resultados',     short: 'RS', type: 'CRUD',     color: '#ec4899', ca: 0, ce: 4 },
+];
+
+// [from_idx, to_idx, type, fromLayer, detail]
+// type: shared | port | mixed | vo | exception | api
+const DEPS = [
+  // notificaciones(1) → shared(0)
+  [1, 0, 'shared', 'all', 'shared.domain.*\nshared.infrastructure.event_store.SQLiteEventStore'],
+
+  // identidad(2) → shared(0)
+  [2, 0, 'shared', 'all', 'shared.domain.*'],
+  // identidad(2) → notificaciones(1)
+  [2, 1, 'mixed', 'api + application', 'notificaciones.domain.ports.EmailPort ✅\nnotificaciones.domain.value_objects.ContenidoEmail ⚠️\nnotificaciones.domain.value_objects.Destinatario ⚠️\nnotificaciones.infrastructure.email.LoggingEmailAdapter ⚠️'],
+
+  // registro(3) → shared(0)
+  [3, 0, 'shared', 'all', 'shared.domain.value_objects.*'],
+  // registro(3) → identidad(2)
+  [3, 2, 'api', 'api', 'identidad.api.dependencies.get_current_user ❌\nSe accede directamente a la capa api/ de identidad.\nDebería existir un AuthorizationPort en identidad/domain/ports/'],
+
+  // competencia(4) → shared(0)
+  [4, 0, 'shared', 'all', 'shared.domain.*\nshared.infrastructure.event_store.SQLiteEventStore'],
+  // competencia(4) → registro(3)
+  [4, 3, 'port', 'api', 'registro.domain.ports.InscripcionRepositoryPort ✅\nAcceso a la grilla de competencia desde domain.ports de registro'],
+
+  // torneo(5) → shared(0)
+  [5, 0, 'shared', 'all', 'shared.domain.*\nshared.infrastructure.*'],
+  // torneo(5) → registro(3)
+  [5, 3, 'exception', 'api', 'registro.domain.exceptions.APIncompletoParaPreparacion ⚠️\nExcepción de dominio de registro leaking hacia torneo'],
+
+  // resultados(6) → shared(0)
+  [6, 0, 'shared', 'all', 'shared.domain.*\nshared.infrastructure.event_store.SQLiteEventStore'],
+  // resultados(6) → competencia(4)
+  [6, 4, 'port', 'api + application + infra', 'competencia.domain.ports.CompetenciasPorTorneoPort ✅\ncompetencia.domain.ports.DisciplinaDescriptorPort ✅'],
+  // resultados(6) → torneo(5)
+  [6, 5, 'port', 'api + application', 'torneo.domain.ports.TorneoRepositoryPort ✅'],
+  // resultados(6) → registro(3)
+  [6, 3, 'vo', 'application + infra', 'registro.domain.value_objects.Categoria ⚠️\nValue Object de registro leaking hacia resultados'],
+];
+
+const TYPE_META = {
+  shared:    { icon: '⬡', label: 'Shared',     cls: 'type-shared',    badge: '#6366f1', badgeText: 'SHARED' },
+  port:      { icon: '✦', label: 'Port',        cls: 'type-port',      badge: '#10b981', badgeText: 'PORT ✅' },
+  mixed:     { icon: '◈', label: 'Port + VO',   cls: 'type-mixed',     badge: '#a78bfa', badgeText: 'PORT+VO' },
+  vo:        { icon: '◇', label: 'Value Object', cls: 'type-vo',       badge: '#f59e0b', badgeText: 'VO ⚠️' },
+  exception: { icon: '△', label: 'Exception',   cls: 'type-exception', badge: '#f97316', badgeText: 'EXC ⚠️' },
+  api:       { icon: '✖', label: 'API Violation',cls: 'type-api',      badge: '#ef4444', badgeText: 'API ❌' },
+};
+
+// ── BUILD BC DSM ──────────────────────────────────────────────────────────
+
+function buildBCMatrix() {
+  const n = BCS.length;
+  const grid = document.getElementById('bc-matrix');
+  grid.style.gridTemplateColumns = `var(--label-w) repeat(${n}, var(--cell))`;
+  grid.style.gridTemplateRows = `80px repeat(${n}, var(--cell))`;
+
+  // Build dep lookup: depMap[from][to] = dep
+  const depMap = {};
+  DEPS.forEach(([f, t, type, layer, detail]) => {
+    if (!depMap[f]) depMap[f] = {};
+    depMap[f][t] = { type, layer, detail };
+  });
+
+  // Corner
+  const corner = el('div', 'dsm-corner');
+  corner.innerHTML = `<div class="dsm-corner-text">← dependiente<br>proveedor ↑</div>`;
+  grid.appendChild(corner);
+
+  // Column headers
+  BCS.forEach((bc, j) => {
+    const h = el('div', 'dsm-col-header');
+    h.innerHTML = `
+      <span class="dsm-col-idx">${j}</span>
+      <div class="dsm-col-header-inner" style="color:${bc.color}">${bc.label}</div>
+    `;
+    grid.appendChild(h);
+  });
+
+  // Rows
+  BCS.forEach((rowBC, i) => {
+    // Row header
+    const rh = el('div', 'dsm-row-header');
+    rh.innerHTML = `
+      <div>
+        <div class="dsm-row-label" style="color:${rowBC.color}">${rowBC.label}</div>
+        <span class="bc-badge">${rowBC.type}</span>
+      </div>
+      <div class="dsm-row-idx">${i}</div>
+    `;
+    grid.appendChild(rh);
+
+    // Cells
+    BCS.forEach((colBC, j) => {
+      const cell = el('div', 'dsm-cell');
+
+      if (i === j) {
+        // Diagonal
+        cell.classList.add('diagonal');
+        // Small BC label
+        const lbl = el('span');
+        lbl.style.cssText = `font-size:.55rem;color:${rowBC.color};position:absolute;bottom:4px;left:0;right:0;text-align:center;letter-spacing:.04em;font-weight:700`;
+        lbl.textContent = rowBC.short;
+        cell.appendChild(lbl);
+
+      } else if (depMap[i] && depMap[i][j]) {
+        // Dependency cell
+        const dep = depMap[i][j];
+        const meta = TYPE_META[dep.type];
+        cell.classList.add('dep', meta.cls);
+
+        cell.innerHTML = `
+          <span class="dep-icon">${meta.icon}</span>
+          <span class="dep-type-label">${meta.label}</span>
+          <div class="tooltip">
+            <span class="tooltip-badge" style="background:${meta.badge}20;color:${meta.badge};border:1px solid ${meta.badge}50">${meta.badgeText}</span>
+            <div class="tooltip-title">${rowBC.label} → ${colBC.label}</div>
+            <div class="tooltip-from">Capas: ${dep.layer}</div>
+            <div class="tooltip-detail">${dep.detail.replace(/\n/g,'<br>')}</div>
+          </div>
+        `;
+
+      } else {
+        // Empty
+        cell.classList.add('empty');
+
+        // Show upper-triangular zone (violations would go here)
+        if (i < j) {
+          cell.style.background = 'rgba(7,13,26,.9)';
+          cell.style.borderColor = 'rgba(30,48,80,.2)';
+        }
+      }
+
+      grid.appendChild(cell);
+    });
+  });
+}
+
+// ── BUILD LAYER DSM ───────────────────────────────────────────────────────
+
+function buildLayerMatrix() {
+  const LAYERS = [
+    { id: 'domain', label: 'domain/', i: 'I=0.26', color: '#10b981' },
+    { id: 'infra',  label: 'infrastructure/', i: 'I=0.59', color: '#3b82f6' },
+    { id: 'app',    label: 'application/', i: 'I=0.73', color: '#f59e0b' },
+    { id: 'api',    label: 'api/', i: 'I=0.91', color: '#ef4444' },
+  ];
+
+  // layer DSM: row i depends on col j
+  // domain  → nothing (most stable)
+  // infra   → domain (implements ports)
+  // app     → domain (uses domain objects)
+  // api     → domain, app (and infra for DI wiring)
+  const layerDeps = [
+    // [from, to, correct?, note]
+    [1, 0, true,  'infrastructure/ implementa puertos definidos en domain/\nEjemplo: SQLiteCompetenciaRepository → CompetenciaRepositoryPort'],
+    [2, 0, true,  'application/ orquesta aggregates y usa value objects del domain/\nEjemplo: IniciarCompetenciaHandler → Competencia (aggregate)'],
+    [3, 0, true,  'api/ importa schemas, exceptions y puertos de domain/\nEjemplo: router.py → domain.exceptions, domain.value_objects'],
+    [3, 2, true,  'api/ invoca use cases definidos en application/\nEjemplo: router.py → IniciarCompetenciaHandler'],
+    // api → infra (para DI / factories) — esto es wiring, aceptable en api/
+    [3, 1, true,  'api/ accede a infraestructura para inyección de dependencias\nEjemplo: router.py → SQLiteEventStore (vía factory)'],
+  ];
+
+  const depMap = {};
+  layerDeps.forEach(([f, t, ok, note]) => {
+    if (!depMap[f]) depMap[f] = {};
+    depMap[f][t] = { ok, note };
+  });
+
+  const grid = document.getElementById('layer-matrix');
+  const n = LAYERS.length;
+
+  // Corner
+  grid.appendChild(el('div', 'layer-cell'));
+
+  // Col headers
+  LAYERS.forEach(l => {
+    const h = el('div', 'layer-cell lc-header');
+    h.style.color = l.color;
+    h.textContent = l.label;
+    grid.appendChild(h);
+  });
+
+  // Rows
+  LAYERS.forEach((rowL, i) => {
+    // Row header
+    const rh = el('div', 'layer-cell lc-row-header');
+    rh.innerHTML = `<div><div style="color:${rowL.color};font-weight:700">${rowL.label}</div><div style="font-size:.6rem;color:var(--muted)">${rowL.i}</div></div>`;
+    grid.appendChild(rh);
+
+    // Cells
+    LAYERS.forEach((colL, j) => {
+      const cell = el('div', 'layer-cell');
+
+      if (i === j) {
+        cell.classList.add('lc-diag');
+        cell.textContent = '×';
+
+      } else if (depMap[i] && depMap[i][j]) {
+        const dep = depMap[i][j];
+        cell.classList.add('lc-dep', dep.ok ? 'lc-dep-green' : 'lc-dep-red');
+        cell.innerHTML = `
+          <span class="lc-icon">${dep.ok ? '✦' : '✖'}</span>
+          <span class="lc-label">${dep.ok ? 'OK' : 'VIOLATION'}</span>
+          <div class="tooltip" style="width:240px;top:auto;bottom:calc(100%+8px)">
+            <div class="tooltip-title">${rowL.label} → ${colL.label}</div>
+            <div class="tooltip-detail">${dep.note.replace(/\n/g,'<br>')}</div>
+          </div>
+        `;
+
+      } else if (i < j) {
+        // Upper triangular = would be violation if filled
+        cell.classList.add('lc-dep', 'lc-dep-none');
+        const warn = el('span');
+        warn.style.cssText = 'font-size:.55rem;color:rgba(100,116,139,.3);font-weight:700';
+        warn.textContent = '—';
+        cell.appendChild(warn);
+
+      } else {
+        cell.classList.add('lc-dep', 'lc-dep-none');
+        cell.innerHTML = '<span style="font-size:.6rem;color:rgba(100,116,139,.2)">—</span>';
+      }
+
+      grid.appendChild(cell);
+    });
+  });
+}
+
+// ── BUILD COUPLING CARDS ──────────────────────────────────────────────────
+
+function buildCouplingCards() {
+  const container = document.getElementById('coupling-cards');
+  BCS.forEach(bc => {
+    const i = bc.ce / (bc.ca + bc.ce) || 0;
+    const card = el('div', 'card');
+    card.innerHTML = `
+      <div class="card-bc" style="color:${bc.color}">${bc.label} · ${bc.type}</div>
+      <div class="card-metric" style="color:${bc.color}">I = ${i.toFixed(2)}</div>
+      <div class="card-note">Ca = ${bc.ca} · Ce = ${bc.ce}</div>
+      <div style="margin-top:.6rem;background:var(--surface);border-radius:4px;height:5px;overflow:hidden">
+        <div style="height:100%;width:${i*100}%;background:${bc.color};opacity:.7;border-radius:4px;transition:width 1s .3s"></div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// ── BUILD DEP GRAPH TEXT ──────────────────────────────────────────────────
+
+function buildDepGraph() {
+  const container = document.getElementById('dep-graph-text');
+  const lines = [
+    `<span style="color:#ec4899">resultados</span> ──[port]──→ <span style="color:#10b981">competencia</span>`,
+    `<span style="color:#ec4899">resultados</span> ──[port]──→ <span style="color:#3b82f6">torneo</span>`,
+    `<span style="color:#ec4899">resultados</span> ──[vo]────→ <span style="color:#f59e0b">registro</span>`,
+    `<span style="color:#10b981">competencia</span> ─[port]──→ <span style="color:#f59e0b">registro</span>`,
+    `<span style="color:#3b82f6">torneo</span> ──────[exc]───→ <span style="color:#f59e0b">registro</span>`,
+    `<span style="color:#f59e0b">registro</span> ────[<span style="color:#ef4444">API❌</span>]──→ <span style="color:#8b5cf6">identidad</span>`,
+    `<span style="color:#8b5cf6">identidad</span> ──[port+vo]─→ <span style="color:#06b6d4">notificaciones</span>`,
+    `<span style="color:#ec4899">resultados</span>, <span style="color:#10b981">competencia</span>, <span style="color:#3b82f6">torneo</span>, <span style="color:#f59e0b">registro</span>, <span style="color:#8b5cf6">identidad</span>, <span style="color:#06b6d4">notificaciones</span> ──→ <span style="color:#6366f1">shared</span>`,
+  ];
+  container.innerHTML = lines.map(l => `<div>${l}</div>`).join('');
+}
+
+// ── UTILS ────────────────────────────────────────────────────────────────
+
+function el(tag, cls = '') {
+  const e = document.createElement(tag.includes(' ') ? 'div' : tag);
+  if (cls) cls.split(' ').filter(Boolean).forEach(c => e.classList.add(c));
+  return e;
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────
+
+buildBCMatrix();
+buildLayerMatrix();
+buildCouplingCards();
+buildDepGraph();
+</script>
+</body>
+</html>

@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AtaraxiaDive · Historia en Números</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg:        #070d1a;
+    --surface:   #0d1627;
+    --card:      #111e33;
+    --border:    #1e3050;
+    --text:      #e2e8f0;
+    --muted:     #64748b;
+    --blue:      #3b82f6;
+    --blue-dim:  #1d4ed8;
+    --cyan:      #06b6d4;
+    --emerald:   #10b981;
+    --emerald-dim:#047857;
+    --violet:    #8b5cf6;
+    --violet-dim:#6d28d9;
+    --amber:     #f59e0b;
+    --red:       #ef4444;
+    --green:     #22c55e;
+    --white:     #f8fafc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(7,13,26,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 52px;
+  }
+  .nav-logo { font-size: .85rem; font-weight: 600; color: var(--cyan); letter-spacing: .08em; }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a {
+    font-size: .78rem; color: var(--muted); text-decoration: none;
+    letter-spacing: .05em; text-transform: uppercase;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ── SECTIONS ── */
+  section { padding: 7rem 2rem 5rem; max-width: 1100px; margin: 0 auto; }
+  section.full { max-width: 100%; padding-left: 4vw; padding-right: 4vw; }
+
+  .section-label {
+    font-size: .7rem; letter-spacing: .15em; text-transform: uppercase;
+    font-weight: 700; margin-bottom: .6rem;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 700; line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  .section-intro {
+    font-size: 1.05rem; color: #94a3b8;
+    max-width: 640px; margin-bottom: 3rem;
+    line-height: 1.75;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+    padding-top: 6rem;
+    position: relative;
+    overflow: hidden;
+  }
+  #hero::before {
+    content: '';
+    position: absolute; top: -20%; left: -10%;
+    width: 70vw; height: 70vw; border-radius: 50%;
+    background: radial-gradient(circle, rgba(6,182,212,.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: rgba(6,182,212,.12); border: 1px solid rgba(6,182,212,.3);
+    color: var(--cyan); font-size: .75rem; letter-spacing: .12em;
+    text-transform: uppercase; padding: .35rem .9rem; border-radius: 99px;
+    margin-bottom: 1.5rem;
+  }
+  .hero-title {
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+    font-weight: 800; line-height: 1.1;
+    letter-spacing: -.02em; margin-bottom: 1.2rem;
+  }
+  .hero-title span { color: var(--cyan); }
+  .hero-subtitle {
+    font-size: 1.1rem; color: #94a3b8;
+    max-width: 560px; margin-bottom: 3.5rem;
+  }
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(4, auto);
+    gap: 2.5rem; align-items: start;
+  }
+  .hero-stat-val {
+    font-size: clamp(2.4rem, 4vw, 3.4rem);
+    font-weight: 800; line-height: 1;
+    color: var(--white);
+  }
+  .hero-stat-val.cyan  { color: var(--cyan); }
+  .hero-stat-val.blue  { color: var(--blue); }
+  .hero-stat-val.emerald { color: var(--emerald); }
+  .hero-stat-val.violet  { color: var(--violet); }
+  .hero-stat-label {
+    font-size: .72rem; color: var(--muted);
+    letter-spacing: .07em; text-transform: uppercase;
+    margin-top: .3rem;
+  }
+  .scroll-hint {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    color: var(--muted); font-size: .75rem; letter-spacing: .1em;
+    text-transform: uppercase;
+    display: flex; flex-direction: column; align-items: center; gap: .5rem;
+    animation: bounce 2s infinite;
+  }
+  .scroll-hint svg { width: 18px; height: 18px; }
+  @keyframes bounce {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  /* ── ACT DIVIDERS ── */
+  .act-divider {
+    width: 100%; padding: 2.5rem 4vw;
+    display: flex; align-items: center; gap: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .act-number {
+    font-size: 4.5rem; font-weight: 900;
+    line-height: 1; opacity: .08; letter-spacing: -.04em;
+    flex-shrink: 0;
+  }
+  .act-meta { flex: 1; }
+  .act-meta-label { font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; margin-bottom: .3rem; }
+  .act-meta-title { font-size: 1.6rem; font-weight: 700; }
+
+  /* ── CARDS ── */
+  .cards { display: grid; gap: 1.5rem; }
+  .cards-2 { grid-template-columns: repeat(2, 1fr); }
+  .cards-3 { grid-template-columns: repeat(3, 1fr); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-label {
+    font-size: .68rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: .4rem;
+  }
+  .card-value {
+    font-size: 2.6rem; font-weight: 800; line-height: 1;
+    margin-bottom: .3rem;
+  }
+  .card-note { font-size: .8rem; color: var(--muted); }
+  .card-glow {
+    position: absolute; top: -40%; right: -20%;
+    width: 200px; height: 200px; border-radius: 50%;
+    opacity: .07; pointer-events: none;
+  }
+
+  /* ── CHART WRAPPERS ── */
+  .chart-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 1.5rem 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .chart-title {
+    font-size: .82rem; font-weight: 600;
+    color: var(--text); margin-bottom: .25rem;
+  }
+  .chart-sub {
+    font-size: .7rem; color: var(--muted);
+    margin-bottom: 1.25rem;
+  }
+  .chart-canvas { position: relative; }
+
+  /* ── INSIGHT BOX ── */
+  .insight {
+    display: flex; gap: 1rem; align-items: flex-start;
+    background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.1rem 1.4rem; margin-top: 1.5rem;
+  }
+  .insight-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: .1rem; }
+  .insight-text { font-size: .85rem; color: #94a3b8; line-height: 1.6; }
+  .insight-text strong { color: var(--text); }
+
+  /* ── GRADIENT BARS ── */
+  .grad-bar-wrap { margin-top: 1rem; }
+  .grad-bar-row {
+    display: flex; align-items: center; gap: 1rem; margin-bottom: .85rem;
+  }
+  .grad-bar-label { width: 120px; font-size: .78rem; color: var(--muted); flex-shrink: 0; }
+  .grad-bar-track {
+    flex: 1; height: 8px; background: var(--surface);
+    border-radius: 99px; overflow: hidden;
+  }
+  .grad-bar-fill {
+    height: 100%; border-radius: 99px;
+    transition: width 1.2s ease;
+  }
+  .grad-bar-val {
+    width: 40px; font-size: .78rem; font-weight: 700; text-align: right; flex-shrink: 0;
+  }
+
+  /* ── BENCHMARK COMPARE ── */
+  .benchmark {
+    display: flex; gap: 1.5rem; margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+  .bench-item {
+    flex: 1; min-width: 160px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem 1.2rem;
+  }
+  .bench-label { font-size: .68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+  .bench-val { font-size: 1.8rem; font-weight: 800; margin: .2rem 0 .1rem; }
+  .bench-note { font-size: .72rem; color: var(--muted); }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 2rem; margin-top: 1.5rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 6px; top: 4px; bottom: 4px;
+    width: 2px; background: var(--border);
+  }
+  .tl-item { position: relative; margin-bottom: 1.4rem; }
+  .tl-dot {
+    position: absolute; left: -2rem; top: .35rem;
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--bg);
+  }
+  .tl-dot.done { border-color: var(--emerald); background: var(--emerald); }
+  .tl-sp { font-size: .68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
+  .tl-title { font-size: .9rem; font-weight: 600; margin: .15rem 0; }
+  .tl-meta { font-size: .75rem; color: var(--muted); }
+
+  /* ── EPÍLOGO ── */
+  #epilogue {
+    min-height: 70vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    padding: 6rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  #epilogue::before {
+    content: '';
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,92,246,.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .qpi-formula {
+    display: flex; gap: 1.2rem; align-items: center;
+    flex-wrap: wrap; justify-content: center;
+    margin: 2.5rem 0; font-size: .85rem; color: var(--muted);
+  }
+  .qpi-piece {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: .5rem 1rem;
+  }
+  .qpi-piece span { display: block; font-size: 1.1rem; font-weight: 700; color: var(--text); }
+  .qpi-op { color: var(--muted); font-size: 1.2rem; }
+  .qpi-big {
+    font-size: clamp(5rem, 12vw, 9rem);
+    font-weight: 900; line-height: 1;
+    background: linear-gradient(135deg, var(--blue), var(--cyan), var(--emerald));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -.04em;
+  }
+  .qpi-caption { font-size: .85rem; color: var(--muted); max-width: 480px; margin-top: 1.5rem; line-height: 1.7; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center; padding: 2rem;
+    border-top: 1px solid var(--border);
+    font-size: .72rem; color: var(--muted);
+    letter-spacing: .06em;
+  }
+
+  /* ── FADE IN ── */
+  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 680px) {
+    .hero-stats { grid-template-columns: repeat(2, auto); }
+    .cards-2, .cards-3 { grid-template-columns: 1fr; }
+    .qpi-formula { gap: .6rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">AtaraxiaDive · Métricas</span>
+  <div class="nav-links">
+    <a href="#act1">Arquitectura</a>
+    <a href="#act2">Proceso</a>
+    <a href="#act3">Calidad</a>
+    <a href="#epilogue">QPI</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-tag">Experimento IEDD · v1.0.2 · 2026</div>
+  <h1 class="hero-title">AtaraxiaDive<br><span>Historia en Números</span></h1>
+  <p class="hero-subtitle">
+    63 días. 77 historias de usuario. Una arquitectura hexagonal que resistió.<br>
+    Un pipeline de IA que voló. Una calidad que no se sacrificó.
+  </p>
+  <div class="hero-stats">
+    <div>
+      <div class="hero-stat-val cyan counter" data-target="77">0</div>
+      <div class="hero-stat-label">US funcionales</div>
+    </div>
+    <div>
+      <div class="hero-stat-val blue counter" data-target="63">0</div>
+      <div class="hero-stat-label">días calendario</div>
+    </div>
+    <div>
+      <div class="hero-stat-val emerald" data-target="28331">28 331</div>
+      <div class="hero-stat-label">SLOC totales</div>
+    </div>
+    <div>
+      <div class="hero-stat-val violet">0.971</div>
+      <div class="hero-stat-label">QPI final</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Comenzar</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 5v14M5 12l7 7 7-7"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ACT I DIVIDER -->
+<div class="act-divider" id="act1">
+  <div class="act-number" style="color:var(--blue)">I</div>
+  <div class="act-meta">
+    <div class="act-meta-label" style="color:var(--blue)">Acto I</div>
+    <div class="act-meta-title">"La arquitectura resistió"</div>
+  </div>
+</div>
+
+<!-- ACT I CONTENT -->
+<section class="fade-in">
+  <div class="section-label" style="color:var(--blue)">Arquitectura Hexagonal</div>
+  <h2 class="section-title">El gradiente que no debería verse, se ve</h2>
+  <p class="section-intro">
+    En un sistema construido incrementalmente durante 63 días, la arquitectura hexagonal
+    se mantuvo íntegra cuantitativamente. El gradiente de inestabilidad I se confirma
+    en los 6 Bounded Contexts sin excepción.
+  </p>
+
+  <!-- Instability gradient bars -->
+  <div class="chart-wrap">
+    <div class="chart-title">Gradiente de Inestabilidad I por capa hexagonal</div>
+    <div class="chart-sub">I = Ce / (Ca + Ce) · 0 = estable (todos dependen de esta capa) · 1 = inestable (hoja del grafo)</div>
+    <div class="grad-bar-wrap" id="grad-bars">
+      <div class="grad-bar-row">
+        <div class="grad-bar-label">domain/</div>
+        <div class="grad-bar-track"><div class="grad-bar-fill" style="width:0%;background:var(--blue)" data-w="26"></div></div>
+        <div class="grad-bar-val" style="color:var(--blue)">0.26</div>
+      </div>
+      <div class="grad-bar-row">
+        <div class="grad-bar-label">infrastructure/</div>
+        <div class="grad-bar-track"><div class="grad-bar-fill" style="width:0%;background:var(--cyan)" data-w="59"></div></div>
+        <div class="grad-bar-val" style="color:var(--cyan)">0.59</div>
+      </div>
+      <div class="grad-bar-row">
+        <div class="grad-bar-label">application/</div>
+        <div class="grad-bar-track"><div class="grad-bar-fill" style="width:0%;background:var(--amber)" data-w="73"></div></div>
+        <div class="grad-bar-val" style="color:var(--amber)">0.73</div>
+      </div>
+      <div class="grad-bar-row">
+        <div class="grad-bar-label">api/</div>
+        <div class="grad-bar-track"><div class="grad-bar-fill" style="width:0%;background:var(--muted)" data-w="91"></div></div>
+        <div class="grad-bar-val" style="color:var(--muted)">0.91</div>
+      </div>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">🔵</div>
+      <div class="insight-text">
+        <strong>Verificación formal de la intención de diseño.</strong> Este gradiente es invisible
+        en el código fuente — emerge solo al medir Ca/Ce sistemáticamente.
+        Se confirma en los 6 BCs sin excepción.
+      </div>
+    </div>
+  </div>
+
+  <!-- D evolution chart -->
+  <div class="chart-wrap">
+    <div class="chart-title">Evolución de Distancia Arquitectural D por Bounded Context</div>
+    <div class="chart-sub">D = |A + I − 1| · umbral de intervención: D > 0.70 · should_block=false en todas las baselines</div>
+    <div class="chart-canvas" style="height:300px">
+      <canvas id="chartD"></canvas>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">📉</div>
+      <div class="insight-text">
+        <strong>competencia</strong> (Core Domain ES) bajó de D=0.62 → D=0.46 — la mejora
+        más significativa. <strong>identidad</strong> bajó de 0.87 → 0.66.
+        El umbral de alerta (D&gt;0.70) <strong>nunca fue superado en ninguna baseline</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- BC cards row -->
+  <div class="cards cards-3">
+    <div class="card">
+      <div class="card-glow" style="background:var(--emerald)"></div>
+      <div class="card-label">competencia (Core ES)</div>
+      <div class="card-value" style="color:var(--emerald)">0.459</div>
+      <div class="card-note">D final · desde 0.62 en BL-004</div>
+    </div>
+    <div class="card">
+      <div class="card-glow" style="background:var(--blue)"></div>
+      <div class="card-label">should_block=false</div>
+      <div class="card-value" style="color:var(--blue)">7/7</div>
+      <div class="card-note">baselines consecutivas · BL-001 → BL-007</div>
+    </div>
+    <div class="card">
+      <div class="card-glow" style="background:var(--cyan)"></div>
+      <div class="card-label">CRITICAL activos</div>
+      <div class="card-value" style="color:var(--cyan)">0</div>
+      <div class="card-note">DesignReviewer · toda la historia del proyecto</div>
+    </div>
+  </div>
+</section>
+
+<!-- ACT II DIVIDER -->
+<div class="act-divider" id="act2">
+  <div class="act-number" style="color:var(--emerald)">II</div>
+  <div class="act-meta">
+    <div class="act-meta-label" style="color:var(--emerald)">Acto II</div>
+    <div class="act-meta-title">"El pipeline voló"</div>
+  </div>
+</div>
+
+<!-- ACT II CONTENT -->
+<section class="fade-in">
+  <div class="section-label" style="color:var(--emerald)">Productividad IEDD</div>
+  <h2 class="section-title">20 minutos por historia de usuario completa</h2>
+  <p class="section-intro">
+    El overhead de un proceso formal de 10 fases era la hipótesis más cuestionada.
+    La mediana del pipeline resultó en 20 minutos por US completa —
+    desde especificación formal hasta integración y BDD.
+  </p>
+
+  <div class="cards cards-2">
+    <!-- Velocity chart -->
+    <div class="chart-wrap" style="margin-bottom:0">
+      <div class="chart-title">Velocidad por Subproyecto</div>
+      <div class="chart-sub">US funcionales entregadas por día calendario</div>
+      <div class="chart-canvas" style="height:220px">
+        <canvas id="chartVel"></canvas>
+      </div>
+    </div>
+
+    <!-- Pipeline distribution -->
+    <div class="chart-wrap" style="margin-bottom:0">
+      <div class="chart-title">Distribución de tiempos de pipeline</div>
+      <div class="chart-sub">n=34 US · mediana 20 min · media sin outliers 20.8 min</div>
+      <div class="chart-canvas" style="height:220px">
+        <canvas id="chartPipe"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADJ ratio chart -->
+  <div class="chart-wrap" style="margin-top:1.5rem">
+    <div class="chart-title">Ratio SP-ADJ / US funcionales por Sprint</div>
+    <div class="chart-sub">Deuda técnica formalizada como US de ajuste — tendencia decreciente SP3→SP5</div>
+    <div class="chart-canvas" style="height:220px">
+      <canvas id="chartAdj"></canvas>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">📊</div>
+      <div class="insight-text">
+        El ratio global fue <strong>60%</strong> — el costo real de la calidad incremental.
+        La tendencia decreciente (SP3=127% → SP5=35%) confirma que el sistema de deuda
+        se hace más eficiente con la madurez de la arquitectura.
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline de sprints -->
+  <div class="chart-wrap">
+    <div class="chart-title">Línea de tiempo del proyecto</div>
+    <div class="chart-sub">7 subproyectos · 63 días efectivos · tag v1.0.2</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot done"></div>
+        <div class="tl-sp">SP1 · 10 días</div>
+        <div class="tl-title">La Performance — fundación hexagonal</div>
+        <div class="tl-meta">9 US func. · tag v0.2.0 · 0.90 US/día</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot done"></div>
+        <div class="tl-sp">SP2–SP3 · 11 días</div>
+        <div class="tl-title">La Competencia + El Torneo — dominio completo</div>
+        <div class="tl-meta">14 US func. · tags v0.3.0 / v0.4.0</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot done"></div>
+        <div class="tl-sp">SP4 · 14 días</div>
+        <div class="tl-title">La Plataforma — frontend React PWA + BC Notificaciones</div>
+        <div class="tl-meta">21 US func. · tag v0.5.0 · 1.50 US/día · velocidad de crucero</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot done"></div>
+        <div class="tl-sp">SP5 · 13 días</div>
+        <div class="tl-title">La Puesta en Marcha — portales organizador, atleta, FAAS</div>
+        <div class="tl-meta">20 US func. · tag v0.6.0 · 1.54 US/día</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot done"></div>
+        <div class="tl-sp">SP6 · 15 días</div>
+        <div class="tl-title">Validación, Ajustes y Despliegue — UAT 10/10 flows</div>
+        <div class="tl-meta">13 US func. · tag v1.0.0 · 0.87 US/día (SP de validación)</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot done"></div>
+        <div class="tl-sp">SP7 + SP-ADJ-12</div>
+        <div class="tl-title">Despliegue en Fly.io + correcciones producción real</div>
+        <div class="tl-meta">tag v1.0.2 · 1 049 tests · 0 failed</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards cards-3" style="margin-top:0">
+    <div class="card">
+      <div class="card-glow" style="background:var(--emerald)"></div>
+      <div class="card-label">mediana pipeline IEDD</div>
+      <div class="card-value" style="color:var(--emerald)">20 min</div>
+      <div class="card-note">10 fases · spec → BDD → integración</div>
+    </div>
+    <div class="card">
+      <div class="card-glow" style="background:var(--cyan)"></div>
+      <div class="card-label">US en menos de 30 min</div>
+      <div class="card-value" style="color:var(--cyan)">64%</div>
+      <div class="card-note">del total de US medidas (n=34)</div>
+    </div>
+    <div class="card">
+      <div class="card-glow" style="background:var(--blue)"></div>
+      <div class="card-label">velocidad de crucero</div>
+      <div class="card-value" style="color:var(--blue)">1.5</div>
+      <div class="card-note">US func./día · SP3 a SP5</div>
+    </div>
+  </div>
+</section>
+
+<!-- ACT III DIVIDER -->
+<div class="act-divider" id="act3">
+  <div class="act-number" style="color:var(--violet)">III</div>
+  <div class="act-meta">
+    <div class="act-meta-label" style="color:var(--violet)">Acto III</div>
+    <div class="act-meta-title">"La calidad es real"</div>
+  </div>
+</div>
+
+<!-- ACT III CONTENT -->
+<section class="fade-in">
+  <div class="section-label" style="color:var(--violet)">Calidad del Software</div>
+  <h2 class="section-title">Métricas que superan el promedio industrial</h2>
+  <p class="section-intro">
+    La velocidad podría haber sacrificado la calidad. No lo hizo.
+    Los tres indicadores clave — cobertura, complejidad y densidad de bugs —
+    convergen en una dirección inequívoca.
+  </p>
+
+  <div class="cards cards-2">
+    <!-- Coverage chart -->
+    <div class="chart-wrap" style="margin-bottom:0">
+      <div class="chart-title">Cobertura de tests por capa</div>
+      <div class="chart-sub">pytest-cov · 1 019 unit+integration + 636 BDD scenarios</div>
+      <div class="chart-canvas" style="height:220px">
+        <canvas id="chartCov"></canvas>
+      </div>
+    </div>
+
+    <!-- CC chart -->
+    <div class="chart-wrap" style="margin-bottom:0">
+      <div class="chart-title">Complejidad Ciclomática (CC) promedio por capa</div>
+      <div class="chart-sub">Radon · escala A=1–5 (bajo) · domain/ tiene el valor mínimo del sistema</div>
+      <div class="chart-canvas" style="height:220px">
+        <canvas id="chartCC"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- DesignReviewer evolution -->
+  <div class="chart-wrap" style="margin-top:1.5rem">
+    <div class="chart-title">Evolución DesignReviewer — issues WARNING a lo largo de los sprints</div>
+    <div class="chart-sub">0 CRITICAL en toda la historia · el gate funcionó como discriminador, nunca como bloqueante</div>
+    <div class="chart-canvas" style="height:220px">
+      <canvas id="chartDR"></canvas>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">🛡️</div>
+      <div class="insight-text">
+        Los WARNINGs crecen con el proyecto — son esperables, no alarmas.
+        La reducción de <strong>issues por US de 17.7 → 2.4</strong> (−86%) indica
+        que el código nuevo es más limpio a medida que la base arquitectónica madura.
+      </div>
+    </div>
+  </div>
+
+  <!-- Benchmark comparison -->
+  <div class="chart-wrap">
+    <div class="chart-title">Comparación con benchmarks industriales</div>
+    <div class="chart-sub">Fuentes: Capers Jones (bugs), industry surveys (cobertura), propio (AtaraxiaDive)</div>
+    <div class="benchmark">
+      <div class="bench-item">
+        <div class="bench-label">Bugs / 1 000 SLOC</div>
+        <div class="bench-val" style="color:var(--emerald)">0.30</div>
+        <div class="bench-note">AtaraxiaDive · percentil &lt;10 industria</div>
+      </div>
+      <div class="bench-item">
+        <div class="bench-label">Bugs / 1 000 SLOC</div>
+        <div class="bench-val" style="color:var(--red)">1–25</div>
+        <div class="bench-note">Rango industrial (Capers Jones)</div>
+      </div>
+      <div class="bench-item">
+        <div class="bench-label">Cobertura de tests</div>
+        <div class="bench-val" style="color:var(--emerald)">95.3%</div>
+        <div class="bench-note">AtaraxiaDive · domain/ 97.3%</div>
+      </div>
+      <div class="bench-item">
+        <div class="bench-label">Cobertura de tests</div>
+        <div class="bench-val" style="color:var(--amber)">40–60%</div>
+        <div class="bench-note">Proyectos bien testeados (industry)</div>
+      </div>
+    </div>
+    <div class="insight" style="margin-top:1.2rem">
+      <div class="insight-icon">⚗️</div>
+      <div class="insight-text">
+        <strong>La hipótesis que emerge del experimento IEDD:</strong> el pipeline formal
+        exige precondiciones, postcondiciones e invariantes como condición de entrada —
+        no como artefacto opcional. La especificación formaliza la calidad antes de que
+        exista una sola línea de código.
+      </div>
+    </div>
+  </div>
+
+  <div class="cards cards-3">
+    <div class="card">
+      <div class="card-glow" style="background:var(--violet)"></div>
+      <div class="card-label">Clases LCOM &gt; 1</div>
+      <div class="card-value" style="color:var(--violet)">3.3%</div>
+      <div class="card-note">10 de 303 clases · cohesión alta</div>
+    </div>
+    <div class="card">
+      <div class="card-glow" style="background:var(--emerald)"></div>
+      <div class="card-label">domain/ MI promedio</div>
+      <div class="card-value" style="color:var(--emerald)">90.07</div>
+      <div class="card-note">Índice de Mantenibilidad / 100 · umbral "alto": 85</div>
+    </div>
+    <div class="card">
+      <div class="card-glow" style="background:var(--blue)"></div>
+      <div class="card-label">domain/ CC promedio</div>
+      <div class="card-value" style="color:var(--blue)">1.89</div>
+      <div class="card-note">Complejidad Ciclomática · mínimo del sistema</div>
+    </div>
+  </div>
+</section>
+
+<!-- EPÍLOGO -->
+<div style="border-top:1px solid var(--border); margin-top:4rem"></div>
+<section id="epilogue" class="full fade-in">
+  <div class="section-label" style="color:var(--violet); margin-bottom:1rem">Epílogo · Indicador Compuesto</div>
+  <div style="font-size:1.1rem; color:var(--muted); max-width:520px; margin-bottom:1rem;">
+    Un solo número que integra ritmo funcional y calidad en una cifra comparable entre iteraciones.
+  </div>
+
+  <div class="qpi-formula">
+    <div class="qpi-piece">Cobertura<span>0.953</span></div>
+    <div class="qpi-op">+</div>
+    <div class="qpi-piece">Cohesión OO<span>0.967</span></div>
+    <div class="qpi-op">+</div>
+    <div class="qpi-piece">Salud Arq.<span>0.453</span></div>
+    <div class="qpi-op">+</div>
+    <div class="qpi-piece">CC inversa<span>0.811</span></div>
+    <div class="qpi-op">→</div>
+    <div class="qpi-piece" style="border-color:rgba(139,92,246,.4)">Score calidad<span style="color:var(--violet)">0.796</span></div>
+    <div class="qpi-op">×</div>
+    <div class="qpi-piece">Ritmo<span>1.22</span></div>
+  </div>
+
+  <div class="qpi-big" id="qpi-display">0.971</div>
+
+  <p class="qpi-caption">
+    <strong style="color:var(--text)">QPI = Ritmo funcional × Score de calidad</strong><br>
+    Productividad/Calidad Index — AtaraxiaDive IEDD v1.0.2<br>
+    Válido como referencia comparativa entre iteraciones del mismo proyecto,
+    no como valor absoluto cross-proyecto.
+  </p>
+</section>
+
+<footer>
+  AtaraxiaDive · Plataforma de gestión de torneos de apnea · Victor Valotto + Claude · 2026<br>
+  docs/metricas/REPORTE-METRICAS.md · 17 documentos de métricas · BL-001 → BL-007
+</footer>
+
+<script>
+// ── CHART DEFAULTS ──
+Chart.defaults.color = '#64748b';
+Chart.defaults.borderColor = '#1e3050';
+Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+Chart.defaults.font.size = 11;
+
+const BLUE    = '#3b82f6';
+const CYAN    = '#06b6d4';
+const EMERALD = '#10b981';
+const VIOLET  = '#8b5cf6';
+const AMBER   = '#f59e0b';
+const MUTED   = '#475569';
+const RED     = '#ef4444';
+
+function rgba(hex, a) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+// ── CHART D: Evolución distancia por BC ──
+(function() {
+  const labels = ['BL-004','BL-005','BL-006','BL-007'];
+  const bcs = [
+    { label:'competencia', data:[0.62, 0.46, 0.459, 0.459], color: EMERALD },
+    { label:'torneo',      data:[null, 0.48, 0.479, 0.479], color: BLUE },
+    { label:'registro',    data:[0.56, 0.59, 0.583, 0.590], color: AMBER },
+    { label:'identidad',   data:[0.87, 0.67, 0.652, 0.660], color: VIOLET },
+    { label:'shared',      data:[0.63, 0.64, 0.635, 0.630], color: MUTED },
+    { label:'notificaciones', data:[null, 0.45, 0.450, 0.450], color: CYAN },
+  ];
+  new Chart(document.getElementById('chartD'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: bcs.map(bc => ({
+        label: bc.label,
+        data: bc.data,
+        borderColor: bc.color,
+        backgroundColor: 'transparent',
+        pointBackgroundColor: bc.color,
+        pointRadius: 5, pointHoverRadius: 7,
+        borderWidth: 2,
+        tension: .3,
+        spanGaps: true,
+      }))
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position:'bottom', labels:{ boxWidth:10, padding:16, color:'#94a3b8' } },
+        tooltip: { mode:'index', intersect:false }
+      },
+      scales: {
+        y: {
+          min: 0.3, max: 0.95,
+          grid: { color: rgba('#1e3050',1) },
+          ticks: { callback: v => v.toFixed(2) }
+        },
+        x: { grid: { color: rgba('#1e3050',1) } }
+      }
+    }
+  });
+
+  // threshold line annotation (manual)
+  // We'll add a note via plugin
+  Chart.register({
+    id: 'thresholdLine',
+    afterDraw(chart) {
+      if (chart.canvas.id !== 'chartD') return;
+      const {ctx, chartArea: {left, right, top, bottom}, scales: {y}} = chart;
+      const yPx = y.getPixelForValue(0.70);
+      ctx.save();
+      ctx.setLineDash([5, 4]);
+      ctx.strokeStyle = rgba(RED, 0.4);
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(left, yPx);
+      ctx.lineTo(right, yPx);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = rgba(RED, 0.6);
+      ctx.font = '10px Segoe UI';
+      ctx.fillText('umbral D=0.70', left + 6, yPx - 5);
+      ctx.restore();
+    }
+  });
+})();
+
+// ── CHART VEL: Velocidad por SP ──
+(function() {
+  const ctx = document.getElementById('chartVel');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['SP1','SP2','SP3','SP4','SP5','SP6'],
+      datasets: [{
+        label: 'US func./día',
+        data: [0.90, 0.75, 1.57, 1.50, 1.54, 0.87],
+        backgroundColor: [
+          rgba(MUTED,.6), rgba(MUTED,.6),
+          rgba(EMERALD,.7), rgba(EMERALD,.7), rgba(EMERALD,.7),
+          rgba(AMBER,.6)
+        ],
+        borderColor: [
+          MUTED, MUTED, EMERALD, EMERALD, EMERALD, AMBER
+        ],
+        borderWidth: 1.5, borderRadius: 5
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: {display:false} },
+      scales: {
+        y: { min: 0, max: 2, grid: { color: rgba('#1e3050',1) }, ticks:{callback:v=>v.toFixed(2)} },
+        x: { grid: { display:false } }
+      }
+    }
+  });
+})();
+
+// ── CHART PIPE: Distribución tiempos ──
+(function() {
+  const ctx = document.getElementById('chartPipe');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['< 15 min (35%)', '15–30 min (29%)', '30–60 min (15%)', '> 60 min (21%)'],
+      datasets: [{
+        data: [35, 29, 15, 21],
+        backgroundColor: [rgba(EMERALD,.8), rgba(CYAN,.8), rgba(AMBER,.7), rgba(MUTED,.6)],
+        borderColor: ['#070d1a'],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position:'right', labels:{ boxWidth:10, padding:12, color:'#94a3b8', font:{size:10} } }
+      },
+      cutout: '60%'
+    }
+  });
+})();
+
+// ── CHART ADJ: Ratio SP-ADJ ──
+(function() {
+  const ctx = document.getElementById('chartAdj');
+  const data = [56, 100, 127, 33, 35, 77];
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['SP1','SP2','SP3','SP4','SP5','SP6'],
+      datasets: [{
+        label: 'Ratio ADJ (%)',
+        data,
+        backgroundColor: data.map(v =>
+          v >= 100 ? rgba(RED,.6) : v >= 70 ? rgba(AMBER,.6) : rgba(EMERALD,.6)
+        ),
+        borderColor: data.map(v =>
+          v >= 100 ? RED : v >= 70 ? AMBER : EMERALD
+        ),
+        borderWidth: 1.5, borderRadius: 5
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend:{display:false} },
+      scales: {
+        y: { min:0, max:150, grid:{color:rgba('#1e3050',1)}, ticks:{callback:v=>v+'%'} },
+        x: { grid:{display:false} }
+      }
+    }
+  });
+})();
+
+// ── CHART COV: Cobertura por capa ──
+(function() {
+  const ctx = document.getElementById('chartCov');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['domain/','infrastructure/','application/','global'],
+      datasets: [{
+        label: 'Cobertura %',
+        data: [97.3, 94.0, 93.6, 95.3],
+        backgroundColor: [rgba(VIOLET,.75), rgba(BLUE,.65), rgba(CYAN,.65), rgba(EMERALD,.7)],
+        borderColor: [VIOLET, BLUE, CYAN, EMERALD],
+        borderWidth: 1.5, borderRadius: 5
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend:{display:false} },
+      scales: {
+        x: { min:85, max:100, grid:{color:rgba('#1e3050',1)}, ticks:{callback:v=>v+'%'} },
+        y: { grid:{display:false} }
+      }
+    }
+  });
+})();
+
+// ── CHART CC: CC por capa ──
+(function() {
+  const ctx = document.getElementById('chartCC');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['domain/','infrastructure/','api/','application/'],
+      datasets: [{
+        label: 'CC promedio',
+        data: [1.89, 2.07, 2.10, 2.25],
+        backgroundColor: [rgba(VIOLET,.8), rgba(BLUE,.65), rgba(CYAN,.65), rgba(AMBER,.6)],
+        borderColor: [VIOLET, BLUE, CYAN, AMBER],
+        borderWidth: 1.5, borderRadius: 5
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend:{display:false} },
+      scales: {
+        x: { min:1.5, max:2.5, grid:{color:rgba('#1e3050',1)} },
+        y: { grid:{display:false} }
+      }
+    }
+  });
+})();
+
+// ── CHART DR: DesignReviewer evolution ──
+(function() {
+  const ctx = document.getElementById('chartDR');
+  const labels = ['SP2','SP3','SP4','SP5 INC-5.6','SP5 INC-5.7','SP6 INC-6.3','SP6 INC-6.4','SP-ADJ-11'];
+  const values = [35, 72, 145, 252, 256, 258, 253, 287];
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'WARNING count',
+        data: values,
+        borderColor: VIOLET,
+        backgroundColor: rgba(VIOLET, .1),
+        fill: true,
+        tension: .35,
+        pointBackgroundColor: VIOLET,
+        pointRadius: 5, pointHoverRadius: 7,
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend:{display:false},
+        tooltip: {
+          callbacks: {
+            afterLabel: () => '  CRITICAL: 0'
+          }
+        }
+      },
+      scales: {
+        y: { min:0, grid:{color:rgba('#1e3050',1)} },
+        x: { grid:{display:false}, ticks:{maxRotation:30} }
+      }
+    }
+  });
+})();
+
+// ── GRADIENT BARS ANIMATION (Intersection Observer) ──
+const gradObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.grad-bar-fill').forEach(bar => {
+        const target = bar.dataset.w;
+        bar.style.width = target + '%';
+      });
+      gradObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: .3 });
+gradObs.observe(document.getElementById('grad-bars'));
+
+// ── COUNTER ANIMATION ──
+function animateCounter(el, target, duration=1200) {
+  let start = null;
+  const step = ts => {
+    if (!start) start = ts;
+    const progress = Math.min((ts - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(ease * target);
+    if (progress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+const counterObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const target = parseInt(el.dataset.target);
+      animateCounter(el, target);
+      counterObs.unobserve(el);
+    }
+  });
+}, { threshold: .5 });
+document.querySelectorAll('.counter').forEach(el => counterObs.observe(el));
+
+// ── FADE IN OBSERVER ──
+const fadeObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      fadeObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: .08 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+</script>
+</body>
+</html>
