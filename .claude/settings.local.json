@@ -220,7 +220,11 @@
       "Bash(open *)",
       "Bash(git revert *)",
       "Bash(pkill -f uvicorn)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(flyctl version *)",
+      "Bash(flyctl status *)",
+      "Bash(flyctl deploy *)",
+      "Bash(git check-ignore *)"
     ]
   }
 }
