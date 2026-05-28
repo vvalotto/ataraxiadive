@@ -34,8 +34,8 @@ Introduce el aggregate `Inscripcion` en el BC Registro: permite inscribir un atl
 
 | RF | Descripción |
 |----|-------------|
-| RF-IN-03 | Sin límite de atletas por torneo o disciplina |
-| RF-IN-04 | Cancelar inscripción hasta el día anterior |
+| [[RF-IN-03]] | Sin límite de atletas por torneo o disciplina |
+| [[RF-IN-04]] | Cancelar inscripción hasta el día anterior |
 
 ## Contenido implementado
 

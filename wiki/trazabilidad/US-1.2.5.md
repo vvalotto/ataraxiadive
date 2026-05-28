@@ -31,7 +31,7 @@ Registra la ausencia de un atleta en su turno (Did Not Start). El DNS es una des
 
 | RF | Descripción |
 |----|-------------|
-| RF-EJ-02 | DNS = descalificación inmediata, sin espera (P-07, INV-P-08) |
+| [[RF-EJ-02]] | DNS = descalificación inmediata, sin espera (P-07, INV-P-08) |
 
 ## Comando principal
 

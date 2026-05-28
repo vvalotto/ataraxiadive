@@ -31,7 +31,7 @@ Permite al organizador modificar manualmente el orden de la grilla generada ante
 
 | RF | Descripción |
 |----|-------------|
-| RF-PR-07 | Organizador puede ajustar manualmente el orden de la grilla |
+| [[RF-PR-07]] | Organizador puede ajustar manualmente el orden de la grilla |
 
 ## Comando principal
 

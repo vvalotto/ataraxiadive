@@ -30,7 +30,7 @@ Corrige el ordenamiento de la grilla para SPE: según el reglamento CMAS/FAAS, l
 
 | RF | Descripción |
 |----|-------------|
-| RF-PR-05 | Orden de grilla: AP ascendente (DNF/DYN/DBF/STA) o **descendente (SPE)** |
+| [[RF-PR-05]] | Orden de grilla: AP ascendente (DNF/DYN/DBF/STA) o **descendente (SPE)** |
 
 ## Contenido implementado
 

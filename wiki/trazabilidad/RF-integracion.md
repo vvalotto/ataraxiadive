@@ -21,10 +21,10 @@ El sistema menciona una base de datos externa de atletas (posiblemente de la FAA
 
 | ID | Pregunta | Estado |
 |----|---------|--------|
-| RF-IG-01 | ¿La BD externa es de la FAAS? ¿Qué formato/protocolo? | **Pendiente** |
-| RF-IG-02 | ¿La consulta es solo lectura o también escritura? | **Pendiente** |
-| RF-IG-03 | ¿Qué pasa si la BD externa no está disponible? | **Pendiente** |
-| RF-IG-04 | ¿Se exportan resultados a sistemas externos (AIDA/CMAS)? | **Pendiente** |
+| [[RF-IG-01]] | ¿La BD externa es de la FAAS? ¿Qué formato/protocolo? | **Pendiente** |
+| [[RF-IG-02]] | ¿La consulta es solo lectura o también escritura? | **Pendiente** |
+| [[RF-IG-03]] | ¿Qué pasa si la BD externa no está disponible? | **Pendiente** |
+| [[RF-IG-04]] | ¿Se exportan resultados a sistemas externos (AIDA/CMAS)? | **Pendiente** |
 
 ## Implicación arquitectónica
 

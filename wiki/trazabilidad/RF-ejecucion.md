@@ -32,16 +32,16 @@ Requerimientos funcionales del área de ejecución. Fuente: elicitación inicial
 
 | ID | Requerimiento | Respuesta / Regla |
 |----|--------------|-------------------|
-| RF-EJ-01 | ¿Puede haber más de un juez por disciplina? | **Sí.** Juez principal, jueces de línea, safety divers. |
-| RF-EJ-02 | ¿Qué pasa si un atleta no se presenta (DNS)? | **Descalificación inmediata.** Sin tiempo de espera. |
-| RF-EJ-03 | ¿Hay tarjeta amarilla (penalización parcial)? | **Sí.** Reglas de negocio configurables. |
-| RF-EJ-04 | ¿Cuáles son los códigos de penalización? | **Pendiente.** Posiblemente AIDA/CMAS. |
-| RF-EJ-05 | ¿El cronometraje lo hace el sistema? | **No.** El juez toma el tiempo manualmente e ingresa el valor. |
-| RF-EJ-06 | ¿Un juez puede corregir un resultado ya registrado? | **Sí.** Con período de protesta. |
-| RF-EJ-07 | ¿Qué se registra en un black-out? | Black-out (no back-out): se registra la distancia alcanzada también. |
-| RF-EJ-08 | ¿Las distancias usan decimales? | **Sí.** Metros con decimales. |
-| RF-EJ-09 | ¿El protocolo de superficie (SP) lo evalúa el sistema? | **No.** |
-| RF-EJ-10 | ¿Se registra el SP por separado o solo su efecto? | **Solo el resultado** (tarjeta blanca/amarilla/roja). |
+| [[RF-EJ-01]] | ¿Puede haber más de un juez por disciplina? | **Sí.** Juez principal, jueces de línea, safety divers. |
+| [[RF-EJ-02]] | ¿Qué pasa si un atleta no se presenta (DNS)? | **Descalificación inmediata.** Sin tiempo de espera. |
+| [[RF-EJ-03]] | ¿Hay tarjeta amarilla (penalización parcial)? | **Sí.** Reglas de negocio configurables. |
+| [[RF-EJ-04]] | ¿Cuáles son los códigos de penalización? | **Pendiente.** Posiblemente AIDA/CMAS. |
+| [[RF-EJ-05]] | ¿El cronometraje lo hace el sistema? | **No.** El juez toma el tiempo manualmente e ingresa el valor. |
+| [[RF-EJ-06]] | ¿Un juez puede corregir un resultado ya registrado? | **Sí.** Con período de protesta. |
+| [[RF-EJ-07]] | ¿Qué se registra en un black-out? | Black-out (no back-out): se registra la distancia alcanzada también. |
+| [[RF-EJ-08]] | ¿Las distancias usan decimales? | **Sí.** Metros con decimales. |
+| [[RF-EJ-09]] | ¿El protocolo de superficie (SP) lo evalúa el sistema? | **No.** |
+| [[RF-EJ-10]] | ¿Se registra el SP por separado o solo su efecto? | **Solo el resultado** (tarjeta blanca/amarilla/roja). |
 
 ## Reglas de negocio clave
 
@@ -57,7 +57,7 @@ Requerimientos funcionales del área de ejecución. Fuente: elicitación inicial
 
 | ID | Pendiente | Clasificación |
 |----|-----------|---------------|
-| RF-EJ-04 | Códigos de penalización específicos (AIDA/CMAS u otro reglamento) | **Backlog activo** — la infraestructura técnica existe; solo falta definir los códigos |
+| [[RF-EJ-04]] | Códigos de penalización específicos (AIDA/CMAS u otro reglamento) | **Backlog activo** — la infraestructura técnica existe; solo falta definir los códigos |
 
 ## Estado de implementación (lint-001)
 

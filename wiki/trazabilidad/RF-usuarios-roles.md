@@ -19,11 +19,11 @@ Requerimientos funcionales del área de identidad y permisos. Fuente: elicitaci�
 
 | ID | Requerimiento | Respuesta / Regla |
 |----|--------------|-------------------|
-| RF-US-01 | ¿El administrador puede crear múltiples organizadores por torneo? | **No.** Un organizador por torneo. |
-| RF-US-02 | ¿Un usuario puede tener múltiples roles? | **Sí.** (ej: organizador en un torneo y juez en otro) |
-| RF-US-03 | ¿Cómo se autentican los atletas? | Mail + contraseña. |
-| RF-US-04 | ¿Un juez necesita ser asignado a disciplinas específicas? | **Sí.** Se asigna un juez a cada [[disciplina]]. |
-| RF-US-05 | ¿Los atletas pueden ver resultados de otros durante la competencia? | **Solo los resultados finales.** No en tiempo real. |
+| [[RF-US-01]] | ¿El administrador puede crear múltiples organizadores por torneo? | **No.** Un organizador por torneo. |
+| [[RF-US-02]] | ¿Un usuario puede tener múltiples roles? | **Sí.** (ej: organizador en un torneo y juez en otro) |
+| [[RF-US-03]] | ¿Cómo se autentican los atletas? | Mail + contraseña. |
+| [[RF-US-04]] | ¿Un juez necesita ser asignado a disciplinas específicas? | **Sí.** Se asigna un juez a cada [[disciplina]]. |
+| [[RF-US-05]] | ¿Los atletas pueden ver resultados de otros durante la competencia? | **Solo los resultados finales.** No en tiempo real. |
 
 ## Reglas de negocio clave
 

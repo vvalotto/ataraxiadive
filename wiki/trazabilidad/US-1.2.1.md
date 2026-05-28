@@ -34,10 +34,10 @@ Permite al juez registrar el Anuncio de Performance (AP) de un atleta antes de c
 
 | RF | Descripción |
 |----|-------------|
-| RF-PR-01 | AP = marca declarada por el atleta |
-| RF-PR-02 | AP > 0, sin negativos ni cero (INV-P-01) |
-| RF-PR-03 | AP no modificable una vez registrado (INV-P-02) |
-| RF-EJ-08 | Distancia con decimales (metros) |
+| [[RF-PR-01]] | AP = marca declarada por el atleta |
+| [[RF-PR-02]] | AP > 0, sin negativos ni cero (INV-P-01) |
+| [[RF-PR-03]] | AP no modificable una vez registrado (INV-P-02) |
+| [[RF-EJ-08]] | Distancia con decimales (metros) |
 
 ## Comando principal
 

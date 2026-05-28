@@ -31,7 +31,7 @@ Introduce el value object `DisciplinaDescriptor` que encapsula las reglas de cad
 
 | RF | Descripción |
 |----|-------------|
-| RF-EJ-08 | Distancia con decimales (metros) / tiempo en segundos según disciplina |
+| [[RF-EJ-08]] | Distancia con decimales (metros) / tiempo en segundos según disciplina |
 
 ## Contenido implementado
 

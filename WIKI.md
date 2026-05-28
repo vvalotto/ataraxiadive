@@ -87,7 +87,7 @@ Todas las páginas deben incluir:
 ```yaml
 ---
 title: "Título de la página"
-type: arquitectura | arquitectura-componente | decision | trazabilidad | trazabilidad-us | trazabilidad-rf | concepto | impacto | estado | investigacion | salud | vista | plan
+type: arquitectura | arquitectura-componente | decision | trazabilidad | trazabilidad-us | trazabilidad-rf | trazabilidad-rf-item | concepto | impacto | estado | investigacion | salud | vista | plan
 last_updated: "YYYY-MM-DD"
 sources:
   - ruta/o/nombre/de/la/fuente
@@ -152,13 +152,31 @@ test_units:                   # Paths relativos al/los test(s) que verifican est
 
 **Convención origen:** toda US cerrada debe tener `origen_tipo` poblado. Las US con `rf: [...]` no vacío tienen `origen_tipo: rf` y pueden omitir `origen_refs` (la referencia ya está en `rf:`). Las US con `rf: []` deben tener `origen_tipo` distinto de `rf` y `origen_refs` con la referencia al trigger específico (ADR, BL, o descripción).
 
-**trazabilidad-rf** (Requerimiento Funcional):
+**trazabilidad-rf** (Requerimiento Funcional — página de área):
 ```yaml
-# Campo adicional en páginas RF-*.md
-us_refs:                      # US que implementan este RF (derivado de los campos rf: de las US)
+# Campo adicional en páginas RF-*.md (una página por área, ej: RF-gestion-torneo.md)
+us_refs:                      # US que implementan RFs de esta área (nivel de página)
   - US-1.2.1
   - US-1.2.3
+# Tabla en el cuerpo: IDs convertidos a [[rf/RF-XX-NN|RF-XX-NN]] para navegación
 ```
+
+**trazabilidad-rf-item** (Requerimiento Funcional Individual):
+```yaml
+# Una página por RF individual, en wiki/trazabilidad/rf/
+title: "RF-GT-01 — No. Una sede por torneo."
+type: trazabilidad-rf-item
+rf_id: RF-GT-01                   # ID canónico del RF
+area: gestion-torneo               # slug del área
+parent_page: "[[RF-gestion-torneo]]"  # página de área padre
+us_refs:                           # US que implementan este RF exacto
+  - US-3.1.1
+  - US-3.1.2
+estado: implementado | sin-us      # implementado = tiene US; sin-us = backlog/pendiente
+last_updated: "YYYY-MM-DD"
+```
+Ubicación: `wiki/trazabilidad/rf/RF-XX-NN.md`  
+Navegación habilitada: RF tabla → `[[rf/RF-GT-01]]` → página RF → `[[US-3.1.1]]` → US → `test_units`
 
 ---
 

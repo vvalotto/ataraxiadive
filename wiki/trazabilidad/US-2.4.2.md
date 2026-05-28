@@ -32,7 +32,7 @@ Introduce el BC Resultados con su funcionalidad núcleo: calcular el ranking de 
 
 | RF | Descripción |
 |----|-------------|
-| RF-PM-03 | Empates = mismo puesto y mismos puntos |
+| [[RF-PM-03]] | Empates = mismo puesto y mismos puntos |
 
 ## Comando principal
 

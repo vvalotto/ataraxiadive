@@ -35,10 +35,10 @@ Introduce el BC Registro con el aggregate `Atleta`: registro de atletas, consult
 
 | RF | Descripción |
 |----|-------------|
-| RF-IN-01 | Categorías configurables por edad y género |
-| RF-IN-02 | Brevet no obligatorio |
-| RF-IN-08 | Género solo para categorización |
-| RF-IN-09 | Atleta no puede cambiar categoría por disciplina |
+| [[RF-IN-01]] | Categorías configurables por edad y género |
+| [[RF-IN-02]] | Brevet no obligatorio |
+| [[RF-IN-08]] | Género solo para categorización |
+| [[RF-IN-09]] | Atleta no puede cambiar categoría por disciplina |
 
 ## Contenido implementado
 

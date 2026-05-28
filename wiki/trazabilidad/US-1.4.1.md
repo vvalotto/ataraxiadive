@@ -30,7 +30,7 @@ Extiende el manejo de tarjeta roja para incluir el caso específico de black-out
 
 | RF | Descripción |
 |----|-------------|
-| RF-EJ-07 | Black-out registra el hecho y la distancia alcanzada |
+| [[RF-EJ-07]] | Black-out registra el hecho y la distancia alcanzada |
 
 ## Comando principal
 

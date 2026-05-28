@@ -33,7 +33,7 @@ Introduce el BC Notificaciones con el aggregate `Notificacion` y su ciclo de vid
 
 | RF | Descripción |
 |----|-------------|
-| RF-NT-01 | Notificaciones por email y push |
+| [[RF-NT-01]] | Notificaciones por email y push |
 
 ## Contenido implementado
 

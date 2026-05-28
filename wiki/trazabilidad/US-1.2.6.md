@@ -31,7 +31,7 @@ Permite corregir el RP de un atleta dentro de la ventana de impugnación habilit
 
 | RF | Descripción |
 |----|-------------|
-| RF-EJ-06 | Corrección con ventana de impugnación (INV-P-15, HS-P2 ✅) |
+| [[RF-EJ-06]] | Corrección con ventana de impugnación (INV-P-15, HS-P2 ✅) |
 
 ## Comando principal
 

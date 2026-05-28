@@ -38,11 +38,11 @@ Introduce el BC Identidad con la entidad `Usuario`, autenticación JWT mínima y
 
 | RF | Descripción |
 |----|-------------|
-| RF-US-01 | Un organizador por torneo |
-| RF-US-02 | Un usuario puede tener múltiples roles |
-| RF-US-03 | Autenticación mail + contraseña |
-| RF-US-04 | Juez asignado a disciplina específica |
-| RF-US-05 | Atletas solo ven resultados finales |
+| [[RF-US-01]] | Un organizador por torneo |
+| [[RF-US-02]] | Un usuario puede tener múltiples roles |
+| [[RF-US-03]] | Autenticación mail + contraseña |
+| [[RF-US-04]] | Juez asignado a disciplina específica |
+| [[RF-US-05]] | Atletas solo ven resultados finales |
 
 ## Contenido implementado
 

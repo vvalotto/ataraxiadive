@@ -22,10 +22,10 @@ Requerimientos funcionales del área de notificaciones. Fuente: elicitación ini
 
 | ID | Requerimiento | Respuesta / Regla |
 |----|--------------|-------------------|
-| RF-NT-01 | ¿Notificaciones solo por email o también push? | **Email + push.** |
-| RF-NT-02 | ¿Se notifica al atleta cuando se acerca la fecha límite de anuncios? | **Sí.** |
-| RF-NT-03 | ¿El juez/organizador recibe notificaciones durante la ejecución? | **Pendiente.** |
-| RF-NT-04 | ¿Se notifica a los atletas cuando se publican resultados finales? | **Sí.** |
+| [[RF-NT-01]] | ¿Notificaciones solo por email o también push? | **Email + push.** |
+| [[RF-NT-02]] | ¿Se notifica al atleta cuando se acerca la fecha límite de anuncios? | **Sí.** |
+| [[RF-NT-03]] | ¿El juez/organizador recibe notificaciones durante la ejecución? | **Pendiente.** |
+| [[RF-NT-04]] | ¿Se notifica a los atletas cuando se publican resultados finales? | **Sí.** |
 
 ## Triggers de notificación definidos
 
@@ -40,7 +40,7 @@ Requerimientos funcionales del área de notificaciones. Fuente: elicitación ini
 
 | ID | Pendiente | Clasificación |
 |----|-----------|---------------|
-| RF-NT-03 | Notificaciones al juez u organizador durante ejecución | **Backlog activo** — la infraestructura de notificaciones existe; falta definir triggers |
+| [[RF-NT-03]] | Notificaciones al juez u organizador durante ejecución | **Backlog activo** — la infraestructura de notificaciones existe; falta definir triggers |
 
 ## Estado de implementación (lint-001)
 

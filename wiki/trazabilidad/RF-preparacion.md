@@ -24,14 +24,14 @@ Requerimientos funcionales del área de preparación. Fuente: elicitación inici
 
 | ID | Requerimiento | Respuesta / Regla |
 |----|--------------|-------------------|
-| RF-PR-01 | ¿Qué es un anuncio (AP)? | Marca que el atleta declara que intentará lograr. AP = Announced Performance. |
-| RF-PR-02 | ¿Hay valores mínimos/máximos para anuncios? | No se permiten valores 0 o negativos. |
-| RF-PR-03 | ¿Un atleta puede modificar su anuncio? | **No.** Una vez registrado, es definitivo. |
-| RF-PR-04 | ¿Qué pasa si un atleta no registra su anuncio? | **No compite.** |
-| RF-PR-05 | ¿Cómo se determina el orden de salida? | Depende de la [[disciplina]]: **por distancia → menor a mayor; por tiempo → mayor a menor.** |
-| RF-PR-06 | ¿Pueden competir varios atletas simultáneamente? | **Sí,** mediante andariveles (líneas de competencia). |
-| RF-PR-07 | ¿El organizador puede modificar el orden manualmente? | **Sí.** |
-| RF-PR-08 | ¿Qué es la "duración de cada performance"? | Tiempo entre Tiempos Oficiales (OT = Official Top). Lo determina el juez por prueba. |
+| [[RF-PR-01]] | ¿Qué es un anuncio (AP)? | Marca que el atleta declara que intentará lograr. AP = Announced Performance. |
+| [[RF-PR-02]] | ¿Hay valores mínimos/máximos para anuncios? | No se permiten valores 0 o negativos. |
+| [[RF-PR-03]] | ¿Un atleta puede modificar su anuncio? | **No.** Una vez registrado, es definitivo. |
+| [[RF-PR-04]] | ¿Qué pasa si un atleta no registra su anuncio? | **No compite.** |
+| [[RF-PR-05]] | ¿Cómo se determina el orden de salida? | Depende de la [[disciplina]]: **por distancia → menor a mayor; por tiempo → mayor a menor.** |
+| [[RF-PR-06]] | ¿Pueden competir varios atletas simultáneamente? | **Sí,** mediante andariveles (líneas de competencia). |
+| [[RF-PR-07]] | ¿El organizador puede modificar el orden manualmente? | **Sí.** |
+| [[RF-PR-08]] | ¿Qué es la "duración de cada performance"? | Tiempo entre Tiempos Oficiales (OT = Official Top). Lo determina el juez por prueba. |
 
 ## Reglas de negocio clave
 

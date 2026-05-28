@@ -2,9 +2,30 @@
 ## Diagnóstico, Vistas y Plan de Implementación
 
 > **Fecha:** Mayo 2026
+> **Estado:** ✅ POC completado y operativo — 2026-05-24
 > **Contexto:** Prueba de concepto para implementar el patrón LLM Wiki (Karpathy, abril 2026)
 > como gestor de conocimiento de un proyecto de software, con foco en trazabilidad
 > y análisis de impacto para mantenimiento.
+
+---
+
+## Estado operativo (2026-05-24)
+
+El POC está completamente operativo. Los 6 hitos del plan fueron ejecutados.
+
+| Métrica | Valor |
+|---------|-------|
+| Páginas wiki totales | 296 |
+| US con trazabilidad completa (RF→SI→TU) | 128 |
+| Páginas de trazabilidad (US + RF) | 185 |
+| ADRs documentados | 22 |
+| Vistas activas | 7 (6 originales + arquitectura) |
+| Consultas respondidas sin código fuente | 4/4 |
+| Páginas promedio por consulta | 1.5 |
+
+**Comandos activos:** `/wiki-ingest` · `/wiki-query` · `/wiki-lint`
+
+**Fase 5 — Operación continua** en curso. Ver triggers de sincronización al final del documento.
 
 ---
 
@@ -423,7 +444,7 @@ características. Ver Apéndice A para el contenido completo.
 Al final del ingest de cada fuente, el LLM actualiza `wiki/index.md` y agrega
 una entrada en `wiki/log.md`.
 
-**Progreso actual:** 51 páginas creadas (9 conceptos, 8 semillas RF, 5 investigación, 22 decisiones, 7 arquitectura). Fase 1 completada.
+**Progreso actual:** 51 páginas al cierre de Fase 1 → **296 páginas** al cierre del POC. Fase 1 completada.
 
 **Resultado esperado:** ~35-45 páginas wiki, BCs documentados con ADRs vinculados,
 lenguaje ubicuo del dominio capturado, `index.md` navegable.
@@ -458,48 +479,42 @@ instrucción de contexto al inicio de una sesión de consulta especializada.
 
 ---
 
-### Fase 3 — Ingest de estado
+### Fase 3 — Ingest de estado ✅ Completada (2026-05-24)
 
 **Objetivo:** Poblar el wiki con el estado real de implementación del proyecto.
 
-| Fuente | Páginas wiki generadas / actualizadas |
-|--------|---------------------------------------|
-| `docs/traceability/matrix.md` | Páginas de trazabilidad por US, actualización de BCs |
-| `docs/reports/US-*.md` | Enriquecimiento de páginas US con evidencia de cierre |
-| `.cm/baselines/BL-*.md` | Página de estado del proyecto |
-| `quality/reports/` | Métricas de salud por BC en páginas de BC |
-| `docs/contexto/HITO-*.md` | Páginas de investigación: aprendizajes por subproyecto |
+| Fuente | Páginas wiki generadas / actualizadas | Estado |
+|--------|---------------------------------------|--------|
+| `docs/traceability/matrix.md` | 177 páginas US + 8 páginas RF con `us_refs:` | ✅ |
+| Scripts D1–D6 (por BC) | 128 US con `software_items`, `test_units`, `origen_tipo` | ✅ |
+| `.cm/baselines/BL-*.md` | `wiki/estado/proyecto.md` | ✅ |
+| `quality/reports/` | `wiki/salud/calidad-BL-006.md` | ✅ |
+| `docs/contexto/HITO-*.md` | `wiki/investigacion/hitos-catalog.md` | ✅ |
 
-**Resultado esperado:** Página de estado unificada (solución a D-02), trazabilidad
-RF → código → tests navegable, vista de investigación poblada con hallazgos reales.
+**Resultado:** Página de estado unificada operativa, cadena RF→US→SI→TU completa, vista de trazabilidad con 6 queries Dataview activas (cadena completa, gaps, distribución por origen).
 
 ---
 
-### Fase 4 — Primer lint
+### Fase 4 — Primer lint ✅ Completada (2026-05-22)
 
 **Objetivo:** Detectar inconsistencias heredadas y generar la primera página de salud.
 
-**Instrucción al LLM:**
+**Resultado:** `wiki/salud/lint-001.md` — 232 páginas auditadas. Hallazgos:
 
-```
-Auditá el wiki completo. Generá wiki/salud/lint-001.md con:
-1. Páginas que mencionan PostgreSQL como tecnología vigente
-2. ADRs con estado contradictorio entre sí o con la arquitectura actual
-3. Requerimientos en la matriz de trazabilidad sin página US en el wiki
-4. BCs sin cobertura de tests registrada
-5. Páginas de impacto con dependencias inferidas que requieren validación
-6. Conceptos del dominio usados en el código sin página propia en wiki/conceptos/
-7. Páginas huérfanas (sin ningún enlace entrante desde otras páginas)
-8. Sugerencias de nuevas fuentes a ingestar para llenar los gaps detectados
-```
-
-**Resultado esperado:** Primera radiografía honesta del estado real del conocimiento
-del proyecto. Esta página es la que le presenta al experto qué investigar y qué
-proponer como acciones de mejora.
+| Categoría | Resultado |
+|-----------|-----------|
+| L1 — PostgreSQL como tecnología vigente | 🟢 0 instancias |
+| L2 — ADRs contradictorios | 🟢 ADR-010 correctamente supersedida |
+| L3 — RFs sin US asociada | 🟡 8 RFs sin US (gap de implementación real) |
+| L4 — BCs sin cobertura registrada | 🟡 4 BCs con cobertura en prosa, sin métricas numéricas |
+| L5 — wiki/impacto/ vacío | 🔴 → **resuelto**: 4 páginas de impacto creadas post-lint |
+| L6 — Conceptos sin página propia | 🟡 7 conceptos identificados |
+| L7 — Páginas huérfanas | 🟡 14 páginas no enlazadas desde index.md |
+| L8 — Inconsistencias de naming | 🔴 2 → resueltas en sesiones siguientes |
 
 ---
 
-### Fase 5 — Operación continua
+### Fase 5 — Operación continua ⏳ En curso
 
 El sistema opera con tres comandos regulares más el uso de vistas como contexto:
 
@@ -534,13 +549,20 @@ esa perspectiva usando el wiki como base de conocimiento.
 
 ---
 
-### Extensión opcional — Graphify (grafo estructural del código)
+### Extensión Graphify — ✅ Operativa (2026-05-24)
 
 [Graphify](https://graphify.net) es una herramienta open-source (abril 2026) que combina
 análisis estático con Tree-sitter y extracción semántica por LLM para generar un grafo
 de conocimiento del codebase. Opera de forma complementaria al LLM Wiki: donde el wiki
 responde *por qué* se construyó algo de cierta manera, Graphify responde *cómo está
 conectado* el código estructuralmente.
+
+**Estado actual:**
+- `graphify update src/` ejecutado — 3114 nodos · 21681 edges · 231 comunidades
+- God nodes: `Disciplina` (621) · `EventStorePort` (375) · `Performance` (241)
+- Skill instalado en `.claude/` + sección en `CLAUDE.md`
+- Página wiki: [[wiki/impacto/graphify-graph-report]]
+- Extracción semántica pendiente: requiere `ANTHROPIC_API_KEY` en terminal local
 
 **Punto de integración en el plan:** Fase 5, una vez que el wiki fundacional está estable.
 
@@ -589,12 +611,12 @@ Una vez validado el POC manualmente, automatizar el ingest ante eventos semánti
 | Hito | Entregable | Criterio de éxito | Estado |
 |------|------------|-------------------|--------|
 | H-0 | Gaps G-01/02/03 resueltos | CLAUDE.md con jerarquía de verdad, WIKI.md creado | ✅ |
-| H-1 | Ingest fundacional completo | 35+ páginas wiki, BCs documentados, index.md navegable | ✅ 51 páginas, 7/7 fuentes |
-| H-2 | Vistas construidas | 6 páginas de vistas operativas, recorridos validados | ✅ |
-| H-3 | Ingest de estado completo | Página de estado unificada, trazabilidad por US visible | ⏳ |
-| H-4 | Primer lint ejecutado | Página de salud con inconsistencias identificadas | ⏳ |
-| H-5 | Primera consulta de impacto | Respuesta fundamentada archivada como página del wiki | ⏳ |
-| H-6 | Evaluación del POC | ¿El wiki reduce la fricción de análisis de impacto? ¿Son útiles las vistas? | ⏳ |
+| H-1 | Ingest fundacional completo | 35+ páginas wiki, BCs documentados, index.md navegable | ✅ 51 páginas → 296, 7/7 fuentes |
+| H-2 | Vistas construidas | 6 páginas de vistas operativas, recorridos validados | ✅ 7 vistas (+ arquitectura) |
+| H-3 | Ingest de estado completo | Página de estado unificada, trazabilidad por US visible | ✅ 2026-05-24 — 177 US, cadena RF→US→SI→TU |
+| H-4 | Primer lint ejecutado | Página de salud con inconsistencias identificadas | ✅ 2026-05-22 — lint-001.md, 232 páginas |
+| H-5 | Primera consulta de impacto | Respuesta fundamentada archivada como página del wiki | ✅ 2026-05-22 — 4 páginas en wiki/impacto/ |
+| H-6 | Evaluación del POC | ¿El wiki reduce la fricción de análisis de impacto? ¿Son útiles las vistas? | ✅ 2026-05-22 — veredicto: exitoso |
 
 ---
 

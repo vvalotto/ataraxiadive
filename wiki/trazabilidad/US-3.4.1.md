@@ -32,7 +32,7 @@ Permite al organizador asignar las disciplinas que tendrá el torneo y asignar u
 
 | RF | Descripción |
 |----|-------------|
-| RF-EJ-01 | Más de un juez asignado a una disciplina |
+| [[RF-EJ-01]] | Más de un juez asignado a una disciplina |
 
 ## Comandos principales
 

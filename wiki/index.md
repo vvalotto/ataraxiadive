@@ -4,8 +4,8 @@
 > El LLM actualiza este archivo en cada operación de ingest.
 > Leer este archivo primero al responder cualquier consulta.
 
-**Última actualización:** 2026-05-23
-**Total de páginas:** 250
+**Última actualización:** 2026-05-28
+**Total de páginas:** 304
 
 ---
 
@@ -17,7 +17,8 @@
 | Componentes C4 L3 | 41 / ~47 | 🔄 Fases B1–B6 completas (Competencia + Registro + Torneo + Resultados + Identidad + Notificaciones); Fase C pendiente |
 | Decisiones (ADRs) | 22 / 22 | ✅ Ingest completo |
 | Trazabilidad (US) | 185 | ✅ SP1–SP7 + SP-ADJ-01 a SP-ADJ-11 completos; SP7 INC-7.1 + INC-7.2 documentados |
-| Trazabilidad (RF semilla) | 8 | 🔄 Ingest parcial (fuente 3/7) |
+| Trazabilidad (RF área) | 8 | ✅ 8 páginas de área — tablas con wikilinks `[[RF-XX-NN]]` navegables |
+| Trazabilidad (RF individual) | 54 | ✅ 54 páginas en `wiki/trazabilidad/rf/` — cadena RF→US→tests navegable |
 | Investigación | 5 | ✅ Ingest completo (HITOs + experimento) |
 | Conceptos de dominio | 16 | ✅ 9 originales + 7 nuevos (L6 lint-001 resuelto) |
 | Impacto | 4 | ✅ 4 páginas de análisis (L5 lint-001 resuelto) |
@@ -70,16 +71,38 @@
 
 ### Semilla de requerimientos funcionales (por área)
 
-| Página | Área | Pendientes |
-|--------|------|-----------|
-| [[RF-gestion-torneo]] | Gestión del torneo | 0 |
-| [[RF-inscripcion-atletas]] | Inscripción de atletas | 1 (RF-IN-07) |
-| [[RF-preparacion]] | Preparación de competencias | 0 |
-| [[RF-ejecucion]] | Ejecución de competencias | 1 (RF-EJ-04 códigos de penalización) |
-| [[RF-resultados]] | Premiación y resultados | 1 (RF-PM-01 sistema de puntos) |
-| [[RF-usuarios-roles]] | Usuarios, roles y permisos | 0 |
-| [[RF-notificaciones]] | Notificaciones | 1 (RF-NT-03) |
-| [[RF-integracion]] | Integración con sistemas externos | 4 (toda el área pendiente) |
+Páginas de área — tabla navegable con `[[rf/RF-XX-NN|RF-XX-NN]]` → página individual RF → US → tests.
+
+| Página | Área | RFs | Pendientes |
+|--------|------|-----|-----------|
+| [[RF-gestion-torneo]] | Gestión del torneo | 7 | 0 |
+| [[RF-inscripcion-atletas]] | Inscripción de atletas | 10 | 1 (RF-IN-07) |
+| [[RF-preparacion]] | Preparación de competencias | 8 | 0 |
+| [[RF-ejecucion]] | Ejecución de competencias | 10 | 1 (RF-EJ-04 códigos de penalización) |
+| [[RF-resultados]] | Premiación y resultados | 6 | 1 (RF-PM-01 sistema de puntos) |
+| [[RF-usuarios-roles]] | Usuarios, roles y permisos | 5 | 0 |
+| [[RF-notificaciones]] | Notificaciones | 4 | 1 (RF-NT-03) |
+| [[RF-integracion]] | Integración con sistemas externos | 4 | 4 (toda el área pendiente) |
+
+### Requerimientos funcionales individuales (por RF)
+
+54 páginas en `wiki/trazabilidad/rf/`. Cada página: RF → US que lo implementa → test_units.
+
+**RF-EJ (Ejecución):** [[RF-EJ-01]] · [[RF-EJ-02]] · [[RF-EJ-03]] · [[RF-EJ-04]] · [[RF-EJ-05]] · [[RF-EJ-06]] · [[RF-EJ-07]] · [[RF-EJ-08]] · [[RF-EJ-09]] · [[RF-EJ-10]]
+
+**RF-GT (Gestión Torneo):** [[RF-GT-01]] · [[RF-GT-02]] · [[RF-GT-03]] · [[RF-GT-04]] · [[RF-GT-05]] · [[RF-GT-06]] · [[RF-GT-07]]
+
+**RF-IG (Integración):** [[RF-IG-01]] · [[RF-IG-02]] · [[RF-IG-03]] · [[RF-IG-04]]
+
+**RF-IN (Inscripción):** [[RF-IN-01]] · [[RF-IN-02]] · [[RF-IN-03]] · [[RF-IN-04]] · [[RF-IN-05]] · [[RF-IN-06]] · [[RF-IN-07]] · [[RF-IN-08]] · [[RF-IN-09]] · [[RF-IN-10]]
+
+**RF-NT (Notificaciones):** [[RF-NT-01]] · [[RF-NT-02]] · [[RF-NT-03]] · [[RF-NT-04]]
+
+**RF-PM (Premiación/Resultados):** [[RF-PM-01]] · [[RF-PM-02]] · [[RF-PM-03]] · [[RF-PM-04]] · [[RF-PM-05]] · [[RF-PM-06]]
+
+**RF-PR (Preparación):** [[RF-PR-01]] · [[RF-PR-02]] · [[RF-PR-03]] · [[RF-PR-04]] · [[RF-PR-05]] · [[RF-PR-06]] · [[RF-PR-07]] · [[RF-PR-08]]
+
+**RF-US (Usuarios/Roles):** [[RF-US-01]] · [[RF-US-02]] · [[RF-US-03]] · [[RF-US-04]] · [[RF-US-05]]
 
 ### Trazabilidad por US
 

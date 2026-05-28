@@ -31,7 +31,7 @@ Permite configurar el intervalo entre Official Tops (OT) de una competencia. Int
 
 | RF | Descripción |
 |----|-------------|
-| RF-PR-08 | Intervalo entre OTs configurable por competencia (P-02) |
+| [[RF-PR-08]] | Intervalo entre OTs configurable por competencia (P-02) |
 
 ## Comando principal
 

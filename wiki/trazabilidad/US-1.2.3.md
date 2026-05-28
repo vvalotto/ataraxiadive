@@ -31,7 +31,7 @@ Permite al juez registrar el resultado real (RP — Resultado de Performance) de
 
 | RF       | Descripción                                  |
 | -------- | -------------------------------------------- |
-| RF-EJ-05 | Cronometraje manual — juez ingresa el tiempo |
+| [[RF-EJ-05]] | Cronometraje manual — juez ingresa el tiempo |
 
 ## Comando principal
 

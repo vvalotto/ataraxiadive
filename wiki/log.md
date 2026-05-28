@@ -6,6 +6,36 @@
 
 ---
 
+## [2026-05-28] ingest | Trazabilidad RF individual — 54 páginas RF-XX-NN + wikilinks en tablas de área
+
+Operación: crear páginas individuales por RF para habilitar navegación RF → US → tests.
+
+**Archivos creados:** 54 páginas en `wiki/trazabilidad/rf/RF-XX-NN.md`
+- Tipo: `trazabilidad-rf-item` (nuevo tipo declarado en WIKI.md)
+- Frontmatter: `rf_id`, `area`, `parent_page`, `us_refs`, `estado` (implementado | sin-us)
+- Cuerpo: pregunta + respuesta del RF + US que lo implementan + test_units por US
+
+**Archivos modificados:** 8 páginas RF de área (`wiki/trazabilidad/RF-*.md`)
+- IDs en tabla convertidos a `[[rf/RF-XX-NN|RF-XX-NN]]` — 58 referencias actualizadas
+
+**Archivos modificados (schema/índice):**
+- `WIKI.md` — nuevo tipo `trazabilidad-rf-item` documentado
+- `wiki/index.md` — nueva sección RF individual + total de páginas: 250 → 304
+
+**Distribución de estado:**
+- implementado: 43 RF (tienen al menos una US)
+- sin-us: 11 RF (backlog o pendiente de elicitación)
+  - RF-EJ-03, RF-EJ-09 (sin US mapeada en frontmatter)
+  - RF-GT-06 (sin US)
+  - RF-IG-01..04 (toda el área pendiente)
+  - RF-IN-05, RF-IN-06 (sin US)
+  - RF-NT-02 (sin US)
+  - RF-PM-04 (sin US)
+
+**Cadena habilitada:** `[[RF-gestion-torneo]]` → `[[RF-GT-01]]` → `[[US-3.1.1]]` → `test_units`
+
+---
+
 ## [2026-05-23] ingest | Fase C plan-trazabilidad-rf-us-si-tu — us_refs: en 8 páginas RF
 
 Script: `poblar_us_refs.py`
@@ -556,3 +586,9 @@ Páginas de vistas (6) creadas con propósito, stakeholders y recorridos.
 
 **Próximo paso:** Fase 0 — Preparación (resolver gaps G-01, G-02, G-03 en branch develop)
 **Luego:** Fase 1 — Ingest fundacional (docs/dominio/, docs/adr/, docs/architecture/)
+
+## [2026-05-24] graphify | src/ — AST extraction
+Graphify v0.8.18 instalado. Extracción AST (Tree-sitter, sin LLM) sobre src/.
+3114 nodos · 21681 edges · 231 comunidades. God nodes: Disciplina (621) · EventStorePort (375) · Performance (241).
+Skill instalado en .claude/ + CLAUDE.md. Página wiki: wiki/impacto/graphify-graph-report.md.
+Extracción semántica pendiente (requiere ANTHROPIC_API_KEY en terminal local).

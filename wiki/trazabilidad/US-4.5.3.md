@@ -31,7 +31,7 @@ Implementa la política P-10: cuando se confirma una inscripción, el sistema en
 
 ## RFs cubiertos
 
-RF-NT-01 · RF-NT-03
+[[RF-NT-01]] · [[RF-NT-03]]
 
 ## Contenido implementado
 

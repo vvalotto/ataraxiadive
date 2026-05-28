@@ -32,7 +32,7 @@ Implementa la política P-11: cuando se publican los resultados de una disciplin
 
 | RF | Descripción |
 |----|-------------|
-| RF-NT-04 | Notificar a atletas cuando se publican resultados finales |
+| [[RF-NT-04]] | Notificar a atletas cuando se publican resultados finales |
 
 ## Contenido implementado
 

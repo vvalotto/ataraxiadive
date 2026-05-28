@@ -32,7 +32,7 @@ Expone el ranking overall del torneo vía endpoint REST, permitiendo consultar e
 
 | RF | Descripción |
 |----|-------------|
-| RF-PM-06 | Publicación en plataforma + descarga |
+| [[RF-PM-06]] | Publicación en plataforma + descarga |
 
 ## Contenido implementado
 

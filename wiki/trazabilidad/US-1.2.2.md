@@ -31,7 +31,7 @@ Inicia el turno de un atleta en la grilla. Marca el inicio del OT (Official Top)
 
 | RF | Descripción |
 |----|-------------|
-| RF-EJ-02 | DNS = descalificación inmediata, sin espera (P-07, INV-P-08) |
+| [[RF-EJ-02]] | DNS = descalificación inmediata, sin espera (P-07, INV-P-08) |
 
 ## Comando principal
 

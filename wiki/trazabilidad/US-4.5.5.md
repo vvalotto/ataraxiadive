@@ -28,7 +28,7 @@ Conecta la política P-10 ([[US-4.5.3]]) al flujo real de inscripción: enriquec
 
 ## RFs cubiertos
 
-RF-NT-01
+[[RF-NT-01]]
 
 ## Contenido implementado
 

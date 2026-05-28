@@ -32,9 +32,9 @@ Protege todos los endpoints de escritura (POST/PUT/PATCH/DELETE) con validación
 
 | RF | Descripción |
 |----|-------------|
-| RF-US-02 | Un usuario puede tener múltiples roles |
-| RF-US-03 | Autenticación mail + contraseña |
-| RF-US-04 | Juez asignado a disciplina específica |
+| [[RF-US-02]] | Un usuario puede tener múltiples roles |
+| [[RF-US-03]] | Autenticación mail + contraseña |
+| [[RF-US-04]] | Juez asignado a disciplina específica |
 
 ## Contenido implementado
 

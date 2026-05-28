@@ -19,18 +19,18 @@ Requerimientos funcionales del área de inscripción. Fuente: elicitación inici
 
 ## Requerimientos definidos
 
-| ID | Requerimiento | Respuesta / Regla |
-|----|--------------|-------------------|
-| RF-IN-01 | ¿Las categorías son fijas o configurables? | Hoy fijas; debería ser configurable (ej: senior masculino 18-50). |
-| RF-IN-02 | ¿El brevet es obligatorio? | **No.** |
-| RF-IN-03 | ¿Hay límite de atletas por torneo o disciplina? | **No.** |
-| RF-IN-04 | ¿Un atleta puede cancelar su inscripción? | **Sí,** hasta el día anterior a la competencia. |
-| RF-IN-05 | ¿Se requiere apto médico? | **Sí.** |
-| RF-IN-06 | ¿La inscripción tiene costo? | **Sí.** Se pide constancia de pago (no gestión de pagos). |
-| RF-IN-07 | ¿Cómo se resuelve un conflicto con datos de BD externa? | **Pendiente de definición.** |
-| RF-IN-08 | ¿El género tiene efecto más allá de la categoría? | **Solo categoría.** |
-| RF-IN-09 | ¿Un atleta puede inscribirse en categorías distintas por disciplina? | **No.** Una categoría por torneo. |
-| RF-IN-10 | ¿El club del atleta es obligatorio? | **Sí.** Debe reflejarse en grillas y reportes. |
+| ID           | Requerimiento                                                        | Respuesta / Regla                                                 |
+| ------------ | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| [[RF-IN-01]] | ¿Las categorías son fijas o configurables?                           | Hoy fijas; debería ser configurable (ej: senior masculino 18-50). |
+| [[RF-IN-02]] | ¿El brevet es obligatorio?                                           | **No.**                                                           |
+| [[RF-IN-03]] | ¿Hay límite de atletas por torneo o disciplina?                      | **No.**                                                           |
+| [[RF-IN-04]] | ¿Un atleta puede cancelar su inscripción?                            | **Sí,** hasta el día anterior a la competencia.                   |
+| [[RF-IN-05]] | ¿Se requiere apto médico?                                            | **Sí.**                                                           |
+| [[RF-IN-06]] | ¿La inscripción tiene costo?                                         | **Sí.** Se pide constancia de pago (no gestión de pagos).         |
+| [[RF-IN-07]] | ¿Cómo se resuelve un conflicto con datos de BD externa?              | **Pendiente de definición.**                                      |
+| [[RF-IN-08]] | ¿El género tiene efecto más allá de la categoría?                    | **Solo categoría.**                                               |
+| [[RF-IN-09]] | ¿Un atleta puede inscribirse en categorías distintas por disciplina? | **No.** Una categoría por torneo.                                 |
+| [[RF-IN-10]] | ¿El club del atleta es obligatorio?                                  | **Sí.** Debe reflejarse en grillas y reportes.                    |
 
 ## Reglas de negocio clave
 
@@ -45,7 +45,7 @@ Requerimientos funcionales del área de inscripción. Fuente: elicitación inici
 
 | ID | Pendiente | Clasificación |
 |----|-----------|---------------|
-| RF-IN-07 | Resolución de conflictos entre datos ingresados y BD externa de atletas | **Indefinido** — depende de definir RF-IG-01 (¿existe BD externa FAAS? ¿qué protocolo?) |
+| [[RF-IN-07]] | Resolución de conflictos entre datos ingresados y BD externa de atletas | **Indefinido** — depende de definir RF-IG-01 (¿existe BD externa FAAS? ¿qué protocolo?) |
 
 ## Estado de implementación (lint-001)
 

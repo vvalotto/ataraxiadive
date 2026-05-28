@@ -36,14 +36,14 @@ Expone el aggregate Torneo vía API REST con endpoints de CRUD y los 7 endpoints
 
 ## RFs cubiertos
 
-| RF | Descripción |
-|----|-------------|
-| RF-GT-01 | Un torneo tiene una sola sede |
-| RF-GT-02 | Disciplinas configurables |
-| RF-GT-03 | Múltiples torneos activos simultáneamente |
-| RF-GT-04 | Cancelar = estado Cancelado, datos preservados |
-| RF-GT-05 | Restricciones de transición entre fases |
-| RF-GT-07 | Registrar EntidadOrganizadora |
+| RF       | Descripción                                    |
+| -------- | ---------------------------------------------- |
+| [[RF-GT-01]] | Un torneo tiene una sola sede                  |
+| [[RF-GT-02]] | Disciplinas configurables                      |
+| [[RF-GT-03]] | Múltiples torneos activos simultáneamente      |
+| [[RF-GT-04]] | Cancelar = estado Cancelado, datos preservados |
+| [[RF-GT-05]] | Restricciones de transición entre fases        |
+| [[RF-GT-07]] | Registrar EntidadOrganizadora                  |
 
 ## Contenido implementado
 

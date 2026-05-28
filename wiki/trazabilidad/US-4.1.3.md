@@ -25,7 +25,7 @@ Agrega las cuatro variantes de la disciplina SPE (Static Pool Equipment) según 
 
 | RF | Descripción |
 |----|-------------|
-| RF-GT-02 | Disciplinas configurables — variantes SPE |
+| [[RF-GT-02]] | Disciplinas configurables — variantes SPE |
 
 ## Contenido implementado
 

@@ -35,12 +35,12 @@ Implementa la ACL que permite crear automáticamente una `Competencia` por cada 
 
 | RF | Descripción |
 |----|-------------|
-| RF-IN-01 | Categorías configurables por edad y género |
-| RF-IN-02 | Brevet no obligatorio |
-| RF-IN-03 | Sin límite de atletas |
-| RF-IN-04 | Cancelar inscripción hasta el día anterior |
-| RF-GT-02 | Disciplinas configurables |
-| RF-GT-03 | Múltiples torneos activos simultáneamente |
+| [[RF-IN-01]] | Categorías configurables por edad y género |
+| [[RF-IN-02]] | Brevet no obligatorio |
+| [[RF-IN-03]] | Sin límite de atletas |
+| [[RF-IN-04]] | Cancelar inscripción hasta el día anterior |
+| [[RF-GT-02]] | Disciplinas configurables |
+| [[RF-GT-03]] | Múltiples torneos activos simultáneamente |
 
 ## Contenido implementado
 

@@ -30,7 +30,7 @@ Implementa la política P-09: cuando el torneo pasa a estado `CERRADO`, el siste
 
 | RF | Descripción |
 |----|-------------|
-| RF-PM-05 | Rankings por categoría y género |
+| [[RF-PM-05]] | Rankings por categoría y género |
 
 ## Contenido implementado
 

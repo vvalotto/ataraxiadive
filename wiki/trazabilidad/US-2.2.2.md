@@ -30,7 +30,7 @@ Hace que la API de competencia comprenda la disciplina activa: valida que las un
 
 | RF | Descripción |
 |----|-------------|
-| RF-EJ-08 | Distancia con decimales (metros) / tiempo según disciplina |
+| [[RF-EJ-08]] | Distancia con decimales (metros) / tiempo según disciplina |
 
 ## Contenido implementado
 

@@ -34,9 +34,9 @@ Agrega el campo `torneo_id` opcional al aggregate `Competencia`, habilitando la 
 
 | RF | Descripción |
 |----|-------------|
-| RF-PM-01 | Fórmula de puntos configurable por torneo |
-| RF-PM-02 | Overall = ranking general multi-disciplina por categoría |
-| RF-PM-05 | Rankings por categoría y género |
+| [[RF-PM-01]] | Fórmula de puntos configurable por torneo |
+| [[RF-PM-02]] | Overall = ranking general multi-disciplina por categoría |
+| [[RF-PM-05]] | Rankings por categoría y género |
 
 ## Contenido implementado
 

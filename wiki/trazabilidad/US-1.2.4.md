@@ -31,7 +31,7 @@ Permite al juez asignar tarjeta blanca (actuación válida) o roja (descalificac
 
 | RF | Descripción |
 |----|-------------|
-| RF-EJ-10 | Solo se registra resultado de tarjeta (no el SP en sí) |
+| [[RF-EJ-10]] | Solo se registra resultado de tarjeta (no el SP en sí) |
 
 ## Comando principal
 

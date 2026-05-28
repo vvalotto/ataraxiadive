@@ -31,7 +31,7 @@ Construye los modelos de lectura necesarios para que el juez opere en tiempo rea
 
 | RF | Descripción |
 |----|-------------|
-| RF-EJ-05 | Cronometraje manual — juez ingresa el tiempo |
+| [[RF-EJ-05]] | Cronometraje manual — juez ingresa el tiempo |
 
 ## Read Models implementados
 

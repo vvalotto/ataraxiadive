@@ -23,13 +23,13 @@ Para trazabilidad vigente hacia USs ver `docs/traceability/matrix.md` (pendiente
 
 | ID | Requerimiento | Respuesta / Regla |
 |----|--------------|-------------------|
-| RF-GT-01 | ¿Un torneo puede tener más de una sede? | **No.** Una sede por torneo. |
-| RF-GT-02 | ¿Qué disciplinas soporta el sistema? | **Configurable.** Inicialmente: STA, DNF, DBF, DYN, SPE. |
-| RF-GT-03 | ¿Pueden existir múltiples torneos activos simultáneamente? | **Sí.** |
-| RF-GT-04 | ¿Qué significa cancelar un torneo? | Estado cancelado conservando la información (no se elimina). |
-| RF-GT-05 | ¿Hay restricciones para transición entre fases? | **Sí.** Se puede volver de etapas (ej: Ejecución → Preparación). |
-| RF-GT-06 | ¿El cierre implica archivo o exportación? | **No.** |
-| RF-GT-07 | ¿Se registra la entidad organizadora (federación/club)? | **Sí.** Además del organizador como persona. |
+| [[RF-GT-01]] | ¿Un torneo puede tener más de una sede? | **No.** Una sede por torneo. |
+| [[RF-GT-02]] | ¿Qué disciplinas soporta el sistema? | **Configurable.** Inicialmente: STA, DNF, DBF, DYN, SPE. |
+| [[RF-GT-03]] | ¿Pueden existir múltiples torneos activos simultáneamente? | **Sí.** |
+| [[RF-GT-04]] | ¿Qué significa cancelar un torneo? | Estado cancelado conservando la información (no se elimina). |
+| [[RF-GT-05]] | ¿Hay restricciones para transición entre fases? | **Sí.** Se puede volver de etapas (ej: Ejecución → Preparación). |
+| [[RF-GT-06]] | ¿El cierre implica archivo o exportación? | **No.** |
+| [[RF-GT-07]] | ¿Se registra la entidad organizadora (federación/club)? | **Sí.** Además del organizador como persona. |
 
 ## Reglas de negocio clave
 

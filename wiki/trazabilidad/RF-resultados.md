@@ -23,12 +23,12 @@ Requerimientos funcionales del área de resultados. Fuente: elicitación inicial
 
 | ID | Requerimiento | Respuesta / Regla |
 |----|--------------|-------------------|
-| RF-PM-01 | ¿Los resultados son por puntos o por marca absoluta? | **Pendiente.** Es una regla de negocio configurable. |
-| RF-PM-02 | ¿Existe ranking general del torneo? | **Sí.** Se denomina **Overall**. |
-| RF-PM-03 | ¿Cómo se resuelven los empates? | Mismo puesto y mismos puntos. |
-| RF-PM-04 | ¿Los certificados requieren logos/firmas específicas? | No es importante en esta etapa. |
-| RF-PM-05 | ¿Hay rankings separados por categoría y género? | **Sí.** Rankings por [[disciplina]], categoría y género. |
-| RF-PM-06 | ¿Cómo se publican los resultados? | En la plataforma; descargables. |
+| [[RF-PM-01]] | ¿Los resultados son por puntos o por marca absoluta? | **Pendiente.** Es una regla de negocio configurable. |
+| [[RF-PM-02]] | ¿Existe ranking general del torneo? | **Sí.** Se denomina **Overall**. |
+| [[RF-PM-03]] | ¿Cómo se resuelven los empates? | Mismo puesto y mismos puntos. |
+| [[RF-PM-04]] | ¿Los certificados requieren logos/firmas específicas? | No es importante en esta etapa. |
+| [[RF-PM-05]] | ¿Hay rankings separados por categoría y género? | **Sí.** Rankings por [[disciplina]], categoría y género. |
+| [[RF-PM-06]] | ¿Cómo se publican los resultados? | En la plataforma; descargables. |
 
 ## Reglas de negocio clave
 
@@ -41,7 +41,7 @@ Requerimientos funcionales del área de resultados. Fuente: elicitación inicial
 
 | ID | Pendiente | Clasificación |
 |----|-----------|---------------|
-| RF-PM-01 | Sistema de puntos vs marca absoluta — regla de negocio configurable no definida | **Backlog activo** — la decisión de diseño es pendiente; el algoritmo FAAS existe |
+| [[RF-PM-01]] | Sistema de puntos vs marca absoluta — regla de negocio configurable no definida | **Backlog activo** — la decisión de diseño es pendiente; el algoritmo FAAS existe |
 
 ## Estado de implementación (lint-001)
 

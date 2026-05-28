@@ -44,7 +44,7 @@ El área de ejecución concentra las reglas más complejas del dominio: tarjetas
 **Recorrido (estado actual):**
 [[RF-ejecucion]] → [[performance]] → [[tarjeta]] → [[arquitectura/competencia]] → [[ADR-014-penalizaciones-acumulables]]
 
-**Recorrido completo (disponible en Fase 3):**
+**Recorrido completo:**
 [[RF-ejecucion]] → `US-X.Y.Z` → código en `src/competencia/` → tests en `tests/features/` → reporte de cierre
 
 **Requerimiento pendiente de elicitación:** RF-EJ-04 (códigos de penalización AIDA/CMAS).
@@ -272,4 +272,4 @@ SORT test_coverage ASC
 | [[RF-ejecucion]] | Área más compleja; concentra reglas de negocio del Core Domain |
 | [[arquitectura/competencia]] | Implementa la mayoría de los RFs de ejecución y preparación |
 | [[arquitectura/context-map]] | Muestra qué BC implementa qué área |
-| `docs/traceability/matrix.md` | Fuente primaria de trazabilidad hasta que se complete Fase 3 |
+| `docs/traceability/matrix.md` | Fuente primaria original — cadena RF→US→SI→TU ahora en el wiki (177 US) |

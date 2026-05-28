@@ -31,7 +31,7 @@ Permite que varios atletas compitan en paralelo en andariveles separados, distri
 
 | RF | Descripción |
 |----|-------------|
-| RF-PR-06 | Andariveles simultáneos — varios atletas compiten en paralelo |
+| [[RF-PR-06]] | Andariveles simultáneos — varios atletas compiten en paralelo |
 
 ## Contenido implementado
 

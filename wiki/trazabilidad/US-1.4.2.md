@@ -33,8 +33,8 @@ Valida el flujo completo de una competencia de punta a punta e introduce el endp
 
 | RF | Descripción |
 |----|-------------|
-| RF-EJ-05 | Cronometraje manual — juez ingresa el tiempo |
-| RF-EJ-10 | Solo se registra resultado de tarjeta |
+| [[RF-EJ-05]] | Cronometraje manual — juez ingresa el tiempo |
+| [[RF-EJ-10]] | Solo se registra resultado de tarjeta |
 
 ## Contenido implementado
 

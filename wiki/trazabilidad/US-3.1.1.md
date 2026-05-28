@@ -36,11 +36,11 @@ Introduce el BC Torneo con su aggregate principal: `Torneo` con máquina de esta
 
 | RF | Descripción |
 |----|-------------|
-| RF-GT-01 | Un torneo tiene una sola sede |
-| RF-GT-03 | Múltiples torneos activos simultáneamente |
-| RF-GT-04 | Cancelar = estado Cancelado, datos preservados |
-| RF-GT-05 | Restricciones de transición entre fases (con retroceso Ejecución → Preparación) |
-| RF-GT-07 | Registrar EntidadOrganizadora (federación/club) |
+| [[RF-GT-01]] | Un torneo tiene una sola sede |
+| [[RF-GT-03]] | Múltiples torneos activos simultáneamente |
+| [[RF-GT-04]] | Cancelar = estado Cancelado, datos preservados |
+| [[RF-GT-05]] | Restricciones de transición entre fases (con retroceso Ejecución → Preparación) |
+| [[RF-GT-07]] | Registrar EntidadOrganizadora (federación/club) |
 
 ## Contenido implementado
 

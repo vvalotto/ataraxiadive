@@ -32,8 +32,8 @@ Genera el orden de salida de los atletas según el AP declarado. La grilla puede
 
 | RF | Descripción |
 |----|-------------|
-| RF-PR-04 | Atleta sin AP no compite — no aparece en grilla (P-05) |
-| RF-PR-05 | Orden de grilla: AP ascendente (DNF/DYN/DBF/STA) o descendente (SPE) |
+| [[RF-PR-04]] | Atleta sin AP no compite — no aparece en grilla (P-05) |
+| [[RF-PR-05]] | Orden de grilla: AP ascendente (DNF/DYN/DBF/STA) o descendente (SPE) |
 
 ## Comandos principales
 
