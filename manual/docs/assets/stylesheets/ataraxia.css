@@ -21,3 +21,8 @@
 .md-content img[alt*="resultados"] {
   max-width: 700px;
 }
+
+/* Screenshots del portal organizador — todos son desktop */
+.md-content img[src*="portal-organizador"] {
+  max-width: 700px;
+}
