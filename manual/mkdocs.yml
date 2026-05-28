@@ -1,0 +1,62 @@
+site_name: AtaraxiaDive — Manual de Usuario
+site_description: Guía completa para organizadores, atletas, jueces y visitantes de la plataforma AtaraxiaDive
+site_url: https://ataraxiadive.github.io/manual/
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: es
+  palette:
+    - scheme: slate
+      primary: custom
+      accent: custom
+  custom_dir: docs/overrides
+  font:
+    text: Inter
+    code: JetBrains Mono
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.tooltips
+
+extra_css:
+  - assets/stylesheets/ataraxia.css
+
+nav:
+  - Inicio: index.md
+  - Portal Público:
+    - portal-publico/index.md
+    - Explorar torneos: portal-publico/explorar-torneos.md
+    - Ver resultados y podios: portal-publico/ver-resultados.md
+    - Crear tu cuenta: portal-publico/crear-cuenta.md
+    - Iniciar sesión: portal-publico/iniciar-sesion.md
+    - Recuperar contraseña: portal-publico/recuperar-password.md
+  - Portal Organizador:
+    - portal-organizador/index.md
+    - Crear y configurar un torneo: portal-organizador/crear-torneo.md
+    - Gestionar competencias: portal-organizador/gestionar-competencias.md
+    - Administrar inscriptos: portal-organizador/inscriptos.md
+    - Asignar jueces: portal-organizador/jueces.md
+    - Manejar la grilla: portal-organizador/grilla.md
+    - Publicar resultados: portal-organizador/resultados.md
+    - Ver podios: portal-organizador/podios.md
+    - Auditoría: portal-organizador/auditoria.md
+    - Mis datos: portal-organizador/mis-datos.md
+  - Portal Atleta:
+    - portal-atleta/index.md
+    - Inscribirse a un torneo: portal-atleta/inscribirse.md
+    - Declarar mi AP: portal-atleta/declarar-ap.md
+    - Ver mi grilla: portal-atleta/mi-grilla.md
+    - Ver mis resultados: portal-atleta/mis-resultados.md
+    - Cancelar inscripción: portal-atleta/cancelar-inscripcion.md
+    - Mis datos: portal-atleta/mis-datos.md
+  - Portal Juez:
+    - portal-juez/index.md
+    - Registrar una performance: portal-juez/registrar-performance.md
+    - Ver la grilla: portal-juez/grilla.md
+    - Mis datos: portal-juez/mis-datos.md
