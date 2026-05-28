@@ -40,13 +40,3 @@ Desde el panel lateral podés cambiar el estado de aceptación de cada inscripci
 
 El badge de estado (ACEPTADO / RECHAZADO) se actualiza inmediatamente en la tabla.
 
-## Ingresar o modificar el AP
-
-Si necesitás corregir el AP de un atleta mientras las inscripciones están abiertas, podés editarlo directamente en la celda de la columna **Anuncio**:
-
-1. Hacé clic en la celda del AP de la disciplina correspondiente
-2. Ingresá el valor (formato `mm:ss` para tiempos como STA/SPE, metros con coma decimal para DYN/DNF/DBF, ej: `2:30`, `80,5`)
-3. El valor se guarda automáticamente
-
-!!! warning "El AP solo se puede modificar con inscripciones abiertas"
-    Una vez que el torneo pasa a **Preparación**, los AP quedan fijos para la generación de la grilla.
