@@ -1,48 +1,42 @@
-# Publicar resultados
+# Ver resultados
 
-La sección **Resultados** muestra la tabla de resultados completa por disciplina, incluyendo tarjetas, RP y penalizaciones.
+La sección **Resultados** muestra el ranking por disciplina con todas las performances, tarjetas y RP finales.
 
-## Ver los resultados por disciplina
+## Seleccionar la disciplina
 
-Seleccioná el torneo y luego usá las solapas para elegir la disciplina. La tabla muestra a todos los atletas de la grilla con:
+Usá las pestañas (**DBF**, **DNF**, **DYN**, **STA**) para ver el ranking de cada disciplina. El encabezado muestra cuántas disciplinas están cerradas (ej: "Ranking parcial · 1 de 4 disciplinas cerradas").
+
+## La tabla de resultados
+
+La tabla está ordenada por OT (orden de ejecución) y muestra:
 
 | Columna | Descripción |
 |---------|-------------|
-| **And.** | Andarivel asignado |
-| **Atleta** | Apellido y nombre |
-| **Anuncio** | AP declarada (Announced Performance) |
-| **Performance** | RP lograda (Realized Performance) |
-| **Tarjeta** | Resultado de la performance: blanca, blanca con penalizaciones, amarilla en revisión o roja |
-| **Categoría** | Grupo etario y género |
+| **#OT** | Posición en el orden de salida |
+| **Nombre** | Nombre del atleta |
+| **Gén.** | Género (M / F) |
+| **Categoría** | Grupo etario |
+| **Club** | Club del atleta |
+| **Anuncio** | AP declarada |
+| **OT** | Hora del Official Top |
+| **Línea** | Andarivel |
+| **Performance** | RP logrado — en rojo si está cerca o por debajo del AP |
+| **Tarjeta** | Resultado de la performance |
+
+![Tabla de resultados de la disciplina DBF](../assets/screenshots/portal-organizador/resultados.png)
 
 ### Tipos de tarjeta
 
 | Tarjeta | Significado |
 |---------|-------------|
 | **Blanca** | Performance válida sin infracciones |
-| **Blanca + penaliz.** | Performance válida con infracciones técnicas; RP final = RP medido − penalizaciones |
-| **Amarilla** | En revisión — se resolverá como blanca, blanca con penalizaciones o roja |
-| **Roja** | Descalificación; se muestra el motivo |
-| **DNS** | El atleta no se presentó al Official Top |
+| **Blanca + penaliz.** | Válida con infracciones técnicas; RP final = RP medido − penalizaciones |
+| **Roja** | Descalificación — se muestra el motivo (ej: "Blackout superficie") |
+| **DNS** | El atleta no se presentó al OT |
 
-### Penalizaciones
+## Publicar resultados
 
-Si un atleta recibió penalizaciones, la columna de Performance muestra el RP medido y el descuento aplicado (ej: `−3m`). El RP final ya está calculado en la columna **Performance**.
+Cuando querés que los resultados de una disciplina sean visibles en el portal público, hacé clic en **Publicar resultados** en la esquina superior derecha. Esto actualiza la vista pública en tiempo real.
 
-### Motivo de descalificación
-
-Cuando la tarjeta es roja, la columna **Tarjeta** muestra el código de descalificación:
-
-- `BKO_SUPERFICIE` — black-out en superficie
-- `BKO_SUBACUATICO` — black-out subacuático
-- `NO_PROTOCOLO` — incumplimiento de protocolo
-- `INFRACCION_TECNICA` — infracción técnica
-- `NO_INICIO_VENTANA` — no inició dentro de la ventana OT
-- `SALIDA_FALSO` — salida en falso
-
-## Disponibilidad de resultados
-
-Los resultados aparecen en tiempo real durante la **Ejecución** y se finalizan al pasar a **Premiación**. También están disponibles con el torneo en **Cerrado**.
-
-!!! info "Vista pública"
-    Los resultados también son visibles para cualquier visitante en el [portal público](../portal-publico/ver-resultados.md), en tiempo real durante la ejecución.
+!!! info "Resultados en tiempo real"
+    Durante la ejecución, los resultados de las disciplinas finalizadas aparecen automáticamente en el portal público sin necesidad de publicación manual.

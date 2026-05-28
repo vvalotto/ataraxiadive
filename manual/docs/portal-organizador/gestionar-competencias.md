@@ -1,39 +1,36 @@
-# Gestionar el torneo activo (Panel)
+# Gestionar el torneo activo
 
-El **Panel** es la vista central desde donde controlás el ciclo de vida del torneo: avanzás entre estados, revisás disciplinas y manejás las transiciones de fase.
+El portal organizador tiene dos secciones para gestionar el torneo: **Torneo** (estado y datos) y **Panel** (seguimiento operativo durante la ejecución).
 
-## Seleccionar el torneo activo
+---
 
-Al entrar al **Panel**, si todavía no seleccionaste un torneo, la plataforma te muestra un selector. Elegí el torneo con el que querés trabajar — el torneo queda "activo" y todas las secciones (Inscriptos, Grilla, Jueces, etc.) operan sobre él.
+## Sección Torneo — estado y transiciones
 
-## Datos generales del torneo
+La sección **Torneo** es desde donde controlás el ciclo de vida: avanzás entre estados, revisás disciplinas y cancelás el torneo si es necesario.
 
-El panel muestra:
+![Panel del torneo activo con datos generales y disciplinas](../assets/screenshots/portal-organizador/torneo-activo.png)
 
-- **Nombre del torneo**
-- **Fecha de inicio**
-- **Sede**
-- **Estado actual** — con un selector para avanzar al siguiente estado
+### Datos generales
+
+La columna izquierda muestra:
+
+- **Nombre del torneo**, fecha y sede
+- **Estado** — con un selector para avanzar al siguiente estado
 - **Ciudad y país**
-- **Categorías** (JUNIOR / SENIOR / MASTER)
+- **Categorías** habilitadas (JUNIOR / SENIOR / MASTER)
 
-## Disciplinas
+### Disciplinas
 
 La columna derecha lista las disciplinas del torneo con su estado:
 
-| Estado de disciplina | Significado |
-|----------------------|-------------|
-| **Pendiente** | La competencia aún no fue creada (ocurre automáticamente al generar la grilla) |
-| **Activa** | La competencia está en ejecución (el juez está registrando performances) |
+| Estado | Significado |
+|--------|-------------|
+| **Activa** | La competencia está en ejecución |
 | **Cerrada** | La competencia finalizó — resultados disponibles |
 
-Cada tarjeta de disciplina también indica si tiene juez asignado o no.
+### Avanzar el estado del torneo
 
-## Avanzar el estado del torneo
-
-Usá el selector de **Estado** en la sección "Datos generales" para seleccionar el próximo estado y luego hacé clic en **Guardar cambios**.
-
-Las transiciones posibles son:
+Seleccioná el próximo estado en el selector y hacé clic en **Guardar cambios**.
 
 | Desde | Hacia |
 |-------|-------|
@@ -44,11 +41,40 @@ Las transiciones posibles son:
 | Premiación | Cerrado |
 
 !!! warning "Condición para pasar a Premiación"
-    La transición a **Premiación** solo se habilita cuando **todas las disciplinas tienen su competencia cerrada**. Si alguna sigue activa, el panel te lo indica con un aviso en ámbar mostrando cuáles disciplinas faltan.
+    La transición solo se habilita cuando **todas las disciplinas tienen su competencia cerrada**. Si alguna sigue activa, aparece un aviso en ámbar indicando cuáles faltan (ej: "Falta cerrar 3 disciplinas: DNF, DYN, STA").
 
-## Cancelar un torneo
+### Cancelar un torneo
 
-En cualquier estado no terminal, podés cancelar el torneo usando el botón **Cancelar torneo** en la parte inferior del panel. El sistema te pedirá que escribas el nombre exacto del torneo para confirmar la acción.
+Al pie de la página está la **Zona de peligro**. Hacé clic en **Cancelar torneo** y confirmá escribiendo el nombre exacto del torneo.
 
 !!! danger "La cancelación es irreversible"
     Un torneo cancelado no puede volver a activarse.
+
+---
+
+## Sección Panel — seguimiento durante la ejecución
+
+Durante la **Ejecución**, la sección **Panel** muestra el estado operativo en tiempo real de la disciplina activa.
+
+![Panel operativo durante la ejecución](../assets/screenshots/portal-organizador/panel.png)
+
+### Pestañas por disciplina
+
+Cada disciplina del torneo tiene su propia pestaña. Al cambiar de pestaña ves las métricas y la cola de atletas de esa disciplina.
+
+### Métricas de la disciplina
+
+| Tarjeta | Descripción |
+|---------|-------------|
+| **Atletas totales** | Total de atletas en la grilla de esta disciplina |
+| **Completados** | Cuántos ya realizaron su performance |
+| **En revisión** | Alertas operativas pendientes de resolución |
+| **Tiempo estimado** | Tiempo restante estimado para cerrar la disciplina (hh:mm) |
+
+### Cola operativa
+
+La tabla **Próximos atletas** muestra a los siguientes en la grilla con su andarivel, hora de OT y AP declarada. Esta lista se actualiza automáticamente a medida que avanza la competencia.
+
+### Disciplina activa y progreso
+
+La columna derecha muestra el progreso de la disciplina activa (porcentaje de atletas completados) y las alertas operativas vigentes.

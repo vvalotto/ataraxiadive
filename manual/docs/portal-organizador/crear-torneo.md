@@ -4,6 +4,8 @@
 
 Desde el menú **Inicio**, hacé clic en **Nuevo torneo**. El formulario tiene tres secciones.
 
+![Formulario de nuevo torneo](../assets/screenshots/portal-organizador/nuevo-torneo.png)
+
 ### 1. Datos generales
 
 | Campo | Descripción |
@@ -32,7 +34,7 @@ Desde el menú **Inicio**, hacé clic en **Nuevo torneo**. El formulario tiene t
 
 **Categorías:** seleccioná las categorías del torneo — podés elegir **JUNIOR**, **SENIOR** y/o **MASTER**. Debés seleccionar al menos una.
 
-**Disciplinas:** seleccioná las disciplinas que se competirán. Las opciones disponibles incluyen STA, DYN, DNF, SPE y sus variantes. Las disciplinas se pueden editar después mientras el torneo esté en estado **Creado**.
+**Disciplinas:** seleccioná las disciplinas que se competirán. Las opciones disponibles son STA, DNF, DYN, DBF y las variantes SPE (2×50, 4×50, 8×50, 16×50). Las disciplinas se pueden editar después mientras el torneo esté en estado **Creado**.
 
 !!! warning "Las disciplinas no se pueden modificar una vez abierto el torneo"
     Una vez que el torneo pasa al estado **Inscripciones abiertas**, las disciplinas quedan fijas. Revisalas antes de abrir.
@@ -43,7 +45,7 @@ Hacé clic en **Crear Torneo** para guardar.
 
 ## Editar un torneo
 
-Mientras el torneo esté en estado **Creado** o **Inscripciones abiertas**, podés editar los datos generales. Desde el panel del torneo, hacé clic en el botón **Editar torneo** que aparece en la cabecera.
+Mientras el torneo esté en estado **Creado** o **Inscripciones abiertas**, podés editar los datos generales. Desde la sección **Torneo**, hacé clic en el botón **Editar torneo** que aparece en la cabecera.
 
 Para editar solo las disciplinas (solo disponible en estado **Creado**), hacé clic en **Editar disciplinas**.
 

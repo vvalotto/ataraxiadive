@@ -1,27 +1,42 @@
 # Auditoría (Audit Log)
 
-El **Audit Log** permite inspeccionar la trazabilidad de cada competencia: disciplinas, estados y el detalle de performances por atleta.
+El **Audit Log** permite inspeccionar la trazabilidad completa de cada competencia: resultados por atleta y el historial de eventos de cada performance.
 
-## Acceder al Audit Log
+## Nivel 1 — Lista de competencias
 
-Desde la barra de navegación del portal organizador, hacé clic en **Audit Log**. Seleccioná el torneo para ver la lista de competencias.
+La pantalla principal muestra una tarjeta por cada disciplina del torneo, con su ID de competencia y el botón **Ver auditoria**.
 
-## Lista de competencias
+![Audit Log principal con lista de disciplinas](../assets/screenshots/portal-organizador/auditoria-1.png)
 
-La pantalla muestra una tarjeta por cada disciplina del torneo, con:
+Hacé clic en **Ver auditoria** para entrar al detalle de esa disciplina.
 
-- Nombre de la disciplina
-- ID de la competencia
-- Estado actual de la competencia
-- Enlace para abrir la trazabilidad detallada
+## Nivel 2 — Resultados por atleta
 
-## Trazabilidad por competencia
+Dentro de una disciplina, el audit log muestra todos los atletas con su resultado final:
 
-Al hacer clic en una competencia, accedés a la vista de auditoría que muestra el historial de eventos de esa competencia:
+![Auditoria de la disciplina DBF con resultados por atleta](../assets/screenshots/portal-organizador/auditoria-2.png)
 
-- Lista de performances registradas
-- Estado de cada atleta (tarjeta, RP, DNS)
-- Eventos del sistema (inicio de ejecución, cierre)
+Cada fila indica:
+
+- **Atleta** — apellido y nombre, posición y andarivel
+- **Resultado final** — tarjeta asignada (Blanca, Roja, DNS) y estado de la performance (Ejecutada / DNS)
+
+Hacé clic en un atleta para ver la traza de eventos de su performance.
+
+## Nivel 3 — Traza de performance
+
+La vista de traza muestra el historial completo de eventos de un atleta en esa disciplina, en orden cronológico:
+
+![Traza de eventos de la performance de María de los Milagros Montangie](../assets/screenshots/portal-organizador/auditoria-3.png)
+
+Cada evento incluye su número, fecha y hora, y los datos relevantes:
+
+| Evento | Datos |
+|--------|-------|
+| **AP declarado** | Valor del AP y fecha de declaración |
+| **Atleta en llamada** | OT asignado, fecha y andarivel |
+| **Resultado registrado** | RP efectivo medido |
+| **Tarjeta asignada** | Tipo de tarjeta resultante |
 
 !!! info "Para qué sirve el Audit Log"
-    El Audit Log es una herramienta para resolver disputas y verificar que las performances quedaron registradas correctamente. No reemplaza los resultados oficiales — los resultados finales son los que se muestran en la sección **Resultados**.
+    El Audit Log es una herramienta para verificar y resolver disputas — permite confirmar que cada performance quedó registrada correctamente con su trazabilidad completa de eventos.
