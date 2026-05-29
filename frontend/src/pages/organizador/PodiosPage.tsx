@@ -233,7 +233,7 @@ function PodiosTorneo({ torneoId }: PodiosTorneoProps) {
     [disciplinas, rankingQueries, categoriaActiva, inscriptosPorAtleta],
   )
 
-  const subtitulo = torneo ? `${torneo.nombre} · ${torneo.sede.ciudad}` : 'Podios del torneo'
+
 
   return (
     <OrganizadorLayout

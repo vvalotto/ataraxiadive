@@ -13,7 +13,7 @@ import {
   type ProgresoCompetenciaDto,
   type ProximoAtletaDto,
 } from '../../api/competencia'
-import { fetchTorneo, type EstadoTorneo } from '../../api/torneo'
+import { fetchTorneo } from '../../api/torneo'
 import { EmptyStateCard } from '../../components/organizador/EmptyStateCard'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
 import { TorneoRouteSelector } from '../../components/organizador/TorneoRouteSelector'
@@ -95,24 +95,6 @@ function badgeClass(estado: EstadoCompetenciaNormalizado): string {
   return 'border-slate-600 bg-slate-800 text-slate-300'
 }
 
-function formatTorneoEstado(estado: EstadoTorneo): string {
-  switch (estado) {
-    case 'CREADO':
-      return 'Creado'
-    case 'INSCRIPCION_ABIERTA':
-      return 'Inscripcion abierta'
-    case 'PREPARACION':
-      return 'Preparacion'
-    case 'EJECUCION':
-      return 'En ejecucion'
-    case 'PREMIACION':
-      return 'Premiacion'
-    case 'CERRADO':
-      return 'Cerrado'
-    case 'CANCELADO':
-      return 'Cancelado'
-  }
-}
 
 function formatDurationMinutes(totalMinutes: number | null): string {
   if (totalMinutes === null || totalMinutes <= 0) return 'Sin ETA'

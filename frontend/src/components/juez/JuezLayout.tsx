@@ -1,7 +1,6 @@
 import { type ReactNode, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import useAuthStore from '../../stores/useAuthStore'
-import { SyncStatusBadge } from './SyncStatusBadge'
 
 interface JuezLayoutProps {
   title: string

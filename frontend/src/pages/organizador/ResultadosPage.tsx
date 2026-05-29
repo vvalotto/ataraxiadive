@@ -176,13 +176,6 @@ function ResultadosTorneo({ torneoId }: ResultadosTorneoProps) {
     grillaQuery.isLoading ||
     rankingQuery.isLoading
 
-  const subtitulo = torneo
-    ? `${torneo.nombre} · ${torneo.sede.ciudad}`
-    : 'Resultados por disciplina'
-  const estadoRankingLabel = overallDisponible ? 'Ranking final' : 'Ranking parcial'
-  const progresoLabel =
-    totalDisciplinas > 0 ? `${disciplinasCerradas} de ${totalDisciplinas} disciplinas cerradas` : null
-
   return (
     <OrganizadorLayout
       title="Resultados"

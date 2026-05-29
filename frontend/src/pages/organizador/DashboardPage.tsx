@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link, useLocation } from 'react-router-dom'
 import { fetchTorneos, type EstadoTorneo, type TorneoDto } from '../../api/torneo'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
-import useAuthStore from '../../stores/useAuthStore'
+
 
 const ESTADO_TORNEO_LABELS: Record<EstadoTorneo, string> = {
   CREADO: 'Creado',
@@ -135,7 +135,7 @@ function actionClass(estado: EstadoTorneo): string {
 
 export function DashboardPage() {
   const location = useLocation()
-  const logout = useAuthStore((s) => s.logout)
+
   const [filtro, setFiltro] = useState<FiltroTorneos>('vigentes')
   const torneosQuery = useQuery({
     queryKey: ['torneos-organizador'],
