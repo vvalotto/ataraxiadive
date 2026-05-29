@@ -60,11 +60,10 @@ export function AtletaShell({
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-400">
                   AtaraxiaDive
                 </p>
-                <span className="flex items-center gap-1 text-xs font-semibold text-emerald-400">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                  En línea
-                </span>
               </div>
+              <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-300/75">
+                Portal Atleta
+              </p>
               <h1 className="mt-2 text-xl font-semibold text-white">{title}</h1>
               {subtitle ? <p className="mt-1 text-sm text-slate-400">{subtitle}</p> : null}
             </div>

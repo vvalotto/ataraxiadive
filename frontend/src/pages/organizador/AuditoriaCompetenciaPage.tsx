@@ -86,15 +86,15 @@ export function AuditoriaCompetenciaPage() {
         title="Auditoria"
         subtitle="Faltan parametros de navegacion"
         activeTournamentId={torneoId}
-        actions={
+      >
+        <div className="flex justify-end">
           <Link
             to="/organizador/audit-log"
             className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
           >
             Volver
           </Link>
-        }
-      >
+        </div>
         <section className="rounded-[2rem] border border-red-300/60 bg-red-50 p-5 text-sm text-red-900">
           No se pudo determinar la disciplina de la competencia.
         </section>
@@ -107,15 +107,15 @@ export function AuditoriaCompetenciaPage() {
       title={`Auditoria - ${disciplina}`}
       activeTournamentId={torneoId}
       subtitle={`Disciplina ${disciplina}`}
-      actions={
+    >
+      <div className="flex justify-end">
         <Link
           to={torneoId ? `/organizador/audit-log?torneo_id=${torneoId}` : '/organizador/audit-log'}
           className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
         >
           Volver a Audit Log
         </Link>
-      }
-    >
+      </div>
       <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">
         Vista contextual de auditoria por disciplina. La navegacion principal del organizador se mantiene disponible en el shell superior.
       </section>

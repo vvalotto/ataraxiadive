@@ -75,19 +75,15 @@ export function AuditoriaPerformancePage() {
           ? `${auditLogQuery.data.atleta_nombre} · ${auditLogQuery.data.disciplina}`
           : 'Auditoria puntual de eventos'
       }
-      actions={
+    >
+      <div className="flex justify-end">
         <Link
           to={`/organizador/competencias/${competenciaId}/auditoria?disciplina=${encodeURIComponent(disciplina ?? '')}&torneo_id=${encodeURIComponent(torneoId ?? '')}`}
           className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
         >
           Volver a disciplina
         </Link>
-      }
-    >
-      <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">
-        Vista contextual de eventos por atleta. El shell principal permanece visible para volver a cualquier seccion primaria del organizador.
-      </section>
-
+      </div>
       {auditLogQuery.isLoading ? (
         <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando traza de eventos...

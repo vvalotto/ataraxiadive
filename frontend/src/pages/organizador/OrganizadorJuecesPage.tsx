@@ -13,7 +13,7 @@ export function OrganizadorJuecesPage() {
     return (
       <OrganizadorLayout
         title="Jueces"
-        subtitle="Seleccionar torneo para asignar jueces por disciplina"
+        subtitle="Asignación de jueces por disciplina y andarivel"
         showTournamentNavigation={false}
         simpleHeader
       >
@@ -45,7 +45,7 @@ function JuecesTorneoPage({ torneoId }: JuecesTorneoPageProps) {
       title="Jueces"
       activeTournamentId={torneoId}
       activeTournamentState={torneo?.estado}
-      subtitle={torneo ? `${torneo.nombre} · ${torneo.sede.ciudad}` : 'Asignación de jueces'}
+      subtitle="Asignación de jueces por disciplina y andarivel"
     >
       <JuecesPanel torneoId={torneoId} />
     </OrganizadorLayout>

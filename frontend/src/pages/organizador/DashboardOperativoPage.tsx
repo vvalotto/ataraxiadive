@@ -303,7 +303,7 @@ export function DashboardOperativoPage() {
     return (
       <OrganizadorLayout
         title="Panel"
-        subtitle="Seleccionar torneo para abrir el dashboard operativo del torneo activo"
+        subtitle="Estado general y alertas del torneo activo"
         showTournamentNavigation={false}
         simpleHeader
       >
@@ -418,11 +418,7 @@ function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
       title="Panel"
       activeTournamentId={torneoId}
       activeTournamentState={torneoQuery.data?.estado}
-      subtitle={
-        torneoQuery.data
-          ? `${torneoQuery.data.nombre} · ${torneoQuery.data.sede.ciudad} · ${formatTorneoEstado(torneoQuery.data.estado)}`
-          : 'Dashboard operativo del torneo activo'
-      }
+      subtitle="Estado general y alertas del torneo activo"
     >
       {torneoQuery.isLoading || loadingCompetencias ? (
         <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">

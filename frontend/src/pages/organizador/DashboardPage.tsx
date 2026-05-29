@@ -149,26 +149,17 @@ export function DashboardPage() {
   return (
     <OrganizadorLayout
       title="Inicio"
-      subtitle=""
+      subtitle="Tus torneos y acceso rápido a cada uno"
       showTournamentNavigation={false}
-      actions={
-        <>
-          <Link
-            to="/organizador/torneos/nuevo"
-            className="rounded-full bg-sky-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950"
-          >
-            Nuevo torneo
-          </Link>
-          <button
-            type="button"
-            onClick={logout}
-            className="rounded-full border border-slate-600 bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
-          >
-            Cerrar sesion
-          </button>
-        </>
-      }
     >
+      <div className="flex justify-end">
+        <Link
+          to="/organizador/torneos/nuevo"
+          className="rounded-full bg-sky-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950"
+        >
+          Nuevo torneo
+        </Link>
+      </div>
       {location.state && (location.state as { passwordUpdated?: boolean }).passwordUpdated ? (
         <section className="rounded-[2rem] border border-emerald-300 bg-emerald-50 p-5 text-sm text-emerald-900">
           Contrasena actualizada correctamente.

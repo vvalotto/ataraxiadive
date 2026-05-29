@@ -1,13 +1,12 @@
 import { type ReactNode, useEffect } from 'react'
 import type { EstadoTorneo } from '../../api/torneo'
 import { Link, useLocation } from 'react-router-dom'
-import { HealthCheck } from '../HealthCheck'
 import useAuthStore from '../../stores/useAuthStore'
 
 interface OrganizadorLayoutProps {
   title: string
   subtitle: string
-  actions?: ReactNode
+
   children: ReactNode
   showTournamentNavigation?: boolean
   simpleHeader?: boolean
@@ -77,7 +76,6 @@ function currentSection(pathname: string): NavItem['key'] {
 export function OrganizadorLayout({
   title,
   subtitle,
-  actions,
   children,
   showTournamentNavigation = true,
   simpleHeader = false,
@@ -91,11 +89,8 @@ export function OrganizadorLayout({
     document.title = 'AtaraxiaDive · Organizador'
     return () => { document.title = 'AtaraxiaDive' }
   }, [])
-  const email = useAuthStore((s) => s.email)
-  const nombre = useAuthStore((s) => s.nombre)
-  const apellido = useAuthStore((s) => s.apellido)
+  const logout = useAuthStore((s) => s.logout)
   const seccionActiva = currentSection(location.pathname)
-  const usuarioLabel = [nombre, apellido].filter(Boolean).join(' ').trim() || email || 'Organizador'
 
   function shouldShowNavItem(item: NavItem): boolean {
     if (item.key === 'torneo') return Boolean(activeTournamentId)
@@ -111,61 +106,55 @@ export function OrganizadorLayout({
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
-      <header className="sticky top-0 z-40 border-b border-slate-700/80 bg-slate-900/95 backdrop-blur">
-        <div className="mx-auto flex max-w-[1100px] flex-col px-5 lg:px-8">
-          <div
-            className={
-              showTournamentNavigation && !simpleHeader
-                ? 'flex flex-col gap-2 py-2 xl:flex-row xl:items-center xl:justify-between'
-                : 'flex flex-col gap-2 py-3 xl:flex-row xl:items-center xl:justify-between'
-            }
-          >
-            <div className="flex min-w-0 flex-1 items-center">
-              {showTournamentNavigation ? (
-                <nav className="-mx-1 flex min-w-0 flex-1 items-center gap-1 overflow-x-auto px-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-700">
-                  {NAV_ITEMS.filter((item) => shouldShowNavItem(item)).map((item) => {
-                    const isActive = seccionActiva === item.key
-                    const baseClass =
-                      'inline-flex h-10 items-center rounded-full border border-transparent px-3 text-xs font-semibold tracking-[0.02em] transition whitespace-nowrap'
-
-                    return (
-                      <Link
-                        key={item.key}
-                        to={navHref(item)}
-                        className={
-                          isActive
-                            ? `${baseClass} border-sky-400/40 bg-sky-400/10 text-sky-200`
-                            : `${baseClass} text-slate-400 hover:border-slate-700 hover:bg-slate-800/70 hover:text-white`
-                        }
-                      >
-                        {item.label}
-                      </Link>
-                    )
-                  })}
-                </nav>
-              ) : null}
-            </div>
-
-            <div className="ml-auto flex flex-wrap items-center gap-2">
-              {!simpleHeader ? <HealthCheck compact /> : null}
-              <span className="text-xs text-slate-400">
-                {usuarioLabel}
-              </span>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2 border-t border-slate-800/80 py-3 xl:flex-row xl:items-end xl:justify-between">
-            <div className="max-w-3xl">
+      <header className="sticky top-0 z-40 border-b border-slate-800 bg-slate-950/95 backdrop-blur">
+        <div className="mx-auto max-w-[1100px] px-5 lg:px-8">
+          <div className="flex items-start justify-between gap-3 pt-3 pb-0">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-400">
+                  AtaraxiaDive
+                </p>
+              </div>
               {!simpleHeader ? (
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-300/75">
-                  Organizador
+                <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-300/75">
+                  Portal Organizador
                 </p>
               ) : null}
-              <h1 className="mt-1 text-2xl font-semibold tracking-tight text-white">{title}</h1>
-              {subtitle ? <p className="mt-1 text-sm text-slate-300">{subtitle}</p> : null}
+              <h1 className="mt-2 text-xl font-semibold text-white">{title}</h1>
+              {subtitle ? <p className="mt-1 text-sm text-slate-400">{subtitle}</p> : null}
             </div>
-            {actions ? <div className="flex flex-wrap gap-2">{actions}</div> : null}
+            <div className="flex shrink-0 items-start gap-2">
+              <button
+                type="button"
+                onClick={logout}
+                className="rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-400 hover:border-slate-500 hover:text-slate-200"
+              >
+                Salir
+              </button>
+            </div>
           </div>
+
+          {showTournamentNavigation && !simpleHeader ? (
+            <nav className="mt-3 flex overflow-x-auto border-t border-slate-800 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-700">
+              {NAV_ITEMS.filter((item) => shouldShowNavItem(item)).map((item) => {
+                const isActive = seccionActiva === item.key
+                return (
+                  <Link
+                    key={item.key}
+                    to={navHref(item)}
+                    className={[
+                      'flex h-10 shrink-0 items-center px-4 text-xs font-semibold whitespace-nowrap transition-colors',
+                      isActive
+                        ? 'border-b-2 border-sky-400 text-sky-300'
+                        : 'border-b-2 border-transparent text-slate-400 hover:text-white',
+                    ].join(' ')}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              })}
+            </nav>
+          ) : null}
         </div>
       </header>
 
