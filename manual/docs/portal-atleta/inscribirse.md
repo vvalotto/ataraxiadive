@@ -18,13 +18,13 @@ El primer paso verifica tus datos personales. Los campos se precargan desde tu p
 
 Presioná **Siguiente** para avanzar.
 
-## Paso 2 — Datos de competencia
+## Paso 2 — Datos de competencia y AP
 
 El segundo paso muestra las disciplinas del torneo. Para cada disciplina ingresás tu **AP (Announced Performance)**:
 
-![Paso 2: disciplinas DBF (80 m) y DNF (50 m) con sus APs declaradas](../assets/screenshots/portal-atleta/inscripcion-wizard-3.png)
+![Paso 2: disciplinas DBF (80 m) y DNF (50 m) con sus APs declaradas](../assets/screenshots/portal-atleta/declarar-ap-1.png)
 
-![Paso 2 (continuación): SPE 2x50 (2:15), STA y selector de categoría](../assets/screenshots/portal-atleta/inscripcion-wizard-4.png)
+![Paso 2 (continuación): SPE 2x50 (2:15), STA y selector de categoría](../assets/screenshots/portal-atleta/declarar-ap-2.png)
 
 - **Disciplinas de distancia** (DBF, DNF, DYN, CWT): metros con decimales
 - **Disciplinas de tiempo** (STA, SPE): formato mm:ss
@@ -35,7 +35,11 @@ También seleccionás tu **categoría** (Junior, Senior, Master). Si ya está co
 
 El tercer paso requiere subir los documentos obligatorios:
 
-![Paso 3: aviso de verificación, campos certificado médico y comprobante de pago](../assets/screenshots/portal-atleta/inscripcion-wizard-2.png)
+![Paso 3: aviso de verificación, campos certificado médico y comprobante de pago vacíos](../assets/screenshots/portal-atleta/inscripcion-wizard-2.png)
+
+![Paso 3: campos con archivos adjuntos cargados](../assets/screenshots/portal-atleta/inscripcion-wizard-3.png)
+
+![Paso 3: enviando la inscripción](../assets/screenshots/portal-atleta/inscripcion-wizard-4.png)
 
 | Documento | Formato |
 |-----------|---------|

@@ -7,8 +7,9 @@
 }
 
 /* Imágenes de screenshots */
-.md-content img {
-  max-width: 380px;
+.md-content img,
+.md-typeset img {
+  max-width: 380px !important;
   height: auto;
   display: block;
   margin: 1.5rem auto;
