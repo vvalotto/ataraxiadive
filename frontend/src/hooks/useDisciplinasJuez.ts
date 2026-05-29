@@ -20,7 +20,6 @@ function esTorneoOperativo(estado: string): boolean {
 }
 
 export function useDisciplinasJuez() {
-  const email = useAuthStore((s) => s.email)
   const userId = useAuthStore((s) => s.userId)
 
   const torneoActivoQuery = useQuery({
@@ -71,9 +70,9 @@ export function useDisciplinasJuez() {
   })
 
   const subtitle = useMemo(() => {
-    if (!torneoActivoQuery.data) return email ?? 'Juez'
-    return `${email ?? 'Juez'} · ${torneoActivoQuery.data.nombre}`
-  }, [email, torneoActivoQuery.data])
+    if (!torneoActivoQuery.data) return 'Disciplinas en las que estás asignado como juez'
+    return torneoActivoQuery.data.nombre
+  }, [torneoActivoQuery.data])
 
   return {
     torneoActivo: torneoActivoQuery.data ?? null,

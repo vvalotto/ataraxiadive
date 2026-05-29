@@ -27,7 +27,7 @@ export function TorneoCompetenciasPage() {
     return (
       <OrganizadorLayout
         title="Audit Log"
-        subtitle="Seleccionar torneo para inspeccionar competencias y trazas"
+        subtitle="Historial de performances y trazabilidad por disciplina"
         showTournamentNavigation={false}
         simpleHeader
       >
@@ -79,12 +79,8 @@ function TorneoCompetenciasContent({ torneoId }: TorneoCompetenciasContentProps)
       title="Audit Log"
       activeTournamentId={torneoId}
       activeTournamentState={torneo?.estado}
-      subtitle={torneo ? `${torneo.nombre} · ${torneo.sede.ciudad} · trazabilidad por disciplina` : 'Trazabilidad del torneo'}
+      subtitle="Historial de performances y trazabilidad por disciplina"
     >
-      <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">
-        El audit log es una seccion primaria del shell. Desde aqui se inspecciona la traza por disciplina sin salir del contexto del torneo activo.
-      </section>
-
       {isLoading ? (
         <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando competencias...

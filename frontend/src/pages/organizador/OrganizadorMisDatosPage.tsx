@@ -3,6 +3,7 @@ import type { FormEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
 import { RolesSection } from '../../components/shared/RolesSection'
+import useAuthStore from '../../stores/useAuthStore'
 import {
   actualizarOrganizadorMe,
   crearOrganizadorMe,
@@ -27,6 +28,9 @@ function getErrorMessage(error: unknown): string {
 export function OrganizadorMisDatosPage() {
   const [searchParams] = useSearchParams()
   const torneoId = searchParams.get('torneo_id')
+  const nombre = useAuthStore((s) => s.nombre)
+  const apellido = useAuthStore((s) => s.apellido)
+  const email = useAuthStore((s) => s.email)
   const [perfilExiste, setPerfilExiste] = useState<boolean | null>(null)
   const [form, setForm] = useState<FormState>({ nombre_organizacion: '' })
   const [isLoading, setIsLoading] = useState(true)
@@ -103,33 +107,16 @@ export function OrganizadorMisDatosPage() {
       showTournamentNavigation={true}
       activeTournamentId={torneoId ?? undefined}
     >
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
       <RolesSection />
       {isLoading ? (
         <div className="rounded-2xl border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando perfil...
         </div>
-      ) : perfilExiste === false ? (
-        <div className="rounded-2xl border border-slate-700 bg-slate-900/85 p-5 shadow-lg max-w-md">
-          <p className="mb-4 text-sm text-slate-400">
-            Todavía no tenés un perfil de organizador. Crealo para agregar el nombre de tu organización.
-          </p>
-          {error ? (
-            <div className="mb-4 rounded-xl border border-red-500/40 bg-red-950/40 p-3 text-sm text-red-200">
-              {error}
-            </div>
-          ) : null}
-          <button
-            onClick={() => void handleCrear()}
-            disabled={isSubmitting}
-            className="w-full rounded-full bg-sky-500 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950 disabled:cursor-not-allowed disabled:bg-slate-600 disabled:text-slate-300"
-          >
-            {isSubmitting ? 'Creando...' : 'Crear mi perfil de organizador'}
-          </button>
-        </div>
       ) : (
         <form
-          onSubmit={handleSubmit}
-          className="rounded-2xl border border-slate-700 bg-slate-900/85 p-5 shadow-lg max-w-md"
+          onSubmit={perfilExiste ? handleSubmit : (e) => { e.preventDefault(); void handleCrear() }}
+          className="rounded-2xl border border-slate-700 bg-slate-900/85 p-5 shadow-lg"
         >
           {success ? (
             <div className="mb-4 rounded-xl border border-emerald-500/40 bg-emerald-950/40 p-3 text-sm text-emerald-200">
@@ -142,6 +129,30 @@ export function OrganizadorMisDatosPage() {
             </div>
           ) : null}
           <div className="grid gap-4">
+            <label className="block text-sm font-semibold text-slate-100">
+              Nombre
+              <input
+                value={nombre ?? ''}
+                readOnly
+                className="mt-2 w-full rounded-xl border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-slate-400 outline-none cursor-default"
+              />
+            </label>
+            <label className="block text-sm font-semibold text-slate-100">
+              Apellido
+              <input
+                value={apellido ?? ''}
+                readOnly
+                className="mt-2 w-full rounded-xl border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-slate-400 outline-none cursor-default"
+              />
+            </label>
+            <label className="block text-sm font-semibold text-slate-100">
+              Email
+              <input
+                value={email ?? ''}
+                readOnly
+                className="mt-2 w-full rounded-xl border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-slate-400 outline-none cursor-default"
+              />
+            </label>
             <label className="block text-sm font-semibold text-slate-100">
               Nombre de organización <span className="ml-1 text-xs font-normal text-slate-400">(opcional)</span>
               <input
@@ -158,11 +169,12 @@ export function OrganizadorMisDatosPage() {
               disabled={isSubmitting}
               className="w-full rounded-full bg-sky-500 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950 disabled:cursor-not-allowed disabled:bg-slate-600 disabled:text-slate-300"
             >
-              {isSubmitting ? 'Guardando...' : 'Guardar cambios'}
+              {isSubmitting ? 'Guardando...' : perfilExiste ? 'Guardar cambios' : 'Crear mi perfil de organizador'}
             </button>
           </div>
         </form>
       )}
+      </div>
     </OrganizadorLayout>
   )
 }

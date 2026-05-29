@@ -282,15 +282,15 @@ export function CrearTorneoPage() {
       subtitle={pageSubtitle}
       showTournamentNavigation={false}
       simpleHeader
-      actions={
+    >
+      <div className="flex justify-end">
         <Link
           to={torneoId ? `/organizador/torneo/${torneoId}` : '/organizador/torneo'}
           className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
         >
           Volver
         </Link>
-      }
-    >
+      </div>
       <form
         onSubmit={handleSubmit}
         className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-6 shadow-[0_20px_60px_rgba(2,6,23,0.24)]"

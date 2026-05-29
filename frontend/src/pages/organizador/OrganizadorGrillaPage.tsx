@@ -13,7 +13,7 @@ export function OrganizadorGrillaPage() {
     return (
       <OrganizadorLayout
         title="Grilla"
-        subtitle="Seleccionar torneo para generar, ajustar o confirmar la grilla"
+        subtitle="Generación y gestión del orden de salida por disciplina"
         showTournamentNavigation={false}
         simpleHeader
       >
@@ -45,7 +45,7 @@ function GrillaTorneoPage({ torneoId }: GrillaTorneoPageProps) {
       title="Grilla"
       activeTournamentId={torneoId}
       activeTournamentState={torneo?.estado}
-      subtitle={torneo ? `${torneo.nombre} · ${torneo.sede.ciudad}` : 'Configuración de grilla'}
+      subtitle="Generación y gestión del orden de salida por disciplina"
     >
       <GrillaPanel
         torneoId={torneoId}
