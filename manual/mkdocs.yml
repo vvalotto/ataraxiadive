@@ -33,9 +33,12 @@ nav:
     - portal-publico/index.md
     - Explorar torneos: portal-publico/explorar-torneos.md
     - Ver resultados y podios: portal-publico/ver-resultados.md
-    - Crear tu cuenta: portal-publico/crear-cuenta.md
-    - Iniciar sesión: portal-publico/iniciar-sesion.md
-    - Recuperar contraseña: portal-publico/recuperar-password.md
+  - Tu cuenta:
+    - tu-cuenta/index.md
+    - Crear tu cuenta: tu-cuenta/crear-cuenta.md
+    - Iniciar sesión: tu-cuenta/iniciar-sesion.md
+    - Recuperar contraseña: tu-cuenta/recuperar-password.md
+    - Roles y perfiles: tu-cuenta/roles.md
   - Portal Organizador:
     - portal-organizador/index.md
     - Crear y configurar un torneo: portal-organizador/crear-torneo.md

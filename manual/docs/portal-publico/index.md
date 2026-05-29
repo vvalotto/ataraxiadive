@@ -15,7 +15,7 @@ El portal público es la parte de AtaraxiaDive que podés usar **sin iniciar ses
 - Gestionar un torneo (requiere rol **Organizador**)
 - Registrar performances (requiere rol **Juez**)
 
-Si todavía no tenés cuenta, podés [crearla en minutos](crear-cuenta.md).
+Si todavía no tenés cuenta, podés [crearla en minutos](../tu-cuenta/crear-cuenta.md).
 
 ## Cómo acceder
 
