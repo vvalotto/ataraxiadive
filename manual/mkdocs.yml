@@ -57,6 +57,8 @@ nav:
     - Mis datos: portal-atleta/mis-datos.md
   - Portal Juez:
     - portal-juez/index.md
-    - Registrar una performance: portal-juez/registrar-performance.md
+    - Mis asignaciones: portal-juez/mis-asignaciones.md
     - Ver la grilla: portal-juez/grilla.md
+    - Registrar una performance: portal-juez/registrar-performance.md
+    - Situaciones especiales: portal-juez/situaciones-especiales.md
     - Mis datos: portal-juez/mis-datos.md

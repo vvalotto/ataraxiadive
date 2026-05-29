@@ -1,91 +1,92 @@
 # Registrar una performance
 
-El flujo de registro guía al juez paso a paso desde la llamada del atleta hasta la confirmación del resultado. El indicador de pasos en la parte superior muestra el progreso.
+El flujo de registro guía al juez paso a paso desde la llamada del atleta hasta la confirmación de la marca. El indicador en la parte superior muestra el paso actual.
+
+Para los casos de **DNS**, **BKO**, **penalizaciones** y **tarjeta amarilla**, ver [Situaciones especiales](situaciones-especiales.md).
+
+---
 
 ## Paso 1 — Llamada
 
-Confirmá la llamada del atleta presionando **Llamar atleta**. Esto habilita la performance en el sistema e indica que la ventana de OT comenzará próximamente.
+Tocá el nombre del atleta en la grilla para abrir el flujo. La primera pantalla muestra los datos del atleta (AP, andarivel y OT programado) y el botón para confirmar la llamada.
+
+![Paso 1: Llamada — datos del atleta y botón LLAMAR ATLETA](../assets/screenshots/portal-juez/performance-llamar-atleta.png)
+
+Presioná **Llamar atleta** para habilitar la performance en el sistema.
+
+---
 
 ## Paso 2 — Confirmar presencia
 
-Verificá que el atleta está en cámara y listo para iniciar:
+Verificá que el atleta está en cámara y listo para iniciar.
 
-- **Continuar** — el atleta está presente, avanzar al OT
-- **DNS — No se presenta** — registrar que el atleta no se presentó al OT
+![Paso 2: Confirmar presencia — botones CONTINUAR y DNS](../assets/screenshots/portal-juez/performance-atleta-presente.png)
 
-!!! info "DNS"
-    El DNS (Did Not Start) se registra definitivamente. La performance queda cerrada como DNS y no puede modificarse.
+Presioná **Continuar** para avanzar al OT. Si el atleta no se presentó, ver [DNS](situaciones-especiales.md#dns).
 
-## Paso 3 — OT (Official Top)
+---
+
+## Paso 3 — OT
 
 La pantalla muestra el OT programado del atleta. El flujo tiene dos momentos:
 
-1. Presioná **Iniciar ventana OT** cuando corresponda abrir la ventana de 30 segundos
-2. Cuando el atleta inicia la inmersión, presioná el botón de inicio de performance:
-   - **"Vías respiratorias en agua"** para disciplinas de apnea estática (STA)
-   - **"Atleta inicia"** para disciplinas dinámicas y en profundidad
+**Momento 1** — Abrí la ventana de 30 segundos presionando **Iniciar ventana OT**:
+
+![Paso 3: OT — botón INICIAR VENTANA OT](../assets/screenshots/portal-juez/performance-OT.png)
+
+**Momento 2** — Cuando el atleta inicia la inmersión, presioná **Atleta inicia** (o *"Vías respiratorias en agua"* para STA):
+
+![Paso 3: OT — botón ATLETA INICIA con ventana activa](../assets/screenshots/portal-juez/performance-iniciar.png)
+
+---
 
 ## Paso 4 — Performance en curso
 
-La performance está activa. En este paso tenés dos opciones:
+La performance está activa. Esperá a que el atleta complete su intento.
 
-- **Finalizar performance** — el atleta completó su intento, avanzar a la asignación de tarjeta
-- **BKO — Black-out** — el atleta perdió el conocimiento
+![Paso 4: Performance en curso — botones FINALIZAR y BKO](../assets/screenshots/portal-juez/performance-finalizar.png)
 
-### Registrar un BKO
+Presioná **Finalizar performance** cuando el atleta termine. Si ocurre un black-out, ver [BKO](situaciones-especiales.md#bko).
 
-Si el atleta sufre un black-out, el flujo cambia a modo BKO:
-
-1. Ingresá la marca alcanzada antes del BKO (metros y centímetros para disciplinas de distancia; no aplica para STA)
-2. Confirmá el motivo de descalificación (preseleccionado según el tipo: **BKO_SUBACUATICO** o **BKO_SUPERFICIE**)
-3. Presioná **Confirmar BKO** para registrar la tarjeta roja automática
+---
 
 ## Paso 5 — Asignar tarjeta
 
-Seleccioná el resultado de la performance:
+Seleccioná el resultado tocando una de las tres tarjetas:
 
-| Tarjeta | Descripción |
-|---------|-------------|
-| **Blanca** | Performance válida sin infracciones |
-| **Blanca con penalizaciones** | Performance válida con infracciones técnicas — el RP se descuenta según cantidad de penalizaciones |
-| **Amarilla** | Resultado en revisión — queda pendiente hasta que el comité resuelva |
-| **Roja** | Descalificación — requiere seleccionar el motivo (MotivoDQ) |
+![Paso 5: Tarjeta — Blanca seleccionada, Roja y Amarilla visibles](../assets/screenshots/portal-juez/performance-blanca-1.png)
 
-### Penalizaciones (tarjeta Blanca con penalizaciones)
+| Tarjeta | Cuándo usarla |
+|---------|---------------|
+| **Blanca** (gris claro) | Performance válida sin infracciones |
+| **Roja** (burdeos) | Descalificación — requiere seleccionar el motivo |
+| **Amarilla** (dorado) | Resultado en revisión por el comité |
 
-Disponible en disciplinas que lo permiten. Indicá la cantidad de penalizaciones; el sistema calcula el descuento automáticamente (cada penalización resta 3 metros o equivalente según disciplina).
+Para tarjeta blanca con infracciones técnicas, ver [Penalizaciones](situaciones-especiales.md#penalizaciones). Para tarjeta amarilla, ver [Tarjeta amarilla](situaciones-especiales.md#tarjeta-amarilla).
 
-### Motivo de descalificación (tarjeta Roja)
+Una vez seleccionada la tarjeta, presioná **Confirmar tarjeta**:
 
-| Código | Significado |
-|--------|-------------|
-| BKO_SUPERFICIE | Black-out en superficie |
-| BKO_SUBACUÁTICO | Black-out subacuático |
-| NO_PROTOCOLO | No cumplió el protocolo de superficie |
-| INFRACCIÓN_TÉCNICA | Infracción técnica grave |
-| NO_INICIO_VENTANA | No inició dentro de la ventana OT |
-| SALIDA_FALSO | Salida falsa |
+![Paso 5: parte inferior con sección de penalizaciones y botón CONFIRMAR TARJETA](../assets/screenshots/portal-juez/performace-blanca-2.png)
 
-## Paso 6 — Registrar RP y confirmar marca
+---
 
-Ingresá la Realized Performance (RP) medida:
+## Paso 6 — Registrar la marca
+
+Ingresá la Realized Performance medida usando el teclado numérico:
 
 - **Metros y centímetros** para disciplinas de distancia (DNF, DYN, CWT, etc.)
 - **Minutos y segundos** para apnea estática (STA)
 
+![Paso 6: Marca — teclado numérico con 75.25 m y botón CONFIRMAR MARCA](../assets/screenshots/portal-juez/performace-registro.png)
+
 Presioná **Confirmar marca** para cerrar la performance.
 
-## Resolver revisión (tarjeta amarilla)
+---
 
-Si la performance quedó en tarjeta amarilla, el comité de jueces la resolverá. Una vez resuelta, el sistema presenta el paso de **Resolver revisión** donde podés confirmar el resultado final: Blanca, Blanca con penalizaciones, o Roja con motivo.
+## Resultado
 
-## Performance completada
+La pantalla muestra el resultado y la marca registrada:
 
-Al finalizar el flujo, la pantalla muestra el resultado:
-
-- Blanca o Blanca con penalizaciones: fondo verde con la marca registrada
-- Amarilla (en revisión): fondo ámbar
-- Roja (descalificada): fondo rojo con el motivo
-- DNS: fondo gris
+![Resultado: TARJETA BLANCA · 75,25 m · botón SIGUIENTE ATLETA](../assets/screenshots/portal-juez/performance-fin.png)
 
 Presioná **Siguiente atleta** para volver a la grilla y continuar con el próximo.

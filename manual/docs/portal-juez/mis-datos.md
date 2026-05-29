@@ -1,28 +1,34 @@
 # Mis datos (Juez)
 
-La sección **Mis Datos** del portal juez permite configurar el perfil de juez y gestionar los roles activos en tu cuenta.
+La sección **Mis Datos** permite configurar el perfil de juez y gestionar los roles activos en tu cuenta.
 
-## Perfil de juez
-
-Los campos del perfil de juez son opcionales:
-
-| Campo | Descripción |
-|-------|-------------|
-| **Número de licencia** | Tu licencia como juez (ej: "LIC-001") |
-| **Federación** | La federación a la que pertenecés (ej: "AIDA", "CMAS") |
-
-Si todavía no tenés un perfil de juez, la página muestra el botón **Crear mi perfil de juez**. Una vez creado, podés editar los datos y guardar los cambios en cualquier momento.
+![Mis Datos: sección Roles con Juez activo y Organizador inactivo, y campos del perfil](../assets/screenshots/portal-juez/mis-datos-juez-1.png)
 
 ## Gestión de roles
 
-La sección **Roles** muestra todos los roles disponibles (Atleta, Juez, Organizador) y permite activarlos o desactivarlos:
+La sección **Mis Roles** en la parte superior muestra todos los roles disponibles (Atleta, Juez, Organizador). Cada rol tiene un botón para activarlo o desactivarlo.
 
-- Un **switch activado** indica que ese rol está activo en tu cuenta
-- Podés tener más de un rol activo al mismo tiempo
-- Al iniciar sesión, la plataforma te redirige al portal del rol con el que accediste
+- Un rol con botón **Desactivar** está activo en tu cuenta
+- Un rol con botón **Activar** está inactivo
 
 !!! warning "No podés desactivar tu único rol activo"
-    Si solo tenés un rol activo, el sistema no te permite desactivarlo. Tenés que activar otro rol antes de poder quitar el actual.
+    Si solo tenés un rol activo, el sistema no te permite desactivarlo. Activá otro rol antes de poder quitar el actual.
+
+## Perfil de juez
+
+Los campos del perfil son opcionales:
+
+![Mis Datos: formulario completo con Federación y botón GUARDAR CAMBIOS](../assets/screenshots/portal-juez/mis-datos-juez-2.png)
+
+| Campo | Descripción |
+|-------|-------------|
+| **Nombre** | Tu nombre (solo lectura) |
+| **Apellido** | Tu apellido (solo lectura) |
+| **Email** | Tu correo de acceso (solo lectura) |
+| **Número de licencia** | Tu licencia como juez — ej: "LIC-001" (opcional) |
+| **Federación** | La federación a la que pertenecés — ej: "AIDA", "CMAS" (opcional) |
+
+Presioná **Guardar cambios** para actualizar el perfil.
 
 !!! tip "Activar el rol de Juez"
-    Si entraste con otro rol (ej: Atleta) y querés actuar como juez, activá el rol **Juez** desde Mis Datos y volvé a iniciar sesión para acceder al portal juez.
+    Si entraste con otro rol y querés actuar como juez, activá el rol **Juez** desde esta sección y volvé a iniciar sesión para acceder al portal juez.

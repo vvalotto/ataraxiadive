@@ -1,44 +1,49 @@
 # Ver la grilla
 
-La sección **Grilla** muestra el listado de atletas asignados al juez en la disciplina seleccionada, ordenados por estado de ejecución.
+La **Grilla** muestra los atletas asignados al juez en la disciplina seleccionada, ordenados dinámicamente según el estado de cada performance.
 
-## Acceder a la grilla
+## La lista de atletas
 
-Desde **Mis Asignaciones**, tocá el botón de la disciplina que está activa. Las disciplinas inactivas (no en ejecución) aparecen deshabilitadas.
+Cada fila muestra la posición, andarivel, nombre del atleta, AP declarada y el estado actual:
 
-## La tabla de atletas
+![Grilla DYN: atletas con estados Siguiente y Pendiente](../assets/screenshots/portal-juez/grilla-1.png)
 
-Cada fila representa un atleta asignado y muestra:
-
-| Dato | Descripción |
-|------|-------------|
-| **Posición y andarivel** | Orden en la grilla y andarivel asignado |
+| Columna | Descripción |
+|---------|-------------|
+| **Posición · andarivel** | Orden en la grilla y andarivel asignado |
 | **Nombre** | Apellido y nombre del atleta |
-| **AP** | Announced Performance declarada (en metros o mm:ss) |
+| **AP** | Announced Performance declarada |
 | **Estado** | Estado actual de la performance |
 
-## Estados de las performances
+## Estados
 
-Los atletas se ordenan automáticamente según el estado de su performance:
+La grilla se reordena automáticamente a medida que avanza la competencia:
 
 | Estado | Color | Descripción |
 |--------|-------|-------------|
 | **Siguiente** | Verde | El próximo atleta en salir |
 | **En curso** | Cyan | Performance actualmente en ejecución |
 | **Revisión** | Ámbar | Tarjeta amarilla pendiente de resolución |
-| **Pendiente** | Gris oscuro | Aún no fue llamado |
-| **Finalizada** | Gris atenuado | Performance completada o DNS registrado |
+| **Pendiente** | Gris | Aún no fue llamado |
+| **Finalizada** | Gris atenuado | Performance completada o DNS |
 
-!!! info "Orden automático"
-    La grilla se reordena en tiempo real a medida que avanza la competencia. Los atletas finalizados quedan al fondo.
+![Grilla DYN reordenada: En curso sube por encima de Siguiente](../assets/screenshots/portal-juez/grilla-3.png)
 
-## Registrar una performance
+## Seleccionar un atleta
 
-Tocá el nombre del atleta para abrir el flujo de registro de performance. Los atletas en estado **Finalizada** no son seleccionables.
+Tocá cualquier fila para abrir el flujo de registro de performance. Los atletas en estado **Finalizada** no son seleccionables.
+
+## Disciplina completada
+
+Cuando todos los atletas finalizaron, la grilla los muestra todos en estado **Finalizada**:
+
+![Grilla STA con todos los atletas en estado Finalizada](../assets/screenshots/portal-juez/grilla-4.png)
 
 ## Modo offline
 
-Si no hay conexión a internet, la grilla se carga desde el cache local. En ese caso aparece un aviso con la antigüedad del cache.
+Si no hay conexión, la grilla se carga desde el cache local y aparece un aviso con la antigüedad de los datos:
+
+![Grilla en modo offline con aviso de datos actualizados](../assets/screenshots/portal-juez/grilla-2.png)
 
 !!! warning "Cache expirado"
-    Si el cache tiene más de 24 horas, la aplicación lo indica. Los datos pueden estar desactualizados respecto al estado real del torneo.
+    Si el cache tiene más de 24 horas, la aplicación lo indica. Conectate a internet para actualizar los datos antes de continuar.
