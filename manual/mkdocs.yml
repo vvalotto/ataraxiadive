@@ -49,11 +49,13 @@ nav:
     - Mis datos: portal-organizador/mis-datos.md
   - Portal Atleta:
     - portal-atleta/index.md
+    - Inicio: portal-atleta/inicio.md
+    - Torneos: portal-atleta/torneos.md
     - Inscribirse a un torneo: portal-atleta/inscribirse.md
-    - Declarar mi AP: portal-atleta/declarar-ap.md
+    - Declarar o editar mi AP: portal-atleta/declarar-ap.md
+    - Mis inscripciones: portal-atleta/mis-inscripciones.md
     - Ver mi grilla: portal-atleta/mi-grilla.md
-    - Ver mis resultados: portal-atleta/mis-resultados.md
-    - Cancelar inscripción: portal-atleta/cancelar-inscripcion.md
+    - Mis resultados: portal-atleta/mis-resultados.md
     - Mis datos: portal-atleta/mis-datos.md
   - Portal Juez:
     - portal-juez/index.md
