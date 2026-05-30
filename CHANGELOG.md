@@ -7,6 +7,33 @@ Versionado: [Semantic Versioning](https://semver.org/lang/es/)
 
 ---
 
+## [1.0.4] - 2026-05-30
+
+### Fixed
+- **Audit Log — cartel placeholder eliminado** (`AuditoriaCompetenciaPage`): removido el texto
+  "Vista contextual de auditoria por disciplina..." que quedó del desarrollo inicial (#213)
+- **Audit Log — Hash SHA-256 eliminado** (`AuditoriaCompetenciaPage`): removida la sección
+  de hash de integridad que no era parte de la UX esperada (#213)
+- **Audit Log — nombre de disciplina** (`TorneoCompetenciasPage`): cada fila ahora muestra
+  el nombre de la disciplina (DBF, DNF, DYN, STA) en lugar del UUID de competencia (#215)
+- **Resultados — espaciado** (`ResultadosPage`): agregado `mt-6` entre las pestañas de
+  selección de disciplina y el título "Ranking por disciplina" (#214)
+
+### Added
+- **Navegación móvil — menú hamburguesa** en los tres portales (#216):
+  - `OrganizadorLayout`: botón `☰` en mobile despliega panel vertical con todos los items
+    de navegación; nav horizontal desktop se mantiene (`md:hidden` / `md:flex`)
+  - `JuezLayout`: hamburguesa reemplaza tabs horizontales comprimidos en pantallas chicas
+  - `AtletaShell`: hamburguesa reemplaza el `grid-cols-5` ilegible en mobile
+  - Item activo marcado con punto sky; menú se cierra automáticamente al navegar
+- **Script `seed_produccion_resultados.py`**: herramienta para alimentar la app en producción
+  con resultados del dataset BA2025 de forma progresiva por disciplina (`--disciplina`,
+  `--limite`, `--desde`, `--dry-run`; soporta Blanca / Roja BKO / DNS / BlancaConPenalizaciones)
+
+### Changed
+- `seed_ba2025_usuarios.py`: adaptado a API multi-rol post-SP-ADJ-11
+  (`rol` → `roles[]`; `POST /registro/atletas` → `PATCH /registro/atletas/me`)
+
 ## [Unreleased]
 
 ### Added
