@@ -4,13 +4,17 @@ La sección **Mis Datos** del portal organizador permite configurar el perfil de
 
 ## Perfil de organizador
 
-El único campo del perfil de organizador es:
+![Mis Datos del organizador — gestión de roles y datos del perfil](../assets/screenshots/portal-organizador/mis-datos.png)
+
+El formulario del perfil (columna derecha) muestra:
 
 | Campo | Descripción |
 |-------|-------------|
-| **Nombre de la organización** | El nombre que aparece asociado a los torneos que creás (ej: "FAAS", "Club Atlántico") |
+| **Nombre** y **Apellido** | Tus datos personales de la cuenta |
+| **Email** | Correo de acceso a la plataforma |
+| **Nombre de organización** *(opcional)* | El nombre que aparece asociado a los torneos que creás (ej: "FAAS", "Club Atlántico") |
 
-Si todavía no completaste este perfil, la página te mostrará el formulario de creación. Si ya existe, podés editarlo y guardar los cambios.
+Editá los campos y hacé clic en **Guardar cambios**.
 
 ## Gestión de roles
 

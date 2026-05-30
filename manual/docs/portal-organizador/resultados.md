@@ -4,7 +4,7 @@ La sección **Resultados** muestra el ranking por disciplina con todas las perfo
 
 ## Seleccionar la disciplina
 
-Usá las pestañas (**DBF**, **DNF**, **DYN**, **STA**) para ver el ranking de cada disciplina. El encabezado muestra cuántas disciplinas están cerradas (ej: "Ranking parcial · 1 de 4 disciplinas cerradas").
+Usá las pestañas (**DBF**, **DNF**, **DYN**, **STA**) para ver el ranking de cada disciplina. Cada una muestra un badge con su estado: **DISCIPLINA FINALIZADA** (ranking definitivo) o **DISCIPLINA EN SEGUIMIENTO** (ejecución en curso, valores provisorios).
 
 ## La tabla de resultados
 
@@ -23,16 +23,33 @@ La tabla está ordenada por OT (orden de ejecución) y muestra:
 | **Performance** | RP logrado — en rojo si está cerca o por debajo del AP |
 | **Tarjeta** | Resultado de la performance |
 
-![Tabla de resultados de la disciplina DBF](../assets/screenshots/portal-organizador/resultados.png)
+![Tabla de resultados de la disciplina DBF finalizada](../assets/screenshots/portal-organizador/resultados-1.png)
 
 ### Tipos de tarjeta
 
 | Tarjeta | Significado |
 |---------|-------------|
 | **Blanca** | Performance válida sin infracciones |
-| **Blanca + penaliz.** | Válida con infracciones técnicas; RP final = RP medido − penalizaciones |
+| **Blanca + penaliz.** | Válida con infracciones técnicas; RP final = RP medido − penalizaciones (se muestra el motivo, ej: "Sin contacto con pared") |
 | **Roja** | Descalificación — se muestra el motivo (ej: "Blackout superficie") |
 | **DNS** | El atleta no se presentó al OT |
+| **Pendiente** | La performance todavía no fue registrada (disciplina en seguimiento) |
+
+En las disciplinas que aún están en ejecución conviven performances ya registradas con otras en estado **Pendiente**:
+
+![Ranking de DYN en seguimiento con tarjetas Blanca, Roja, DNS y penalizaciones](../assets/screenshots/portal-organizador/resultados-5.png)
+
+### Ejemplos por disciplina
+
+Cada disciplina muestra su ranking con el mismo formato. En **DNF** se ven las primeras performances registradas junto a las pendientes:
+
+![Ranking de DNF en seguimiento](../assets/screenshots/portal-organizador/resultados-2.png)
+
+![Continuación del ranking de DNF con performances pendientes](../assets/screenshots/portal-organizador/resultados-4.png)
+
+En **STA**, las marcas son tiempos (mm:ss) en lugar de distancias, y el motivo de descalificación puede ser distinto (ej: "No protocolo superficie"):
+
+![Ranking de STA con marcas en tiempo](../assets/screenshots/portal-organizador/resultados-3.png)
 
 ## Publicar resultados
 

@@ -15,11 +15,13 @@ Usá las pestañas para seleccionar la disciplina y verás la grilla completa de
 | **AP** | Announced Performance declarada |
 | **Juez asignado** | Selector con todos los usuarios con rol JUEZ |
 
-![Asignación de jueces por performance en disciplina DNF](../assets/screenshots/portal-organizador/jueces.png)
+![Asignación de jueces por performance en disciplina DNF](../assets/screenshots/portal-organizador/jueces-1.png)
 
 ## Asignar un juez
 
 Hacé clic en el selector de **Juez asignado** de la fila del atleta y elegí un juez de la lista. El cambio se guarda automáticamente.
+
+![Selector de juez desplegado con la lista de jueces disponibles](../assets/screenshots/portal-organizador/jueces-2.png)
 
 Podés asignar el mismo juez a múltiples atletas. El badge **N/N Asignadas** en la cabecera muestra el progreso (ej: "23/23 Asignadas"). Cuando todas las performances tienen juez asignado, aparece el badge **ASIGNACIÓN COMPLETA**.
 

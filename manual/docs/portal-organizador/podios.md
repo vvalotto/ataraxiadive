@@ -1,27 +1,37 @@
 # Ver podios
 
-La sección **Podios** muestra los primeros puestos por categoría y la tabla **Overall** (clasificación general del torneo).
+La sección **Podios** muestra la clasificación final del torneo: el **Overall** y los podios por disciplina, organizados por categoría.
 
-## Podios por disciplina y categoría
+## Seleccionar la categoría
 
-Los podios se organizan por **disciplina** (solapas en la parte superior) y dentro de cada disciplina por categoría:
+Las solapas superiores son las **categorías** del torneo:
 
 - JUNIOR F / JUNIOR M
 - SENIOR F / SENIOR M
 - MASTER F / MASTER M
 
-Para cada categoría se muestran los tres primeros puestos con:
+Al elegir una categoría ves, una debajo de la otra, su clasificación **Overall** y los podios de **cada disciplina** para esa categoría.
 
-- Posición (🥇 🥈 🥉)
-- Nombre del atleta
-- Club
-- RP logrado
+![Podios de la categoría SENIOR F — Overall y podios por disciplina](../assets/screenshots/portal-organizador/podios-1.png)
 
-## Overall
+## Overall por categoría
 
-La tabla **Overall** muestra la clasificación general del torneo combinando los resultados de todas las disciplinas. Se ordena por una puntuación compuesta usando el sistema FAAS (Factor de Ajuste por Actuación Subacuática).
+La primera sección (**OVERALL — \<categoría\>**) muestra la clasificación general del top 3 combinando todas las disciplinas. Cada puesto indica posición (🥇 🥈 🥉), nombre y club del atleta.
 
-La tabla Overall está disponible en la solapa **Overall** dentro de **Podios**.
+El orden surge del **reglamento FAAS**: cada disciplina otorga puntos relativos al mejor de la categoría (la mejor marca recibe 100 puntos y el resto en proporción), y el Overall suma los puntos de todas las disciplinas. Las performances con tarjeta roja o DNS suman 0.
+
+![Overall de la categoría MASTER F con el top 3 general](../assets/screenshots/portal-organizador/podios-3.png)
+
+![Overall de la categoría SENIOR M con el top 3 general](../assets/screenshots/portal-organizador/podios-4.png)
+
+!!! info "Sin datos de overall"
+    Si una categoría todavía no tiene puntaje calculado, la sección Overall muestra *"Sin datos de overall para esta categoría"*.
+
+## Podios por disciplina
+
+Debajo del Overall, cada disciplina (DBF, DNF, DYN, STA…) tiene su propio podio con los tres primeros puestos de esa categoría, mostrando posición, nombre, club y **RP logrado**.
+
+![Podios por disciplina (DBF, DNF, DYN, STA) de una categoría](../assets/screenshots/portal-organizador/podios-2.png)
 
 ## Cuándo están disponibles los podios
 
