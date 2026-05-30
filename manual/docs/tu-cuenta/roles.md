@@ -14,6 +14,8 @@ AtaraxiaDive usa un sistema de roles para determinar a qué portal accedés y qu
 
 Al iniciar sesión, si tu cuenta tiene más de un rol activo, la plataforma te pregunta con cuál rol querés operar. Eso determina a qué portal entrás.
 
+![Selector de rol al iniciar sesión](../assets/screenshots/tu-cuenta/cambiar-rol.png)
+
 Podés cerrar sesión en cualquier momento y volver a entrar con otro rol.
 
 ## Cómo activar o desactivar roles

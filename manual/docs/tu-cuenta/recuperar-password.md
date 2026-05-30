@@ -10,7 +10,7 @@ Si olvidaste tu contraseña podés restablecerla desde la pantalla de login.
 4. Revisá tu bandeja de entrada — vas a recibir un email con un enlace de recuperación
 5. Tocá el enlace del email y elegí tu nueva contraseña
 
-![Pantalla de recuperación de contraseña](../assets/screenshots/portal-publico/recuperar-password.png)
+![Pantalla de recuperación de contraseña](../assets/screenshots/tu-cuenta/recuperar-password.png)
 
 ## Requisitos de la nueva contraseña
 

@@ -6,11 +6,13 @@
 2. Ingresá tu email y contraseña
 3. Tocá **"Ingresar"**
 
-![Pantalla de inicio de sesión](../assets/screenshots/portal-publico/login.png)
+![Pantalla de inicio de sesión](../assets/screenshots/tu-cuenta/login.png)
 
 ## Selección de rol (usuarios con múltiples roles)
 
 Si tu cuenta tiene más de un rol (por ejemplo, Atleta y Organizador), la plataforma te va a pedir que elijas con cuál rol querés operar en esta sesión.
+
+![Selector de rol al iniciar sesión](../assets/screenshots/tu-cuenta/elegir-rol.png)
 
 Esta elección determina a qué portal entrás:
 

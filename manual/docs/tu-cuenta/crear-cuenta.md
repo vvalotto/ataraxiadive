@@ -9,9 +9,15 @@ Para inscribirte a torneos, declarar performances o gestionar competencias neces
 3. En la pantalla de login, tocá **"Crear cuenta"**
 4. Completá el formulario
 
-![Formulario de registro — datos personales](../assets/screenshots/portal-publico/registro-1.png)
+![Formulario de registro — paso 1](../assets/screenshots/tu-cuenta/registro-0.png)
 
-![Formulario de registro — selección de roles](../assets/screenshots/portal-publico/registro-2.png)
+![Formulario de registro — datos personales](../assets/screenshots/tu-cuenta/registro-1.png)
+
+![Formulario de registro — selección de roles](../assets/screenshots/tu-cuenta/registro-2.png)
+
+![Formulario de registro — datos adicionales por rol](../assets/screenshots/tu-cuenta/registro-3.png)
+
+![Confirmación de registro](../assets/screenshots/tu-cuenta/registro-4.png)
 
 ## Datos requeridos
 
