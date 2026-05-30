@@ -1,0 +1,29 @@
+/* AtaraxiaDive — colores de marca (sky/slate, igual que la app) */
+:root {
+  --md-primary-fg-color: #0ea5e9;       /* sky-500 */
+  --md-primary-fg-color--light: #38bdf8; /* sky-400 */
+  --md-primary-fg-color--dark: #0284c7;  /* sky-600 */
+  --md-accent-fg-color: #0ea5e9;
+}
+
+/* Imágenes de screenshots */
+.md-content img,
+.md-typeset img {
+  max-width: 380px !important;
+  height: auto;
+  display: block;
+  margin: 1.5rem auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+/* Screenshots de tablas/grillas (desktop) */
+.md-content img[alt*="Resultados"],
+.md-content img[alt*="resultados"] {
+  max-width: 700px;
+}
+
+/* Screenshots del portal organizador — todos son desktop */
+.md-content img[src*="portal-organizador"] {
+  max-width: 700px;
+}

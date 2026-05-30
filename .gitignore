@@ -45,6 +45,7 @@ frontend/dist/
 frontend/build/
 .claude/worktrees/
 .work/formacion/
+manual/site/
 
 # graphify — artefactos generados (regenerar con `graphify update .`)
 graphify-out/
