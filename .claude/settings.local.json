@@ -221,10 +221,10 @@
       "Bash(git revert *)",
       "Bash(pkill -f uvicorn)",
       "Bash(git rm *)",
-      "Bash(flyctl version *)",
-      "Bash(flyctl status *)",
-      "Bash(flyctl deploy *)",
-      "Bash(git check-ignore *)"
+      "Bash(pkill -f \"mkdocs serve\")",
+      "Bash(file /Users/victor/PycharmProjects/ataraxiadive/manual/docs/assets/screenshots/portal-atleta/mis-resultados-*.png)",
+      "Bash(mkdocs build *)",
+      "Bash(mkdocs serve *)"
     ]
   }
 }

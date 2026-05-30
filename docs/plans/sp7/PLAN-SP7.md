@@ -45,28 +45,32 @@ SP7
 | US-7.1.1 | Dockerfile + FastAPI sirve `frontend/dist` como estáticos + `fly.toml` + `.env.production` |
 | US-7.1.2 | `fly deploy` + verificación de flujos críticos (login, crear torneo, grilla) + tag `v1.0.1` |
 
-### INC-7.2 — Manual de Usuario
+### INC-7.2 — Manual de Usuario ✅ Cerrado 2026-05-30
 
-**Estructura de salida:** `docs/manual/`
+**Estructura de salida:** `manual/` (MkDocs Material — PR #212 → `main`)
 
-**DoD:** tres documentos Markdown con capturas de pantalla de los flujos verificados en UAT SP6;
-índice general en `docs/manual/README.md`.
+**DoD:** manual completo con capturas de pantalla de los flujos verificados en UAT SP6.
+`mkdocs build --strict` verde · ~90 screenshots · 5 portales + sección "Tu cuenta".
 
-| US | Descripción |
-|----|-------------|
-| US-7.2.1 | Manual organizador — crear torneo · inscripciones · grilla · ejecución · cierre y podios |
-| US-7.2.2 | Manual juez — acceso al panel · flujo de performance (6 pasos) · tarjetas blanca/roja/amarilla |
-| US-7.2.3 | Manual atleta — registro · inscripción · declarar AP · consulta de resultados |
+| US | Descripción | Estado |
+|----|-------------|--------|
+| US-7.2.5 | Portal público — explorar torneos, ver resultados, flujo inscripción → login | ✅ |
+| US-7.2.1 | Portal organizador — 10 páginas + 12 screenshots | ✅ |
+| US-7.2.2 | Portal juez — 5 páginas + 25 screenshots | ✅ |
+| US-7.2.3 | Portal atleta — 8 páginas + 21 screenshots | ✅ |
+| US-7.2.4 | Sección "Tu cuenta" — crear cuenta, login, recuperar pwd, roles | ✅ |
 
 ---
 
-## 4. Criterio de Cierre SP7 (BL-007 / v1.0.1)
+## 4. Criterio de Cierre SP7 (BL-007 / v1.0.2)
 
-- [ ] INC-7.1: URL pública Fly.io accesible con SSL
-- [ ] INC-7.1: login de los tres roles funcional en producción
-- [ ] INC-7.1: flujo organizador → juez → atleta verificado end-to-end en producción
-- [ ] INC-7.2: `docs/manual/README.md` + 3 manuales por rol completos
-- [ ] `v1.0.1` tageado en `main` · BL-007 registrado
+- [x] INC-7.1: URL pública Fly.io accesible con SSL
+- [x] INC-7.1: login de los tres roles funcional en producción
+- [x] INC-7.1: flujo organizador → juez → atleta verificado end-to-end en producción
+- [x] INC-7.2: manual completo con 5 portales + Tu cuenta · `mkdocs build --strict` verde
+- [x] `v1.0.2` tageado en `main` · BL-007 registrado
+
+**SP7 cerrado: 2026-05-30**
 
 ---
 
