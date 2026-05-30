@@ -23,9 +23,9 @@
   max-width: 700px;
 }
 
-/* Screenshots del portal organizador — todos son desktop */
+/* Screenshots del portal organizador — todos son desktop (apaisados) */
 .md-content img[src*="portal-organizador"] {
-  max-width: 700px;
+  max-width: 100% !important;
 }
 
 /* Capturas de escritorio (apaisadas) — usan el ancho completo del contenido */
