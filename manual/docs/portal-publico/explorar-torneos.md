@@ -5,11 +5,12 @@
 Al ingresar a la plataforma vas a ver el listado de todos los torneos. Cada tarjeta muestra:
 
 - Nombre del torneo
-- Organización responsable
-- Sede (ciudad y país)
 - Fechas (inicio — fin)
-- Disciplinas habilitadas
+- Sede (ciudad y país)
+- Disciplinas habilitadas (DBF, DNF, DYN, STA, SPE…)
+- Categorías (Junior, Senior, Master)
 - Estado del torneo
+- Botón de acción según el estado (**Ver resultados**, **Inscribirse**, etc.)
 
 ![Lista de torneos disponibles](../assets/screenshots/portal-publico/lista-torneos.png)
 
@@ -29,16 +30,16 @@ Al ingresar a la plataforma vas a ver el listado de todos los torneos. Cada tarj
 
 Tocá o hacé clic en cualquier tarjeta para ver más información:
 
-- Nombre del torneo y organización
+- Nombre del torneo y organización responsable
 - Sede completa (ciudad, país)
 - Fechas de inicio y fin
 - Estado actual con indicador visual
-- Botón de acción según el estado:
-    - **En ejecución** → "Ver panel" (resultados en tiempo real)
-    - **Premiación / Cerrado** → "Ver resultados"
-    - **Inscripciones abiertas** → "Inscribirse" (requiere sesión como atleta)
+- Botones de acción según el estado:
+    - **Resultados** → ranking de cada disciplina (disponible desde *En ejecución*)
+    - **Podios** → top 3 por categoría (se habilita en *Premiación* y *Cerrado*; aparece atenuado mientras el torneo está en ejecución)
+    - **Inscribirse** → cuando las inscripciones están abiertas (requiere sesión como atleta)
 
-![Detalle del torneo Puerto Madryn 2026](../assets/screenshots/portal-publico/detalle-torneo.png)
+![Detalle del torneo Puerto Madryn 2026 en Premiación](../assets/screenshots/portal-publico/detalle-torneo-2.png)
 
 ## Inscribirse a un torneo
 

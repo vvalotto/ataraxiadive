@@ -27,3 +27,8 @@
 .md-content img[src*="portal-organizador"] {
   max-width: 700px;
 }
+
+/* Capturas de escritorio (apaisadas) — usan el ancho completo del contenido */
+.md-content img[src*="-desktop"] {
+  max-width: 100% !important;
+}
