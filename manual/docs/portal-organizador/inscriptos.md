@@ -27,9 +27,9 @@ Hacé clic en cualquier fila para abrir el panel lateral con el detalle completo
 - **Brevet** (número de licencia de apnea)
 - **DNI** y **Teléfono**
 - **Estado de la inscripción** (ACEPTADO / RECHAZADO)
-- Botones **Aceptar** y **Rechazar**
+- Botón de acción según el estado: **Rechazar** si está aceptada, **Aceptar** si está rechazada
 
-![Panel lateral con el detalle de inscripción de un atleta](../assets/screenshots/portal-organizador/inscripto-detalle.png)
+![Panel lateral con el detalle de inscripción de un atleta](../assets/screenshots/portal-organizador/inscriptos-detalle.png)
 
 ## Aceptar o rechazar inscripciones
 

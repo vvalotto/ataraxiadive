@@ -56,7 +56,7 @@ Al pie de la página está la **Zona de peligro**. Hacé clic en **Cancelar torn
 
 Durante la **Ejecución**, la sección **Panel** muestra el estado operativo en tiempo real de la disciplina activa.
 
-![Panel operativo durante la ejecución](../assets/screenshots/portal-organizador/panel.png)
+![Panel operativo durante la ejecución de la disciplina DYN](../assets/screenshots/portal-organizador/panel-2.png)
 
 ### Pestañas por disciplina
 
@@ -77,4 +77,8 @@ La tabla **Próximos atletas** muestra a los siguientes en la grilla con su anda
 
 ### Disciplina activa y progreso
 
-La columna derecha muestra el progreso de la disciplina activa (porcentaje de atletas completados) y las alertas operativas vigentes.
+La columna derecha muestra el estado de la disciplina activa con un badge (**EN EJECUCIÓN** o **CERRADA**), su barra de progreso (porcentaje de atletas completados) y las alertas operativas vigentes.
+
+Cuando una disciplina termina, el badge pasa a **CERRADA**, el progreso llega al 100 % y la cola de próximos atletas queda vacía:
+
+![Panel de una disciplina cerrada al 100%](../assets/screenshots/portal-organizador/panel-1.png)

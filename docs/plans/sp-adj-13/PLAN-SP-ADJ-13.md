@@ -6,8 +6,8 @@
 | **Contexto** | Ejecución completa del prototipo en producción para capturar screenshots faltantes del manual e identificar ajustes necesarios |
 | **Fuentes** | Sesión de validación en https://ataraxiadive.fly.dev |
 | **Incremento asociado** | INC-7.2 (manual de usuario — capturas pendientes) |
-| **Branch base** | `develop` (fixes) · `manual` (capturas) |
-| **Estado** | ⏳ En curso |
+| **Branch base** | `develop` (fixes) · `feature/sp-adj-13-capturas-manual` (capturas) |
+| **Estado** | ✅ Cerrado 2026-05-30 · tag `v1.0.5` |
 
 ---
 
@@ -83,12 +83,12 @@ US-ADJ-13.1  Ciclo organizador en producción + capturas
 
 ## Criterio de cierre de SP-ADJ-13
 
-- [ ] `tu-cuenta/roles.md` con screenshots reales de producción
-- [ ] `portal-organizador/podios.md` con screenshots reales de producción
-- [ ] Capturas desactualizadas detectadas en ejecución reemplazadas
-- [ ] Fixes de producción detectados implementados y pusheados
-- [ ] `mkdocs build --strict` verde post-integración
-- [ ] DesignReviewer 0 CRITICAL (si hay cambios de código)
+- [x] `tu-cuenta/roles.md` con screenshots reales de producción
+- [x] `portal-organizador/podios.md` con screenshots reales de producción
+- [x] Capturas desactualizadas detectadas en ejecución reemplazadas (público, organizador, atleta)
+- [x] Fixes de producción detectados implementados y pusheados (#213–#216, PR #217, v1.0.4)
+- [x] `mkdocs build --strict` verde post-integración
+- [x] DesignReviewer 0 CRITICAL (los fixes de código ya pasaron el gate en v1.0.4; el manual es solo documentación)
 
 ---
 
@@ -100,3 +100,4 @@ US-ADJ-13.1  Ciclo organizador en producción + capturas
 ---
 
 *Creado: 2026-05-30 — post-cierre INC-7.2 · capturas de producción pendientes*
+*Cerrado: 2026-05-30 — fixes UI #213–#216 (v1.0.4) · manual revisado contra producción (PR #218) · tag `v1.0.5` · manual publicado en GitHub Pages*

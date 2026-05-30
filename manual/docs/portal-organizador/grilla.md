@@ -23,7 +23,7 @@ Hacé clic en **Generar grilla** para crear la competencia y distribuir los atle
 
 Una vez generada, la tabla muestra a todos los atletas en el orden de salida:
 
-![Grilla generada de la disciplina DNF con estado Confirmada](../assets/screenshots/portal-organizador/grilla.png)
+![Grilla generada de la disciplina DBF con estado Confirmada](../assets/screenshots/portal-organizador/grilla-1.png)
 
 | Columna | Descripción |
 |---------|-------------|
@@ -35,6 +35,10 @@ Una vez generada, la tabla muestra a todos los atletas en el orden de salida:
 
 !!! info "Orden de la grilla"
     Los atletas se ordenan por AP declarada de mayor a menor. Si un atleta no declaró AP, queda al final.
+
+En **STA** el AP es un tiempo (mm:ss) en lugar de una distancia, pero la grilla funciona igual:
+
+![Grilla de la disciplina STA con AP en tiempo](../assets/screenshots/portal-organizador/grilla-2.png)
 
 ## Ajustar el orden
 

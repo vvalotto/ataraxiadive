@@ -658,6 +658,19 @@ RFs sin implementar en v1.0. No bloquean el scope actual (SP7 — despliegue y d
 
 ---
 
+## 35. SP-ADJ-13 — Ejecución en producción, capturas del manual y fixes UI
+
+**Contexto:** Ejecución end-to-end del torneo Puerto Madryn 2026 en producción (https://ataraxiadive.fly.dev) para capturar las pantallas faltantes del manual y detectar inconsistencias de UI.  
+**Plan:** `docs/plans/sp-adj-13/PLAN-SP-ADJ-13.md`.  
+**Estado:** ✅ Cerrado 2026-05-30 · fixes UI #213–#216 (v1.0.4) + manual revisado contra producción (v1.0.5) · `mkdocs build --strict` verde.
+
+| US | Área | PRs | Descripción | Estado |
+|----|------|-----|-------------|--------|
+| US-ADJ-13.1/13.2 | Frontend | #217 | Fixes Audit Log (#213 cartel+hash, #215 nombre disciplina), spacing Resultados (#214), nav móvil hamburguesa en los 3 portales (#216) · seed producción · tag `v1.0.4` | ✅ Implementado |
+| US-ADJ-13.3 | Documentación | #218 | Manual revisado contra producción: portal público (botones reales, Vista escritorio), organizador (24 capturas, podios por categoría, FAAS), atleta (EN PODIO, DIF, Overall); juez y tu-cuenta verificados · tag `v1.0.5` | ✅ Implementado |
+
+---
+
 ## 36. Trazabilidad: Discrepancias → US → Documentos a actualizar
 
 Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 2025".
