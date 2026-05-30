@@ -13,7 +13,7 @@ export function OrganizadorInscriptosPage() {
     return (
       <OrganizadorLayout
         title="Inscriptos"
-        subtitle="Seleccionar torneo para gestionar inscripciones y AP"
+        subtitle="Gestión de inscripciones y anuncios de performance"
         showTournamentNavigation={false}
         simpleHeader
       >
@@ -45,7 +45,7 @@ function InscriptosTorneoPage({ torneoId }: InscriptosTorneoPageProps) {
       title="Inscriptos"
       activeTournamentId={torneoId}
       activeTournamentState={torneo?.estado}
-      subtitle={torneo ? `${torneo.nombre} · ${torneo.sede.ciudad}` : 'Inscripciones del torneo'}
+      subtitle="Gestión de inscripciones y anuncios de performance"
     >
       {torneo ? (
         <InscriptosPanel torneoId={torneoId} torneoEstado={torneo.estado} />

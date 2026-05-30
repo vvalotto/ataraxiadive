@@ -13,7 +13,7 @@ import {
   type ProgresoCompetenciaDto,
   type ProximoAtletaDto,
 } from '../../api/competencia'
-import { fetchTorneo, type EstadoTorneo } from '../../api/torneo'
+import { fetchTorneo } from '../../api/torneo'
 import { EmptyStateCard } from '../../components/organizador/EmptyStateCard'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
 import { TorneoRouteSelector } from '../../components/organizador/TorneoRouteSelector'
@@ -95,24 +95,6 @@ function badgeClass(estado: EstadoCompetenciaNormalizado): string {
   return 'border-slate-600 bg-slate-800 text-slate-300'
 }
 
-function formatTorneoEstado(estado: EstadoTorneo): string {
-  switch (estado) {
-    case 'CREADO':
-      return 'Creado'
-    case 'INSCRIPCION_ABIERTA':
-      return 'Inscripcion abierta'
-    case 'PREPARACION':
-      return 'Preparacion'
-    case 'EJECUCION':
-      return 'En ejecucion'
-    case 'PREMIACION':
-      return 'Premiacion'
-    case 'CERRADO':
-      return 'Cerrado'
-    case 'CANCELADO':
-      return 'Cancelado'
-  }
-}
 
 function formatDurationMinutes(totalMinutes: number | null): string {
   if (totalMinutes === null || totalMinutes <= 0) return 'Sin ETA'
@@ -303,7 +285,7 @@ export function DashboardOperativoPage() {
     return (
       <OrganizadorLayout
         title="Panel"
-        subtitle="Seleccionar torneo para abrir el dashboard operativo del torneo activo"
+        subtitle="Estado general y alertas del torneo activo"
         showTournamentNavigation={false}
         simpleHeader
       >
@@ -418,11 +400,7 @@ function DashboardOperativoContent({ torneoId }: { torneoId: string }) {
       title="Panel"
       activeTournamentId={torneoId}
       activeTournamentState={torneoQuery.data?.estado}
-      subtitle={
-        torneoQuery.data
-          ? `${torneoQuery.data.nombre} · ${torneoQuery.data.sede.ciudad} · ${formatTorneoEstado(torneoQuery.data.estado)}`
-          : 'Dashboard operativo del torneo activo'
-      }
+      subtitle="Estado general y alertas del torneo activo"
     >
       {torneoQuery.isLoading || loadingCompetencias ? (
         <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">

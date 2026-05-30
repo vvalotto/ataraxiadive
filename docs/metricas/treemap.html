@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AtaraxiaDive · Métricas por Bounded Context</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg:     #070d1a;
+    --surf:   #0d1627;
+    --card:   #111e33;
+    --border: #1e3050;
+    --text:   #e2e8f0;
+    --muted:  #64748b;
+    --dim:    #1e3050;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; min-height:100vh; }
+
+  /* ── HEADER ── */
+  header {
+    position:sticky; top:0; z-index:50;
+    background:rgba(7,13,26,.95); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+    padding:.7rem 2rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+  }
+  .logo { font-size:.82rem; font-weight:700; color:#06b6d4; letter-spacing:.06em; white-space:nowrap; }
+  .logo span { color:var(--muted); font-weight:400; }
+
+  /* metric toggle */
+  .toggle { display:flex; gap:.4rem; }
+  .toggle button {
+    font-size:.72rem; padding:.35rem .9rem; border-radius:6px; border:1px solid var(--border);
+    background:transparent; color:var(--muted); cursor:pointer; font-family:inherit;
+    letter-spacing:.04em; transition:all .2s;
+  }
+  .toggle button.active { color:#fff; border-color:transparent; }
+  .toggle button[data-m="cc"].active    { background:#ef4444; }
+  .toggle button[data-m="mi"].active    { background:#10b981; }
+  .toggle button[data-m="cov"].active   { background:#3b82f6; }
+
+  /* view toggle */
+  .view-toggle { display:flex; gap:.3rem; }
+  .view-toggle button {
+    font-size:.68rem; padding:.3rem .7rem; border-radius:5px; border:1px solid var(--border);
+    background:transparent; color:var(--muted); cursor:pointer; font-family:inherit; transition:all .2s;
+  }
+  .view-toggle button.active { background:rgba(255,255,255,.08); color:var(--text); }
+
+  /* ── MAIN ── */
+  main { padding:1.5rem 2rem; }
+
+  /* intro */
+  .intro { margin-bottom:1.5rem; }
+  .intro h1 { font-size:1.3rem; font-weight:800; letter-spacing:-.01em; margin-bottom:.3rem; }
+  .intro p  { font-size:.82rem; color:var(--muted); max-width:800px; line-height:1.6; }
+
+  /* color scale */
+  .scale-row { display:flex; align-items:center; gap:1rem; margin-bottom:1.2rem; flex-wrap:wrap; }
+  .scale-label { font-size:.7rem; color:var(--muted); white-space:nowrap; }
+  .scale-bar-wrap { display:flex; align-items:center; gap:.5rem; }
+  .scale-bar {
+    width:200px; height:10px; border-radius:99px;
+    background:linear-gradient(to right, var(--scale-from), var(--scale-mid), var(--scale-to));
+  }
+  .scale-ends { font-size:.68rem; color:var(--muted); }
+  .nodata-swatch { width:14px; height:14px; border-radius:3px; background:#1e3050; display:inline-block; vertical-align:middle; margin-right:4px; }
+
+  /* ── TREEMAP CONTAINER ── */
+  .treemap-wrap {
+    background:var(--card); border:1px solid var(--border); border-radius:12px;
+    overflow:hidden; position:relative;
+  }
+  /* BC header strip */
+  .bc-header-row { display:flex; border-bottom:1px solid var(--border); }
+  .bc-header-cell {
+    padding:.5rem .4rem; overflow:hidden;
+    border-right:1px solid var(--border); flex-shrink:0;
+    display:flex; flex-direction:column; justify-content:center;
+    min-width:0;
+  }
+  .bc-header-cell:last-child { border-right:none; }
+  .bc-name { font-size:.72rem; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .bc-sloc { font-size:.6rem; color:var(--muted); }
+  .bc-type-badge { font-size:.5rem; text-transform:uppercase; letter-spacing:.08em; font-weight:700;
+    padding:.1rem .35rem; border-radius:3px; background:rgba(255,255,255,.06); color:var(--muted);
+    display:inline-block; margin-top:.15rem; }
+
+  /* main treemap body (columns × layers) */
+  .treemap-body { display:flex; height:480px; }
+
+  /* left axis labels */
+  .axis-labels {
+    width:90px; flex-shrink:0; display:flex; flex-direction:column;
+    border-right:1px solid var(--border); padding:.25rem .4rem;
+    justify-content:space-around;
+  }
+  .axis-label { font-size:.62rem; color:var(--muted); text-align:right; padding-right:.5rem; }
+
+  /* treemap columns area */
+  .treemap-cols { flex:1; display:flex; gap:2px; padding:2px; overflow:hidden; position:relative; }
+
+  /* one BC column */
+  .bc-col {
+    display:flex; flex-direction:column; gap:2px;
+    cursor:pointer; transition:filter .15s; position:relative;
+    min-width:0; overflow:hidden;
+  }
+  .bc-col:hover { filter:brightness(1.12); }
+  .bc-col.selected { outline:2px solid #fff; outline-offset:1px; z-index:5; }
+
+  /* one layer cell within a BC */
+  .layer-cell {
+    flex-shrink:0; border-radius:4px; overflow:hidden;
+    position:relative; display:flex; flex-direction:column;
+    justify-content:center; align-items:flex-start;
+    padding:4px 6px; transition:filter .15s; min-width:0;
+  }
+  .layer-cell:hover { filter:brightness(1.1); }
+
+  .lc-name  { font-size:.6rem; font-weight:700; color:rgba(255,255,255,.8); line-height:1.2; white-space:nowrap; }
+  .lc-sloc  { font-size:.55rem; color:rgba(255,255,255,.5); }
+  .lc-val   { font-size:.7rem; font-weight:800; color:rgba(255,255,255,.95); margin-top:1px; }
+
+  /* ── TOOLTIP ── */
+  .tooltip-box {
+    display:none; position:fixed; z-index:200;
+    background:#0a1628; border:1px solid var(--border); border-radius:8px;
+    padding:.75rem 1rem; width:220px; pointer-events:none;
+    box-shadow:0 12px 32px rgba(0,0,0,.7); font-size:.75rem; line-height:1.6;
+  }
+  .tt-bc    { font-size:.6rem; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
+  .tt-layer { font-size:.9rem; font-weight:700; margin-bottom:.4rem; }
+  .tt-row   { display:flex; justify-content:space-between; gap:.5rem; }
+  .tt-key   { color:var(--muted); }
+  .tt-val   { font-weight:700; }
+  .tt-sloc  { font-size:.8rem; font-weight:800; color:#06b6d4; border-top:1px solid var(--border); margin-top:.4rem; padding-top:.4rem; }
+
+  /* ── DETAIL PANEL ── */
+  .detail-panel {
+    margin-top:1.2rem;
+    background:var(--card); border:1px solid var(--border); border-radius:12px;
+    overflow:hidden; animation:slideIn .25s ease;
+  }
+  @keyframes slideIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  .detail-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:.9rem 1.2rem; border-bottom:1px solid var(--border);
+  }
+  .detail-bc-name { font-size:1.1rem; font-weight:800; }
+  .detail-close { background:none; border:none; color:var(--muted); cursor:pointer; font-size:1.1rem; padding:.2rem .4rem; border-radius:4px; }
+  .detail-close:hover { background:rgba(255,255,255,.06); color:var(--text); }
+
+  .detail-body { padding:1.2rem; display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.2rem; }
+  @media (max-width:768px) { .detail-body { grid-template-columns:1fr; } }
+
+  .detail-chart-card { background:var(--surf); border:1px solid var(--border); border-radius:8px; padding:1rem; }
+  .detail-chart-title { font-size:.72rem; font-weight:700; margin-bottom:.2rem; }
+  .detail-chart-sub   { font-size:.62rem; color:var(--muted); margin-bottom:.8rem; }
+  .detail-chart-wrap  { position:relative; height:150px; }
+
+  .detail-summary { display:grid; grid-template-columns:repeat(4,1fr); gap:.7rem; margin:.8rem 1.2rem; }
+  .summary-card { background:var(--surf); border:1px solid var(--border); border-radius:8px; padding:.7rem .8rem; }
+  .sc-layer { font-size:.6rem; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+  .sc-sloc  { font-size:1.3rem; font-weight:800; color:#06b6d4; line-height:1.1; }
+  .sc-pct   { font-size:.65rem; color:var(--muted); }
+  .sc-tags  { display:flex; flex-direction:column; gap:2px; margin-top:.35rem; }
+  .sc-tag   { font-size:.6rem; padding:.1rem .35rem; border-radius:3px; display:flex; justify-content:space-between; }
+
+  /* ── GLOBAL STATS BAR ── */
+  .stats-bar {
+    display:flex; gap:1.5rem; flex-wrap:wrap;
+    padding:1rem 1.5rem; background:var(--surf);
+    border:1px solid var(--border); border-radius:10px; margin-bottom:1.2rem;
+  }
+  .stat-item { text-align:center; }
+  .stat-val  { font-size:1.5rem; font-weight:800; line-height:1; }
+  .stat-lbl  { font-size:.62rem; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-top:.15rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">AtaraxiaDive · <span>Métricas por Bounded Context × Capa</span></div>
+  <div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap">
+    <span style="font-size:.68rem;color:var(--muted)">Color =</span>
+    <div class="toggle">
+      <button class="active" data-m="cc">CC Ciclomática</button>
+      <button data-m="mi">Mantenibilidad MI</button>
+      <button data-m="cov">Cobertura Tests</button>
+    </div>
+    <div class="view-toggle">
+      <button class="active" data-v="prop">Proporcional</button>
+      <button data-v="norm">Normalizado</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="intro">
+    <h1>Distribución de código: tamaño relativo × complejidad</h1>
+    <p>
+      Cada columna es un Bounded Context — su <strong>ancho es proporcional a su SLOC total</strong>.
+      Dentro de cada columna, las bandas representan las capas hexagonales con
+      <strong>altura proporcional al SLOC de esa capa</strong>.
+      El <strong>color</strong> codifica la métrica seleccionada arriba.
+      Clic en cualquier BC para ver el detalle completo.
+    </p>
+  </div>
+
+  <!-- Global stats -->
+  <div class="stats-bar" id="stats-bar"></div>
+
+  <!-- Color scale -->
+  <div class="scale-row" id="scale-row"></div>
+
+  <!-- Treemap -->
+  <div class="treemap-wrap" id="treemap-wrap">
+    <div class="bc-header-row" id="bc-headers"></div>
+    <div class="treemap-body">
+      <div class="axis-labels" id="axis-labels"></div>
+      <div class="treemap-cols" id="treemap-cols"></div>
+    </div>
+  </div>
+
+  <!-- Detail panel (hidden) -->
+  <div class="detail-panel" id="detail-panel" style="display:none"></div>
+</main>
+
+<!-- Tooltip -->
+<div class="tooltip-box" id="tooltip"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+
+const LAYERS = ['domain', 'application', 'infrastructure', 'api'];
+const LAYER_LABELS = { domain:'domain/', application:'application/', infrastructure:'infrastructure/', api:'api/' };
+const LAYER_COLORS = { domain:'#10b981', application:'#f59e0b', infrastructure:'#3b82f6', api:'#94a3b8' };
+
+const DATA = [
+  { id:'competencia',    label:'competencia',    type:'ES Core', bcColor:'#10b981',
+    layers: { domain:{sloc:2278,cc:1.74,mi:88.11,cov:96.3}, application:{sloc:1481,cc:1.92,mi:84.27,cov:97.9}, infrastructure:{sloc:391,cc:2.16,mi:86.82,cov:90.4}, api:{sloc:1155,cc:1.60,mi:85.83,cov:null} } },
+  { id:'registro',       label:'registro',       type:'CRUD',    bcColor:'#f59e0b',
+    layers: { domain:{sloc:324,cc:2.11,mi:87.25,cov:97.9}, application:{sloc:363,cc:1.98,mi:72.85,cov:99.0}, infrastructure:{sloc:529,cc:2.16,mi:74.73,cov:92.5}, api:{sloc:691,cc:2.15,mi:61.63,cov:null} } },
+  { id:'resultados',     label:'resultados',     type:'CRUD',    bcColor:'#ec4899',
+    layers: { domain:{sloc:613,cc:2.53,mi:89.61,cov:98.7}, application:{sloc:734,cc:2.90,mi:77.80,cov:76.9}, infrastructure:{sloc:160,cc:2.24,mi:80.97,cov:88.8}, api:{sloc:294,cc:2.33,mi:74.39,cov:null} } },
+  { id:'torneo',         label:'torneo',         type:'CRUD',    bcColor:'#3b82f6',
+    layers: { domain:{sloc:248,cc:1.55,mi:91.50,cov:100.0}, application:{sloc:246,cc:1.68,mi:77.34,cov:98.4}, infrastructure:{sloc:154,cc:1.81,mi:83.12,cov:100.0}, api:{sloc:408,cc:1.80,mi:78.90,cov:null} } },
+  { id:'notificaciones', label:'notificaciones', type:'ES',      bcColor:'#06b6d4',
+    layers: { domain:{sloc:404,cc:1.84,mi:85.64,cov:95.5}, application:{sloc:278,cc:2.04,mi:80.19,cov:97.6}, infrastructure:{sloc:354,cc:2.45,mi:81.82,cov:96.6}, api:{sloc:0,cc:null,mi:null,cov:null} } },
+  { id:'identidad',      label:'identidad',      type:'CRUD',    bcColor:'#8b5cf6',
+    layers: { domain:{sloc:140,cc:1.51,mi:97.36,cov:99.2}, application:{sloc:300,cc:3.00,mi:70.45,cov:98.5}, infrastructure:{sloc:186,cc:1.90,mi:83.59,cov:99.1}, api:{sloc:353,cc:2.50,mi:65.32,cov:null} } },
+  { id:'shared',         label:'shared',         type:'Shared',  bcColor:'#6366f1',
+    layers: { domain:{sloc:151,cc:1.92,mi:92.99,cov:99.2}, application:{sloc:0,cc:null,mi:null,cov:null}, infrastructure:{sloc:153,cc:2.11,mi:85.19,cov:100.0}, api:{sloc:2,cc:null,mi:null,cov:null} } },
+];
+
+// totals
+DATA.forEach(bc => {
+  bc.totalSloc = LAYERS.reduce((s, l) => s + (bc.layers[l].sloc || 0), 0);
+});
+const GRAND_TOTAL = DATA.reduce((s, bc) => s + bc.totalSloc, 0);
+
+// global averages
+const GLOBAL = { cc:1.89, mi:90.07, cov:95.3 };
+
+// metric config
+const METRICS = {
+  cc:  { label:'CC Ciclomática', key:'cc', lo:1.5, hi:3.0, loGood:true,  fmt:v=>v.toFixed(2), unit:'', from:'#22c55e', mid:'#f59e0b', to:'#ef4444', ref:1.89 },
+  mi:  { label:'Mantenibilidad MI', key:'mi', lo:60, hi:100, loGood:false, fmt:v=>v.toFixed(1), unit:'', from:'#ef4444', mid:'#f59e0b', to:'#10b981', ref:90.07 },
+  cov: { label:'Cobertura Tests', key:'cov', lo:70, hi:100, loGood:false, fmt:v=>v.toFixed(1), unit:'%', from:'#ef4444', mid:'#f59e0b', to:'#22c55e', ref:95.3 },
+};
+
+let currentMetric = 'cc';
+let currentView   = 'prop';
+let selectedBC    = null;
+let detailCharts  = [];
+
+// ── COLOR UTILS ──────────────────────────────────────────────────────────
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return [r,g,b];
+}
+function lerp(a,b,t) { return a + (b-a)*t; }
+function lerpColor(c1,c2,t) {
+  const [r1,g1,b1] = hexToRgb(c1), [r2,g2,b2] = hexToRgb(c2);
+  return `rgb(${Math.round(lerp(r1,r2,t))},${Math.round(lerp(g1,g2,t))},${Math.round(lerp(b1,b2,t))})`;
+}
+function metricColor(val, m) {
+  if (val == null) return '#1e3050';
+  const cfg = METRICS[m];
+  const t = Math.max(0, Math.min(1, (val - cfg.lo) / (cfg.hi - cfg.lo)));
+  if (t < 0.5) return lerpColor(cfg.from, cfg.mid, t*2);
+  return lerpColor(cfg.mid, cfg.to, (t-0.5)*2);
+}
+
+// ── BUILD GLOBAL STATS BAR ───────────────────────────────────────────────
+
+function buildStatsBar() {
+  const el = document.getElementById('stats-bar');
+  const items = [
+    { val: GRAND_TOTAL.toLocaleString('es'), lbl: 'SLOC backend', color:'#06b6d4' },
+    { val: DATA.length,                       lbl: 'Bounded Contexts', color:'#10b981' },
+    { val: '1.89',                            lbl: 'CC promedio global', color:'#f59e0b' },
+    { val: '90.07',                           lbl: 'MI promedio domain/', color:'#10b981' },
+    { val: '95.3%',                           lbl: 'Cobertura tests', color:'#3b82f6' },
+    { val: '73.21',                           lbl: 'MI promedio api/', color:'#f59e0b' },
+  ];
+  el.innerHTML = items.map(i=>
+    `<div class="stat-item"><div class="stat-val" style="color:${i.color}">${i.val}</div><div class="stat-lbl">${i.lbl}</div></div>`
+  ).join('');
+}
+
+// ── BUILD COLOR SCALE ─────────────────────────────────────────────────────
+
+function buildScale() {
+  const cfg = METRICS[currentMetric];
+  const el = document.getElementById('scale-row');
+  const gradId = `grad-${currentMetric}`;
+  el.innerHTML = `
+    <span class="scale-label">Escala ${cfg.label}:</span>
+    <div class="scale-bar-wrap">
+      <span class="scale-ends">${cfg.loGood===false ? '◀ bajo' : '◀ '+cfg.lo.toFixed(1)}</span>
+      <div class="scale-bar" style="--scale-from:${cfg.from};--scale-mid:${cfg.mid};--scale-to:${cfg.to}"></div>
+      <span class="scale-ends">${cfg.loGood===false ? cfg.hi.toFixed(0)+'% ▶' : cfg.hi.toFixed(1)+' ▶'}</span>
+    </div>
+    <span class="scale-label" style="margin-left:.5rem">
+      <span class="nodata-swatch"></span>Sin datos
+    </span>
+    <span class="scale-label" style="color:#94a3b8">
+      ── ref. global: <strong style="color:${lerpColor(cfg.mid,cfg.to,.5)}">${cfg.ref}</strong>
+    </span>
+  `;
+}
+
+// ── BUILD TREEMAP ─────────────────────────────────────────────────────────
+
+function buildTreemap() {
+  const cols   = document.getElementById('treemap-cols');
+  const headers= document.getElementById('bc-headers');
+  const axis   = document.getElementById('axis-labels');
+  cols.innerHTML = ''; headers.innerHTML = ''; axis.innerHTML = '';
+
+  // axis labels (approximate – domain at top, api at bottom)
+  LAYERS.forEach(l => {
+    const d = document.createElement('div');
+    d.className = 'axis-label';
+    d.style.color = LAYER_COLORS[l];
+    d.textContent = LAYER_LABELS[l];
+    axis.appendChild(d);
+  });
+
+  DATA.forEach(bc => {
+    const colFlex = currentView === 'prop' ? bc.totalSloc : Math.round(GRAND_TOTAL / DATA.length);
+
+    // ── BC column ──
+    const col = document.createElement('div');
+    col.className = 'bc-col';
+    col.style.flex = colFlex;
+    if (selectedBC === bc.id) col.classList.add('selected');
+
+    // header cell
+    const hCell = document.createElement('div');
+    hCell.className = 'bc-header-cell';
+    hCell.style.flex = colFlex;
+    hCell.innerHTML = `
+      <div class="bc-name" style="color:${bc.bcColor}">${bc.label}</div>
+      <div class="bc-sloc">${bc.totalSloc.toLocaleString('es')} SLOC · ${((bc.totalSloc/GRAND_TOTAL)*100).toFixed(1)}%</div>
+      <span class="bc-type-badge">${bc.type}</span>
+    `;
+    headers.appendChild(hCell);
+
+    // layer cells
+    LAYERS.forEach(layerKey => {
+      const ld = bc.layers[layerKey];
+      if (!ld) return;
+      const sloc = ld.sloc || 0;
+      if (sloc === 0 && ld.cc == null && ld.mi == null) return; // skip truly empty
+
+      const layerFlex = currentView === 'prop' ? Math.max(sloc, 1) : (bc.totalSloc > 0 ? Math.max(sloc/bc.totalSloc*100,1) : 1);
+
+      const cell = document.createElement('div');
+      cell.className = 'layer-cell';
+      cell.style.flex = layerFlex;
+      cell.style.background = metricColor(ld[currentMetric], currentMetric);
+
+      // text labels (only if cell big enough)
+      const showFull = sloc > 300;
+      const showMin  = sloc > 80 || currentView === 'norm';
+      if (showFull) {
+        cell.innerHTML = `
+          <div class="lc-name">${LAYER_LABELS[layerKey]}</div>
+          <div class="lc-sloc">${sloc.toLocaleString('es')} SLOC</div>
+          <div class="lc-val">${ld[currentMetric] != null ? METRICS[currentMetric].fmt(ld[currentMetric]) + METRICS[currentMetric].unit : '—'}</div>
+        `;
+      } else if (showMin) {
+        cell.innerHTML = `<div class="lc-name" style="font-size:.5rem">${layerKey.slice(0,4)}</div>`;
+      }
+
+      // mouse events for tooltip
+      cell.addEventListener('mouseenter', e => showTooltip(e, bc, layerKey, ld));
+      cell.addEventListener('mouseleave', () => { document.getElementById('tooltip').style.display='none'; });
+      cell.addEventListener('mousemove',  e => posTooltip(e));
+
+      col.appendChild(cell);
+    });
+
+    col.addEventListener('click', () => selectBC(bc.id));
+    cols.appendChild(col);
+  });
+}
+
+// ── TOOLTIP ───────────────────────────────────────────────────────────────
+
+function showTooltip(e, bc, layerKey, ld) {
+  const tt = document.getElementById('tooltip');
+  const pct = bc.totalSloc > 0 ? ((ld.sloc/bc.totalSloc)*100).toFixed(1) : '0';
+  const ccBadge  = ld.cc  != null ? `<span style="color:${metricColor(ld.cc, 'cc')}">${ld.cc.toFixed(2)}</span>` : '<span style="color:#475569">—</span>';
+  const miBadge  = ld.mi  != null ? `<span style="color:${metricColor(ld.mi, 'mi')}">${ld.mi.toFixed(1)}</span>` : '<span style="color:#475569">—</span>';
+  const covBadge = ld.cov != null ? `<span style="color:${metricColor(ld.cov,'cov')}">${ld.cov.toFixed(1)}%</span>` : '<span style="color:#475569">n/a</span>';
+  tt.innerHTML = `
+    <div class="tt-bc" style="color:${bc.bcColor}">${bc.label} · ${bc.type}</div>
+    <div class="tt-layer" style="color:${LAYER_COLORS[layerKey]}">${LAYER_LABELS[layerKey]}</div>
+    <div class="tt-row"><span class="tt-key">CC ciclomática</span><span class="tt-val">${ccBadge}</span></div>
+    <div class="tt-row"><span class="tt-key">Mantenibilidad MI</span><span class="tt-val">${miBadge}</span></div>
+    <div class="tt-row"><span class="tt-key">Cobertura tests</span><span class="tt-val">${covBadge}</span></div>
+    <div class="tt-sloc">${ld.sloc.toLocaleString('es')} SLOC · ${pct}% del BC</div>
+  `;
+  tt.style.display = 'block';
+  posTooltip(e);
+}
+function posTooltip(e) {
+  const tt = document.getElementById('tooltip');
+  const vw = window.innerWidth, vh = window.innerHeight;
+  let x = e.clientX + 14, y = e.clientY - 10;
+  if (x + 230 > vw) x = e.clientX - 234;
+  if (y + tt.offsetHeight > vh) y = e.clientY - tt.offsetHeight - 10;
+  tt.style.left = x + 'px'; tt.style.top = y + 'px';
+}
+
+// ── DETAIL PANEL ──────────────────────────────────────────────────────────
+
+function selectBC(id) {
+  if (selectedBC === id) {
+    selectedBC = null;
+    document.getElementById('detail-panel').style.display = 'none';
+    buildTreemap();
+    return;
+  }
+  selectedBC = id;
+  buildTreemap();
+  buildDetailPanel(DATA.find(b => b.id === id));
+}
+
+function buildDetailPanel(bc) {
+  detailCharts.forEach(c => c.destroy());
+  detailCharts = [];
+
+  const panel = document.getElementById('detail-panel');
+  panel.style.display = 'block';
+
+  // summary cards per layer
+  const totalSlocStr = bc.totalSloc.toLocaleString('es');
+  const summaryCards = LAYERS.map(lk => {
+    const ld = bc.layers[lk];
+    const sloc = ld.sloc || 0;
+    const pct = bc.totalSloc > 0 ? ((sloc/bc.totalSloc)*100).toFixed(0) : '0';
+    const ccClr  = metricColor(ld.cc,  'cc');
+    const miClr  = metricColor(ld.mi,  'mi');
+    const covClr = metricColor(ld.cov, 'cov');
+    return `
+      <div class="summary-card">
+        <div class="sc-layer" style="color:${LAYER_COLORS[lk]}">${LAYER_LABELS[lk]}</div>
+        <div class="sc-sloc">${sloc.toLocaleString('es')}</div>
+        <div class="sc-pct">${pct}% del BC · SLOC</div>
+        <div class="sc-tags">
+          <div class="sc-tag" style="background:${ccClr}22;color:${ccClr}">
+            <span>CC</span><span>${ld.cc != null ? ld.cc.toFixed(2) : '—'}</span>
+          </div>
+          <div class="sc-tag" style="background:${miClr}22;color:${miClr}">
+            <span>MI</span><span>${ld.mi != null ? ld.mi.toFixed(1) : '—'}</span>
+          </div>
+          <div class="sc-tag" style="background:${(ld.cov!=null?covClr:'#475569')}22;color:${ld.cov!=null?covClr:'#475569'}">
+            <span>Cov</span><span>${ld.cov != null ? ld.cov.toFixed(1)+'%' : 'n/a'}</span>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  panel.innerHTML = `
+    <div class="detail-header">
+      <div>
+        <div class="detail-bc-name" style="color:${bc.bcColor}">${bc.label}
+          <span style="font-size:.7rem;font-weight:400;color:var(--muted);margin-left:.5rem">${bc.type} · ${totalSlocStr} SLOC</span>
+        </div>
+      </div>
+      <button class="detail-close" onclick="selectBC('${bc.id}')">✕</button>
+    </div>
+    <div class="detail-summary">${summaryCards}</div>
+    <div class="detail-body">
+      <div class="detail-chart-card">
+        <div class="detail-chart-title" style="color:#ef4444">Complejidad Ciclomática (CC)</div>
+        <div class="detail-chart-sub">Por capa · ref. global: ${GLOBAL.cc}</div>
+        <div class="detail-chart-wrap"><canvas id="dc-cc"></canvas></div>
+      </div>
+      <div class="detail-chart-card">
+        <div class="detail-chart-title" style="color:#10b981">Mantenibilidad (MI)</div>
+        <div class="detail-chart-sub">Por capa · ref. global: ${GLOBAL.mi}</div>
+        <div class="detail-chart-wrap"><canvas id="dc-mi"></canvas></div>
+      </div>
+      <div class="detail-chart-card">
+        <div class="detail-chart-title" style="color:#3b82f6">Cobertura de Tests</div>
+        <div class="detail-chart-sub">Por capa · ref. global: ${GLOBAL.cov}%</div>
+        <div class="detail-chart-wrap"><canvas id="dc-cov"></canvas></div>
+      </div>
+    </div>
+  `;
+
+  // ── Chart.js charts ──
+  const labels = LAYERS.map(l => LAYER_LABELS[l]);
+
+  function refPlugin(refVal, color) {
+    return {
+      id: 'refLine',
+      afterDraw(chart) {
+        const {ctx, scales:{x}, chartArea:{top,bottom}} = chart;
+        if (!x) return;
+        const xPx = x.getPixelForValue(refVal);
+        ctx.save();
+        ctx.setLineDash([4,3]); ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(xPx,top); ctx.lineTo(xPx,bottom); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = color; ctx.font = '9px Segoe UI';
+        ctx.fillText('ref', xPx+3, top+10);
+        ctx.restore();
+      }
+    };
+  }
+
+  function makeBar(canvasId, layerKey, cfg, refVal) {
+    const vals = LAYERS.map(l => bc.layers[l][layerKey]);
+    const bgs  = vals.map(v => v != null ? metricColor(v, layerKey === 'cc' ? 'cc' : layerKey === 'mi' ? 'mi' : 'cov') + 'cc' : '#1e3050');
+    const borders = vals.map(v => v != null ? metricColor(v, layerKey === 'cc' ? 'cc' : layerKey === 'mi' ? 'mi' : 'cov') : '#1e3050');
+    const c = new Chart(document.getElementById(canvasId), {
+      type:'bar',
+      data:{
+        labels,
+        datasets:[{
+          data: vals.map(v => v ?? 0),
+          backgroundColor: bgs,
+          borderColor: borders,
+          borderWidth: 1.5,
+          borderRadius: 4,
+        }]
+      },
+      options:{
+        indexAxis:'y',
+        responsive:true, maintainAspectRatio:false,
+        plugins:{
+          legend:{display:false},
+          tooltip:{
+            callbacks:{
+              label: ctx => {
+                const v = vals[ctx.dataIndex];
+                return v != null ? ' ' + cfg.fmt(v) + cfg.unit : ' sin datos';
+              }
+            }
+          }
+        },
+        scales:{
+          x:{ min:cfg.lo * .95, max:cfg.hi * 1.02, grid:{color:'rgba(30,48,80,.8)'}, ticks:{color:'#64748b',font:{size:9}} },
+          y:{ grid:{display:false}, ticks:{color:'#94a3b8',font:{size:10}} }
+        }
+      },
+      plugins:[ refPlugin(refVal, '#ffffff44') ]
+    });
+    detailCharts.push(c);
+  }
+
+  makeBar('dc-cc',  'cc',  METRICS.cc,  GLOBAL.cc);
+  makeBar('dc-mi',  'mi',  METRICS.mi,  GLOBAL.mi);
+  makeBar('dc-cov', 'cov', METRICS.cov, GLOBAL.cov);
+
+  panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+// ── CONTROLS ────────────────────────────────────────────────────────────
+
+document.querySelectorAll('.toggle button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.toggle button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentMetric = btn.dataset.m;
+    buildScale();
+    buildTreemap();
+    if (selectedBC) buildDetailPanel(DATA.find(b => b.id === selectedBC));
+  });
+});
+
+document.querySelectorAll('.view-toggle button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentView = btn.dataset.v;
+    buildTreemap();
+  });
+});
+
+// ── INIT ────────────────────────────────────────────────────────────────
+
+buildStatsBar();
+buildScale();
+buildTreemap();
+</script>
+</body>
+</html>

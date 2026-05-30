@@ -143,8 +143,9 @@ function DetalleTorneoContent({ torneoId }: DetalleTorneoContentProps) {
       activeTournamentId={torneoId}
       activeTournamentState={torneoQuery.data?.estado}
       subtitle="Gestión del torneo activo"
-      actions={
-        <>
+    >
+      {(torneoQuery.data?.estado === 'CREADO' || torneoQuery.data?.estado === 'INSCRIPCION_ABIERTA' ) ? (
+        <div className="flex justify-end gap-2">
           {(torneoQuery.data?.estado === 'CREADO' ||
             torneoQuery.data?.estado === 'INSCRIPCION_ABIERTA') ? (
             <Link
@@ -162,9 +163,8 @@ function DetalleTorneoContent({ torneoId }: DetalleTorneoContentProps) {
               Editar disciplinas
             </Link>
           ) : null}
-        </>
-      }
-    >
+        </div>
+      ) : null}
       {torneoQuery.isLoading ? (
         <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando torneo...

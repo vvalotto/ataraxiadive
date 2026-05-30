@@ -36,18 +36,18 @@ function SelectorTorneo() {
     return (
       <OrganizadorLayout
       title="Resultados"
-      subtitle="Seleccionar torneo para ver los resultados"
+      subtitle="Rankings provisionales y finales por disciplina"
       showTournamentNavigation={false}
       simpleHeader
-      actions={
+    >
+      <div className="flex justify-end">
         <Link
           to="/organizador/torneo"
           className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
         >
           Volver
         </Link>
-      }
-    >
+      </div>
       {torneosQuery.isLoading ? (
         <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando torneos...
@@ -176,39 +176,26 @@ function ResultadosTorneo({ torneoId }: ResultadosTorneoProps) {
     grillaQuery.isLoading ||
     rankingQuery.isLoading
 
-  const subtitulo = torneo
-    ? `${torneo.nombre} · ${torneo.sede.ciudad}`
-    : 'Resultados por disciplina'
-  const estadoRankingLabel = overallDisponible ? 'Ranking final' : 'Ranking parcial'
-  const progresoLabel =
-    totalDisciplinas > 0 ? `${disciplinasCerradas} de ${totalDisciplinas} disciplinas cerradas` : null
-
   return (
     <OrganizadorLayout
       title="Resultados"
       activeTournamentId={torneoId}
       activeTournamentState={torneo?.estado}
-      subtitle={
-        disciplinaActiva
-          ? `${subtitulo} · ${disciplinaActiva} · ${estadoRankingLabel}${progresoLabel ? ` · ${progresoLabel}` : ''}`
-          : `${subtitulo} · ${estadoRankingLabel}${progresoLabel ? ` · ${progresoLabel}` : ''}`
-      }
-      actions={
-        <>
-          <button
-            type="button"
-            disabled={!overallDisponible}
-            className={
-              overallDisponible
-                ? 'rounded-full border border-sky-400 bg-sky-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-sky-300'
-                : 'cursor-not-allowed rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500'
-            }
-          >
-            Publicar resultados
-          </button>
-        </>
-      }
+      subtitle="Rankings provisionales y finales por disciplina"
     >
+      <div className="flex justify-end">
+        <button
+          type="button"
+          disabled={!overallDisponible}
+          className={
+            overallDisponible
+              ? 'rounded-full border border-sky-400 bg-sky-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-sky-300'
+              : 'cursor-not-allowed rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500'
+          }
+        >
+          Publicar resultados
+        </button>
+      </div>
       {competenciasQuery.isLoading ? (
         <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">
           Cargando disciplinas...

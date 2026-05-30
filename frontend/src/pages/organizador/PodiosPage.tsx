@@ -42,18 +42,18 @@ function SelectorTorneoPodios() {
   return (
     <OrganizadorLayout
       title="Podios"
-      subtitle="Seleccionar torneo para ver los podios"
+      subtitle="Clasificación final y podios por categoría"
       showTournamentNavigation={false}
       simpleHeader
-      actions={
+    >
+      <div className="flex justify-end">
         <Link
           to="/organizador/torneo"
           className="rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100"
         >
           Volver
         </Link>
-      }
-    >
+      </div>
       {torneosQuery.isLoading ? (
         <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando torneos...
@@ -233,14 +233,14 @@ function PodiosTorneo({ torneoId }: PodiosTorneoProps) {
     [disciplinas, rankingQueries, categoriaActiva, inscriptosPorAtleta],
   )
 
-  const subtitulo = torneo ? `${torneo.nombre} · ${torneo.sede.ciudad}` : 'Podios del torneo'
+
 
   return (
     <OrganizadorLayout
       title="Podios"
       activeTournamentId={torneoId}
       activeTournamentState={torneo?.estado}
-      subtitle={subtitulo}
+      subtitle="Clasificación final y podios por categoría"
     >
       {competenciasQuery.isLoading ? (
         <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">

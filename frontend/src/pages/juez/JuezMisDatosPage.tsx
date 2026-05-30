@@ -3,6 +3,7 @@ import type { FormEvent } from 'react'
 import { JuezLayout } from '../../components/juez/JuezLayout'
 import { actualizarJuezMe, crearJuezMe, fetchJuezMe, ApiError } from '../../api/registro'
 import { RolesSection } from '../../components/shared/RolesSection'
+import useAuthStore from '../../stores/useAuthStore'
 
 interface FormState {
   numero_licencia: string
@@ -20,6 +21,9 @@ function getErrorMessage(error: unknown): string {
 }
 
 export function JuezMisDatosPage() {
+  const nombre = useAuthStore((s) => s.nombre)
+  const apellido = useAuthStore((s) => s.apellido)
+  const email = useAuthStore((s) => s.email)
   const [perfilExiste, setPerfilExiste] = useState<boolean | null>(null)
   const [form, setForm] = useState<FormState>({ numero_licencia: '', federacion: '' })
   const [isLoading, setIsLoading] = useState(true)
@@ -103,27 +107,9 @@ export function JuezMisDatosPage() {
         <div className="rounded-2xl border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando perfil...
         </div>
-      ) : perfilExiste === false ? (
-        <div className="rounded-2xl border border-slate-700 bg-slate-900/85 p-5 shadow-lg">
-          <p className="mb-4 text-sm text-slate-400">
-            Todavía no tenés un perfil de juez. Crealo para agregar tu licencia y federación.
-          </p>
-          {error ? (
-            <div className="mb-4 rounded-xl border border-red-500/40 bg-red-950/40 p-3 text-sm text-red-200">
-              {error}
-            </div>
-          ) : null}
-          <button
-            onClick={() => void handleCrear()}
-            disabled={isSubmitting}
-            className="w-full rounded-full bg-sky-500 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950 disabled:cursor-not-allowed disabled:bg-slate-600 disabled:text-slate-300"
-          >
-            {isSubmitting ? 'Creando...' : 'Crear mi perfil de juez'}
-          </button>
-        </div>
       ) : (
         <form
-          onSubmit={handleSubmit}
+          onSubmit={perfilExiste ? handleSubmit : (e) => { e.preventDefault(); void handleCrear() }}
           className="rounded-2xl border border-slate-700 bg-slate-900/85 p-5 shadow-lg"
         >
           {success ? (
@@ -137,6 +123,30 @@ export function JuezMisDatosPage() {
             </div>
           ) : null}
           <div className="grid gap-4">
+            <label className="block text-sm font-semibold text-slate-100">
+              Nombre
+              <input
+                value={nombre ?? ''}
+                readOnly
+                className="mt-2 w-full rounded-xl border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-slate-400 outline-none cursor-default"
+              />
+            </label>
+            <label className="block text-sm font-semibold text-slate-100">
+              Apellido
+              <input
+                value={apellido ?? ''}
+                readOnly
+                className="mt-2 w-full rounded-xl border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-slate-400 outline-none cursor-default"
+              />
+            </label>
+            <label className="block text-sm font-semibold text-slate-100">
+              Email
+              <input
+                value={email ?? ''}
+                readOnly
+                className="mt-2 w-full rounded-xl border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-slate-400 outline-none cursor-default"
+              />
+            </label>
             <label className="block text-sm font-semibold text-slate-100">
               Número de licencia <span className="ml-1 text-xs font-normal text-slate-400">(opcional)</span>
               <input
@@ -162,7 +172,7 @@ export function JuezMisDatosPage() {
               disabled={isSubmitting}
               className="w-full rounded-full bg-sky-500 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-950 disabled:cursor-not-allowed disabled:bg-slate-600 disabled:text-slate-300"
             >
-              {isSubmitting ? 'Guardando...' : 'Guardar cambios'}
+              {isSubmitting ? 'Guardando...' : perfilExiste ? 'Guardar cambios' : 'Crear mi perfil de juez'}
             </button>
           </div>
         </form>
