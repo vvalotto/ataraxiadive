@@ -233,7 +233,7 @@ function ResultadosTorneo({ torneoId }: ResultadosTorneoProps) {
             </div>
 
             {disciplinaActiva ? (
-              <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+              <div className="mt-6 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
                     Ranking por disciplina

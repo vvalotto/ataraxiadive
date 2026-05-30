@@ -165,7 +165,7 @@ def crear_usuario(client: httpx.Client, email: str, nombre: str, apellido: str, 
         json={
             "email": email,
             "password": PASSWORD,
-            "rol": rol,
+            "roles": [rol],
             "nombre": nombre,
             "apellido": apellido,
         },
@@ -269,25 +269,29 @@ def main() -> None:
             atleta_id = str(uuid.uuid4())
             fecha_nac = FECHA_NAC[atleta["category"]]
 
-            # Auth user
-            crear_usuario(client, email, nombre, apellido, "ATLETA")
+            # Auth user — el registro crea el perfil atleta automáticamente
+            atleta_token = crear_usuario(client, email, nombre, apellido, "ATLETA")
+            atleta_h = {"Authorization": f"Bearer {atleta_token}"}
 
-            # Registro BC
+            # Obtener atleta_id real del perfil auto-creado
+            perfil_resp = assert_ok(
+                client.get("/registro/atletas/me", headers=atleta_h),
+                f"get perfil {nombre_completo}",
+            )
+            atleta_id = perfil_resp["atleta_id"]
+
+            # Completar perfil con datos del dataset
             assert_ok(
-                client.post(
-                    "/registro/atletas",
+                client.patch(
+                    "/registro/atletas/me",
                     json={
-                        "atleta_id": atleta_id,
-                        "nombre": nombre,
-                        "apellido": apellido,
-                        "email": email,
                         "fecha_nacimiento": fecha_nac,
                         "categoria": categoria,
                         "club": atleta["club"],
                     },
-                    headers=admin_h,
+                    headers=atleta_h,
                 ),
-                f"registro atleta {nombre_completo}",
+                f"patch perfil {nombre_completo}",
             )
 
             ids["atletas"][nombre_completo] = {

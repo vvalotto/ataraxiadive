@@ -115,7 +115,7 @@ function TorneoCompetenciasContent({ torneoId }: TorneoCompetenciasContentProps)
                   </h2>
                   <p className="mt-2 text-sm text-slate-300">
                     {item.competencia
-                      ? `Competencia ${item.competencia.competencia_id}`
+                      ? `Competencia ${item.disciplina}`
                       : 'Competencia pendiente: generar grilla desde la sección Grilla'}
                   </p>
                 </div>
