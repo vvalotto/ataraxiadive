@@ -7,6 +7,29 @@ Versionado: [Semantic Versioning](https://semver.org/lang/es/)
 
 ---
 
+## [1.0.5] - 2026-05-30
+
+### Changed
+- **Manual de usuario — revisión completa contra producción** (SP-ADJ-13, PR #218): el manual
+  se actualizó para coincidir con la UI real de https://ataraxiadive.fly.dev tras la ejecución
+  end-to-end del torneo Puerto Madryn 2026.
+  - **Portal público:** nombres de botones reales (Resultados / Podios / Inscribirse); tarjeta
+    de lista con Categorías y botón de acción; resultados con pestañas por disciplina y columnas
+    Anuncio/OT/Performance/Tarjeta; podios con vistas por disciplina y Overall; nueva página
+    anexa "Vista de escritorio"
+  - **Portal organizador:** 24 capturas reales (reemplazo de las renombradas); resultados con
+    badge FINALIZADA/EN SEGUIMIENTO, estado Pendiente y ejemplos por disciplina; podios con
+    estructura por categoría (Overall + por disciplina) y descripción del reglamento FAAS;
+    grilla STA en tiempo; panel de disciplina cerrada; Mis Datos con formulario real
+  - **Portal atleta:** badge EN PODIO, signo de DIF (RP − AP) y sección Ranking Overall
+  - **Portal juez y Tu cuenta:** verificados sin cambios (completos desde INC-7.2)
+
+### Fixed
+- **Manual — capturas de escritorio a ancho completo** (`ataraxia.css`): las imágenes apaisadas
+  (desktop / portal organizador) ya no quedan limitadas al ancho mobile de 380px
+
+---
+
 ## [1.0.4] - 2026-05-30
 
 ### Fixed

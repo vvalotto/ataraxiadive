@@ -96,7 +96,7 @@ SP-ADJ  → ajuste técnico o documental antes de cerrar la baseline
 **SP6 cerrado:** INC-6.1..6.6 + SP-ADJ-10/11 · UAT 10/10 flows · BL-006 ✅ · tag `v1.0.0` · despliegue diferido a SP7.
 **SP7 cerrado:** INC-7.1 Despliegue en Fly.io ✅ · INC-7.2 Manual de usuario ✅ · PR #212 · BL-007 · tag `v1.0.2`.
 **SP-ADJ-12 cerrado:** 6/6 US ✅ + 3 fixes post-revisión · PRs #205–#210 · issues #198–#204 · DesignReviewer 0 CRITICAL · 1049 tests · BL-007 · tag `v1.0.2`.
-**SP-ADJ-13 en curso:** ejecución completa en producción · capturas faltantes del manual (roles, podios) · fixes que emerjan.
+**SP-ADJ-13 cerrado:** ejecución completa en producción (Puerto Madryn 2026) · fixes UI #213–#216 + nav móvil (PR #217, v1.0.4) · manual revisado contra producción (PR #218) · BL-007 · tag `v1.0.5` · manual publicado en GitHub Pages.
 
 ---
 
@@ -222,7 +222,7 @@ memory/
 
 ---
 
-*Última actualización: 2026-05-30 — SP6 ✅ v1.0.0 · SP7 ✅ v1.0.2 · SP-ADJ-12 ✅ cerrado · INC-7.2 ✅ manual completo*
+*Última actualización: 2026-05-30 — SP7 ✅ v1.0.2 · SP-ADJ-12 ✅ cerrado · SP-ADJ-13 ✅ v1.0.5 · manual revisado y publicado*
 
 ## graphify
 
