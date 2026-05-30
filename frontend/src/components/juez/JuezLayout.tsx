@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import useAuthStore from '../../stores/useAuthStore'
 
@@ -24,11 +24,14 @@ function isTabActive(pathname: string, to: string): boolean {
 export function JuezLayout({ title, subtitle, actions, children }: JuezLayoutProps) {
   const logout = useAuthStore((s) => s.logout)
   const { pathname } = useLocation()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     document.title = 'AtaraxiaDive · Juez'
     return () => { document.title = 'AtaraxiaDive' }
   }, [])
+
+  useEffect(() => { setMenuOpen(false) }, [pathname])
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
@@ -51,6 +54,14 @@ export function JuezLayout({ title, subtitle, actions, children }: JuezLayoutPro
               {actions ? <div>{actions}</div> : null}
               <button
                 type="button"
+                onClick={() => setMenuOpen((v) => !v)}
+                className="rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-400 hover:border-slate-500 hover:text-slate-200"
+                aria-label="Menú de navegación"
+              >
+                {menuOpen ? '✕' : '☰'}
+              </button>
+              <button
+                type="button"
                 onClick={logout}
                 className="rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-400 hover:border-slate-500 hover:text-slate-200"
               >
@@ -59,25 +70,31 @@ export function JuezLayout({ title, subtitle, actions, children }: JuezLayoutPro
             </div>
           </div>
 
-          <nav className="mt-3 grid grid-cols-2 border-t border-slate-800">
-            {TABS.map((tab) => {
-              const active = isTabActive(pathname, tab.to)
-              return (
-                <Link
-                  key={tab.to}
-                  to={tab.to}
-                  className={[
-                    'flex h-10 items-center justify-center text-center text-xs font-semibold transition-colors',
-                    active
-                      ? 'border-b-2 border-sky-400 text-sky-300'
-                      : 'border-b-2 border-transparent text-slate-400',
-                  ].join(' ')}
-                >
-                  {tab.label}
-                </Link>
-              )
-            })}
-          </nav>
+          {/* Menú vertical desplegable */}
+          {menuOpen ? (
+            <nav className="flex flex-col border-t border-slate-800 px-4">
+              {TABS.map((tab) => {
+                const active = isTabActive(pathname, tab.to)
+                return (
+                  <Link
+                    key={tab.to}
+                    to={tab.to}
+                    className={[
+                      'flex items-center border-b border-slate-800/60 py-3.5 text-sm font-semibold transition-colors',
+                      active ? 'text-sky-400' : 'text-slate-300 hover:text-white',
+                    ].join(' ')}
+                  >
+                    {active ? (
+                      <span className="mr-3 h-1.5 w-1.5 rounded-full bg-sky-400" />
+                    ) : (
+                      <span className="mr-3 h-1.5 w-1.5 rounded-full bg-transparent" />
+                    )}
+                    {tab.label}
+                  </Link>
+                )
+              })}
+            </nav>
+          ) : null}
         </header>
 
         <main className="flex-1 px-4 py-4">{children}</main>

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import type { GrillaAtletaDto } from '../../api/competencia'
 import { OrganizadorLayout } from '../../components/organizador/OrganizadorLayout'
@@ -46,15 +46,9 @@ function borderClasePorResultado(atleta: GrillaAtletaDto): string {
   return 'border-stone-300/80 bg-white/85'
 }
 
-function truncateHash(value: string) {
-  if (value.length <= 16) return value
-  return `${value.slice(0, 16)}...`
-}
-
 export function AuditoriaCompetenciaPage() {
   const { competenciaId } = useParams()
   const [searchParams] = useSearchParams()
-  const [copyFeedback, setCopyFeedback] = useState<string | null>(null)
   const disciplina = searchParams.get('disciplina') ?? undefined
   const torneoId = searchParams.get('torneo_id') ?? undefined
 
@@ -72,13 +66,6 @@ export function AuditoriaCompetenciaPage() {
       ]),
     )
   }, [ranking])
-
-  async function handleCopyHash() {
-    if (!estado?.hash_sha256) return
-    await navigator.clipboard.writeText(estado.hash_sha256)
-    setCopyFeedback('Copiado')
-    window.setTimeout(() => setCopyFeedback(null), 1600)
-  }
 
   if (!competenciaId || !disciplina) {
     return (
@@ -116,10 +103,6 @@ export function AuditoriaCompetenciaPage() {
           Volver a Audit Log
         </Link>
       </div>
-      <section className="rounded-[2rem] border border-slate-700 bg-slate-900/75 p-5 text-sm text-slate-300">
-        Vista contextual de auditoria por disciplina. La navegacion principal del organizador se mantiene disponible en el shell superior.
-      </section>
-
       {isLoading ? (
         <section className="rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300">
           Cargando auditoria de competencia...
@@ -134,43 +117,13 @@ export function AuditoriaCompetenciaPage() {
 
       {!isLoading && !hasError && estado ? (
         <section className="rounded-[2rem] border border-slate-700 bg-slate-900/85 p-5 shadow-[0_20px_60px_rgba(2,6,23,0.24)]">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                Estado de disciplina
-              </p>
-              <h2 className="mt-2 text-2xl font-semibold text-white">
-                {formatEstado(estado.estado)}
-              </h2>
-            </div>
-
-            {estado.estado === 'Finalizada' && estado.hash_sha256 ? (
-              <div className="rounded-[1.5rem] border border-emerald-500/40 bg-emerald-500/10 px-4 py-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-800">
-                  Hash SHA-256
-                </p>
-                <div className="mt-2 flex flex-wrap items-center gap-3">
-                  <code
-                    title={estado.hash_sha256}
-                    className="rounded-full bg-slate-950 px-3 py-2 text-sm text-emerald-200"
-                  >
-                    {truncateHash(estado.hash_sha256)}
-                  </code>
-                  <button
-                    type="button"
-                    onClick={() => void handleCopyHash()}
-                    className="rounded-full bg-emerald-900 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white"
-                  >
-                    Copiar
-                  </button>
-                  {copyFeedback ? (
-                    <span className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-900">
-                      {copyFeedback}
-                    </span>
-                  ) : null}
-                </div>
-              </div>
-            ) : null}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+              Estado de disciplina
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold text-white">
+              {formatEstado(estado.estado)}
+            </h2>
           </div>
         </section>
       ) : null}
