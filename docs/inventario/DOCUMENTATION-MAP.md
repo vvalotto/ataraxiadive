@@ -32,24 +32,20 @@ En síntesis: **código y tests › baselines › ADRs › matriz de trazabilida
 
 ---
 
-## 3. Fuentes de verdad por tema
+## 3. Fuentes de verdad por tema (entradas frecuentes)
+
+> La **tabla completa y autoritativa** de fuente de verdad por tema vive —de forma única— en [`FUENTES-DE-VERDAD-DOCUMENTAL.md §3`](./FUENTES-DE-VERDAD-DOCUMENTAL.md). Lo de abajo es solo un atajo de navegación para los temas más consultados.
 
 | Tema | Fuente principal | Uso |
 |---|---|---|
 | Presentación breve | `README.md` | Entrada rápida; no contiene detalle completo. |
 | Estado operativo actual | `CLAUDE.md` | Memoria operativa para desarrollo asistido por IA. |
 | Manual de usuario (final) | [GitHub Pages](https://vvalotto.github.io/ataraxiadive/) · `manual/` (MkDocs) | Guía de uso de los portales público/organizador/juez/atleta. |
-| Workflow de desarrollo | `docs/plans/WORKFLOW-DESARROLLO.md` | Procedimiento vigente para US, incrementos y subproyectos. |
 | Arquitectura vigente | `docs/architecture/` | Vista técnica principal (C4). `docs/design/architecture.md` es histórico. |
-| Decisiones arquitectónicas | `docs/adr/` | Registro de decisiones y trade-offs. |
-| Dominio del problema | `docs/dominio/01-dominio_torneos_apnea.md` | Descripción narrativa del dominio de apnea. |
-| Requerimientos funcionales | `docs/dominio/05-requerimientos_funcionales.md` | Catálogo base de RF. |
 | Trazabilidad | `docs/traceability/matrix.md` | Relación RF → BC → incremento → US → estado. |
-| Especificaciones US-IEDD | `docs/specs/` | Especificaciones detalladas por historia. |
-| Baselines | `.cm/baselines/` | Evidencia formal de cierre. |
-| Cambios de configuración | `.cm/changes/` | Registro de cambios. |
-| Aprendizajes metodológicos | `docs/contexto/HITO-*.md` | Evidencia y capitalización del experimento. |
-| Reportes de calidad | `quality/reports/` | Evidencia técnica de calidad. |
+| Workflow de desarrollo | `docs/plans/WORKFLOW-DESARROLLO.md` | Procedimiento vigente para US, incrementos y subproyectos. |
+
+> Para cualquier otro tema (ADRs, dominio, specs, baselines, calidad, etc.), ver la tabla completa en FUENTES §3.
 
 ---
 
