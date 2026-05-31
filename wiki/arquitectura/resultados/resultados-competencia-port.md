@@ -87,6 +87,16 @@ Fallback interno `_CategoriaFallbackPort` retorna `SENIOR_MASCULINO` cuando no s
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/resultados]]
+
 - Implementaciones en `infrastructure/` — no en `domain/`
 - Usadas por [[command-handlers-resultados]] (CalcularRankingHandler)
 - Acceso cross-BC directo a `competencia.db` y `registro.db` — mismo patrón que [[atleta-nombre-port]] en BC Competencia
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/resultados/domain/ports/resultados_competencia_port.py` | Puerto abstracto ResultadosCompetenciaPort |
+| `src/resultados/infrastructure/repositories/resultados_competencia_adapter.py` | Adapter ACL — lee performances desde competencia.db |
+| `src/resultados/infrastructure/repositories/atleta_categoria_adapter.py` | Adapter ACL — lee categoría del atleta desde registro.db |

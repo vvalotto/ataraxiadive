@@ -57,7 +57,16 @@ El TODO en `obtener_disciplinas` es una deuda técnica conocida: la validación 
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/registro]]
+
 - Implementa el puerto definido en `domain/ports/` — relación de dependencia hacia adentro
 - Usada por [[command-handlers-registro]] (InscribirAtletaHandler, CancelarInscripcionHandler)
 - Análoga a `AtletaNombreAdapter` en BC Competencia: ambas leen DBs ajenas directamente (sin API HTTP)
 - Registrada en [[router-registro]] como dependencia via `_torneo_consulta()`
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/registro/domain/ports/torneo_consulta_port.py` | Puerto abstracto TorneoConsultaPort (ACL read-only) |
+| `src/registro/infrastructure/acl/sqlite_torneo_consulta.py` | Adapter ACL — lee torneo.db para validar inscripciones |

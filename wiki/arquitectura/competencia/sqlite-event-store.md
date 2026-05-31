@@ -47,5 +47,14 @@ Implementación concreta de [[event-store-port]] sobre SQLite. El archivo de est
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/competencia]]
+
 - Es la implementación de [[event-store-port]]
 - Usado por [[handler-utils]] para todas las escrituras y lecturas de streams
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/competencia/infrastructure/event_store/sqlite_event_store.py` | Implementación SQLite del EventStorePort |
+| `src/shared/infrastructure/event_store/sqlite_event_store.py` | Implementación SQLite del EventStorePort |

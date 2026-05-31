@@ -87,7 +87,16 @@ Llamado desde `app.py` (composition root). Permite inyectar implementaciones alt
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/identidad]]
+
 - Usa [[command-handlers-identidad]]
 - Instancia [[jwt-service]] y [[sqlite-usuario-repository]] via dependency providers
 - Los guards `OrganizadorDep`, `JuezDep`, `AtletaDep` son importados por [[router-torneo]], [[router-registro]], [[router-resultados]] y BC Competencia
 - `configure_identity_dependencies()` inyecta [[perfil-registro-adapter]] como `PerfilRegistroPort`
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/identidad/api/router.py` | Router FastAPI — endpoints HTTP del BC |
+| `src/identidad/api/dependencies.py` | Guards de rol: get_current_user, OrganizadorDep, JuezDep, AtletaDep |

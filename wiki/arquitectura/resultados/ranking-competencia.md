@@ -102,8 +102,16 @@ Aplica `_rehidratar_resultados_calculados` para restaurar `_entries` y `_calcula
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/resultados]]
+
 - `AggregateRoot` de `shared/domain/base/` — hereda `_record()` y `pull_events()`
 - Emite evento consumido por [[calculador-ranking-handler-resultados]] via `pull_events()`
 - Recibe datos desde [[resultados-competencia-port]] (ACL a BC Competencia)
 - Usa [[algoritmo-faas]] como implementación concreta de `AlgoritmoPuntaje`
 - Leído por [[query-handlers-resultados]] para consultas y exportación
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/resultados/domain/aggregates/ranking_competencia.py` | Aggregate RankingCompetencia — calcula y persiste ranking de disciplina |

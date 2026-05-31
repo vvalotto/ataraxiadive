@@ -1,16 +1,31 @@
 ---
-title: "Vista de Arquitectura — C4 L2+L3"
+title: "Vista de Arquitectura — C4 L1+L2+L3"
 type: vista
-last_updated: "2026-05-23"
+last_updated: "2026-05-31"
 sources:
   - wiki/arquitectura/
   - docs/architecture/
   - docs/adr/
 ---
 
-# Vista de Arquitectura — C4 L2 + L3
+# Vista de Arquitectura — C4 L1 + L2 + L3
 
-> El sistema visto desde sus límites estructurales: Bounded Contexts (L2) y componentes internos (L3).
+> El sistema visto en tres niveles de detalle: contexto externo (L1), Bounded Contexts (L2) y componentes internos (L3).
+
+---
+
+## C4 L1 — Contexto del Sistema
+
+→ Página completa: [[arquitectura/sistema]]
+
+| Elemento | Descripción |
+|----------|-------------|
+| **Sistema** | AtaraxiaDive — gestión de torneos de apnea |
+| **Actores** | Organizador · Juez · Atleta |
+| **Sistemas externos** | Resend (email) · Fly.io (hosting) · Navegador / PWA (cliente offline) |
+| **Restricción clave** | Offline-first por conectividad limitada en pileta ([[decisiones/ADR-003-offline-first-pwa]]) |
+
+---
 
 ## Propósito
 

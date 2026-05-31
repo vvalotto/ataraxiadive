@@ -66,6 +66,14 @@ Misma estrategia que BC Registro: migraciones inline, silenciosas. Tres columnas
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/torneo]]
+
 - Implementa `TorneoRepositoryPort` definido en `torneo/domain/ports/`
 - Instanciado en [[router-torneo]] via `_repo()`
 - Su DB (`torneo.db`) es leída también por BC Registro via [[torneo-consulta-port]] — acceso cross-BC directo (misma estrategia que `registro.db` / `AtletaNombreAdapter`)
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/torneo/infrastructure/repositories/sqlite_torneo_repository.py` | Repositorio CRUD del aggregate Torneo en torneo.db |

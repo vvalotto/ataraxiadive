@@ -4,18 +4,19 @@ type: arquitectura
 last_updated: "2026-05-23"
 sources:
   - docs/architecture/13-bc-resultados.md
+l1_ref: "[[arquitectura/sistema]]"
 tipo_ddd: supporting
 persistencia: CRUD + stream propio
 db: resultados.db
 test_coverage: null
 componentes:
-  - ranking-competencia
-  - ranking-overall
-  - resultados-competencia-port
-  - algoritmo-faas
-  - command-handlers-resultados
-  - query-handlers-resultados
-  - router-resultados
+  - arquitectura/resultados/ranking-competencia
+  - arquitectura/resultados/ranking-overall
+  - arquitectura/resultados/resultados-competencia-port
+  - arquitectura/resultados/algoritmo-faas
+  - arquitectura/resultados/command-handlers-resultados
+  - arquitectura/resultados/query-handlers-resultados
+  - arquitectura/resultados/router-resultados
 ---
 
 # BC Resultados — Supporting Domain
@@ -50,6 +51,18 @@ Posición, atleta, marca efectiva (RP), unidad, tarjeta, indicador DNS, indicado
 | `application/` | `CalcularRankingHandler`, `ObtenerRankingHandler`, `ObtenerRankingProvisionalHandler` (SP5), `CalcularOverallHandler`, `ExportarResultadosHandler` |
 | `domain/` | `RankingCompetencia`, `EntradaRanking`, `ResultadosCalculados`, `ResultadosCompetenciaPort` |
 | `infrastructure/` | `ResultadosCompetenciaAdapter` (ACL → Competencia), `DisciplinaDescriptorAdapter`, `SQLiteEventStore` |
+
+## Componentes (C4 L3)
+
+| Componente | Capa | Tipo | Responsabilidad |
+|---|---|---|---|
+| [[arquitectura/resultados/ranking-competencia\|RankingCompetencia]] | domain | aggregate | Calcula y persiste el ranking de una disciplina — Event Sourcing |
+| [[arquitectura/resultados/ranking-overall\|RankingOverall]] | domain | aggregate | Ranking general del torneo sumando puntos FAAS de todas las disciplinas |
+| [[arquitectura/resultados/algoritmo-faas\|AlgoritmoFAAS]] | domain | service | Reglamento FAAS: 3 fórmulas según tipo de disciplina |
+| [[arquitectura/resultados/resultados-competencia-port\|ResultadosCompetenciaPort]] | domain | port | ACL hacia BC Competencia (performances) y BC Registro (categorías) |
+| [[arquitectura/resultados/command-handlers-resultados\|Command Handlers]] | application | handler | 2 handlers: CalcularRanking y CalcularOverall |
+| [[arquitectura/resultados/query-handlers-resultados\|Query Handlers]] | application | handler | 4 handlers: ranking definitivo, provisional, overall, exportación |
+| [[arquitectura/resultados/router-resultados\|Router Resultados]] | api | router | API HTTP: 3 endpoints (ranking, overall, export) |
 
 ## Integración de entrada: Competencia
 

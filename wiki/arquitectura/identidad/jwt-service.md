@@ -73,7 +73,16 @@ Usa `bcrypt` con work factor por defecto (12 rondas). Nunca expone contraseñas 
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/identidad]]
+
 - `JWTService` implementa `TokenServicePort` (domain port)
 - `BcryptPasswordHasher` implementa `PasswordHashingPort` (domain port)
 - Ambos instanciados via `configure_identity_dependencies()` en [[dependencies-identidad]]
 - `JWTService.verify()` es llamado por `get_current_user()` en cada request autenticado — cross-cutting para todos los BCs
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/identidad/infrastructure/jwt_service.py` | JWTService — generación y verificación JWT HS256 |
+| `src/identidad/infrastructure/bcrypt_password_hasher.py` | BcryptPasswordHasher — hash y verificación de contraseñas |

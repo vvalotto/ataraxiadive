@@ -58,7 +58,15 @@ Modela la **participación de un atleta en un torneo**. Registra las disciplinas
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/registro]]
+
 - Referencia a [[atleta]] por `atleta_id`
 - La validación de inscripción usa [[torneo-consulta-port]] (ACL a BC Torneo)
 - Los adjuntos se almacenan via [[adjunto-storage-port]]
 - Los APs declarados aquí son luego consumidos por BC Competencia para generar la grilla
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/registro/domain/aggregates/inscripcion.py` | Aggregate Inscripcion — participación, disciplinas, APs |

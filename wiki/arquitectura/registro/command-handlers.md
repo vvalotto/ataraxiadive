@@ -119,7 +119,23 @@ Lanza `PlazoCancelacionVencido` si `fecha_actual >= fecha_inicio`.
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/registro]]
+
 - Los handlers de perfil son instanciados por [[perfil-registro-adapter]] (ruta de registro inicial)
 - Los handlers de inscripción son instanciados directamente en [[router-registro]]
 - Usan [[sqlite-repositories-registro]] como puertos de persistencia
 - `InscribirAtletaHandler` y `CancelarInscripcionHandler` usan [[torneo-consulta-port]]
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/registro/application/commands/registrar_atleta.py` | Handler: RegistrarAtletaHandler |
+| `src/registro/application/commands/actualizar_atleta.py` | Handler: ActualizarAtletaHandler |
+| `src/registro/application/commands/registrar_juez.py` | Handler: RegistrarJuezHandler |
+| `src/registro/application/commands/actualizar_juez.py` | Handler: ActualizarJuezHandler |
+| `src/registro/application/commands/registrar_organizador.py` | Handler: RegistrarOrganizadorHandler |
+| `src/registro/application/commands/actualizar_organizador.py` | Handler: ActualizarOrganizadorHandler |
+| `src/registro/application/commands/inscribir_atleta.py` | Handler: InscribirAtletaHandler |
+| `src/registro/application/commands/cancelar_inscripcion.py` | Handler: CancelarInscripcionHandler |
+| `src/registro/application/commands/declarar_ap_inscripcion.py` | Handler: DeclararAPInscripcionHandler |

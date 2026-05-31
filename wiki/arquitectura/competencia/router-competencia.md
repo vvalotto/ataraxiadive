@@ -68,6 +68,19 @@ Guards via `shared/api/dependencies.py`: `JuezDep` (endpoints de ejecución), `O
 
 `exception_handlers.py` mapea excepciones de dominio a respuestas RFC 7807 (ADR-012).
 
+## Relaciones
+
+**Contenedor:** [[arquitectura/competencia]]
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/competencia/api/router.py` | Router FastAPI — endpoints HTTP del BC |
+| `src/competencia/api/schemas.py` | Schemas Pydantic — request/response |
+| `src/competencia/api/dependencies.py` | Guards de rol: JuezDep, OrganizadorDep |
+| `src/competencia/api/exception_handlers.py` | Mapeo excepciones → RFC 7807 |
+
 ## ADRs relacionados
 
 - [[ADR-002-fastapi-backend]] — FastAPI como framework

@@ -52,5 +52,14 @@ Carga el torneo, llama `torneo.obtener_disciplinas_de_juez(juez_id)`. Usado por 
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/torneo]]
+
 - Instanciados en [[router-torneo]]
 - Usan [[sqlite-torneo-repository]]
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/torneo/application/queries/obtener_torneo.py` | Query: ObtenerTorneoHandler |
+| `src/torneo/application/queries/obtener_disciplinas_juez.py` | Query: ObtenerDisciplinasJuezHandler |

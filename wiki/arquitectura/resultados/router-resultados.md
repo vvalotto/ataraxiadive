@@ -75,6 +75,14 @@ Usa FastAPI `Depends()` para construir los handlers:
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/resultados]]
+
 - Usa [[query-handlers-resultados]] y [[command-handlers-resultados]]
 - Accede a `competencia.db`, `registro.db`, `torneo.db` via ACLs cross-BC
 - Auth: `OrganizadorDep` de `shared/api/dependencies.py`
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/resultados/api/router.py` | Router FastAPI — endpoints HTTP del BC |

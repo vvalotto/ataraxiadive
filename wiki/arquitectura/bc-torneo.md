@@ -4,16 +4,17 @@ type: arquitectura
 last_updated: "2026-05-23"
 sources:
   - docs/architecture/11-bc-torneo.md
+l1_ref: "[[arquitectura/sistema]]"
 tipo_ddd: supporting
 persistencia: CRUD
 db: torneo.db
 test_coverage: null
 componentes:
-  - torneo-aggregate
-  - sqlite-torneo-repository
-  - command-handlers-torneo
-  - query-handlers-torneo
-  - router-torneo
+  - arquitectura/torneo/torneo-aggregate
+  - arquitectura/torneo/sqlite-torneo-repository
+  - arquitectura/torneo/command-handlers-torneo
+  - arquitectura/torneo/query-handlers-torneo
+  - arquitectura/torneo/router-torneo
 ---
 
 # BC Torneo — Supporting Domain
@@ -57,6 +58,16 @@ CREADO → INSCRIPCION_ABIERTA → PREPARACION → EJECUCION → PREMIACION → 
 | `application/` | `CrearTorneoHandler`, `ObtenerTorneoHandler`, `ListarTorneosHandler`, handlers de transición |
 | `domain/` | Aggregate `Torneo`, `EstadoTorneo`, `Sede`, `EntidadOrganizadora`, `TorneoRepositoryPort` |
 | `infrastructure/` | `SQLiteTorneoRepository` → `torneo.db` |
+
+## Componentes (C4 L3)
+
+| Componente | Capa | Tipo | Responsabilidad |
+|---|---|---|---|
+| [[arquitectura/torneo/torneo-aggregate\|Torneo Aggregate]] | domain | aggregate | Ciclo de vida completo del torneo: estados, transiciones, disciplinas, sede |
+| [[arquitectura/torneo/sqlite-torneo-repository\|SQLiteTorneoRepository]] | infrastructure | repository | Persistencia CRUD del aggregate Torneo en torneo.db |
+| [[arquitectura/torneo/command-handlers-torneo\|Command Handlers]] | application | handler | 9 handlers: CRUD + 7 transiciones de ciclo de vida + disciplinas/jueces |
+| [[arquitectura/torneo/query-handlers-torneo\|Query Handlers]] | application | handler | 3 handlers: torneo por ID, lista de torneos, disciplinas por juez |
+| [[arquitectura/torneo/router-torneo\|Router Torneo]] | api | router | API HTTP: CRUD + transiciones de estado + disciplinas y jueces |
 
 ## Integraciones de salida
 

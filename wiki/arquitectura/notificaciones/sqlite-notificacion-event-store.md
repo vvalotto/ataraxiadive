@@ -129,6 +129,17 @@ Ambas implementan el protocolo `render(evento) → ContenidoEmail`. Las polític
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/notificaciones]]
+
 - Persiste eventos del [[notificacion-aggregate]]
 - Usado por [[command-handlers-notificaciones]] vía `NotificacionRepository`
 - `ResendEmailAdapter` y `LoggingEmailAdapter` son inyectados por `configure_identity_dependencies()` desde `app.py`
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/notificaciones/infrastructure/event_store/sqlite_notificacion_event_store.py` | Event store ES en notificaciones.db |
+| `src/notificaciones/infrastructure/repositories/sqlite_notificacion_repository.py` | Repositorio de consulta de notificaciones |
+| `src/notificaciones/infrastructure/email/resend_email_adapter.py` | Adapter Resend — envío real vía API REST |
+| `src/notificaciones/infrastructure/email/logging_email_adapter.py` | Adapter Logging — fallback sin API key (desarrollo) |

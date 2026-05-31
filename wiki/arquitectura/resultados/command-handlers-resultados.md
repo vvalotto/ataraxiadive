@@ -87,7 +87,16 @@ class CalcularOverallHandler:
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/resultados]]
+
 - Orquesta [[ranking-competencia]] y [[ranking-overall]]
 - Usa [[resultados-competencia-port]] (ACL cross-BC)
 - Usa [[algoritmo-faas]] como estrategia de puntuación
 - Instanciados en [[router-resultados]]
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/resultados/application/commands/calcular_ranking.py` | Handler: CalcularRankingHandler |
+| `src/resultados/application/commands/calcular_overall.py` | Handler: CalcularOverallHandler |

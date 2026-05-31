@@ -95,7 +95,17 @@ Inmutable — la reasignación de juez crea una nueva instancia. Serializable a 
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/torneo]]
+
 - Persiste en `torneo.db` via [[sqlite-torneo-repository]]
 - Sus datos de estado (`INSCRIPCION_ABIERTA`, `fecha_inicio`) son leídos por BC Registro via [[torneo-consulta-port]]
 - Las transiciones son orquestadas por [[command-handlers-torneo]]
 - El aggregate expone hooks (precondiciones/post-acciones) que permiten a BC Registro y BC Competencia participar en transiciones de estado sin violar la arquitectura hexagonal
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/torneo/domain/aggregates/torneo.py` | Aggregate Torneo — máquina de estados, disciplinas, sede |
+| `src/torneo/domain/value_objects/estado_torneo.py` | Value Object EstadoTorneo — StrEnum con 7 estados |
+| `src/torneo/domain/value_objects/disciplina_torneo.py` | Value Object DisciplinaTorneo — disciplina con juez asignado |

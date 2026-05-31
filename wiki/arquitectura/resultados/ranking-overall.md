@@ -12,7 +12,7 @@ last_updated: "2026-05-23"
 sources:
   - src/resultados/domain/aggregates/ranking_overall.py
 ---
-
+ha
 # Aggregate RankingOverall
 
 ## Stream ID
@@ -81,7 +81,15 @@ Lanza `DisciplinasNoFinalizadas` si alguna disciplina tiene lista vacía de entr
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/resultados]]
+
 - `AggregateRoot` de `shared/domain/base/` — igual que [[ranking-competencia]]
 - Calculado por [[command-handlers-resultados]] (CalcularOverallHandler)
 - Requiere que [[ranking-competencia]] ya haya sido calculado para cada disciplina del torneo
 - Leído por [[query-handlers-resultados]] (ObtenerOverallHandler)
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/resultados/domain/aggregates/ranking_overall.py` | Aggregate RankingOverall — ranking general del torneo |

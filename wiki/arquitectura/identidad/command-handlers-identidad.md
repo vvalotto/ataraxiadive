@@ -100,6 +100,18 @@ Verifica el JWT de reset (claim `type=password_reset`), hashea la nueva contrase
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/identidad]]
+
 - Instanciados en [[router-identidad]]
 - Usan [[sqlite-usuario-repository]], [[jwt-service]], y [[perfil-registro-adapter]] (vía `PerfilRegistroPort`)
 - `RegistrarUsuarioHandler` es el punto de entrada del modelo multi-rol (ADR-020)
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/identidad/application/commands/registrar_usuario.py` | Handler: RegistrarUsuarioHandler (multi-rol, bcrypt, política password) |
+| `src/identidad/application/commands/autenticar_usuario.py` | Handler: AutenticarUsuarioHandler (credenciales, JWT, selector de rol) |
+| `src/identidad/application/commands/cambiar_password.py` | Handler: CambiarPasswordHandler |
+| `src/identidad/application/commands/solicitar_reset_password.py` | Handler: SolicitarResetPasswordHandler |
+| `src/identidad/application/commands/reset_password.py` | Handler: ResetPasswordHandler |

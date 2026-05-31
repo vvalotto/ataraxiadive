@@ -38,6 +38,16 @@ Llamado desde `_p08_finalizacion.py` (módulo de orquestación de cierre automá
 
 Permite verificar post-facto que los resultados de una disciplina no fueron alterados. Cualquier modificación del event store cambiaría el hash. El organizador puede compararlo con el hash publicado al cierre.
 
+## Relaciones
+
+**Contenedor:** [[arquitectura/competencia]]
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/competencia/domain/services/calculador_hash_competencia.py` | Servicio SHA-256 sobre secuencia de eventos |
+
 ## ADRs relacionados
 
 - [[ADR-018-hash-sha256-auditoria]] — decisión de usar SHA-256 sobre la secuencia de eventos

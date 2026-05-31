@@ -40,6 +40,15 @@ Lee todos los streams `performance-{competencia_id}-*` del [[event-store-port]],
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/competencia]]
+
 - Depende de [[event-store-port]] para leer los streams
 - Reconstituye [[performance-aggregate]] como paso intermedio
 - Es consumido por `GenerarGrillaHandler` (capa application)
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/competencia/domain/ports/performances_ap_port.py` | Puerto abstracto PerformancesAPPort |
+| `src/competencia/infrastructure/repositories/performances_ap_adapter.py` | Adapter — reconstituye performances desde event store |

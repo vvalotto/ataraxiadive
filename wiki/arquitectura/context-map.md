@@ -1,13 +1,17 @@
 ---
 title: "Context Map — Integraciones entre Bounded Contexts"
 type: arquitectura
-last_updated: "2026-05-20"
+c4_level: L2
+last_updated: "2026-05-31"
 sources:
   - docs/architecture/03-bounded-contexts.md
   - docs/architecture/20-context-map-integrations.md
+l1_ref: "[[arquitectura/sistema]]"
 ---
 
 # Context Map — Integraciones entre Bounded Contexts
+
+> **C4 L2** — Vista de contenedores. Para el contexto del sistema (actores y sistemas externos) ver [[arquitectura/sistema]].
 
 ## Los seis Bounded Contexts
 
@@ -22,20 +26,28 @@ sources:
 
 ## Diagrama de relaciones
 
-```
-Identidad ──Conformist (JWT)──► Torneo
-Identidad ──Conformist (JWT)──► Registro
-Identidad ──Conformist (JWT)──► Competencia
+```mermaid
+graph TD
+    Identidad["🔑 Identidad\nGeneric · CRUD"]
+    Torneo["📋 Torneo\nSupporting · CRUD"]
+    Registro["📝 Registro\nSupporting · CRUD"]
+    Competencia["🏊 Competencia\nCore · Event Sourcing"]
+    Resultados["🏆 Resultados\nSupporting · CRUD+stream"]
+    Notificaciones["📧 Notificaciones\nGeneric · Event Sourcing"]
 
-Torneo ──Customer-Supplier (InscripcionHabilitada)──► Registro
-Registro ──Referencia por ID + adaptadores──► Competencia
-Competencia ──Customer-Supplier (CompetenciaFinalizada)──► Resultados
-Torneo ──Consulta read-only──► Resultados
+    Identidad -->|"Conformist\nJWT / claims"| Torneo
+    Identidad -->|"Conformist\nJWT / claims"| Registro
+    Identidad -->|"Conformist\nJWT / claims"| Competencia
 
-Torneo ──Eventos de dominio──► Notificaciones
-Registro ──Eventos de dominio──► Notificaciones
-Competencia ──Eventos de dominio──► Notificaciones
-Resultados ──Eventos de dominio──► Notificaciones
+    Torneo -->|"Customer-Supplier\nInscripcionHabilitada"| Registro
+    Registro -->|"Ref. por ID\n+ adaptadores"| Competencia
+    Competencia -->|"Customer-Supplier\nCompetenciaFinalizada"| Resultados
+    Torneo -->|"Consulta\nread-only"| Resultados
+
+    Torneo -->|"Eventos\nde dominio"| Notificaciones
+    Registro -->|"Eventos\nde dominio"| Notificaciones
+    Competencia -->|"Eventos\nde dominio"| Notificaciones
+    Resultados -->|"Eventos\nde dominio"| Notificaciones
 ```
 
 ## Integraciones detalladas

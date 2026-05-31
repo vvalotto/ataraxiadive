@@ -4,20 +4,21 @@ type: arquitectura
 last_updated: "2026-05-23"
 sources:
   - docs/architecture/12-bc-registro.md
+l1_ref: "[[arquitectura/sistema]]"
 tipo_ddd: supporting
 persistencia: CRUD
 db: registro.db
 test_coverage: 90
 componentes:
-  - atleta
-  - inscripcion
-  - juez-organizador
-  - torneo-consulta-port
-  - sqlite-repositories-registro
-  - perfil-registro-adapter
-  - command-handlers-registro
-  - query-handlers-registro
-  - router-registro
+  - arquitectura/registro/atleta
+  - arquitectura/registro/inscripcion
+  - arquitectura/registro/juez-organizador
+  - arquitectura/registro/torneo-consulta-port
+  - arquitectura/registro/sqlite-repositories
+  - arquitectura/registro/perfil-registro-adapter
+  - arquitectura/registro/command-handlers
+  - arquitectura/registro/query-handlers
+  - arquitectura/registro/router-registro
 ---
 
 # BC Registro — Supporting Domain
@@ -61,6 +62,20 @@ Modela la participación de un atleta en un torneo. Invariantes: atleta y torneo
 | `application/` | `RegistrarAtletaHandler`, `ObtenerAtletaHandler`, `InscribirAtletaHandler`, `CancelarInscripcionHandler`, `ListarInscriptosHandler` |
 | `domain/` | `Atleta`, `Inscripcion`, `Categoria`, `EstadoInscripcion`, `TorneoConsultaPort`, puertos de repo |
 | `infrastructure/` | `SQLiteAtletaRepository`, `SQLiteInscripcionRepository`, `SQLiteTorneoConsulta` (ACL read-only → `torneo.db`) |
+
+## Componentes (C4 L3)
+
+| Componente | Capa | Tipo | Responsabilidad |
+|---|---|---|---|
+| [[arquitectura/registro/atleta\|Atleta]] | domain | aggregate | Perfil deportivo: identidad, categoría, club, brevet |
+| [[arquitectura/registro/inscripcion\|Inscripcion]] | domain | aggregate | Participación en torneo: disciplinas, estado, APs declarados |
+| [[arquitectura/registro/juez-organizador\|JuezOrganizador]] | domain | aggregate | Perfiles de Juez y Organizador — modelo multi-rol (ADR-020) |
+| [[arquitectura/registro/torneo-consulta-port\|TorneoConsultaPort]] | domain | port | ACL read-only sobre BC Torneo para validar inscripciones |
+| [[arquitectura/registro/sqlite-repositories\|SQLiteRepositories]] | infrastructure | repository | Persistencia CRUD de los 4 aggregates en registro.db |
+| [[arquitectura/registro/perfil-registro-adapter\|PerfilRegistroAdapter]] | infrastructure | adapter | Puente BC Identidad → BC Registro al registrar nuevo usuario |
+| [[arquitectura/registro/command-handlers\|Command Handlers]] | application | handler | 10 handlers: registrar/actualizar + inscribir, cancelar, declarar AP |
+| [[arquitectura/registro/query-handlers\|Query Handlers]] | application | handler | 5 handlers: perfiles por rol, inscriptos por torneo, completitud APs |
+| [[arquitectura/registro/router-registro\|Router Registro]] | api | router | API HTTP: CRUD de perfiles + inscripciones y APs |
 
 ## Integración de entrada: Torneo
 

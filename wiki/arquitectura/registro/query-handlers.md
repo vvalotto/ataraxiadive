@@ -82,6 +82,18 @@ Usado por `build_cierre_inscripcion_precondition()` en [[router-registro]]: BC T
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/registro]]
+
 - Instanciados directamente en [[router-registro]]
 - Usan [[sqlite-repositories-registro]] como fuente de datos
 - `VerificarCompletitudAPHandler` es invocado indirectamente por BC Torneo vía el callback de precondición expuesto en [[router-registro]]
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/registro/application/queries/obtener_atleta.py` | Query: ObtenerAtletaHandler |
+| `src/registro/application/queries/obtener_juez.py` | Query: ObtenerJuezHandler |
+| `src/registro/application/queries/obtener_organizador.py` | Query: ObtenerOrganizadorHandler |
+| `src/registro/application/queries/listar_inscriptos.py` | Query: ListarInscriptosHandler |
+| `src/registro/application/queries/verificar_completitud_ap.py` | Query: VerificarCompletitudAPHandler |

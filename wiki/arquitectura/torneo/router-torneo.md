@@ -71,7 +71,15 @@ Este patrón mantiene BC Torneo ignorante de los otros BCs: sólo conoce firmas 
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/torneo]]
+
 - Usa [[command-handlers-torneo]] y [[query-handlers-torneo]]
 - Instancia [[sqlite-torneo-repository]] via `_repo()`
 - Auth guard: `OrganizadorDep` de `shared/api/dependencies.py`
 - Las precondiciones/post-acciones son provistas por [[router-registro]] y BC Competencia al inicializar `app.py`
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/torneo/api/router.py` | Router FastAPI — endpoints HTTP del BC |

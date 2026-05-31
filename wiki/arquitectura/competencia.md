@@ -4,6 +4,7 @@ type: arquitectura
 last_updated: "2026-05-23"
 sources:
   - docs/architecture/10-bc-competencia.md
+l1_ref: "[[arquitectura/sistema]]"
 tipo_ddd: core
 persistencia: Event Sourcing
 db: competencia.db
@@ -62,11 +63,22 @@ No existe entidad `Participante` materializada. El BC opera con `participante_id
 | `domain/` | Aggregates, value objects, eventos, puertos — sin dependencias de FastAPI/SQLite |
 | `infrastructure/` | Event store, repositorios, proyecciones, adaptadores de integración |
 
-## Handlers de aplicación (referencia)
+## Componentes (C4 L3)
 
-**Competencia:** `GenerarGrillaHandler`, `AjustarGrillaHandler`, `ConfirmarGrillaHandler`, `IniciarCompetenciaHandler`, `FinalizarCompetenciaHandler`
-
-**Performance:** `RegistrarAPHandler`, `LlamarAtletaHandler`, `RegistrarResultadoHandler`, `AsignarTarjetaHandler`, `RegistrarDNSHandler`, `CorregirResultadoHandler`
+| Componente | Capa | Tipo | Responsabilidad |
+|---|---|---|---|
+| [[arquitectura/competencia/competencia-aggregate\|Competencia Aggregate]] | domain | aggregate | Ciclo de vida de la disciplina: grilla, confirmación, ejecución, finalización |
+| [[arquitectura/competencia/performance-aggregate\|Performance Aggregate]] | domain | aggregate | Ciclo de vida de la actuación del atleta: AP, resultado, tarjeta, DNS |
+| [[arquitectura/competencia/grilla-de-salida\|GrillaDeSalida]] | domain | entity | Ordenamiento por AP, cálculo de OTs, ajustes manuales |
+| [[arquitectura/competencia/event-store-port\|EventStorePort]] | domain | port | Contrato append-only de persistencia de eventos |
+| [[arquitectura/competencia/atleta-nombre-port\|AtletaNombrePort]] | domain | port | Resolución de nombre de atleta por ID (cross-BC desde Registro) |
+| [[arquitectura/competencia/performances-ap-port\|PerformancesAPPort]] | domain | port | Consulta de performances con AP registrado (insumo para grilla) |
+| [[arquitectura/competencia/calculador-hash-competencia\|CalculadorHashCompetencia]] | domain | service | Hash SHA-256 de la secuencia de eventos al cierre de disciplina |
+| [[arquitectura/competencia/handler-utils\|HandlerUtils]] | application | service | Helpers de orquestación: carga, reconstitución y persistencia de aggregates |
+| [[arquitectura/competencia/command-handlers\|Command Handlers]] | application | handler | 16 handlers de comandos: grilla + ejecución de competencia y performances |
+| [[arquitectura/competencia/query-handlers\|Query Handlers]] | application | handler | 9 handlers de consulta: read models de grilla, estado, progreso y audit log |
+| [[arquitectura/competencia/sqlite-event-store\|SQLiteEventStore]] | infrastructure | adapter | Implementación del EventStorePort sobre competencia.db |
+| [[arquitectura/competencia/router-competencia\|Router Competencia]] | api | router | Endpoints HTTP del juez y organizador: grilla y ejecución |
 
 ## Integraciones
 

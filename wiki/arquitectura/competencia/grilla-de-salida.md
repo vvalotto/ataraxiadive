@@ -50,7 +50,15 @@ Los OTs se recalculan para todas las entradas cuando se modifica la posición de
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/competencia]]
+
 - Es propiedad exclusiva de [[competencia-aggregate]]
 - Consume `PerformancesAPData` del [[performances-ap-port]] (a través del handler)
 - Usa `DisciplinaDescriptor` del [[disciplina-descriptor-port]] para saber el tipo de ordenamiento
 - `EntradaGrilla` y `CambioGrilla` son value objects del dominio
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/competencia/domain/entities/grilla_de_salida.py` | Entidad GrillaDeSalida — ordenamiento y OTs |

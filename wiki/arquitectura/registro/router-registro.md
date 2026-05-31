@@ -83,7 +83,15 @@ sources:
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/registro]]
+
 - Usa [[command-handlers-registro]] y [[query-handlers-registro]]
 - Instancia repositorios de [[sqlite-repositories-registro]] via funciones helper `_repo()`, etc.
 - Usa [[torneo-consulta-port]] (SQLiteTorneoConsulta) para validaciones de inscripción
 - Auth guards: `AtletaDep`, `JuezDep`, `OrganizadorDep` definidos en `shared/api/dependencies.py`
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/registro/api/router.py` | Router FastAPI — endpoints HTTP del BC |

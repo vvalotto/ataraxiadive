@@ -4,16 +4,17 @@ type: arquitectura
 last_updated: "2026-05-23"
 sources:
   - docs/architecture/14-bc-identidad.md
+l1_ref: "[[arquitectura/sistema]]"
 tipo_ddd: generic
 persistencia: CRUD
 db: identidad.db
 test_coverage: null
 componentes:
-  - usuario-aggregate
-  - jwt-service
-  - sqlite-usuario-repository
-  - command-handlers-identidad
-  - router-identidad
+  - arquitectura/identidad/usuario-aggregate
+  - arquitectura/identidad/jwt-service
+  - arquitectura/identidad/sqlite-usuario-repository
+  - arquitectura/identidad/command-handlers-identidad
+  - arquitectura/identidad/router-identidad
 ---
 
 # BC Identidad — Generic Domain
@@ -52,6 +53,16 @@ El token lleva el **rol elegido al login** (uno solo — ver [[ADR-020-modelo-us
 | `application/` | `RegistrarUsuarioHandler` (unicidad email, política contraseña, bcrypt), `AutenticarUsuarioHandler` (valida credenciales, impide login de inactivos, emite token) |
 | `domain/` | `Usuario`, `Rol`, excepciones (`EmailDuplicado`, `CredencialesInvalidas`, `PasswordDemasiadoCorto`), `UsuarioRepositoryPort` |
 | `infrastructure/` | `SQLiteUsuarioRepository`, `JWTService` (HS256, secreto y expiración desde vars de entorno) |
+
+## Componentes (C4 L3)
+
+| Componente | Capa | Tipo | Responsabilidad |
+|---|---|---|---|
+| [[arquitectura/identidad/usuario-aggregate\|Usuario Aggregate]] | domain | aggregate | Perfil de acceso: credenciales, lista de roles, estado activo |
+| [[arquitectura/identidad/jwt-service\|JWTService]] | infrastructure | adapter | Generación/verificación JWT HS256 + hash bcrypt |
+| [[arquitectura/identidad/sqlite-usuario-repository\|SQLiteUsuarioRepository]] | infrastructure | repository | Persistencia CRUD de Usuario en identidad.db |
+| [[arquitectura/identidad/command-handlers-identidad\|Command Handlers]] | application | handler | 5 handlers: registro, autenticación, cambio y reset de password |
+| [[arquitectura/identidad/router-identidad\|Router Identidad]] | api | router | API HTTP /auth + guards de rol cross-cutting para todos los BCs |
 
 ## Política de contraseñas (ADR-019)
 

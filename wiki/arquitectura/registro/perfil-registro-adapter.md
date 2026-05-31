@@ -56,7 +56,15 @@ La identidad entre `atleta_id` / `juez_id` / `organizador_id` y `usuario_id` de 
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/registro]]
+
 - Implementa `PerfilRegistroPort` definido en [[identidad]] (`identidad/domain/ports/perfil_registro_port.py`)
 - Orquesta los handlers de BC Registro: [[command-handlers-registro]]
 - Instancia [[atleta]], [[juez-organizador]] a través de sus respectivos handlers y repositorios [[sqlite-repositories-registro]]
 - Registrado en el contenedor de dependencias de FastAPI al inicializar BC Identidad
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/registro/infrastructure/perfil_registro_adapter.py` | Adapter: crea perfil deportivo al registrar usuario en Identidad |

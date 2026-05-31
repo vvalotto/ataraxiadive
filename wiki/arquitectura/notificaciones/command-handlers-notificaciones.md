@@ -150,8 +150,20 @@ Ningún BC funcional importa tipos de Notificaciones — la dependencia es solo 
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/notificaciones]]
+
 - Operan sobre [[notificacion-aggregate]]
 - Usan [[sqlite-notificacion-event-store]] vía `NotificacionRepository`
 - Inyectados vía composition root en `app.py`
 - P-10 registrado en [[router-registro]] vía `configure_inscripcion_notificaciones()`
 - P-11 registrado en [[router-resultados]] vía `configure_resultados_notificaciones()`
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/notificaciones/application/commands/solicitar_envio.py` | Handler: SolicitarEnvioHandler |
+| `src/notificaciones/application/commands/enviar_notificacion.py` | Handler: EnviarNotificacionHandler |
+| `src/notificaciones/application/policies/politica_p10.py` | Política P-10 — email de confirmación de inscripción |
+| `src/notificaciones/application/policies/politica_p11.py` | Política P-11 — email de resultados publicados |
+| `src/notificaciones/application/policies/_helpers.py` | Helpers internos de políticas de notificación |

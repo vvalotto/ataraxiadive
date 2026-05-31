@@ -60,6 +60,15 @@ El campo `roles: list[Rol]` reemplazó al campo `rol: Rol` anterior. La migraci�
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/identidad]]
+
 - Persiste en `identidad.db` via [[sqlite-usuario-repository]]
 - El `usuario_id` es el anchor que correlaciona con `atleta_id` / `juez_id` / `organizador_id` en BC Registro (correlación por email en la práctica)
 - Al crear un usuario, [[command-handlers-identidad]] llama a [[perfil-registro-adapter]] para crear los perfiles deportivos correspondientes
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/identidad/domain/aggregates/usuario.py` | Aggregate Usuario — credenciales, lista de roles, estado activo |
+| `src/identidad/domain/value_objects/rol.py` | Value Object Rol — StrEnum con 4 roles (ATLETA, JUEZ, ORGANIZADOR, ADMIN) |

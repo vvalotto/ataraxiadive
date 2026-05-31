@@ -46,6 +46,17 @@ SELECT nombre, apellido FROM atletas WHERE atleta_id = ?
 
 Si la tabla `atletas` en `registro.db` cambia de nombre de columna (`nombre`, `apellido`), este adapter se rompe silenciosamente (devuelve fallback). Riesgo catalogado en [[atleta-nombre-port]].
 
+## Relaciones
+
+**Contenedor:** [[arquitectura/competencia]]
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/competencia/domain/ports/atleta_nombre_port.py` | Puerto abstracto AtletaNombrePort |
+| `src/competencia/infrastructure/repositories/atleta_nombre_adapter.py` | Adapter — lee registro.db via aiosqlite |
+
 ## ADRs relacionados
 
 - [[ADR-005-bounded-contexts-ddd-estrategico]] — justifica la separación Registro/Competencia

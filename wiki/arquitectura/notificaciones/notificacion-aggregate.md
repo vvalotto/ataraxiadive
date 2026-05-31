@@ -107,6 +107,18 @@ Cada notificación tiene su propio stream. Los eventos del stream determinan el 
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/notificaciones]]
+
 - Persistido por [[sqlite-notificacion-event-store]]
 - Creado y mutado por [[command-handlers-notificaciones]]
 - Los eventos del dominio fuente (`InscripcionConfirmada`, `ResultadosPublicados`) son DTOs externos — el BC no importa los agregados de Registro ni Resultados
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/notificaciones/domain/aggregates/notificacion.py` | Aggregate Notificacion — ciclo de vida ES + idempotencia EventoFuenteId |
+| `src/notificaciones/domain/events/notificacion_solicitada.py` | Evento NotificacionSolicitada |
+| `src/notificaciones/domain/events/notificacion_enviada.py` | Evento NotificacionEnviada |
+| `src/notificaciones/domain/events/notificacion_fallida.py` | Evento NotificacionFallida |
+| `src/notificaciones/domain/value_objects/` |  |

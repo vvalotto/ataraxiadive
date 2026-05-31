@@ -65,10 +65,18 @@ Preparacion → Confirmada → EnEjecucion → Finalizada
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/competencia]]
+
 - Contiene [[grilla-de-salida]] como entidad interna
 - Escribe en [[event-store-port]] (única salida de datos)
 - Al finalizar, persiste `hash_sha256` calculado por [[calculador-hash-competencia]]
 - Los handlers de application orquestan la interacción — ver [[handler-utils]]
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/competencia/domain/aggregates/competencia.py` | Aggregate Competencia — ciclo de vida, grilla, invariantes |
 
 ## ADRs relacionados
 

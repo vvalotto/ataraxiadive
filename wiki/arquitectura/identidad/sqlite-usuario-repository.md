@@ -55,6 +55,14 @@ Y repara cualquier `roles` con JSON inválido. Se ejecuta en cada `_ensure_table
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/identidad]]
+
 - Implementa `UsuarioRepositoryPort` de `domain/ports/`
 - Instanciado via `get_usuario_repository()` en [[dependencies-identidad]]
 - Sus datos son la fuente de verdad de autenticación — todos los BCs confían en el JWT generado a partir de aquí
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/identidad/infrastructure/repositories/sqlite_usuario_repository.py` | Repositorio CRUD de Usuario en identidad.db |

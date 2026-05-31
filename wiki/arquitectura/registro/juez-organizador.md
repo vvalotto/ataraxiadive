@@ -60,6 +60,15 @@ Ambos son `@dataclass` sin Event Sourcing. La creación de perfiles está orques
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/registro]]
+
 - `juez_id` / `organizador_id` = `usuario_id` del BC [[identidad]]
 - Son creados vía [[perfil-registro-adapter]] al registrarse un nuevo usuario con esos roles
 - Sus repositorios son [[juez-repository-port]] y [[organizador-repository-port]]
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/registro/domain/aggregates/juez.py` | Aggregate Juez — perfil deportivo del juez |
+| `src/registro/domain/aggregates/organizador.py` | Aggregate Organizador — perfil deportivo del organizador |

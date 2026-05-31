@@ -113,6 +113,17 @@ Tabla: `organizadores`
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/registro]]
+
 - Implementan [[atleta-repository-port]], [[inscripcion-repository-port]], [[juez-repository-port]], [[organizador-repository-port]]
 - Instanciados directamente en [[router-registro]] via funciones `_repo()`, `_juez_repo()`, etc. (sin DI container)
 - `SQLiteAtletaRepository` es leído también por BC Competencia via [[atleta-nombre-port]] (acceso directo a `registro.db`)
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/registro/infrastructure/repositories/sqlite_atleta_repository.py` | Repositorio CRUD de Atleta en registro.db |
+| `src/registro/infrastructure/repositories/sqlite_inscripcion_repository.py` | Repositorio CRUD de Inscripcion en registro.db |
+| `src/registro/infrastructure/repositories/sqlite_juez_repository.py` | Repositorio CRUD de Juez en registro.db |
+| `src/registro/infrastructure/repositories/sqlite_organizador_repository.py` | Repositorio CRUD de Organizador en registro.db |

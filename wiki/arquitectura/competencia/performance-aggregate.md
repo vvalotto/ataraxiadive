@@ -80,10 +80,20 @@ El RP visible para ranking es `rp_penalizado` si existen penalizaciones, o `rp_m
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/competencia]]
+
 - Escribe en [[event-store-port]]
 - Es orquestado por handlers en [[handler-utils]]
 - Su estado es leído por [[performances-ap-port]] y [[performances-estado-port]]
 - Vinculado con [[competencia-aggregate]] por `competencia_id`
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/competencia/domain/aggregates/performance.py` | Aggregate Performance — ciclo de vida del atleta |
+| `src/competencia/domain/aggregates/performance_events.py` | Eventos de dominio del aggregate Performance |
+| `src/competencia/domain/aggregates/performance_state.py` | Estado interno del aggregate Performance (reconstitución) |
 
 ## ADRs relacionados
 

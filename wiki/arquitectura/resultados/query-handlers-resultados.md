@@ -65,6 +65,17 @@ Retorna un DTO `ExportResultadosDTO` con todos los datos consolidados. El router
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/resultados]]
+
 - Todos instanciados en [[router-resultados]] vía FastAPI `Depends()`
 - `ObtenerRankingProvisionalHandler` y `ExportarResultadosHandler` acceden cross-BC directamente a `competencia.db` y `registro.db`
 - `ExportarResultadosHandler` también usa `TorneoRepositoryPort` (BC Torneo) configurado vía `configure_resultados_cross_bc_dependencies()`
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/resultados/application/queries/obtener_ranking.py` | Query: ObtenerRankingHandler (definitivo) |
+| `src/resultados/application/queries/obtener_ranking_provisional.py` | Query: ObtenerRankingProvisionalHandler (tiempo real) |
+| `src/resultados/application/queries/obtener_overall.py` | Query: ObtenerOverallHandler |
+| `src/resultados/application/queries/exportar_resultados.py` | Query: ExportarResultadosHandler (CSV/JSON) |

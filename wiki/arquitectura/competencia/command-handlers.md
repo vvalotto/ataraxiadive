@@ -71,7 +71,15 @@ Conjunto de 16 handlers de comandos que implementan los casos de uso de escritur
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/competencia]]
+
 - Todos usan [[handler-utils]] y [[event-store-port]]
 - `GenerarGrillaHandler` usa [[performances-ap-port]]
 - `LlamarAtletaHandler` lee estado de [[competencia-aggregate]] y escribe en [[performance-aggregate]]
 - Los handlers son invocados desde [[router-competencia]]
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/competencia/application/commands/` |  |

@@ -47,6 +47,15 @@ Evita que cada handler repita el ciclo load → reconstitute → command → per
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/competencia]]
+
 - Usa [[event-store-port]] para todas las operaciones de I/O
 - Es usado por todos los command handlers del BC Competencia
 - [[competencia-aggregate]] y [[performance-aggregate]] son los aggregates que maneja
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/competencia/application/commands/_handler_utils.py` | Helpers: cargar, reconstituir, persistir aggregates |
+| `src/competencia/application/commands/_stream_ids.py` | Stream IDs canónicos (build_*_stream_id) |

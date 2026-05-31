@@ -39,6 +39,10 @@ Re-export del contrato canónico `EventStorePort` definido en `shared.domain`. E
 
 [[sqlite-event-store]] — re-export de `shared.infrastructure`. Usa `competencia.db` como archivo SQLite con tabla `events`.
 
+## Relaciones
+
+**Contenedor:** [[arquitectura/competencia]]
+
 ## Consumidores en este BC
 
 - [[handler-utils]] — `persistir_eventos_pendientes()` usa este port para escribir
@@ -48,3 +52,10 @@ Re-export del contrato canónico `EventStorePort` definido en `shared.domain`. E
 ## Riesgo
 
 Componente de muy alto impacto transversal. Ver análisis completo en [[event-store-port]] (wiki/impacto/).
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/competencia/domain/ports/event_store_port.py` | Puerto abstracto EventStorePort (append-only) |
+| `src/shared/domain/ports/event_store_port.py` | Puerto abstracto EventStorePort (append-only) |

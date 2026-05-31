@@ -85,7 +85,16 @@ def calcular(self, resultados, disciplina):
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/resultados]]
+
 - Implementa `AlgoritmoPuntaje` de `domain/ports/`
 - Inyectado en [[command-handlers-resultados]] (CalcularRankingHandler) via el router
 - Consumido por [[ranking-competencia]] en el método `calcular(resultados, algoritmo)`
 - La disciplina `STA` usa `mayor_es_mejor=True`; `SPE_*` usa `mayor_es_mejor=False`
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/resultados/domain/services/algoritmo_faas.py` | Servicio FAAS — 3 fórmulas de puntuación por tipo de disciplina |
+| `src/resultados/domain/ports/algoritmo_puntaje.py` | Puerto abstracto AlgoritmoPuntaje |

@@ -4,14 +4,15 @@ type: arquitectura
 last_updated: "2026-05-23"
 sources:
   - docs/architecture/15-bc-notificaciones.md
+l1_ref: "[[arquitectura/sistema]]"
 tipo_ddd: generic
 persistencia: Event Sourcing
 db: notificaciones.db
 test_coverage: null
 componentes:
-  - notificacion-aggregate
-  - sqlite-notificacion-event-store
-  - command-handlers-notificaciones
+  - arquitectura/notificaciones/notificacion-aggregate
+  - arquitectura/notificaciones/sqlite-notificacion-event-store
+  - arquitectura/notificaciones/command-handlers-notificaciones
 ---
 
 # BC Notificaciones — Generic Domain
@@ -72,6 +73,14 @@ NotificacionSolicitada → NotificacionEnviada
 | `PushPort` | — | ⏳ Solo diseño |
 
 **Fallback de desarrollo:** si `RESEND_API_KEY` no está configurada, se inyecta `LoggingEmailAdapter` — registra el email en el log sin enviarlo.
+
+## Componentes (C4 L3)
+
+| Componente | Capa | Tipo | Responsabilidad |
+|---|---|---|---|
+| [[arquitectura/notificaciones/notificacion-aggregate\|Notificacion Aggregate]] | domain | aggregate | Ciclo de vida ES: Nueva→Solicitada→Enviada\|Fallida + idempotencia por EventoFuenteId |
+| [[arquitectura/notificaciones/sqlite-notificacion-event-store\|SQLiteNotificacionEventStore]] | infrastructure | event-store | Event store en notificaciones.db + adapters EmailPort (Resend / Logging) |
+| [[arquitectura/notificaciones/command-handlers-notificaciones\|Command Handlers]] | application | handler | SolicitarEnvio, EnviarNotificacion + políticas P-10/P-11 |
 
 ## Mecanismo de integración (SP4)
 

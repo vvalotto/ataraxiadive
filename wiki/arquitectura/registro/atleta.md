@@ -53,7 +53,15 @@ Es un `@dataclass` (no hereda de `AggregateRoot`). El BC Registro usa CRUD puro 
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/registro]]
+
 - `atleta_id` = `usuario_id` del BC [[identidad]] — vinculado al crear el perfil via [[perfil-registro-adapter]]
 - Leído por BC Competencia vía [[atleta-nombre-port]] (cross-BC, lectura directa de `registro.db`)
 - `categoria` es un `StrEnum` importado de `shared/` (ADR-022) — también usado por [[competencia]] y [[resultados]]
 - Participa en [[inscripcion]] como `atleta_id`
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/registro/domain/aggregates/atleta.py` | Aggregate Atleta — perfil deportivo, categoría, brevet |

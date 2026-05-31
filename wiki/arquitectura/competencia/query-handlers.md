@@ -44,7 +44,15 @@ Las queries leen streams del Event Store y reconstituyen aggregates, o bien proy
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/competencia]]
+
 - Todos consumen [[event-store-port]]
 - `ObtenerGrillaHandler` usa [[atleta-nombre-port]]
 - Son invocados desde [[router-competencia]]
 - El read model de grilla es el principal insumo del panel del juez (Frontend)
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/competencia/application/queries/` |  |

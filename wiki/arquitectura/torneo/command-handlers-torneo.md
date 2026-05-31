@@ -78,6 +78,18 @@ El patrón de precondición/post-acción permite que otros BCs participen en las
 
 ## Relaciones
 
+**Contenedor:** [[arquitectura/torneo]]
+
 - Instanciados en [[router-torneo]]
 - Usan [[sqlite-torneo-repository]]
 - Las precondiciones/post-acciones son provistas por BC Registro (`build_cierre_inscripcion_precondition`) y BC Competencia
+
+## Código fuente
+
+| Archivo | Descripción |
+|---|---|
+| `src/torneo/application/commands/crear_torneo.py` | Handler: CrearTorneoHandler |
+| `src/torneo/application/commands/actualizar_torneo.py` | Handler: ActualizarTorneoHandler |
+| `src/torneo/application/commands/asignar_disciplinas.py` | Handler: AsignarDisciplinasHandler |
+| `src/torneo/application/commands/asignar_juez.py` | Handler: AsignarJuezHandler |
+| `src/torneo/application/commands/transicionar_torneo.py` | Handlers de transición de estado del ciclo de vida |
