@@ -32,7 +32,7 @@ Operación: crear páginas individuales por RF para habilitar navegación RF →
   - RF-NT-02 (sin US)
   - RF-PM-04 (sin US)
 
-**Cadena habilitada:** `[[RF-gestion-torneo]]` → `[[RF-GT-01]]` → `[[US-3.1.1]]` → `test_units`
+**Cadena habilitada:** `[[RF-gestion-torneo]]` → `[[RF-GT-01-sede-unica-por-torneo]]` → `[[US-3.1.1-aggregate-torneo-maquina-de-estados-aggregate-torneo-maquina-de-estados-aggregate-torneo-maquina-de-estados]]` → `test_units`
 
 ---
 
@@ -71,7 +71,7 @@ Fase E actualizada: query de distribución por origen + gap de origen_tipo = nul
 ## [2026-05-23] ingest | Fase B plan-trazabilidad-rf-us-si-tu — campo rf: en 177 US
 
 Script: `poblar_rf.py`
-Archivos modificados: 177 (`wiki/trazabilidad/US-*.md`)
+Archivos modificados: 177 (`wiki/trazabilidad/us/US-*.md`)
 
 - 42 US recibieron `rf: [RF-XX-NN, ...]` (RFs extraídos del body)
 - 135 US recibieron `rf: []` (sin RFs en el body: US de setup, ADJs técnicos, SP4+)

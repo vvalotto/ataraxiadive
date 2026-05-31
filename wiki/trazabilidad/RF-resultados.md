@@ -5,12 +5,12 @@ last_updated: "2026-05-20"
 sources:
   - docs/dominio/05-requerimientos_funcionales.md
 us_refs:
-  - US-2.4.2
-  - US-3.3.1
-  - US-3.5.1
-  - US-3.5.2
-  - US-3.5.3
-  - US-ADJ-4.5
+  - US-2.4.2-calcularranking-—-bc-resultados-nucleo
+  - US-3.3.1-torneo-id-opcional-en-competencia-para-overall
+  - US-3.5.1-aggregate-rankingoverall-calcularoverallhandler
+  - US-3.5.2-politica-p-09-overall-automatico-al-cerrar-torneo
+  - US-3.5.3-api-get-resultados-{torneo-id}-overall
+  - US-ADJ-4.5-ranking-por-disciplina-categoria-en-bc-resultados
 ---
 
 # RF — Premiación y Resultados
@@ -23,12 +23,12 @@ Requerimientos funcionales del área de resultados. Fuente: elicitación inicial
 
 | ID | Requerimiento | Respuesta / Regla |
 |----|--------------|-------------------|
-| [[RF-PM-01]] | ¿Los resultados son por puntos o por marca absoluta? | **Pendiente.** Es una regla de negocio configurable. |
-| [[RF-PM-02]] | ¿Existe ranking general del torneo? | **Sí.** Se denomina **Overall**. |
-| [[RF-PM-03]] | ¿Cómo se resuelven los empates? | Mismo puesto y mismos puntos. |
-| [[RF-PM-04]] | ¿Los certificados requieren logos/firmas específicas? | No es importante en esta etapa. |
-| [[RF-PM-05]] | ¿Hay rankings separados por categoría y género? | **Sí.** Rankings por [[disciplina]], categoría y género. |
-| [[RF-PM-06]] | ¿Cómo se publican los resultados? | En la plataforma; descargables. |
+| [[RF-PM-01-resultados-por-puntos-faas]] | ¿Los resultados son por puntos o por marca absoluta? | **Pendiente.** Es una regla de negocio configurable. |
+| [[RF-PM-02-ranking-general-overall]] | ¿Existe ranking general del torneo? | **Sí.** Se denomina **Overall**. |
+| [[RF-PM-03-resolucion-empates]] | ¿Cómo se resuelven los empates? | Mismo puesto y mismos puntos. |
+| [[RF-PM-04-certificados-logos-firmas]] | ¿Los certificados requieren logos/firmas específicas? | No es importante en esta etapa. |
+| [[RF-PM-05-rankings-por-categoria-y-genero]] | ¿Hay rankings separados por categoría y género? | **Sí.** Rankings por [[disciplina]], categoría y género. |
+| [[RF-PM-06-publicacion-resultados-descargables]] | ¿Cómo se publican los resultados? | En la plataforma; descargables. |
 
 ## Reglas de negocio clave
 
@@ -41,7 +41,7 @@ Requerimientos funcionales del área de resultados. Fuente: elicitación inicial
 
 | ID | Pendiente | Clasificación |
 |----|-----------|---------------|
-| [[RF-PM-01]] | Sistema de puntos vs marca absoluta — regla de negocio configurable no definida | **Backlog activo** — la decisión de diseño es pendiente; el algoritmo FAAS existe |
+| [[RF-PM-01-resultados-por-puntos-faas]] | Sistema de puntos vs marca absoluta — regla de negocio configurable no definida | **Backlog activo** — la decisión de diseño es pendiente; el algoritmo FAAS existe |
 
 ## Estado de implementación (lint-001)
 

@@ -131,8 +131,8 @@ tests_count: 28
 report_path: docs/reports/US-3.3.1-report.md
 # Campos de trazabilidad extendida (plan-trazabilidad-rf-us-si-tu)
 rf:                           # RFs que esta US implementa ([] si no aplica)
-  - RF-EJ-05
-  - RF-EJ-06
+  - RF-EJ-05-cronometraje-manual-por-juez
+  - RF-EJ-06-correccion-resultado-registrado
 origen_tipo: rf | adr | calidad | plataforma | setup
                               # rf        → deriva de requerimiento funcional elicitado
                               # adr       → deriva de una decisión arquitectónica (ADR-NNN)
@@ -156,8 +156,8 @@ test_units:                   # Paths relativos al/los test(s) que verifican est
 ```yaml
 # Campo adicional en páginas RF-*.md (una página por área, ej: RF-gestion-torneo.md)
 us_refs:                      # US que implementan RFs de esta área (nivel de página)
-  - US-1.2.1
-  - US-1.2.3
+  - US-1.2.1-registrarap-registrarap-registrarap
+  - US-1.2.3-registrarresultado-registrarresultado-registrarresultado
 # Tabla en el cuerpo: IDs convertidos a [[rf/RF-XX-NN|RF-XX-NN]] para navegación
 ```
 
@@ -170,13 +170,13 @@ rf_id: RF-GT-01                   # ID canónico del RF
 area: gestion-torneo               # slug del área
 parent_page: "[[RF-gestion-torneo]]"  # página de área padre
 us_refs:                           # US que implementan este RF exacto
-  - US-3.1.1
-  - US-3.1.2
+  - US-3.1.1-aggregate-torneo-maquina-de-estados-aggregate-torneo-maquina-de-estados-aggregate-torneo-maquina-de-estados
+  - US-3.1.2-api-rest-torneo-crud-transiciones-repositorio-sqlite-api-rest-torneo-crud-transiciones-repositorio-sqlite-api-rest-torneo-crud-transiciones-repositorio-sqlite
 estado: implementado | sin-us      # implementado = tiene US; sin-us = backlog/pendiente
 last_updated: "YYYY-MM-DD"
 ```
 Ubicación: `wiki/trazabilidad/rf/RF-XX-NN.md`  
-Navegación habilitada: RF tabla → `[[rf/RF-GT-01]]` → página RF → `[[US-3.1.1]]` → US → `test_units`
+Navegación habilitada: RF tabla → `[[rf/RF-GT-01]]` → página RF → `[[US-3.1.1-aggregate-torneo-maquina-de-estados-aggregate-torneo-maquina-de-estados-aggregate-torneo-maquina-de-estados]]` → US → `test_units`
 
 ---
 

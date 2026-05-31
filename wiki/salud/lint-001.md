@@ -39,7 +39,7 @@ Todas las menciones de PostgreSQL en el wiki están en contexto correcto:
 - `wiki/decisiones/ADR-021-fly-io.md` — contraste con alternativa descartada
 - `wiki/vistas/decisiones.md` — pregunta característica "¿Por qué SQLite y no PostgreSQL?"
 - `wiki/vistas/salud.md` — nota meta sobre qué detectar en futuros lints
-- `wiki/trazabilidad/US-ADJ-5.2.md` — referencia histórica contextualizada
+- `wiki/trazabilidad/us/US-ADJ-5.2.md` — referencia histórica contextualizada
 - `wiki/LLM-WIKI-DIAGNOSTICO-Y-PLAN.md` — documento del plan (meta)
 
 **Ninguna página presenta PostgreSQL como tecnología activa del proyecto.**
@@ -54,7 +54,7 @@ Todas las menciones de PostgreSQL en el wiki están en contexto correcto:
 - **ADR-021 (Fly.io)**: referencia a ADR-010 en contexto histórico correcto.
 - No se detectaron ADRs que se contradigan mutuamente sin documentación.
 
-**Nota:** `wiki/trazabilidad/US-7.1.1.md` referencia ADR-010 — verificar que lo haga en contexto histórico.
+**Nota:** `wiki/trazabilidad/us/US-7.1.1.md` referencia ADR-010 — verificar que lo haga en contexto histórico.
 
 ---
 
@@ -152,24 +152,24 @@ Conceptos presentes en el código fuente (`src/`) sin página propia:
 Las siguientes páginas existen como archivos pero no tienen `[[wikilink]]` en `wiki/index.md`:
 
 ### Trazabilidad — INC-6.6 (SP6 API pública)
-- `wiki/trazabilidad/US-6.6.1.md`
-- `wiki/trazabilidad/US-6.6.2.md`
-- `wiki/trazabilidad/US-6.6.3.md`
-- `wiki/trazabilidad/US-6.6.4.md`
+- `wiki/trazabilidad/us/US-6.6.1.md`
+- `wiki/trazabilidad/us/US-6.6.2.md`
+- `wiki/trazabilidad/us/US-6.6.3.md`
+- `wiki/trazabilidad/us/US-6.6.4.md`
 
 ### Trazabilidad — SP-ADJ-10
-- `wiki/trazabilidad/US-ADJ-10.1.md`
-- `wiki/trazabilidad/US-ADJ-10.2.md`
-- `wiki/trazabilidad/US-ADJ-10.3.md`
-- `wiki/trazabilidad/US-ADJ-10.4.md`
+- `wiki/trazabilidad/us/US-ADJ-10.1.md`
+- `wiki/trazabilidad/us/US-ADJ-10.2.md`
+- `wiki/trazabilidad/us/US-ADJ-10.3.md`
+- `wiki/trazabilidad/us/US-ADJ-10.4.md`
 
 ### Trazabilidad — SP7 (parcialmente registrado)
 El index menciona SP7 en su tabla de estado pero no tiene secciones con wikilinks:
-- `wiki/trazabilidad/US-7.1.1.md`
-- `wiki/trazabilidad/US-7.1.2.md`
-- `wiki/trazabilidad/US-7.2.1.md`
-- `wiki/trazabilidad/US-7.2.2.md`
-- `wiki/trazabilidad/US-7.2.3.md`
+- `wiki/trazabilidad/us/US-7.1.1.md`
+- `wiki/trazabilidad/us/US-7.1.2.md`
+- `wiki/trazabilidad/us/US-7.2.1.md`
+- `wiki/trazabilidad/us/US-7.2.2.md`
+- `wiki/trazabilidad/us/US-7.2.3.md`
 
 ### Estado del proyecto
 - `wiki/estado/proyecto.md` — existe pero el index.md solo lo menciona en la tabla de estado (sin wikilink navegable)

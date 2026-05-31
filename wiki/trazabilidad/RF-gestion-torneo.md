@@ -5,11 +5,11 @@ last_updated: "2026-05-20"
 sources:
   - docs/dominio/05-requerimientos_funcionales.md
 us_refs:
-  - US-3.1.1
-  - US-3.1.2
-  - US-3.3.2
-  - US-4.1.3
-  - US-ADJ-4.1
+  - US-3.1.1-aggregate-torneo-maquina-de-estados
+  - US-3.1.2-api-rest-torneo-crud-transiciones-repositorio-sqlite
+  - US-3.3.2-acl-torneo-registro-competencia-crear-competencias-por
+  - US-4.1.3-subdisciplinas-spe-spe-2x50-spe-4x50-spe-8x50-spe-16x50
+  - US-ADJ-4.1-renombrar-dynb-dbf-y-spe2x50-spe-acronimos-dominio-real
 ---
 
 # RF — Gestión del Torneo
@@ -23,13 +23,13 @@ Para trazabilidad vigente hacia USs ver `docs/traceability/matrix.md` (pendiente
 
 | ID | Requerimiento | Respuesta / Regla |
 |----|--------------|-------------------|
-| [[RF-GT-01]] | ¿Un torneo puede tener más de una sede? | **No.** Una sede por torneo. |
-| [[RF-GT-02]] | ¿Qué disciplinas soporta el sistema? | **Configurable.** Inicialmente: STA, DNF, DBF, DYN, SPE. |
-| [[RF-GT-03]] | ¿Pueden existir múltiples torneos activos simultáneamente? | **Sí.** |
-| [[RF-GT-04]] | ¿Qué significa cancelar un torneo? | Estado cancelado conservando la información (no se elimina). |
-| [[RF-GT-05]] | ¿Hay restricciones para transición entre fases? | **Sí.** Se puede volver de etapas (ej: Ejecución → Preparación). |
-| [[RF-GT-06]] | ¿El cierre implica archivo o exportación? | **No.** |
-| [[RF-GT-07]] | ¿Se registra la entidad organizadora (federación/club)? | **Sí.** Además del organizador como persona. |
+| [[RF-GT-01-sede-unica-por-torneo]] | ¿Un torneo puede tener más de una sede? | **No.** Una sede por torneo. |
+| [[RF-GT-02-disciplinas-configurables]] | ¿Qué disciplinas soporta el sistema? | **Configurable.** Inicialmente: STA, DNF, DBF, DYN, SPE. |
+| [[RF-GT-03-torneos-activos-simultaneos]] | ¿Pueden existir múltiples torneos activos simultáneamente? | **Sí.** |
+| [[RF-GT-04-cancelacion-conserva-datos]] | ¿Qué significa cancelar un torneo? | Estado cancelado conservando la información (no se elimina). |
+| [[RF-GT-05-transiciones-ciclo-vida-torneo]] | ¿Hay restricciones para transición entre fases? | **Sí.** Se puede volver de etapas (ej: Ejecución → Preparación). |
+| [[RF-GT-06-cierre-sin-exportacion-automatica]] | ¿El cierre implica archivo o exportación? | **No.** |
+| [[RF-GT-07-entidad-organizadora-registrada]] | ¿Se registra la entidad organizadora (federación/club)? | **Sí.** Además del organizador como persona. |
 
 ## Reglas de negocio clave
 

@@ -92,7 +92,7 @@ ADRs directamente relevantes:
 
 > **Consulta:** "¿Qué tests cubren el flujo de registro de performance con tarjeta roja?"
 
-**Páginas leídas:** `wiki/trazabilidad/RF-ejecucion.md` + `wiki/trazabilidad/US-1.4.1.md` (2 páginas)
+**Páginas leídas:** `wiki/trazabilidad/RF-ejecucion.md` + `wiki/trazabilidad/us/US-1.4.1.md` (2 páginas)
 
 **Respuesta del wiki:**
 

@@ -5,11 +5,11 @@ last_updated: "2026-05-20"
 sources:
   - docs/dominio/05-requerimientos_funcionales.md
 us_refs:
-  - US-4.5.1
-  - US-4.5.2
-  - US-4.5.3
-  - US-4.5.4
-  - US-4.5.5
+  - US-4.5.1-aggregate-notificacion-ciclo-de-vida-idempotencia
+  - US-4.5.2-emailport-resendemailadapter
+  - US-4.5.3-politica-p-10-email-al-atleta-al-confirmar-inscripcion
+  - US-4.5.4-politica-p-11-email-a-atletas-al-publicar-resultados
+  - US-4.5.5-cableado-p-10-al-endpoint-post-registro-inscripciones
 ---
 
 # RF — Notificaciones
@@ -22,10 +22,10 @@ Requerimientos funcionales del área de notificaciones. Fuente: elicitación ini
 
 | ID | Requerimiento | Respuesta / Regla |
 |----|--------------|-------------------|
-| [[RF-NT-01]] | ¿Notificaciones solo por email o también push? | **Email + push.** |
-| [[RF-NT-02]] | ¿Se notifica al atleta cuando se acerca la fecha límite de anuncios? | **Sí.** |
-| [[RF-NT-03]] | ¿El juez/organizador recibe notificaciones durante la ejecución? | **Pendiente.** |
-| [[RF-NT-04]] | ¿Se notifica a los atletas cuando se publican resultados finales? | **Sí.** |
+| [[RF-NT-01-canales-notificacion-email-push]] | ¿Notificaciones solo por email o también push? | **Email + push.** |
+| [[RF-NT-02-notificacion-limite-anuncios]] | ¿Se notifica al atleta cuando se acerca la fecha límite de anuncios? | **Sí.** |
+| [[RF-NT-03-notificaciones-durante-ejecucion]] | ¿El juez/organizador recibe notificaciones durante la ejecución? | **Pendiente.** |
+| [[RF-NT-04-notificacion-resultados-publicados]] | ¿Se notifica a los atletas cuando se publican resultados finales? | **Sí.** |
 
 ## Triggers de notificación definidos
 
@@ -40,7 +40,7 @@ Requerimientos funcionales del área de notificaciones. Fuente: elicitación ini
 
 | ID | Pendiente | Clasificación |
 |----|-----------|---------------|
-| [[RF-NT-03]] | Notificaciones al juez u organizador durante ejecución | **Backlog activo** — la infraestructura de notificaciones existe; falta definir triggers |
+| [[RF-NT-03-notificaciones-durante-ejecucion]] | Notificaciones al juez u organizador durante ejecución | **Backlog activo** — la infraestructura de notificaciones existe; falta definir triggers |
 
 ## Estado de implementación (lint-001)
 

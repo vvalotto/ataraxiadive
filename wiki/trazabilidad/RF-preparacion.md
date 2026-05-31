@@ -5,13 +5,13 @@ last_updated: "2026-05-20"
 sources:
   - docs/dominio/05-requerimientos_funcionales.md
 us_refs:
-  - US-1.2.1
-  - US-2.1.1
-  - US-2.1.2
-  - US-2.1.3
-  - US-2.3.1
-  - US-4.1.4
-  - US-ADJ-4.2
+  - US-1.2.1-registrarap-registrarap
+  - US-2.1.1-configurarintervaloot-scaffold-aggregate-competencia-configurarintervaloot-scaffold-aggregate-competencia
+  - US-2.1.2-generargrilla-regenerargrilla-generargrilla-regenerargrilla
+  - US-2.1.3-ajustargrilla-ajustargrilla
+  - US-2.3.1-ejecucion-multi-andarivel-ejecucion-multi-andarivel
+  - US-4.1.4-orden-spe-descendente-en-grilladesalida-orden-spe-descendente-en-grilladesalida
+  - US-ADJ-4.2-corregir-orden-grilla-sta-ascendente-corregir-orden-grilla-sta-ascendente
 ---
 
 # RF — Preparación de Competencias
@@ -24,14 +24,14 @@ Requerimientos funcionales del área de preparación. Fuente: elicitación inici
 
 | ID | Requerimiento | Respuesta / Regla |
 |----|--------------|-------------------|
-| [[RF-PR-01]] | ¿Qué es un anuncio (AP)? | Marca que el atleta declara que intentará lograr. AP = Announced Performance. |
-| [[RF-PR-02]] | ¿Hay valores mínimos/máximos para anuncios? | No se permiten valores 0 o negativos. |
-| [[RF-PR-03]] | ¿Un atleta puede modificar su anuncio? | **No.** Una vez registrado, es definitivo. |
-| [[RF-PR-04]] | ¿Qué pasa si un atleta no registra su anuncio? | **No compite.** |
-| [[RF-PR-05]] | ¿Cómo se determina el orden de salida? | Depende de la [[disciplina]]: **por distancia → menor a mayor; por tiempo → mayor a menor.** |
-| [[RF-PR-06]] | ¿Pueden competir varios atletas simultáneamente? | **Sí,** mediante andariveles (líneas de competencia). |
-| [[RF-PR-07]] | ¿El organizador puede modificar el orden manualmente? | **Sí.** |
-| [[RF-PR-08]] | ¿Qué es la "duración de cada performance"? | Tiempo entre Tiempos Oficiales (OT = Official Top). Lo determina el juez por prueba. |
+| [[RF-PR-01-anuncio-previo-ap]] | ¿Qué es un anuncio (AP)? | Marca que el atleta declara que intentará lograr. AP = Announced Performance. |
+| [[RF-PR-02-validacion-valores-ap]] | ¿Hay valores mínimos/máximos para anuncios? | No se permiten valores 0 o negativos. |
+| [[RF-PR-03-ap-definitivo-sin-modificacion]] | ¿Un atleta puede modificar su anuncio? | **No.** Una vez registrado, es definitivo. |
+| [[RF-PR-04-atleta-sin-ap-no-compite]] | ¿Qué pasa si un atleta no registra su anuncio? | **No compite.** |
+| [[RF-PR-05-orden-salida-por-ap]] | ¿Cómo se determina el orden de salida? | Depende de la [[disciplina]]: **por distancia → menor a mayor; por tiempo → mayor a menor.** |
+| [[RF-PR-06-competencia-multi-andarivel]] | ¿Pueden competir varios atletas simultáneamente? | **Sí,** mediante andariveles (líneas de competencia). |
+| [[RF-PR-07-ajuste-manual-grilla]] | ¿El organizador puede modificar el orden manualmente? | **Sí.** |
+| [[RF-PR-08-intervalo-ot-entre-performances]] | ¿Qué es la "duración de cada performance"? | Tiempo entre Tiempos Oficiales (OT = Official Top). Lo determina el juez por prueba. |
 
 ## Reglas de negocio clave
 

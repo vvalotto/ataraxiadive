@@ -5,21 +5,21 @@ last_updated: "2026-05-20"
 sources:
   - docs/dominio/05-requerimientos_funcionales.md
 us_refs:
-  - US-1.2.1
-  - US-1.2.2
-  - US-1.2.3
-  - US-1.2.4
-  - US-1.2.5
-  - US-1.2.6
-  - US-1.3.1
-  - US-1.4.1
-  - US-1.4.2
-  - US-2.2.1
-  - US-2.2.2
-  - US-3.4.1
-  - US-4.3.2
-  - US-4.3.3
-  - US-4.3.5
+  - US-1.2.1-registrarap
+  - US-1.2.2-llamaratleta
+  - US-1.2.3-registrarresultado
+  - US-1.2.4-asignartarjeta-blanca-roja
+  - US-1.2.5-registrardns
+  - US-1.2.6-corregirresultado
+  - US-1.3.1-read-models-performanceactual-proximosatletas
+  - US-1.4.1-asignartarjeta-roja-black-out-con-distancia
+  - US-1.4.2-flujo-e2e-audit-log-get-events
+  - US-2.2.1-disciplinadescriptor-value-object-port
+  - US-2.2.2-api-disciplina-aware-validacion-de-unidades
+  - US-3.4.1-asignardisciplinas-asignarjuez-en-torneo
+  - US-4.3.2-grillapage-operativa-wizard-movil-de-performance
+  - US-4.3.3-wizard-extendido-dns-bko-tarjeta-roja-con-motivodq-y
+  - US-4.3.5-adaptacion-wizard-para-sta-vias-respiratorias
 ---
 
 # RF — Ejecución de Competencias
@@ -32,16 +32,16 @@ Requerimientos funcionales del área de ejecución. Fuente: elicitación inicial
 
 | ID | Requerimiento | Respuesta / Regla |
 |----|--------------|-------------------|
-| [[RF-EJ-01]] | ¿Puede haber más de un juez por disciplina? | **Sí.** Juez principal, jueces de línea, safety divers. |
-| [[RF-EJ-02]] | ¿Qué pasa si un atleta no se presenta (DNS)? | **Descalificación inmediata.** Sin tiempo de espera. |
-| [[RF-EJ-03]] | ¿Hay tarjeta amarilla (penalización parcial)? | **Sí.** Reglas de negocio configurables. |
-| [[RF-EJ-04]] | ¿Cuáles son los códigos de penalización? | **Pendiente.** Posiblemente AIDA/CMAS. |
-| [[RF-EJ-05]] | ¿El cronometraje lo hace el sistema? | **No.** El juez toma el tiempo manualmente e ingresa el valor. |
-| [[RF-EJ-06]] | ¿Un juez puede corregir un resultado ya registrado? | **Sí.** Con período de protesta. |
-| [[RF-EJ-07]] | ¿Qué se registra en un black-out? | Black-out (no back-out): se registra la distancia alcanzada también. |
-| [[RF-EJ-08]] | ¿Las distancias usan decimales? | **Sí.** Metros con decimales. |
-| [[RF-EJ-09]] | ¿El protocolo de superficie (SP) lo evalúa el sistema? | **No.** |
-| [[RF-EJ-10]] | ¿Se registra el SP por separado o solo su efecto? | **Solo el resultado** (tarjeta blanca/amarilla/roja). |
+| [[RF-EJ-01-multiples-jueces-por-disciplina]] | ¿Puede haber más de un juez por disciplina? | **Sí.** Juez principal, jueces de línea, safety divers. |
+| [[RF-EJ-02-registro-dns-no-presentado]] | ¿Qué pasa si un atleta no se presenta (DNS)? | **Descalificación inmediata.** Sin tiempo de espera. |
+| [[RF-EJ-03-tarjeta-amarilla-penalizacion-parcial]] | ¿Hay tarjeta amarilla (penalización parcial)? | **Sí.** Reglas de negocio configurables. |
+| [[RF-EJ-04-codigos-de-penalizacion]] | ¿Cuáles son los códigos de penalización? | **Pendiente.** Posiblemente AIDA/CMAS. |
+| [[RF-EJ-05-cronometraje-manual-por-juez]] | ¿El cronometraje lo hace el sistema? | **No.** El juez toma el tiempo manualmente e ingresa el valor. |
+| [[RF-EJ-06-correccion-resultado-registrado]] | ¿Un juez puede corregir un resultado ya registrado? | **Sí.** Con período de protesta. |
+| [[RF-EJ-07-registro-black-out-distancia]] | ¿Qué se registra en un black-out? | Black-out (no back-out): se registra la distancia alcanzada también. |
+| [[RF-EJ-08-distancias-con-decimales]] | ¿Las distancias usan decimales? | **Sí.** Metros con decimales. |
+| [[RF-EJ-09-protocolo-superficie-manual]] | ¿El protocolo de superficie (SP) lo evalúa el sistema? | **No.** |
+| [[RF-EJ-10-efecto-sp-registrado-como-tarjeta]] | ¿Se registra el SP por separado o solo su efecto? | **Solo el resultado** (tarjeta blanca/amarilla/roja). |
 
 ## Reglas de negocio clave
 
@@ -57,7 +57,7 @@ Requerimientos funcionales del área de ejecución. Fuente: elicitación inicial
 
 | ID | Pendiente | Clasificación |
 |----|-----------|---------------|
-| [[RF-EJ-04]] | Códigos de penalización específicos (AIDA/CMAS u otro reglamento) | **Backlog activo** — la infraestructura técnica existe; solo falta definir los códigos |
+| [[RF-EJ-04-codigos-de-penalizacion]] | Códigos de penalización específicos (AIDA/CMAS u otro reglamento) | **Backlog activo** — la infraestructura técnica existe; solo falta definir los códigos |
 
 ## Estado de implementación (lint-001)
 

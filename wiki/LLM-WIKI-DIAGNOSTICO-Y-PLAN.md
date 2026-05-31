@@ -207,7 +207,7 @@ verifican y el reporte que los cierra.
 - ¿Está cerrada y verificada la US-3.5.1?
 
 **Recorrido típico:**
-`trazabilidad/RF-CO-03.md` → `trazabilidad/US-3.3.1.md` →
+`trazabilidad/RF-CO-03.md` → `trazabilidad/us/US-3.3.1.md` →
 `bounded-contexts/competencia.md` → tests asociados en matrix
 
 **Valor específico para AtaraxiaDive:** La `docs/traceability/matrix.md` ya existe
@@ -263,7 +263,7 @@ métricas de cobertura por BC, inconsistencias detectadas entre fuentes.
 
 **Recorrido típico:**
 `salud/lint-actual.md` → `bounded-contexts/competencia.md` →
-`trazabilidad/US-pendientes.md` → `decisiones/ADRs-desalineados.md`
+`trazabilidad/us/US-pendientes.md` → `decisiones/ADRs-desalineados.md`
 
 **Valor específico para AtaraxiaDive:** Resuelve directamente D-02 y D-03 de
 HITO-14. La salud del proyecto deja de ser una percepción distribuida en múltiples
@@ -638,7 +638,7 @@ Los documentos marcados como "históricos" no representan el estado vigente.
 ## Tipos de páginas y ubicaciones
 - wiki/bounded-contexts/<nombre-bc>.md
 - wiki/decisiones/ADR-NNN-<slug>.md
-- wiki/trazabilidad/US-<id>.md
+- wiki/trazabilidad/us/US-<id>.md
 - wiki/conceptos/<concepto>.md
 - wiki/impacto/<componente-o-interfaz>.md
 - wiki/estado/proyecto.md
