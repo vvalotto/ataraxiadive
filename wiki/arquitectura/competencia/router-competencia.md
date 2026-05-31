@@ -23,6 +23,10 @@ us_origen:
   - US-ADJ-2.8-refactoring-api-dip-fix-event-store-dep-tipado-como
   - US-ADJ-6.7-uat-sp4-inc-4-4-4-5-4-6-bug-sp4-001-002-ux-fixes
   - US-ADJ-7.2-bug-sp4-004-exponer-tarjeta-asignada-en-grilla
+tests:
+  - tests/unit/competencia/api/test_exception_handlers.py
+  - tests/features/US-2.2.2-api-disciplina-aware.feature
+  - tests/integration/competencia/test_grilla_tarjeta_asignada_api.py
 ---
 
 # Router FastAPI — BC Competencia

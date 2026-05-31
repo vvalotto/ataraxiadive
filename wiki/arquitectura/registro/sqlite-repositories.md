@@ -19,6 +19,16 @@ us_origen:
   - US-6.4.5-refactoring-declarar-ap-inscripcion-handler-sq-lite
   - US-ADJ-11.4-entidad-juez-juez-repository-port-endpoints-registro
   - US-ADJ-11.5-entidad-organizador-organizador-repository-port
+tests:
+  - tests/features/US-3.2.2-bc-registro-aggregate-atleta.feature
+  - tests/integration/registro/test_sqlite_atleta_repository.py
+  - tests/features/US-3.2.3-inscripcion-atleta.feature
+  - tests/integration/registro/test_sqlite_inscripcion_repository.py
+  - tests/features/US-6.4.5-refactor-registro-designreviewer.feature
+  - tests/features/US-ADJ-11.4-juez.feature
+  - tests/integration/registro/test_sqlite_juez_repository.py
+  - tests/features/US-ADJ-11.5-organizador.feature
+  - tests/integration/registro/test_sqlite_organizador_repository.py
 ---
 
 # SQLite Repositories — BC Registro

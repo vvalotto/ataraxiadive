@@ -14,6 +14,9 @@ sources:
 us_origen:
   - US-5.6.1-puerto-algoritmo-puntaje-implementacion-faas
   - US-6.4.4-refactoring-algoritmo-puntaje-faas-correcciones-code
+tests:
+  - tests/features/US-5.6.1-algoritmo-puntaje-faas.feature
+  - tests/features/US-6.4.4-refactor-faas-codeguard.feature
 ---
 
 # AlgoritmoPuntajeFAAS — Servicio de Dominio

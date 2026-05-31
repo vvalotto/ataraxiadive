@@ -14,6 +14,9 @@ sources:
   - src/registro/domain/aggregates/inscripcion.py
 us_origen:
   - US-3.2.3-aggregate-inscripcion-inscribir-cancelar-y-listar
+tests:
+  - tests/features/US-3.2.3-inscripcion-atleta.feature
+  - tests/integration/registro/test_sqlite_inscripcion_repository.py
 ---
 
 # Aggregate Inscripcion

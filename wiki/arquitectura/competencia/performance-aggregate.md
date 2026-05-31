@@ -21,6 +21,11 @@ us_origen:
   - US-4.1.5-descomponer-aggregate-performance-en-modulos
   - US-ADJ-1.1-refactoring-domain-ot-programado-event-handlers-snake
   - US-ADJ-1.2-refactoring-domain-helpers-recalcular-ots-aplicar-swap
+tests:
+  - tests/features/US-1.4.1-blackout-con-distancia.feature
+  - tests/features/US-1.4.2-flujo-e2e.feature
+  - tests/integration/competencia/test_flujo_e2e.py
+  - tests/features/US-4.1.2-tarjeta-blanca-penalizaciones.feature
 ---
 
 # Aggregate Performance

@@ -15,6 +15,10 @@ sources:
 us_origen:
   - US-3.2.1-bc-identidad-usuario-jwt-minimo-auth
   - US-ADJ-11.1-usuario-roles-list-rol-jwt-rol-activo-login-condicional
+tests:
+  - tests/features/US-3.2.1-bc-identidad-jwt.feature
+  - tests/integration/identidad/test_sqlite_usuario_repository.py
+  - tests/features/US-ADJ-11.1-identidad-multi-rol.feature
 ---
 
 # Aggregate Usuario

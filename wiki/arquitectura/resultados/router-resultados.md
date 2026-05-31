@@ -13,6 +13,10 @@ sources:
 us_origen:
   - US-3.5.3-api-get-resultados-{torneo-id}-overall
   - US-6.4.3-corregir-d-05-imports-cross-bc-en-resultados-api-y
+tests:
+  - tests/features/US-3.5.3-api-overall.feature
+  - tests/integration/resultados/test_obtener_overall_integration.py
+  - tests/features/US-6.4.3-routers-sin-infra-crossbc.feature
 ---
 
 # Router — BC Resultados

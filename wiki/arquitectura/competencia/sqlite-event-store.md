@@ -18,6 +18,9 @@ us_origen:
   - US-3.3.2-acl-torneo-registro-competencia-crear-competencias-por
   - US-ADJ-3.3-refactorizar-build-app-constante-event-type
   - US-ADJ-3.7-proyeccion-competencias-por-torneo-o-n-o-1
+tests:
+  - tests/features/US-3.3.1-torneo-id-competencia.feature
+  - tests/integration/competencia/test_torneo_id_integration.py
 ---
 
 # Adapter SQLiteEventStore (Competencia)

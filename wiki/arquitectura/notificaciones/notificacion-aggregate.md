@@ -16,6 +16,9 @@ sources:
   - src/notificaciones/domain/value_objects/
 us_origen:
   - US-4.5.1-aggregate-notificacion-ciclo-de-vida-idempotencia
+tests:
+  - tests/features/US-4.5.1-notificacion-idempotencia.feature
+  - tests/integration/notificaciones/test_sqlite_notificacion_repository.py
 ---
 
 # Aggregate Notificacion — BC Notificaciones

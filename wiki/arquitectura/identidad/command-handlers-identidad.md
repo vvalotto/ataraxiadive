@@ -26,6 +26,16 @@ us_origen:
   - US-5.4.3-recuperar-contrasena-via-token-jwt
   - US-ADJ-10.3-email-de-bienvenida-y-auto-login-post-registro
   - US-ADJ-11.2-post-delete-auth-usuarios-me-roles-guard-no-quitar
+tests:
+  - tests/features/US-3.2.1-bc-identidad-jwt.feature
+  - tests/integration/identidad/test_sqlite_usuario_repository.py
+  - tests/features/US-5.3.2-vista-atleta.feature
+  - tests/features/US-5.4.1-auto-registro.feature
+  - tests/integration/identidad/test_registro_email_handler.py
+  - tests/features/US-5.4.2-cambiar-password.feature
+  - tests/features/US-5.4.3-recuperar-password.feature
+  - tests/features/US-ADJ-10.3-email-autologin-post-registro.feature
+  - tests/features/US-ADJ-11.2-agregar-quitar-rol.feature
 ---
 
 # Command Handlers — BC Identidad

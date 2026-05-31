@@ -16,6 +16,11 @@ us_origen:
   - US-5.6.3-ranking-competencia-con-puntos-por-categoria
   - US-6.4.6-cierre-arch-03-srp-ranking-competencia-monitoreo
   - US-ADJ-4.5-ranking-por-disciplina-categoria-en-bc-resultados
+tests:
+  - tests/features/US-2.4.2-calcular-ranking.feature
+  - tests/integration/resultados/test_calcular_ranking_integration.py
+  - tests/features/US-5.6.3-ranking-puntos-faas.feature
+  - tests/features/US-6.4.6-cierre-arch-decisiones.feature
 ---
 
 # Aggregate RankingCompetencia

@@ -33,6 +33,20 @@ us_origen:
   - US-ADJ-11.4-entidad-juez-juez-repository-port-endpoints-registro
   - US-ADJ-11.5-entidad-organizador-organizador-repository-port
   - US-ADJ-9.7-sp-adj-09-declarar-ap-en-el-wizard-de-inscripcion
+tests:
+  - tests/features/US-3.2.3-inscripcion-atleta.feature
+  - tests/integration/registro/test_sqlite_inscripcion_repository.py
+  - tests/features/US-5.5.1-inscripcion-atleta-ap.feature
+  - tests/features/US-6.3.2-inscripcion-ap-adjuntos.feature
+  - tests/integration/registro/test_adjuntos_inscripcion_endpoint.py
+  - tests/features/US-6.4.5-refactor-registro-designreviewer.feature
+  - tests/features/US-ADJ-10.2-mis-datos-atleta.feature
+  - tests/features/US-ADJ-11.10-perfiles-registro.feature
+  - tests/features/US-ADJ-11.4-juez.feature
+  - tests/integration/registro/test_sqlite_juez_repository.py
+  - tests/features/US-ADJ-11.5-organizador.feature
+  - tests/integration/registro/test_sqlite_organizador_repository.py
+  - tests/features/US-ADJ-9.7-ap-inscripcion-preparacion.feature
 ---
 
 # Command Handlers — BC Registro

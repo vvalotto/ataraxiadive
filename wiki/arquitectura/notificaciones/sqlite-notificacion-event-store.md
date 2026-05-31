@@ -18,6 +18,11 @@ sources:
 us_origen:
   - US-4.5.1-aggregate-notificacion-ciclo-de-vida-idempotencia
   - US-4.5.2-email-port-resend-email-adapter
+tests:
+  - tests/features/US-4.5.1-notificacion-idempotencia.feature
+  - tests/integration/notificaciones/test_sqlite_notificacion_repository.py
+  - tests/features/US-4.5.2-adaptador-email.feature
+  - tests/integration/notificaciones/test_resend_email_adapter.py
 ---
 
 # SQLiteNotificacionEventStore + EmailPort Adapters — BC Notificaciones

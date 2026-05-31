@@ -14,6 +14,12 @@ us_origen:
   - US-3.1.2-api-rest-torneo-crud-transiciones-repositorio-sq-lite
   - US-6.6.1-endpoint-publico-get-torneos-sin-autenticacion
   - US-ADJ-8.1-sp-adj-08-ux-paneles-organizador-post-uat-inc-5-2
+tests:
+  - tests/features/US-3.1.2-api-rest-torneo.feature
+  - tests/integration/torneo/test_sqlite_torneo_repository.py
+  - tests/features/US-6.6.1-endpoint-publico-torneos.feature
+  - tests/integration/torneo/test_torneos_publicos_api.py
+  - tests/features/US-ADJ-8.1-claridad-operativa-panel-organizador.feature
 ---
 
 # Router — BC Torneo

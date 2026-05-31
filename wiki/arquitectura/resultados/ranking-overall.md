@@ -14,6 +14,10 @@ sources:
 us_origen:
   - US-3.5.1-aggregate-ranking-overall-calcular-overall-handler
   - US-5.6.4-ranking-overall-puntos-acumulados-por-categoria-y
+tests:
+  - tests/features/US-3.5.1-ranking-overall.feature
+  - tests/integration/resultados/test_calcular_overall_integration.py
+  - tests/features/US-5.6.4-ranking-overall-puntos.feature
 ---
 ha
 # Aggregate RankingOverall

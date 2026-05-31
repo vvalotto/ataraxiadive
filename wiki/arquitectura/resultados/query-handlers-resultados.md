@@ -21,6 +21,14 @@ us_origen:
   - US-5.6.6-ui-podios-por-division-6-divisiones-fijas
   - US-5.7.3-mis-resultados-result-hero-disciplina-pendiente-card
   - US-5.7.4-rankings-y-podios-para-el-atleta
+tests:
+  - tests/features/US-3.5.3-api-overall.feature
+  - tests/integration/resultados/test_obtener_overall_integration.py
+  - tests/features/US-4.6.4-exportacion-resultados.feature
+  - tests/features/US-5.6.5-ui-tabla-resultados.feature
+  - tests/features/US-5.6.6-ui-podios.feature
+  - tests/features/US-5.7.3-mis-resultados.feature
+  - tests/features/US-5.7.4-rankings-podios.feature
 ---
 
 # Query Handlers — BC Resultados

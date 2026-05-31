@@ -36,6 +36,34 @@ us_origen:
   - US-ADJ-2.7-refactoring-eliminar-codigo-muerto-get-on-finalizada
   - US-ADJ-6.3-eliminar-inspect-signature-callback-on-finalizada
   - US-ADJ-7.1-bug-sp4-003-corregir-resultado-tras-dns
+tests:
+  - tests/features/US-1.2.1-registrar-ap.feature
+  - tests/integration/competencia/test_registrar_ap_integration.py
+  - tests/features/US-1.2.2-llamar-atleta.feature
+  - tests/integration/competencia/test_llamar_atleta_integration.py
+  - tests/features/US-1.2.3-registrar-resultado.feature
+  - tests/integration/competencia/test_registrar_resultado_integration.py
+  - tests/features/US-1.2.4-asignar-tarjeta.feature
+  - tests/integration/competencia/test_asignar_tarjeta_integration.py
+  - tests/features/US-1.2.5-registrar-dns.feature
+  - tests/integration/competencia/test_registrar_dns_integration.py
+  - tests/features/US-1.2.6-corregir-resultado.feature
+  - tests/integration/competencia/test_corregir_resultado_integration.py
+  - tests/features/US-2.1.1-configurar-intervalo-ot.feature
+  - tests/integration/competencia/test_configurar_intervalo_ot_integration.py
+  - tests/features/US-2.1.2-generar-grilla.feature
+  - tests/integration/competencia/test_generar_grilla_integration.py
+  - tests/features/US-2.1.3-ajustar-grilla.feature
+  - tests/integration/competencia/test_ajustar_grilla_integration.py
+  - tests/features/US-2.1.4-confirmar-grilla.feature
+  - tests/integration/competencia/test_confirmar_grilla_integration.py
+  - tests/features/US-2.4.1-competencia-finalizada.feature
+  - tests/integration/competencia/test_competencia_finalizada_integration.py
+  - tests/features/US-4.1.1-motivos-tarjeta-roja.feature
+  - tests/features/US-4.3.4-tarjeta-amarilla.feature
+  - tests/features/US-5.1.4-generacion-ajuste-grilla.feature
+  - tests/features/US-5.2.2-finalizacion-manual.feature
+  - tests/integration/competencia/test_corregir_resultado_tras_dns_integration.py
 ---
 
 # Command Handlers

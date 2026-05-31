@@ -24,6 +24,18 @@ us_origen:
   - US-ADJ-10.1-edicion-completa-del-torneo-put-torneos-{id}
   - US-ADJ-8.2-sp-adj-08-selector-de-grilla-filtrado-y-transicion-a
   - US-ADJ-8.3-sp-adj-08-cancelar-torneo-con-confirmacion-fuerte
+tests:
+  - tests/features/US-3.1.2-api-rest-torneo.feature
+  - tests/integration/torneo/test_sqlite_torneo_repository.py
+  - tests/features/US-3.4.1-asignar-disciplinas-juez.feature
+  - tests/integration/torneo/test_disciplinas_torneo_api.py
+  - tests/features/US-5.1.1-crear-torneo-ui.feature
+  - tests/features/US-5.1.5-asignacion-jueces.feature
+  - tests/features/US-5.1.9-bloquear-jueces-sin-grilla.feature
+  - tests/features/US-ADJ-10.1-edicion-torneo.feature
+  - tests/features/US-ADJ-8.2-restringir-operaciones-torneo-fase.feature
+  - tests/integration/torneo/test_ejecucion_precondicion.py
+  - tests/features/US-ADJ-8.3-cancelacion-fuerte-torneo.feature
 ---
 
 # Command Handlers — BC Torneo

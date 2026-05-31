@@ -29,6 +29,20 @@ us_origen:
   - US-ADJ-4.2-corregir-orden-grilla-sta-ascendente
   - US-ADJ-4.6-value-object-tiempo-ap-parsear-mm-ss-segundos
   - US-ADJ-6.1-renombrar-faz-faas-en-codigo
+tests:
+  - tests/features/US-1.4.2-flujo-e2e.feature
+  - tests/integration/competencia/test_flujo_e2e.py
+  - tests/features/US-2.2.1-disciplina-descriptor.feature
+  - tests/integration/competencia/test_disciplina_descriptor_integration.py
+  - tests/features/US-2.3.1-ejecucion-multi-andarivel.feature
+  - tests/integration/competencia/test_andariveles_activos_integration.py
+  - tests/features/US-3.3.1-torneo-id-competencia.feature
+  - tests/integration/competencia/test_torneo_id_integration.py
+  - tests/features/US-4.1.1-motivos-tarjeta-roja.feature
+  - tests/features/US-4.1.2-tarjeta-blanca-penalizaciones.feature
+  - tests/features/US-4.1.4-orden-grilla-reglamentario.feature
+  - tests/features/US-4.3.4-tarjeta-amarilla.feature
+  - tests/features/US-6.4.1-romper-ciclo-adp.feature
 ---
 
 # Aggregate Competencia

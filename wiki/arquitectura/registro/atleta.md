@@ -15,6 +15,10 @@ us_origen:
   - US-3.2.2-aggregate-atleta-registro-consulta-y-repositorio-sq
   - US-ADJ-11.3-atleta-club-categoria-opcionales-dni-telefono-migracion
   - US-ADJ-4.4-agregar-campo-club-a-aggregate-atleta
+tests:
+  - tests/features/US-3.2.2-bc-registro-aggregate-atleta.feature
+  - tests/integration/registro/test_sqlite_atleta_repository.py
+  - tests/features/US-ADJ-11.3-atleta-refactor.feature
 ---
 
 # Aggregate Atleta

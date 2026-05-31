@@ -22,6 +22,11 @@ us_origen:
   - US-5.1.3-inscriptos-panel-lista-de-atletas-con-estado-ap
   - US-5.5.2-vista-organizador-inscriptos-con-datos-completos-y
   - US-5.7.1-mis-torneos-lista-de-torneos-inscriptos-del-atleta
+tests:
+  - tests/features/US-5.1.3-vista-inscriptos-ap.feature
+  - tests/features/US-5.5.2-organizador-inscriptos-ap.feature
+  - tests/integration/registro/test_inscriptos_detalle_endpoint.py
+  - tests/features/US-5.7.1-mis-torneos.feature
 ---
 
 # Query Handlers — BC Registro

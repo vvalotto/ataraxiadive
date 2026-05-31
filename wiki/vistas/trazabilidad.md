@@ -1,275 +1,193 @@
 ---
-title: "Vista de Trazabilidad"
+title: "Vista de Trazabilidad — Cadena completa"
 type: vista
-last_updated: "2026-05-24"
+last_updated: "2026-05-31"
 sources:
   - wiki/trazabilidad/
-  - docs/traceability/matrix.md
+  - wiki/arquitectura/
+  - wiki/decisiones/
 ---
 
 # Vista de Trazabilidad
 
-> El sistema visto desde los requerimientos hacia la implementación.
+> **Pregunta central:** este requerimiento inicial, ¿cómo se validó?
 
-## Propósito
+## Dos tracks de trazabilidad
 
-Responder preguntas sobre qué requerimiento funcional implementa cada parte del sistema, qué tests lo verifican y cuál es el estado de cobertura. Es la vista del QA, el auditor y el desarrollador que necesita entender el alcance antes de modificar algo.
+```
+Track de validación:
+RF ──► US ──► Componente ──► Test
+ ↑     ↑           ↑
+ └─ rf: ─┘   componentes_wiki:   us_origen: / tests:
 
-## Stakeholder principal
+Track de diseño:
+RNF ──► ADR ──► BC ──► Componente
+  ↑       ↑
+  └ adr_refs: ─┘  rnf_refs:
+```
 
-QA, auditor de calidad, desarrollador implementando o modificando un requerimiento.
+Los dos tracks convergen en el **Componente** — es el nodo donde un requisito funcional (RF→US) se encuentra con una decisión arquitectónica (RNF→ADR).
 
 ---
 
-## Estado actual del wiki
+## Navegación de referencia
+
+### "¿Cómo se validó RF-EJ-06 (corrección de resultados)?"
+
+[[trazabilidad/rf/RF-EJ-06-correccion-resultado-registrado]]
+→ `us_refs:` → [[trazabilidad/us/US-1.2.6-corregir-resultado]]
+→ `componentes_wiki:` → [[arquitectura/competencia/command-handlers]]
+→ `tests:` → `tests/features/US-1.2.6-corregir-resultado.feature`
+
+### "¿Por qué se eligió Event Sourcing en Competencia?"
+
+[[trazabilidad/rnf/RNF-01-confiabilidad-persistencia-event-sourcing]]
+→ `adr_refs:` → [[decisiones/ADR-001-event-sourcing-competencia]]
+→ `bcs_afectados:` → [[arquitectura/competencia]]
+→ `us_origen:` → [[trazabilidad/us/US-1.1.1-setup-esqueleto-bc-competencia]]
+
+### "¿Qué USs construyeron competencia-aggregate?"
+
+[[arquitectura/competencia/competencia-aggregate]]
+→ `us_origen:` → lista de USs
+→ cada US → `rf:` → RF que motivó la US
+→ cada US → `test_units:` → tests que la validan
+
+---
+
+## Cobertura de RFs
 
 ```dataview
-TABLE WITHOUT ID
-  length(rows) AS "Total US",
-  estado AS "Estado"
-FROM "wiki/trazabilidad"
+TABLE rf_id, estado, length(us_refs) AS "USs", area
+FROM "wiki/trazabilidad/rf"
+WHERE type = "trazabilidad-rf-item"
+SORT area ASC, rf_id ASC
+```
+
+---
+
+## Cadena RF → US → Componente
+
+```dataview
+TABLE us_id, rf, componentes_wiki, test_units
+FROM "wiki/trazabilidad/us"
 WHERE type = "trazabilidad-us"
-GROUP BY estado
-SORT length(rows) DESC
-```
-
----
-
-## Preguntas características y recorridos
-
-### 1. ¿Qué requerimientos cubre el área de ejecución?
-
-El área de ejecución concentra las reglas más complejas del dominio: tarjetas, DNS, black-out, correcciones del juez, cronometraje manual.
-
-**Recorrido (estado actual):**
-[[RF-ejecucion]] → [[performance]] → [[tarjeta]] → [[arquitectura/competencia]] → [[ADR-014-penalizaciones-acumulables]]
-
-**Recorrido completo:**
-[[RF-ejecucion]] → `US-X.Y.Z` → código en `src/competencia/` → tests en `tests/features/` → reporte de cierre
-
-**Requerimiento pendiente de elicitación:** RF-EJ-04 (códigos de penalización AIDA/CMAS).
-
----
-
-### 2. ¿Qué requerimientos cubre el ciclo de vida del torneo?
-
-Gestión del torneo incluye: creación, configuración de disciplinas, inscripciones, etapas reversibles, y cierre sin eliminación de datos.
-
-**Recorrido (estado actual):**
-[[RF-gestion-torneo]] → [[torneo]] (concepto) → [[arquitectura/bc-torneo]]
-
-**Regla clave documentada:** las disciplinas son configurables; el set inicial es STA, DNF, DBF, DYN, SPE. Las transiciones entre fases son reversibles.
-
----
-
-### 3. ¿Qué requerimientos cubre la inscripción de atletas?
-
-Inscripción define: categorías, brevet, límites de participantes, apto médico, constancia de pago, datos del club.
-
-**Recorrido (estado actual):**
-[[RF-inscripcion-atletas]] → [[atleta]] → [[arquitectura/registro]]
-
-**Requerimiento pendiente:** RF-IN-07 (resolución de conflictos con BD externa) — sin implementar.
-
----
-
-### 4. ¿Qué requerimientos de preparación generan la grilla?
-
-La preparación comprende: generación de grilla, anuncios de marcas, configuración de disciplinas.
-
-**Recorrido (estado actual):**
-[[RF-preparacion]] → [[grilla]] → [[anuncio]] → [[arquitectura/competencia]]
-
----
-
-### 5. ¿Qué áreas de requerimientos tienen pendientes sin implementar?
-
-| Área RF | Página | Pendientes |
-|---------|--------|-----------|
-| Inscripción | [[RF-inscripcion-atletas]] | RF-IN-07 (conflicto BD externa) |
-| Ejecución | [[RF-ejecucion]] | RF-EJ-04 (códigos penalización) |
-| Resultados | [[RF-resultados]] | RF-PM-01 (sistema de puntos) |
-| Notificaciones | [[RF-notificaciones]] | RF-NT-03 |
-| Integración | [[RF-integracion]] | Toda el área (4 RFs pendientes) |
-| Gestión torneo | [[RF-gestion-torneo]] | Ninguno |
-| Preparación | [[RF-preparacion]] | Ninguno |
-| Usuarios/roles | [[RF-usuarios-roles]] | Ninguno |
-
----
-
-### 6. ¿Cómo se traza un requerimiento hasta su implementación?
-
-La cadena canónica en AtaraxiaDive es:
-
-```
-RF (área) → US (historia de usuario) → código en src/<bc>/ → tests en tests/ → reporte en docs/reports/
-```
-
-Esta cadena vive en `docs/traceability/matrix.md` y es navegable directamente en el wiki — cada US tiene su propia página con el ciclo completo.
-
-**Recorrido de referencia:**
-[[RF-ejecucion]] → [[US-X.Y.Z]] → código en `src/<bc>/` → tests en `tests/features/`
-
----
-
-### 7. ¿Qué BC implementa cada área de requerimientos?
-
-| Área RF | BC principal | BC secundario |
-|---------|-------------|--------------|
-| Gestión del torneo | [[arquitectura/bc-torneo]] | [[arquitectura/competencia]] |
-| Inscripción de atletas | [[arquitectura/registro]] | — |
-| Preparación | [[arquitectura/competencia]] | [[arquitectura/registro]] |
-| Ejecución | [[arquitectura/competencia]] | — |
-| Resultados | [[arquitectura/resultados]] | [[arquitectura/competencia]] |
-| Usuarios y roles | [[arquitectura/identidad]] | — |
-| Notificaciones | [[arquitectura/notificaciones]] | — |
-| Integración externa | [[RF-integracion]] | (sin BC asignado aún) |
-
----
-
-## Trazabilidad RF → Software Item → Test Unit
-
-> Cadena completa disponible desde 2026-05-24. Todos los BCs poblados: Competencia · Registro · Torneo · Resultados · Identidad · Notificaciones.
-
-### Cadena completa RF → código → test
-
-```dataview
-TABLE us_id, rf, software_items, test_units
-FROM "wiki/trazabilidad"
-WHERE type = "trazabilidad-us" AND rf != null AND length(rf) > 0
+  AND rf != null AND length(rf) > 0
+  AND componentes_wiki != null
 SORT rf ASC, us_id ASC
 ```
 
-### Distribución por origen — radiografía de trazabilidad
+---
+
+## Track de diseño — RNF → ADR
 
 ```dataview
-TABLE WITHOUT ID
-  origen_tipo AS "Origen",
-  length(rows) AS "US",
-  map(rows, (r) => r.us_id) AS "Ejemplos"
-FROM "wiki/trazabilidad"
-WHERE type = "trazabilidad-us"
-GROUP BY origen_tipo
-```
-
-### Cobertura de RFs
-
-```dataview
-TABLE us_refs, length(us_refs) AS "US count"
-FROM "wiki/trazabilidad"
-WHERE type = "trazabilidad-rf"
-SORT length(us_refs) DESC
-```
-
-### Gaps de origen (US cerradas sin origen_tipo)
-
-```dataview
-TABLE us_id, bc, sp
-FROM "wiki/trazabilidad"
-WHERE type = "trazabilidad-us"
-  AND estado = "cerrada"
-  AND origen_tipo = null
-SORT bc ASC
-```
-
-### Gaps de trazabilidad — US cerradas sin Software Item
-
-```dataview
-TABLE us_id, bc, sp, origen_tipo
-FROM "wiki/trazabilidad"
-WHERE type = "trazabilidad-us"
-  AND estado = "cerrada"
-  AND software_items = null
-SORT bc ASC
-```
-
-### Gaps de trazabilidad — US cerradas sin Test Unit
-
-```dataview
-TABLE us_id, bc, sp, origen_tipo
-FROM "wiki/trazabilidad"
-WHERE type = "trazabilidad-us"
-  AND estado = "cerrada"
-  AND test_units = null
-SORT bc ASC
+TABLE rnf_id, atributo, adr_refs, bcs_afectados
+FROM "wiki/trazabilidad/rnf"
+WHERE type = "trazabilidad-rnf"
+SORT rnf_id ASC
 ```
 
 ---
 
-## Vistas dinámicas
+## Componentes con trazabilidad completa
 
-### US por estado
+> Componentes que tienen: us_origen + tests (cadena cerrada)
 
 ```dataview
-TABLE us_id, bc, sp, tests_count
-FROM "wiki/trazabilidad"
+TABLE bc, tipo_componente, length(us_origen) AS "USs origen", length(tests) AS "Tests"
+FROM "wiki/arquitectura"
+WHERE type = "arquitectura-componente"
+  AND us_origen != null
+  AND tests != null
+SORT bc ASC, tipo_componente ASC
+```
+
+---
+
+## Gaps — preguntas sin respuesta
+
+### RFs sin USs asignadas
+
+```dataview
+TABLE rf_id, area, estado
+FROM "wiki/trazabilidad/rf"
+WHERE type = "trazabilidad-rf-item"
+  AND (us_refs = null OR length(us_refs) = 0)
+SORT area ASC
+```
+
+### USs cerradas sin componente wiki
+
+```dataview
+TABLE us_id, bc, sp
+FROM "wiki/trazabilidad/us"
 WHERE type = "trazabilidad-us"
-SORT sp ASC, us_id ASC
-GROUP BY estado
+  AND estado = "cerrada"
+  AND (componentes_wiki = null OR length(componentes_wiki) = 0)
+SORT bc ASC
 ```
 
-### US pendientes
+### USs cerradas sin tests
 
 ```dataview
-TABLE us_id, bc, sp, inc
-FROM "wiki/trazabilidad"
-WHERE type = "trazabilidad-us" AND estado = "pendiente"
-SORT sp ASC
+TABLE us_id, bc, sp
+FROM "wiki/trazabilidad/us"
+WHERE type = "trazabilidad-us"
+  AND estado = "cerrada"
+  AND (test_units = null OR length(test_units) = 0)
+SORT bc ASC
 ```
 
-### US por BC
+### ADRs sin RNF motivador
+
+```dataview
+TABLE file.name, bcs_afectados
+FROM "wiki/decisiones"
+WHERE type = "decision"
+  AND rnf_refs = null
+SORT file.name ASC
+```
+
+---
+
+## Distribución de USs
+
+### Por BC
 
 ```dataview
 TABLE WITHOUT ID
   bc AS "BC",
-  length(rows) AS "Total US",
-  length(filter(rows, (r) => r.estado = "cerrada")) AS "Cerradas"
-FROM "wiki/trazabilidad"
+  length(rows) AS "Total",
+  length(filter(rows, (r) => r.estado = "cerrada")) AS "Cerradas",
+  length(filter(rows, (r) => r.componentes_wiki != null AND length(r.componentes_wiki) > 0)) AS "Con componente"
+FROM "wiki/trazabilidad/us"
 WHERE type = "trazabilidad-us"
 GROUP BY bc
 SORT bc ASC
 ```
 
-### US con cobertura de tests registrada
+### Por estado
 
 ```dataview
-TABLE us_id, bc, sp, tests_count
-FROM "wiki/trazabilidad"
-WHERE type = "trazabilidad-us" AND tests_count != null
-SORT tests_count DESC
-```
-
-### Cobertura por BC (arquitectura)
-
-```dataview
-TABLE tipo_ddd, test_coverage
-FROM "wiki/arquitectura"
-WHERE tipo_ddd != null
-SORT test_coverage ASC
+TABLE WITHOUT ID
+  estado AS "Estado",
+  length(rows) AS "Total"
+FROM "wiki/trazabilidad/us"
+WHERE type = "trazabilidad-us"
+GROUP BY estado
 ```
 
 ---
 
-## Páginas de RF semilla disponibles
+## Páginas hub de trazabilidad
 
-| Página | Área |
-|--------|------|
-| [[RF-gestion-torneo]] | Gestión del torneo — sin pendientes |
-| [[RF-inscripcion-atletas]] | Inscripción de atletas — 1 pendiente |
-| [[RF-preparacion]] | Preparación de competencias — sin pendientes |
-| [[RF-ejecucion]] | Ejecución de competencias — 1 pendiente |
-| [[RF-resultados]] | Premiación y resultados — 1 pendiente |
-| [[RF-usuarios-roles]] | Usuarios, roles y permisos — sin pendientes |
-| [[RF-notificaciones]] | Notificaciones — 1 pendiente |
-| [[RF-integracion]] | Integración externa — toda el área pendiente |
-
----
-
-## Páginas hub de esta vista
-
-| Página | Por qué es hub |
-|--------|----------------|
-| [[RF-ejecucion]] | Área más compleja; concentra reglas de negocio del Core Domain |
-| [[arquitectura/competencia]] | Implementa la mayoría de los RFs de ejecución y preparación |
-| [[arquitectura/context-map]] | Muestra qué BC implementa qué área |
-| `docs/traceability/matrix.md` | Fuente primaria original — cadena RF→US→SI→TU ahora en el wiki (177 US) |
+| Página | Rol en la cadena |
+|---|---|
+| [[conceptos/atributos-calidad]] | Origen del track de diseño — 8 RNFs |
+| [[trazabilidad/rf/RF-EJ-06-correccion-resultado-registrado]] | RF de referencia — cadena completa documentada |
+| [[trazabilidad/rnf/RNF-01-confiabilidad-persistencia-event-sourcing]] | RNF fundacional — motiva ADR-001 |
+| [[arquitectura/competencia/command-handlers]] | Componente con más trazabilidad (27 tests) |
+| [[arquitectura/competencia/competencia-aggregate]] | Aggregate con más us_origen (17 USs) |
+| [[RF-ejecucion]] | Hub de RFs del Core Domain |
+| [[vistas/arquitectura]] | Vista complementaria — C4 L1→L4 |

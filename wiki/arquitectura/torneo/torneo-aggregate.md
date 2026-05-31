@@ -15,6 +15,9 @@ sources:
   - src/torneo/domain/value_objects/disciplina_torneo.py
 us_origen:
   - US-3.1.1-aggregate-torneo-maquina-de-estados
+tests:
+  - tests/features/US-3.1.1-aggregate-torneo.feature
+  - tests/integration/torneo/test_torneo_domain_integration.py
 ---
 
 # Aggregate Torneo

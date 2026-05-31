@@ -12,6 +12,9 @@ sources:
   - src/identidad/infrastructure/repositories/sqlite_usuario_repository.py
 us_origen:
   - US-3.2.1-bc-identidad-usuario-jwt-minimo-auth
+tests:
+  - tests/features/US-3.2.1-bc-identidad-jwt.feature
+  - tests/integration/identidad/test_sqlite_usuario_repository.py
 ---
 
 # SQLiteUsuarioRepository

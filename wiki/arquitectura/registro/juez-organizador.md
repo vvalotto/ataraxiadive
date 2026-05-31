@@ -16,6 +16,11 @@ sources:
 us_origen:
   - US-ADJ-11.4-entidad-juez-juez-repository-port-endpoints-registro
   - US-ADJ-11.5-entidad-organizador-organizador-repository-port
+tests:
+  - tests/features/US-ADJ-11.4-juez.feature
+  - tests/integration/registro/test_sqlite_juez_repository.py
+  - tests/features/US-ADJ-11.5-organizador.feature
+  - tests/integration/registro/test_sqlite_organizador_repository.py
 ---
 
 # Aggregates Juez y Organizador

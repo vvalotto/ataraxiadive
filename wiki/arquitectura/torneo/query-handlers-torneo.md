@@ -18,6 +18,12 @@ us_origen:
   - US-5.1.5-jueces-panel-asignacion-de-juez-por-disciplina
   - US-5.1.7-politica-de-tabs-por-fase-en-detalle-torneo-page
   - US-5.1.8-torneo-competencias-page-composicion-disciplinas
+tests:
+  - tests/features/US-5.1.10-acciones-fase.feature
+  - tests/features/US-5.1.2-gestion-fases-torneo.feature
+  - tests/features/US-5.1.5-asignacion-jueces.feature
+  - tests/features/US-5.1.7-politica-tabs.feature
+  - tests/features/US-5.1.8-componer-competencias.feature
 ---
 
 # Query Handlers — BC Torneo

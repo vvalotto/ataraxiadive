@@ -14,6 +14,9 @@ us_origen:
   - US-3.1.1-aggregate-torneo-maquina-de-estados
   - US-4.1.8-limpieza-torneo-sq-lite-torneo-repository-disciplina
   - US-5.6.2-tipo-reglamento-en-torneo-di-en-calcular-ranking
+tests:
+  - tests/features/US-3.1.1-aggregate-torneo.feature
+  - tests/integration/torneo/test_torneo_domain_integration.py
 ---
 
 # SQLiteTorneoRepository

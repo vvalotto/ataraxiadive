@@ -20,6 +20,12 @@ us_origen:
   - US-5.1.6-ejecucion-panel-monitor-de-competencias-activas
   - US-5.2.1-torneo-competencias-page-maestro-detalle-por-disciplina
   - US-5.7.2-mi-grilla-posicion-del-atleta-por-disciplina
+tests:
+  - tests/features/US-1.3.1-interfaz-juez.feature
+  - tests/integration/competencia/test_api_interfaz_juez.py
+  - tests/features/US-4.6.1-audit-log-performance.feature
+  - tests/integration/competencia/test_audit_log_api.py
+  - tests/features/US-5.7.2-mi-grilla.feature
 ---
 
 # Query Handlers

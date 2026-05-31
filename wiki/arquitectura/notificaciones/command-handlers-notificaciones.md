@@ -20,6 +20,9 @@ us_origen:
   - US-4.5.3-politica-p-10-email-al-atleta-al-confirmar-inscripcion
   - US-4.5.4-politica-p-11-email-a-atletas-al-publicar-resultados
   - US-ADJ-6.4-eliminar-duplicacion-p-10-p-11-y-staticmethod
+tests:
+  - tests/features/US-4.5.3-politica-p10.feature
+  - tests/integration/notificaciones/test_politica_p10_integration.py
 ---
 
 # Command Handlers y Políticas — BC Notificaciones
