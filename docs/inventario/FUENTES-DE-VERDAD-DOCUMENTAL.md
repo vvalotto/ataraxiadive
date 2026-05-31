@@ -48,6 +48,7 @@ Cuando exista contradicción entre documentos, se aplicará este orden general:
 | Planes de implementación | `docs/plans/` | `CLAUDE.md`, specs US-IEDD | Cada plan debe indicar si está vigente, cerrado o histórico. |
 | Aprendizajes metodológicos | `docs/contexto/HITO-*.md` | baselines, análisis metodológicos | Evidencia del experimento. |
 | Reportes de calidad | `quality/reports/` | `CLAUDE.md`, baselines | Evidencia técnica. |
+| Manual de usuario | `manual/` (MkDocs) | GitHub Pages (<https://vvalotto.github.io/ataraxiadive/>) | Guía de uso por rol (organizador, juez, atleta, público). Debe reflejar la app en producción. |
 | Gestión de configuración | `.cm/` | `docs/plans/WORKFLOW-DESARROLLO.md` | Fuente de registros de baseline y cambios. |
 
 ---

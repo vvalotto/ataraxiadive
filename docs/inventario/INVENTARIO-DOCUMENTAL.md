@@ -52,6 +52,7 @@ Este inventario corresponde a la Fase 1 del plan de adecuación documental. Su o
 | `.cm/baselines/` | Evidencia / vigente para cierres | Registro formal de baselines. | Fuente de verdad para cierres de SP y estado validado por baseline. |
 | `.cm/changes/` | Evidencia / operativo | Solicitudes o registros de cambio. | Debe mantenerse vinculado al flujo de CM. |
 | `quality/reports/` | Evidencia | Reportes de calidad. | Fuente de evidencia técnica. |
+| `manual/` | Vigente | Manual de usuario (MkDocs) publicado en GitHub Pages. | Guía de uso por rol. Debe reflejar la app en producción. |
 | `frontend/` | Implementación | Código frontend. | Evidencia para validar estado real del frontend y offline-first. |
 | `src/` | Implementación | Código backend y bounded contexts. | Fuente primaria para contrastar arquitectura y estado implementado. |
 | `tests/` | Evidencia técnica | Tests unitarios, integración y BDD. | Fuente primaria de validación. |
