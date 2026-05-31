@@ -29,7 +29,7 @@ Este inventario corresponde a la Fase 1 del plan de adecuación documental. Su o
 |---|---|---|---|
 | `README.md` | Vigente / candidato a simplificación | Entrada rápida al proyecto. | Debe mantenerse breve y alineado con `CLAUDE.md` y la matriz. |
 | `CLAUDE.md` | Operativo / vigente / candidato a simplificación | Memoria operativa para trabajo con IA y desarrollo. | Debe dar contexto suficiente sin duplicar detalles históricos de SPs. |
-| `docs/DOCUMENTATION-MAP.md` | Vigente | Mapa de navegación documental. | Fuente para saber qué leer y qué documento manda. |
+| `docs/inventario/DOCUMENTATION-MAP.md` | Vigente | Mapa de navegación documental. | Fuente para saber qué leer y qué documento manda. |
 | `docs/design/architecture.md` | Vigente | Arquitectura actual y objetivo técnico. | Debe verificarse contra implementación real. |
 | `docs/design/context-map.md` | Vigente | Mapa de bounded contexts. | Debe mantenerse alineado con los BC reales en `src/`. |
 | `docs/design/domain-model.md` | Vigente | Modelo de dominio. | Debe revisarse contra refactorings posteriores y cambios de dominio real. |

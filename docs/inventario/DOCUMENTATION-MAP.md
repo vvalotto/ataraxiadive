@@ -2,7 +2,7 @@
 
 > Estado documental: vigente
 > Fuente de verdad para: navegación documental y jerarquía de lectura
-> Última actualización: 2026-04-27
+> Última actualización: 2026-05-30
 
 ## 1. Propósito
 
@@ -47,6 +47,7 @@ Esta precedencia completa está definida en [`docs/inventario/FUENTES-DE-VERDAD-
 |---|---|---|
 | Presentación breve | `README.md` | Entrada rápida; no contiene detalle completo. |
 | Estado operativo actual | `CLAUDE.md` | Memoria operativa para desarrollo asistido por IA. |
+| Manual de usuario (final) | [GitHub Pages](https://vvalotto.github.io/ataraxiadive/) · `manual/` (MkDocs) | Guía de uso de los portales público/organizador/juez/atleta. |
 | Workflow de desarrollo | `docs/plans/WORKFLOW-DESARROLLO.md` | Procedimiento vigente para US, incrementos y subproyectos. |
 | Arquitectura vigente | `docs/design/architecture.md` | Vista técnica principal. |
 | Decisiones arquitectónicas | `docs/adr/` | Registro de decisiones y trade-offs. |
@@ -68,7 +69,7 @@ Esta precedencia completa está definida en [`docs/inventario/FUENTES-DE-VERDAD-
 | `docs/PLAN-ADECUACION-DOCUMENTAL.md` | Plan general de depuración documental. |
 | `docs/inventario/INVENTARIO-DOCUMENTAL.md` | Inventario inicial y clasificación documental. |
 | `docs/inventario/FUENTES-DE-VERDAD-DOCUMENTAL.md` | Jerarquía documental y fuentes de verdad. |
-| `docs/DOCUMENTATION-MAP.md` | Mapa mínimo de navegación documental. |
+| `docs/inventario/DOCUMENTATION-MAP.md` | Mapa mínimo de navegación documental (este documento). |
 
 ---
 
