@@ -2,7 +2,7 @@
 
 > Estado documental: vigente
 > Fuente de verdad para: jerarquía documental y autoridad por tema
-> Última actualización: 2026-05-02
+> Última actualización: 2026-05-30
 
 ## 1. Propósito
 
@@ -135,4 +135,4 @@ Cuando exista contradicción entre documentos, se aplicará este orden general:
 
 ## 8. Próximo paso
 
-La Fase 3 crea el mapa documental mínimo en `docs/DOCUMENTATION-MAP.md`, usando esta jerarquía como base.
+La Fase 3 crea el mapa documental mínimo en `docs/inventario/DOCUMENTATION-MAP.md`, usando esta jerarquía como base.

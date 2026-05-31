@@ -2,16 +2,16 @@
 
 > Estado documental: vigente  
 > Fuente de verdad para: trazabilidad RF → BC → incremento → US-IEDD · estados de implementación  
-> Última actualización: 2026-05-24  
+> Última actualización: 2026-05-30  
 > Jerarquía de autoridad: [FUENTES-DE-VERDAD-DOCUMENTAL.md](../inventario/FUENTES-DE-VERDAD-DOCUMENTAL.md)
 
 | Campo | Valor |
 |-------|-------|
 | **Documento** | matrix.md |
 | **Capa IEDD** | Capa 3 — Especificación (puente con Implementación) |
-| **Fecha** | 2026-05-24 |
+| **Fecha** | 2026-05-30 |
 | **Fuentes** | `05-requerimientos_funcionales.md` · Context Map v1.1 · `estrategia-desarrollo-bc.md` · ES Competencia |
-| **Estado** | ✅ v1.47 — SP-ADJ-12 ✅ cerrado 2026-05-24 · SP7 ⏳ INC-7.2 pendiente |
+| **Estado** | ✅ v1.48 — SP7 ✅ cerrado (INC-7.2 ✅) · SP-ADJ-13 ✅ cerrado 2026-05-30 · tag `v1.0.5` · proyecto completo |
 
 ---
 
@@ -835,6 +835,7 @@ Hallazgos del análisis HITO-17 sobre dataset real "Apnea Indoor Buenos Aires 20
 
 ---
 
+*v1.48 — 2026-05-30: SP7 cerrado (INC-7.2 manual ✅) · SP-ADJ-13 cerrado (§35 · fixes UI #213–#216 v1.0.4 + manual revisado v1.0.5) · cabecera sincronizada — proyecto completo*
 *v1.47 — 2026-05-24: SP-ADJ-12 cerrado (§34 · 6 US + 3 fixes · PRs #205–#210 · issues #198–#204 cerrados)*
 *v1.46 — 2026-05-23: SP-ADJ-12 planificado (§34 nuevo · 6 US · issues #198–#204 producción) · §§ renumerados 35..39*
 *v1.45 — 2026-05-17: Iteración 3 adecuación documental — §2 SP6/SP7 agregados · 23 "✅ definido" normalizados a "✅ implementado" en SPs cerrados · §4 actualizado a scope v1.0 · header fecha/estado actualizado*

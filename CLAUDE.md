@@ -2,11 +2,11 @@
 
 > Estado documental: vigente  
 > Fuente de verdad para: contexto operativo, decisiones y convenciones de trabajo  
-> Última actualización: 2026-05-02
+> Última actualización: 2026-05-30
 
 **Memoria operativa del proyecto.** Leer antes de trabajar.
 
-> **Navegación:** [Mapa documental](docs/inventario/DOCUMENTATION-MAP.md) · [Jerarquía de autoridad](docs/inventario/FUENTES-DE-VERDAD-DOCUMENTAL.md) · [Experimento IEDD](docs/contexto/PLAN-EXPERIMENTO.md)
+> **Navegación:** [Mapa documental](docs/inventario/DOCUMENTATION-MAP.md) · [Jerarquía de autoridad](docs/inventario/FUENTES-DE-VERDAD-DOCUMENTAL.md) · [Experimento IEDD](docs/contexto/PLAN-EXPERIMENTO.md) · [Manual de usuario](https://vvalotto.github.io/ataraxiadive/)
 
 ---
 
