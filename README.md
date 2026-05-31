@@ -45,7 +45,7 @@ pytest tests/features/
 - [Manual de usuario (publicado)](https://vvalotto.github.io/ataraxiadive/)
 - [Contexto operativo y decisiones → CLAUDE.md](CLAUDE.md)
 - [Mapa de navegación documental](docs/inventario/DOCUMENTATION-MAP.md)
-- [Arquitectura vigente](docs/design/architecture.md)
+- [Arquitectura vigente (C4)](docs/architecture/)
 - [Decisiones arquitectónicas](docs/adr/)
 - [Trazabilidad RF → US](docs/traceability/matrix.md)
 - [Baselines y CM](.cm/baselines/)

@@ -16,7 +16,7 @@ Este documento corresponde a la Fase 3 del plan de adecuación documental. Su ob
 |---|---|---|
 | 1 | `README.md` | Entender rápidamente qué es AtaraxiaDive, su stack y estado resumido. |
 | 2 | `CLAUDE.md` | Conocer el estado operativo actual y las reglas de trabajo con IA. |
-| 3 | `docs/design/architecture.md` | Revisar la arquitectura técnica vigente y sus vistas principales. |
+| 3 | `docs/architecture/` | Revisar la arquitectura técnica vigente (C4) y sus vistas principales. |
 | 4 | `docs/traceability/matrix.md` | Consultar trazabilidad entre RF, BC, incrementos y US-IEDD. |
 | 5 | `.cm/baselines/` | Ver evidencia formal de cierres y baselines. |
 
@@ -26,18 +26,9 @@ Este documento corresponde a la Fase 3 del plan de adecuación documental. Su ob
 
 ## 2.1 Precedencia en caso de conflicto (resolver divergencias)
 
-Cuando exista **contradicción entre documentos** sobre un hecho, estado o decisión, consultar en este orden de **precedencia de autoridad:**
+Cuando exista **contradicción entre documentos** sobre un hecho, estado o decisión, la jerarquía de **precedencia de autoridad** está definida —de forma única— en [`FUENTES-DE-VERDAD-DOCUMENTAL.md §2`](./FUENTES-DE-VERDAD-DOCUMENTAL.md).
 
-| Rango | Fuente | Autoridad |
-|---|---|---|
-| 1 | Código y tests | Implementación y validación ejecutable |
-| 2 | `.cm/baselines/` | Cierre formal y estado validado en baseline |
-| 3 | `docs/adr/` | Decisiones arquitectónicas documentadas y trade-offs |
-| 4 | `docs/traceability/matrix.md` | Trazabilidad de RF y cobertura de implementación |
-| 5 | `CLAUDE.md` | Estado operativo actual |
-| 6 | `README.md` | Síntesis de entrada |
-
-Esta precedencia completa está definida en [`docs/inventario/FUENTES-DE-VERDAD-DOCUMENTAL.md`](./FUENTES-DE-VERDAD-DOCUMENTAL.md).
+En síntesis: **código y tests › baselines › ADRs › matriz de trazabilidad › CLAUDE.md › README.md.**
 
 ---
 
@@ -49,7 +40,7 @@ Esta precedencia completa está definida en [`docs/inventario/FUENTES-DE-VERDAD-
 | Estado operativo actual | `CLAUDE.md` | Memoria operativa para desarrollo asistido por IA. |
 | Manual de usuario (final) | [GitHub Pages](https://vvalotto.github.io/ataraxiadive/) · `manual/` (MkDocs) | Guía de uso de los portales público/organizador/juez/atleta. |
 | Workflow de desarrollo | `docs/plans/WORKFLOW-DESARROLLO.md` | Procedimiento vigente para US, incrementos y subproyectos. |
-| Arquitectura vigente | `docs/design/architecture.md` | Vista técnica principal. |
+| Arquitectura vigente | `docs/architecture/` | Vista técnica principal (C4). `docs/design/architecture.md` es histórico. |
 | Decisiones arquitectónicas | `docs/adr/` | Registro de decisiones y trade-offs. |
 | Dominio del problema | `docs/dominio/01-dominio_torneos_apnea.md` | Descripción narrativa del dominio de apnea. |
 | Requerimientos funcionales | `docs/dominio/05-requerimientos_funcionales.md` | Catálogo base de RF. |

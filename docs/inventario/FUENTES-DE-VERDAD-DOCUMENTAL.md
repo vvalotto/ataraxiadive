@@ -35,9 +35,10 @@ Cuando exista contradicción entre documentos, se aplicará este orden general:
 | Estado operativo actual | `CLAUDE.md` | `README.md`, `docs/traceability/matrix.md`, `.cm/baselines/` | CLAUDE.md resume y enlaza evidencia. |
 | Estado validado por baseline | `.cm/baselines/` | `CLAUDE.md`, `README.md` | Las baselines mandan sobre cierres formales. |
 | Workflow vigente de desarrollo | `docs/plans/WORKFLOW-DESARROLLO.md` | `CLAUDE.md` | Si hay diferencia, manda el workflow. |
-| Arquitectura vigente | `docs/design/architecture.md` | `docs/adr/`, `CLAUDE.md` | Debe distinguir vigente, objetivo y candidato. |
-| Decisiones arquitectónicas | `docs/adr/` | `docs/design/architecture.md` | Las ADRs registran decisión y trade-offs. |
-| Bounded Contexts | `docs/design/context-map.md` | `docs/design/architecture.md`, `CLAUDE.md` | Deben contrastarse con `src/`. |
+| Arquitectura vigente | `docs/architecture/` | `docs/adr/`, `docs/design/architecture.md` (histórico) | Vista C4 vigente (16 docs: por BC + transversales). |
+| Decisiones arquitectónicas | `docs/adr/` | `docs/architecture/` | Las ADRs registran decisión y trade-offs. |
+| Bounded Contexts | `docs/architecture/03-bounded-contexts.md` · `20-context-map-integrations.md` | `docs/design/context-map.md` (modelado DDD), `CLAUDE.md §3` | Deben contrastarse con `src/`. |
+| Contrato HTTP / API observable | `src/*/api/router.py` (OpenAPI generado) | `docs/architecture/30-runtime-interactions.md` | El contrato real lo define el código; la doc lo describe. |
 | Modelo de dominio | `docs/design/domain-model.md` | `docs/dominio/01-dominio_torneos_apnea.md`, specs US-IEDD | Debe actualizarse con refactorings reales. |
 | Dominio del problema | `docs/dominio/01-dominio_torneos_apnea.md` | `docs/design/domain-model.md` | Fuente narrativa principal del dominio. |
 | Atributos de calidad | `docs/dominio/03-atributos_calidad.md` | `docs/design/architecture.md`, tests, quality reports | Fuente de atributos no funcionales. |
@@ -57,6 +58,7 @@ Cuando exista contradicción entre documentos, se aplicará este orden general:
 |---|---|
 | Vigente | Documento activo que debe reflejar el estado actual de su tema. |
 | Histórico | Documento conservado como memoria previa. No manda sobre el estado actual. |
+| Superseded | Reemplazado por otra fuente explícita; no usar como guía sin verificar el reemplazo. |
 | Evidencia | Documento que registra cierre, hito, reporte o baseline. |
 | Operativo | Documento usado para guiar el trabajo diario. |
 | Derivado | Documento que resume información de otras fuentes. |

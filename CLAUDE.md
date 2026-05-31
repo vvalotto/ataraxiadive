@@ -190,6 +190,8 @@ El LLM ingestor debe priorizar fuentes en este orden. Ante contradicción, preva
 | 6 | `docs/plans/` · `docs/traceability/` | Planificación e historias de usuario |
 | 7 — Más baja | `docs/dominio/` | Elicitación histórica — puede estar desactualizada |
 
+> **Alcance:** esta jerarquía es específica del *ingest del wiki LLM*. La autoridad documental general del proyecto (con código y tests como nivel máximo) está definida —de forma única— en [`docs/inventario/FUENTES-DE-VERDAD-DOCUMENTAL.md §2`](docs/inventario/FUENTES-DE-VERDAD-DOCUMENTAL.md).
+
 ### Operaciones del wiki
 
 ```

@@ -30,12 +30,13 @@ Este inventario corresponde a la Fase 1 del plan de adecuación documental. Su o
 | `README.md` | Vigente / candidato a simplificación | Entrada rápida al proyecto. | Debe mantenerse breve y alineado con `CLAUDE.md` y la matriz. |
 | `CLAUDE.md` | Operativo / vigente / candidato a simplificación | Memoria operativa para trabajo con IA y desarrollo. | Debe dar contexto suficiente sin duplicar detalles históricos de SPs. |
 | `docs/inventario/DOCUMENTATION-MAP.md` | Vigente | Mapa de navegación documental. | Fuente para saber qué leer y qué documento manda. |
-| `docs/design/architecture.md` | Vigente | Arquitectura actual y objetivo técnico. | Debe verificarse contra implementación real. |
-| `docs/design/context-map.md` | Vigente | Mapa de bounded contexts. | Debe mantenerse alineado con los BC reales en `src/`. |
+| `docs/architecture/` | Vigente | Arquitectura técnica vigente (C4: contexto, contenedores, por BC, transversales, despliegue). | Fuente vigente de arquitectura. Mantener alineada con `src/`. |
+| `docs/design/architecture.md` | Histórico / superseded | Diseño C4 inicial (Semana 1). | Superseded por `docs/architecture/`. Conservar como evidencia. |
+| `docs/design/context-map.md` | Referencia (DDD) | Mapa de bounded contexts (modelado estratégico). | Vista vigente de BC: `docs/architecture/03-bounded-contexts.md`. |
 | `docs/design/domain-model.md` | Vigente | Modelo de dominio. | Debe revisarse contra refactorings posteriores y cambios de dominio real. |
 | `docs/adr/` | Vigente / evidencia | Registro de decisiones arquitectónicas. | Debe preservarse. Puede requerir nuevas ADRs si se detectan decisiones no registradas. |
 | `docs/dominio/01-dominio_torneos_apnea.md` | Vigente | Descripción del dominio de torneos de apnea. | Fuente narrativa principal del dominio. |
-| `docs/dominio/02-arquitectura_referencia.md` | Histórico / derivado | Arquitectura de referencia inicial. | Debe verificarse si fue superado por `docs/design/architecture.md` y ADRs. |
+| `docs/dominio/02-arquitectura_referencia.md` | Referencia / derivado | Narrativa de arquitectura de alto nivel (estado implementado). | No es fuente vigente: usar `docs/architecture/` y ADRs. |
 | `docs/dominio/03-atributos_calidad.md` | Vigente | Atributos de calidad. | Fuente de requisitos no funcionales. |
 | `docs/dominio/04-estrategia_desarrollo.md` | Histórico | Planificación inicial de subproyectos e incrementos. | Contiene referencias superadas y debe leerse como planificación inicial. |
 | `docs/dominio/05-requerimientos_funcionales.md` | Vigente | Catálogo base de requerimientos funcionales. | Debe coordinarse con la matriz de trazabilidad. |
