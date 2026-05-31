@@ -17,6 +17,8 @@ software_items:
 test_units:
   - tests/features/US-ADJ-10.2-mis-datos-atleta.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/registro/command-handlers
 ---
 
 # US-ADJ-10.2 — Página Mis Datos del atleta (PATCH /registro/atletas/me)

@@ -19,6 +19,8 @@ test_units:
   - tests/features/US-2.1.3-ajustar-grilla.feature
   - tests/integration/competencia/test_ajustar_grilla_integration.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/competencia/command-handlers
 ---
 
 # US-2.1.3 — AjustarGrilla

@@ -18,6 +18,9 @@ software_items:
 test_units:
   - tests/features/US-6.4.5-refactor-registro-designreviewer.feature
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/registro/command-handlers
+  - arquitectura/registro/sqlite-repositories
 ---
 
 # US-6.4.5 — Refactoring DeclararAPInscripcionHandler + SQLiteInscripcionRepository

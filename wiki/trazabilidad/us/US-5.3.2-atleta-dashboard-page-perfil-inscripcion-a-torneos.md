@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-5.3.2-vista-atleta.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/identidad/command-handlers-identidad
 ---
 
 # US-5.3.2 — AtletaDashboardPage: perfil + inscripción a torneos

@@ -18,6 +18,7 @@ software_items:
 test_units:
   - tests/features/US-ADJ-7.3-p11-competencia-finalizada.feature
 origen_tipo: plataforma
+componentes_wiki: []
 ---
 
 # US-ADJ-7.3 — SCOPE-SP4-001: cablear P-11 a CompetenciaFinalizada

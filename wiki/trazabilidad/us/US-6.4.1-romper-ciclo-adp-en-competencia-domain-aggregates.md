@@ -19,6 +19,8 @@ test_units:
 origen_tipo: calidad
 origen_refs:
   - BL-005
+componentes_wiki:
+  - arquitectura/competencia/competencia-aggregate
 ---
 
 # US-6.4.1 — Romper ciclo ADP en competencia/domain/aggregates

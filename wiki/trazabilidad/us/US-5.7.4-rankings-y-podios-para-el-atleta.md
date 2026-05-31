@@ -19,6 +19,8 @@ software_items:
 test_units:
   - tests/features/US-5.7.4-rankings-podios.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/resultados/query-handlers-resultados
 ---
 
 # US-5.7.4 — Rankings y podios para el atleta

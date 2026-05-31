@@ -17,6 +17,8 @@ software_items:
   - src/competencia/api/dependencies.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/competencia/router-competencia
 ---
 
 # US-ADJ-1.5 — Refactoring api: SRP router en schemas.py + dependencies.py

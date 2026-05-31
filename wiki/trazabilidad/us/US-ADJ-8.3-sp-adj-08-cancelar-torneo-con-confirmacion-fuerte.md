@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-ADJ-8.3-cancelacion-fuerte-torneo.feature
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/torneo/command-handlers-torneo
 ---
 
 # US-ADJ-8.3 — SP-ADJ-08: cancelar torneo con confirmación fuerte

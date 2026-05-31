@@ -19,6 +19,9 @@ software_items:
 test_units:
   - tests/features/US-5.6.4-ranking-overall-puntos.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/resultados/command-handlers-resultados
+  - arquitectura/resultados/ranking-overall
 ---
 
 # US-5.6.4 — RankingOverall: puntos acumulados por categoría y género

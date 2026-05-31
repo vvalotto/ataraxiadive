@@ -7,6 +7,8 @@ sources:
 estado: Aceptada
 fecha: 2026-03-14
 bcs_afectados: [competencia]
+rnf_refs:
+  - RNF-01-confiabilidad-persistencia-event-sourcing
 ---
 
 # ADR-001: Event Sourcing en Competencia

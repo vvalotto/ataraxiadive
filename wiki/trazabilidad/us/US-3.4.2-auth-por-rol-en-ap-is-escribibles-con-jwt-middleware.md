@@ -20,6 +20,8 @@ software_items:
 test_units:
   - tests/features/US-3.4.2-auth-jwt-middleware.feature
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/identidad/router-identidad
 ---
 
 # US-3.4.2 — Auth por rol en APIs escribibles con JWT middleware

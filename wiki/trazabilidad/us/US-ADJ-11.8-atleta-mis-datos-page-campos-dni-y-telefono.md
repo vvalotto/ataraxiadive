@@ -11,6 +11,7 @@ sources:
 us_id: US-ADJ-11.8
 tests_count: null
 rf: []
+componentes_wiki: []
 ---
 
 # US-ADJ-11.8 — AtletaMisDatosPage: campos dni y telefono

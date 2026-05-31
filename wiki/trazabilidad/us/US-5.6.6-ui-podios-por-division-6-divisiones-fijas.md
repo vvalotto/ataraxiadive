@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-5.6.6-ui-podios.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/resultados/query-handlers-resultados
 ---
 
 # US-5.6.6 — UI podios por división (6 divisiones fijas)

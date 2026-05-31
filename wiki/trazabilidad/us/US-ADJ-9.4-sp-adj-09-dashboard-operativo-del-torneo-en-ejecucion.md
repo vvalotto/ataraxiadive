@@ -13,6 +13,7 @@ sources:
 us_id: US-ADJ-9.4
 tests_count: null
 rf: []
+componentes_wiki: []
 ---
 
 # US-ADJ-9.4 — SP-ADJ-09: dashboard operativo del torneo en ejecución

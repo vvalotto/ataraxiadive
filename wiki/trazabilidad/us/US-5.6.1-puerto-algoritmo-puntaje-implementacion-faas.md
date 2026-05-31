@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-5.6.1-algoritmo-puntaje-faas.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/resultados/algoritmo-faas
 ---
 
 # US-5.6.1 — Puerto AlgoritmoPuntaje + implementación FAAS

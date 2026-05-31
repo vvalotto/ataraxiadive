@@ -15,6 +15,9 @@ sources:
   - src/notificaciones/infrastructure/repositories/sqlite_notificacion_repository.py
   - src/notificaciones/infrastructure/email/resend_email_adapter.py
   - src/notificaciones/infrastructure/email/logging_email_adapter.py
+us_origen:
+  - US-4.5.1-aggregate-notificacion-ciclo-de-vida-idempotencia
+  - US-4.5.2-email-port-resend-email-adapter
 ---
 
 # SQLiteNotificacionEventStore + EmailPort Adapters — BC Notificaciones

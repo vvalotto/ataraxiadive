@@ -12,7 +12,7 @@ sources:
 us_id: US-4.5.1
 tests_count: null
 rf:
-  - RF-NT-01
+  - RF-NT-01-canales-notificacion-email-push
 software_items:
   - src/notificaciones/domain/aggregates/notificacion.py
   - src/notificaciones/infrastructure/event_store/sqlite_notificacion_event_store.py
@@ -21,6 +21,9 @@ test_units:
   - tests/features/US-4.5.1-notificacion-idempotencia.feature
   - tests/integration/notificaciones/test_sqlite_notificacion_repository.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/notificaciones/notificacion-aggregate
+  - arquitectura/notificaciones/sqlite-notificacion-event-store
 ---
 
 # US-4.5.1 — Aggregate Notificacion: ciclo de vida + idempotencia

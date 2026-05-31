@@ -12,6 +12,8 @@ sources:
   - src/resultados/domain/ports/resultados_competencia_port.py
   - src/resultados/infrastructure/repositories/resultados_competencia_adapter.py
   - src/resultados/infrastructure/repositories/atleta_categoria_adapter.py
+us_origen:
+  - US-ADJ-3.8-desacoplar-acl-resultados-de-bc-competencia
 ---
 
 # ResultadosCompetenciaPort — ACL a BC Competencia

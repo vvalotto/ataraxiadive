@@ -12,8 +12,9 @@ sources:
 us_id: US-4.3.3
 tests_count: null
 rf:
-  - RF-EJ-07
-  - RF-EJ-08
+  - RF-EJ-07-registro-black-out-distancia
+  - RF-EJ-08-distancias-con-decimales
+componentes_wiki: []
 ---
 
 # US-4.3.3 — Wizard extendido: DNS, BKO, tarjeta roja con MotivoDQ

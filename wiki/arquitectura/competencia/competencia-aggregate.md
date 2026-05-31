@@ -11,6 +11,24 @@ adr_refs: [ADR-001, ADR-008, ADR-018]
 last_updated: "2026-05-23"
 sources:
   - src/competencia/domain/aggregates/competencia.py
+us_origen:
+  - US-1.4.2-flujo-e2e-audit-log-get-events
+  - US-2.2.1-disciplina-descriptor-value-object-port
+  - US-2.3.1-ejecucion-multi-andarivel
+  - US-3.3.1-torneo-id-opcional-en-competencia-para-overall
+  - US-4.1.1-motivo-dq-str-enum-tarjeta-asignacion-extendida-brecha
+  - US-4.1.2-tipo-tarjeta-blanca-con-penalizaciones-penalizacion
+  - US-4.1.4-orden-spe-descendente-en-grilla-de-salida
+  - US-4.1.7-descomponer-grilla-de-salida-ajustar-y-ranking
+  - US-4.3.4-estado-en-revision-resolver-revision-ui-tarjeta
+  - US-6.4.1-romper-ciclo-adp-en-competencia-domain-aggregates
+  - US-ADJ-3.1-extraer-grilla-de-salida-vo-eliminar-disciplinas-sp3
+  - US-ADJ-3.2-extraer-tarjeta-asignacion-vo
+  - US-ADJ-3.5-limpiar-imports-cross-module-en-ports-de-competencia
+  - US-ADJ-4.1-renombrar-dynb-dbf-y-spe2x50-spe-acronimos-dominio-real
+  - US-ADJ-4.2-corregir-orden-grilla-sta-ascendente
+  - US-ADJ-4.6-value-object-tiempo-ap-parsear-mm-ss-segundos
+  - US-ADJ-6.1-renombrar-faz-faas-en-codigo
 ---
 
 # Aggregate Competencia

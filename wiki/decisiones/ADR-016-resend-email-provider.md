@@ -7,6 +7,8 @@ sources:
 estado: Aceptada
 fecha: 2026-04-16
 bcs_afectados: [notificaciones]
+rnf_refs:
+  - RNF-08-interoperabilidad-exportacion-resultados
 ---
 
 # ADR-016: Resend como proveedor de email transaccional

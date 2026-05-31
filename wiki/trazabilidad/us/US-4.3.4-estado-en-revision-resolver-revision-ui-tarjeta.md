@@ -18,6 +18,9 @@ software_items:
 test_units:
   - tests/features/US-4.3.4-tarjeta-amarilla.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/competencia/command-handlers
+  - arquitectura/competencia/competencia-aggregate
 ---
 
 # US-4.3.4 — Estado EnRevision + ResolverRevision + UI tarjeta amarilla

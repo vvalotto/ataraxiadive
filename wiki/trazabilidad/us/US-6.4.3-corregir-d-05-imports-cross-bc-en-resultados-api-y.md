@@ -17,6 +17,8 @@ software_items:
 test_units:
   - tests/features/US-6.4.3-routers-sin-infra-crossbc.feature
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/resultados/router-resultados
 ---
 
 # US-6.4.3 — Corregir D-05: imports cross-BC en resultados/api y competencia/api

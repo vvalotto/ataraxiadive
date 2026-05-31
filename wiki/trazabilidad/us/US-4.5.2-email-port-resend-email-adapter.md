@@ -23,6 +23,8 @@ test_units:
 origen_tipo: adr
 origen_refs:
   - ADR-016
+componentes_wiki:
+  - arquitectura/notificaciones/sqlite-notificacion-event-store
 ---
 
 # US-4.5.2 — EmailPort + ResendEmailAdapter

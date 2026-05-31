@@ -19,6 +19,8 @@ software_items:
 test_units:
   - tests/integration/competencia/test_grilla_tarjeta_asignada_api.py
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/competencia/router-competencia
 ---
 
 # US-ADJ-7.2 — BUG-SP4-004: exponer tarjeta_asignada en /grilla

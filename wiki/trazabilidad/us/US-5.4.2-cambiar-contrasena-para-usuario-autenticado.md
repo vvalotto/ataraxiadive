@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-5.4.2-cambiar-password.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/identidad/command-handlers-identidad
 ---
 
 # US-5.4.2 — Cambiar contraseña para usuario autenticado

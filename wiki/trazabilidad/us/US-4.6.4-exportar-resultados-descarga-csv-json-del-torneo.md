@@ -17,6 +17,8 @@ software_items:
 test_units:
   - tests/features/US-4.6.4-exportacion-resultados.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/resultados/query-handlers-resultados
 ---
 
 # US-4.6.4 — ExportarResultados: descarga CSV/JSON del torneo

@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-ADJ-9.7-ap-inscripcion-preparacion.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/registro/command-handlers
 ---
 
 # US-ADJ-9.7 — SP-ADJ-09: declarar AP en el wizard de inscripción

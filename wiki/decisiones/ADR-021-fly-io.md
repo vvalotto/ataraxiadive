@@ -8,6 +8,8 @@ estado: Aceptada
 fecha: 2026-05-17
 bcs_afectados: [todos]
 supersede: ADR-010-docker-cloud-run
+rnf_refs:
+  - RNF-06-escalabilidad-volumen-modesto
 ---
 
 # ADR-021: Plataforma de despliegue — Fly.io + volumen persistente

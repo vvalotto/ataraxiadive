@@ -24,6 +24,9 @@ test_units:
   - tests/features/US-3.1.1-aggregate-torneo.feature
   - tests/integration/torneo/test_torneo_domain_integration.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/torneo/torneo-aggregate
+  - arquitectura/torneo/sqlite-torneo-repository
 ---
 
 # US-3.1.1 — Aggregate Torneo: máquina de estados

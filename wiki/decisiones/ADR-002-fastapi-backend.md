@@ -7,6 +7,8 @@ sources:
 estado: Aceptada
 fecha: 2026-03-14
 bcs_afectados: [todos]
+rnf_refs:
+  - RNF-06-escalabilidad-volumen-modesto
 ---
 
 # ADR-002: FastAPI como framework backend

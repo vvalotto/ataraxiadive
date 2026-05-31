@@ -16,6 +16,8 @@ software_items:
   - src/competencia/domain/value_objects/ap.py
 test_units: null
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/competencia/competencia-aggregate
 ---
 
 # US-ADJ-4.6 — Value Object TiempoAP: parsear MM:SS → segundos

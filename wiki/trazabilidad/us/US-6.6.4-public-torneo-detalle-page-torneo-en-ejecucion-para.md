@@ -13,6 +13,7 @@ sources:
 us_id: US-6.6.4
 tests_count: null
 rf: []
+componentes_wiki: []
 ---
 
 # US-6.6.4 — PublicTorneoDetallePage: torneo en ejecución para visitantes

@@ -18,6 +18,7 @@ software_items:
 test_units:
   - tests/features/US-5.1.6-monitor-ejecucion.feature
 origen_tipo: plataforma
+componentes_wiki: []
 ---
 
 # US-5.1.6 — EjecucionPanel: monitor de competencias activas

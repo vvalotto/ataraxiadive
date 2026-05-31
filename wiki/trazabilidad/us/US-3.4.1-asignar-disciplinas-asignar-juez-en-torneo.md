@@ -20,6 +20,8 @@ test_units:
   - tests/features/US-3.4.1-asignar-disciplinas-juez.feature
   - tests/integration/torneo/test_disciplinas_torneo_api.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/torneo/command-handlers-torneo
 ---
 
 # US-3.4.1 — AsignarDisciplinas + AsignarJuez en Torneo

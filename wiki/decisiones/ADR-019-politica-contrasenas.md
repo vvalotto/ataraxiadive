@@ -7,6 +7,8 @@ sources:
 estado: Aceptada
 fecha: 2026-04-24
 bcs_afectados: [identidad]
+rnf_refs:
+  - RNF-05-seguridad-auditoria-inalterable
 ---
 
 # ADR-019: Política de contraseñas y UX de fortaleza

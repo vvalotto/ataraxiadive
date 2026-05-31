@@ -17,6 +17,8 @@ software_items:
 test_units:
   - tests/features/US-6.4.4-refactor-faas-codeguard.feature
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/resultados/algoritmo-faas
 ---
 
 # US-6.4.4 — Refactoring AlgoritmoPuntajeFAAS + correcciones CodeGuard

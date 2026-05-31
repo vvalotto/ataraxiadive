@@ -17,6 +17,7 @@ software_items:
   - src/identidad/domain/ports/password_hashing_port.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki: []
 ---
 
 # US-ADJ-3.6 — TokenServicePort + PasswordHashingPort (DIP en Identidad)

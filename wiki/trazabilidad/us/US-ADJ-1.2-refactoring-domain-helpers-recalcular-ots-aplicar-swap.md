@@ -16,6 +16,8 @@ software_items:
   - src/competencia/domain/aggregates/performance.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/competencia/performance-aggregate
 ---
 
 # US-ADJ-1.2 — Refactoring domain: helpers _recalcular_ots + _aplicar_swap_posicion

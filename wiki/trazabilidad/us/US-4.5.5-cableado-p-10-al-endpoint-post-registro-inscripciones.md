@@ -18,6 +18,7 @@ software_items:
 test_units:
   - tests/features/US-4.5.5-cablear-p10-inscripcion.feature
 origen_tipo: rf
+componentes_wiki: []
 ---
 
 # US-4.5.5 — Cableado P-10 al endpoint POST /registro/inscripciones

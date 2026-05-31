@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-5.7.3-mis-resultados.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/resultados/query-handlers-resultados
 ---
 
 # US-5.7.3 — Mis resultados: ResultHero + DisciplinaPendienteCard

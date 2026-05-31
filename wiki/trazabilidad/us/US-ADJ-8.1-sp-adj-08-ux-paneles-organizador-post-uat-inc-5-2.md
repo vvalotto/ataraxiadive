@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-ADJ-8.1-claridad-operativa-panel-organizador.feature
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/torneo/router-torneo
 ---
 
 # US-ADJ-8.1 — SP-ADJ-08: UX paneles organizador post-UAT INC-5.2

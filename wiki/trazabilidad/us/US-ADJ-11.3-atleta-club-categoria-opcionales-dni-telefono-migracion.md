@@ -18,6 +18,8 @@ test_units:
 origen_tipo: adr
 origen_refs:
   - ADR-020
+componentes_wiki:
+  - arquitectura/registro/atleta
 ---
 
 # US-ADJ-11.3 — Atleta: club/categoría opcionales + dni/telefono + migración

@@ -14,6 +14,13 @@ sources:
   - src/resultados/application/queries/obtener_ranking_provisional.py
   - src/resultados/application/queries/obtener_overall.py
   - src/resultados/application/queries/exportar_resultados.py
+us_origen:
+  - US-3.5.3-api-get-resultados-{torneo-id}-overall
+  - US-4.6.4-exportar-resultados-descarga-csv-json-del-torneo
+  - US-5.6.5-ui-resultados-page-tabla-de-resultados-por-disciplina
+  - US-5.6.6-ui-podios-por-division-6-divisiones-fijas
+  - US-5.7.3-mis-resultados-result-hero-disciplina-pendiente-card
+  - US-5.7.4-rankings-y-podios-para-el-atleta
 ---
 
 # Query Handlers — BC Resultados

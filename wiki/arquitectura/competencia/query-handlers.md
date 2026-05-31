@@ -14,6 +14,12 @@ adr_refs: [ADR-001]
 last_updated: "2026-05-23"
 sources:
   - src/competencia/application/queries/
+us_origen:
+  - US-1.3.1-read-models-performance-actual-proximos-atletas
+  - US-4.6.1-obtener-audit-log-por-performance
+  - US-5.1.6-ejecucion-panel-monitor-de-competencias-activas
+  - US-5.2.1-torneo-competencias-page-maestro-detalle-por-disciplina
+  - US-5.7.2-mi-grilla-posicion-del-atleta-por-disciplina
 ---
 
 # Query Handlers

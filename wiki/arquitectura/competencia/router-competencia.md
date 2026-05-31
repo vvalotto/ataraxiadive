@@ -15,6 +15,14 @@ sources:
   - src/competencia/api/schemas.py
   - src/competencia/api/dependencies.py
   - src/competencia/api/exception_handlers.py
+us_origen:
+  - US-2.0-exception-management-cross-bc
+  - US-2.2.2-api-disciplina-aware-validacion-de-unidades
+  - US-ADJ-1.4-refactoring-api-dip-en-router-p-08-a-composition-root
+  - US-ADJ-1.5-refactoring-api-srp-router-en-schemas-py-dependencies
+  - US-ADJ-2.8-refactoring-api-dip-fix-event-store-dep-tipado-como
+  - US-ADJ-6.7-uat-sp4-inc-4-4-4-5-4-6-bug-sp4-001-002-ux-fixes
+  - US-ADJ-7.2-bug-sp4-004-exponer-tarjeta-asignada-en-grilla
 ---
 
 # Router FastAPI — BC Competencia

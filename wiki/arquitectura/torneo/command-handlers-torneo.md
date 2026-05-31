@@ -15,6 +15,15 @@ sources:
   - src/torneo/application/commands/asignar_disciplinas.py
   - src/torneo/application/commands/asignar_juez.py
   - src/torneo/application/commands/transicionar_torneo.py
+us_origen:
+  - US-3.1.2-api-rest-torneo-crud-transiciones-repositorio-sq-lite
+  - US-3.4.1-asignar-disciplinas-asignar-juez-en-torneo
+  - US-5.1.1-crear-torneo-page-formulario-de-creacion-para-el
+  - US-5.1.5-jueces-panel-asignacion-de-juez-por-disciplina
+  - US-5.1.9-precondicion-de-grilla-para-asignacion-de-juez
+  - US-ADJ-10.1-edicion-completa-del-torneo-put-torneos-{id}
+  - US-ADJ-8.2-sp-adj-08-selector-de-grilla-filtrado-y-transicion-a
+  - US-ADJ-8.3-sp-adj-08-cancelar-torneo-con-confirmacion-fuerte
 ---
 
 # Command Handlers — BC Torneo

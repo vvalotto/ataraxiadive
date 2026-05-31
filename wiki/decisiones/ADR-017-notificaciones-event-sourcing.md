@@ -7,6 +7,8 @@ sources:
 estado: Aceptada
 fecha: 2026-04-16
 bcs_afectados: [notificaciones]
+rnf_refs:
+  - RNF-08-interoperabilidad-exportacion-resultados
 ---
 
 # ADR-017: Event Sourcing en BC Notificaciones para exactly-once delivery

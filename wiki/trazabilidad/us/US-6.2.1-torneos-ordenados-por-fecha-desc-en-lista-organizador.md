@@ -12,6 +12,7 @@ sources:
 us_id: US-6.2.1
 tests_count: null
 rf: []
+componentes_wiki: []
 ---
 
 # US-6.2.1 — Torneos ordenados por fecha desc en lista organizador

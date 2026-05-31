@@ -19,6 +19,8 @@ test_units:
   - tests/features/US-1.2.3-registrar-resultado.feature
   - tests/integration/competencia/test_registrar_resultado_integration.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/competencia/command-handlers
 ---
 
 # US-1.2.3 — RegistrarResultado

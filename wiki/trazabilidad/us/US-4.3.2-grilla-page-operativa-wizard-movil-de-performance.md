@@ -14,6 +14,7 @@ tests_count: null
 rf:
   - RF-EJ-05-cronometraje-manual-por-juez
   - RF-EJ-06-correccion-resultado-registrado
+componentes_wiki: []
 ---
 
 # US-4.3.2 — GrillaPage operativa + wizard móvil de performance

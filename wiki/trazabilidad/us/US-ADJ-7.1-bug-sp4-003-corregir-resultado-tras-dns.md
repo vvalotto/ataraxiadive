@@ -19,6 +19,8 @@ software_items:
 test_units:
   - tests/integration/competencia/test_corregir_resultado_tras_dns_integration.py
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/competencia/command-handlers
 ---
 
 # US-ADJ-7.1 — BUG-SP4-003: CorregirResultadoTrasDNS

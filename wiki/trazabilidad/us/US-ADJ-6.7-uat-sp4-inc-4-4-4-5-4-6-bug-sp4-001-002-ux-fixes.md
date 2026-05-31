@@ -16,6 +16,8 @@ software_items:
   - src/competencia/api/router.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/competencia/router-competencia
 ---
 
 # US-ADJ-6.7 — UAT SP4 + bugs + UX fixes organizador

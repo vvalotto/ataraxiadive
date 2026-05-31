@@ -16,6 +16,7 @@ software_items:
   - src/competencia/domain/aggregates/competencia.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki: []
 ---
 
 # US-ADJ-6.1 — Renombrar FAZ→FAAS en código

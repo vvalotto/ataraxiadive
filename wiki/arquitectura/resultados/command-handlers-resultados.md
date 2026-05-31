@@ -14,6 +14,13 @@ last_updated: "2026-05-23"
 sources:
   - src/resultados/application/commands/calcular_ranking.py
   - src/resultados/application/commands/calcular_overall.py
+us_origen:
+  - US-2.4.2-calcular-ranking-—-bc-resultados-nucleo
+  - US-3.5.1-aggregate-ranking-overall-calcular-overall-handler
+  - US-3.5.2-politica-p-09-overall-automatico-al-cerrar-torneo
+  - US-5.6.3-ranking-competencia-con-puntos-por-categoria
+  - US-5.6.4-ranking-overall-puntos-acumulados-por-categoria-y
+  - US-6.4.2-materializar-proyeccion-competencias-por-torneo-en
 ---
 
 # Command Handlers — BC Resultados

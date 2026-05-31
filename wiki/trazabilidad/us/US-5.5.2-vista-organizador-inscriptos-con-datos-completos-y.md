@@ -19,6 +19,8 @@ test_units:
   - tests/features/US-5.5.2-organizador-inscriptos-ap.feature
   - tests/integration/registro/test_inscriptos_detalle_endpoint.py
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/registro/query-handlers
 ---
 
 # US-5.5.2 — Vista organizador: inscriptos con datos completos y estado AP

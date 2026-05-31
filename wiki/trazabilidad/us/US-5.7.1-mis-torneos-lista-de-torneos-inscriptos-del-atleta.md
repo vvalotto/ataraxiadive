@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-5.7.1-mis-torneos.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/registro/query-handlers
 ---
 
 # US-5.7.1 — Mis torneos: lista de torneos inscriptos del atleta

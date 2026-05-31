@@ -17,6 +17,8 @@ software_items:
   - src/competencia/domain/value_objects/disciplina.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/competencia/competencia-aggregate
 ---
 
 # US-ADJ-4.1 — Renombrar DYNB→DBF y SPE2X50→SPE

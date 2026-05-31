@@ -13,6 +13,8 @@ sources:
   - src/torneo/domain/aggregates/torneo.py
   - src/torneo/domain/value_objects/estado_torneo.py
   - src/torneo/domain/value_objects/disciplina_torneo.py
+us_origen:
+  - US-3.1.1-aggregate-torneo-maquina-de-estados
 ---
 
 # Aggregate Torneo

@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-5.7.2-mi-grilla.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/competencia/query-handlers
 ---
 
 # US-5.7.2 — Mi grilla: posición del atleta por disciplina

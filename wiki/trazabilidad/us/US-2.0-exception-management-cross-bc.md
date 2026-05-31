@@ -19,6 +19,8 @@ test_units:
 origen_tipo: adr
 origen_refs:
   - ADR-012
+componentes_wiki:
+  - arquitectura/competencia/router-competencia
 ---
 
 # INC-2.0 — Exception management cross-BC

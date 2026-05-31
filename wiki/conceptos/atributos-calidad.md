@@ -1,9 +1,18 @@
 ---
 title: "Atributos de Calidad"
 type: concepto
-last_updated: "2026-05-20"
+last_updated: "2026-05-31"
 sources:
   - docs/dominio/03-atributos_calidad.md
+rnf_pages:
+  - trazabilidad/rnf/RNF-01-confiabilidad-persistencia-event-sourcing
+  - trazabilidad/rnf/RNF-02-disponibilidad-offline-first
+  - trazabilidad/rnf/RNF-03-usabilidad-interfaz-movil-juez
+  - trazabilidad/rnf/RNF-04-configurabilidad-reglas-como-datos
+  - trazabilidad/rnf/RNF-05-seguridad-auditoria-inalterable
+  - trazabilidad/rnf/RNF-06-escalabilidad-volumen-modesto
+  - trazabilidad/rnf/RNF-07-mantenibilidad-sin-desarrollador
+  - trazabilidad/rnf/RNF-08-interoperabilidad-exportacion-resultados
 ---
 
 # Atributos de Calidad
@@ -142,11 +151,13 @@ Drivers no funcionales del sistema AtaraxiaDive. Elicitados en febrero 2026 y ma
 
 ## Mapa de atributos → decisiones arquitectónicas
 
-| Atributo | ADR derivado | BC principal |
-|----------|-------------|-------------|
-| Confiabilidad + Reconstrucción | [[ADR-001-event-sourcing-competencia]] | [[competencia]] |
-| Offline-first | [[ADR-003-offline-first-pwa]] | Todos |
-| Reglas como datos | [[ADR-004-reglas-como-datos]] | [[competencia]], [[torneo]] |
-| Persistencia por BC | [[ADR-007-sqlite-persistencia-bc]] | Todos |
-| Auditoría inalterable | [[ADR-018-hash-sha256-auditoria]] | [[competencia]] |
-| Notificaciones | [[ADR-016-resend-email-provider]], [[ADR-017-notificaciones-event-sourcing]] | [[notificaciones]] |
+| Atributo | Página RNF | ADRs derivados | BC principal |
+|---|---|---|---|
+| Confiabilidad | [[trazabilidad/rnf/RNF-01-confiabilidad-persistencia-event-sourcing\|RNF-01]] | [[ADR-001-event-sourcing-competencia]], [[ADR-008-event-store-sqlite]] | [[competencia]] |
+| Disponibilidad | [[trazabilidad/rnf/RNF-02-disponibilidad-offline-first\|RNF-02]] | [[ADR-003-offline-first-pwa]], [[ADR-015-dexie-indexeddb-frontend]] | Todos |
+| Usabilidad | [[trazabilidad/rnf/RNF-03-usabilidad-interfaz-movil-juez\|RNF-03]] | [[ADR-003-offline-first-pwa]], [[ADR-015-dexie-indexeddb-frontend]] | Todos |
+| Configurabilidad | [[trazabilidad/rnf/RNF-04-configurabilidad-reglas-como-datos\|RNF-04]] | [[ADR-004-reglas-como-datos]] | [[competencia]], [[bc-torneo]] |
+| Seguridad | [[trazabilidad/rnf/RNF-05-seguridad-auditoria-inalterable\|RNF-05]] | [[ADR-018-hash-sha256-auditoria]], [[ADR-019-politica-contrasenas]], [[ADR-020-modelo-usuarios-roles]] | [[competencia]], [[identidad]] |
+| Escalabilidad | [[trazabilidad/rnf/RNF-06-escalabilidad-volumen-modesto\|RNF-06]] | [[ADR-002-fastapi-backend]], [[ADR-007-sqlite-persistencia-bc]], [[ADR-021-fly-io]] | Todos |
+| Mantenibilidad | [[trazabilidad/rnf/RNF-07-mantenibilidad-sin-desarrollador\|RNF-07]] | [[ADR-004-reglas-como-datos]], [[ADR-006-estructura-bc-first]], [[ADR-009-migraciones-por-bc]] | Todos |
+| Interoperabilidad | [[trazabilidad/rnf/RNF-08-interoperabilidad-exportacion-resultados\|RNF-08]] | [[ADR-016-resend-email-provider]], [[ADR-017-notificaciones-event-sourcing]] | [[notificaciones]], [[resultados]] |

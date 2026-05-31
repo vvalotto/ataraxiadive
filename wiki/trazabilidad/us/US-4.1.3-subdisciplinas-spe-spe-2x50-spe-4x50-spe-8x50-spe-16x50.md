@@ -13,6 +13,7 @@ us_id: US-4.1.3
 tests_count: 73
 rf:
   - RF-GT-02-disciplinas-configurables
+componentes_wiki: []
 ---
 
 # US-4.1.3 — Subdisciplinas SPE: variantes de piscina

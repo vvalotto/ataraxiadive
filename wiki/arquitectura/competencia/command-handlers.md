@@ -16,6 +16,26 @@ adr_refs: [ADR-001, ADR-004]
 last_updated: "2026-05-23"
 sources:
   - src/competencia/application/commands/
+us_origen:
+  - US-1.2.1-registrar-ap
+  - US-1.2.2-llamar-atleta
+  - US-1.2.3-registrar-resultado
+  - US-1.2.4-asignar-tarjeta-blanca-roja
+  - US-1.2.5-registrar-dns
+  - US-1.2.6-corregir-resultado
+  - US-2.1.1-configurar-intervalo-ot-scaffold-aggregate-competencia
+  - US-2.1.2-generar-grilla-regenerar-grilla
+  - US-2.1.3-ajustar-grilla
+  - US-2.1.4-confirmar-grilla-iniciar-competencia
+  - US-2.4.1-competencia-finalizada-automatico-politica-p-08
+  - US-4.1.1-motivo-dq-str-enum-tarjeta-asignacion-extendida-brecha
+  - US-4.3.4-estado-en-revision-resolver-revision-ui-tarjeta
+  - US-5.1.4-grilla-panel-generar-y-confirmar-grilla-por-disciplina
+  - US-5.2.2-accion-finalizar-prueba-por-disciplina
+  - US-ADJ-1.4-refactoring-api-dip-en-router-p-08-a-composition-root
+  - US-ADJ-2.7-refactoring-eliminar-codigo-muerto-get-on-finalizada
+  - US-ADJ-6.3-eliminar-inspect-signature-callback-on-finalizada
+  - US-ADJ-7.1-bug-sp4-003-corregir-resultado-tras-dns
 ---
 
 # Command Handlers

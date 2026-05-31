@@ -19,6 +19,8 @@ test_units:
   - tests/features/US-6.3.2-inscripcion-ap-adjuntos.feature
   - tests/integration/registro/test_adjuntos_inscripcion_endpoint.py
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/registro/command-handlers
 ---
 
 # US-6.3.2 — Inscripción atleta: AP inline + apto médico + constancia pago

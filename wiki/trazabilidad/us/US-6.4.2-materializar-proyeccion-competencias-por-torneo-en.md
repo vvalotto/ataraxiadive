@@ -19,6 +19,8 @@ test_units:
 origen_tipo: calidad
 origen_refs:
   - BL-005
+componentes_wiki:
+  - arquitectura/resultados/command-handlers-resultados
 ---
 
 # US-6.4.2 — Materializar proyección competencias_por_torneo en CalcularOverallHandler

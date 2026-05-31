@@ -18,6 +18,14 @@ sources:
   - src/identidad/application/commands/cambiar_password.py
   - src/identidad/application/commands/solicitar_reset_password.py
   - src/identidad/application/commands/reset_password.py
+us_origen:
+  - US-3.2.1-bc-identidad-usuario-jwt-minimo-auth
+  - US-5.3.2-atleta-dashboard-page-perfil-inscripcion-a-torneos
+  - US-5.4.1-auto-registro-publico-de-usuarios
+  - US-5.4.2-cambiar-contrasena-para-usuario-autenticado
+  - US-5.4.3-recuperar-contrasena-via-token-jwt
+  - US-ADJ-10.3-email-de-bienvenida-y-auto-login-post-registro
+  - US-ADJ-11.2-post-delete-auth-usuarios-me-roles-guard-no-quitar
 ---
 
 # Command Handlers — BC Identidad

@@ -21,6 +21,10 @@ test_units:
 origen_tipo: adr
 origen_refs:
   - ADR-020
+componentes_wiki:
+  - arquitectura/registro/juez-organizador
+  - arquitectura/registro/command-handlers
+  - arquitectura/registro/sqlite-repositories
 ---
 
 # US-ADJ-11.5 — Entidad Organizador + OrganizadorRepositoryPort + endpoints

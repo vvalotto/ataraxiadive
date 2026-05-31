@@ -18,6 +18,8 @@ test_units:
   - tests/features/US-ADJ-10.3-email-autologin-post-registro.feature
   - tests/integration/identidad/test_registro_email_handler.py
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/identidad/command-handlers-identidad
 ---
 
 # US-ADJ-10.3 — Email de bienvenida y auto-login post-registro

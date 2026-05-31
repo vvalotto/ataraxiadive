@@ -19,6 +19,8 @@ test_units:
 origen_tipo: adr
 origen_refs:
   - ADR-018
+componentes_wiki:
+  - arquitectura/competencia/calculador-hash-competencia
 ---
 
 # US-4.6.2 — CalculadorHashCompetencia: hash SHA-256 de integridad

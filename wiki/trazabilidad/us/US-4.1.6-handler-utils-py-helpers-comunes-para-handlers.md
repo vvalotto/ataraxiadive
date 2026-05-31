@@ -18,6 +18,8 @@ test_units: null
 origen_tipo: calidad
 origen_refs:
   - BL-004
+componentes_wiki:
+  - arquitectura/competencia/handler-utils
 ---
 
 # US-4.1.6 — _handler_utils.py: helpers comunes para handlers

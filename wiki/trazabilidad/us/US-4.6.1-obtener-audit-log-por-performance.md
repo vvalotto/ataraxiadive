@@ -18,6 +18,8 @@ test_units:
   - tests/features/US-4.6.1-audit-log-performance.feature
   - tests/integration/competencia/test_audit_log_api.py
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/competencia/query-handlers
 ---
 
 # US-4.6.1 — ObtenerAuditLog por performance

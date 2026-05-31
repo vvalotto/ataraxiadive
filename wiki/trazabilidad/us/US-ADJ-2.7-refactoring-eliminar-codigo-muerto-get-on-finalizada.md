@@ -16,6 +16,8 @@ software_items:
   - src/competencia/application/_p08_finalizacion.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/competencia/command-handlers
 ---
 
 # US-ADJ-2.7 — Refactoring: eliminar código muerto get_on_finalizada_callback

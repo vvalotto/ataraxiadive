@@ -12,6 +12,12 @@ last_updated: "2026-05-23"
 sources:
   - src/torneo/application/queries/obtener_torneo.py
   - src/torneo/application/queries/obtener_disciplinas_juez.py
+us_origen:
+  - US-5.1.10-normalizacion-del-campo-estado-en-fetch-torneo
+  - US-5.1.2-detalle-torneo-page-tabs-y-panel-de-acciones-de-fase
+  - US-5.1.5-jueces-panel-asignacion-de-juez-por-disciplina
+  - US-5.1.7-politica-de-tabs-por-fase-en-detalle-torneo-page
+  - US-5.1.8-torneo-competencias-page-composicion-disciplinas
 ---
 
 # Query Handlers — BC Torneo

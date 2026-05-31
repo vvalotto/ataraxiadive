@@ -18,6 +18,7 @@ software_items:
 test_units:
   - tests/features/US-5.2.1-ejecucion-disciplinas.feature
 origen_tipo: plataforma
+componentes_wiki: []
 ---
 
 # US-5.2.1 — TorneoCompetenciasPage: maestro-detalle por disciplina

@@ -23,6 +23,16 @@ sources:
   - src/registro/application/commands/inscribir_atleta.py
   - src/registro/application/commands/cancelar_inscripcion.py
   - src/registro/application/commands/declarar_ap_inscripcion.py
+us_origen:
+  - US-3.2.3-aggregate-inscripcion-inscribir-cancelar-y-listar
+  - US-5.5.1-portal-atleta-completo-shell-inscripcion-ap
+  - US-6.3.2-inscripcion-atleta-ap-inline-apto-medico-constancia
+  - US-6.4.5-refactoring-declarar-ap-inscripcion-handler-sq-lite
+  - US-ADJ-10.2-pagina-mis-datos-del-atleta-patch-registro-atletas-me
+  - US-ADJ-11.10-creacion-automatica-de-perfiles-al-registrarse
+  - US-ADJ-11.4-entidad-juez-juez-repository-port-endpoints-registro
+  - US-ADJ-11.5-entidad-organizador-organizador-repository-port
+  - US-ADJ-9.7-sp-adj-09-declarar-ap-en-el-wizard-de-inscripcion
 ---
 
 # Command Handlers — BC Registro

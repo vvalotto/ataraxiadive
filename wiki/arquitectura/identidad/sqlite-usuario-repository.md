@@ -10,6 +10,8 @@ adr_refs: [ADR-007, ADR-020]
 last_updated: "2026-05-23"
 sources:
   - src/identidad/infrastructure/repositories/sqlite_usuario_repository.py
+us_origen:
+  - US-3.2.1-bc-identidad-usuario-jwt-minimo-auth
 ---
 
 # SQLiteUsuarioRepository

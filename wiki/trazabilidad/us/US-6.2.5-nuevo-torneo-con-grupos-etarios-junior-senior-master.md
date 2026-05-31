@@ -12,6 +12,7 @@ sources:
 us_id: US-6.2.5
 tests_count: null
 rf: []
+componentes_wiki: []
 ---
 
 # US-6.2.5 — Nuevo torneo con grupos etarios JUNIOR/SENIOR/MASTER

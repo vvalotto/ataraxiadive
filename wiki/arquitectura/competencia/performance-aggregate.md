@@ -13,6 +13,14 @@ sources:
   - src/competencia/domain/aggregates/performance.py
   - src/competencia/domain/aggregates/performance_events.py
   - src/competencia/domain/aggregates/performance_state.py
+us_origen:
+  - US-1.1.1-setup-esqueleto-bc-competencia
+  - US-1.4.1-asignar-tarjeta-roja-black-out-con-distancia
+  - US-1.4.2-flujo-e2e-audit-log-get-events
+  - US-4.1.2-tipo-tarjeta-blanca-con-penalizaciones-penalizacion
+  - US-4.1.5-descomponer-aggregate-performance-en-modulos
+  - US-ADJ-1.1-refactoring-domain-ot-programado-event-handlers-snake
+  - US-ADJ-1.2-refactoring-domain-helpers-recalcular-ots-aplicar-swap
 ---
 
 # Aggregate Performance

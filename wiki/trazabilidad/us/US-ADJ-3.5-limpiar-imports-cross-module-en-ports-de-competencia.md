@@ -16,6 +16,8 @@ software_items:
   - src/competencia/domain/aggregates/competencia.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/competencia/competencia-aggregate
 ---
 
 # US-ADJ-3.5 — Limpiar imports cross-module en ports de Competencia

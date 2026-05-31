@@ -13,6 +13,7 @@ sources:
 us_id: US-ADJ-9.5
 tests_count: null
 rf: []
+componentes_wiki: []
 ---
 
 # US-ADJ-9.5 — SP-ADJ-09: ResultadosPage integrada en el panel organizador

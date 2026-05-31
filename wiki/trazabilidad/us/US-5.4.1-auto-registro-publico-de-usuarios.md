@@ -19,6 +19,8 @@ test_units:
   - tests/features/US-5.4.1-auto-registro.feature
   - tests/integration/identidad/test_registro_email_handler.py
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/identidad/command-handlers-identidad
 ---
 
 # US-5.4.1 — Auto-registro público de usuarios

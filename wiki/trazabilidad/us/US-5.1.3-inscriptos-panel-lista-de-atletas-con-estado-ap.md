@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-5.1.3-vista-inscriptos-ap.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/registro/query-handlers
 ---
 
 # US-5.1.3 — InscriptosPanel: lista de atletas con estado AP

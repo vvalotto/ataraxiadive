@@ -12,12 +12,14 @@ sources:
 us_id: US-4.1.4
 tests_count: 68
 rf:
-  - RF-PR-05
+  - RF-PR-05-orden-salida-por-ap
 software_items:
   - src/competencia/domain/aggregates/competencia.py
 test_units:
   - tests/features/US-4.1.4-orden-grilla-reglamentario.feature
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/competencia/competencia-aggregate
 ---
 
 # US-4.1.4 — Orden SPE descendente en GrillaDeSalida

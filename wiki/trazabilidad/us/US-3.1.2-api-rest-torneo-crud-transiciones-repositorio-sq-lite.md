@@ -26,6 +26,9 @@ test_units:
   - tests/features/US-3.1.2-api-rest-torneo.feature
   - tests/integration/torneo/test_sqlite_torneo_repository.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/torneo/command-handlers-torneo
+  - arquitectura/torneo/router-torneo
 ---
 
 # US-3.1.2 — API REST Torneo: CRUD + transiciones + repositorio SQLite

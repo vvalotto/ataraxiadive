@@ -16,6 +16,8 @@ software_items:
   - src/competencia/api/dependencies.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/competencia/router-competencia
 ---
 
 # US-ADJ-2.8 — Refactoring api: DIP fix EventStoreDep tipado como puerto abstracto

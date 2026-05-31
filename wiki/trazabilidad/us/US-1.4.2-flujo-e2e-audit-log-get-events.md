@@ -21,6 +21,9 @@ test_units:
   - tests/features/US-1.4.2-flujo-e2e.feature
   - tests/integration/competencia/test_flujo_e2e.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/competencia/performance-aggregate
+  - arquitectura/competencia/competencia-aggregate
 ---
 
 # US-1.4.2 — Flujo E2E + audit log GET /events

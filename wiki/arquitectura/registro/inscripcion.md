@@ -12,6 +12,8 @@ adr_refs: [ADR-005, ADR-007]
 last_updated: "2026-05-23"
 sources:
   - src/registro/domain/aggregates/inscripcion.py
+us_origen:
+  - US-3.2.3-aggregate-inscripcion-inscribir-cancelar-y-listar
 ---
 
 # Aggregate Inscripcion

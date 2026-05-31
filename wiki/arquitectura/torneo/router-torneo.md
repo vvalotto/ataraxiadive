@@ -10,6 +10,10 @@ adr_refs: [ADR-005]
 last_updated: "2026-05-23"
 sources:
   - src/torneo/api/router.py
+us_origen:
+  - US-3.1.2-api-rest-torneo-crud-transiciones-repositorio-sq-lite
+  - US-6.6.1-endpoint-publico-get-torneos-sin-autenticacion
+  - US-ADJ-8.1-sp-adj-08-ux-paneles-organizador-post-uat-inc-5-2
 ---
 
 # Router — BC Torneo

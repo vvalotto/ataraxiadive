@@ -17,6 +17,9 @@ software_items:
   - src/competencia/application/_p08_finalizacion.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/competencia/router-competencia
+  - arquitectura/competencia/command-handlers
 ---
 
 # US-ADJ-1.4 — Refactoring api: DIP en router + P-08 a composition root

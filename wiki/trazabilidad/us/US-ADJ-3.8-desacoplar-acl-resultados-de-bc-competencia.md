@@ -16,6 +16,8 @@ software_items:
   - src/resultados/infrastructure/repositories/resultados_competencia_adapter.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/resultados/resultados-competencia-port
 ---
 
 # US-ADJ-3.8 — Desacoplar ACL resultados de BC Competencia

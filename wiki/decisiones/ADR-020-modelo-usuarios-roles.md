@@ -7,6 +7,8 @@ sources:
 estado: Aceptada
 fecha: 2026-05-16
 bcs_afectados: [identidad, registro]
+rnf_refs:
+  - RNF-05-seguridad-auditoria-inalterable
 ---
 
 # ADR-020: Modelo de usuarios con múltiples roles y perfiles por rol

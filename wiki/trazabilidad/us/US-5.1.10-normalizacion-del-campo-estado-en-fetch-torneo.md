@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-5.1.10-acciones-fase.feature
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/torneo/query-handlers-torneo
 ---
 
 # US-5.1.10 — Normalización del campo estado en fetchTorneo

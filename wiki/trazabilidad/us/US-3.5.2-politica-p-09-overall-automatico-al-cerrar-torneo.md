@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-3.5.2-politica-p09.feature
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/resultados/command-handlers-resultados
 ---
 
 # US-3.5.2 — Política P-09: overall automático al cerrar torneo

@@ -18,6 +18,8 @@ test_units:
 origen_tipo: adr
 origen_refs:
   - ADR-020
+componentes_wiki:
+  - arquitectura/registro/command-handlers
 ---
 
 # US-ADJ-11.10 — Creación automática de perfiles al registrarse

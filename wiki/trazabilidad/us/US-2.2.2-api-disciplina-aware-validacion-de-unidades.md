@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-2.2.2-api-disciplina-aware.feature
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/competencia/router-competencia
 ---
 
 # US-2.2.2 — API disciplina-aware + validación de unidades

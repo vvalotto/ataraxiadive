@@ -19,6 +19,7 @@ test_units:
   - tests/features/US-5.6.2-tipo-reglamento-di-ranking.feature
   - tests/integration/torneo/test_tipo_reglamento_repository.py
 origen_tipo: plataforma
+componentes_wiki: []
 ---
 
 # US-5.6.2 — TipoReglamento en Torneo + DI en CalcularRankingHandler

@@ -16,6 +16,10 @@ sources:
   - src/notificaciones/application/policies/politica_p10.py
   - src/notificaciones/application/policies/politica_p11.py
   - src/notificaciones/application/policies/_helpers.py
+us_origen:
+  - US-4.5.3-politica-p-10-email-al-atleta-al-confirmar-inscripcion
+  - US-4.5.4-politica-p-11-email-a-atletas-al-publicar-resultados
+  - US-ADJ-6.4-eliminar-duplicacion-p-10-p-11-y-staticmethod
 ---
 
 # Command Handlers y Políticas — BC Notificaciones

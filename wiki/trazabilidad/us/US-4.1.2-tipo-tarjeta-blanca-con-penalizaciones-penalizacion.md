@@ -18,6 +18,9 @@ software_items:
 test_units:
   - tests/features/US-4.1.2-tarjeta-blanca-penalizaciones.feature
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/competencia/competencia-aggregate
+  - arquitectura/competencia/performance-aggregate
 ---
 
 # US-4.1.2 — TipoTarjeta.BlancaConPenalizaciones + PenalizacionTecnica VO

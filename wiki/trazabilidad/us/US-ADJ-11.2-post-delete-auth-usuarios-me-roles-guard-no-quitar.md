@@ -19,6 +19,8 @@ test_units:
 origen_tipo: adr
 origen_refs:
   - ADR-020
+componentes_wiki:
+  - arquitectura/identidad/command-handlers-identidad
 ---
 
 # US-ADJ-11.2 — POST/DELETE /auth/usuarios/me/roles + guard no quitar ATLETA

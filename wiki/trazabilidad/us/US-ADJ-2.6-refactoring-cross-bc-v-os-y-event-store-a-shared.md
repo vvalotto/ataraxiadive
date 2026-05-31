@@ -12,6 +12,7 @@ sources:
 us_id: US-ADJ-2.6
 tests_count: null
 rf: []
+componentes_wiki: []
 ---
 
 # US-ADJ-2.6 — Refactoring cross-BC: VOs y EventStore a shared/

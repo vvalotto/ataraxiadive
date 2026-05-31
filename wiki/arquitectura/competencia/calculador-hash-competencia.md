@@ -10,6 +10,8 @@ adr_refs: [ADR-018]
 last_updated: "2026-05-23"
 sources:
   - src/competencia/domain/services/calculador_hash_competencia.py
+us_origen:
+  - US-4.6.2-calculador-hash-competencia-hash-sha-256-de-integridad
 ---
 
 # Service CalculadorHashCompetencia

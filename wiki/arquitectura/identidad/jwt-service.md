@@ -11,6 +11,9 @@ last_updated: "2026-05-23"
 sources:
   - src/identidad/infrastructure/jwt_service.py
   - src/identidad/infrastructure/bcrypt_password_hasher.py
+us_origen:
+  - US-3.2.1-bc-identidad-usuario-jwt-minimo-auth
+  - US-ADJ-11.1-usuario-roles-list-rol-jwt-rol-activo-login-condicional
 ---
 
 # JWTService + BcryptPasswordHasher

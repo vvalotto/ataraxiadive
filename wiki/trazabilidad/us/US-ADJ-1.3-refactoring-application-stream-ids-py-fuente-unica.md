@@ -16,6 +16,8 @@ software_items:
   - src/competencia/application/commands/_stream_ids.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/competencia/handler-utils
 ---
 
 # US-ADJ-1.3 — Refactoring application: _stream_ids.py fuente única

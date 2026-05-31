@@ -12,8 +12,8 @@ sources:
 us_id: US-4.5.3
 tests_count: null
 rf:
-  - RF-NT-01
-  - RF-NT-03
+  - RF-NT-01-canales-notificacion-email-push
+  - RF-NT-03-notificaciones-durante-ejecucion
 software_items:
   - src/notificaciones/application/policies/politica_p10.py
   - src/notificaciones/infrastructure/templates/inscripcion_confirmada_template.py
@@ -21,6 +21,8 @@ test_units:
   - tests/features/US-4.5.3-politica-p10.feature
   - tests/integration/notificaciones/test_politica_p10_integration.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/notificaciones/command-handlers-notificaciones
 ---
 
 # US-4.5.3 — Política P-10: email al atleta al confirmar inscripción

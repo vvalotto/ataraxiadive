@@ -12,7 +12,7 @@ sources:
 us_id: US-4.3.5
 tests_count: null
 rf:
-  - RF-EJ-02
+  - RF-EJ-02-registro-dns-no-presentado
 ---
 
 # US-4.3.5 — Adaptación wizard para STA (vías respiratorias)

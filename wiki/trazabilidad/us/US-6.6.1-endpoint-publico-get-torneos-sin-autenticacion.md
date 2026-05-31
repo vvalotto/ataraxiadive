@@ -19,6 +19,8 @@ test_units:
   - tests/features/US-6.6.1-endpoint-publico-torneos.feature
   - tests/integration/torneo/test_torneos_publicos_api.py
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/torneo/router-torneo
 ---
 
 # US-6.6.1 — Endpoint público GET /torneos sin autenticación

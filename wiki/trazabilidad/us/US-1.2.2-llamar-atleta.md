@@ -19,6 +19,8 @@ test_units:
   - tests/features/US-1.2.2-llamar-atleta.feature
   - tests/integration/competencia/test_llamar_atleta_integration.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/competencia/command-handlers
 ---
 
 # US-1.2.2 — LlamarAtleta

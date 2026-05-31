@@ -23,6 +23,7 @@ software_items:
 test_units:
   - tests/features/US-3.3.2-flujo-e2e-torneo-competencia.feature
 origen_tipo: rf
+componentes_wiki: []
 ---
 
 # US-3.3.2 — ACL Torneo/Registro → Competencia: crear competencias por disciplina

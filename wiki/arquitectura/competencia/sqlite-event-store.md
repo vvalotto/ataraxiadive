@@ -12,6 +12,12 @@ last_updated: "2026-05-23"
 sources:
   - src/competencia/infrastructure/event_store/sqlite_event_store.py
   - src/shared/infrastructure/event_store/sqlite_event_store.py
+us_origen:
+  - US-1.1.1-setup-esqueleto-bc-competencia
+  - US-3.3.1-torneo-id-opcional-en-competencia-para-overall
+  - US-3.3.2-acl-torneo-registro-competencia-crear-competencias-por
+  - US-ADJ-3.3-refactorizar-build-app-constante-event-type
+  - US-ADJ-3.7-proyeccion-competencias-por-torneo-o-n-o-1
 ---
 
 # Adapter SQLiteEventStore (Competencia)

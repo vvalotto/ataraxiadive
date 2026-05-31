@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-5.2.2-finalizacion-manual.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/competencia/command-handlers
 ---
 
 # US-5.2.2 — Acción Finalizar prueba por disciplina

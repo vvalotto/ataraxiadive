@@ -15,6 +15,7 @@ rf: []
 software_items: null
 test_units: null
 origen_tipo: plataforma
+componentes_wiki: []
 ---
 
 # US-7.2.3 — Manual atleta

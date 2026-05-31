@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-5.3.1-gestion-usuarios.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/identidad/router-identidad
 ---
 
 # US-5.3.1 — UsuariosPage: gestión de usuarios para el organizador

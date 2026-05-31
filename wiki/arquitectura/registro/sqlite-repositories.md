@@ -13,6 +13,12 @@ sources:
   - src/registro/infrastructure/repositories/sqlite_inscripcion_repository.py
   - src/registro/infrastructure/repositories/sqlite_juez_repository.py
   - src/registro/infrastructure/repositories/sqlite_organizador_repository.py
+us_origen:
+  - US-3.2.2-aggregate-atleta-registro-consulta-y-repositorio-sq
+  - US-3.2.3-aggregate-inscripcion-inscribir-cancelar-y-listar
+  - US-6.4.5-refactoring-declarar-ap-inscripcion-handler-sq-lite
+  - US-ADJ-11.4-entidad-juez-juez-repository-port-endpoints-registro
+  - US-ADJ-11.5-entidad-organizador-organizador-repository-port
 ---
 
 # SQLite Repositories — BC Registro

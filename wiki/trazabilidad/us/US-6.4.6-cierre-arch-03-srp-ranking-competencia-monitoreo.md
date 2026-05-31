@@ -17,6 +17,8 @@ software_items:
 test_units:
   - tests/features/US-6.4.6-cierre-arch-decisiones.feature
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/resultados/ranking-competencia
 ---
 
 # US-6.4.6 — Cierre ARCH-03 + SRP RankingCompetencia + monitoreo identidad/shared

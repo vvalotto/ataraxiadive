@@ -19,6 +19,8 @@ test_units:
   - tests/features/US-1.3.1-interfaz-juez.feature
   - tests/integration/competencia/test_api_interfaz_juez.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/competencia/query-handlers
 ---
 
 # US-1.3.1 — Read Models

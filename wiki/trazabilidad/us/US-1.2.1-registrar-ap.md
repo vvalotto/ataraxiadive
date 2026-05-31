@@ -12,16 +12,18 @@ sources:
 us_id: US-1.2.1
 tests_count: 34
 rf:
-  - RF-EJ-08
-  - RF-PR-01
-  - RF-PR-02
-  - RF-PR-03
+  - RF-EJ-08-distancias-con-decimales
+  - RF-PR-01-anuncio-previo-ap
+  - RF-PR-02-validacion-valores-ap
+  - RF-PR-03-ap-definitivo-sin-modificacion
 software_items:
   - src/competencia/application/commands/registrar_ap.py
 test_units:
   - tests/features/US-1.2.1-registrar-ap.feature
   - tests/integration/competencia/test_registrar_ap_integration.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/competencia/command-handlers
 ---
 
 # US-1.2.1 — RegistrarAP

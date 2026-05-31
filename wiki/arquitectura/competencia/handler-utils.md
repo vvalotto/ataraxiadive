@@ -12,6 +12,9 @@ last_updated: "2026-05-23"
 sources:
   - src/competencia/application/commands/_handler_utils.py
   - src/competencia/application/commands/_stream_ids.py
+us_origen:
+  - US-4.1.6-handler-utils-py-helpers-comunes-para-handlers
+  - US-ADJ-1.3-refactoring-application-stream-ids-py-fuente-unica
 ---
 
 # Helpers HandlerUtils

@@ -11,6 +11,9 @@ last_updated: "2026-05-23"
 sources:
   - src/identidad/api/router.py
   - src/identidad/api/dependencies.py
+us_origen:
+  - US-3.4.2-auth-por-rol-en-ap-is-escribibles-con-jwt-middleware
+  - US-5.3.1-usuarios-page-gestion-de-usuarios-para-el-organizador
 ---
 
 # Router — BC Identidad

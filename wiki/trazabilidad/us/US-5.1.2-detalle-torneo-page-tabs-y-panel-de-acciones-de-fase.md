@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-5.1.2-gestion-fases-torneo.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/torneo/query-handlers-torneo
 ---
 
 # US-5.1.2 — DetalleTorneoPage: tabs y panel de acciones de fase

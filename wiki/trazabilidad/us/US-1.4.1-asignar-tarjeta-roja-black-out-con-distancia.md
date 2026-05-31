@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-1.4.1-blackout-con-distancia.feature
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/competencia/performance-aggregate
 ---
 
 # US-1.4.1 — AsignarTarjeta roja + black-out con distancia

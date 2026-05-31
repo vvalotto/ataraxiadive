@@ -18,6 +18,8 @@ software_items:
   - src/notificaciones/application/policies/_helpers.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/notificaciones/command-handlers-notificaciones
 ---
 
 # US-ADJ-6.4 — Eliminar duplicación P-10/P-11 y @staticmethod innecesario

@@ -13,6 +13,9 @@ last_updated: "2026-05-23"
 sources:
   - src/registro/domain/aggregates/juez.py
   - src/registro/domain/aggregates/organizador.py
+us_origen:
+  - US-ADJ-11.4-entidad-juez-juez-repository-port-endpoints-registro
+  - US-ADJ-11.5-entidad-organizador-organizador-repository-port
 ---
 
 # Aggregates Juez y Organizador

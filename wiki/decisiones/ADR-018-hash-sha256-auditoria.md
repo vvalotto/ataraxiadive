@@ -7,6 +7,8 @@ sources:
 estado: Aceptada
 fecha: 2026-04-16
 bcs_afectados: [competencia]
+rnf_refs:
+  - RNF-05-seguridad-auditoria-inalterable
 ---
 
 # ADR-018: Hash SHA-256 para integridad de resultados de competencia

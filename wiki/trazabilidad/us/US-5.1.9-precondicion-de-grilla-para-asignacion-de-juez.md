@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-5.1.9-bloquear-jueces-sin-grilla.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/torneo/command-handlers-torneo
 ---
 
 # US-5.1.9 — Precondición de grilla para asignación de juez

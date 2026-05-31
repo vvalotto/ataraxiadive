@@ -20,6 +20,9 @@ test_units:
   - tests/features/US-2.4.2-calcular-ranking.feature
   - tests/integration/resultados/test_calcular_ranking_integration.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/resultados/command-handlers-resultados
+  - arquitectura/resultados/ranking-competencia
 ---
 
 # US-2.4.2 — CalcularRanking — BC Resultados núcleo

@@ -12,13 +12,15 @@ sources:
 us_id: US-1.2.4
 tests_count: 92
 rf:
-  - RF-EJ-10
+  - RF-EJ-10-efecto-sp-registrado-como-tarjeta
 software_items:
   - src/competencia/application/commands/asignar_tarjeta.py
 test_units:
   - tests/features/US-1.2.4-asignar-tarjeta.feature
   - tests/integration/competencia/test_asignar_tarjeta_integration.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/competencia/command-handlers
 ---
 
 # US-1.2.4 — AsignarTarjeta (blanca/roja)

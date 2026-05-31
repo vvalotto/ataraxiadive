@@ -19,6 +19,8 @@ software_items:
 test_units:
   - tests/features/US-5.1.4-generacion-ajuste-grilla.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/competencia/command-handlers
 ---
 
 # US-5.1.4 — GrillaPanel: generar y confirmar grilla por disciplina

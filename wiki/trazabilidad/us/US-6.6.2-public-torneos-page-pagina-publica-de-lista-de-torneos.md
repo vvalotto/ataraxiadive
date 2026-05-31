@@ -13,6 +13,7 @@ sources:
 us_id: US-6.6.2
 tests_count: null
 rf: []
+componentes_wiki: []
 ---
 
 # US-6.6.2 — PublicTorneosPage: página pública de lista de torneos

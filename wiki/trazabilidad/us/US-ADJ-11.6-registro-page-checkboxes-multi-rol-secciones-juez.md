@@ -11,6 +11,7 @@ sources:
 us_id: US-ADJ-11.6
 tests_count: null
 rf: []
+componentes_wiki: []
 ---
 
 # US-ADJ-11.6 — RegistroPage: checkboxes multi-rol + secciones Juez/Organizador

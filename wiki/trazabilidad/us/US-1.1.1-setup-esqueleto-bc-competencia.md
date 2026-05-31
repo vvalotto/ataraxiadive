@@ -17,6 +17,9 @@ software_items:
   - src/competencia/infrastructure/event_store/sqlite_event_store.py
 test_units: null
 origen_tipo: setup
+componentes_wiki:
+  - arquitectura/competencia/performance-aggregate
+  - arquitectura/competencia/sqlite-event-store
 ---
 
 # US-1.1.1 — Setup: esqueleto BC Competencia

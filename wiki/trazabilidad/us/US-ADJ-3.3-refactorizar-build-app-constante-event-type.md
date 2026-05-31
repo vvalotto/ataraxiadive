@@ -16,6 +16,7 @@ software_items:
   - src/competencia/infrastructure/event_store/sqlite_event_store.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki: []
 ---
 
 # US-ADJ-3.3 — Refactorizar build_app() + constante event type

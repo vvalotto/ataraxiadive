@@ -19,6 +19,9 @@ test_units:
 origen_tipo: adr
 origen_refs:
   - ADR-020
+componentes_wiki:
+  - arquitectura/identidad/usuario-aggregate
+  - arquitectura/identidad/jwt-service
 ---
 
 # US-ADJ-11.1 — Usuario.roles: list[Rol] + JWT rol_activo + login condicional

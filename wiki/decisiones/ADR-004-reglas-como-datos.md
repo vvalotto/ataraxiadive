@@ -7,6 +7,9 @@ sources:
 estado: Aceptada
 fecha: 2026-03-14
 bcs_afectados: [torneo, competencia]
+rnf_refs:
+  - RNF-04-configurabilidad-reglas-como-datos
+  - RNF-07-mantenibilidad-sin-desarrollador
 ---
 
 # ADR-004: Reglas de competencia como datos configurables

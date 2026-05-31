@@ -17,6 +17,8 @@ software_items:
 test_units:
   - tests/features/US-5.6.5-ui-tabla-resultados.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/resultados/query-handlers-resultados
 ---
 
 # US-5.6.5 — UI ResultadosPage: tabla de resultados por disciplina

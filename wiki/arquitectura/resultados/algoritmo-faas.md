@@ -11,6 +11,9 @@ last_updated: "2026-05-23"
 sources:
   - src/resultados/domain/services/algoritmo_faas.py
   - src/resultados/domain/ports/algoritmo_puntaje.py
+us_origen:
+  - US-5.6.1-puerto-algoritmo-puntaje-implementacion-faas
+  - US-6.4.4-refactoring-algoritmo-puntaje-faas-correcciones-code
 ---
 
 # AlgoritmoPuntajeFAAS — Servicio de Dominio

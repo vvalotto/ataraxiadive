@@ -17,6 +17,8 @@ software_items:
 test_units:
   - tests/features/US-ADJ-10.1-edicion-torneo.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/torneo/command-handlers-torneo
 ---
 
 # US-ADJ-10.1 — Edición completa del torneo (PUT /torneos/{id})

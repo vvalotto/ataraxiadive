@@ -16,6 +16,7 @@ software_items:
   - src/registro/domain/value_objects/categoria.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki: []
 ---
 
 # US-ADJ-4.3 — Renombrar JUVENIL→JUNIOR en enum Categoria

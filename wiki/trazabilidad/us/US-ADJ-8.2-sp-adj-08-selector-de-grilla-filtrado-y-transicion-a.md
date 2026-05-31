@@ -19,6 +19,8 @@ test_units:
   - tests/features/US-ADJ-8.2-restringir-operaciones-torneo-fase.feature
   - tests/integration/torneo/test_ejecucion_precondicion.py
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/torneo/command-handlers-torneo
 ---
 
 # US-ADJ-8.2 — SP-ADJ-08: selector de grilla filtrado y transición a premiación

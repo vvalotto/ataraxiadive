@@ -16,6 +16,8 @@ software_items:
   - src/torneo/infrastructure/repositories/sqlite_torneo_repository.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/torneo/sqlite-torneo-repository
 ---
 
 # US-4.1.8 — Limpieza Torneo, SQLiteTorneoRepository, DisciplinaDescriptor, TarjetaAsignacion

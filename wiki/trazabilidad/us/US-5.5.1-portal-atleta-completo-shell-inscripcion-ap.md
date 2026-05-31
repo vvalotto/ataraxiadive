@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-5.5.1-inscripcion-atleta-ap.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/registro/command-handlers
 ---
 
 # US-5.5.1 — Portal atleta completo: shell + inscripción + AP

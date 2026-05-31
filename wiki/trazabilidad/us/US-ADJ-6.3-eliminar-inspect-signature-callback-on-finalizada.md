@@ -16,6 +16,8 @@ software_items:
   - src/competencia/application/_p08_finalizacion.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/competencia/command-handlers
 ---
 
 # US-ADJ-6.3 — Eliminar inspect.signature: callback on_finalizada unificado

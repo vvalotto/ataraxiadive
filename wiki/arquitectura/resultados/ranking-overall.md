@@ -11,6 +11,9 @@ adr_refs: [ADR-001, ADR-008]
 last_updated: "2026-05-23"
 sources:
   - src/resultados/domain/aggregates/ranking_overall.py
+us_origen:
+  - US-3.5.1-aggregate-ranking-overall-calcular-overall-handler
+  - US-5.6.4-ranking-overall-puntos-acumulados-por-categoria-y
 ---
 ha
 # Aggregate RankingOverall

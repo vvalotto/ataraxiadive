@@ -16,6 +16,8 @@ software_items:
   - src/competencia/infrastructure/repositories/sqlite_competencias_por_torneo.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/competencia/sqlite-event-store
 ---
 
 # US-ADJ-3.7 — Proyección competencias_por_torneo O(n)→O(1)

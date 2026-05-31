@@ -7,6 +7,9 @@ sources:
 estado: Aceptada (implementada en INC-4.4)
 fecha: 2026-04-13
 bcs_afectados: []
+rnf_refs:
+  - RNF-02-disponibilidad-offline-first
+  - RNF-03-usabilidad-interfaz-movil-juez
 ---
 
 # ADR-015: Dexie.js como capa de acceso a IndexedDB

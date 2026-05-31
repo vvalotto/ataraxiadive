@@ -7,6 +7,8 @@ sources:
 estado: Aceptada
 fecha: 2026-03-20
 bcs_afectados: [todos]
+rnf_refs:
+  - RNF-07-mantenibilidad-sin-desarrollador
 ---
 
 # ADR-006: Estructura de Código Fuente BC-First

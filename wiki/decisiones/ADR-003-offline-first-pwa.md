@@ -7,6 +7,9 @@ sources:
 estado: Aceptada (implementada en INC-4.4)
 fecha: 2026-03-14
 bcs_afectados: [competencia]
+rnf_refs:
+  - RNF-02-disponibilidad-offline-first
+  - RNF-03-usabilidad-interfaz-movil-juez
 ---
 
 # ADR-003: Offline-first PWA + IndexedDB para la interfaz del juez

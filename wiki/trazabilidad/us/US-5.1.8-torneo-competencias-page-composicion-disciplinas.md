@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-5.1.8-componer-competencias.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/torneo/query-handlers-torneo
 ---
 
 # US-5.1.8 — TorneoCompetenciasPage: composición disciplinas + competencias

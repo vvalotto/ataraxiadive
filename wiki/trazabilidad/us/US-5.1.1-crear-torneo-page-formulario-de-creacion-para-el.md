@@ -18,6 +18,8 @@ software_items:
 test_units:
   - tests/features/US-5.1.1-crear-torneo-ui.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/torneo/command-handlers-torneo
 ---
 
 # US-5.1.1 — CrearTorneoPage: formulario de creación para el organizador

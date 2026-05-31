@@ -16,6 +16,8 @@ software_items:
   - src/competencia/domain/aggregates/performance.py
 test_units: null
 origen_tipo: calidad
+componentes_wiki:
+  - arquitectura/competencia/performance-aggregate
 ---
 
 # US-ADJ-1.1 — Refactoring domain: ot_programado + event_handlers + snake_case

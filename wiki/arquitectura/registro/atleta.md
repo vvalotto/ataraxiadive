@@ -11,6 +11,10 @@ adr_refs: [ADR-005, ADR-007, ADR-020, ADR-022]
 last_updated: "2026-05-23"
 sources:
   - src/registro/domain/aggregates/atleta.py
+us_origen:
+  - US-3.2.2-aggregate-atleta-registro-consulta-y-repositorio-sq
+  - US-ADJ-11.3-atleta-club-categoria-opcionales-dni-telefono-migracion
+  - US-ADJ-4.4-agregar-campo-club-a-aggregate-atleta
 ---
 
 # Aggregate Atleta

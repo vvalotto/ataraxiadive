@@ -12,6 +12,7 @@ sources:
 us_id: US-ADJ-10.4
 tests_count: null
 rf: []
+componentes_wiki: []
 ---
 
 # US-ADJ-10.4 — Vista post-torneo en portal del atleta

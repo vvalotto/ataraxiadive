@@ -19,6 +19,8 @@ test_units:
   - tests/features/US-2.3.1-ejecucion-multi-andarivel.feature
   - tests/integration/competencia/test_andariveles_activos_integration.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/competencia/competencia-aggregate
 ---
 
 # US-2.3.1 — Ejecución multi-andarivel

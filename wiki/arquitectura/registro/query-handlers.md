@@ -18,6 +18,10 @@ sources:
   - src/registro/application/queries/obtener_organizador.py
   - src/registro/application/queries/listar_inscriptos.py
   - src/registro/application/queries/verificar_completitud_ap.py
+us_origen:
+  - US-5.1.3-inscriptos-panel-lista-de-atletas-con-estado-ap
+  - US-5.5.2-vista-organizador-inscriptos-con-datos-completos-y
+  - US-5.7.1-mis-torneos-lista-de-torneos-inscriptos-del-atleta
 ---
 
 # Query Handlers — BC Registro

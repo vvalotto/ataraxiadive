@@ -17,6 +17,8 @@ software_items:
   - src/resultados/domain/aggregates/ranking_competencia.py
 test_units: null
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/resultados/ranking-competencia
 ---
 
 # US-ADJ-4.5 — Ranking por (disciplina, categoría) en BC Resultados

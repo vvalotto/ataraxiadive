@@ -10,6 +10,10 @@ adr_refs: [ADR-007]
 last_updated: "2026-05-23"
 sources:
   - src/torneo/infrastructure/repositories/sqlite_torneo_repository.py
+us_origen:
+  - US-3.1.1-aggregate-torneo-maquina-de-estados
+  - US-4.1.8-limpieza-torneo-sq-lite-torneo-repository-disciplina
+  - US-5.6.2-tipo-reglamento-en-torneo-di-en-calcular-ranking
 ---
 
 # SQLiteTorneoRepository

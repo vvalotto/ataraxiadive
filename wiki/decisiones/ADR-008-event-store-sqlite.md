@@ -7,6 +7,8 @@ sources:
 estado: Aceptada
 fecha: 2026-03-20
 bcs_afectados: [competencia, notificaciones]
+rnf_refs:
+  - RNF-01-confiabilidad-persistencia-event-sourcing
 ---
 
 # ADR-008: Event Store como tabla append-only en SQLite

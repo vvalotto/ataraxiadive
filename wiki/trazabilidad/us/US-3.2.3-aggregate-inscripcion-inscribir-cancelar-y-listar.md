@@ -22,6 +22,10 @@ test_units:
   - tests/features/US-3.2.3-inscripcion-atleta.feature
   - tests/integration/registro/test_sqlite_inscripcion_repository.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/registro/command-handlers
+  - arquitectura/registro/inscripcion
+  - arquitectura/registro/sqlite-repositories
 ---
 
 # US-3.2.3 — Aggregate Inscripcion: inscribir, cancelar y listar

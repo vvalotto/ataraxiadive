@@ -18,6 +18,9 @@ software_items:
 test_units:
   - tests/features/US-4.1.1-motivos-tarjeta-roja.feature
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/competencia/competencia-aggregate
+  - arquitectura/competencia/command-handlers
 ---
 
 # US-4.1.1 — MotivoDQ StrEnum + TarjetaAsignacion extendida

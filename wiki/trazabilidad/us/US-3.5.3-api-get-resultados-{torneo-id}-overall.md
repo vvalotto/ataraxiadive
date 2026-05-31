@@ -20,6 +20,9 @@ test_units:
   - tests/features/US-3.5.3-api-overall.feature
   - tests/integration/resultados/test_obtener_overall_integration.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/resultados/query-handlers-resultados
+  - arquitectura/resultados/router-resultados
 ---
 
 # US-3.5.3 — API GET /resultados/{torneo_id}/overall

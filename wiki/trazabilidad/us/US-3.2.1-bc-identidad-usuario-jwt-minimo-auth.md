@@ -26,6 +26,11 @@ test_units:
   - tests/features/US-3.2.1-bc-identidad-jwt.feature
   - tests/integration/identidad/test_sqlite_usuario_repository.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/identidad/usuario-aggregate
+  - arquitectura/identidad/command-handlers-identidad
+  - arquitectura/identidad/jwt-service
+  - arquitectura/identidad/sqlite-usuario-repository
 ---
 
 # US-3.2.1 — BC Identidad: Usuario + JWT mínimo + /auth

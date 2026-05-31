@@ -22,6 +22,9 @@ test_units:
   - tests/features/US-3.3.1-torneo-id-competencia.feature
   - tests/integration/competencia/test_torneo_id_integration.py
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/competencia/competencia-aggregate
+  - arquitectura/competencia/sqlite-event-store
 ---
 
 # US-3.3.1 — torneo_id opcional en Competencia para overall

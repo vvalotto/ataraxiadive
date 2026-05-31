@@ -17,6 +17,8 @@ software_items:
   - src/registro/domain/aggregates/atleta.py
 test_units: null
 origen_tipo: rf
+componentes_wiki:
+  - arquitectura/registro/atleta
 ---
 
 # US-ADJ-4.4 — Agregar campo club a aggregate Atleta

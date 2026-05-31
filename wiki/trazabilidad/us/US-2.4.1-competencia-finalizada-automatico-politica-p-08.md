@@ -18,6 +18,8 @@ test_units:
   - tests/features/US-2.4.1-competencia-finalizada.feature
   - tests/integration/competencia/test_competencia_finalizada_integration.py
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/competencia/command-handlers
 ---
 
 # US-2.4.1 — CompetenciaFinalizada automático (política P-08)

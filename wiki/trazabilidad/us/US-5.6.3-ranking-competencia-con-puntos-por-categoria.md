@@ -19,6 +19,9 @@ software_items:
 test_units:
   - tests/features/US-5.6.3-ranking-puntos-faas.feature
 origen_tipo: plataforma
+componentes_wiki:
+  - arquitectura/resultados/command-handlers-resultados
+  - arquitectura/resultados/ranking-competencia
 ---
 
 # US-5.6.3 — RankingCompetencia con puntos por categoría

@@ -10,6 +10,9 @@ adr_refs: [ADR-005]
 last_updated: "2026-05-23"
 sources:
   - src/resultados/api/router.py
+us_origen:
+  - US-3.5.3-api-get-resultados-{torneo-id}-overall
+  - US-6.4.3-corregir-d-05-imports-cross-bc-en-resultados-api-y
 ---
 
 # Router — BC Resultados

@@ -12,6 +12,7 @@ sources:
 us_id: US-6.2.4
 tests_count: null
 rf: []
+componentes_wiki: []
 ---
 
 # US-6.2.4 — Panel torneo: alertas sin botón Resolver + jueces sin nombre

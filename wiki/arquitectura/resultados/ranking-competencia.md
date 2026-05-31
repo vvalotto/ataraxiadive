@@ -11,6 +11,11 @@ adr_refs: [ADR-001, ADR-008, ADR-014]
 last_updated: "2026-05-23"
 sources:
   - src/resultados/domain/aggregates/ranking_competencia.py
+us_origen:
+  - US-2.4.2-calcular-ranking-—-bc-resultados-nucleo
+  - US-5.6.3-ranking-competencia-con-puntos-por-categoria
+  - US-6.4.6-cierre-arch-03-srp-ranking-competencia-monitoreo
+  - US-ADJ-4.5-ranking-por-disciplina-categoria-en-bc-resultados
 ---
 
 # Aggregate RankingCompetencia
