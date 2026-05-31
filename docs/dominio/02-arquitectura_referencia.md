@@ -2,10 +2,10 @@
 
 **Plataforma de Gestión de Torneos de Apnea — Estado Final Implementado**
 
-> **Estado documental:** vigente  
-> Actualizado a Mayo 2026 para reflejar el sistema tal como fue implementado en v1.0.0.  
+> **Estado documental:** referencia (derivado).  
+> Narrativa de arquitectura de alto nivel del estado implementado (Mayo 2026). **No es la fuente vigente de arquitectura:** para la vista vigente usar `docs/architecture/`; para el estado del proyecto, `CLAUDE.md §5`.  
 > Decisiones de BD, infra y stack formalizadas en ADR-006 (BC-first), ADR-007 (SQLite), ADR-021 (Fly.io).  
-> Fuente vigente relacionada: `docs/adr/` · `CLAUDE.md §2`
+> Fuente vigente relacionada: `docs/architecture/` · `docs/adr/` · `CLAUDE.md §2`
 
 | Campo       | Valor                                                          |
 |-------------|----------------------------------------------------------------|
