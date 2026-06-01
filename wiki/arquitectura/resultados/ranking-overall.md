@@ -19,7 +19,7 @@ tests:
   - tests/integration/resultados/test_calcular_overall_integration.py
   - tests/features/US-5.6.4-ranking-overall-puntos.feature
 ---
-ha
+
 # Aggregate RankingOverall
 
 ## Stream ID
