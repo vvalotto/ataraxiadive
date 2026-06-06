@@ -42,6 +42,10 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | HITO-30 | SP6 apertura | 2026-05-08 | Deriva silenciosa de tests: invariantes, contratos y entorno | ¿Qué tipos de deriva silenciosa acumula un proyecto IEDD+LLM cuando los tests unitarios no se ejecutan en cada PR? | [HITO-30](./HITO-30-DERIVA-TESTS-UNITARIOS-INVARIANTES-DOMINIO.md) |
 | HITO-31 | SP6 apertura | 2026-05-08 | Deriva de tests de integración: wiring, invariantes incorrectos y entorno | ¿Qué patrones de falla son exclusivos del nivel de integración frente a los unitarios en un proyecto IEDD+LLM? | [HITO-31](./HITO-31-DERIVA-TESTS-INTEGRACION-WIRING-ENTORNO.md) |
 | HITO-32 | SP6 apertura | 2026-05-08 | Deriva de tests BDD: contratos de adaptadores, passwords y semántica de dominio | ¿Qué tipos de deriva son exclusivos del nivel BDD? ¿Qué proporción de tests con invariantes incorrectos escribe un LLM? | [HITO-32](./HITO-32-DERIVA-TESTS-BDD-CONTRATOS-DOMINIO.md) |
+| HITO-33 | SP6 INC-6.4 | 2026-05-10 | LCOM como falso positivo estructural en aggregates Event Sourcing | ¿Las métricas OO producen falsos positivos sistemáticos en patrones DDD+ES? | [HITO-33](./HITO-33-LCOM-FALSO-POSITIVO-ES-AGGREGATES.md) |
+| HITO-34 | SP7 INC-7.1 | 2026-05-17 | El despliegue como incremento IEDD de dominio técnico | ¿El despliegue a producción puede tratarse como un incremento IEDD con su propia especificación y DoD? | [HITO-34](./HITO-34-DESPLIEGUE-COMO-INCREMENTO-IEDD.md) |
+| HITO-35 | SP7 INC-7.2 | 2026-05-30 | El manual de usuario como etapa de cierre y validación UX | ¿La documentación de usuario es una etapa necesaria del ciclo de vida o siempre puede diferirse? | [HITO-35](./HITO-35-MANUAL-USUARIO-ETAPA-CIERRE.md) |
+| HITO-36 | SP-ADJ-13 | 2026-05-30 | Producción real como oráculo terminal — Puerto Madryn 2026 | ¿El uso en una competencia real detecta clases de defectos que el UAT con dataset simulado no puede anticipar? | [HITO-36](./HITO-36-PRODUCCION-REAL-ORACULO-TERMINAL.md) |
 
 ---
 
@@ -55,7 +59,9 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | SP3 (El Torneo) | 14, 15, 16 | Proyecciones CQRS emergentes, secuencialidad del pipeline y gobierno del proceso |
 | SP4 (La Plataforma) | 17, 18, 19, 20, 21, 22, 23, 24, 25 | Datos reales como oráculo, validación UX, captura formal de hallazgos estructurales, gobierno secuencial del tracker, integridad criptográfica, auditoría navegable por composición de read models, exportación portable, restricción técnica como driver de buen diseño |
 | SP5 (La Puesta en Marcha) | 26, 27, 28, 29 | Cobertura asimétrica del event storming, deriva documental, validación con UAT exploratorio, anti-patrones de validación tardía |
-| SP6 (Validación y Despliegue) | 30, 31, 32 | Deriva silenciosa de tests: unitarios, integración y BDD en proyectos IEDD+LLM |
+| SP6 (Validación y Despliegue) | 30, 31, 32, 33 | Deriva silenciosa de tests; falsos positivos de quality gates en patrones DDD+ES |
+| SP7 (Despliegue y Documentación) | 34, 35 | Despliegue e infraestructura como incrementos IEDD; manual de usuario como validación UX |
+| SP-ADJ-13 (Puerto Madryn 2026) | 36 | Producción real como oráculo terminal del sistema y del experimento |
 
 ---
 
@@ -85,9 +91,15 @@ Todos viven en `docs/contexto/HITO-N-*.md`.
 | Los tests unitarios derivan silenciosamente cuando no se ejecutan en cada PR de un proyecto LLM | HITO-30 | ✅ Evidencia documentada en SP6 |
 | Los tests de integración concentran fallas de wiring e invariantes incorrectos en proyectos LLM | HITO-31 | ✅ Evidencia documentada en SP6 |
 | Los tests BDD son el nivel con mayor deriva semántica en proyectos IEDD+LLM | HITO-32 | ✅ Evidencia documentada en SP6 |
+| Las métricas OO producen falsos positivos en aggregates ES (LCOM=2 estructural) | HITO-33 | ✅ Falso positivo documentado y aceptado en BL-006 |
+| El despliegue puede tratarse como incremento IEDD con DoD observable | HITO-34 | ✅ Confirmada en INC-7.1 Fly.io |
+| El manual de usuario es etapa necesaria del ciclo de vida (no tarea de cierre) | HITO-35 | ✅ Evidencia confirmada en INC-7.2 |
+| La producción real detecta defectos de usabilidad que el UAT no anticipa | HITO-36 | ✅ Confirmada en Puerto Madryn 2026 |
+| La metodología protege el dominio; la producción real protege la interfaz | HITO-36 | ✅ 0 defectos de dominio en producción real |
 
 ---
 
 *Creado: 2026-03-28 — SP-ADJ-02-doc*
 *Actualizado: 2026-05-17 — Iteración 4 adecuación documental: HITO-31/32 en §Distribución · hipótesis SP6 agregadas*
+*Actualizado: 2026-06-05 — HITO-33..36 agregados · SP7 y SP-ADJ-13 en §Distribución · hipótesis cerradas*
 *Mantenido por: Claude Cowork + Victor Valotto*
