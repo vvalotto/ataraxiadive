@@ -240,18 +240,83 @@ Cada incremento de AtaraxiaDive genera materia prima directa para productos inte
 
 ---
 
-## Preguntas abiertas del experimento
+## Hallazgo experimental 2: deriva silenciosa de tests en proyectos IEDD+LLM (HITO-30/31/32)
 
-Estas son las preguntas que los subproyectos siguientes deben dejar con respuesta documentada:
+Al abrir SP6, la ejecución completa de la suite de tests reveló 115 tests silenciosamente fallando — distribuidos en 3 niveles (21 unitarios, 31 de integración, 63 BDD). Los tests no habían fallado en CI porque no se ejecutaban en cada PR; el LLM los escribió correctamente al crear cada US, pero no los actualizó cuando USs posteriores cambiaron las reglas de dominio.
 
-1. ¿Las US-IEDD con invariantes formales producen menos defectos en Phase 7 que las US clásicas?
-2. ¿Los BDD scenarios derivados de invariantes cubren casos que una especificación informal habría omitido?
-3. ¿Cuántas veces el proceso IEDD reveló ambigüedades en los RFs que de otra forma habrían llegado al código?
-4. ¿Mejora la calidad del BDD generado cuando la US tiene precondiciones y postcondiciones explícitas?
-5. ¿Los quality gates de DesignReviewer correlacionan con violaciones al modelo conceptual? ¿Un God Object es siempre una US mal especificada?
-6. ¿La cadena es sostenible? ¿Mantener el modelo actualizado ante cambios tiene menor costo que el beneficio en claridad?
+**Tres patrones de deriva documentados:**
+
+| Nivel | Patrón dominante | Ejemplo |
+|---|---|---|
+| Unitarios (HITO-30) | Refactor de puertos no propagado a stubs de test | `PerformancesAPAdapter` con nueva firma no reflejada |
+| Integración (HITO-31) | Wiring incorrecto entre handlers e infraestructura real | Path relativo a DB que solo falla fuera de raíz |
+| BDD (HITO-32) | Scenarios correctos al escribirse, inválidos tras refactor posterior | Algoritmo FAAS reemplazado, scenario con semántica del algoritmo anterior |
+
+**Implicación metodológica para IEDD:** al cerrar una US que modifica una regla de dominio existente, el checklist debe incluir explícitamente: `grep` sobre tests existentes buscando el símbolo/regla modificada, verificación de validez semántica de scenarios encontrados, y ejecución completa de la suite antes del commit. Este es el principio de "regresión de invariantes" — no solo de funcionalidad.
+
+---
+
+## Hallazgo experimental 3: límites de los quality gates automatizados (HITO-33)
+
+Durante INC-6.4 (SP6), DesignReviewer reportó LCOM=2 en `RankingCompetencia`. El análisis reveló que el flag no era un defecto sino una consecuencia estructural del patrón Aggregate+Event Sourcing: todo aggregate con Event Sourcing tendrá inevitablemente dos grupos de métodos (comando y reconstitución) que LCOM interpreta como falta de cohesión.
+
+**El hallazgo:** las métricas OO clásicas producen falsos positivos sistemáticos en patrones DDD+ES. LCOM=2 en un aggregate ES no indica deuda — indica que el patrón está implementado correctamente.
+
+**Extensión necesaria del marco:** IEDD necesita una categoría de "falso positivo documentado" en los reportes de quality gate, análoga a un `noqa` semántico con justificación explícita. El registro en BL-006 (DR-01) es el primer ejemplo de este mecanismo operando. Sin esta categoría, los quality gates producen ruido que degrada la confianza en el sistema de control de calidad.
+
+---
+
+## Hallazgo experimental 4: incrementos de dominio técnico (HITO-34/35)
+
+SP7 introdujo dos incrementos sin lógica de negocio: INC-7.1 (despliegue a Fly.io) e INC-7.2 (manual de usuario). El experimento los trató como incrementos IEDD de primera clase con DoD verificable.
+
+**INC-7.1 — Despliegue:** el entorno de producción es un oráculo distinto al entorno de desarrollo. Variables implícitas (PYTHONPATH, SQLite en filesystem efímero, volumes persistentes) solo se revelan al desplegar. Tratar el despliegue como tarea implícita de cierre habría producido trabajo sin trazabilidad.
+
+**INC-7.2 — Manual de usuario:** documentar el sistema desde afuera fuerza un recorrido exhaustivo de cada pantalla que el UAT no garantiza. El manual escrito contra el sistema real (no contra especificaciones) es un oráculo de consistencia UX.
+
+**Implicación:** IEDD debería reconocer explícitamente los **incrementos de dominio técnico** (infraestructura, despliegue, documentación) como ciudadanos de primera clase del ciclo, con su propio template de US y DoD adaptado.
+
+---
+
+## Hallazgo experimental 5: la cadena de validación completa (HITO-36)
+
+Puerto Madryn 2026 fue el primer uso del sistema en una competencia real. Resultado: 0 defectos de dominio, 4 defectos de usabilidad (nav móvil, texto ambiguo).
+
+**La observación clave:** los invariantes de dominio especificados con IEDD, validados con BDD y verificados en UAT, se mantuvieron bajo presión real. Los únicos defectos encontrados eran de interfaz — una categoría que IEDD no especifica con el mismo nivel de formalidad que el dominio.
+
+**La cadena de validación completa observada en el experimento:**
+
+```
+Tests formales (unit/integración/BDD)  → detecta invariantes, contratos, regresiones
+       ↓
+UAT con dataset real                   → detecta flujos completos y variantes de dominio
+       ↓
+UAT exploratorio                       → detecta inconsistencias no especificadas
+       ↓
+Manual de usuario                      → detecta inconsistencias UX desde afuera
+       ↓
+Producción real                        → detecta presión real, usuarios nuevos, interfaz móvil
+```
+
+Cada capa detecta una categoría que la anterior no puede ver. Ninguna es redundante.
+
+**Implicación para IEDD:** el método protege el dominio; la producción real protege la interfaz. La extensión metodológica para especificación de comportamiento de interfaz móvil queda como pregunta abierta para trabajos futuros.
+
+---
+
+## Estado de las preguntas del experimento (cierre)
+
+| Pregunta | Estado | Evidencia |
+|---|---|---|
+| ¿Las US-IEDD producen menos defectos de dominio que US clásicas? | ✅ Evidencia positiva | 0 defectos de dominio en producción real (HITO-36) |
+| ¿Los BDD scenarios cubren casos que la especificación informal omite? | ✅ Confirmada | HITO-6, HITO-20 — variantes de dominio no anticipadas |
+| ¿IEDD reveló ambigüedades en RFs que habrían llegado al código? | ✅ Confirmada | HITO-1, HITO-17 — oráculo de dominio |
+| ¿Los quality gates correlacionan con violaciones al modelo conceptual? | 🔄 Parcial | HITO-11 (sí), HITO-33 (falsos positivos estructurales) |
+| ¿La cadena es sostenible a lo largo del proyecto? | ✅ Confirmada | 7 SPs + 13 ADJs completados con el marco intacto |
+| ¿IEDD especifica interfaces con el mismo rigor que el dominio? | ❌ Brecha identificada | HITO-36 — defectos de interfaz no capturados por el método |
 
 ---
 
 *Síntesis generada con Claude Cowork — Mayo 2026*
-*Fuentes: docs/contexto/ANALISIS-IEDD.md · HITO-1-ADHERENCIA-IEDD-FASE0.md · HITO-13-SP-ADJ-DEUDA-TECNICA-COMO-ETAPA-FORMAL.md · HITO-14-ANALISIS-METODOLOGIA-Y-ESTRUCTURA.md · PLAN-EXPERIMENTO.md*
+*Actualizado: Junio 2026 — HITO-30..36 incorporados · estado de preguntas del experimento al cierre*
+*Fuentes: docs/contexto/ANALISIS-IEDD.md · HITO-1 · HITO-13 · HITO-14 · HITO-30 · HITO-31 · HITO-32 · HITO-33 · HITO-34 · HITO-35 · HITO-36 · PLAN-EXPERIMENTO.md · BL-006 · BL-007*
