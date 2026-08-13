@@ -175,9 +175,31 @@ metodológico.
 ### 4.1 Velocidad de implementación
 
 Sin cambios en los datos de la fase de construcción — la velocidad de crucero de SP3–SP5 (~1.5
-US func./día) y el ratio implícito 3x–5x sobre baseline humano siguen siendo los números válidos
-para citar, **medidos en la fase de construcción activa, no en el proyecto completo con cierre
-incluido.**
+US func./día) y el ratio implícito 3x–5x a 6x–12x sobre baseline humano siguen siendo los números
+derivados de AtaraxiaDive, **medidos en la fase de construcción activa, no en el proyecto completo
+con cierre incluido.**
+
+**Matiz metodológico (agregado 2026-08-13, ver `BENCHMARK-INDUSTRIA.md §5`):** ese ratio 3x–10x
+se deriva de un baseline **estimado**, no medido (2–4 h/US tradicional, comparado contra los ~20
+min/US medidos de AtaraxiaDive). Al buscar el estudio externo más riguroso disponible sobre
+productividad con asistencia de IA — un caso longitudinal 2025 con equipos reales usando GitHub
+Copilot — el número medido es sustancialmente más conservador: **+55% de velocidad de tarea y
+−75% en ciclo de PR** (9.6→2.4 días), es decir, un múltiplo de ~1.5x–4x, no de 3x–10x.
+
+**Esto no invalida el hallazgo de AtaraxiaDive, pero exige presentarlo con más cuidado:**
+
+1. El pipeline IEDD no es comparable 1:1 con "autocompletado en el editor" (que es lo que mide
+   Copilot) — incluye especificación formal (precondición/postcondición/invariantes), generación
+   de tests y una revisión automatizada de diseño en cada commit. Un múltiplo mayor que el de
+   Copilot no es descabellado por esta razón.
+2. Pero el "2–4 h/US" de AtaraxiaDive es una estimación interna sin medición directa de un
+   desarrollador humano equivalente, mientras que el +55%/−75% de Copilot proviene de una
+   medición real contra un grupo de comparación. **El claim de AtaraxiaDive tiene menos rigor
+   metodológico que la referencia externa con la que se lo compara.**
+3. **Recomendación para el paper:** citar el 3x–10x como *hipótesis derivada de estimación
+   interna, propia de este proyecto*, y el +55%/−75% de Copilot como *piso conservador con
+   evidencia externa más sólida* — presentar ambos con esa distinción explícita de rigor, no
+   promediarlos ni quedarse solo con el número más favorable.
 
 ### 4.2 Calidad resultante
 
@@ -205,9 +227,15 @@ con la salvedad ya documentada de que el ratio no se extiende a fases de cierre.
 > *"En este proyecto, la metodología IEDD produjo software con métricas de calidad superiores al
 > promedio industrial (0.297 bugs/KLOC vs. 1–25, cobertura 94.7% vs. 40–60%, 0 CRITICAL en
 > quality gates durante toda la historia del proyecto, incluido el cierre) a una velocidad de
-> implementación estimada entre 3x y 10x superior a la de un desarrollador senior sin asistencia
-> IA durante la fase de construcción activa (63 días, QPI=0.970), con un overhead de pipeline de
-> 20 minutos mediana por historia de usuario completa. La arquitectura hexagonal se verificó
+> implementación durante la fase de construcción activa (63 días, QPI=0.970) que, según una
+> estimación interna sin baseline medido, sería de 3x a 10x superior a la de un desarrollador
+> senior sin asistencia IA — un múltiplo considerablemente más optimista que el +55% de velocidad
+> de tarea y −75% de ciclo de PR (≈1.5x–4x) reportado por el estudio longitudinal más riguroso
+> disponible sobre asistencia de IA en desarrollo real (GitHub Copilot, 2025). Ambas cifras se
+> presentan explícitamente con esa distinción de rigor: la de AtaraxiaDive es una hipótesis
+> derivada, no una medición contra grupo de control; el +55%/−75% es la referencia externa con
+> mayor solidez metodológica disponible. Con un overhead de pipeline de 20 minutos mediana por
+> historia de usuario completa, la arquitectura hexagonal se verificó
 > cuantitativamente en dos momentos independientes — cierre de SP6 y cierre del proyecto, 77 días
 > después — mediante el gradiente de inestabilidad I(domain=0.27) → I(api=0.90), confirmado en
 > los 6 Bounded Contexts sin excepción en ambas mediciones. El cierre del proyecto (despliegue,
