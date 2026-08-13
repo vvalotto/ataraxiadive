@@ -3,6 +3,7 @@
 > Fuente: `.cm/baselines/BL-006-report.json` (CouplingAnalyzer + DistanceAnalyzer)  
 > Herramienta: ArchitectAnalyst BL-006 · 246 módulos analizados  
 > Fecha de extracción: 2026-05-18  
+> **Recálculo: 2026-08-13 — `quality/reports/architectanalyst/v1.0.5-report.json` (HEAD `main`, post SP-ADJ-13, tag v1.0.5, 309 archivos, 252 filas de CouplingAnalyzer)**  
 > Referencia: PLAN-METRICAS.md §A.1.7
 
 ---
@@ -21,6 +22,8 @@
 
 ## 1. Métricas a nivel BC (DistanceAnalyzer)
 
+### 1.1 BL-006 (2026-05-18)
+
 | BC | Tipo | A | I | Ca | Ce | D | Zona |
 |----|------|:-:|:-:|:--:|:--:|:--:|------|
 | resultados | CRUD | — | — | — | — | **≤ 0.30** | ✅ Main Sequence |
@@ -31,7 +34,19 @@
 | shared | Shared | 0.22 | 0.14 | 6 | 1 | 0.635 | Zone of Pain |
 | identidad | CRUD | 0.10 | 0.25 | 3 | 1 | 0.652 | Zone of Pain |
 
-**`resultados` es el único BC en o cerca de la Main Sequence** — sus Ca/Ce están equilibrados y D ≤ 0.30. El resto del sistema presenta valores de D > 0.30, lo que es normal en un sistema hexagonal donde los BCs internos (shared, identidad) son deliberadamente estables y concretos.
+### 1.2 v1.0.5 / HEAD (2026-08-13) — post SP7 + SP-ADJ-12 + SP-ADJ-13
+
+| BC | Tipo | A | I | Ca | Ce | D | Zona | Δ vs BL-006 |
+|----|------|:-:|:-:|:--:|:--:|:--:|------|:---:|
+| resultados | CRUD | — | — | — | — | **≤ 0.30** | ✅ Main Sequence | = (sin fila de violación, sin cambios) |
+| notificaciones | ES | 0.22 | 0.33 | 2 | 1 | 0.450 | Alejado | = |
+| competencia | ES (Core) | 0.04 | 0.50 | 2 | 2 | 0.459 | Alejado | = |
+| torneo | CRUD | 0.02 | 0.50 | 2 | 2 | 0.479 | Alejado | = |
+| registro | CRUD | 0.08 | 0.33 | 4 | 2 | **0.589** | CRITICAL | +0.006 |
+| shared | Shared | 0.22 | 0.14 | 6 | 1 | 0.635 | Zone of Pain | = |
+| identidad | CRUD | 0.08 | 0.25 | 3 | 1 | **0.673** | Zone of Pain | +0.021 |
+
+**`resultados` sigue siendo el único BC en o cerca de la Main Sequence.** El resto del sistema no cambió de posición relativa: los mismos 3 BCs siguen CRITICAL/Zone of Pain (registro, shared, identidad), y los mismos 3 siguen "Alejado" (notificaciones, competencia, torneo). El único movimiento real desde BL-006 es el leve empeoramiento de `identidad` (A bajó de 0.10 a 0.08 — se agregaron comandos concretos `AgregarRolCommand`/`QuitarRolCommand` sin nuevas abstracciones) y `registro` (mismo patrón, `estado_aceptacion`).
 
 ---
 
@@ -40,6 +55,8 @@
 La inestabilidad I se agrega sumando Ca y Ce de todos los módulos de cada BC × capa.
 
 ### 2.1 Tabla completa
+
+**BL-006 (2026-05-18):**
 
 | BC | Tipo | domain/ I | application/ I | infrastructure/ I | api/ I |
 |----|------|:---------:|:--------------:|:-----------------:|:------:|
@@ -51,14 +68,32 @@ La inestabilidad I se agrega sumando Ca y Ce de todos los módulos de cada BC ×
 | identidad | CRUD | **0.16** | 0.82 | 0.62 | 0.83 |
 | shared | Shared | **0.11** | — | 0.25 | 0.20 |
 
+**v1.0.5 / HEAD (2026-08-13):**
+
+| BC | Tipo | domain/ I | application/ I | infrastructure/ I | api/ I |
+|----|------|:---------:|:--------------:|:-----------------:|:------:|
+| competencia | ES | **0.33** | 0.70 | 0.65 | 0.97 |
+| notificaciones | ES | **0.31** | 0.67 | 0.53 | — |
+| torneo | CRUD | **0.29** | 0.72 | 0.75 | 0.84 |
+| registro | CRUD | **0.14** | 0.71 | 0.68 | 0.97 |
+| resultados | CRUD | 0.49 | 0.77 | 0.53 | 0.92 |
+| identidad | CRUD | **0.13** | 0.83 | 0.62 | 0.84 |
+| shared | Shared | **0.11** | — | 0.25 | 0.20 |
+
+**Casi sin cambios.** Solo `identidad/domain` bajó levemente (0.16→0.13, aún más estable) e `identidad/application` subió (0.82→0.83) — mismo patrón que el D: el modelo multi-rol de SP-ADJ-12 agregó comandos concretos en application/ sin tocar domain/. `registro/application` subió marginalmente (0.70→0.71).
+
 ### 2.2 Promedio por capa (todos los BCs)
 
-| Capa | I promedio | Interpretación |
-|------|:----------:|----------------|
-| domain/ | **0.26** | Estable — muchos módulos dependen del dominio |
-| infrastructure/ | 0.59 | Moderadamente inestable — implementa ports, depende de librerías externas |
-| application/ | 0.73 | Inestable — orquesta domain, depende de múltiples ports |
-| api/ | **0.91** | Muy inestable — importa todo, nadie lo importa |
+**BL-006 → v1.0.5:**
+
+| Capa | I promedio BL-006 | I promedio v1.0.5 | Interpretación |
+|------|:----------:|:----------:|----------------|
+| domain/ | 0.26 | **0.273** | Estable — muchos módulos dependen del dominio |
+| infrastructure/ | 0.59 | **0.613** | Moderadamente inestable — implementa ports, depende de librerías externas |
+| application/ | 0.73 | **0.721** | Inestable — orquesta domain, depende de múltiples ports |
+| api/ | 0.91 | **0.903** | Muy inestable — importa todo, nadie lo importa |
+
+**El gradiente global se mantiene idéntico en forma** (domain < infra < application < api), con variaciones de ±0.02 explicables por el crecimiento normal del código en 3 meses (309 vs 246 módulos analizados) — no hay señal de degradación arquitectónica.
 
 ---
 
@@ -118,6 +153,8 @@ La application/ de Identidad tiene la mayor inestabilidad de todas las capas de 
 
 ## 5. Hipótesis: ES más estable que CRUD en domain/
 
+**v1.0.5 (2026-08-13):**
+
 | BC | Tipo | domain/ I |
 |----|------|:---------:|
 | competencia | ES (Core) | 0.33 |
@@ -125,11 +162,11 @@ La application/ de Identidad tiene la mayor inestabilidad de todas las capas de 
 | **Promedio ES** | | **0.32** |
 | torneo | CRUD | 0.29 |
 | registro | CRUD | 0.14 |
-| identidad | CRUD | 0.16 |
+| identidad | CRUD | 0.13 |
 | resultados | CRUD | 0.49 |
-| **Promedio CRUD** | | **0.27** |
+| **Promedio CRUD** | | **0.26** |
 
-**Hipótesis NO confirmada:** los dominios CRUD tienen I promedio (0.27) menor que los ES (0.32). Los BCs CRUD simples como registro e identidad tienen dominios extremadamente estables (I=0.14/0.16) porque sus value objects y excepciones son importados por muchos módulos sin importar nada a cambio.
+**Hipótesis sigue NO confirmada, con el mismo margen que en BL-006:** los dominios CRUD tienen I promedio (0.26, antes 0.27) menor que los ES (0.32, sin cambio). `identidad` bajó de 0.16 a 0.13 — aún más estable que en BL-006 — sin alterar la conclusión.
 
 **Matiz importante:** el dominio ES de Competencia (I=0.33) tiene más interdependencias internas entre aggregates, events y value objects — la complejidad del patrón ES se expresa como mayor Ce en domain/. Esto es coherente con el análisis de CC por capa: ES tiene más interacciones intra-capa, CRUD tiene capas más aisladas.
 
@@ -149,3 +186,4 @@ La application/ de Identidad tiene la mayor inestabilidad de todas las capas de 
 ---
 
 *Extraído: 2026-05-18 — rama doc/metricas — PLAN-METRICAS.md §A.1.7 (Prioridad 9) completada*
+*Recalculado: 2026-08-13 — HEAD `main` post SP-ADJ-13 (tag v1.0.5) — `quality/reports/architectanalyst/v1.0.5-report.json` — PLAN-METRICAS.md §A.1.7 (Ronda 2). Conclusión: el gradiente de inestabilidad y las hipótesis se mantienen sin cambios sustantivos tras 3 meses y ~6 000 SLOC adicionales — la arquitectura hexagonal siguió siendo estable durante SP7/SP-ADJ-12/13.*

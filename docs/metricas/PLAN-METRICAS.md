@@ -2,7 +2,34 @@
 
 > Estado documental: vigente
 > Fuente de verdad para: estrategia de medición del producto y del experimento IEDD
-> Última actualización: 2026-05-17
+> Última actualización: 2026-08-13 — fuentes actualizadas a BL-007 / v1.0.5 (ver §0)
+
+---
+
+## 0. Actualización de fuentes (2026-08-13)
+
+Las mediciones publicadas en `REPORTE-METRICAS.md` y `CONCLUSIONES-IEDD.md` corresponden a
+**BL-006 (v1.0.0, cerrado 2026-05-16)**. Desde entonces el proyecto cerró SP7, SP-ADJ-12 y
+SP-ADJ-13, con despliegue real y ejecución en producción (Puerto Madryn 2026). Este plan se
+actualiza para recalcular contra el estado vigente:
+
+| Referencia | Antes (BL-006) | Ahora | Fuente |
+|---|---|---|---|
+| Baseline de arquitectura | `BL-006-report.json` | ✅ re-ejecutado 2026-08-13 sobre HEAD | `quality/reports/architectanalyst/v1.0.5-report.json` (3 CRITICAL · 64 WARNING · should_block=false — prácticamente idéntico a BL-007: 3 CRITICAL · 62 WARNING) |
+| Reporte DesignReviewer | `current-report.json` @ 2026-05-18 (303 archivos, 287 issues) | ✅ re-ejecutado 2026-08-13 sobre HEAD `main` | `quality/reports/designreviewer/v1.0.5-report.json` (309 archivos · 298 WARNING · 0 CRITICAL · should_block=false) |
+| Último tag | `v1.0.0` | `v1.0.5` | `git tag` |
+| SLOC backend | 12 708 | ~18 790 (medición preliminar, a confirmar en A.1.1) | `src/` actual |
+| SLOC frontend | 15 623 | ~17 254 (medición preliminar, a confirmar en A.2.1) | `frontend/src/` actual |
+| SPs/ajustes cubiertos | SP1–SP6 | SP1–SP7 + SP-ADJ-12 + SP-ADJ-13 | `matrix.md §34, §35` |
+
+**Nota importante:** no existe una baseline formal posterior a BL-007 (SP-ADJ-13 no generó
+`.cm/baselines/BL-008*`). SP-ADJ-13 (fixes UI + manual revisado, tags v1.0.4/v1.0.5) solo está
+documentado narrativamente en `matrix.md §35` — sin reporte JSON de DesignReviewer/ArchitectAnalyst
+propio. Al recalcular, dejar explícito que la "foto" de arquitectura/calidad más reciente con
+datos duros es BL-007, y que v1.0.3–v1.0.5 se cubren solo con datos estructurales (SLOC, tests)
+y de productividad (commits, PRs), no con una nueva corrida de quality gates — salvo que se
+decida correr `designreviewer`/`architectanalyst` de nuevo sobre HEAD como parte de esta
+actualización.
 
 ---
 
@@ -114,15 +141,16 @@ done > docs/metricas/estructurales/backend-por-capa.md
 
 ### A.1.6 Suite Chidamber/Kemerer parcial — LCOM y CBO por BC
 
-**Fuente:** `quality/reports/designreviewer/BL-006-report.json` (LCOMAnalyzer + FanOutAnalyzer)  
+**Fuente:** no hay snapshot JSON de DesignReviewer posterior a SP-ADJ-11 (`quality/reports/designreviewer/current-report.json`, 2026-05-18, 303 archivos). Para BL-007/SP-ADJ-12 solo hay narrativa en `BL-007.md` (0 CRITICAL · 296 WARNING), sin JSON archivado.
+**Acción requerida antes de recalcular:** correr `designreviewer src/ --config pyproject.toml --output quality/reports/designreviewer/BL-007-report.json` (o equivalente sobre HEAD) para obtener un snapshot con LCOMAnalyzer + FanOutAnalyzer actualizado.  
 **Cobertura:** LCOM (falta de cohesión) y CBO/FanOut (acoplamiento eferente) — las 2 métricas CK disponibles en el stack actual  
 **Excluidas:** DIT y NOC (irrelevantes en Python hexagonal con composición sobre herencia) · RFC (requiere call-graph no disponible)
 
 ```python
-# Extraer LCOM y FanOut por módulo del reporte BL-006
+# Extraer LCOM y FanOut por módulo del reporte más reciente disponible
 import json
 
-with open("quality/reports/designreviewer/BL-006-report.json") as f:
+with open("quality/reports/designreviewer/BL-007-report.json") as f:
     data = json.load(f)
 
 lcom = [r for r in data["results"] if r["analyzer"] == "LCOMAnalyzer"]
@@ -146,7 +174,7 @@ fanout = [r for r in data["results"] if r["analyzer"] == "FanOutAnalyzer"]
 ```python
 import json
 
-with open(".cm/baselines/BL-006-report.json") as f:
+with open(".cm/baselines/BL-007-report.json") as f:
     data = json.load(f)
 
 coupling = [r for r in data["results"] if r["analyzer"] == "CouplingAnalyzer"]
@@ -222,9 +250,15 @@ du -sh frontend/dist/
 | INC-5.7 | 256 | +4 | INC-5.7-report.txt |
 | INC-6.3 | 258 | +2 | INC-6.3-report.txt |
 | INC-6.4 | 253 | −5 | INC-6.4-report.txt |
-| SP-ADJ-11 | 287 | +34 | SP-ADJ-11-report.txt |
+| SP-ADJ-11 | 287 | +34 | current-report.json (2026-05-18) |
+| SP-ADJ-12 | 296 | +9 | narrativa `BL-007.md` (sin JSON archivado) |
+| SP-ADJ-13 / v1.0.5 (HEAD) | **298** | +2 | `quality/reports/designreviewer/v1.0.5-report.json` (2026-08-13) |
 
-**Análisis:** tendencia, picos por INC, correlación con tipo de incremento (frontend vs backend)
+**Análisis:** tendencia, picos por INC, correlación con tipo de incremento (frontend vs backend).
+Confirmado con la re-ejecución: **0 CRITICAL se mantiene en toda la historia del proyecto**,
+incluyendo SP7 + SP-ADJ-12 + SP-ADJ-13. El crecimiento SP-ADJ-11→v1.0.5 (287→298, +11 en total)
+es mucho más chico que saltos anteriores (p.ej. INC-5.6 +25) — consistente con que SP7/ADJ-12/13
+fueron incrementos acotados (despliegue, manual, fixes puntuales) y no nuevo dominio.
 
 ### B.2 ArchitectAnalyst — Métrica D por BC
 
@@ -237,6 +271,10 @@ grep -A 20 "ArchitectAnalyst\|Distancia\|should_block\|D=" .cm/baselines/BL-*.md
 ```
 
 **Métricas:** D por BC · tendencia por SP · `should_block` triggers
+
+**Baseline más reciente con datos duros: BL-007** (`.cm/baselines/BL-007-report.json`, 2026-05-24) —
+3 CRITICAL · 62 WARNING · should_block=false. No existe BL-008: SP-ADJ-13 (v1.0.4/v1.0.5) no generó
+una nueva corrida de ArchitectAnalyst, solo quedó documentado en `matrix.md §35`.
 
 ### B.3 Cobertura de Tests
 
@@ -294,11 +332,15 @@ gh pr list --limit 200 --state merged --json number,title,mergedAt \
   > docs/metricas/productividad/prs-por-sp.json
 
 # Commits por SP (por tag)
-for tag in v0.2.0 v0.3.0 v0.4.0 v0.5.0 v0.6.0 v1.0.0 v1.0.1; do
+for tag in v0.2.0 v0.3.0 v0.4.0 v0.5.0 v0.6.0 v1.0.0 v1.0.1 v1.0.2 v1.0.3 v1.0.4 v1.0.5; do
   echo "=== $tag ===" && git log --oneline $prev..$tag 2>/dev/null | wc -l
   prev=$tag
 done
 ```
+
+**Tags cubiertos por la medición anterior:** hasta `v1.0.0`. **Tags nuevos a incorporar:** `v1.0.1`
+(2026-05-16) · `v1.0.2` (SP7 + SP-ADJ-12, 2026-05-24) · `v1.0.3` · `v1.0.4` (SP-ADJ-13 fixes UI,
+2026-05-30) · `v1.0.5` (SP-ADJ-13 manual revisado, 2026-05-30 — **último tag**).
 
 **Métricas:** US/SP · PRs/SP · commits/SP · días/SP
 
@@ -365,42 +407,54 @@ find .cm -name "*tracker*" | head -20
 | SP4 | 21 | 7 (ADJ-06) | 33% |
 | SP5 | 20 | 7 (ADJ-09) | 35% |
 | SP6 | 13 | 10 (ADJ-11) | 77% |
+| SP7 | — (INC-7.1 despliegue + INC-7.2 manual, no son US funcionales clásicas) | 6 (ADJ-12) + 2 (ADJ-13) | a definir metodología de cómputo |
 
-**Análisis:** tendencia de deuda formalizada · correlación con tipo de SP
+**Análisis:** tendencia de deuda formalizada · correlación con tipo de SP  
+**Nota metodológica:** SP7 no tiene "US funcionales" comparables a SP1–SP6 (son un incremento de
+infraestructura de despliegue + un incremento documental). Antes de recalcular el ratio global,
+decidir si SP7 se excluye del ratio funcional/ajuste o si se define un denominador equivalente
+(p. ej. incrementos en vez de US).
 
 ### C.4 Cobertura Funcional RF
 
-**Fuente:** `matrix.md` §35
+**Fuente:** `matrix.md` §37 "Cobertura Total" (la numeración de secciones cambió — §35 es ahora
+SP-ADJ-13, no la tabla de RFs). Datos vigentes al 2026-08-13, ya reflejan RF-EJ y RF-NT
+actualizados post-SP7:
 
 | Área | Total RFs | Implementados | % |
 |------|:---------:|:-------------:|:-:|
 | RF-GT | 7 | 7 | 100% |
 | RF-IN | 10 | 9 | 90% |
 | RF-PR | 8 | 8 | 100% |
-| RF-EJ | 10 | 8 | 80% |
+| RF-EJ | 10 | 9 | 90% |
 | RF-PM | 6 | 5 | 83% |
 | RF-US | 5 | 5 | 100% |
-| RF-NT | 4 | 2 | 50% |
+| RF-NT | 4 | 3 | 75% |
 | RF-IG | 4 | 0 | 0% (fuera scope) |
-| **Total** | **54** | **44** | **81%** |
+| **Total** | **54** | **45** | **85%** |
 
 ---
 
 ## 6. Orden de ejecución
 
-| Prioridad | Categoría | Tiempo estimado | Resultado | Estado |
-|-----------|-----------|:---------------:|-----------|:------:|
-| 1 | A.1.1 a A.1.4 — Backend raw/CC/MI/Halstead | 30 min | 4 archivos en `estructurales/` | ✅ |
-| 2 | A.1.5 — Backend por capa hexagonal | 30 min | análisis cruzado BC × capa | ✅ |
-| 3 | B.3/B.4 — Cobertura y ratio tests | 20 min | pytest-cov ejecutado | ✅ |
-| 4 | B.1/B.2 — DesignReviewer + ArchitectAnalyst | 30 min | serie temporal extraída | ✅ |
-| 5 | A.2 — Frontend LOC + duplicación | 20 min | cloc + jscpd ejecutados | ✅ |
-| 6 | C.1/C.3 — Velocidad SP + ratio ADJ | 30 min | datos de git + matrix | ✅ |
-| 7 | C.2 — Overhead pipeline (tracker) | 45 min | 34 US con timing, mediana 20 min | ✅ |
-| 8 | A.1.6 — Suite CK: LCOM + CBO/FanOut | 20 min | `backend-ck.md` | ⏳ |
-| 9 | A.1.7 — Cohesión y acoplamiento Ca/Ce/I | 15 min | `backend-acoplamiento.md` | ⏳ |
-| 10 | C.0 — Tamaño funcional (BDD + endpoints + SP) | 20 min | `tamano-funcional.md` | ⏳ |
-| 11 | Síntesis | 60 min | reporte integrado `REPORTE-METRICAS.md` | ⏳ |
+> **Ronda 2 (2026-08-13) — recálculo contra BL-007/v1.0.5.** La ronda 1 (2026-05-17/18, columna
+> "Ronda 1") midió BL-001→BL-006. Todos los ítems vuelven a ⏳ porque las fuentes cambiaron
+> (§0): nuevo tag (v1.0.5), nueva baseline de arquitectura (BL-007) y sin snapshot JSON de
+> DesignReviewer posterior a SP-ADJ-11.
+
+| Prioridad | Categoría | Tiempo estimado | Resultado | Ronda 1 | Ronda 2 |
+|-----------|-----------|:---------------:|-----------|:-------:|:-------:|
+| 1 | A.1.1 a A.1.4 — Backend raw/CC/MI/Halstead | 30 min | 4 archivos en `estructurales/` | ✅ | ⏳ |
+| 2 | A.1.5 — Backend por capa hexagonal | 30 min | análisis cruzado BC × capa | ✅ | ⏳ |
+| 3 | B.3/B.4 — Cobertura y ratio tests | 20 min | pytest-cov ejecutado | ✅ | ⏳ |
+| 4 | B.1/B.2 — DesignReviewer + ArchitectAnalyst | 30 min | serie temporal extraída | ✅ | ✅ (ambos re-ejecutados 2026-08-13) |
+| 5 | A.2 — Frontend LOC + duplicación | 20 min | cloc + jscpd ejecutados | ✅ | ⏳ |
+| 6 | C.1/C.3 — Velocidad SP + ratio ADJ | 30 min | datos de git + matrix | ✅ | ⏳ (incluir v1.0.1→v1.0.5, definir metodología SP7) |
+| 7 | C.2 — Overhead pipeline (tracker) | 45 min | 34 US con timing, mediana 20 min | ✅ | ⏳ (agregar timing SP7/ADJ-12/13 si existe) |
+| 8 | A.1.6 — Suite CK: LCOM + CBO/FanOut | 20 min | `backend-ck.md` | ✅ | ✅ (2026-08-13) |
+| 9 | A.1.7 — Cohesión y acoplamiento Ca/Ce/I | 15 min | `backend-acoplamiento.md` | ✅ | ✅ (2026-08-13) |
+| 10 | C.0 — Tamaño funcional (BDD + endpoints + SP) | 20 min | `tamano-funcional.md` | ✅ | ⏳ |
+| 11 | Síntesis | 60 min | reporte integrado `REPORTE-METRICAS.md` | ✅ | ⏳ |
 
 ---
 
@@ -420,4 +474,5 @@ Al completar todas las categorías, generar `docs/metricas/REPORTE-METRICAS.md` 
 ---
 
 *Creado: 2026-05-17 — SP7 INC-7.2 (adecuación documental)*
+*Actualizado: 2026-08-13 — fuentes recalibradas a BL-007 / v1.0.5 (ver §0); orden de ejecución §6 vuelve a ⏳ para todos los ítems hasta re-ejecutar*
 *Ejecutar en orden de §6 para construir evidencia incremental*
