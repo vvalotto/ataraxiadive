@@ -1,0 +1,4357 @@
+{
+  "statistics": {
+    "detectionDate": "2026-08-13T12:02:47.573Z",
+    "formats": {
+      "javascript": {
+        "sources": {
+          "frontend/src/pages/organizador/TorneoCompetenciasPage.tsx": {
+            "lines": 93,
+            "tokens": 779,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/ResultadosPage.tsx": {
+            "lines": 245,
+            "tokens": 2016,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/PodiosPage.tsx": {
+            "lines": 284,
+            "tokens": 2414,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/OrganizadorMisDatosPage.tsx": {
+            "lines": 62,
+            "tokens": 448,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 41,
+            "duplicatedTokens": 299,
+            "percentage": 66.13,
+            "percentageTokens": 66.74,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/OrganizadorJuecesPage.tsx": {
+            "lines": 33,
+            "tokens": 215,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/OrganizadorInscriptosPage.tsx": {
+            "lines": 34,
+            "tokens": 231,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/OrganizadorGrillaPage.tsx": {
+            "lines": 37,
+            "tokens": 242,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/DetalleTorneoPage.tsx": {
+            "lines": 477,
+            "tokens": 4102,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/DashboardPage.tsx": {
+            "lines": 93,
+            "tokens": 720,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/DashboardOperativoPage.tsx": {
+            "lines": 320,
+            "tokens": 2685,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/CrearTorneoPage.tsx": {
+            "lines": 211,
+            "tokens": 1550,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/AuditoriaPerformancePage.tsx": {
+            "lines": 43,
+            "tokens": 370,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/AuditoriaCompetenciaPage.tsx": {
+            "lines": 67,
+            "tokens": 547,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/juez/PerformanceFlowPage.tsx": {
+            "lines": 274,
+            "tokens": 2170,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/juez/JuezMisDatosPage.tsx": {
+            "lines": 60,
+            "tokens": 458,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 41,
+            "duplicatedTokens": 299,
+            "percentage": 68.33,
+            "percentageTokens": 65.28,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/juez/GrillaPage.tsx": {
+            "lines": 7,
+            "tokens": 78,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/juez/DisciplinasPage.tsx": {
+            "lines": 0,
+            "tokens": 3,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaTorneosPage.tsx": {
+            "lines": 118,
+            "tokens": 1032,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaTorneoDetallePage.tsx": {
+            "lines": 15,
+            "tokens": 127,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaResultadosPage.tsx": {
+            "lines": 4,
+            "tokens": 29,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaMisInscripcionesPage.tsx": {
+            "lines": 155,
+            "tokens": 1409,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaMisDatosPage.tsx": {
+            "lines": 108,
+            "tokens": 800,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaMiGrillaPage.tsx": {
+            "lines": 43,
+            "tokens": 392,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaInscripcionPage.tsx": {
+            "lines": 270,
+            "tokens": 2169,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaHomePage.tsx": {
+            "lines": 71,
+            "tokens": 673,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaDeclararAPPage.tsx": {
+            "lines": 41,
+            "tokens": 366,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaDashboardPage.tsx": {
+            "lines": 207,
+            "tokens": 1706,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/shared/RolesSection.tsx": {
+            "lines": 7,
+            "tokens": 43,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/TorneoRouteSelector.tsx": {
+            "lines": 14,
+            "tokens": 132,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/TablaJueces.tsx": {
+            "lines": 19,
+            "tokens": 199,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/TablaInscriptos.tsx": {
+            "lines": 106,
+            "tokens": 918,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/TablaDisciplinaResultados.tsx": {
+            "lines": 0,
+            "tokens": 11,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/PodiosSection.tsx": {
+            "lines": 0,
+            "tokens": 21,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/PanelCategoria.tsx": {
+            "lines": 0,
+            "tokens": 11,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/OrganizadorLayout.tsx": {
+            "lines": 54,
+            "tokens": 375,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/MonitorDisciplina.tsx": {
+            "lines": 57,
+            "tokens": 502,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/JuezSelector.tsx": {
+            "lines": 0,
+            "tokens": 13,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/JuecesPanel.tsx": {
+            "lines": 42,
+            "tokens": 290,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/InscriptosPanel.tsx": {
+            "lines": 45,
+            "tokens": 388,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/InscripcionDetalleDrawer.tsx": {
+            "lines": 156,
+            "tokens": 1328,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/GrillaPanel.tsx": {
+            "lines": 131,
+            "tokens": 1055,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/FilaResultado.tsx": {
+            "lines": 16,
+            "tokens": 176,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/FilaPodio.tsx": {
+            "lines": 21,
+            "tokens": 160,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/FaseBadge.tsx": {
+            "lines": 3,
+            "tokens": 19,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/DisciplinaSelector.tsx": {
+            "lines": 11,
+            "tokens": 64,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/ConfigurarGrillaForm.tsx": {
+            "lines": 59,
+            "tokens": 420,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/AccionesPanel.tsx": {
+            "lines": 95,
+            "tokens": 762,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/SyncStatusBadge.tsx": {
+            "lines": 0,
+            "tokens": 18,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/StepTarjeta.tsx": {
+            "lines": 28,
+            "tokens": 215,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/StepRevision.tsx": {
+            "lines": 30,
+            "tokens": 208,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/StepIndicator.tsx": {
+            "lines": 6,
+            "tokens": 52,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/StepBKO.tsx": {
+            "lines": 19,
+            "tokens": 129,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/RpSelector.tsx": {
+            "lines": 24,
+            "tokens": 159,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/PenalizacionesSelector.tsx": {
+            "lines": 14,
+            "tokens": 131,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/MotivoDqSelector.tsx": {
+            "lines": 6,
+            "tokens": 74,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/JuezLayout.tsx": {
+            "lines": 28,
+            "tokens": 198,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 28,
+            "duplicatedTokens": 200,
+            "percentage": 100,
+            "percentageTokens": 101.01,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/DisciplinaCard.tsx": {
+            "lines": 20,
+            "tokens": 127,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/atleta/ResultHero.tsx": {
+            "lines": 0,
+            "tokens": 10,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/atleta/RankingRow.tsx": {
+            "lines": 16,
+            "tokens": 170,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/atleta/RankingCard.tsx": {
+            "lines": 6,
+            "tokens": 77,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/atleta/OverallCard.tsx": {
+            "lines": 3,
+            "tokens": 23,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/atleta/GrupoResultados.tsx": {
+            "lines": 53,
+            "tokens": 415,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/atleta/GrillaRow.tsx": {
+            "lines": 4,
+            "tokens": 70,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/atleta/AtletaShell.tsx": {
+            "lines": 48,
+            "tokens": 375,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 28,
+            "duplicatedTokens": 200,
+            "percentage": 58.33,
+            "percentageTokens": 53.33,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/ResetPasswordPage.tsx": {
+            "lines": 32,
+            "tokens": 212,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/RegistroPage.tsx": {
+            "lines": 166,
+            "tokens": 1356,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/RecuperarPasswordPage.tsx": {
+            "lines": 25,
+            "tokens": 168,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/PublicTorneosPage.tsx": {
+            "lines": 134,
+            "tokens": 1051,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/PublicTorneoResultadosPage.tsx": {
+            "lines": 197,
+            "tokens": 1806,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/PublicTorneoPodiosPage.tsx": {
+            "lines": 243,
+            "tokens": 2187,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/PublicTorneoDetallePage.tsx": {
+            "lines": 68,
+            "tokens": 477,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/LoginPage.tsx": {
+            "lines": 136,
+            "tokens": 1061,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/CambiarPasswordPage.tsx": {
+            "lines": 57,
+            "tokens": 483,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/RequireRole.tsx": {
+            "lines": 0,
+            "tokens": 6,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/PasswordStrengthBar.tsx": {
+            "lines": 2,
+            "tokens": 28,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/HealthCheck.tsx": {
+            "lines": 28,
+            "tokens": 205,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/main.tsx": {
+            "lines": 0,
+            "tokens": 3,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/App.tsx": {
+            "lines": 261,
+            "tokens": 1394,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 48,
+            "duplicatedTokens": 220,
+            "percentage": 18.39,
+            "percentageTokens": 15.78,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          }
+        },
+        "total": {
+          "lines": 5862,
+          "tokens": 47506,
+          "sources": 78,
+          "clones": 3,
+          "duplicatedLines": 93,
+          "duplicatedTokens": 609,
+          "percentage": 1.59,
+          "percentageTokens": 1.28,
+          "newDuplicatedLines": 0,
+          "newClones": 0
+        }
+      },
+      "tsx": {
+        "sources": {
+          "frontend/src/pages/organizador/TorneoCompetenciasPage.tsx": {
+            "lines": 157,
+            "tokens": 1224,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/ResultadosPage.tsx": {
+            "lines": 284,
+            "tokens": 2331,
+            "sources": 1,
+            "clones": 4,
+            "duplicatedLines": 93,
+            "duplicatedTokens": 779,
+            "percentage": 32.75,
+            "percentageTokens": 33.42,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/PodiosPage.tsx": {
+            "lines": 327,
+            "tokens": 2800,
+            "sources": 1,
+            "clones": 3,
+            "duplicatedLines": 83,
+            "duplicatedTokens": 717,
+            "percentage": 25.38,
+            "percentageTokens": 25.61,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/OrganizadorMisDatosPage.tsx": {
+            "lines": 179,
+            "tokens": 1472,
+            "sources": 1,
+            "clones": 7,
+            "duplicatedLines": 156,
+            "duplicatedTokens": 1216,
+            "percentage": 87.15,
+            "percentageTokens": 82.61,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/OrganizadorJuecesPage.tsx": {
+            "lines": 52,
+            "tokens": 370,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 18,
+            "duplicatedTokens": 164,
+            "percentage": 34.62,
+            "percentageTokens": 44.32,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/OrganizadorInscriptosPage.tsx": {
+            "lines": 58,
+            "tokens": 419,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 9,
+            "duplicatedTokens": 82,
+            "percentage": 15.52,
+            "percentageTokens": 19.57,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/OrganizadorGrillaPage.tsx": {
+            "lines": 57,
+            "tokens": 397,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 9,
+            "duplicatedTokens": 82,
+            "percentage": 15.79,
+            "percentageTokens": 20.65,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/DetalleTorneoPage.tsx": {
+            "lines": 551,
+            "tokens": 4605,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 10,
+            "duplicatedTokens": 86,
+            "percentage": 1.81,
+            "percentageTokens": 1.87,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/DashboardPage.tsx": {
+            "lines": 255,
+            "tokens": 2071,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 12,
+            "duplicatedTokens": 103,
+            "percentage": 4.71,
+            "percentageTokens": 4.97,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/DashboardOperativoPage.tsx": {
+            "lines": 592,
+            "tokens": 5134,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/CrearTorneoPage.tsx": {
+            "lines": 500,
+            "tokens": 3909,
+            "sources": 1,
+            "clones": 3,
+            "duplicatedLines": 29,
+            "duplicatedTokens": 302,
+            "percentage": 5.8,
+            "percentageTokens": 7.73,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/AuditoriaPerformancePage.tsx": {
+            "lines": 133,
+            "tokens": 1282,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/organizador/AuditoriaCompetenciaPage.tsx": {
+            "lines": 171,
+            "tokens": 1404,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/juez/PerformanceFlowPage.tsx": {
+            "lines": 303,
+            "tokens": 2415,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/juez/JuezMisDatosPage.tsx": {
+            "lines": 181,
+            "tokens": 1557,
+            "sources": 1,
+            "clones": 4,
+            "duplicatedLines": 97,
+            "duplicatedTokens": 754,
+            "percentage": 53.59,
+            "percentageTokens": 48.43,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/juez/GrillaPage.tsx": {
+            "lines": 281,
+            "tokens": 2554,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 34,
+            "duplicatedTokens": 434,
+            "percentage": 12.1,
+            "percentageTokens": 16.99,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/juez/DisciplinasPage.tsx": {
+            "lines": 89,
+            "tokens": 749,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaTorneosPage.tsx": {
+            "lines": 256,
+            "tokens": 2294,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 14,
+            "duplicatedTokens": 156,
+            "percentage": 5.47,
+            "percentageTokens": 6.8,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaTorneoDetallePage.tsx": {
+            "lines": 195,
+            "tokens": 1947,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 15,
+            "duplicatedTokens": 168,
+            "percentage": 7.69,
+            "percentageTokens": 8.63,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaResultadosPage.tsx": {
+            "lines": 114,
+            "tokens": 1133,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 15,
+            "duplicatedTokens": 168,
+            "percentage": 13.16,
+            "percentageTokens": 14.83,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaMisInscripcionesPage.tsx": {
+            "lines": 202,
+            "tokens": 1749,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaMisDatosPage.tsx": {
+            "lines": 253,
+            "tokens": 2054,
+            "sources": 1,
+            "clones": 3,
+            "duplicatedLines": 59,
+            "duplicatedTokens": 462,
+            "percentage": 23.32,
+            "percentageTokens": 22.49,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaMiGrillaPage.tsx": {
+            "lines": 151,
+            "tokens": 1353,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 7,
+            "duplicatedTokens": 82,
+            "percentage": 4.64,
+            "percentageTokens": 6.06,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaInscripcionPage.tsx": {
+            "lines": 529,
+            "tokens": 4699,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaHomePage.tsx": {
+            "lines": 192,
+            "tokens": 1824,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaDeclararAPPage.tsx": {
+            "lines": 174,
+            "tokens": 1845,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/atleta/AtletaDashboardPage.tsx": {
+            "lines": 318,
+            "tokens": 2601,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/shared/RolesSection.tsx": {
+            "lines": 115,
+            "tokens": 1020,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 18,
+            "duplicatedTokens": 162,
+            "percentage": 15.65,
+            "percentageTokens": 15.88,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/TorneoRouteSelector.tsx": {
+            "lines": 86,
+            "tokens": 609,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 8,
+            "duplicatedTokens": 85,
+            "percentage": 9.3,
+            "percentageTokens": 13.96,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/TablaJueces.tsx": {
+            "lines": 112,
+            "tokens": 961,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/TablaInscriptos.tsx": {
+            "lines": 226,
+            "tokens": 1886,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/TablaGrilla.tsx": {
+            "lines": 115,
+            "tokens": 1202,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/TablaDisciplinaResultados.tsx": {
+            "lines": 125,
+            "tokens": 1365,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/ProgressBar.tsx": {
+            "lines": 26,
+            "tokens": 259,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/PodiosSection.tsx": {
+            "lines": 50,
+            "tokens": 400,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/PanelCategoria.tsx": {
+            "lines": 30,
+            "tokens": 244,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/OrganizadorLayout.tsx": {
+            "lines": 199,
+            "tokens": 1796,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/MonitorDisciplina.tsx": {
+            "lines": 127,
+            "tokens": 1108,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/JuezSelector.tsx": {
+            "lines": 29,
+            "tokens": 273,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/JuecesPanel.tsx": {
+            "lines": 256,
+            "tokens": 2368,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/InscriptosPanel.tsx": {
+            "lines": 154,
+            "tokens": 1377,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/InscripcionDetalleDrawer.tsx": {
+            "lines": 217,
+            "tokens": 1851,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/GrillaPanel.tsx": {
+            "lines": 401,
+            "tokens": 3464,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 24,
+            "duplicatedTokens": 174,
+            "percentage": 5.99,
+            "percentageTokens": 5.02,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/FilaResultado.tsx": {
+            "lines": 127,
+            "tokens": 1150,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/FilaPodio.tsx": {
+            "lines": 80,
+            "tokens": 624,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/FaseBadge.tsx": {
+            "lines": 37,
+            "tokens": 235,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/EstadoAPBadge.tsx": {
+            "lines": 37,
+            "tokens": 300,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/EmptyStateCard.tsx": {
+            "lines": 12,
+            "tokens": 90,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/DisciplinaSelector.tsx": {
+            "lines": 67,
+            "tokens": 634,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/ConfigurarGrillaForm.tsx": {
+            "lines": 146,
+            "tokens": 1166,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/organizador/AccionesPanel.tsx": {
+            "lines": 241,
+            "tokens": 1962,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/SyncStatusBadge.tsx": {
+            "lines": 53,
+            "tokens": 439,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/StepTarjeta.tsx": {
+            "lines": 108,
+            "tokens": 811,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/StepRevision.tsx": {
+            "lines": 85,
+            "tokens": 581,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/StepIndicator.tsx": {
+            "lines": 43,
+            "tokens": 333,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/StepBKO.tsx": {
+            "lines": 68,
+            "tokens": 468,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/RpSelector.tsx": {
+            "lines": 159,
+            "tokens": 1265,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/PenalizacionesSelector.tsx": {
+            "lines": 76,
+            "tokens": 670,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/MotivoDqSelector.tsx": {
+            "lines": 35,
+            "tokens": 281,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/JuezLayout.tsx": {
+            "lines": 103,
+            "tokens": 887,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 55,
+            "duplicatedTokens": 410,
+            "percentage": 53.4,
+            "percentageTokens": 46.22,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/DisciplinaCard.tsx": {
+            "lines": 44,
+            "tokens": 276,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/juez/AtletaCard.tsx": {
+            "lines": 69,
+            "tokens": 552,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/atleta/ResultHero.tsx": {
+            "lines": 59,
+            "tokens": 439,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/atleta/RankingRow.tsx": {
+            "lines": 56,
+            "tokens": 460,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 16,
+            "duplicatedTokens": 153,
+            "percentage": 28.57,
+            "percentageTokens": 33.26,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/atleta/RankingCard.tsx": {
+            "lines": 63,
+            "tokens": 542,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 7,
+            "duplicatedTokens": 82,
+            "percentage": 11.11,
+            "percentageTokens": 15.13,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/atleta/OverallCard.tsx": {
+            "lines": 74,
+            "tokens": 580,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/atleta/OtHero.tsx": {
+            "lines": 39,
+            "tokens": 286,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/atleta/GrupoResultados.tsx": {
+            "lines": 201,
+            "tokens": 2016,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/atleta/GrillaRow.tsx": {
+            "lines": 34,
+            "tokens": 255,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 16,
+            "duplicatedTokens": 153,
+            "percentage": 47.06,
+            "percentageTokens": 60,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/atleta/DisciplinaPendienteCard.tsx": {
+            "lines": 45,
+            "tokens": 373,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/atleta/AtletaShell.tsx": {
+            "lines": 123,
+            "tokens": 1019,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 55,
+            "duplicatedTokens": 410,
+            "percentage": 44.72,
+            "percentageTokens": 40.24,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/ResetPasswordPage.tsx": {
+            "lines": 125,
+            "tokens": 1029,
+            "sources": 1,
+            "clones": 4,
+            "duplicatedLines": 40,
+            "duplicatedTokens": 315,
+            "percentage": 32,
+            "percentageTokens": 30.61,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/RegistroPage.tsx": {
+            "lines": 389,
+            "tokens": 3739,
+            "sources": 1,
+            "clones": 5,
+            "duplicatedLines": 43,
+            "duplicatedTokens": 420,
+            "percentage": 11.05,
+            "percentageTokens": 11.23,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/RecuperarPasswordPage.tsx": {
+            "lines": 89,
+            "tokens": 701,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 24,
+            "duplicatedTokens": 154,
+            "percentage": 26.97,
+            "percentageTokens": 21.97,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/PublicTorneosPage.tsx": {
+            "lines": 238,
+            "tokens": 2036,
+            "sources": 1,
+            "clones": 3,
+            "duplicatedLines": 56,
+            "duplicatedTokens": 354,
+            "percentage": 23.53,
+            "percentageTokens": 17.39,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/PublicTorneoResultadosPage.tsx": {
+            "lines": 246,
+            "tokens": 2215,
+            "sources": 1,
+            "clones": 4,
+            "duplicatedLines": 96,
+            "duplicatedTokens": 635,
+            "percentage": 39.02,
+            "percentageTokens": 28.67,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/PublicTorneoPodiosPage.tsx": {
+            "lines": 354,
+            "tokens": 3169,
+            "sources": 1,
+            "clones": 3,
+            "duplicatedLines": 74,
+            "duplicatedTokens": 560,
+            "percentage": 20.9,
+            "percentageTokens": 17.67,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/PublicTorneoDetallePage.tsx": {
+            "lines": 131,
+            "tokens": 1080,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 34,
+            "duplicatedTokens": 239,
+            "percentage": 25.95,
+            "percentageTokens": 22.13,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/LoginPage.tsx": {
+            "lines": 241,
+            "tokens": 2156,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 16,
+            "duplicatedTokens": 136,
+            "percentage": 6.64,
+            "percentageTokens": 6.31,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/pages/CambiarPasswordPage.tsx": {
+            "lines": 192,
+            "tokens": 1753,
+            "sources": 1,
+            "clones": 4,
+            "duplicatedLines": 34,
+            "duplicatedTokens": 359,
+            "percentage": 17.71,
+            "percentageTokens": 20.48,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/RequireRole.tsx": {
+            "lines": 24,
+            "tokens": 235,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 8,
+            "duplicatedTokens": 81,
+            "percentage": 33.33,
+            "percentageTokens": 34.47,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/RequireAuth.tsx": {
+            "lines": 17,
+            "tokens": 156,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 8,
+            "duplicatedTokens": 81,
+            "percentage": 47.06,
+            "percentageTokens": 51.92,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/PasswordStrengthBar.tsx": {
+            "lines": 27,
+            "tokens": 359,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/components/HealthCheck.tsx": {
+            "lines": 59,
+            "tokens": 423,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/main.tsx": {
+            "lines": 26,
+            "tokens": 212,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/App.tsx": {
+            "lines": 345,
+            "tokens": 2221,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          }
+        },
+        "total": {
+          "lines": 13609,
+          "tokens": 116553,
+          "sources": 86,
+          "clones": 41,
+          "duplicatedLines": 646,
+          "duplicatedTokens": 5359,
+          "percentage": 4.75,
+          "percentageTokens": 4.6,
+          "newDuplicatedLines": 0,
+          "newClones": 0
+        }
+      },
+      "typescript": {
+        "sources": {
+          "frontend/src/pages/atleta/portalData.ts": {
+            "lines": 290,
+            "tokens": 2742,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/utils/marca.ts": {
+            "lines": 24,
+            "tokens": 321,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/utils/auth.ts": {
+            "lines": 7,
+            "tokens": 62,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/types/auth.ts": {
+            "lines": 21,
+            "tokens": 183,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/stores/useConnectionStore.ts": {
+            "lines": 63,
+            "tokens": 683,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/stores/useCompetenciaStore.ts": {
+            "lines": 43,
+            "tokens": 397,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/stores/useAuthStore.ts": {
+            "lines": 65,
+            "tokens": 527,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/hooks/useSyncQueue.ts": {
+            "lines": 288,
+            "tokens": 2771,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/hooks/usePrecarga.ts": {
+            "lines": 146,
+            "tokens": 1222,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 34,
+            "duplicatedTokens": 272,
+            "percentage": 23.29,
+            "percentageTokens": 22.26,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/hooks/usePerformanceFlow.ts": {
+            "lines": 485,
+            "tokens": 4219,
+            "sources": 1,
+            "clones": 4,
+            "duplicatedLines": 132,
+            "duplicatedTokens": 1110,
+            "percentage": 27.22,
+            "percentageTokens": 26.31,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/hooks/useNavigateWithRedirect.ts": {
+            "lines": 15,
+            "tokens": 123,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/hooks/useGrillaQueue.ts": {
+            "lines": 50,
+            "tokens": 532,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 12,
+            "duplicatedTokens": 119,
+            "percentage": 24,
+            "percentageTokens": 22.37,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/hooks/useDisciplinasJuez.ts": {
+            "lines": 87,
+            "tokens": 915,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/hooks/useComandoQueue.ts": {
+            "lines": 107,
+            "tokens": 956,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 12,
+            "duplicatedTokens": 119,
+            "percentage": 11.21,
+            "percentageTokens": 12.45,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/hooks/useAuditoriaCompetencia.ts": {
+            "lines": 57,
+            "tokens": 431,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/hooks/useAuditLog.ts": {
+            "lines": 9,
+            "tokens": 113,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/db/schema.ts": {
+            "lines": 20,
+            "tokens": 150,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/db/queries.ts": {
+            "lines": 121,
+            "tokens": 1156,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/db/index.ts": {
+            "lines": 17,
+            "tokens": 135,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/constants/tarjeta.ts": {
+            "lines": 43,
+            "tokens": 297,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/api/torneo.ts": {
+            "lines": 301,
+            "tokens": 2358,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 29,
+            "duplicatedTokens": 205,
+            "percentage": 9.63,
+            "percentageTokens": 8.69,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/api/tokenProvider.ts": {
+            "lines": 16,
+            "tokens": 150,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/api/resultados.ts": {
+            "lines": 65,
+            "tokens": 454,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/api/registro.ts": {
+            "lines": 421,
+            "tokens": 3367,
+            "sources": 1,
+            "clones": 5,
+            "duplicatedLines": 85,
+            "duplicatedTokens": 609,
+            "percentage": 20.19,
+            "percentageTokens": 18.09,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/api/identidad.ts": {
+            "lines": 177,
+            "tokens": 1471,
+            "sources": 1,
+            "clones": 3,
+            "duplicatedLines": 45,
+            "duplicatedTokens": 305,
+            "percentage": 25.42,
+            "percentageTokens": 20.73,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/api/health.ts": {
+            "lines": 10,
+            "tokens": 94,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/api/competencia.ts": {
+            "lines": 484,
+            "tokens": 3658,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 37,
+            "duplicatedTokens": 277,
+            "percentage": 7.64,
+            "percentageTokens": 7.57,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/api/auth.ts": {
+            "lines": 53,
+            "tokens": 459,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "frontend/src/sw.ts": {
+            "lines": 42,
+            "tokens": 340,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          }
+        },
+        "total": {
+          "lines": 3527,
+          "tokens": 30286,
+          "sources": 29,
+          "clones": 10,
+          "duplicatedLines": 193,
+          "duplicatedTokens": 1508,
+          "percentage": 5.47,
+          "percentageTokens": 4.98,
+          "newDuplicatedLines": 0,
+          "newClones": 0
+        }
+      },
+      "css": {
+        "sources": {
+          "frontend/src/index.css": {
+            "lines": 16,
+            "tokens": 77,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          }
+        },
+        "total": {
+          "lines": 16,
+          "tokens": 77,
+          "sources": 1,
+          "clones": 0,
+          "duplicatedLines": 0,
+          "duplicatedTokens": 0,
+          "percentage": 0,
+          "percentageTokens": 0,
+          "newDuplicatedLines": 0,
+          "newClones": 0
+        }
+      }
+    },
+    "total": {
+      "lines": 23014,
+      "tokens": 194422,
+      "sources": 194,
+      "clones": 54,
+      "duplicatedLines": 932,
+      "duplicatedTokens": 7476,
+      "percentage": 4.05,
+      "percentageTokens": 3.85,
+      "newDuplicatedLines": 0,
+      "newClones": 0
+    }
+  },
+  "duplicates": [
+    {
+      "format": "tsx",
+      "lines": 51,
+      "fragment": "\"\n      showTournamentNavigation={false}\n      simpleHeader\n    >\n      <div className=\"flex justify-end\">\n        <Link\n          to=\"/organizador/torneo\"\n          className=\"rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-100\"\n        >\n          Volver\n        </Link>\n      </div>\n      {torneosQuery.isLoading ? (\n        <section className=\"rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300\">\n          Cargando torneos...\n        </section>\n      ) : null}\n\n      {torneosQuery.isError ? (\n        <section className=\"rounded-[2rem] border border-red-500/40 bg-red-950/50 p-5 text-sm text-red-100\">\n          No se pudieron cargar los torneos.\n        </section>\n      ) : null}\n\n      {!torneosQuery.isLoading && !torneosQuery.isError && torneosQuery.data?.length === 0 ? (\n        <section className=\"rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300\">\n          No hay torneos disponibles.\n        </section>\n      ) : null}\n\n      {!torneosQuery.isLoading && !torneosQuery.isError\n        ? (torneosQuery.data ?? []).map((torneo) => (\n            <article\n              key={torneo.torneo_id}\n              className=\"rounded-[2rem] border border-slate-700 bg-slate-900/80 p-5 shadow-[0_20px_60px_rgba(2,6,23,0.32)]\"\n            >\n              <div className=\"flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between\">\n                <div>\n                  <p className=\"text-xs font-semibold uppercase tracking-[0.18em] text-slate-400\">\n                    Torneo\n                  </p>\n                  <h2 className=\"mt-2 text-xl font-semibold text-white\">{torneo.nombre}</h2>\n                  <p className=\"mt-2 text-sm text-slate-300\">\n                    {torneo.sede.nombre}, {torneo.sede.ciudad}\n                  </p>\n                </div>\n                <Link\n                  to={`/organizador/podios?torneo_id=${torneo.torneo_id}`}\n                  className=\"rounded-full border border-sky-400 bg-sky-400/10 px-4 py-2 text-center text-xs font-semibold uppercase tracking-[0.16em] text-sky-300\"\n                >\n                  Ver podios",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/organizador/PodiosPage.tsx",
+        "start": 45,
+        "end": 95,
+        "startLoc": {
+          "line": 45,
+          "column": 43,
+          "position": 400
+        },
+        "endLoc": {
+          "line": 95,
+          "column": 7,
+          "position": 789
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/ResultadosPage.tsx",
+        "start": 39,
+        "end": 89,
+        "startLoc": {
+          "line": 39,
+          "column": 48,
+          "position": 301
+        },
+        "endLoc": {
+          "line": 89,
+          "column": 11,
+          "position": 690
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 24,
+      "fragment": ")\n\n  const torneosQuery = useQuery({\n    queryKey: ['torneos-organizador'],\n    queryFn: fetchTorneos,\n  })\n  const torneo = torneosQuery.data?.find((t) => t.torneo_id === torneoId) ?? null\n\n  const competenciasQuery = useQuery({\n    queryKey: ['competencias-torneo', torneoId],\n    queryFn: () => fetchCompetenciasPorTorneo(torneoId),\n  })\n\n  const inscriptosQuery = useQuery({\n    queryKey: ['inscriptos-detalle', torneoId],\n    queryFn: () => listarInscriptosDetalle(torneoId),\n  })\n\n  const disciplinas: CompetenciaResumenDto[] = useMemo(\n    () => competenciasQuery.data ?? [],\n    [competenciasQuery.data],\n  )\n\n  const rankingQueries",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/organizador/PodiosPage.tsx",
+        "start": 156,
+        "end": 179,
+        "startLoc": {
+          "line": 156,
+          "column": 3,
+          "position": 1331
+        },
+        "endLoc": {
+          "line": 179,
+          "column": 15,
+          "position": 1533
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/ResultadosPage.tsx",
+        "start": 104,
+        "end": 126,
+        "startLoc": {
+          "line": 104,
+          "column": 5,
+          "position": 781
+        },
+        "endLoc": {
+          "line": 126,
+          "column": 17,
+          "position": 982
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 10,
+      "fragment": ") {\n  const torneosQuery = useQuery({\n    queryKey: ['torneos-organizador'],\n    queryFn: fetchTorneos,\n  })\n  const torneo = torneosQuery.data?.find((item) => item.torneo_id === torneoId) ?? null\n\n  return (\n    <OrganizadorLayout\n      title=\"Inscriptos",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/organizador/OrganizadorInscriptosPage.tsx",
+        "start": 36,
+        "end": 45,
+        "startLoc": {
+          "line": 36,
+          "column": 26,
+          "position": 242
+        },
+        "endLoc": {
+          "line": 45,
+          "column": 11,
+          "position": 324
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/OrganizadorJuecesPage.tsx",
+        "start": 36,
+        "end": 45,
+        "startLoc": {
+          "line": 36,
+          "column": 22,
+          "position": 242
+        },
+        "endLoc": {
+          "line": 45,
+          "column": 7,
+          "position": 324
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 10,
+      "fragment": ") {\n  const torneosQuery = useQuery({\n    queryKey: ['torneos-organizador'],\n    queryFn: fetchTorneos,\n  })\n  const torneo = torneosQuery.data?.find((item) => item.torneo_id === torneoId) ?? null\n\n  return (\n    <OrganizadorLayout\n      title=\"Grilla",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/organizador/OrganizadorGrillaPage.tsx",
+        "start": 36,
+        "end": 45,
+        "startLoc": {
+          "line": 36,
+          "column": 22,
+          "position": 242
+        },
+        "endLoc": {
+          "line": 45,
+          "column": 7,
+          "position": 324
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/OrganizadorJuecesPage.tsx",
+        "start": 36,
+        "end": 45,
+        "startLoc": {
+          "line": 36,
+          "column": 22,
+          "position": 242
+        },
+        "endLoc": {
+          "line": 45,
+          "column": 7,
+          "position": 324
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 13,
+      "fragment": "{torneosQuery.isLoading ? (\n        <section className=\"rounded-[2rem] border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300\">\n          Cargando torneos...\n        </section>\n      ) : null}\n\n      {torneosQuery.isError ? (\n        <section className=\"rounded-[2rem] border border-red-500/40 bg-red-950/50 p-5 text-sm text-red-100\">\n          No se pudieron cargar los torneos.\n        </section>\n      ) : null}\n\n      {!torneosQuery.isLoading && !torneosQuery.isError ?",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/organizador/DashboardPage.tsx",
+        "start": 169,
+        "end": 181,
+        "startLoc": {
+          "line": 169,
+          "column": 7,
+          "position": 1428
+        },
+        "endLoc": {
+          "line": 181,
+          "column": 2,
+          "position": 1531
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/ResultadosPage.tsx",
+        "start": 51,
+        "end": 63,
+        "startLoc": {
+          "line": 51,
+          "column": 7,
+          "position": 356
+        },
+        "endLoc": {
+          "line": 63,
+          "column": 3,
+          "position": 459
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 12,
+      "fragment": "{\n    return {\n      nombre: form.nombre.trim(),\n      descripcion: form.descripcion.trim(),\n      fecha_inicio: form.fechaInicio,\n      fecha_fin: form.fechaFin,\n      sede: {\n        nombre: form.sedeNombre.trim(),\n        ciudad: form.sedeCiudad.trim(),\n        pais: form.sedePais.trim(),\n      },\n      grupos_etarios",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/organizador/CrearTorneoPage.tsx",
+        "start": 187,
+        "end": 198,
+        "startLoc": {
+          "line": 187,
+          "column": 2,
+          "position": 1622
+        },
+        "endLoc": {
+          "line": 198,
+          "column": 15,
+          "position": 1723
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/CrearTorneoPage.tsx",
+        "start": 168,
+        "end": 179,
+        "startLoc": {
+          "line": 168,
+          "column": 2,
+          "position": 1462
+        },
+        "endLoc": {
+          "line": 179,
+          "column": 21,
+          "position": 1563
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 42,
+      "fragment": "={perfilExiste ? handleSubmit : (e) => { e.preventDefault(); void handleCrear() }}\n          className=\"rounded-2xl border border-slate-700 bg-slate-900/85 p-5 shadow-lg\"\n        >\n          {success ? (\n            <div className=\"mb-4 rounded-xl border border-emerald-500/40 bg-emerald-950/40 p-3 text-sm text-emerald-200\">\n              Datos actualizados correctamente.\n            </div>\n          ) : null}\n          {error ? (\n            <div className=\"mb-4 rounded-xl border border-red-500/40 bg-red-950/40 p-3 text-sm text-red-200\">\n              {error}\n            </div>\n          ) : null}\n          <div className=\"grid gap-4\">\n            <label className=\"block text-sm font-semibold text-slate-100\">\n              Nombre\n              <input\n                value={nombre ?? ''}\n                readOnly\n                className=\"mt-2 w-full rounded-xl border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-slate-400 outline-none cursor-default\"\n              />\n            </label>\n            <label className=\"block text-sm font-semibold text-slate-100\">\n              Apellido\n              <input\n                value={apellido ?? ''}\n                readOnly\n                className=\"mt-2 w-full rounded-xl border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-slate-400 outline-none cursor-default\"\n              />\n            </label>\n            <label className=\"block text-sm font-semibold text-slate-100\">\n              Email\n              <input\n                value={email ?? ''}\n                readOnly\n                className=\"mt-2 w-full rounded-xl border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-slate-400 outline-none cursor-default\"\n              />\n            </label>\n            <label className=\"block text-sm font-semibold text-slate-100\">\n              Número de licencia <span className=\"ml-1 text-xs font-normal text-slate-400\">(opcional)</span>\n              <input\n                value={form.numero_licencia",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/juez/JuezMisDatosPage.tsx",
+        "start": 112,
+        "end": 153,
+        "startLoc": {
+          "line": 112,
+          "column": 9,
+          "position": 1041
+        },
+        "endLoc": {
+          "line": 153,
+          "column": 16,
+          "position": 1340
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/OrganizadorMisDatosPage.tsx",
+        "start": 118,
+        "end": 159,
+        "startLoc": {
+          "line": 118,
+          "column": 9,
+          "position": 1036
+        },
+        "endLoc": {
+          "line": 159,
+          "column": 20,
+          "position": 1334
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 12,
+      "fragment": ": '' })\n  const [isLoading, setIsLoading] = useState(true)\n  const [isSubmitting, setIsSubmitting] = useState(false)\n  const [error, setError] = useState<string | null>(null)\n  const [success, setSuccess] = useState(false)\n\n  useEffect(() => {\n    let cancelled = false\n    async function load() {\n      setIsLoading(true)\n      try {\n        const juez",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/juez/JuezMisDatosPage.tsx",
+        "start": 28,
+        "end": 39,
+        "startLoc": {
+          "line": 28,
+          "column": 11,
+          "position": 300
+        },
+        "endLoc": {
+          "line": 39,
+          "column": 5,
+          "position": 427
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/OrganizadorMisDatosPage.tsx",
+        "start": 35,
+        "end": 46,
+        "startLoc": {
+          "line": 35,
+          "column": 20,
+          "position": 332
+        },
+        "endLoc": {
+          "line": 46,
+          "column": 4,
+          "position": 459
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 26,
+      "fragment": "})\n          } else {\n            setPerfilExiste(false)\n          }\n        }\n      } catch (err) {\n        if (!cancelled) setError(getErrorMessage(err))\n      } finally {\n        if (!cancelled) setIsLoading(false)\n      }\n    }\n    void load()\n    return () => { cancelled = true }\n  }, [])\n\n  function updateField(field: keyof FormState, value: string) {\n    setForm((current) => ({ ...current, [field]: value }))\n    setError(null)\n    setSuccess(false)\n  }\n\n  async function handleCrear() {\n    setIsSubmitting(true)\n    setError(null)\n    try {\n      const juez",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/juez/JuezMisDatosPage.tsx",
+        "start": 46,
+        "end": 71,
+        "startLoc": {
+          "line": 46,
+          "column": 13,
+          "position": 496
+        },
+        "endLoc": {
+          "line": 71,
+          "column": 5,
+          "position": 700
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/OrganizadorMisDatosPage.tsx",
+        "start": 50,
+        "end": 75,
+        "startLoc": {
+          "line": 50,
+          "column": 2,
+          "position": 511
+        },
+        "endLoc": {
+          "line": 75,
+          "column": 4,
+          "position": 715
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 15,
+      "fragment": "?? '' })\n    } catch (err) {\n      setError(getErrorMessage(err))\n    } finally {\n      setIsSubmitting(false)\n    }\n  }\n\n  async function handleSubmit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault()\n    setIsSubmitting(true)\n    setError(null)\n    setSuccess(false)\n    try {\n      const updated = await actualizarJuezMe",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/juez/JuezMisDatosPage.tsx",
+        "start": 73,
+        "end": 87,
+        "startLoc": {
+          "line": 73,
+          "column": 2,
+          "position": 741
+        },
+        "endLoc": {
+          "line": 87,
+          "column": 17,
+          "position": 846
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/OrganizadorMisDatosPage.tsx",
+        "start": 77,
+        "end": 91,
+        "startLoc": {
+          "line": 77,
+          "column": 2,
+          "position": 743
+        },
+        "endLoc": {
+          "line": 91,
+          "column": 24,
+          "position": 848
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 48,
+      "fragment": "\">\n      <RolesSection />\n      {isLoading ? (\n        <div className=\"rounded-2xl border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300\">\n          Cargando perfil...\n        </div>\n      ) : (\n        <form\n          onSubmit={perfilExiste ? handleSubmit : (e) => { e.preventDefault(); void handleCrear() }}\n          className=\"rounded-2xl border border-slate-700 bg-slate-900/85 p-5 shadow-lg\"\n        >\n          {success ? (\n            <div className=\"mb-4 rounded-xl border border-emerald-500/40 bg-emerald-950/40 p-3 text-sm text-emerald-200\">\n              Datos actualizados correctamente.\n            </div>\n          ) : null}\n          {error ? (\n            <div className=\"mb-4 rounded-xl border border-red-500/40 bg-red-950/40 p-3 text-sm text-red-200\">\n              {error}\n            </div>\n          ) : null}\n          <div className=\"grid gap-4\">\n            <label className=\"block text-sm font-semibold text-slate-100\">\n              Nombre\n              <input\n                value={nombre ?? ''}\n                readOnly\n                className=\"mt-2 w-full rounded-xl border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-slate-400 outline-none cursor-default\"\n              />\n            </label>\n            <label className=\"block text-sm font-semibold text-slate-100\">\n              Apellido\n              <input\n                value={apellido ?? ''}\n                readOnly\n                className=\"mt-2 w-full rounded-xl border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-slate-400 outline-none cursor-default\"\n              />\n            </label>\n            <label className=\"block text-sm font-semibold text-slate-100\">\n              Email\n              <input\n                value={email ?? ''}\n                readOnly\n                className=\"mt-2 w-full rounded-xl border border-slate-700 bg-slate-800/50 px-3 py-2 text-sm text-slate-400 outline-none cursor-default\"\n              />\n            </label>\n            <label className=\"block text-sm font-semibold text-slate-100\">\n              N",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/juez/JuezMisDatosPage.tsx",
+        "start": 104,
+        "end": 151,
+        "startLoc": {
+          "line": 104,
+          "column": 15,
+          "position": 990
+        },
+        "endLoc": {
+          "line": 151,
+          "column": 2,
+          "position": 1308
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/OrganizadorMisDatosPage.tsx",
+        "start": 110,
+        "end": 157,
+        "startLoc": {
+          "line": 110,
+          "column": 53,
+          "position": 985
+        },
+        "endLoc": {
+          "line": 157,
+          "column": 7,
+          "position": 1303
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 18,
+      "fragment": "= useMemo(() => {\n    const grillaBase = (precargaQuery.payload?.grilla ?? []).filter(\n      (atleta) => atleta.juez_id === juezId,\n    )\n    const queue = queueData\n    const grillaMap = new Map(grillaBase.map((atleta) => [atleta.atleta_id, { ...atleta }]))\n\n    for (const cmd of queue) {\n      const payload = parsePayload(cmd.payload)\n      const participanteId = String(payload.participante_id ?? '')\n      if (!participanteId) continue\n      const atleta = grillaMap.get(participanteId)\n      if (!atleta) continue\n      atleta.estado = projectedEstado(cmd.tipo, payload)\n      grillaMap.set(participanteId, atleta)\n    }\n\n    return",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/juez/GrillaPage.tsx",
+        "start": 132,
+        "end": 149,
+        "startLoc": {
+          "line": 132,
+          "column": 2,
+          "position": 1190
+        },
+        "endLoc": {
+          "line": 149,
+          "column": 7,
+          "position": 1407
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/juez/GrillaPage.tsx",
+        "start": 110,
+        "end": 127,
+        "startLoc": {
+          "line": 110,
+          "column": 2,
+          "position": 891
+        },
+        "endLoc": {
+          "line": 127,
+          "column": 6,
+          "position": 1108
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 8,
+      "fragment": ">\n                    <div>\n                      <h2 className=\"text-base font-semibold text-white\">{torneo.nombre}</h2>\n                      <p className=\"mt-1 text-sm text-slate-400\">\n                        {formatFecha(torneo.fecha_inicio)} · {torneo.sede.nombre}, {torneo.sede.ciudad}\n                      </p>\n                    </div>\n                    <Link",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/atleta/AtletaTorneosPage.tsx",
+        "start": 235,
+        "end": 242,
+        "startLoc": {
+          "line": 235,
+          "column": 19,
+          "position": 2135
+        },
+        "endLoc": {
+          "line": 242,
+          "column": 5,
+          "position": 2213
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/atleta/AtletaTorneosPage.tsx",
+        "start": 179,
+        "end": 186,
+        "startLoc": {
+          "line": 179,
+          "column": 17,
+          "position": 1640
+        },
+        "endLoc": {
+          "line": 186,
+          "column": 2,
+          "position": 1718
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 9,
+      "fragment": ", entry.competenciaId, entry.disciplina],\n      queryFn: () => fetchRankingCompetencia(entry.competenciaId!, entry.disciplina),\n      enabled: Boolean(entry.competenciaId),\n      retry: false,\n    })),\n  })\n\n  const grillaQueries = useQueries({\n    queries: entriesActivas",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/atleta/AtletaResultadosPage.tsx",
+        "start": 28,
+        "end": 36,
+        "startLoc": {
+          "line": 28,
+          "column": 17,
+          "position": 258
+        },
+        "endLoc": {
+          "line": 36,
+          "column": 15,
+          "position": 339
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/atleta/AtletaTorneoDetallePage.tsx",
+        "start": 55,
+        "end": 63,
+        "startLoc": {
+          "line": 55,
+          "column": 25,
+          "position": 541
+        },
+        "endLoc": {
+          "line": 63,
+          "column": 14,
+          "position": 622
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 8,
+      "fragment": "]?.data ?? []\n    const mapa = new Map<string, string>()\n    grilla.forEach((fila) => mapa.set(fila.atleta_id, fila.nombre_atleta))\n    nombresPorCompetencia.set(entry.competenciaId, mapa)\n  })\n\n  const overallPorTorneo = new Map(\n    torneoIds",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/atleta/AtletaResultadosPage.tsx",
+        "start": 56,
+        "end": 63,
+        "startLoc": {
+          "line": 56,
+          "column": 6,
+          "position": 591
+        },
+        "endLoc": {
+          "line": 63,
+          "column": 10,
+          "position": 678
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/atleta/AtletaTorneoDetallePage.tsx",
+        "start": 90,
+        "end": 96,
+        "startLoc": {
+          "line": 90,
+          "column": 4,
+          "position": 919
+        },
+        "endLoc": {
+          "line": 96,
+          "column": 2,
+          "position": 1004
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 13,
+      "fragment": "})\n  const [isLoading, setIsLoading] = useState(true)\n  const [isSubmitting, setIsSubmitting] = useState(false)\n  const [error, setError] = useState<string | null>(null)\n  const [success, setSuccess] = useState(false)\n\n  useEffect(() => {\n    let cancelled = false\n\n    async function load() {\n      setIsLoading(true)\n      try {\n        const atleta",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/atleta/AtletaMisDatosPage.tsx",
+        "start": 68,
+        "end": 80,
+        "startLoc": {
+          "line": 68,
+          "column": 3,
+          "position": 581
+        },
+        "endLoc": {
+          "line": 80,
+          "column": 7,
+          "position": 705
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/OrganizadorMisDatosPage.tsx",
+        "start": 35,
+        "end": 46,
+        "startLoc": {
+          "line": 35,
+          "column": 2,
+          "position": 336
+        },
+        "endLoc": {
+          "line": 46,
+          "column": 4,
+          "position": 459
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 20,
+      "fragment": "} catch (err) {\n        if (!cancelled) setError(getErrorMessage(err))\n      } finally {\n        if (!cancelled) setIsLoading(false)\n      }\n    }\n\n    void load()\n    return () => {\n      cancelled = true\n    }\n  }, [])\n\n  function updateField(field: keyof FormState, value: string) {\n    setForm((current) => ({ ...current, [field]: value }))\n    setError(null)\n    setSuccess(false)\n  }\n\n  async function handleSubmit",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/atleta/AtletaMisDatosPage.tsx",
+        "start": 82,
+        "end": 101,
+        "startLoc": {
+          "line": 82,
+          "column": 7,
+          "position": 732
+        },
+        "endLoc": {
+          "line": 101,
+          "column": 13,
+          "position": 890
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/OrganizadorMisDatosPage.tsx",
+        "start": 55,
+        "end": 71,
+        "startLoc": {
+          "line": 55,
+          "column": 7,
+          "position": 534
+        },
+        "endLoc": {
+          "line": 71,
+          "column": 12,
+          "position": 689
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 29,
+      "fragment": "\">\n      <RolesSection />\n      {isLoading ? (\n        <div className=\"rounded-2xl border border-slate-700 bg-slate-900/70 p-5 text-sm text-slate-300\">\n          Cargando perfil...\n        </div>\n      ) : (\n        <form\n          onSubmit={handleSubmit}\n          className=\"rounded-2xl border border-slate-700 bg-slate-900/85 p-5 shadow-lg\"\n        >\n          {success ? (\n            <div className=\"mb-4 rounded-xl border border-emerald-500/40 bg-emerald-950/40 p-3 text-sm text-emerald-200\">\n              Datos actualizados correctamente.\n            </div>\n          ) : null}\n\n          {error ? (\n            <div className=\"mb-4 rounded-xl border border-red-500/40 bg-red-950/40 p-3 text-sm text-red-200\">\n              {error}\n            </div>\n          ) : null}\n\n          <div className=\"grid gap-4\">\n            <label className=\"block text-sm font-semibold text-slate-100\">\n              Nombre\n              <input\n                value={form.nombre}\n                onChange",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/atleta/AtletaMisDatosPage.tsx",
+        "start": 128,
+        "end": 156,
+        "startLoc": {
+          "line": 128,
+          "column": 30,
+          "position": 1153
+        },
+        "endLoc": {
+          "line": 156,
+          "column": 9,
+          "position": 1333
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/OrganizadorMisDatosPage.tsx",
+        "start": 110,
+        "end": 136,
+        "startLoc": {
+          "line": 110,
+          "column": 53,
+          "position": 985
+        },
+        "endLoc": {
+          "line": 136,
+          "column": 9,
+          "position": 1190
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 10,
+      "fragment": "(rol),\n    onSuccess: async () => {\n      setError(null)\n      await refreshStore()\n      void queryClient.invalidateQueries({ queryKey: ['usuarios'] })\n    },\n    onError: (err) => setError(getErrorMessage(err)),\n  })\n\n  const isPending",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/components/shared/RolesSection.tsx",
+        "start": 45,
+        "end": 54,
+        "startLoc": {
+          "line": 45,
+          "column": 16,
+          "position": 486
+        },
+        "endLoc": {
+          "line": 54,
+          "column": 10,
+          "position": 567
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/components/shared/RolesSection.tsx",
+        "start": 35,
+        "end": 44,
+        "startLoc": {
+          "line": 35,
+          "column": 17,
+          "position": 383
+        },
+        "endLoc": {
+          "line": 44,
+          "column": 15,
+          "position": 464
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 9,
+      "fragment": ">\n          <div className=\"flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between\">\n            <div>\n              <p className=\"text-xs font-semibold uppercase tracking-[0.18em] text-slate-400\">\n                Torneo\n              </p>\n              <h2 className=\"mt-2 text-xl font-semibold text-white\">{torneo.nombre}</h2>\n              <p className=\"mt-2 text-sm text-slate-300\">\n                {torneo.sede.nombre}, {torneo.sede.ciudad} ·",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/components/organizador/TorneoRouteSelector.tsx",
+        "start": 65,
+        "end": 73,
+        "startLoc": {
+          "line": 65,
+          "column": 9,
+          "position": 447
+        },
+        "endLoc": {
+          "line": 73,
+          "column": 2,
+          "position": 532
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/ResultadosPage.tsx",
+        "start": 74,
+        "end": 83,
+        "startLoc": {
+          "line": 74,
+          "column": 13,
+          "position": 568
+        },
+        "endLoc": {
+          "line": 83,
+          "column": 3,
+          "position": 654
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 13,
+      "fragment": ")\n      await generarGrilla({\n        competenciaId: competencia.competencia_id,\n        disciplina,\n        otInicio: payload.otInicio,\n        andariveles: payload.andariveles,\n      })\n    },\n    onSuccess: refresh,\n    onError: (mutationError) => setError((mutationError as Error).message),\n  })\n\n  const confirmarMutation",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/components/organizador/GrillaPanel.tsx",
+        "start": 192,
+        "end": 204,
+        "startLoc": {
+          "line": 192,
+          "column": 2,
+          "position": 1756
+        },
+        "endLoc": {
+          "line": 204,
+          "column": 18,
+          "position": 1843
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/components/organizador/GrillaPanel.tsx",
+        "start": 137,
+        "end": 149,
+        "startLoc": {
+          "line": 137,
+          "column": 3,
+          "position": 1343
+        },
+        "endLoc": {
+          "line": 149,
+          "column": 22,
+          "position": 1430
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 8,
+      "fragment": "</p>\n      <div className=\"mt-3 overflow-x-auto\">\n        <table className=\"w-full text-left text-sm\">\n          <thead>\n            <tr className=\"border-b border-slate-800\">\n              <th className=\"px-4 pb-2 text-center text-xs font-semibold uppercase tracking-[0.16em] text-slate-500\">Pos</th>\n              <th className=\"px-0 pb-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500\">Atleta</th>\n              <th className=\"px-4 pb-2 text-center text-xs font-semibold uppercase tracking-[0.16em] text-slate-500\">Marca",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/components/atleta/RankingCard.tsx",
+        "start": 33,
+        "end": 40,
+        "startLoc": {
+          "line": 33,
+          "column": 7,
+          "position": 262
+        },
+        "endLoc": {
+          "line": 40,
+          "column": 6,
+          "position": 344
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/atleta/AtletaMiGrillaPage.tsx",
+        "start": 112,
+        "end": 119,
+        "startLoc": {
+          "line": 112,
+          "column": 15,
+          "position": 1029
+        },
+        "endLoc": {
+          "line": 119,
+          "column": 3,
+          "position": 1111
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 17,
+      "fragment": ") {\n  return (\n    <tr className={isSelf ? 'bg-sky-500/10' : undefined}>\n      <td className=\"py-2 pr-3 text-center text-xs font-semibold text-slate-400\">{posicion}</td>\n      <td className=\"py-2 pr-3\">\n        <div className=\"flex items-center gap-1.5\">\n          <span className={`text-sm font-semibold ${isSelf ? 'text-sky-300' : 'text-white'}`}>\n            {nombre}\n          </span>\n          {isSelf ? (\n            <span className=\"rounded-full border border-sky-400/40 bg-sky-400/10 px-1.5 py-0.5 text-[10px] font-semibold text-sky-300\">\n              Vos\n            </span>\n          ) : null}\n        </div>\n      </td>\n      <td className=\"py-2 pr-3 text-center text-sm font-semibold text-slate-200\">{ot",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/components/atleta/GrillaRow.tsx",
+        "start": 15,
+        "end": 31,
+        "startLoc": {
+          "line": 15,
+          "column": 15,
+          "position": 71
+        },
+        "endLoc": {
+          "line": 31,
+          "column": 3,
+          "position": 224
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/components/atleta/RankingRow.tsx",
+        "start": 35,
+        "end": 51,
+        "startLoc": {
+          "line": 35,
+          "column": 16,
+          "position": 259
+        },
+        "endLoc": {
+          "line": 51,
+          "column": 3,
+          "position": 412
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 29,
+      "fragment": "={() => setMenuOpen((v) => !v)}\n                className=\"rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-400 hover:border-slate-500 hover:text-slate-200\"\n                aria-label=\"Menú de navegación\"\n              >\n                {menuOpen ? '✕' : '☰'}\n              </button>\n              <button\n                type=\"button\"\n                onClick={logout}\n                className=\"rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-400 hover:border-slate-500 hover:text-slate-200\"\n              >\n                Salir\n              </button>\n            </div>\n          </div>\n\n          {/* Menú vertical desplegable */}\n          {menuOpen ? (\n            <nav className=\"flex flex-col border-t border-slate-800 px-4\">\n              {TABS.map((tab) => {\n                const active = isTabActive(location.pathname, tab.to)\n                return (\n                  <Link\n                    key={tab.to}\n                    to={tab.to}\n                    className={[\n                      'flex items-center border-b border-slate-800/60 py-3.5 text-sm font-semibold transition-colors',\n                      active ? 'text-sky-400' : 'text-slate-300 hover:text-white',\n                    ].join(' ')}",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/components/atleta/AtletaShell.tsx",
+        "start": 77,
+        "end": 105,
+        "startLoc": {
+          "line": 77,
+          "column": 8,
+          "position": 703
+        },
+        "endLoc": {
+          "line": 105,
+          "column": 2,
+          "position": 903
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/components/juez/JuezLayout.tsx",
+        "start": 57,
+        "end": 85,
+        "startLoc": {
+          "line": 57,
+          "column": 8,
+          "position": 573
+        },
+        "endLoc": {
+          "line": 85,
+          "column": 2,
+          "position": 771
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 29,
+      "fragment": "</p>\n              <h1 className=\"mt-2 text-xl font-semibold text-white\">{title}</h1>\n              {subtitle ? <p className=\"mt-1 text-sm text-slate-400\">{subtitle}</p> : null}\n            </div>\n            <div className=\"flex shrink-0 items-start gap-2\">\n              {actions ? <div>{actions}</div> : null}\n              <button\n                type=\"button\"\n                onClick={() => setMenuOpen((v) => !v)}\n                className=\"rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-400 hover:border-slate-500 hover:text-slate-200\"\n                aria-label=\"Menú de navegación\"\n              >\n                {menuOpen ? '✕' : '☰'}\n              </button>\n              <button\n                type=\"button\"\n                onClick={logout}\n                className=\"rounded-full border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-400 hover:border-slate-500 hover:text-slate-200\"\n              >\n                Salir\n              </button>\n            </div>\n          </div>\n\n          {/* Menú vertical desplegable */}\n          {menuOpen ? (\n            <nav className=\"flex flex-col border-t border-slate-800 px-4\">\n              {TABS.map((tab) => {\n                const active = isTabActive(location",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/components/atleta/AtletaShell.tsx",
+        "start": 69,
+        "end": 97,
+        "startLoc": {
+          "line": 69,
+          "column": 15,
+          "position": 607
+        },
+        "endLoc": {
+          "line": 97,
+          "column": 9,
+          "position": 845
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/components/juez/JuezLayout.tsx",
+        "start": 49,
+        "end": 77,
+        "startLoc": {
+          "line": 49,
+          "column": 15,
+          "position": 477
+        },
+        "endLoc": {
+          "line": 77,
+          "column": 9,
+          "position": 715
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 28,
+      "fragment": "pathname, tab.to)\n                return (\n                  <Link\n                    key={tab.to}\n                    to={tab.to}\n                    className={[\n                      'flex items-center border-b border-slate-800/60 py-3.5 text-sm font-semibold transition-colors',\n                      active ? 'text-sky-400' : 'text-slate-300 hover:text-white',\n                    ].join(' ')}\n                  >\n                    {active ? (\n                      <span className=\"mr-3 h-1.5 w-1.5 rounded-full bg-sky-400\" />\n                    ) : (\n                      <span className=\"mr-3 h-1.5 w-1.5 rounded-full bg-transparent\" />\n                    )}\n                    {tab.label}\n                  </Link>\n                )\n              })}\n            </nav>\n          ) : null}\n        </header>\n\n        <main className=\"flex-1 px-4 py-4\">{children}</main>\n      </div>\n    </div>\n  )\n}",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/components/atleta/AtletaShell.tsx",
+        "start": 97,
+        "end": 124,
+        "startLoc": {
+          "line": 97,
+          "column": 2,
+          "position": 847
+        },
+        "endLoc": {
+          "line": 124,
+          "column": 2,
+          "position": 1019
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/components/juez/JuezLayout.tsx",
+        "start": 77,
+        "end": 104,
+        "startLoc": {
+          "line": 77,
+          "column": 2,
+          "position": 715
+        },
+        "endLoc": {
+          "line": 104,
+          "column": 2,
+          "position": 887
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 9,
+      "fragment": ")\n    },\n  })\n\n  if (rol === 'juez') return <Navigate to=\"/juez/disciplinas\" replace />\n  if (rol === 'organizador') return <Navigate to=\"/organizador/dashboard\" replace />\n  if (rol === 'atleta') return <Navigate to=\"/atleta\" replace />\n\n  function updateField",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/RegistroPage.tsx",
+        "start": 113,
+        "end": 121,
+        "startLoc": {
+          "line": 113,
+          "column": 2,
+          "position": 1195
+        },
+        "endLoc": {
+          "line": 121,
+          "column": 12,
+          "position": 1288
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/ResetPasswordPage.tsx",
+        "start": 28,
+        "end": 36,
+        "startLoc": {
+          "line": 28,
+          "column": 7,
+          "position": 321
+        },
+        "endLoc": {
+          "line": 36,
+          "column": 13,
+          "position": 414
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 9,
+      "fragment": "return (\n    <div className=\"min-h-screen bg-slate-950 text-slate-100\">\n      <div className=\"mx-auto flex min-h-screen w-full max-w-md items-center px-4 py-8\">\n        <div className=\"w-full rounded-[2rem] border border-slate-800 bg-slate-900/80 p-8 shadow-[0_24px_80px_-50px_rgba(34,211,238,0.7)]\">\n          <p className=\"text-center text-xs font-semibold uppercase tracking-[0.24em] text-sky-400\">\n            AtaraxiaDive\n          </p>\n          <h1 className=\"mb-2 mt-3 text-center text-3xl font-semibold text-slate-50\">\n            Crear",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/RegistroPage.tsx",
+        "start": 193,
+        "end": 201,
+        "startLoc": {
+          "line": 193,
+          "column": 3,
+          "position": 2160
+        },
+        "endLoc": {
+          "line": 201,
+          "column": 6,
+          "position": 2228
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/ResetPasswordPage.tsx",
+        "start": 64,
+        "end": 72,
+        "startLoc": {
+          "line": 64,
+          "column": 3,
+          "position": 593
+        },
+        "endLoc": {
+          "line": 72,
+          "column": 12,
+          "position": 661
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 12,
+      "fragment": "})\n  }\n\n  return (\n    <div className=\"min-h-screen bg-slate-950 text-slate-100\">\n      <div className=\"mx-auto flex min-h-screen w-full max-w-md items-center px-4 py-8\">\n        <div className=\"w-full rounded-[2rem] border border-slate-800 bg-slate-900/80 p-8 shadow-[0_24px_80px_-50px_rgba(34,211,238,0.7)]\">\n          <p className=\"text-center text-xs font-semibold uppercase tracking-[0.24em] text-sky-400\">\n            AtaraxiaDive\n          </p>\n          <h1 className=\"mb-2 mt-3 text-center text-3xl font-semibold text-slate-50\">\n            Recuperar",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/RecuperarPasswordPage.tsx",
+        "start": 32,
+        "end": 43,
+        "startLoc": {
+          "line": 32,
+          "column": 2,
+          "position": 303
+        },
+        "endLoc": {
+          "line": 43,
+          "column": 10,
+          "position": 379
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/ResetPasswordPage.tsx",
+        "start": 61,
+        "end": 72,
+        "startLoc": {
+          "line": 61,
+          "column": 2,
+          "position": 585
+        },
+        "endLoc": {
+          "line": 72,
+          "column": 12,
+          "position": 661
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 14,
+      "fragment": "}\n            </button>\n          </form>\n\n          <p className=\"mt-6 text-center text-sm text-slate-400\">\n            <Link to=\"/login\" className=\"font-semibold text-sky-300 hover:text-sky-200\">\n              Volver a iniciar sesion\n            </Link>\n          </p>\n        </div>\n      </div>\n    </div>\n  )\n}",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/RecuperarPasswordPage.tsx",
+        "start": 77,
+        "end": 90,
+        "startLoc": {
+          "line": 77,
+          "column": 16,
+          "position": 623
+        },
+        "endLoc": {
+          "line": 90,
+          "column": 2,
+          "position": 701
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/ResetPasswordPage.tsx",
+        "start": 113,
+        "end": 126,
+        "startLoc": {
+          "line": 113,
+          "column": 27,
+          "position": 951
+        },
+        "endLoc": {
+          "line": 126,
+          "column": 2,
+          "position": 1029
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 11,
+      "fragment": "(torneoId ?? ''),\n    enabled: Boolean(torneoId),\n  })\n\n  const competenciasQuery = useQuery({\n    queryKey: ['competencias-torneo', torneoId],\n    queryFn: () => fetchCompetenciasPorTorneo(torneoId ?? ''),\n    enabled: Boolean(torneoId),\n  })\n\n  const competencias",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/PublicTorneoResultadosPage.tsx",
+        "start": 93,
+        "end": 103,
+        "startLoc": {
+          "line": 93,
+          "column": 12,
+          "position": 904
+        },
+        "endLoc": {
+          "line": 103,
+          "column": 13,
+          "position": 990
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/DetalleTorneoPage.tsx",
+        "start": 86,
+        "end": 94,
+        "startLoc": {
+          "line": 86,
+          "column": 24,
+          "position": 725
+        },
+        "endLoc": {
+          "line": 94,
+          "column": 26,
+          "position": 809
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 23,
+      "fragment": "\">\n          <span className=\"text-xs font-semibold uppercase tracking-[0.24em] text-sky-400\">\n            AtaraxiaDive\n          </span>\n          {portalLink ? (\n            <Link\n              to={portalLink}\n              className=\"rounded-2xl bg-sky-500 px-4 py-2 text-xs font-semibold text-slate-950 transition-colors hover:bg-sky-400\"\n            >\n              Mi portal\n            </Link>\n          ) : (\n            <Link\n              to=\"/login\"\n              className=\"rounded-2xl border border-slate-700 bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-200 transition-colors hover:bg-slate-700\"\n            >\n              Iniciar sesión\n            </Link>\n          )}\n        </div>\n      </header>\n\n      <main className=\"mx-auto max-w-3xl px-4 py-6",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/PublicTorneoResultadosPage.tsx",
+        "start": 144,
+        "end": 166,
+        "startLoc": {
+          "line": 144,
+          "column": 52,
+          "position": 1437
+        },
+        "endLoc": {
+          "line": 166,
+          "column": 28,
+          "position": 1552
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/PublicTorneosPage.tsx",
+        "start": 183,
+        "end": 205,
+        "startLoc": {
+          "line": 183,
+          "column": 51,
+          "position": 1629
+        },
+        "endLoc": {
+          "line": 205,
+          "column": 27,
+          "position": 1744
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 17,
+      "fragment": ")\n\n  const torneoQuery = useQuery({\n    queryKey: ['torneo', torneoId],\n    queryFn: () => fetchTorneo(torneoId ?? ''),\n    enabled: Boolean(torneoId),\n  })\n\n  const competenciasQuery = useQuery({\n    queryKey: ['competencias-torneo', torneoId],\n    queryFn: () => fetchCompetenciasPorTorneo(torneoId ?? ''),\n    enabled: Boolean(torneoId),\n  })\n\n  const competencias = competenciasQuery.data ?? []\n\n  const grillaQueries",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/PublicTorneoPodiosPage.tsx",
+        "start": 166,
+        "end": 182,
+        "startLoc": {
+          "line": 166,
+          "column": 4,
+          "position": 1439
+        },
+        "endLoc": {
+          "line": 182,
+          "column": 14,
+          "position": 1579
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/PublicTorneoResultadosPage.tsx",
+        "start": 89,
+        "end": 104,
+        "startLoc": {
+          "line": 89,
+          "column": 5,
+          "position": 868
+        },
+        "endLoc": {
+          "line": 104,
+          "column": 4,
+          "position": 1007
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 11,
+      "fragment": ".map((comp) => ({\n      queryKey: ['ranking', comp.competencia_id, comp.disciplina],\n      queryFn: () => fetchRankingCompetencia(comp.competencia_id, comp.disciplina),\n      enabled: Boolean(comp.competencia_id && comp.disciplina),\n      refetchInterval: 30_000,\n    })),\n  })\n\n  const overallQuery = useQuery({\n    queryKey: ['overall', torneoId],\n    queryFn: () => fetchOverall(torneoId ?",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/PublicTorneoPodiosPage.tsx",
+        "start": 211,
+        "end": 221,
+        "startLoc": {
+          "line": 211,
+          "column": 13,
+          "position": 1936
+        },
+        "endLoc": {
+          "line": 221,
+          "column": 2,
+          "position": 2062
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/PodiosPage.tsx",
+        "start": 180,
+        "end": 190,
+        "startLoc": {
+          "line": 180,
+          "column": 12,
+          "position": 1546
+        },
+        "endLoc": {
+          "line": 190,
+          "column": 2,
+          "position": 1671
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 49,
+      "fragment": ")\n\n  const portalLink =\n    rol === 'juez'\n      ? '/juez/disciplinas'\n      : rol === 'organizador'\n        ? '/organizador/torneo'\n        : rol === 'atleta'\n          ? '/atleta'\n          : null\n\n  const torneo = torneoQuery.data\n\n  return (\n    <div className=\"min-h-screen bg-slate-950 text-slate-100\">\n      <header className=\"border-b border-slate-800 bg-slate-900/80 px-4 py-3\">\n        <div className=\"mx-auto flex max-w-3xl items-center justify-between\">\n          <span className=\"text-xs font-semibold uppercase tracking-[0.24em] text-sky-400\">\n            AtaraxiaDive\n          </span>\n          {portalLink ? (\n            <Link\n              to={portalLink}\n              className=\"rounded-2xl bg-sky-500 px-4 py-2 text-xs font-semibold text-slate-950 transition-colors hover:bg-sky-400\"\n            >\n              Mi portal\n            </Link>\n          ) : (\n            <Link\n              to=\"/login\"\n              className=\"rounded-2xl border border-slate-700 bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-200 transition-colors hover:bg-slate-700\"\n            >\n              Iniciar sesión\n            </Link>\n          )}\n        </div>\n      </header>\n\n      <main className=\"mx-auto max-w-3xl px-4 py-6\">\n        <Link\n          to={`/portalapnea/${torneoId}`}\n          className=\"mb-4 flex items-center gap-1 text-xs text-slate-400 hover:text-slate-200\"\n        >\n          ← {torneo?.nombre ?? 'Torneo'}\n        </Link>\n\n        <div className=\"rounded-[1.75rem] border border-slate-800 bg-slate-900\">\n          <div className=\"border-b border-slate-800 p-5\">\n            <p className=\"text-xs font-semibold uppercase tracking-[0.18em] text-amber-400",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/PublicTorneoPodiosPage.tsx",
+        "start": 246,
+        "end": 294,
+        "startLoc": {
+          "line": 246,
+          "column": 3,
+          "position": 2424
+        },
+        "endLoc": {
+          "line": 294,
+          "column": 65,
+          "position": 2718
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/PublicTorneoResultadosPage.tsx",
+        "start": 131,
+        "end": 176,
+        "startLoc": {
+          "line": 131,
+          "column": 9,
+          "position": 1337
+        },
+        "endLoc": {
+          "line": 176,
+          "column": 65,
+          "position": 1628
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 27,
+      "fragment": "return (\n    <div className=\"min-h-screen bg-slate-950 text-slate-100\">\n      <header className=\"border-b border-slate-800 bg-slate-900/80 px-4 py-3\">\n        <div className=\"mx-auto flex max-w-lg items-center justify-between\">\n          <span className=\"text-xs font-semibold uppercase tracking-[0.24em] text-sky-400\">\n            AtaraxiaDive\n          </span>\n          {portalLink ? (\n            <Link\n              to={portalLink}\n              className=\"rounded-2xl bg-sky-500 px-4 py-2 text-xs font-semibold text-slate-950 transition-colors hover:bg-sky-400\"\n            >\n              Mi portal\n            </Link>\n          ) : (\n            <Link\n              to=\"/login\"\n              className=\"rounded-2xl border border-slate-700 bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-200 transition-colors hover:bg-slate-700\"\n            >\n              Iniciar sesión\n            </Link>\n          )}\n        </div>\n      </header>\n\n      <main className=\"mx-auto max-w-lg px-4 py-6\">\n        <Link",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/PublicTorneoDetallePage.tsx",
+        "start": 35,
+        "end": 61,
+        "startLoc": {
+          "line": 35,
+          "column": 3,
+          "position": 446
+        },
+        "endLoc": {
+          "line": 61,
+          "column": 5,
+          "position": 601
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/PublicTorneosPage.tsx",
+        "start": 180,
+        "end": 206,
+        "startLoc": {
+          "line": 180,
+          "column": 3,
+          "position": 1595
+        },
+        "endLoc": {
+          "line": 206,
+          "column": 3,
+          "position": 1750
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 9,
+      "fragment": ">\n                <p className=\"mt-1 text-sm text-slate-400\">\n                  {formatFecha(torneo.fecha_inicio)}\n                  {torneo.fecha_fin !== torneo.fecha_inicio\n                    ? ` — ${formatFecha(torneo.fecha_fin)}`\n                    : null}{' '}\n                  · {torneo.sede.ciudad}, {torneo.sede.pais}\n                </p>\n                <",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/PublicTorneoDetallePage.tsx",
+        "start": 84,
+        "end": 92,
+        "startLoc": {
+          "line": 84,
+          "column": 3,
+          "position": 772
+        },
+        "endLoc": {
+          "line": 92,
+          "column": 2,
+          "position": 856
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/PublicTorneosPage.tsx",
+        "start": 88,
+        "end": 96,
+        "startLoc": {
+          "line": 88,
+          "column": 3,
+          "position": 857
+        },
+        "endLoc": {
+          "line": 96,
+          "column": 3,
+          "position": 941
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 9,
+      "fragment": "return (\n    <div className=\"min-h-screen bg-slate-950 text-slate-100\">\n      <div className=\"mx-auto flex min-h-screen w-full max-w-sm items-center px-4 py-6\">\n        <div className=\"w-full rounded-[2rem] border border-slate-800 bg-slate-900/80 p-8 shadow-[0_24px_80px_-50px_rgba(34,211,238,0.7)]\">\n          <p className=\"text-center text-xs font-semibold uppercase tracking-[0.24em] text-sky-400\">\n            AtaraxiaDive\n          </p>\n          <h1 className=\"mb-2 mt-3 text-center text-3xl font-semibold text-slate-50\">\n            Iniciar",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/LoginPage.tsx",
+        "start": 144,
+        "end": 152,
+        "startLoc": {
+          "line": 144,
+          "column": 3,
+          "position": 1368
+        },
+        "endLoc": {
+          "line": 152,
+          "column": 8,
+          "position": 1436
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/LoginPage.tsx",
+        "start": 95,
+        "end": 103,
+        "startLoc": {
+          "line": 95,
+          "column": 5,
+          "position": 1019
+        },
+        "endLoc": {
+          "line": 103,
+          "column": 6,
+          "position": 1087
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 12,
+      "fragment": "function inputClass(hasError: boolean): string {\n  return [\n    'w-full rounded-2xl border px-4 py-3 text-sm text-slate-100 focus:outline-none focus:ring-2',\n    hasError\n      ? 'border-red-500 bg-red-950/30 focus:ring-red-500'\n      : 'border-slate-700 bg-slate-950 focus:ring-sky-500',\n  ].join(' ')\n}\n\nfunction resolveApiError(error: unknown): string {\n  if (error instanceof ApiError) {\n    if (error.status === 401",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/CambiarPasswordPage.tsx",
+        "start": 24,
+        "end": 35,
+        "startLoc": {
+          "line": 24,
+          "column": 1,
+          "position": 186
+        },
+        "endLoc": {
+          "line": 35,
+          "column": 4,
+          "position": 273
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/RegistroPage.tsx",
+        "start": 48,
+        "end": 59,
+        "startLoc": {
+          "line": 48,
+          "column": 1,
+          "position": 411
+        },
+        "endLoc": {
+          "line": 59,
+          "column": 4,
+          "position": 498
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 6,
+      "fragment": "function updateField<T extends keyof FormState>(field: T, value: FormState[T]) {\n    setForm((current) => ({ ...current, [field]: value }))\n    setErrors((current) => ({ ...current, [field]: undefined, general: undefined }))\n  }\n\n  function validate",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/CambiarPasswordPage.tsx",
+        "start": 73,
+        "end": 78,
+        "startLoc": {
+          "line": 73,
+          "column": 3,
+          "position": 677
+        },
+        "endLoc": {
+          "line": 78,
+          "column": 9,
+          "position": 774
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/RegistroPage.tsx",
+        "start": 121,
+        "end": 126,
+        "startLoc": {
+          "line": 121,
+          "column": 3,
+          "position": 1286
+        },
+        "endLoc": {
+          "line": 126,
+          "column": 10,
+          "position": 1383
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 8,
+      "fragment": ") {\n    setForm((current) => ({ ...current, [field]: value }))\n    setErrors((current) => ({ ...current, [field]: undefined, general: undefined }))\n  }\n\n  function validate(): FormErrors {\n    const nextErrors: FormErrors = {}\n    if (!form.passwordActual",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/CambiarPasswordPage.tsx",
+        "start": 73,
+        "end": 80,
+        "startLoc": {
+          "line": 73,
+          "column": 2,
+          "position": 703
+        },
+        "endLoc": {
+          "line": 80,
+          "column": 15,
+          "position": 803
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/organizador/CrearTorneoPage.tsx",
+        "start": 149,
+        "end": 156,
+        "startLoc": {
+          "line": 149,
+          "column": 7,
+          "position": 1249
+        },
+        "endLoc": {
+          "line": 156,
+          "column": 7,
+          "position": 1349
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 12,
+      "fragment": "{errors.general ? (\n              <p className=\"rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-center text-sm text-red-100\">\n                {errors.general}\n              </p>\n            ) : null}\n\n            <button\n              type=\"submit\"\n              disabled={mutation.isPending}\n              className=\"rounded-2xl bg-sky-500 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-slate-950 transition-colors hover:bg-sky-400 disabled:opacity-50\"\n            >\n              {mutation.isPending ? 'Actualizando...'",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/pages/CambiarPasswordPage.tsx",
+        "start": 169,
+        "end": 180,
+        "startLoc": {
+          "line": 169,
+          "column": 13,
+          "position": 1601
+        },
+        "endLoc": {
+          "line": 180,
+          "column": 18,
+          "position": 1676
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/pages/RegistroPage.tsx",
+        "start": 365,
+        "end": 376,
+        "startLoc": {
+          "line": 365,
+          "column": 13,
+          "position": 3572
+        },
+        "endLoc": {
+          "line": 376,
+          "column": 20,
+          "position": 3649
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 18,
+      "fragment": "{\n        const cached = await getGrillaCache(key)\n        if (!cached) {\n          throw createPrecargaError(\n            'NO_CACHE_OFFLINE',\n            'Sin datos disponibles. Conectate a internet para cargar la disciplina por primera vez.',\n          )\n        }\n\n        const ageMs = Date.now() - cached.cached_at\n        return {\n          grilla: cached.grilla,\n          estado: cached.estado,\n          cachedAt: cached.cached_at,\n          source: 'cache',\n          cacheAgeMinutes: Math.floor(ageMs / 60000),\n          isCacheExpired: ageMs > CACHE_MAX_AGE_MS,\n          errorCode: 'PRECARGA_FAILED'",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/hooks/usePrecarga.ts",
+        "start": 106,
+        "end": 123,
+        "startLoc": {
+          "line": 106,
+          "column": 2,
+          "position": 860
+        },
+        "endLoc": {
+          "line": 123,
+          "column": 18,
+          "position": 996
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/hooks/usePrecarga.ts",
+        "start": 67,
+        "end": 84,
+        "startLoc": {
+          "line": 67,
+          "column": 2,
+          "position": 566
+        },
+        "endLoc": {
+          "line": 84,
+          "column": 5,
+          "position": 702
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 31,
+      "fragment": "ejecutar(\n        'tarjeta',\n        competenciaId!,\n        {\n          participante_id: atletaActivo!.atletaId,\n          disciplina: disciplinaActiva!,\n          tarjeta: selectedCard!,\n          motivo_texto: selectedCard === 'Amarilla' ? 'Revision pendiente del juez' : undefined,\n          motivo_dq: selectedCard === 'Roja' ? motivoDq : undefined,\n          distancia_blackout:\n            selectedCard === 'Roja' && needsBlackoutDistance\n              ? buildRpValue(metros, centimetros)\n              : undefined,\n          penalizaciones: selectedCard === 'BlancaConPenalizaciones' ? penalizaciones : [],\n        },\n        () =>\n          asignarTarjeta({\n            competenciaId: competenciaId!,\n            participanteId: atletaActivo!.atletaId,\n            disciplina: disciplinaActiva!,\n            tarjeta: selectedCard!,\n            motivoTexto: selectedCard === 'Amarilla' ? 'Revision pendiente del juez' : undefined,\n            motivoDq: selectedCard === 'Roja' ? motivoDq : undefined,\n            distanciaBlackout:\n              selectedCard === 'Roja' && needsBlackoutDistance\n                ? buildRpValue(metros, centimetros)\n                : undefined,\n            penalizaciones: selectedCard === 'BlancaConPenalizaciones' ? penalizaciones : [],\n          }),\n      )\n    }",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/hooks/usePerformanceFlow.ts",
+        "start": 284,
+        "end": 314,
+        "startLoc": {
+          "line": 284,
+          "column": 2,
+          "position": 2655
+        },
+        "endLoc": {
+          "line": 314,
+          "column": 2,
+          "position": 2934
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/hooks/usePerformanceFlow.ts",
+        "start": 211,
+        "end": 241,
+        "startLoc": {
+          "line": 211,
+          "column": 2,
+          "position": 2041
+        },
+        "endLoc": {
+          "line": 241,
+          "column": 7,
+          "position": 2320
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 37,
+      "fragment": "},\n    onSuccess: async (result) => {\n      if (result.encolado) {\n        setInlineError(null)\n        if (selectedCard === 'Amarilla') {\n          seleccionarAtleta({ ...atletaActivo!, estado: 'EnRevision' })\n          setResultKind('AMARILLA')\n          setCompleted(false)\n          setStep(7)\n          return\n        }\n        seleccionarAtleta({ ...atletaActivo!, estado: 'Ejecutada' })\n        setResultKind(\n          selectedCard === 'Roja'\n            ? 'ROJA'\n            : selectedCard === 'BlancaConPenalizaciones'\n              ? 'BLANCA_CON_PENALIZACIONES'\n              : 'BLANCA',\n        )\n        setCompleted(true)\n        return\n      }\n      if (selectedCard === 'Amarilla') {\n        await finalizeResult('AMARILLA', 'EnRevision')\n        setStep(7)\n        return\n      }\n      const kind =\n        selectedCard === 'Roja'\n          ? 'ROJA'\n          : selectedCard === 'BlancaConPenalizaciones'\n            ? 'BLANCA_CON_PENALIZACIONES'\n            : 'BLANCA'\n      await finalizeResult(kind, 'Ejecutada')\n    },\n    onError: (error) => {\n      setInlineError(error instanceof Error ? error.message : 'No se pudo asignar la tarjeta'",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/hooks/usePerformanceFlow.ts",
+        "start": 314,
+        "end": 350,
+        "startLoc": {
+          "line": 314,
+          "column": 5,
+          "position": 2934
+        },
+        "endLoc": {
+          "line": 350,
+          "column": 32,
+          "position": 3210
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/hooks/usePerformanceFlow.ts",
+        "start": 242,
+        "end": 278,
+        "startLoc": {
+          "line": 242,
+          "column": 5,
+          "position": 2340
+        },
+        "endLoc": {
+          "line": 278,
+          "column": 32,
+          "position": 2616
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 13,
+      "fragment": ",\n): GrillaAtletaDto['estado'] {\n  if (tipo === 'llamar') return 'Llamada'\n  if (tipo === 'resultado') return 'ResultadoRegistrado'\n  if (tipo === 'dns') return 'DNS'\n  if (tipo === 'resolver_revision') return 'Ejecutada'\n  if (tipo === 'tarjeta') {\n    return payload.tarjeta === 'Amarilla' ? 'EnRevision' : 'Ejecutada'\n  }\n  return 'AnunciadaAP'\n}\n\nexport function useComandoQueue",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/hooks/useComandoQueue.ts",
+        "start": 32,
+        "end": 44,
+        "startLoc": {
+          "line": 32,
+          "column": 12,
+          "position": 274
+        },
+        "endLoc": {
+          "line": 44,
+          "column": 16,
+          "position": 393
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/hooks/useGrillaQueue.ts",
+        "start": 19,
+        "end": 31,
+        "startLoc": {
+          "line": 19,
+          "column": 2,
+          "position": 169
+        },
+        "endLoc": {
+          "line": 31,
+          "column": 15,
+          "position": 288
+        }
+      }
+    },
+    {
+      "format": "tsx",
+      "lines": 9,
+      "fragment": ") {\n  const token = useAuthStore((s) => s.token)\n  const rol = useAuthStore((s) => s.rol)\n\n  if (!token || !rol) {\n    return <Navigate to=\"/login\" replace />\n  }\n\n  return",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/components/RequireAuth.tsx",
+        "start": 9,
+        "end": 17,
+        "startLoc": {
+          "line": 9,
+          "column": 17,
+          "position": 64
+        },
+        "endLoc": {
+          "line": 17,
+          "column": 7,
+          "position": 145
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/components/RequireRole.tsx",
+        "start": 12,
+        "end": 20,
+        "startLoc": {
+          "line": 12,
+          "column": 17,
+          "position": 99
+        },
+        "endLoc": {
+          "line": 20,
+          "column": 3,
+          "position": 180
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 16,
+      "fragment": "}\n\nfunction buildHeaders(): Record<string, string> {\n  const token = getToken()\n  const headers: Record<string, string> = {\n    'Content-Type': 'application/json',\n  }\n\n  if (token) {\n    headers.Authorization = `Bearer ${token}`\n  }\n\n  return headers\n}\n\nfunction buildFileHeaders",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/api/registro.ts",
+        "start": 113,
+        "end": 128,
+        "startLoc": {
+          "line": 113,
+          "column": 1,
+          "position": 692
+        },
+        "endLoc": {
+          "line": 128,
+          "column": 17,
+          "position": 788
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/api/torneo.ts",
+        "start": 93,
+        "end": 108,
+        "startLoc": {
+          "line": 93,
+          "column": 1,
+          "position": 535
+        },
+        "endLoc": {
+          "line": 108,
+          "column": 13,
+          "position": 631
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 15,
+      "fragment": "}\n\nasync function parseResponse<T>(response: Response): Promise<T> {\n  if (response.ok) {\n    if (response.status === 204) {\n      return undefined as T\n    }\n    return response.json() as Promise<T>\n  }\n\n  if (response.status === 401) {\n    handleUnauthorized()\n  }\n\n  let",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/api/registro.ts",
+        "start": 137,
+        "end": 151,
+        "startLoc": {
+          "line": 137,
+          "column": 1,
+          "position": 865
+        },
+        "endLoc": {
+          "line": 151,
+          "column": 4,
+          "position": 974
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/api/torneo.ts",
+        "start": 149,
+        "end": 163,
+        "startLoc": {
+          "line": 149,
+          "column": 1,
+          "position": 999
+        },
+        "endLoc": {
+          "line": 163,
+          "column": 6,
+          "position": 1108
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 17,
+      "fragment": ": string\n}\n\nfunction buildHeaders(): Record<string, string> {\n  const token = getToken()\n  const headers: Record<string, string> = {\n    'Content-Type': 'application/json',\n  }\n\n  if (token) {\n    headers.Authorization = `Bearer ${token}`\n  }\n\n  return headers\n}\n\nasync",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/api/identidad.ts",
+        "start": 58,
+        "end": 74,
+        "startLoc": {
+          "line": 58,
+          "column": 15,
+          "position": 345
+        },
+        "endLoc": {
+          "line": 74,
+          "column": 6,
+          "position": 443
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/api/registro.ts",
+        "start": 112,
+        "end": 108,
+        "startLoc": {
+          "line": 112,
+          "column": 7,
+          "position": 688
+        },
+        "endLoc": {
+          "line": 108,
+          "column": 9,
+          "position": 629
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 17,
+      "fragment": ") {\n    handleUnauthorized()\n  }\n\n  let detail = `Error de API: ${response.status}`\n  try {\n    const payload = (await response.json()) as { detail?: string }\n    if (payload.detail) {\n      detail = payload.detail\n    }\n  } catch {\n    // sin body JSON util\n  }\n  throw new ApiError(response.status, detail)\n}\n\nexport async",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/api/identidad.ts",
+        "start": 86,
+        "end": 102,
+        "startLoc": {
+          "line": 86,
+          "column": 14,
+          "position": 580
+        },
+        "endLoc": {
+          "line": 102,
+          "column": 6,
+          "position": 698
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/api/registro.ts",
+        "start": 147,
+        "end": 163,
+        "startLoc": {
+          "line": 147,
+          "column": 4,
+          "position": 960
+        },
+        "endLoc": {
+          "line": 163,
+          "column": 10,
+          "position": 1078
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 14,
+      "fragment": "{\n  const token = getToken()\n  const headers: Record<string, string> = {\n    'Content-Type': 'application/json',\n  }\n\n  if (token) {\n    headers.Authorization = `Bearer ${token}`\n  }\n\n  return headers\n}\n\nasync function parseResponse<T>(response: Response)",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/api/competencia.ts",
+        "start": 114,
+        "end": 127,
+        "startLoc": {
+          "line": 114,
+          "column": 2,
+          "position": 655
+        },
+        "endLoc": {
+          "line": 127,
+          "column": 2,
+          "position": 744
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/api/identidad.ts",
+        "start": 61,
+        "end": 75,
+        "startLoc": {
+          "line": 61,
+          "column": 2,
+          "position": 367
+        },
+        "endLoc": {
+          "line": 75,
+          "column": 2,
+          "position": 458
+        }
+      }
+    },
+    {
+      "format": "typescript",
+      "lines": 25,
+      "fragment": "}\n\n  if (token) {\n    headers.Authorization = `Bearer ${token}`\n  }\n\n  return headers\n}\n\nasync function parseResponse<T>(response: Response): Promise<T> {\n  if (response.ok) {\n    if (response.status === 204) {\n      return undefined as T\n    }\n    return response.json() as Promise<T>\n  }\n\n  if (response.status === 401) {\n    handleUnauthorized()\n  }\n\n  let detail = `Error de API: ${response.status}`\n\n  try {\n    const payload = (await response.json()) as { detail?: unknown",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/api/competencia.ts",
+        "start": 118,
+        "end": 142,
+        "startLoc": {
+          "line": 118,
+          "column": 3,
+          "position": 694
+        },
+        "endLoc": {
+          "line": 142,
+          "column": 8,
+          "position": 882
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/api/registro.ts",
+        "start": 130,
+        "end": 153,
+        "startLoc": {
+          "line": 130,
+          "column": 2,
+          "position": 831
+        },
+        "endLoc": {
+          "line": 153,
+          "column": 7,
+          "position": 1018
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 25,
+      "fragment": " />\n            </RequireRole>\n          }\n        />\n        <Route\n          path=\"/organizador/torneos/:torneoId/disciplinas\"\n          element={\n            <RequireRole role=\"organizador\">\n              <CrearTorneoPage />\n            </RequireRole>\n          }\n        />\n        <Route\n          path=\"/organizador/torneos/:torneoId/editar\"\n          element={\n            <RequireRole role=\"organizador\">\n              <CrearTorneoPage />\n            </RequireRole>\n          }\n        />\n        <Route\n          path=\"/organizador/torneo/:torneoId\"\n          element={\n            <RequireRole role=\"organizador\">\n              <DetalleTorneoPage",
+      "tokens": 0,
+      "firstFile": {
+        "name": "frontend/src/App.tsx",
+        "start": 264,
+        "end": 288,
+        "startLoc": {
+          "line": 264,
+          "column": 16,
+          "position": 1828
+        },
+        "endLoc": {
+          "line": 288,
+          "column": 18,
+          "position": 1938
+        }
+      },
+      "secondFile": {
+        "name": "frontend/src/App.tsx",
+        "start": 256,
+        "end": 280,
+        "startLoc": {
+          "line": 256,
+          "column": 22,
+          "position": 1791
+        },
+        "endLoc": {
+          "line": 280,
+          "column": 16,
+          "position": 1901
+        }
+      }
+    }
+  ]
+}
