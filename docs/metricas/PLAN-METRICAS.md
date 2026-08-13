@@ -446,7 +446,7 @@ actualizados post-SP7:
 |-----------|-----------|:---------------:|-----------|:-------:|:-------:|
 | 1 | A.1.1 a A.1.4 — Backend raw/CC/MI/Halstead | 30 min | 4 archivos en `estructurales/` | ✅ | ✅ (2026-08-13) |
 | 2 | A.1.5 — Backend por capa hexagonal | 30 min | análisis cruzado BC × capa | ✅ | ✅ (2026-08-13) |
-| 3 | B.3/B.4 — Cobertura y ratio tests | 20 min | pytest-cov ejecutado | ✅ | ⏳ |
+| 3 | B.3/B.4 — Cobertura y ratio tests | 20 min | pytest-cov ejecutado | ✅ | ✅ (2026-08-13 — halló código muerto en identidad, ver `cobertura-tests.md §3`) |
 | 4 | B.1/B.2 — DesignReviewer + ArchitectAnalyst | 30 min | serie temporal extraída | ✅ | ✅ (ambos re-ejecutados 2026-08-13) |
 | 5 | A.2 — Frontend LOC + duplicación | 20 min | cloc + jscpd ejecutados | ✅ | ⏳ |
 | 6 | C.1/C.3 — Velocidad SP + ratio ADJ | 30 min | datos de git + matrix | ✅ | ⏳ (incluir v1.0.1→v1.0.5, definir metodología SP7) |
