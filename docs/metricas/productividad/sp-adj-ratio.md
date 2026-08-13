@@ -2,7 +2,7 @@
 
 > Fuente: matrix.md (§§ SP-ADJ) · CLAUDE.md §5 · PLAN-METRICAS.md §C.3  
 > Definición: ratio = US de ajuste / US funcionales del mismo SP  
-> Fecha de extracción: 2026-05-18  
+> Fecha de extracción original: 2026-05-18 · **Recálculo: 2026-08-13 (HEAD `main`, tags hasta v1.0.5)**  
 > Referencia: PLAN-METRICAS.md §C.3
 
 ---
@@ -17,9 +17,18 @@
 | SP4 | 21 | ADJ-06 | 7 | 0.33 | **33%** |
 | SP5 | 20 | ADJ-07 + ADJ-09 | 7 | 0.35 | **35%** |
 | SP6 | 13 | ADJ-11 | 10 | 0.77 | **77%** |
-| **Total** | **77** | **6 SP-ADJ** | **46** | **0.60** | **60%** |
+| **Total SP1–SP6** | **77** | **6 SP-ADJ** | **46** | **0.60** | **60%** |
+| SP7 | **0*** | ADJ-12 + ADJ-13 | 8 | **N/A** | **N/A** |
 
-**Promedio global:** por cada US funcional implementada, el proyecto generó 0.60 US de ajuste técnico.
+**Promedio global SP1–SP6:** por cada US funcional implementada, el proyecto generó 0.60 US de
+ajuste técnico. Sin cambios — SP7 no se suma al promedio (ver nota).
+
+\* **SP7 tiene 0 US funcionales por diseño** (ver `velocidad-sp.md §1`, nota metodológica): sus
+incrementos (INC-7.1 despliegue, INC-7.2 manual) no son US-IEDD de dominio. **El ratio SP-ADJ no
+está definido para SP7** — dividir 8 US de ajuste por 0 US funcionales no produce un número
+interpretable. Esto no es una falla del método: es evidencia de que SP7 fue estructuralmente
+distinto a SP1–SP6 (fase de estabilización/despliegue, no de construcción de producto), y el
+ratio SP-ADJ como métrica solo tiene sentido dentro de esa fase de construcción.
 
 ---
 
@@ -120,6 +129,15 @@ El 37% de la capacidad total del proyecto se destinó a ajuste técnico formaliz
 
 4. **SP3 como punto de inflexión:** el ratio 127% en SP3 señala el momento de máxima tensión del proyecto — muchos BCs nuevos en poco tiempo. El hecho de que SP4 baje al 33% inmediatamente indica resiliencia del método.
 
+5. **SP7 confirma el límite del ratio SP-ADJ como métrica (nuevo, 2026-08-13):** el ratio fue
+   diseñado para medir deuda técnica *dentro de* una fase de construcción de producto. Al cerrar
+   el proyecto con una fase de estabilización pura (0 US funcionales, 8 US de ajuste), el
+   indicador se vuelve indefinido — no porque el proyecto se volvió ineficiente, sino porque deja
+   de haber un denominador significativo. Para el paper: el ratio SP-ADJ debe presentarse como
+   válido para *sprints de construcción activa*, con una nota explícita de que no aplica a fases
+   de cierre/estabilización.
+
 ---
 
 *Extraído: 2026-05-18 — rama doc/metricas — PLAN-METRICAS.md §C.3 completado*
+*Recalculado: 2026-08-13 — HEAD `main` (tags v1.0.0→v1.0.5) — PLAN-METRICAS.md §C.3 (Ronda 2)*

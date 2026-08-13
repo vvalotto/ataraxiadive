@@ -1,10 +1,18 @@
 # Overhead del Pipeline IEDD — Tiempo por US
 
 > Fuente: sección "Tracking de Tiempo" / "Tiempo real" de cada `docs/reports/US-*-report.md`  
-> Cobertura: 34 de ~123 US totales (28%) — el tracker no fue usado de forma consistente en SP4  
+> Cobertura: 34 de ~131 US totales (26%) — el tracker no fue usado de forma consistente en SP4 **ni en SP7/SP-ADJ-12/13**  
 > Unidad: minutos de reloj (wall-clock), pipeline completo Fase 0–9  
-> Fecha de extracción: 2026-05-18  
+> Fecha de extracción original: 2026-05-18 · **Revisión: 2026-08-13 — sin datos nuevos que agregar (ver nota)**  
 > Referencia: PLAN-METRICAS.md §C.2
+
+> **Nota de la Ronda 2 (2026-08-13):** se buscó en `docs/reports/`, `.cm/` y `docs/plans/sp-adj-12/`
+> `docs/plans/sp-adj-13/` cualquier registro de tiempo real para INC-7.1, INC-7.2, SP-ADJ-12 (8
+> US) y SP-ADJ-13 (2 entradas) — **no se encontró ningún tracker ni sección de tiempo real para
+> ninguna de las 10 US/incrementos de este período.** El dataset original (n=34, 2026-05-18)
+> sigue siendo el más completo disponible; no se agregan filas nuevas. Esto **empeora** la
+> cobertura relativa del tracking: 34 de ~131 US totales del proyecto completo = 26% (antes 28%
+> sobre ~123). Ver §7.4 para la interpretación de este hallazgo.
 
 ---
 
@@ -207,6 +215,28 @@ El **64% de las US se implementan en menos de 30 minutos** a través del pipelin
 
 5. **Benchmark para el paper:** US estándar (BC existente, patrón conocido) = 11–22 min. US de nuevo dominio (nuevo BC, primer patrón) = 30–70 min. US de integración compleja (cross-BC, diseño emergente) = 100–245 min.
 
+### 7.4 El tracking se abandonó por completo en la fase de cierre (nuevo, 2026-08-13)
+
+**Ninguna de las 10 US/incrementos de SP7 + SP-ADJ-12 + SP-ADJ-13 tiene registro de tiempo.** Esto
+contrasta con `feedback_implement_us_tracking.md` (memoria operativa del proyecto), que documenta
+que la instrumentación del tracker en Fase 0 fue una práctica establecida a partir de cierto
+punto del proyecto. El abandono total en la fase de cierre sugiere una de dos causas — no
+distinguibles con la evidencia disponible:
+
+1. **Cambio de naturaleza del trabajo:** INC-7.1 (deploy), INC-7.2 (manual) y buena parte de
+   SP-ADJ-13 (capturas de pantalla, revisión de documentación) no pasan por el pipeline US-IEDD
+   de 10 fases de la misma manera que una US de dominio — es posible que el tracker no aplicara
+   naturalmente a ese tipo de tarea.
+2. **Relajación de la disciplina de tracking al final del proyecto**, consistente con el patrón
+   ya observado en SP4 (cobertura casi nula) — el tracking parece debilitarse en los sprints con
+   menos US de dominio puro.
+
+**Recomendación para el paper, reforzada:** el hallazgo original ("instrumentar el tracker desde
+Fase 0, automáticamente") sigue vigente y se refuerza con este dato — incluso al final de un
+proyecto con método ya interiorizado, la disciplina de tracking manual no se sostuvo sin
+automatización.
+
 ---
 
 *Extraído: 2026-05-18 — rama doc/metricas — PLAN-METRICAS.md §C.2 completado*
+*Revisado: 2026-08-13 — HEAD `main` (post SP-ADJ-13, tag v1.0.5) — PLAN-METRICAS.md §C.2 (Ronda 2). Sin datos de tiempo nuevos disponibles; ver nota de cabecera y §7.4.*

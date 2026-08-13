@@ -449,8 +449,8 @@ actualizados post-SP7:
 | 3 | B.3/B.4 — Cobertura y ratio tests | 20 min | pytest-cov ejecutado | ✅ | ✅ (2026-08-13 — halló código muerto en identidad, ver `cobertura-tests.md §3`) |
 | 4 | B.1/B.2 — DesignReviewer + ArchitectAnalyst | 30 min | serie temporal extraída | ✅ | ✅ (ambos re-ejecutados 2026-08-13) |
 | 5 | A.2 — Frontend LOC + duplicación | 20 min | cloc + jscpd ejecutados | ✅ | ✅ (2026-08-13 — frontend prácticamente estable: +131 SLOC, bundle idéntico) |
-| 6 | C.1/C.3 — Velocidad SP + ratio ADJ | 30 min | datos de git + matrix | ✅ | ⏳ (incluir v1.0.1→v1.0.5, definir metodología SP7) |
-| 7 | C.2 — Overhead pipeline (tracker) | 45 min | 34 US con timing, mediana 20 min | ✅ | ⏳ (agregar timing SP7/ADJ-12/13 si existe) |
+| 6 | C.1/C.3 — Velocidad SP + ratio ADJ | 30 min | datos de git + matrix | ✅ | ✅ (2026-08-13 — SP7 tiene 0 US func., ratio ADJ indefinido para esa fase) |
+| 7 | C.2 — Overhead pipeline (tracker) | 45 min | 34 US con timing, mediana 20 min | ✅ | ✅ (2026-08-13 — sin datos nuevos: tracking abandonado en SP7/ADJ-12/13) |
 | 8 | A.1.6 — Suite CK: LCOM + CBO/FanOut | 20 min | `backend-ck.md` | ✅ | ✅ (2026-08-13) |
 | 9 | A.1.7 — Cohesión y acoplamiento Ca/Ce/I | 15 min | `backend-acoplamiento.md` | ✅ | ✅ (2026-08-13) |
 | 10 | C.0 — Tamaño funcional (BDD + endpoints + SP) | 20 min | `tamano-funcional.md` | ✅ | ⏳ |

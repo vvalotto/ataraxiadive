@@ -2,7 +2,7 @@
 
 > Fuentes: `git log` (commits por tag) · `gh pr list` (PRs mergeados) · PLAN-METRICAS.md §C.1  
 > US funcionales y de ajuste: matrix.md + CLAUDE.md §5  
-> Fecha de extracción: 2026-05-18  
+> Fecha de extracción original: 2026-05-18 · **Recálculo: 2026-08-13 (HEAD `main`, tags hasta v1.0.5)**  
 > Referencia: PLAN-METRICAS.md §C.1
 
 ---
@@ -18,8 +18,20 @@
 | SP5 | La Puesta en Marcha | 13 días | 20 | 7 | 27 | 49 | 143 |
 | SP6 | Validación y Despliegue | 15 días | 13 | 10 | 23 | 51 | 205 |
 | **Total SP1–SP6** | | **63 días** | **77** | **46** | **123** | **180** | **693** |
+| **SP7 + SP-ADJ-12 + SP-ADJ-13** | Despliegue, manual y producción real | **14 días** | **0*** | **8** | **8** | **13** | **100** |
+| **Total SP1–SP7+ADJ** | | **77 días** | **77** | **54** | **131** | **193** | **793** |
 
-**Período:** 2026-03-14 → 2026-05-16 (63 días calendario)
+**Período SP1–SP6:** 2026-03-14 → 2026-05-16 (63 días calendario)
+**Período SP7+SP-ADJ-12+SP-ADJ-13:** 2026-05-16 → 2026-05-30 (14 días calendario, tags v1.0.0→v1.0.5)
+
+\* **Nota metodológica (nueva en esta ronda):** SP7 no generó US funcionales en el sentido
+clásico de IEDD (dominio nuevo con precondición/postcondición). Sus dos incrementos fueron
+**infraestructura** (INC-7.1 — despliegue en Fly.io, ADR-021, PR #194) y **documentación**
+(INC-7.2 — manual de usuario MkDocs, PR #212), ninguno de los cuales es una "US funcional"
+comparable a las de SP1–SP6. Las 8 US contadas como "ADJ" en esta fila son:
+SP-ADJ-12 (6 US, PRs #205–#210, issues #198–#204) + SP-ADJ-13 (2 entradas de matrix.md §35,
+PRs #217–#218). Los PRs #195/#196 (adecuación documental + plan de métricas) no se cuentan como
+US — son trabajo de documentación paralelo, no incrementos de producto.
 
 ---
 
@@ -107,9 +119,31 @@ US de ajuste:    46 (37%)  █████████████████�
 | Fin SP4 | 44 | 35 | 1.26 |
 | Fin SP5 | 64 | 48 | 1.33 |
 | Fin SP6 | 77 | 63 | 1.22 |
+| **Fin SP7+ADJ-12+ADJ-13** | **77** | **77** | **1.00** |
 
-El ritmo acumulado crece consistentemente hasta SP5 (1.33) y consolida en SP6 (1.22) — la caída en SP6 es esperada por ser un SP de validación/despliegue con más peso en ajuste que en features.
+El ritmo acumulado crece consistentemente hasta SP5 (1.33) y consolida en SP6 (1.22) — la caída en SP6 es esperada por ser un SP de validación/despliegue con más peso en ajuste que en features. **El ritmo acumulado sigue cayendo hasta 1.00 US func./día al cierre de SP7+ADJ-12+ADJ-13** — no porque el equipo se hizo más lento, sino porque el denominador (días) siguió sumando mientras el numerador (US funcionales) se congeló en 77: los últimos 14 días del proyecto fueron 100% despliegue, corrección post-producción y documentación, sin nuevas US funcionales de dominio. Es el patrón esperado del cierre de un proyecto: la curva de "ritmo funcional" se aplana cuando el foco pasa de construir producto a llevarlo a producción y sostenerlo.
+
+---
+
+## 6. Cierre del proyecto — interpretación (2026-08-13)
+
+**El proyecto completo (SP1 → SP-ADJ-13) tomó 77 días calendario y entregó 77 US funcionales +
+54 US de ajuste (131 US totales), con 193 PRs y 793 commits.** El último 18% del calendario
+(14 de 77 días) no agregó ni una sola US funcional nueva — se dedicó íntegramente a:
+
+1. Poner el sistema en producción real (Fly.io, ADR-021)
+2. Corregir los primeros bugs de uso real (SP-ADJ-12, issues #198–#204)
+3. Documentar el sistema para usuarios finales (manual MkDocs)
+4. Validarlo en una ejecución real de torneo (SP-ADJ-13, Puerto Madryn 2026) y corregir lo que
+   esa ejecución reveló
+
+**Esto es evidencia a favor de una fase de proyecto distinta, no de una desaceleración del
+método IEDD.** El ritmo de 1.5 US func./día de SP3–SP5 (velocidad de crucero de *construcción*)
+no es comparable con el ritmo de *estabilización post-producción* — son dos tipos de trabajo
+distintos y sería un error metodológico promediarlos en una sola cifra de "velocidad IEDD" para
+el paper sin esta distinción.
 
 ---
 
 *Extraído: 2026-05-18 — rama doc/metricas — PLAN-METRICAS.md §C.1 completado*
+*Recalculado: 2026-08-13 — HEAD `main` (tags v1.0.0→v1.0.5) — PLAN-METRICAS.md §C.1 (Ronda 2)*
