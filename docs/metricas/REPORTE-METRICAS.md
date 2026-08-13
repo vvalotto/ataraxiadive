@@ -1,30 +1,50 @@
 # Reporte de Métricas — AtaraxiaDive
 
-> Síntesis ejecutiva de todas las categorías de métricas  
-> Rama: doc/metricas · Fecha: 2026-05-18  
-> Fuente: docs/metricas/**/*.md — 17 documentos de detalle  
+> Síntesis ejecutiva de todas las categorías de métricas
+> Medición original: rama doc/metricas · 2026-05-18 (BL-006, tag v1.0.0)
+> **Recálculo (Ronda 2): 2026-08-13 · HEAD `main` post SP7 + SP-ADJ-12 + SP-ADJ-13 · tag v1.0.5**
+> Fuente: `docs/metricas/**/*.md` — 17 documentos de detalle, todos recalculados
 > Experimento: IEDD (Iterative Evidence-Driven Development)
+
+---
+
+## 0. Por qué se recalculó
+
+La medición original (2026-05-18) cerraba en **BL-006 / v1.0.0** (fin de SP6). El proyecto
+completo cerró 14 días después con **SP7** (despliegue en Fly.io + manual de usuario),
+**SP-ADJ-12** (correcciones post-producción) y **SP-ADJ-13** (ejecución real del torneo Puerto
+Madryn 2026 + fixes de UI), alcanzando el tag **v1.0.5**. Esta ronda recalcula las 17 métricas
+contra el estado final del proyecto, con foco en **qué cambió y qué no** entre BL-006 y v1.0.5.
+
+**Resultado más importante de la Ronda 2:** el crecimiento del proyecto en esos 77 días
+adicionales fue mínimo y **quirúrgicamente localizado**. Cuatro métricas independientes —
+SLOC, Halstead, cobertura de tests y endpoints REST — señalan **exactamente los mismos dos BCs**
+(`registro`, `identidad`) como el único lugar del sistema que cambió. Los otros 6 BCs
+(`competencia`, `torneo`, `resultados`, `notificaciones`, `shared`, `app`) son bit-a-bit
+idénticos a la medición del 2026-05-18.
 
 ---
 
 ## Resumen Ejecutivo
 
-| Categoría | Métrica clave | Valor | Evaluación |
-|-----------|--------------|:-----:|:----------:|
-| Tamaño backend | SLOC total src | **12 708** | — |
-| Tamaño frontend | SLOC TypeScript | **15 623** | — |
-| Cobertura de tests | Global (pytest-cov) | **95.3%** | ✅ |
-| Ratio test/código | Unit+integration / src | **1.55** | ✅ |
-| Complejidad | CC domain/ promedio | **1.89** | ✅ |
-| Mantenibilidad | MI domain/ promedio | **90.07 / 100** | ✅ |
-| Cohesión OO | Clases LCOM > 1 | **10 / 303 (3.3%)** | ✅ |
-| Acoplamiento | I gradiente domain→api | **0.26 → 0.91** | ✅ |
-| Diseño evolutivo | DesignReviewer CRITICAL | **0 en toda la historia** | ✅ |
-| Deuda técnica | D ArchitectAnalyst | **should_block=false** | ✅ |
-| Tamaño funcional | US funcionales entregadas | **77 en 63 días** | ✅ |
-| Velocidad | Ritmo promedio | **1.22 US func./día** | ✅ |
-| Overhead pipeline | Mediana por US | **~20 min** | ✅ |
-| Ratio ajuste | SP-ADJ / US func. | **0.60 (60%)** | ℹ️ |
+| Categoría | Métrica clave | Valor BL-006 | Valor v1.0.5 | Evaluación |
+|-----------|--------------|:-----:|:-----:|:----------:|
+| Tamaño backend | SLOC total src | 12 961 | **13 259** (+2.3%) | — |
+| Tamaño frontend | SLOC TypeScript | 15 637 | **15 768** (+0.8%) | — |
+| Cobertura de tests | Global (pytest-cov) | 95.3% | **94.7%** (95.35% sin código muerto — ver §5.3) | ✅ |
+| Ratio test/código | Unit+integration / src | 1.55 | **1.55** (sin cambio) | ✅ |
+| Complejidad | CC domain/ promedio | 1.89 | **1.86** | ✅ |
+| Mantenibilidad | MI domain/ promedio | 90.07 / 100 | **88.02 / 100** | ✅ |
+| Cohesión OO | Clases LCOM > 1 | 10 / 303 (3.3%) | **10 / 309 (3.2%)** | ✅ |
+| Acoplamiento | I gradiente domain→api | 0.26 → 0.91 | **0.273 → 0.903** | ✅ |
+| Diseño evolutivo | DesignReviewer CRITICAL | 0 en toda la historia | **0 — se mantiene** | ✅ |
+| Deuda técnica | D ArchitectAnalyst | should_block=false | **should_block=false — se mantiene** | ✅ |
+| Tamaño funcional | US funcionales entregadas | 77 en 63 días | **77 en 77 días** (SP7 aportó 0 US func.) | ✅ |
+| Velocidad | Ritmo promedio | 1.22 US func./día | **1.00** (77d) / **1.22** (SP1-6, sin cambio) | ✅ |
+| Overhead pipeline | Mediana por US | ~20 min | **~20 min** (sin datos nuevos, ver §7.3) | ✅ |
+| Ratio ajuste | SP-ADJ / US func. | 0.60 (60%) | **0.60** (SP1-6) · **indefinido** en SP7 | ℹ️ |
+| REST Endpoints | Total | 68 | **74** (+6, 100% en registro/identidad) | ℹ️ |
+| BDD Scenarios | Total | 636 | **647** (+11) | ℹ️ |
 
 ---
 
@@ -32,96 +52,122 @@
 
 ### 1.1 Backend Python
 
-| Módulo | SLOC | Archivos | % |
-|--------|:----:|:--------:|:-:|
-| competencia | 3 803 | 72 | 30% |
-| torneo | 1 644 | 30 | 13% |
-| resultados | 1 571 | 27 | 12% |
-| notificaciones | 1 352 | 29 | 11% |
-| registro | 1 305 | 25 | 10% |
-| identidad | 1 258 | 25 | 10% |
-| shared | 775 | 20 | 6% |
-| src raíz | 1 000 | — | 8% |
-| **Total** | **12 708** | **228** | 100% |
+| Módulo | SLOC BL-006 | SLOC v1.0.5 | Δ | Archivos | % |
+|--------|:----:|:----:|:---:|:--------:|:-:|
+| competencia | 5 305 | 5 305 | = | 103 | 40% |
+| registro | 1 907 | **2 042** | **+135** | 52 | 15% |
+| resultados | 1 801 | 1 801 | = | 34 | 14% |
+| identidad | 979 | **1 142** | **+163** | 33 | 9% |
+| notificaciones | 1 036 | 1 036 | = | 39 | 8% |
+| torneo | 1 056 | 1 056 | = | 31 | 8% |
+| shared | 306 | 306 | = | 17 | 2% |
+| app (raíz) | 571 | 571 | = | 1 | 4% |
+| **Total** | **12 961** | **13 259** | **+298** | **309** | 100% |
+
+**Confirmación cruzada #1 (estructura):** el delta total (+298 SLOC) coincide exactamente con la
+suma de `registro` (+135) e `identidad` (+163). Ver [`backend-raw.md`](estructurales/backend-raw.md).
 
 **Distribución por capa (todos los BCs):**
 
-| Capa | SLOC | % | CC promedio | MI promedio |
-|------|:----:|:-:|:-----------:|:-----------:|
-| domain/ | 4 158 | 33% | **1.89** | **90.07** |
-| infrastructure/ | 4 012 | 32% | 2.07 | 75.80 |
-| application/ | 2 648 | 21% | 2.25 | 78.90 |
-| api/ | 1 890 | 15% | 2.10 | 66.50 |
+| Capa | SLOC BL-006 | SLOC v1.0.5 | CC prom v1.0.5 | MI prom v1.0.5 |
+|------|:----:|:----:|:-----------:|:-----------:|
+| domain/ | 4 158 | 4 192 | **1.86** | **88.02** |
+| infrastructure/ | 1 927 | 1 935 | 2.17 | 76.12 |
+| application/ | 3 402 | 3 499 | 2.12 | 73.70 |
+| api/ | 2 901 | 3 062 | 1.95 | 68.69 |
 
-**La capa domain/ tiene la menor complejidad ciclomática y mayor mantenibilidad del sistema** — evidencia de que la arquitectura hexagonal protege el núcleo de negocio de la complejidad accidental.
+**`domain/` sigue teniendo la menor complejidad ciclomática y mayor mantenibilidad del sistema**,
+sin cambios en el patrón — la arquitectura hexagonal siguió protegiendo el núcleo de negocio
+durante los 77 días adicionales. Ver [`backend-por-capa.md`](estructurales/backend-por-capa.md).
 
 ### 1.2 Frontend TypeScript
 
-| Artefacto | Archivos | SLOC | Promedio |
-|-----------|:--------:|:----:|:--------:|
-| Páginas (pages/) | 37 | 8 993 | 243/página |
-| Hooks (hooks/) | 9 | 2 205 | 245/hook |
-| Componentes (components/) | 37 | 2 716 | 73/componente |
-| API clients | 8 | ~900 | ~113/cliente |
-| **Total** | **115** | **15 623** | — |
+| Artefacto | Archivos | SLOC v1.0.5 | Δ vs BL-006 |
+|-----------|:--------:|:----:|:---:|
+| Páginas (pages/) | 37 | 8 134 | ver nota metodológica en `frontend-raw.md` |
+| Componentes (components/) | 48 | 4 375 | conteo de archivos idéntico (~50) |
+| Hooks (hooks/) | 9 | 1 133 | mismo conteo de archivos |
+| API clients | 8 | 1 329 | mismo conteo de archivos |
+| **Total** | **117** | **15 768** | **+131 (+0.8%)** |
 
-**Duplicación (jscpd):** 55 clones / 875 líneas / **3.8%** — dentro del umbral aceptable (< 5%). Concentrada en fetch helpers de API clients, no en lógica de dominio.
+**Duplicación (jscpd):** 54 clones / 932 líneas / **4.05%** (antes 55/875/3.8%) — sigue **dentro
+del umbral aceptable** (< 5%). Ver [`frontend-duplicacion.md`](estructurales/frontend-duplicacion.md).
+
+**Bundle de producción:** 673.7 kB JS (gzip 181 kB) — **prácticamente idéntico** al build previo
+a SP-ADJ-13 (674.8 kB). El crecimiento de código no impactó el peso de la aplicación.
 
 ### 1.3 Tests
 
-| Suite | Archivos | SLOC |
-|-------|:--------:|:----:|
-| Unit | 108 | 12 050 |
-| Integration | 39 | 7 671 |
-| BDD (features) | 125 | ~4 600 |
-| **Total Python tests** | **272** | **24 321** |
+| Suite | Archivos BL-006 | SLOC BL-006 | Archivos v1.0.5 | SLOC v1.0.5 | Δ |
+|-------|:--------:|:----:|:--------:|:----:|:---:|
+| Unit + Integration | 147 | 19 721 | **149** | **20 109** | +388 |
+| BDD (Python step defs) | 62 | 11 461 | **64** | **11 675** | +214 |
+| BDD (Gherkin .feature) | 125 | 3 751 | **127** | **3 798** | +47 |
+| **Total Python tests** | **209** | **31 182** | **213** | **31 784** | **+602** |
 
-**Ratio test/código:** 1.55 (unit+integration) · 2.45 (incluyendo BDD) · **636 BDD scenarios**
+**Ratio test/código:** 1.55 (unit+integration) — **sin cambio**. Los tests crecieron
+proporcionalmente igual o más que la producción (+388 SLOC de tests vs +298 SLOC de código de
+producción). Ver [`test-to-code-ratio.md`](calidad/test-to-code-ratio.md).
 
 ---
 
 ## 2. Complejidad y Mantenibilidad Backend
 
-### 2.1 Complejidad Ciclomática (CC) por BC × capa
+### 2.1 Complejidad Ciclomática (CC) por BC × capa (v1.0.5)
 
-| BC | Tipo | domain/ CC | application/ CC | infra/ CC | api/ CC |
-|----|------|:----------:|:---------------:|:---------:|:-------:|
-| competencia | ES | 1.89 | 2.38 | 2.00 | 2.16 |
-| notificaciones | ES | 1.80 | 1.95 | 1.74 | — |
-| identidad | CRUD | 1.78 | **3.00** | 2.12 | 2.18 |
-| torneo | CRUD | 1.82 | 2.10 | 1.92 | 2.05 |
-| registro | CRUD | 1.75 | 2.22 | 2.01 | 2.11 |
-| resultados | CRUD | 1.97 | **2.90** | 2.10 | 2.15 |
-| **Global** | | **1.89** | **2.25** | **2.07** | **2.10** |
+| BC | Tipo | domain/ CC | application/ CC | infra/ CC | api/ CC | Δ desde BL-006 |
+|----|------|:----------:|:---------------:|:---------:|:-------:|:---:|
+| competencia | ES | 1.74 | 1.92 | 2.16 | 1.60 | = idéntico |
+| notificaciones | ES | 1.84 | 2.04 | 2.45 | — | = idéntico |
+| identidad | CRUD | 1.53 | **2.52** | 2.00 | 2.64 | application bajó (3.00→2.52) |
+| torneo | CRUD | 1.55 | 1.68 | 1.81 | 1.80 | = idéntico |
+| registro | CRUD | 2.09 | 1.96 | 2.18 | 2.20 | ≈ estable (2.11→2.09 domain) |
+| resultados | CRUD | 2.53 | 2.90 | 2.24 | 2.33 | = idéntico |
+| **Global** | | **1.86** | **2.12** | **2.17** | **1.95** | ver §2.2 |
 
-**Gradiente CC(domain) < CC(infra) ≈ CC(api) < CC(application)** — la complejidad legítima se concentra en application/ (orquestación de casos de uso), no en domain/ ni api/.
+**Gradiente CC(domain) < CC(api) ≈ CC(infra) < CC(application) se mantiene** — la complejidad
+legítima sigue concentrada en application/, no en domain/ ni api/.
 
-**Hipótesis ES > CRUD en CC de domain/: NO confirmada.** Los BC ES no tienen mayor CC en domain/ que los CRUD — el patrón ES expresa complejidad en volumen de clases/métodos, no en complejidad por bloque.
+**Hallazgo nuevo:** el CC de `identidad/application/` **bajó** de 3.00 a 2.52 pese a crecer +78
+SLOC — los métodos nuevos de SP-ADJ-12 (`agregar_rol_usuario`... con el hallazgo de código muerto
+en §5.3, y los efectivamente usados `agregar_rol`/`quitar_rol`) son handlers simples de baja
+complejidad, no lógica densa. El crecimiento diluyó el promedio en vez de elevarlo.
+
+**Hipótesis ES > CRUD en CC de domain/: sigue NO confirmada**, sin cambios en la conclusión desde
+BL-006 (ver [`backend-por-capa.md §3`](estructurales/backend-por-capa.md)).
 
 ### 2.2 Índice de Mantenibilidad (MI) por BC × capa
 
-| BC | Tipo | domain/ MI | application/ MI | infra/ MI | api/ MI |
-|----|------|:----------:|:---------------:|:---------:|:-------:|
-| competencia | ES | **93.00** | 81.00 | 76.00 | 65.00 |
-| identidad | CRUD | 91.00 | 73.00 | 76.00 | 64.00 |
-| shared | Shared | **96.00** | — | 82.00 | — |
-| **Global** | | **90.07** | 78.90 | 75.80 | 66.50 |
+| Capa | MI prom BL-006 | MI prom v1.0.5 | Interpretación |
+|------|:----------:|:----------:|-----|
+| domain/ | 90.07 | **88.02** | Sigue siendo la capa más mantenible del sistema |
+| application/ | 77.15 | **73.70** | Baja explicada por `registro`/`identidad` (crecimiento real) |
+| infrastructure/ | 82.32 | **76.12** | Ver nota metodológica de exclusión de archivos triviales |
+| api/ | 73.21 | **68.69** | Sigue siendo la capa con menor mantenibilidad — routers voluminosos |
 
-**MI > 85 se considera "altamente mantenible".** La capa domain/ del sistema supera ese umbral globalmente (90.07). La capa api/ tiene el MI más bajo — los routers FastAPI con múltiples rutas inlined son voluminosos, lo que penaliza el MI.
+**MI > 85 se considera "altamente mantenible".** `domain/` sigue superando ese umbral (88.02).
+Ver nota metodológica sobre exclusión de archivos triviales en
+[`backend-por-capa.md §2`](estructurales/backend-por-capa.md) — los deltas de MI son
+parcialmente sensibles al criterio de exclusión de `__init__.py` vacíos entre corridas.
 
 ### 2.3 Halstead — Métricas de Esfuerzo
 
-| Métrica | Valor global |
-|---------|:-----------:|
-| Volumen total (V) | 11 381 |
-| Esfuerzo total (E) | 58 975 |
-| Dificultad promedio (D) | 0.88 |
-| **Bugs estimados (B)** | **3.79** |
-| Tiempo teórico | 54 min |
+| Métrica | BL-006 | v1.0.5 | Δ |
+|---------|:-----------:|:-----------:|:---:|
+| Volumen total (V) | 11 381 | **11 821** | +440 |
+| Esfuerzo total (E) | 58 975 | **64 621** | +5 646 |
+| Dificultad promedio (D) | 0.88 | ver nota¹ | — |
+| **Bugs estimados (B)** | **3.79** | **3.94** | +0.15 |
+| Bugs / 1 000 SLOC | 0.30 | **0.297** | ≈ igual |
 
-**BC con mayor esfuerzo Halstead:** `resultados` (D alto — código más denso operacionalmente por algoritmos de ranking FAAS multi-variante) + `competencia` (V alto — mayor volumen de operadores/operandos por extensión del BC ES).
+¹ Metodología de ponderación distinta entre corridas — la cifra comparable directamente es
+Bugs/1 000 SLOC, que se mantiene prácticamente igual pese al crecimiento.
 
-**3.79 bugs estimados en 12 708 SLOC** → 0.30 bugs / 1 000 SLOC. Referencia industrial: 1–25 bugs / 1 000 SLOC (Capers Jones). El valor Halstead está por debajo del percentil 10 de la industria — consistente con la alta cobertura de tests (95.3%).
+**Confirmación cruzada #2 (Halstead):** de 8 BCs medidos, **solo `registro` e `identidad`
+cambiaron** — `registro` +321 volumen/+5 274 esfuerzo, `identidad` +119 volumen/+372 esfuerzo. Los
+otros 6 son bit-a-bit idénticos. **3.94 bugs estimados en 13 259 SLOC → 0.297 bugs/1 000 SLOC**
+sigue por debajo del percentil 10 de la industria (Capers Jones: 1–25). Ver
+[`backend-halstead.md`](estructurales/backend-halstead.md).
 
 ---
 
@@ -129,41 +175,65 @@
 
 ### 3.1 LCOM — Falta de Cohesión de Métodos
 
-| BC | Tipo | Clases LCOM > 1 | LCOM máx | Patrón |
-|----|------|:---------------:|:--------:|--------|
-| registro | CRUD | 2 | **4** | Inscripcion multi-rol (SP-ADJ-11) — decisión deliberada |
-| torneo | CRUD | 2 | **3** | Torneo aggregate con ciclo de vida complejo |
-| competencia | ES | 4 | 2 | 4 clases en mínimo umbral — extensión, no profundidad |
-| resultados | CRUD | 1 | 2 | RankingCompetencia + validación |
-| notificaciones | ES | 1 | 2 | PoliticaP11Handler |
-| identidad | CRUD | 0 | — | **Mejor cohesión del proyecto** |
-| shared | Shared | 0 | — | **Mejor cohesión del proyecto** |
-| **Total** | | **10 / 303** | **4** | **3.3%** |
+| BC | Tipo | Clases LCOM > 1 BL-006 | LCOM máx BL-006 | LCOM máx v1.0.5 | Patrón |
+|----|------|:---------------:|:--------:|:--------:|--------|
+| registro | CRUD | 2 | 4 | **5** ↑ | `Inscripcion` extendida con `estado_aceptacion` (SP-ADJ-12) |
+| torneo | CRUD | 2 | 3 | 3 = | Sin cambios |
+| competencia | ES | 4 | 2 | 2 = | Sin cambios |
+| resultados | CRUD | 1 | 2 | 2 = | Sin cambios |
+| notificaciones | ES | 1 | 2 | 2 = | Sin cambios |
+| identidad | CRUD | 0 | — | — = | Mejor cohesión, sin cambios |
+| shared | Shared | 0 | — | — = | Mejor cohesión, sin cambios |
+| **Total** | | **10 / 303 (3.3%)** | **4** | **10 / 309 (3.2%), máx 5** | |
 
-**0 LCOM issues en identidad y shared** — los BCs más estables del proyecto. Las 10 clases con LCOM > 1 representan el 3.3% del total; el LCOM=4 de Inscripcion es un diseño deliberado (SP-ADJ-11: unificación multi-rol).
+**Único movimiento: `Inscripcion` (registro) subió de LCOM=4 a LCOM=5.** Todas las demás clases
+con LCOM > 1 son idénticas a BL-006. Ver [`backend-ck.md §1`](estructurales/backend-ck.md).
 
 ### 3.2 CBO / FanOut — Acoplamiento Eferente
 
-| BC | Capa | Módulo | FanOut |
-|----|------|--------|:------:|
-| — | raíz | `src/app.py` | **13** |
-| competencia | api | `router.py` | **12** |
-| resultados | api | `router.py` | **12** |
-| registro | api | `router.py` | **11** |
-| resultados | application | `exportar_resultados.py` | **10** |
+| BC | Capa | Módulo | FanOut BL-006 | FanOut v1.0.5 |
+|----|------|--------|:------:|:------:|
+| — | raíz | `app.py` | 13 | 13 = |
+| competencia | api | `router.py` | 12 | 12 = |
+| resultados | api | `router.py` | 12 | 12 = |
+| **registro** | **api** | **`router.py`** | **11** | **12 ↑** |
+| resultados | application | `exportar_resultados.py` | 10 | 10 = |
 
-**Patrón:** el FanOut elevado se concentra exclusivamente en api/ (routers FastAPI) y en app.py (wiring de dependencias). Esta es una característica estructural del framework, no un defecto de diseño. El FanOut en domain/ solo aparece en resultados (ranking multi-variante).
+**Único movimiento: `registro/api/router.py` subió de FanOut=11 a 12** — nuevos endpoints de
+aceptación de inscripción y adjuntos. Todo lo demás, idéntico.
 
-### 3.3 WMC proxy — Métodos de alta complejidad
+### 3.3 WMC proxy — Métodos con Complejidad Elevada
 
-| BC | Métodos sobre umbral | % del total |
-|----|:--------------------:|:-----------:|
-| competencia | **74** | 58% |
-| resultados | 27 | 21% |
-| registro | 18 | 14% |
-| **Total** | **144** | 100% |
+| BC | Métodos sobre umbral BL-006 | Métodos sobre umbral v1.0.5 | Δ |
+|----|:--------------------:|:---:|:---:|
+| competencia | 74 | **74** | = |
+| resultados | 27 | **27** | = |
+| registro | 18 | **21** | +3 |
+| notificaciones | 10 | **10** | = |
+| identidad | 8 | **9** | +1 |
+| shared | 5 | **5** | = |
+| torneo | 2 | **2** | = |
+| **Total** | **144** | **148** | **+4** |
 
-**Competencia tiene 74 métodos largos — más que todos los demás BCs combinados.** El BC ES Core expresa su complejidad en extensión (más métodos), no en profundidad (CC promedio bajo).
+**`competencia` sigue con 74 métodos sobre el umbral, sin crecer desde SP6** — es más código
+estable, no menos complejo relativamente. El crecimiento (+4) se concentró en `registro`/`identidad`.
+
+### 3.4 Issues DesignReviewer por BC (todos los analizadores, v1.0.5 — nuevo)
+
+| BC | Total issues | % del proyecto | Issues / 1 000 SLOC |
+|----|:---:|:---:|:---:|
+| competencia | 130 | 43.6% | 24.5 |
+| registro | 42 | 14.1% | 20.6 |
+| resultados | 40 | 13.4% | 22.2 |
+| identidad | 27 | 9.1% | 23.6 |
+| notificaciones | 18 | 6.0% | 17.4 |
+| app (raíz) | 21 | 7.0% | — |
+| torneo | 15 | 5.0% | **14.2 (mínimo)** |
+| shared | 5 | 1.7% | 16.3 |
+
+La densidad de issues por SLOC está en un rango razonablemente estrecho (14–25) sin outliers —
+`competencia` tiene más issues en términos absolutos simplemente porque es 2.5–5× más grande que
+el resto, no porque tenga peor calidad relativa. Ver [`backend-ck.md §5`](estructurales/backend-ck.md).
 
 ---
 
@@ -171,36 +241,37 @@
 
 ### 4.1 Inestabilidad I — Gradiente por capa
 
-| Capa | I promedio | Interpretación |
-|------|:----------:|----------------|
-| domain/ | **0.26** | Estable — muchos módulos dependen del dominio |
-| infrastructure/ | 0.59 | Moderado — implementa ports, depende de libs externas |
-| application/ | 0.73 | Inestable — orquestador, depende de múltiples ports |
-| api/ | **0.91** | Hoja del grafo — importa todo, nadie la importa |
+| Capa | I promedio BL-006 | I promedio v1.0.5 | Interpretación |
+|------|:----------:|:----------:|----------------|
+| domain/ | 0.26 | **0.273** | Estable — sin cambios de fondo |
+| infrastructure/ | 0.59 | **0.613** | Moderado — sin cambios de fondo |
+| application/ | 0.73 | **0.721** | Inestable — sin cambios de fondo |
+| api/ | 0.91 | **0.903** | Hoja del grafo — sin cambios de fondo |
 
-**El gradiente I(domain) < I(infra) < I(application) < I(api) se cumple en los 6 BCs sin excepción.** Esta es la verificación cuantitativa de que la arquitectura hexagonal está correctamente implementada.
+**El gradiente I(domain) < I(infra) < I(application) < I(api) se mantiene** — verificado de nuevo
+con Ca/Ce recalculados desde cero sobre HEAD v1.0.5. Las variaciones (±0.02) son ruido de
+crecimiento normal (309 vs 246 módulos analizados por ArchitectAnalyst), no señal de degradación.
 
 ### 4.2 Distancia Main Sequence (D) por BC
 
-| BC | Tipo | D (BL-006) | Zona |
-|----|------|:----------:|------|
-| resultados | CRUD | **≤ 0.30** | ✅ Main Sequence |
-| notificaciones | ES | 0.450 | Alejado |
-| competencia | ES | 0.459 | Alejado |
-| torneo | CRUD | 0.479 | Alejado |
-| registro | CRUD | 0.583 | CRITICAL |
-| shared | Shared | 0.635 | Zone of Pain |
-| identidad | CRUD | 0.652 | Zone of Pain |
+| BC | Tipo | D BL-006 | D v1.0.5 | Zona v1.0.5 |
+|----|------|:----------:|:----------:|------|
+| resultados | CRUD | ≤ 0.30 | **≤ 0.30** = | ✅ Main Sequence |
+| notificaciones | ES | 0.450 | **0.450** = | Alejado |
+| competencia | ES (Core) | 0.459 | **0.459** = | Alejado |
+| torneo | CRUD | 0.479 | **0.479** = | Alejado |
+| registro | CRUD | 0.583 | **0.589** ↑ | CRITICAL |
+| shared | Shared | 0.635 | **0.635** = | Zone of Pain |
+| identidad | CRUD | 0.652 | **0.673** ↑ (máximo) | Zone of Pain |
 
-**should_block=false en todas las baselines (BL-001 → BL-006)** — el ArchitectAnalyst nunca bloqueó el cierre de un SP. Los valores elevados de D en shared e identidad reflejan alta estabilidad + baja abstracción, aceptado por diseño en un sistema hexagonal Python (sin interfaces formales).
+**Confirmación cruzada #3 (arquitectura):** los únicos dos BCs que se movieron en la métrica D
+son, de nuevo, `registro` e `identidad` — mismo patrón que en SLOC, Halstead y LCOM. `identidad`
+es ahora el BC con mayor D del proyecto (0.673, antes 0.652). Causa: SP-ADJ-12 agregó comandos
+concretos (`agregar_rol`/`quitar_rol`) sin nuevas abstracciones — A bajó de 0.10 a 0.08. Ver
+[`architectanalyst-d.md`](calidad/architectanalyst-d.md).
 
-### 4.3 Módulos más estables del proyecto
-
-| Módulo | Ca | Ce | I | Significado |
-|--------|:--:|:--:|:-:|-------------|
-| `shared/domain/value_objects/disciplina` | 32 | 0 | **0.00** | Punto de mayor estabilidad — todos los BCs lo importan |
-| `shared/domain/base/domain_event` | 22 | 0 | **0.00** | Base de todos los eventos ES |
-| `competencia/domain/ports/event_store_port` | 31 | 1 | **0.03** | Núcleo del sistema ES |
+**should_block sigue en `false`** en todas las mediciones, incluida v1.0.5 (3 CRITICAL, 64
+WARNING — ArchitectAnalyst nunca bloqueó el cierre de un SP ni del proyecto).
 
 ---
 
@@ -208,54 +279,77 @@
 
 ### 5.1 DesignReviewer — Evolución de issues
 
-| SP | Issues totales | CRITICAL | Issues/US | Tendencia |
-|----|:--------------:|:--------:|:---------:|:---------:|
-| SP2 | 35 | 0 | 17.7 | Línea base |
-| SP3 | 72 | 0 | 6.5 | ↓ Mejora |
-| SP4 | 145 | 0 | 6.9 | = Estable |
-| SP5 | 240 | 0 | 12.0 | ↑ (nuevo código ES) |
-| SP6 | 287 | 0 | **2.4** | ↓↓ Mínimo histórico |
+| SP | Issues totales | CRITICAL | Tendencia |
+|----|:--------------:|:--------:|:---------:|
+| SP2 | 35 | 0 | Línea base |
+| SP3 | 72 | 0 | ↓ Mejora |
+| SP4 | 145 | 0 | = Estable |
+| SP5 | 240 | 0 | ↑ (nuevo código ES) |
+| SP6 (SP-ADJ-11) | 287 | 0 | ↓↓ Mínimo histórico relativo |
+| **SP7 + SP-ADJ-12 + SP-ADJ-13 (v1.0.5)** | **298** | **0** | **↑ +11 — el salto más chico de toda la serie** |
 
-**0 CRITICAL en toda la historia del proyecto.** El gate DesignReviewer funcionó como discriminador (WARNINGs), nunca como bloqueante de PR.
-
-**La tasa issues/US decreció de 17.7 a 2.4** a lo largo del proyecto — posible señal de mejora en disciplina de diseño, o de que el código nuevo es más incremental sobre bases ya existentes.
+**0 CRITICAL se mantiene en toda la historia del proyecto, sin excepción, hasta el cierre.** El
+crecimiento de +11 issues en los últimos 77 días es el incremento absoluto más pequeño de toda la
+serie histórica — consistente con que fue un período de estabilización, no de construcción.
 
 ### 5.2 Cobertura de tests
 
-| Capa | Cobertura | Tests | Gap (líneas) |
-|------|:---------:|:-----:|:------------:|
-| domain/ | **97.3%** | — | — |
-| infrastructure/ | 94.0% | — | — |
-| application/ | 93.6% | — | — |
-| **Global** | **95.3%** | 1 019 | ~500 |
+| Capa | Cobertura BL-006 | Cobertura v1.0.5 | Δ |
+|------|:---------:|:---------:|:---:|
+| domain/ | 97.3% | **97.3%** | = |
+| infrastructure/ | 94.0% | **94.0%** | = |
+| application/ | 93.6% | **92.1%** | −1.5 pp (ver §5.3) |
+| **Global** | **95.3%** | **94.7%** | −0.6 pp (ver §5.3) |
 
-**BC con menor cobertura:** resultados (86.9%) — gap de 111 líneas en application/. Riesgo bajo por ser lógica de ranking con amplia cobertura unitaria de dominio.
+### 5.3 Hallazgo nuevo — código muerto detectado en identidad
 
-**Distribución de la suite:** 1 019 tests Python (unit + integration) + 636 BDD scenarios + 14 UAT tests funcionales.
+`src/identidad/application/commands/agregar_rol_usuario.py` y `.../quitar_rol_usuario.py` tienen
+**0% de cobertura (40 sentencias, 0 cubiertas)**. Verificado con grep: **nunca están importados**
+en `router.py`, `app.py` ni en ningún test — el router usa en su lugar `agregar_rol.py`/
+`quitar_rol.py`, que sí están 100% cubiertos. Es un residuo de iteración de SP-ADJ-12 (una
+primera versión reemplazada sin eliminar el archivo original), no un gap real de testing.
+
+**Sin esos dos archivos, la cobertura global sería ≈95.35%** — prácticamente igual a BL-006
+(95.3%), en vez de la caída aparente a 94.7%. Se flaggeó como tarea de limpieza aparte, fuera del
+alcance de esta actualización de métricas. Ver [`cobertura-tests.md §3`](calidad/cobertura-tests.md).
 
 ---
 
 ## 6. Tamaño Funcional
 
-### 6.1 Proxies de tamaño funcional por BC
+### 6.1 Proxies de tamaño funcional — v1.0.5
 
-| BC | Tipo | US func. est. | BDD Scenarios | REST Endpoints |
-|----|------|:-------------:|:-------------:|:--------------:|
-| competencia | ES | ~22 (29%) | 263 | 24 |
-| torneo | CRUD | ~14 (18%) | 310 | 15 |
-| registro | CRUD | ~12 (16%) | 125 | 20 |
-| resultados | CRUD | ~12 (16%) | 107 | 3 |
-| identidad | CRUD | ~9 (12%) | 36 | 6 |
-| notificaciones | ES | ~5 (6%) | 19 | 0 |
-| **Total** | | **77** | **636** | **68** |
+| BC | Endpoints BL-006 | Endpoints v1.0.5 | Δ |
+|----|:-------------:|:-------------:|:---:|
+| competencia | 24 | 24 | = |
+| **registro** | 20 | **23** | **+3** |
+| torneo | 15 | 15 | = |
+| **identidad** | 6 | **9** | **+3** |
+| resultados | 3 | 3 | = |
+| notificaciones | 0 | 0 | = |
+| **Total** | **68** | **74** | **+6** |
+
+**Confirmación cruzada #4 (superficie API):** los +6 endpoints nuevos están 100% en `registro`
+(+3, aceptación de inscripción + adjuntos) e `identidad` (+3, `POST/DELETE /auth/me/roles`) —
+cuarta métrica independiente (junto con SLOC, Halstead, D arquitectónico) que apunta exactamente
+al mismo par de BCs como el único lugar donde el sistema cambió. Ver
+[`tamano-funcional.md §3`](productividad/tamano-funcional.md).
 
 ### 6.2 Distribución de endpoints por método HTTP
 
 | GET | POST | PUT | PATCH | DELETE |
 |:---:|:----:|:---:|:-----:|:------:|
-| 27 (40%) | 25 (37%) | 12 (18%) | 3 (4%) | 1 (1%) |
+| 30 (41%) | 26 (35%) | 12 (16%) | 4 (5%) | 2 (3%) |
 
-**Sistema orientado a comandos (POST = 37%):** consistente con CQRS/ES en el BC Core. Notificaciones no expone API pública — BC completamente interno, orientado a eventos.
+**Sistema sigue orientado a comandos (GET+POST = 76%, antes 77%)** — sin cambio de patrón. Los
+nuevos PATCH/DELETE corresponden a aceptación de inscripción y a quitar rol, respectivamente.
+
+### 6.3 BDD Scenarios
+
+Total: **647** (antes 636, +11) sobre **127 feature files** (antes 125, +2). El desglose por BC
+usa un método de conteo aproximado (coincidencia de texto, no de propiedad real) ya señalado como
+impreciso en la medición original — ver nota metodológica en
+[`tamano-funcional.md §2.2`](productividad/tamano-funcional.md).
 
 ---
 
@@ -271,107 +365,112 @@
 | SP4 | 14 días | 21 | 7 | 1.50 |
 | SP5 | 13 días | 20 | 7 | 1.54 |
 | SP6 | 15 días | 13 | 10 | 0.87 |
-| **Total** | **63 días** | **77** | **46** | **1.22** |
+| **SP1–SP6** | **63 días** | **77** | **46** | **1.22** |
+| SP7+ADJ-12+ADJ-13 | 14 días | **0*** | 8 | **N/A** |
+| **Proyecto completo** | **77 días** | **77** | **54** | **1.00 (acumulado)** |
 
-**Velocidad de crucero (SP3–SP5): ~1.5 US func./día.** SP1–SP2 son de rampa (inversión en infraestructura hexagonal). SP6 baja por diseño (SP de validación y ajuste).
+\* **Hallazgo metodológico nuevo:** SP7 no generó US funcionales porque sus dos incrementos
+(despliegue en Fly.io, manual de usuario MkDocs) no son US-IEDD de dominio con
+precondición/postcondición formal. El ritmo acumulado cae de 1.22 a 1.00 US func./día no porque
+el equipo se hizo más lento, sino porque los últimos 14 días fueron 100% estabilización/cierre,
+sin nuevo dominio. Ver [`velocidad-sp.md §5-6`](productividad/velocidad-sp.md).
 
 ### 7.2 Ratio SP-ADJ / US funcionales
 
-| SP | US func. | SP-ADJ | Ratio |
-|----|:--------:|:------:|:-----:|
-| SP1 | 9 | 5 | 56% |
-| SP2 | 3 | 3 | 100% |
-| SP3 | 11 | 14 | **127%** |
-| SP4 | 21 | 7 | 33% |
-| SP5 | 20 | 7 | **35%** (mínimo) |
-| SP6 | 13 | 10 | 77% |
-| **Global** | **77** | **46** | **60%** |
-
-**Benchmark IEDD:** 0.60 US de ajuste por cada US funcional — nivel esperado en un proyecto de alta complejidad arquitectónica (hexagonal + ES + PWA) con equipo de 1 persona y método incremental. El ratio decreciente SP3→SP5 (127%→35%) muestra que el sistema de deuda técnica se hace más eficiente a medida que madura la arquitectura.
+Sin cambios en SP1–SP6 (60% global). **El ratio queda indefinido para SP7** (8 US de ajuste / 0
+US funcionales) — no por ineficiencia, sino porque la métrica fue diseñada para sprints de
+construcción activa, no para fases de cierre. Ver
+[`sp-adj-ratio.md §1`](productividad/sp-adj-ratio.md).
 
 ### 7.3 Overhead del pipeline IEDD
 
-| Estadístico | Todos (n=34) | Sin outliers (n=28) |
-|-------------|:-----------:|:-------------------:|
-| Mediana | **20 min** | 18 min |
-| P25–P75 | 12–38 min | 11–26 min |
-| Media | 48.6 min | 20.8 min |
-
-**Distribución:**
-- < 15 min: 35% (reutilización alta, refactor puntual)
-- 15–30 min: 29% (rango modal — US CRUD estándar)
-- 30–60 min: 15% (nueva lógica de dominio)
-- > 60 min: 21% (cross-BC, diseño emergente, wait-time)
-
-**Hipótesis H-4.1 confirmada:** el overhead del pipeline IEDD no es estructural. Tras la primera US (120 min de setup), el tiempo convergió a ~18–20 min de mediana y se mantuvo estable. **El 64% de las US se implementan en menos de 30 minutos** a través del pipeline completo de 10 fases.
+**Sin datos nuevos.** Se buscó en `docs/reports/`, `.cm/` y los planes de SP-ADJ-12/13 — ninguna
+de las 10 US/incrementos del período de cierre tiene registro de tiempo real. El dataset sigue
+siendo n=34 (mediana ~20 min), y la cobertura relativa de tracking **empeoró** de 28% (34/123) a
+26% (34/131) porque el denominador de US totales creció sin que el tracker se usara. Es la señal
+más clara de que la disciplina de tracking manual no se sostiene sin automatización — ver
+[`overhead-pipeline.md §7.4`](productividad/overhead-pipeline.md).
 
 ---
 
 ## 8. Conclusiones para el Paper IEDD
 
-### 8.1 La arquitectura hexagonal es verificable cuantitativamente
+### 8.1 La arquitectura hexagonal se sostuvo, verificada dos veces con 3 meses de diferencia
 
-El gradiente de inestabilidad I(domain=0.26) < I(infra=0.59) < I(app=0.73) < I(api=0.91) se cumple **universalmente** en los 6 BCs. Esta evidencia cuantitativa no es visible en el código fuente — emerge solo al medir Ca/Ce sistemáticamente. El paper puede citar este gradiente como verificación formal de la intención de diseño.
+El gradiente I(domain=0.273) < I(infra=0.613) < I(app=0.721) < I(api=0.903) se recalculó
+completamente desde cero (no se copió el resultado anterior) y reprodujo el mismo patrón que
+BL-006 con variaciones de ±0.02. Esta es una verificación independiente más fuerte que la
+original: no solo el diseño *fue* correcto al momento de medirlo, sino que **se mantuvo correcto**
+77 días y 429 SLOC adicionales después, sin intervención dedicada de arquitectura.
 
-### 8.2 El dominio está protegido de la complejidad accidental
+### 8.2 El crecimiento post-construcción fue quirúrgico, con cuádruple confirmación
 
-- domain/ CC promedio = 1.89 (mínimo del sistema)
-- domain/ MI promedio = 90.07 (máximo del sistema)
-- domain/ I promedio = 0.26 (mínimo — es la capa más estable)
-- 0 LCOM issues en shared y identidad
+Cuatro métricas completamente independientes — SLOC (§1.1), Halstead (§2.3), métrica D
+arquitectónica (§4.2) y endpoints REST (§6.1) — señalan **exactamente los mismos dos BCs**
+(`registro`, `identidad`) como el único lugar donde el sistema cambió entre BL-006 y v1.0.5. Los
+otros 6 BCs no cambiaron ni un archivo, ni una línea, ni un endpoint. Esto es evidencia fuerte de
+que SP7 + SP-ADJ-12 + SP-ADJ-13 fueron un cierre acotado, no una segunda fase de construcción —
+y de que el pipeline IEDD, incluso fuera de su fase de mayor disciplina, no generó dispersión de
+cambios no relacionados ("scope creep") en el resto del sistema.
 
-Los tres indicadores (CC, MI, I) convergen en la misma conclusión: la arquitectura hexagonal funcionó como escudo de complejidad en el dominio a lo largo de los 6 sprints.
+### 8.3 ES vs CRUD sigue sin diferenciar en métricas de calidad
 
-### 8.3 ES vs CRUD no diferencia en métricas de calidad
+Todas las hipótesis re-verificadas en la Ronda 2 (CC domain/, LCOM, I domain/) mantienen
+exactamente las mismas conclusiones que en BL-006 — no confirmadas. El paradigma ES vs CRUD no es
+lo que las métricas de calidad diferencian; la complejidad intrínseca del BC sí.
 
-| Hipótesis | Resultado |
-|-----------|-----------|
-| ES > CRUD en CC domain/ | **NO confirmada** — CRUD con lógica compleja (resultados, identidad) tiene CC similar |
-| ES > CRUD en LCOM | **NO confirmada** — registro CRUD tiene el LCOM más alto (4) |
-| ES < CRUD en I domain/ | **NO confirmada** — ES domain/ I=0.32 vs CRUD I=0.27 |
+### 8.4 El pipeline IEDD no fue el problema — el tracking manual sí
 
-**Las métricas diferencian complejidad de dominio, no paradigma de implementación.** Un BC CRUD complejo (registro multi-rol, resultados multi-variante) tiene peores métricas CK que un BC ES simple.
+La mediana de 20 min/US de BL-006 sigue siendo el único dato disponible al cierre del proyecto:
+**cero de las 10 US/incrementos de la fase de cierre tienen registro de tiempo.** Esto no
+contradice la hipótesis H-4.1 original (el overhead de pipeline no es estructural) — la refuerza
+con un dato adicional: incluso al final de un proyecto de 77 días con el método completamente
+interiorizado, la disciplina de tracking manual se abandonó. La recomendación original de
+instrumentar el tracker automáticamente desde Fase 0 queda más justificada, no menos.
 
-### 8.4 El pipeline IEDD no agrega overhead estructural
+### 8.5 La deuda técnica siguió siendo medible, decreciente en tasa, y con un límite metodológico nuevo
 
-- Mediana 20 min por US = tiempo de implementación neto (no acumulado en el pipeline)
-- La inversión inicial (SP1 = 120 min → 29 min en 2 ciclos) se amortiza en las primeras US
-- Las estimaciones del pipeline sobreestiman sistemáticamente en 70–96% — calibradas para esfuerzo humano no asistido, no para IEDD
-- US-ADJ-10.1/10.2 (estimadas con experiencia acumulada) tienen precisión de ±11%
+- Issues/US: la serie 17.7→2.4 (SP2→SP6) no tiene continuación limpia en SP7 porque el
+  denominador (US funcionales) fue 0 — **el ratio SP-ADJ como métrica no está definido fuera de
+  fases de construcción activa**, un hallazgo metodológico nuevo para el paper.
+- should_block: false en todas las baselines, incluida la medición final v1.0.5.
+- LCOM > 1: 3.2% de clases (antes 3.3%) — el único cambio es `Inscripcion` (registro), que
+  siguió creciendo en la misma dirección deliberada ya documentada en BL-006.
+- Bugs estimados Halstead: 3.94 (antes 3.79) — 0.297 bugs/1 000 SLOC (percentil < 10 industria,
+  sin cambio de categoría).
 
-### 8.5 La deuda técnica es medible y decreciente
-
-- Issues/US: 17.7 (SP2) → 2.4 (SP6) — reducción del 86%
-- should_block: false en todas las baselines
-- LCOM > 1: 3.3% de clases — LCOM=4 en Inscripcion es decisión deliberada
-- Bugs estimados Halstead: 3.79 — 0.30 bugs/1 000 SLOC (percentil < 10 industria)
-
-**El sistema de quality gates (DesignReviewer + ArchitectAnalyst) funcionó como monitor de deuda, no como bloqueante.** La deuda acumulada nunca superó los umbrales de alerta definidos y la tasa de generación decrece con la madurez del proyecto.
+**El sistema de quality gates funcionó como monitor de deuda hasta el último commit del
+proyecto** — nunca bloqueó, nunca acumuló CRITICAL, y el único gap real encontrado (código muerto
+en `identidad`, §5.3) fue detectado precisamente *por* este ejercicio de recálculo de métricas,
+no por el pipeline de desarrollo — una limitación honesta a documentar: las métricas agregadas
+(cobertura global) pueden ocultar hallazgos puntuales (archivos huérfanos) que solo aparecen al
+mirar el desglose por archivo.
 
 ---
 
 ## Índice de Documentos de Detalle
 
-| Categoría | Documento | Contenido |
-|-----------|-----------|-----------|
-| Estructural | [backend-raw.md](estructurales/backend-raw.md) | LOC/SLOC por BC y capa |
-| Estructural | [backend-cc.md](estructurales/backend-cc.md) | CC radon por BC × función |
-| Estructural | [backend-mi.md](estructurales/backend-mi.md) | MI radon por BC × módulo |
-| Estructural | [backend-halstead.md](estructurales/backend-halstead.md) | V, E, D, B por BC |
-| Estructural | [backend-por-capa.md](estructurales/backend-por-capa.md) | CC + MI + SLOC agregados |
-| Estructural | [backend-ck.md](estructurales/backend-ck.md) | LCOM, CBO/FanOut, WMC proxy |
-| Estructural | [backend-acoplamiento.md](estructurales/backend-acoplamiento.md) | Ca, Ce, I, A, D por BC × capa |
-| Estructural | [frontend-raw.md](estructurales/frontend-raw.md) | SLOC TypeScript por artefacto |
-| Estructural | [frontend-duplicacion.md](estructurales/frontend-duplicacion.md) | jscpd — clones y duplicación |
-| Calidad | [cobertura-tests.md](calidad/cobertura-tests.md) | pytest-cov por BC × capa |
-| Calidad | [test-to-code-ratio.md](calidad/test-to-code-ratio.md) | Ratio SLOC tests / SLOC src |
-| Calidad | [designreviewer-evolucion.md](calidad/designreviewer-evolucion.md) | Serie temporal issues INC→SP |
-| Calidad | [architectanalyst-d.md](calidad/architectanalyst-d.md) | D por BC en BL-001→BL-006 |
-| Productividad | [velocidad-sp.md](productividad/velocidad-sp.md) | US/día por SP |
-| Productividad | [sp-adj-ratio.md](productividad/sp-adj-ratio.md) | Ratio ADJ / funcionales |
-| Productividad | [overhead-pipeline.md](productividad/overhead-pipeline.md) | Tiempo real por US (n=34) |
-| Productividad | [tamano-funcional.md](productividad/tamano-funcional.md) | US, BDD scenarios, endpoints |
+| Categoría | Documento | Contenido | Estado Ronda 2 |
+|-----------|-----------|-----------|:---:|
+| Estructural | [backend-raw.md](estructurales/backend-raw.md) | LOC/SLOC por BC y capa | ✅ recalculado |
+| Estructural | [backend-cc.md](estructurales/backend-cc.md) | CC radon por BC × función | ✅ recalculado |
+| Estructural | [backend-mi.md](estructurales/backend-mi.md) | MI radon por BC × módulo | ✅ recalculado |
+| Estructural | [backend-halstead.md](estructurales/backend-halstead.md) | V, E, D, B por BC | ✅ recalculado |
+| Estructural | [backend-por-capa.md](estructurales/backend-por-capa.md) | CC + MI + SLOC agregados | ✅ recalculado |
+| Estructural | [backend-ck.md](estructurales/backend-ck.md) | LCOM, CBO/FanOut, WMC proxy + issues por BC | ✅ recalculado |
+| Estructural | [backend-acoplamiento.md](estructurales/backend-acoplamiento.md) | Ca, Ce, I, A, D por BC × capa | ✅ recalculado |
+| Estructural | [frontend-raw.md](estructurales/frontend-raw.md) | SLOC TypeScript por artefacto + bundle | ✅ recalculado |
+| Estructural | [frontend-duplicacion.md](estructurales/frontend-duplicacion.md) | jscpd — clones y duplicación | ✅ recalculado |
+| Calidad | [cobertura-tests.md](calidad/cobertura-tests.md) | pytest-cov por BC × capa + hallazgo código muerto | ✅ recalculado |
+| Calidad | [test-to-code-ratio.md](calidad/test-to-code-ratio.md) | Ratio SLOC tests / SLOC src | ✅ recalculado |
+| Calidad | [designreviewer-evolucion.md](calidad/designreviewer-evolucion.md) | Serie temporal issues INC→SP | ⏳ no recalculado — sin nuevos hitos INC individuales en el período |
+| Calidad | [architectanalyst-d.md](calidad/architectanalyst-d.md) | D por BC en BL-001→v1.0.5 | ✅ recalculado |
+| Productividad | [velocidad-sp.md](productividad/velocidad-sp.md) | US/día por SP + cierre de proyecto | ✅ recalculado |
+| Productividad | [sp-adj-ratio.md](productividad/sp-adj-ratio.md) | Ratio ADJ / funcionales | ✅ recalculado |
+| Productividad | [overhead-pipeline.md](productividad/overhead-pipeline.md) | Tiempo real por US (n=34, sin datos nuevos) | ✅ revisado |
+| Productividad | [tamano-funcional.md](productividad/tamano-funcional.md) | US, BDD scenarios, endpoints | ✅ recalculado |
 
 ---
 
 *Generado: 2026-05-18 — rama doc/metricas — PLAN-METRICAS.md §7 completado*
+*Recalculado: 2026-08-13 — HEAD `main` post SP-ADJ-13 (tag v1.0.5) — PLAN-METRICAS.md §6 Ronda 2 completa*
