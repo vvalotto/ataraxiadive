@@ -156,7 +156,41 @@
 
 ---
 
-## 5. Síntesis CK para el paper IEDD
+## 5. Issues DesignReviewer por BC — todos los analizadores (v1.0.5)
+
+Tabla nueva (2026-08-13): agrega **todos** los tipos de issue de DesignReviewer por BC, no solo
+LCOM/FanOut/WMC/FeatureEnvy — incluye también `DataClumpsAnalyzer` (parámetros repetidos entre
+funciones) y `LongParameterListAnalyzer` (funciones con demasiados parámetros), que no se habían
+tabulado por BC en las secciones anteriores.
+
+| BC | Tipo | LCOM | FanOut | LongMethod | FeatureEnvy | DataClumps | LongParamList | **Total** | % del proyecto |
+|----|------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| competencia | ES (Core) | 4 | 1 | 74 | 36 | 9 | 6 | **130** | 43.6% |
+| resultados | CRUD | 1 | 6 | 27 | 3 | 2 | 1 | **40** | 13.4% |
+| registro | CRUD | 2 | 2 | 21 | 13 | 2 | 2 | **42** | 14.1% |
+| identidad | CRUD | 0 | 1 | 9 | 12 | 3 | 2 | **27** | 9.1% |
+| notificaciones | ES | 1 | 0 | 10 | 7 | 0 | 0 | **18** | 6.0% |
+| torneo | CRUD | 2 | 1 | 2 | 8 | 1 | 1 | **15** | 5.0% |
+| shared | Shared | 0 | 0 | 5 | 0 | 0 | 0 | **5** | 1.7% |
+| app (raíz) | — | 0 | 1 | 14 | 0 | 5 | 1 | **21** | 7.0% |
+| **TOTAL** | | **10** | **12** | **162** | **79** | **22** | **13** | **298** | 100% |
+
+**`competencia` concentra el 43.6% de todos los issues de diseño del proyecto** — coherente con
+que también concentra el 43.6% del SLOC total (5 305/13 259): en issues absolutos es el BC más
+grande porque es el BC más grande, punto. **Densidad de issues por SLOC** (issues/1000 SLOC):
+competencia 24.5 · resultados 22.2 · identidad 23.6 · registro 20.6 · notificaciones 17.4 ·
+shared 16.3 · **torneo 14.2 (la más baja del proyecto)**. La mayoría de los BCs están en un rango
+razonablemente estrecho (17–25 issues/1000 SLOC); `torneo` destaca como el BC con menor densidad
+de smells relativa a su tamaño — consistente con `backend-ck.md §3` (torneo tiene solo 2 métodos
+largos, el mínimo del proyecto) y con que no recibió ningún cambio desde BL-006.
+
+**`app` (raíz, `src/app.py`) es el único "BC" con `DataClumpsAnalyzer` alto (5)** — el archivo de
+wiring de dependencias repite grupos de parámetros entre las funciones `build_*_handler`, un
+patrón esperado en composition roots y no un defecto de diseño de dominio.
+
+---
+
+## 6. Síntesis CK para el paper IEDD
 
 | BC | Tipo | LCOM máx | CBO máx | WMC proxy | Evaluación |
 |----|------|:---------:|:-------:|:---------:|------------|
