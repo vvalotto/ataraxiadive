@@ -54,8 +54,8 @@ ningún benchmark de sistemas embebidos, fintech/healthcare, ni proyectos de gra
 
 | Métrica | AtaraxiaDive v1.0.5 | Benchmark de industria (contexto: MIS/negocio, riesgo bajo-medio) | Posición |
 |---|:---:|---|:---:|
-| **Cobertura de tests** | 94.7% global (95.35% sin código muerto) | 70–90% aplicación de negocio estándar | ✅ **Por encima del rango típico** — se acerca al piso del rango exigido a sistemas críticos (85–95%) sin serlo |
-| **Defectos estimados** (Halstead, proxy) | 0.297 / 1 000 SLOC | Capers Jones: ~5 defectos/function point entregados a razón de ~0.75/FP tras remoción — la conversión SLOC↔FP depende del lenguaje, pero incluso con supuestos conservadores (Python: ~1 FP ≈ 40–50 SLOC) el proxy de AtaraxiaDive equivale a un orden de magnitud **por debajo** del promedio EE.UU. | ✅ **Muy por debajo del promedio** — coherente con la alta cobertura de tests |
+| **Cobertura de tests** | 95.35% global (post-limpieza de código muerto, commit `b832d25`) | 70–90% aplicación de negocio estándar | ✅ **Por encima del rango típico** — se acerca al piso del rango exigido a sistemas críticos (85–95%) sin serlo |
+| **Defectos estimados** (Halstead, proxy) | 0.298 / 1 000 SLOC | Capers Jones: ~5 defectos/function point entregados a razón de ~0.75/FP tras remoción — la conversión SLOC↔FP depende del lenguaje, pero incluso con supuestos conservadores (Python: ~1 FP ≈ 40–50 SLOC) el proxy de AtaraxiaDive equivale a un orden de magnitud **por debajo** del promedio EE.UU. | ✅ **Muy por debajo del promedio** — coherente con la alta cobertura de tests |
 | **Complejidad Ciclomática** (domain/) | 1.86 promedio | 1–10 = bajo riesgo (McCabe) | ✅ **Muy por debajo del umbral de riesgo** — el sistema completo (peor capa: infra 2.17) sigue firmemente en "bajo riesgo" |
 | **Índice de Mantenibilidad** (domain/) | 88.02 / 100 | ≥20 = verde/mantenible | ✅ **4.4× el umbral mínimo** — la capa más débil (api/, 68.69) sigue en zona verde |
 | **Duplicación de código** (frontend) | 4.05% | <3% excelente · 3–5% aceptable · 5–10% alerta | ⚠️ **Dentro del rango aceptable, pero no excelente** — más cerca del límite superior (5%) que del piso |
@@ -113,8 +113,8 @@ Function Points/persona-mes (la unidad que usan ISBSG y Capers Jones).
 SLOC/día), no un orden de magnitud por encima de la capacidad humana. **No hay evidencia, en esta
 unidad, de una velocidad de escritura de código "sobrehumana".**
 
-**Lo que sí es inusual no es el volumen de código — es sostener ese volumen junto con 94.7% de
-cobertura de tests, especificación formal por historia, y 0 issues CRITICAL de diseño en 793
+**Lo que sí es inusual no es el volumen de código — es sostener ese volumen junto con 95.35% de
+cobertura de tests, especificación formal por historia, y 0 issues CRITICAL de diseño en 793+
 commits, sin pausas para "ponerse al día" con deuda técnica.** Un desarrollador senior humano
 escribiendo 400+ SLOC/día raramente mantiene ese ritmo *y* esa disciplina de tests/diseño
 simultáneamente — la combinación, no el número aislado, es la observación defendible para el

@@ -3,6 +3,10 @@
 > Estado documental: vigente
 > Fuente de verdad para: estrategia de medición del producto y del experimento IEDD
 > Última actualización: 2026-08-13 — fuentes actualizadas a BL-007 / v1.0.5 (ver §0)
+> **Nota (2026-08-13, post-Ronda 2):** la Ronda 2 se completó y además se corrigió un hallazgo de
+> código muerto detectado durante la misma (identidad, commit `b832d25`) — los números finales
+> vigentes están en `REPORTE-METRICAS.md` y `CONCLUSIONES-IEDD.md`, no en las cifras preliminares
+> de este §0.
 
 ---
 
@@ -252,13 +256,15 @@ du -sh frontend/dist/
 | INC-6.4 | 253 | −5 | INC-6.4-report.txt |
 | SP-ADJ-11 | 287 | +34 | current-report.json (2026-05-18) |
 | SP-ADJ-12 | 296 | +9 | narrativa `BL-007.md` (sin JSON archivado) |
-| SP-ADJ-13 / v1.0.5 (HEAD) | **298** | +2 | `quality/reports/designreviewer/v1.0.5-report.json` (2026-08-13) |
+| SP-ADJ-13 / v1.0.5 (HEAD) | 298 | +2 | `quality/reports/designreviewer/v1.0.5-report.json` (2026-08-13) |
+| **v1.0.5 post-limpieza** | **296** | **−2** | `quality/reports/designreviewer/v1.0.5-post-cleanup-report.json` (2026-08-13, commit `b832d25` — eliminación de código muerto en identidad) |
 
 **Análisis:** tendencia, picos por INC, correlación con tipo de incremento (frontend vs backend).
 Confirmado con la re-ejecución: **0 CRITICAL se mantiene en toda la historia del proyecto**,
-incluyendo SP7 + SP-ADJ-12 + SP-ADJ-13. El crecimiento SP-ADJ-11→v1.0.5 (287→298, +11 en total)
-es mucho más chico que saltos anteriores (p.ej. INC-5.6 +25) — consistente con que SP7/ADJ-12/13
-fueron incrementos acotados (despliegue, manual, fixes puntuales) y no nuevo dominio.
+incluyendo SP7 + SP-ADJ-12 + SP-ADJ-13. El crecimiento SP-ADJ-11→v1.0.5 (287→298→296 tras
+limpieza, +9 neto) es mucho más chico que saltos anteriores (p.ej. INC-5.6 +25) — consistente con
+que SP7/ADJ-12/13 fueron incrementos acotados (despliegue, manual, fixes puntuales) y no nuevo
+dominio.
 
 ### B.2 ArchitectAnalyst — Métrica D por BC
 

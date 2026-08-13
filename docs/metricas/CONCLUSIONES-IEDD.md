@@ -32,12 +32,12 @@ proyecto — verificado de forma independiente, no asumida.**
 |---------|:-----------------:|:-----------------:|:--------------:|:----------:|
 | CC domain/ promedio | 1.89 | **1.86** | < 5 | ✅ Muy bajo, sin cambios |
 | MI domain/ promedio | 90.07 / 100 | **88.02 / 100** | > 85 | ✅ Altamente mantenible, sin cambios |
-| Bugs estimados Halstead | 0.30 / 1 000 SLOC | **0.297 / 1 000 SLOC** | 1–25 (Capers Jones) | ✅ Percentil < 10 industria, sin cambios |
+| Bugs estimados Halstead | 0.30 / 1 000 SLOC | **0.298 / 1 000 SLOC** | 1–25 (Capers Jones) | ✅ Percentil < 10 industria, sin cambios |
 | Clases LCOM > 1 | 3.3% | **3.2%** | < 10% | ✅ Cohesión alta, sin cambios |
 
 Las cuatro métricas estructurales que sostenían la conclusión de "calidad de producción" en
 BL-006 **no se movieron de categoría** en los 77 días adicionales. El dato de Halstead sigue
-siendo el más revelador: 0.297 bugs/1 000 SLOC contra un rango industrial de 1–25 — el proyecto
+siendo el más revelador: 0.298 bugs/1 000 SLOC contra un rango industrial de 1–25 — el proyecto
 completo, no solo su punto intermedio, está 3× mejor que el límite inferior de ese rango.
 
 ### Ángulo 2 — Calidad arquitectónica (verificada dos veces, con resultado idéntico)
@@ -100,19 +100,24 @@ degrada en cualquier fase donde el tipo de trabajo se aleja de la US-IEDD de dom
 (deploy, documentación, fixes puntuales). Un tracker automático es la única forma de tener
 cobertura completa.
 
-### 2.5 Las métricas agregadas pueden esconder código muerto (aprendizaje nuevo)
+### 2.5 Las métricas agregadas pueden esconder código muerto — y el proceso lo corrigió en el mismo ciclo (aprendizaje nuevo)
 
 El recálculo de cobertura de tests detectó dos archivos (`agregar_rol_usuario.py`,
 `quitar_rol_usuario.py`) con 0% de cobertura porque nunca fueron conectados al router —
-residuo de una iteración de SP-ADJ-12 reemplazada sin limpiar. La cobertura global (94.7%) por sí
-sola no distinguía "gap de testing real" de "código que no debería existir": hizo falta bajar al
-desglose por archivo para encontrarlo.
+residuo de una iteración de SP-ADJ-12 reemplazada sin limpiar. La cobertura global agregada
+(94.7% en el momento de la detección) por sí sola no distinguía "gap de testing real" de "código
+que no debería existir": hizo falta bajar al desglose por archivo para encontrarlo.
+
+**Cerrado en el mismo ciclo (commit `b832d25`, 2026-08-13):** se verificó con grep que los
+archivos no tenían referencias externas, se eliminaron, y se confirmó sin regresiones (1049 tests
+passed, DesignReviewer 0 CRITICAL/296 WARNING). La cobertura global quedó en **95.35%** —
+prácticamente idéntica a BL-006 (95.3%).
 
 **Aprendizaje para el proceso IEDD:** una caída inesperada en una métrica agregada amerita
 siempre desglosar por archivo antes de interpretarla como regresión de calidad — puede ser una
 señal de código muerto, no de menor esfuerzo de testing. Se recomienda agregar un chequeo de
 "módulos importados en producción vs. módulos con tests" como parte del pipeline de cierre de
-Incremento.
+Incremento, para detectar este patrón sin depender de una auditoría manual posterior.
 
 ---
 
@@ -136,29 +141,30 @@ Score_calidad = media de:
 
 **Versión A — QPI de construcción (SP1–SP6, 63 días, igual período que la medición original):**
 
-| Componente | Cálculo | Valor BL-006 | Valor v1.0.5 |
+| Componente | Cálculo | Valor BL-006 | Valor v1.0.5 (post-limpieza) |
 |-----------|---------|:-----:|:-----:|
-| Cobertura | coverage/100 | 0.953 | 0.947 |
-| Cohesión OO | 1 − (LCOM>1/total) | 0.967 | 0.968 |
+| Cobertura | coverage/100 | 0.953 | 0.9535 |
+| Cohesión OO | 1 − (LCOM>1/total) | 0.967 | 0.967 |
 | Salud arquitectónica | 1 − D_prom(6 BCs) | 0.453 | 0.4525 |
 | Complejidad inversa | 1 − (CC_domain/10) | 0.811 | 0.814 |
-| **Score_calidad** | media | **0.796** | **0.795** |
+| **Score_calidad** | media | **0.796** | **0.797** |
 | **Ritmo funcional** | US func./día | 1.22 | **1.22 (sin cambio — mismo SP1-6)** |
-| **QPI construcción** | Ritmo × Score | **0.971** | **0.970** |
+| **QPI construcción** | Ritmo × Score | **0.971** | **0.972** |
 
-**El QPI de construcción prácticamente no se movió (0.971 → 0.970)** — confirmación cuantitativa
+**El QPI de construcción prácticamente no se movió (0.971 → 0.972)** — confirmación cuantitativa
 directa de que la calidad medida en BL-006 no era un artefacto de medición temprana: es el mismo
-número, calculado con datos independientes, 3 meses después.
+número, calculado con datos independientes, 3 meses después, y ahora también neto del código
+muerto detectado y corregido durante este mismo ejercicio (commit `b832d25`).
 
 **Versión B — QPI de proyecto completo (77 días, incluye cierre SP7+ADJ-12+ADJ-13):**
 
 | Componente | Valor |
 |-----------|:-----:|
-| Score_calidad | 0.795 (igual que Versión A — la calidad no cambió) |
+| Score_calidad | 0.797 (igual que Versión A — la calidad no cambió) |
 | Ritmo funcional | 77 / 77 = **1.00** |
-| **QPI proyecto completo** | **0.795** |
+| **QPI proyecto completo** | **0.797** |
 
-**La caída de QPI (0.970 → 0.795) es 100% atribuible al denominador de tiempo, no a la calidad.**
+**La caída de QPI (0.972 → 0.797) es 100% atribuible al denominador de tiempo, no a la calidad.**
 Los últimos 14 días agregaron 0 US funcionales por diseño (fase de cierre). Presentar un único
 QPI para todo el proyecto sin esta distinción sería engañoso — subestimaría la velocidad real de
 construcción del método IEDD.
@@ -205,8 +211,8 @@ Copilot — el número medido es sustancialmente más conservador: **+55% de vel
 
 | Métrica | AtaraxiaDive IEDD (cierre, v1.0.5) | Proyectos típicos | Fuente referencia |
 |---------|:-----------------:|:-----------------:|:-----------------:|
-| Cobertura de tests | **94.7%** (95.35% sin código muerto) | 40–60% | Industry surveys |
-| Bugs estimados / 1 000 SLOC | **0.297** | 1–25 | Capers Jones |
+| Cobertura de tests | **95.35%** (post-limpieza de código muerto, commit `b832d25`) | 40–60% | Industry surveys |
+| Bugs estimados / 1 000 SLOC | **0.298** | 1–25 | Capers Jones |
 | 0 CRITICAL en quality gates | **Toda la historia, incluido el cierre** | Variable | — |
 
 La hipótesis del reporte original se sostiene con un dato adicional: la IA no solo acelera y
@@ -225,9 +231,9 @@ con la salvedad ya documentada de que el ratio no se extiende a fases de cierre.
 ## 5. Conclusión sintetizada para el paper IEDD (actualizada al cierre del proyecto)
 
 > *"En este proyecto, la metodología IEDD produjo software con métricas de calidad superiores al
-> promedio industrial (0.297 bugs/KLOC vs. 1–25, cobertura 94.7% vs. 40–60%, 0 CRITICAL en
+> promedio industrial (0.298 bugs/KLOC vs. 1–25, cobertura 95.35% vs. 40–60%, 0 CRITICAL en
 > quality gates durante toda la historia del proyecto, incluido el cierre) a una velocidad de
-> implementación durante la fase de construcción activa (63 días, QPI=0.970) que, según una
+> implementación durante la fase de construcción activa (63 días, QPI=0.972) que, según una
 > estimación interna sin baseline medido, sería de 3x a 10x superior a la de un desarrollador
 > senior sin asistencia IA — un múltiplo considerablemente más optimista que el +55% de velocidad
 > de tarea y −75% de ciclo de PR (≈1.5x–4x) reportado por el estudio longitudinal más riguroso
@@ -256,3 +262,4 @@ con la salvedad ya documentada de que el ratio no se extiende a fases de cierre.
 
 *Generado: 2026-05-18 — análisis derivado de docs/metricas/REPORTE-METRICAS.md y 17 documentos de detalle*
 *Recalculado: 2026-08-13 — HEAD `main` post SP-ADJ-13 (tag v1.0.5) — proyecto completo, PLAN-METRICAS.md §6 Ronda 2*
+*Actualizado post-limpieza: 2026-08-13 — commit `b832d25` (eliminación de código muerto en identidad, hallado durante la Ronda 2)*

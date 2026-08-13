@@ -146,41 +146,46 @@
 |----|:-------------------:|:---:|
 | competencia | **36** | = |
 | registro | 13 | +1 |
-| identidad | **12** | +4 |
+| identidad | **10** | +2 |
 | torneo | 8 | = |
 | notificaciones | 7 | = |
 | resultados | 3 | = |
 | shared | 0 | = |
 
-**Cambio a observar:** `identidad` pasó de 8 a 12 issues de FeatureEnvy — el mayor incremento relativo de la nueva medición, consistente con la extensión del modelo multi-rol (`agregar_rol`/`quitar_rol` en SP-ADJ-12) accediendo a atributos de `Usuario` desde application/.
+**Cambio a observar:** `identidad` pasó de 8 a 10 issues de FeatureEnvy (post-limpieza; había llegado
+a 12 antes de eliminar `agregar_rol_usuario.py`/`quitar_rol_usuario.py` en commit `b832d25`, que
+aportaban 2 de esos issues) — sigue siendo el mayor incremento relativo del BC, consistente con la
+extensión real del modelo multi-rol (`agregar_rol`/`quitar_rol` en SP-ADJ-12) accediendo a
+atributos de `Usuario` desde application/.
 
 ---
 
-## 5. Issues DesignReviewer por BC — todos los analizadores (v1.0.5)
+## 5. Issues DesignReviewer por BC — todos los analizadores (v1.0.5, post-limpieza)
 
 Tabla nueva (2026-08-13): agrega **todos** los tipos de issue de DesignReviewer por BC, no solo
 LCOM/FanOut/WMC/FeatureEnvy — incluye también `DataClumpsAnalyzer` (parámetros repetidos entre
 funciones) y `LongParameterListAnalyzer` (funciones con demasiados parámetros), que no se habían
-tabulado por BC en las secciones anteriores.
+tabulado por BC en las secciones anteriores. Valores actualizados tras la eliminación de código
+muerto en `identidad` (commit `b832d25`).
 
 | BC | Tipo | LCOM | FanOut | LongMethod | FeatureEnvy | DataClumps | LongParamList | **Total** | % del proyecto |
 |----|------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| competencia | ES (Core) | 4 | 1 | 74 | 36 | 9 | 6 | **130** | 43.6% |
-| resultados | CRUD | 1 | 6 | 27 | 3 | 2 | 1 | **40** | 13.4% |
-| registro | CRUD | 2 | 2 | 21 | 13 | 2 | 2 | **42** | 14.1% |
-| identidad | CRUD | 0 | 1 | 9 | 12 | 3 | 2 | **27** | 9.1% |
-| notificaciones | ES | 1 | 0 | 10 | 7 | 0 | 0 | **18** | 6.0% |
-| torneo | CRUD | 2 | 1 | 2 | 8 | 1 | 1 | **15** | 5.0% |
+| competencia | ES (Core) | 4 | 1 | 74 | 36 | 9 | 6 | **130** | 43.9% |
+| registro | CRUD | 2 | 2 | 21 | 13 | 2 | 2 | **42** | 14.2% |
+| resultados | CRUD | 1 | 6 | 27 | 3 | 2 | 1 | **40** | 13.5% |
+| identidad | CRUD | 0 | 1 | 9 | **10** | 3 | 2 | **25** | 8.4% |
+| notificaciones | ES | 1 | 0 | 10 | 7 | 0 | 0 | **18** | 6.1% |
+| app (raíz) | — | 0 | 1 | 14 | 0 | 5 | 1 | **21** | 7.1% |
+| torneo | CRUD | 2 | 1 | 2 | 8 | 1 | 1 | **15** | 5.1% |
 | shared | Shared | 0 | 0 | 5 | 0 | 0 | 0 | **5** | 1.7% |
-| app (raíz) | — | 0 | 1 | 14 | 0 | 5 | 1 | **21** | 7.0% |
-| **TOTAL** | | **10** | **12** | **162** | **79** | **22** | **13** | **298** | 100% |
+| **TOTAL** | | **10** | **12** | **162** | **77** | **22** | **13** | **296** | 100% |
 
-**`competencia` concentra el 43.6% de todos los issues de diseño del proyecto** — coherente con
-que también concentra el 43.6% del SLOC total (5 305/13 259): en issues absolutos es el BC más
+**`competencia` concentra el 43.9% de todos los issues de diseño del proyecto** — coherente con
+que también concentra el 40.1% del SLOC total (5 305/13 219): en issues absolutos es el BC más
 grande porque es el BC más grande, punto. **Densidad de issues por SLOC** (issues/1000 SLOC):
-competencia 24.5 · resultados 22.2 · identidad 23.6 · registro 20.6 · notificaciones 17.4 ·
+competencia 24.5 · resultados 22.2 · registro 20.6 · identidad 22.7 · notificaciones 17.4 ·
 shared 16.3 · **torneo 14.2 (la más baja del proyecto)**. La mayoría de los BCs están en un rango
-razonablemente estrecho (17–25 issues/1000 SLOC); `torneo` destaca como el BC con menor densidad
+razonablemente estrecho (14–25 issues/1000 SLOC); `torneo` destaca como el BC con menor densidad
 de smells relativa a su tamaño — consistente con `backend-ck.md §3` (torneo tiene solo 2 métodos
 largos, el mínimo del proyecto) y con que no recibió ningún cambio desde BL-006.
 
@@ -198,7 +203,7 @@ patrón esperado en composition roots y no un defecto de diseño de dominio.
 | resultados | CRUD | 2 | 12 (api) | 27 | FanOut en domain × ranking multi-variante — estable |
 | registro | CRUD | **5** | 12 (api) | 21 | Mayor LCOM, sigue creciendo — aggregate Inscripcion multi-rol extendido en SP-ADJ-12/13 |
 | torneo | CRUD | 3 | 9 (api) | 2 | LCOM en aggregate + repository — sin cambios |
-| identidad | CRUD | 0 | 8 (api) | 9 | Cohesión LCOM intacta, pero FeatureEnvy en alza (modelo multi-rol) |
+| identidad | CRUD | 0 | 8 (api) | 9 | Cohesión LCOM intacta; FeatureEnvy subió a 10 (modelo multi-rol real, tras limpiar código muerto) |
 | notificaciones | ES | 2 | 0 | 10 | Saludable — sin FanOut issues |
 | shared | Shared | 0 | 0 | 5 | **Mejor CBO** del proyecto |
 
@@ -210,3 +215,4 @@ patrón esperado en composition roots y no un defecto de diseño de dominio.
 ---
 
 *Ejecutado: 2026-08-13 — recálculo contra HEAD `main` (post SP-ADJ-13, tag v1.0.5) — PLAN-METRICAS.md §A.1.6 (Ronda 2, Prioridad 8)*
+*Actualizado post-limpieza: 2026-08-13 — commit `b832d25` (eliminación de código muerto en identidad). Snapshot: `quality/reports/designreviewer/v1.0.5-post-cleanup-report.json`.*

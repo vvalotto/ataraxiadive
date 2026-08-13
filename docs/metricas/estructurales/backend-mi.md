@@ -2,7 +2,8 @@
 
 > Herramienta: `radon mi` v6.0.1
 > Fuente: `src/`
-> Fecha de ejecución original: 2026-05-18 · **Recálculo: 2026-08-13 (HEAD `main`, post SP7 + SP-ADJ-12 + SP-ADJ-13, tag v1.0.5)**
+> Fecha de ejecución original: 2026-05-18 · **Recálculo Ronda 2: 2026-08-13 (HEAD `main`, post SP7 + SP-ADJ-12 + SP-ADJ-13, tag v1.0.5)**
+> **Actualizado post-limpieza: 2026-08-13 — commit `b832d25`, eliminación de código muerto en identidad (ver `backend-por-capa.md §1.2` para el detalle numérico de identidad/application)**
 
 **Escala:** A (MI ≥ 20) · B (10 ≤ MI < 20) · C (MI < 10)
 

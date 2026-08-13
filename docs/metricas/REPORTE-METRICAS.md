@@ -29,9 +29,9 @@ idénticos a la medición del 2026-05-18.
 
 | Categoría | Métrica clave | Valor BL-006 | Valor v1.0.5 | Evaluación |
 |-----------|--------------|:-----:|:-----:|:----------:|
-| Tamaño backend | SLOC total src | 12 961 | **13 259** (+2.3%) | — |
+| Tamaño backend | SLOC total src | 12 961 | **13 219** (+2.0%, post-limpieza) | — |
 | Tamaño frontend | SLOC TypeScript | 15 637 | **15 768** (+0.8%) | — |
-| Cobertura de tests | Global (pytest-cov) | 95.3% | **94.7%** (95.35% sin código muerto — ver §5.3) | ✅ |
+| Cobertura de tests | Global (pytest-cov) | 95.3% | **95.35%** (post-limpieza de código muerto — ver §5.3) | ✅ |
 | Ratio test/código | Unit+integration / src | 1.55 | **1.55** (sin cambio) | ✅ |
 | Complejidad | CC domain/ promedio | 1.89 | **1.86** | ✅ |
 | Mantenibilidad | MI domain/ promedio | 90.07 / 100 | **88.02 / 100** | ✅ |
@@ -57,15 +57,18 @@ idénticos a la medición del 2026-05-18.
 | competencia | 5 305 | 5 305 | = | 103 | 40% |
 | registro | 1 907 | **2 042** | **+135** | 52 | 15% |
 | resultados | 1 801 | 1 801 | = | 34 | 14% |
-| identidad | 979 | **1 142** | **+163** | 33 | 9% |
+| identidad | 979 | **1 102** | **+123** | 31 | 8% |
 | notificaciones | 1 036 | 1 036 | = | 39 | 8% |
 | torneo | 1 056 | 1 056 | = | 31 | 8% |
 | shared | 306 | 306 | = | 17 | 2% |
 | app (raíz) | 571 | 571 | = | 1 | 4% |
-| **Total** | **12 961** | **13 259** | **+298** | **309** | 100% |
+| **Total** | **12 961** | **13 219** | **+258** | **307** | 100% |
 
-**Confirmación cruzada #1 (estructura):** el delta total (+298 SLOC) coincide exactamente con la
-suma de `registro` (+135) e `identidad` (+163). Ver [`backend-raw.md`](estructurales/backend-raw.md).
+**Confirmación cruzada #1 (estructura):** el delta total (+258 SLOC, post-limpieza) coincide
+exactamente con la suma de `registro` (+135) e `identidad` (+123). Ver
+[`backend-raw.md`](estructurales/backend-raw.md). *(Valores post commit `b832d25` — eliminación
+de 2 archivos de código muerto en `identidad`, 40 SLOC; antes de la limpieza identidad mostraba
++163 y el total +298, ver §5.3.)*
 
 **Distribución por capa (todos los BCs):**
 
@@ -106,8 +109,8 @@ a SP-ADJ-13 (674.8 kB). El crecimiento de código no impactó el peso de la apli
 | **Total Python tests** | **209** | **31 182** | **213** | **31 784** | **+602** |
 
 **Ratio test/código:** 1.55 (unit+integration) — **sin cambio**. Los tests crecieron
-proporcionalmente igual o más que la producción (+388 SLOC de tests vs +298 SLOC de código de
-producción). Ver [`test-to-code-ratio.md`](calidad/test-to-code-ratio.md).
+proporcionalmente igual o más que la producción (+388 SLOC de tests vs +258 SLOC de código de
+producción, post-limpieza). Ver [`test-to-code-ratio.md`](calidad/test-to-code-ratio.md).
 
 ---
 
@@ -154,20 +157,20 @@ parcialmente sensibles al criterio de exclusión de `__init__.py` vacíos entre 
 
 | Métrica | BL-006 | v1.0.5 | Δ |
 |---------|:-----------:|:-----------:|:---:|
-| Volumen total (V) | 11 381 | **11 821** | +440 |
-| Esfuerzo total (E) | 58 975 | **64 621** | +5 646 |
+| Volumen total (V) | 11 381 | **11 811** | +430 |
+| Esfuerzo total (E) | 58 975 | **64 616** | +5 641 |
 | Dificultad promedio (D) | 0.88 | ver nota¹ | — |
 | **Bugs estimados (B)** | **3.79** | **3.94** | +0.15 |
-| Bugs / 1 000 SLOC | 0.30 | **0.297** | ≈ igual |
+| Bugs / 1 000 SLOC | 0.30 | **0.298** | ≈ igual |
 
 ¹ Metodología de ponderación distinta entre corridas — la cifra comparable directamente es
 Bugs/1 000 SLOC, que se mantiene prácticamente igual pese al crecimiento.
 
 **Confirmación cruzada #2 (Halstead):** de 8 BCs medidos, **solo `registro` e `identidad`
-cambiaron** — `registro` +321 volumen/+5 274 esfuerzo, `identidad` +119 volumen/+372 esfuerzo. Los
-otros 6 son bit-a-bit idénticos. **3.94 bugs estimados en 13 259 SLOC → 0.297 bugs/1 000 SLOC**
-sigue por debajo del percentil 10 de la industria (Capers Jones: 1–25). Ver
-[`backend-halstead.md`](estructurales/backend-halstead.md).
+cambiaron** — `registro` +321 volumen/+5 274 esfuerzo, `identidad` +110 volumen/+367 esfuerzo
+(post-limpieza). Los otros 6 son bit-a-bit idénticos. **3.94 bugs estimados en 13 219 SLOC →
+0.298 bugs/1 000 SLOC** sigue por debajo del percentil 10 de la industria (Capers Jones: 1–25).
+Ver [`backend-halstead.md`](estructurales/backend-halstead.md).
 
 ---
 
@@ -222,14 +225,17 @@ estable, no menos complejo relativamente. El crecimiento (+4) se concentró en `
 
 | BC | Total issues | % del proyecto | Issues / 1 000 SLOC |
 |----|:---:|:---:|:---:|
-| competencia | 130 | 43.6% | 24.5 |
-| registro | 42 | 14.1% | 20.6 |
-| resultados | 40 | 13.4% | 22.2 |
-| identidad | 27 | 9.1% | 23.6 |
-| notificaciones | 18 | 6.0% | 17.4 |
-| app (raíz) | 21 | 7.0% | — |
-| torneo | 15 | 5.0% | **14.2 (mínimo)** |
+| competencia | 130 | 43.9% | 24.5 |
+| registro | 42 | 14.2% | 20.6 |
+| resultados | 40 | 13.5% | 22.2 |
+| identidad | 25 | 8.4% | 22.7 |
+| notificaciones | 18 | 6.1% | 17.4 |
+| app (raíz) | 21 | 7.1% | — |
+| torneo | 15 | 5.1% | **14.2 (mínimo)** |
 | shared | 5 | 1.7% | 16.3 |
+
+*Post-limpieza (commit `b832d25`): identidad bajó de 27 a 25 issues (2 de FeatureEnvy
+correspondían a código muerto ya eliminado). Total del proyecto: 296 (antes 298).*
 
 La densidad de issues por SLOC está en un rango razonablemente estrecho (14–25) sin outliers —
 `competencia` tiene más issues en términos absolutos simplemente porque es 2.5–5× más grande que
@@ -286,32 +292,37 @@ WARNING — ArchitectAnalyst nunca bloqueó el cierre de un SP ni del proyecto).
 | SP4 | 145 | 0 | = Estable |
 | SP5 | 240 | 0 | ↑ (nuevo código ES) |
 | SP6 (SP-ADJ-11) | 287 | 0 | ↓↓ Mínimo histórico relativo |
-| **SP7 + SP-ADJ-12 + SP-ADJ-13 (v1.0.5)** | **298** | **0** | **↑ +11 — el salto más chico de toda la serie** |
+| SP7 + SP-ADJ-12 + SP-ADJ-13 (antes de la limpieza) | 298 | 0 | ↑ +11 |
+| **SP7 + SP-ADJ-12 + SP-ADJ-13 (post-limpieza, v1.0.5 actual)** | **296** | **0** | **↑ +9 — el salto más chico de toda la serie** |
 
 **0 CRITICAL se mantiene en toda la historia del proyecto, sin excepción, hasta el cierre.** El
-crecimiento de +11 issues en los últimos 77 días es el incremento absoluto más pequeño de toda la
-serie histórica — consistente con que fue un período de estabilización, no de construcción.
+crecimiento de +9 issues netos en los últimos 77 días es el incremento absoluto más pequeño de
+toda la serie histórica — consistente con que fue un período de estabilización, no de construcción.
 
 ### 5.2 Cobertura de tests
 
-| Capa | Cobertura BL-006 | Cobertura v1.0.5 | Δ |
+| Capa | Cobertura BL-006 | Cobertura v1.0.5 (post-limpieza) | Δ |
 |------|:---------:|:---------:|:---:|
 | domain/ | 97.3% | **97.3%** | = |
 | infrastructure/ | 94.0% | **94.0%** | = |
-| application/ | 93.6% | **92.1%** | −1.5 pp (ver §5.3) |
-| **Global** | **95.3%** | **94.7%** | −0.6 pp (ver §5.3) |
+| application/ | 93.6% | **93.7%** | ≈ = (ver §5.3) |
+| **Global** | **95.3%** | **95.35%** | ≈ = (ver §5.3) |
 
-### 5.3 Hallazgo nuevo — código muerto detectado en identidad
+### 5.3 Hallazgo y corrección — código muerto detectado y eliminado en identidad
 
-`src/identidad/application/commands/agregar_rol_usuario.py` y `.../quitar_rol_usuario.py` tienen
-**0% de cobertura (40 sentencias, 0 cubiertas)**. Verificado con grep: **nunca están importados**
-en `router.py`, `app.py` ni en ningún test — el router usa en su lugar `agregar_rol.py`/
-`quitar_rol.py`, que sí están 100% cubiertos. Es un residuo de iteración de SP-ADJ-12 (una
-primera versión reemplazada sin eliminar el archivo original), no un gap real de testing.
+**Hallazgo (Ronda 2, antes de la limpieza):**
+`src/identidad/application/commands/agregar_rol_usuario.py` y `.../quitar_rol_usuario.py` tenían
+**0% de cobertura (40 sentencias, 0 cubiertas)**. Verificado con grep: **nunca estuvieron
+importados** en `router.py`, `app.py` ni en ningún test — el router usaba en su lugar
+`agregar_rol.py`/`quitar_rol.py`, que sí están 100% cubiertos. Era un residuo de iteración de
+SP-ADJ-12 (una primera versión reemplazada sin eliminar el archivo original), no un gap real de
+testing. La cobertura global había caído aparentemente a 94.7% por esta causa.
 
-**Sin esos dos archivos, la cobertura global sería ≈95.35%** — prácticamente igual a BL-006
-(95.3%), en vez de la caída aparente a 94.7%. Se flaggeó como tarea de limpieza aparte, fuera del
-alcance de esta actualización de métricas. Ver [`cobertura-tests.md §3`](calidad/cobertura-tests.md).
+**Corrección aplicada (commit `b832d25`, 2026-08-13):** se eliminaron ambos archivos. Verificado
+antes de borrar (grep confirmó cero referencias externas) y después de borrar: 1049 tests
+passed sin cambios, DesignReviewer 0 CRITICAL/296 WARNING (sin regresiones), cobertura global
+**95.35%** — prácticamente idéntica a BL-006 (95.3%), confirmando numéricamente que el resto del
+sistema nunca perdió cobertura real. Ver [`cobertura-tests.md §3`](calidad/cobertura-tests.md).
 
 ---
 
@@ -436,15 +447,16 @@ instrumentar el tracker automáticamente desde Fase 0 queda más justificada, no
 - should_block: false en todas las baselines, incluida la medición final v1.0.5.
 - LCOM > 1: 3.2% de clases (antes 3.3%) — el único cambio es `Inscripcion` (registro), que
   siguió creciendo en la misma dirección deliberada ya documentada en BL-006.
-- Bugs estimados Halstead: 3.94 (antes 3.79) — 0.297 bugs/1 000 SLOC (percentil < 10 industria,
+- Bugs estimados Halstead: 3.94 (antes 3.79) — 0.298 bugs/1 000 SLOC (percentil < 10 industria,
   sin cambio de categoría).
 
 **El sistema de quality gates funcionó como monitor de deuda hasta el último commit del
 proyecto** — nunca bloqueó, nunca acumuló CRITICAL, y el único gap real encontrado (código muerto
-en `identidad`, §5.3) fue detectado precisamente *por* este ejercicio de recálculo de métricas,
-no por el pipeline de desarrollo — una limitación honesta a documentar: las métricas agregadas
-(cobertura global) pueden ocultar hallazgos puntuales (archivos huérfanos) que solo aparecen al
-mirar el desglose por archivo.
+en `identidad`, §5.3, ya eliminado en commit `b832d25`) fue detectado precisamente *por* este
+ejercicio de recálculo de métricas, no por el pipeline de desarrollo — una limitación honesta a
+documentar: las métricas agregadas (cobertura global) pueden ocultar hallazgos puntuales (archivos
+huérfanos) que solo aparecen al mirar el desglose por archivo. El hecho de que se haya detectado
+*y corregido* dentro del mismo ciclo de trabajo es, en sí mismo, evidencia a favor del proceso.
 
 ---
 
@@ -483,3 +495,4 @@ Capers Jones, encuestas de cobertura de tests, McCabe, SonarQube, estudios de Co
 
 *Generado: 2026-05-18 — rama doc/metricas — PLAN-METRICAS.md §7 completado*
 *Recalculado: 2026-08-13 — HEAD `main` post SP-ADJ-13 (tag v1.0.5) — PLAN-METRICAS.md §6 Ronda 2 completa*
+*Actualizado post-limpieza: 2026-08-13 — commit `b832d25` (eliminación de código muerto en identidad, hallado durante la Ronda 2)*

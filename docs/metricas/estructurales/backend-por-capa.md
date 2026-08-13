@@ -36,9 +36,14 @@
 | torneo | CRUD | 1.68 | 47 | 74.82 | 246 | = |
 | registro | CRUD | 1.96 | 56 | 66.95 | 382 | **+19** |
 | resultados | CRUD | 2.90 | 60 | 66.69 | 734 | = |
-| identidad | CRUD | 2.52 | 42 | 58.47 | 378 | **+78** |
+| identidad | CRUD | **2.71** | **34** | **56.48** | **338** | **+38** |
 | shared | Shared | — | — | — | — | = |
-| **Promedio** | | **2.12** | **388** | **73.70** | **3 499** | **+97** |
+| **Promedio** | | **2.13** | **380** | **73.93** | **3 459** | **+57** |
+
+> Actualizado post-limpieza (commit `b832d25`): identidad/application pasó de 42→34 bloques y
+> 378→338 SLOC tras eliminar `agregar_rol_usuario.py`/`quitar_rol_usuario.py` (código muerto). El
+> CC promedio subió levemente (2.52→2.71) porque los bloques eliminados eran triviales (CC=1) y
+> diluían el promedio hacia abajo.
 
 ### 1.3 infrastructure/
 
@@ -73,11 +78,11 @@
 | Capa | CC prom BL-006 | CC prom v1.0.5 | MI prom BL-006 | MI prom v1.0.5 | SLOC BL-006 | SLOC v1.0.5 |
 |------|:-------:|:-------:|:-------:|:-------:|-----:|-----:|
 | domain/ | 1.89 | **1.86** | 90.07 | **88.02** | 4 158 | **4 192** |
-| application/ | 2.25 | **2.12** | 77.15 | **73.70** | 3 402 | **3 499** |
+| application/ | 2.25 | **2.13** | 77.15 | **73.93** | 3 402 | **3 459** |
 | infrastructure/ | 2.12 | **2.17** | 82.32 | **76.12** | 1 927 | **1 935** |
 | api/ | 2.08 | **1.95** | 73.21 | **68.69** | 2 901 | **3 062** |
 
-**El patrón emergente se mantiene idéntico:** `domain/` sigue siendo la capa con menor CC y mayor MI del sistema — el crecimiento post-SP6 (+300 SLOC en total, +8%) no alteró la jerarquía CC/MI entre capas. `api/` sigue siendo la capa con MI más bajo.
+**El patrón emergente se mantiene idéntico:** `domain/` sigue siendo la capa con menor CC y mayor MI del sistema — el crecimiento post-SP6 (+256 SLOC en total, +6.8%, tras la limpieza de código muerto) no alteró la jerarquía CC/MI entre capas. `api/` sigue siendo la capa con MI más bajo.
 
 **Nota metodológica sobre las variaciones de MI:** los deltas de MI (p. ej. domain 90.07→88.02) son en parte un artefacto de la exclusión de archivos triviales (`__init__.py` vacíos), que puede diferir levemente entre la corrida original y esta — no se debe leer como una caída real de mantenibilidad salvo donde coincide con crecimiento real de SLOC (registro, identidad). Los valores de **CC y SLOC son comparables directamente** porque provienen de una agregación mecánica (suma/promedio de bloques), sin exclusiones.
 
@@ -109,7 +114,7 @@
 | BC | CC prom application/ | Observación |
 |----|:--------------------:|-------------|
 | resultados | 2.90 | Sin cambios — queries complejos de ranking |
-| identidad | 2.52 | **Bajó desde 3.00** — el crecimiento (+78 SLOC, +16 bloques: `agregar_rol_usuario.py`, `quitar_rol_usuario.py`, `agregar_rol.py`) son handlers pequeños y simples, no lógica densa; diluyen el promedio |
+| identidad | 2.71 | **Bajó desde 3.00, después subió levemente tras la limpieza** — el crecimiento neto (+38 SLOC, `agregar_rol.py`/`quitar_rol.py`, los comandos realmente usados) son handlers pequeños y simples, no lógica densa. Los dos archivos huérfanos (`agregar_rol_usuario.py`/`quitar_rol_usuario.py`) se eliminaron en commit `b832d25` por ser código muerto |
 | notificaciones | 2.04 | Sin cambios |
 
 ### api/ — MI bajo (mantenibilidad reducida)
@@ -128,22 +133,24 @@
 
 ```
 domain/         4 192 SLOC  (33%)  ████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-application/    3 499 SLOC  (28%)  █████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+application/    3 459 SLOC  (28%)  █████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 api/            3 062 SLOC  (24%)  ████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 infrastructure/ 1 935 SLOC  (15%)  ████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 ```
 
-Total backend por capa: 12 688 SLOC (de 13 259 SLOC totales — la diferencia son módulos raíz sin capa asignada: `src/app.py` y `src/*/domain/` sueltos). Distribución porcentual prácticamente idéntica a BL-006 (33/27/23/15 → 33/28/24/15).
+Total backend por capa: 12 648 SLOC (de 13 219 SLOC totales, post-limpieza — la diferencia son
+módulos raíz sin capa asignada: `src/app.py` y `src/*/domain/` sueltos). Distribución porcentual
+prácticamente idéntica a BL-006 (33/27/23/15 → 33/28/24/15).
 
 ---
 
-## 6. Conclusiones para el experimento IEDD (revalidadas 2026-08-13)
+## 6. Conclusiones para el experimento IEDD (revalidadas 2026-08-13, post-limpieza de código muerto)
 
-1. **La arquitectura hexagonal sigue cumpliendo su promesa de dominio limpio** tres meses y ~550 SLOC después: `domain/` mantiene la menor CC (1.86) y mayor MI (88.02) de todas las capas.
+1. **La arquitectura hexagonal sigue cumpliendo su promesa de dominio limpio** tres meses y ~256 SLOC netos después: `domain/` mantiene la menor CC (1.86) y mayor MI (88.02) de todas las capas.
 
 2. **El paradigma ES sigue sin elevar la CC en domain/, y ahora con evidencia temporal:** `competencia/domain/` no cambió ni un bloque desde SP6 — es la parte del sistema más estable de todo el proyecto en un sentido literal, no solo relativo.
 
-3. **El crecimiento post-SP6 fue 100% localizado:** de +550 SLOC totales, +196 SLOC (36%) están en `identidad` y +216 SLOC (39%) en `registro` — los dos BCs con el modelo multi-rol de SP-ADJ-12. Ningún otro BC creció. Esto es evidencia de que SP7/SP-ADJ-12/13 fueron incrementos quirúrgicos, no expansión de dominio.
+3. **El crecimiento post-SP6 fue 100% localizado:** de +258 SLOC totales de backend (post-limpieza), +123 SLOC (48%) están en `identidad` y +135 SLOC (52%) en `registro` — los dos BCs con el modelo multi-rol de SP-ADJ-12. Ningún otro BC creció. Esto es evidencia de que SP7/SP-ADJ-12/13 fueron incrementos quirúrgicos, no expansión de dominio.
 
 4. **api/ sigue siendo la capa de menor mantenibilidad**, y el nuevo código (routers de registro e identidad) empeoró levemente esa tendencia — sigue siendo el candidato más claro a refactoring si el proyecto continuara.
 
@@ -151,3 +158,4 @@ Total backend por capa: 12 688 SLOC (de 13 259 SLOC totales — la diferencia so
 
 *Ejecutado: 2026-05-18 — rama doc/metricas — PLAN-METRICAS.md Prioridad 2 completada*
 *Recalculado: 2026-08-13 — HEAD `main` post SP-ADJ-13 (tag v1.0.5) — PLAN-METRICAS.md §A.1.5 (Ronda 2)*
+*Actualizado post-limpieza: 2026-08-13 — commit `b832d25` (eliminación de código muerto en identidad/application)*
