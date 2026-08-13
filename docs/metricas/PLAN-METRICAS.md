@@ -453,7 +453,7 @@ actualizados post-SP7:
 | 7 | C.2 — Overhead pipeline (tracker) | 45 min | 34 US con timing, mediana 20 min | ✅ | ✅ (2026-08-13 — sin datos nuevos: tracking abandonado en SP7/ADJ-12/13) |
 | 8 | A.1.6 — Suite CK: LCOM + CBO/FanOut | 20 min | `backend-ck.md` | ✅ | ✅ (2026-08-13) |
 | 9 | A.1.7 — Cohesión y acoplamiento Ca/Ce/I | 15 min | `backend-acoplamiento.md` | ✅ | ✅ (2026-08-13) |
-| 10 | C.0 — Tamaño funcional (BDD + endpoints + SP) | 20 min | `tamano-funcional.md` | ✅ | ⏳ |
+| 10 | C.0 — Tamaño funcional (BDD + endpoints + SP) | 20 min | `tamano-funcional.md` | ✅ | ✅ (2026-08-13 — +6 endpoints, 100% en registro/identidad, 4ta confirmación del mismo patrón) |
 | 11 | Síntesis | 60 min | reporte integrado `REPORTE-METRICAS.md` | ✅ | ⏳ |
 
 ---

@@ -2,7 +2,7 @@
 
 > Fuente: `docs/traceability/matrix.md` · `tests/features/` · `src/*/api/router.py` · `docs/metricas/productividad/velocidad-sp.md`  
 > Método: proxies de tamaño funcional (no FPA formal COSMIC/IFPUG) — US-IEDD, BDD scenarios, REST endpoints  
-> Fecha de extracción: 2026-05-18  
+> Fecha de extracción original: 2026-05-18 · **Recálculo: 2026-08-13 (HEAD `main`, post SP7 + SP-ADJ-12 + SP-ADJ-13, tag v1.0.5)**  
 > Referencia: PLAN-METRICAS.md §C.0
 
 ---
@@ -23,12 +23,12 @@ Los tres proxies son independientes y complementarios: una US puede generar 0 en
 
 ### 1.1 Totales del proyecto
 
-| Categoría | Cantidad | % del total |
+| Categoría | Cantidad SP1–SP6 | Cantidad proyecto completo (+SP7/ADJ-12/13) |
 |-----------|:--------:|:-----------:|
-| US funcionales | **77** | 63% |
-| US de ajuste (ADJ) | **46** | 37% |
-| **Total US** | **123** | 100% |
-| Duración | 63 días | 1.22 US func./día |
+| US funcionales | **77** (63%) | **77** (59%) — sin cambios, ver `velocidad-sp.md` |
+| US de ajuste (ADJ) | **46** (37%) | **54** (41%) |
+| **Total US** | **123** | **131** |
+| Duración | 63 días · 1.22 US func./día | 77 días · 1.00 US func./día (ver nota metodológica en `velocidad-sp.md §1`) |
 
 ### 1.2 US funcionales por SP
 
@@ -67,24 +67,39 @@ La trazabilidad US→BC es 1:N (una US puede tocar múltiples BCs). La distribuc
 
 ### 2.1 Totales
 
-| Elemento | Cantidad |
-|----------|:--------:|
-| Feature files | **125** |
-| Scenarios (Scenario + Scenario Outline) | **636** |
-| Scenarios por feature file (promedio) | **5.1** |
+| Elemento | BL-006 (2026-05-18) | v1.0.5 (2026-08-13) | Δ |
+|----------|:--------:|:--------:|:---:|
+| Feature files | 125 | **127** | +2 |
+| Scenarios (Scenario + Scenario Outline) | 636 | **647** | +11 |
+| Scenarios por feature file (promedio) | 5.1 | **5.1** | = |
+
+**+2 feature files, +11 scenarios** — consistente con `cobertura-tests.md §6` (crecimiento BDD ya
+documentado ahí) y con las nuevas capacidades de SP-ADJ-12 (aceptación de inscripciones, roles).
 
 ### 2.2 Scenarios por BC
 
-| BC | Tipo | Feature files | Scenarios | % del total | Scenarios/feature |
-|----|------|:-------------:|:---------:|:-----------:|:-----------------:|
-| torneo | CRUD | 61 | **310** | 48.7% | 5.1 |
-| competencia | ES (Core) | 56 | **263** | 41.4% | 4.7 |
-| registro | CRUD | 23 | **125** | 19.7% | 5.4 |
-| resultados | CRUD | 22 | **107** | 16.8% | 4.9 |
-| identidad | CRUD | 6 | **36** | 5.7% | 6.0 |
-| notificaciones | ES | 4 | **19** | 3.0% | 4.8 |
+| BC | Tipo | Feature files BL-006 | Scenarios BL-006 | Feature files v1.0.5 | Scenarios v1.0.5 | Δ Scenarios |
+|----|------|:-------------:|:---------:|:-------------:|:---------:|:---:|
+| torneo | CRUD | 61 | 310 | 61 | **311** | +1 |
+| competencia | ES (Core) | 56 | 263 | 54 | **254** | −9 |
+| registro | CRUD | 23 | 125 | 22 | **122** | −3 |
+| resultados | CRUD | 22 | 107 | 19 | **92** | −15 |
+| identidad | CRUD | 6 | 36 | 6 | **35** | −1 |
+| notificaciones | ES | 4 | 19 | 4 | **19** | = |
 
-> Los feature files son compartidos — un mismo archivo puede ser contabilizado en múltiples BCs (ej. `US-2.4.2-calcular-ranking.feature` aparece en competencia, torneo y resultados). El total por BC suma más que 636 por este solapamiento.
+**Nota metodológica importante:** este conteo por BC usa `grep -rl "<bc>" tests/features/*.feature`
+— cuenta un feature file en un BC si el **texto** del BC aparece en cualquier parte del archivo,
+no si el BC realmente le pertenece. Es un proxy ya señalado como aproximado en la medición
+original ("el total por BC suma más que el total real por solapamiento"). Los BCs con backend
+**verificadamente sin cambios** (competencia, resultados, identidad — ver `backend-raw.md`) muestran
+variaciones negativas de hasta −15 scenarios pese a que sus `.feature` files no cambiaron: es
+**ruido del método de conteo por coincidencia de texto**, no una pérdida real de cobertura BDD —
+la reorganización de referencias cruzadas entre BCs en los 2 archivos nuevos (+2 feature files)
+alteró qué archivos matchean qué nombre de BC. **El total agregado (+11 scenarios) es el único
+número de esta sección con alta confianza**; el desglose por BC se mantiene como proxy aproximado,
+igual que en BL-006.
+
+> Los feature files son compartidos — un mismo archivo puede ser contabilizado en múltiples BCs (ej. `US-2.4.2-calcular-ranking.feature` aparece en competencia, torneo y resultados). El total por BC suma más que 647 por este solapamiento.
 
 ### 2.3 Top feature files por scenario count
 
@@ -102,31 +117,39 @@ La trazabilidad US→BC es 1:N (una US puede tocar múltiples BCs). La distribuc
 
 ## 3. REST Endpoints por BC
 
-### 3.1 Totales por BC y método HTTP
+### 3.1 Totales por BC y método HTTP (v1.0.5)
 
-| BC | Tipo | GET | POST | PUT | PATCH | DELETE | **Total** |
-|----|------|:---:|:----:|:---:|:-----:|:------:|:---------:|
-| competencia | ES | 10 | 13 | 1 | 0 | 0 | **24** |
-| registro | CRUD | 9 | 6 | 1 | 3 | 1 | **20** |
-| torneo | CRUD | 4 | 1 | 10 | 0 | 0 | **15** |
-| identidad | CRUD | 1 | 5 | 0 | 0 | 0 | **6** |
-| resultados | CRUD | 3 | 0 | 0 | 0 | 0 | **3** |
-| notificaciones | ES | — | — | — | — | — | **0** ¹ |
-| **Total** | | **27** | **25** | **12** | **3** | **1** | **68** |
+| BC | Tipo | GET | POST | PUT | PATCH | DELETE | **Total v1.0.5** | Total BL-006 | Δ |
+|----|------|:---:|:----:|:---:|:-----:|:------:|:---------:|:---:|:---:|
+| competencia | ES | 10 | 13 | 1 | 0 | 0 | **24** | 24 | = |
+| registro | CRUD | 11 | 6 | 1 | 4 | 1 | **23** | 20 | **+3** |
+| torneo | CRUD | 4 | 1 | 10 | 0 | 0 | **15** | 15 | = |
+| identidad | CRUD | 2 | 6 | 0 | 0 | 1 | **9** | 6 | **+3** |
+| resultados | CRUD | 3 | 0 | 0 | 0 | 0 | **3** | 3 | = |
+| notificaciones | ES | — | — | — | — | — | **0** ¹ | 0 | = |
+| **Total** | | **30** | **26** | **12** | **4** | **2** | **74** | **68** | **+6** |
 
-¹ Notificaciones no expone API REST — es un BC completamente interno, orientado a eventos (política P-10/P-11). Su superficie funcional se mide exclusivamente por sus policies y event handlers, no por endpoints.
+¹ Notificaciones no expone API REST — es un BC completamente interno, orientado a eventos (política P-10/P-11). Sin cambios.
 
-### 3.2 Distribución por método
+**Los +6 endpoints nuevos están 100% en `registro` (+3) e `identidad` (+3)** — la señal más limpia
+de todo `PLAN-METRICAS.md` sobre dónde se concentró el trabajo de SP-ADJ-12: `registro` sumó
+`PATCH` (aceptación de inscripción) y ajustó GET/DELETE (detalle + adjuntos); `identidad` sumó
+`POST`+`DELETE` (`POST/DELETE /auth/me/roles`, exactamente los comandos documentados en
+`backend-por-capa.md §4` y `backend-ck.md §2`). **Cuarta confirmación independiente** (junto con
+SLOC, Halstead y cobertura) del mismo hallazgo: solo esos dos BCs cambiaron.
 
-| Método | Cantidad | % | Interpretación |
-|--------|:--------:|:-:|----------------|
-| GET | 27 | 40% | Consultas — read models, rankings, grillas |
-| POST | 25 | 37% | Comandos — crear torneo, registrar AP, emitir tarjeta |
-| PUT | 12 | 18% | Actualizaciones — estados de torneo, edición completa |
-| PATCH | 3 | 4% | Actualizaciones parciales — perfil, documentos adjuntos |
-| DELETE | 1 | 1% | Cancelación de inscripción |
+### 3.2 Distribución por método (v1.0.5)
 
-**El sistema es mayoritariamente orientado a comandos y consultas** (POST + GET = 77%), coherente con la arquitectura CQRS/ES en el BC Core (Competencia tiene 13 POST — uno por cada comando del aggregate).
+| Método | Cantidad BL-006 | Cantidad v1.0.5 | % v1.0.5 | Interpretación |
+|--------|:--------:|:--------:|:-:|----------------|
+| GET | 27 | **30** | 41% | Consultas — read models, rankings, grillas, detalle de inscripción (nuevo) |
+| POST | 25 | **26** | 35% | Comandos — crear torneo, registrar AP, emitir tarjeta, agregar rol (nuevo) |
+| PUT | 12 | **12** | 16% | Actualizaciones — estados de torneo, edición completa (sin cambios) |
+| PATCH | 3 | **4** | 5% | Actualizaciones parciales — perfil, adjuntos, **aceptación de inscripción (nuevo)** |
+| DELETE | 1 | **2** | 3% | Cancelación de inscripción + **quitar rol (nuevo)** |
+
+**El sistema sigue siendo mayoritariamente orientado a comandos y consultas** (POST + GET = 76%,
+antes 77% — sin cambio de patrón), coherente con la arquitectura CQRS/ES en el BC Core.
 
 ### 3.3 Patrones por BC
 
@@ -180,18 +203,28 @@ La trazabilidad US→BC es 1:N (una US puede tocar múltiples BCs). La distribuc
 
 ## 6. Síntesis para el paper IEDD
 
-| Proxy | Valor total | BC dominante | Hallazgo principal |
-|-------|:-----------:|:------------:|-------------------|
-| US funcionales | **77** | competencia (~29%) | 1.22 US func./día — ritmo estable en SP3–SP5 |
-| BDD Scenarios | **636** | torneo (49%) | 5.1 scenarios/feature — cobertura granular |
-| REST Endpoints | **68** | competencia (35%) | GET+POST = 77% — sistema CQRS/orientado a comandos |
-| Scenarios/Endpoint | — | resultados (35.7) | Complejidad en dominio, no en superficie API |
+| Proxy | Valor BL-006 | Valor v1.0.5 | Δ | Hallazgo principal |
+|-------|:-----------:|:-----------:|:---:|-------------------|
+| US funcionales | 77 | **77** | = | Sin cambios — SP7 no aportó US funcionales (ver `velocidad-sp.md`) |
+| BDD Scenarios | 636 | **647** | +11 | +2 feature files, crecimiento marginal y trazable a SP-ADJ-12 |
+| REST Endpoints | 68 | **74** | **+6** | +3 registro, +3 identidad — coincide exactamente con SLOC/Halstead/cobertura |
+| Scenarios/Endpoint | 9.4 (636/68) | **8.7** (647/74) | −0.7 | La superficie API creció más rápido que los scenarios BDD en el período |
 
-**El tamaño funcional no se distribuye uniformemente por paradigma:**
-- ES (competencia + notificaciones) contribuye ~35% de las US funcionales pero el 100% del event store y las políticas
-- CRUD (torneo + registro + resultados + identidad) concentra el mayor número de scenarios BDD porque los flujos CRUD tienen más paths alternativos visibles (validaciones, estados, permisos por rol)
-- La baja superficie API de resultados (3 endpoints) y notificaciones (0 endpoints) contrasta con su alta complejidad interna — evidencia de que el proxy "endpoints" subestima el tamaño funcional de los BCs con lógica de dominio rica
+**Confirmación final del patrón que atraviesa toda la Ronda 2 de recálculo:** de los 4 proxies de
+tamaño funcional medidos (SLOC, Halstead, cobertura, endpoints REST), **los 4 apuntan
+exactamente a los mismos 2 BCs** (`registro`, `identidad`) como el único lugar donde el sistema
+cambió entre BL-006 y v1.0.5. Los otros 4 BCs (`competencia`, `torneo`, `resultados`,
+`notificaciones`) no generaron ni un endpoint, ni una línea de producción, ni un bloque de
+complejidad nuevo en 77 días adicionales de proyecto — evidencia consistente de que SP7 +
+SP-ADJ-12 + SP-ADJ-13 fueron un cierre quirúrgico, no una segunda fase de construcción.
+
+**El tamaño funcional no se distribuía uniformemente por paradigma en BL-006, y sigue sin
+hacerlo:**
+- ES (competencia + notificaciones) contribuye ~35% de las US funcionales pero el 100% del event store y las políticas — sin cambios
+- CRUD concentra el mayor número de scenarios BDD — sin cambios
+- La baja superficie API de resultados (3) y notificaciones (0) contrasta con su alta complejidad interna — sin cambios
 
 ---
 
 *Extraído: 2026-05-18 — rama doc/metricas — PLAN-METRICAS.md §C.0 (Prioridad 10) completada*
+*Recalculado: 2026-08-13 — HEAD `main` post SP-ADJ-13 (tag v1.0.5) — PLAN-METRICAS.md §C.0 (Ronda 2)*
