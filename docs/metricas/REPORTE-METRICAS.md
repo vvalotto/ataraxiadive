@@ -448,6 +448,15 @@ mirar el desglose por archivo.
 
 ---
 
+## Comparación contra Benchmarks de Industria
+
+Ver [`BENCHMARK-INDUSTRIA.md`](BENCHMARK-INDUSTRIA.md) — clasifica primero el tipo de aplicación
+(MIS/vertical SaaS, riesgo bajo-medio, proyecto pequeño, equipo atípico de 1 desarrollador + IA) y
+compara calidad y productividad contra benchmarks de industria específicos a ese contexto (ISBSG,
+Capers Jones, encuestas de cobertura de tests, McCabe, SonarQube, estudios de Copilot 2025).
+
+---
+
 ## Índice de Documentos de Detalle
 
 | Categoría | Documento | Contenido | Estado Ronda 2 |
