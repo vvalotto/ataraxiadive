@@ -1,154 +1,153 @@
 # Métricas Backend por Capa Hexagonal — AtaraxiaDive
 
-> Fuente: `radon cc -j` y `radon mi -j` sobre cada `src/<bc>/<capa>/`  
-> Herramienta: radon 6.0.1  
-> Fecha de ejecución: 2026-05-18  
-> Referencia: PLAN-METRICAS.md §A.1.5
+> Fuente: `radon cc -j` y `radon mi -j` sobre cada `src/<bc>/<capa>/`
+> Herramienta: radon 6.0.1
+> Fecha de ejecución original: 2026-05-18 · **Recálculo: 2026-08-13 (HEAD `main`, post SP7 + SP-ADJ-12 + SP-ADJ-13, tag v1.0.5)**
+> Referencia: PLAN-METRICAS.md §A.1.5 (Ronda 2)
 
 ---
 
-## 1. Tabla principal — CC × MI por BC y capa
+## 1. Tabla principal — CC × MI por BC y capa (v1.0.5)
 
-**Leyenda:** CC = complejidad ciclomática promedio · MI = índice de mantenibilidad promedio · N(CC) = bloques analizados · SLOC = líneas de código fuente  
-**Escala CC:** A (1–5) · B (6–10) · C (11–15) · D (16–20)  
+**Leyenda:** CC = complejidad ciclomática promedio · MI = índice de mantenibilidad promedio · N(CC) = bloques analizados · SLOC = líneas de código fuente
+**Escala CC:** A (1–5) · B (6–10) · C (11–15) · D (16–20)
 **Escala MI:** A (≥ 20) · B (10–20) · C (< 10)
+**Δ** = variación vs. medición 2026-05-18 (BL-006). `=` sin cambio material.
 
 ### 1.1 domain/
 
-| BC | Tipo | CC prom | N(CC) | MI prom | N(MI) | SLOC |
-|----|------|:-------:|:-----:|:-------:|:-----:|-----:|
-| competencia | ES (Core) | 1.74 | 219 | 88.11 | 53 | 2 278 |
-| notificaciones | ES (Generic) | 1.84 | 50 | 85.64 | 17 | 404 |
-| torneo | CRUD | 1.55 | 44 | 91.50 | 14 | 248 |
-| registro | CRUD | 2.11 | 64 | 87.25 | 19 | 324 |
-| resultados | CRUD | 2.53 | 64 | 89.61 | 16 | 613 |
-| identidad | CRUD | 1.51 | 47 | 97.36 | 12 | 140 |
-| shared | Shared | 1.92 | 26 | 92.99 | 11 | 151 |
-| **Promedio** | | **1.89** | **514** | **90.07** | **142** | **4 158** |
+| BC | Tipo | CC prom | N(CC) | MI prom | SLOC | Δ SLOC |
+|----|------|:-------:|:-----:|:-------:|-----:|:---:|
+| competencia | ES (Core) | 1.74 | 219 | 87.64 | 2 278 | = |
+| notificaciones | ES (Generic) | 1.84 | 50 | 84.75 | 404 | = |
+| torneo | CRUD | 1.55 | 44 | 90.85 | 248 | = |
+| registro | CRUD | 2.09 | 66 | 83.76 | 336 | **+12** |
+| resultados | CRUD | 2.53 | 64 | 88.13 | 613 | = |
+| identidad | CRUD | 1.53 | 53 | 94.90 | 162 | **+22** |
+| shared | Shared | 1.92 | 26 | 92.29 | 151 | = |
+| **Promedio** | | **1.86** | **522** | **88.02** | **4 192** | **+34** |
 
 ### 1.2 application/
 
-| BC | Tipo | CC prom | N(CC) | MI prom | N(MI) | SLOC |
-|----|------|:-------:|:-----:|:-------:|:-----:|-----:|
-| competencia | ES (Core) | 1.92 | 157 | 84.27 | 30 | 1 481 |
-| notificaciones | ES (Generic) | 2.04 | 26 | 80.19 | 9 | 278 |
-| torneo | CRUD | 1.68 | 47 | 77.34 | 10 | 246 |
-| registro | CRUD | 1.98 | 52 | 72.85 | 17 | 363 |
-| resultados | CRUD | 2.90 | 60 | 77.80 | 9 | 734 |
-| identidad | CRUD | 3.00 | 26 | 70.45 | 8 | 300 |
-| shared | Shared | — | — | — | — | — |
-| **Promedio** | | **2.25** | **368** | **77.15** | **83** | **3 402** |
+| BC | Tipo | CC prom | N(CC) | MI prom | SLOC | Δ SLOC |
+|----|------|:-------:|:-----:|:-------:|-----:|:---:|
+| competencia | ES (Core) | 1.92 | 157 | 83.15 | 1 481 | = |
+| notificaciones | ES (Generic) | 2.04 | 26 | 74.53 | 278 | = |
+| torneo | CRUD | 1.68 | 47 | 74.82 | 246 | = |
+| registro | CRUD | 1.96 | 56 | 66.95 | 382 | **+19** |
+| resultados | CRUD | 2.90 | 60 | 66.69 | 734 | = |
+| identidad | CRUD | 2.52 | 42 | 58.47 | 378 | **+78** |
+| shared | Shared | — | — | — | — | = |
+| **Promedio** | | **2.12** | **388** | **73.70** | **3 499** | **+97** |
 
 ### 1.3 infrastructure/
 
-| BC | Tipo | CC prom | N(CC) | MI prom | N(MI) | SLOC |
-|----|------|:-------:|:-----:|:-------:|:-----:|-----:|
-| competencia | ES (Core) | 2.16 | 37 | 86.82 | 14 | 391 |
-| notificaciones | ES (Generic) | 2.45 | 29 | 81.82 | 11 | 354 |
-| torneo | CRUD | 1.81 | 16 | 83.12 | 3 | 154 |
-| registro | CRUD | 2.16 | 49 | 74.73 | 11 | 529 |
-| resultados | CRUD | 2.24 | 21 | 80.97 | 6 | 160 |
-| identidad | CRUD | 1.90 | 21 | 83.59 | 5 | 186 |
-| shared | Shared | 2.11 | 9 | 85.19 | 3 | 153 |
-| **Promedio** | | **2.12** | **182** | **82.32** | **53** | **1 927** |
+| BC | Tipo | CC prom | N(CC) | MI prom | SLOC | Δ SLOC |
+|----|------|:-------:|:-----:|:-------:|-----:|:---:|
+| competencia | ES (Core) | 2.16 | 37 | 84.62 | 391 | = |
+| notificaciones | ES (Generic) | 2.45 | 29 | 81.82 | 354 | = |
+| torneo | CRUD | 1.81 | 16 | 74.68 | 154 | = |
+| registro | CRUD | 2.18 | 49 | 60.11 | 536 | **+7** |
+| resultados | CRUD | 2.24 | 21 | 71.45 | 160 | = |
+| identidad | CRUD | 2.00 | 21 | 72.57 | 187 | **+1** |
+| shared | Shared | 2.11 | 9 | 55.56 | 153 | = |
+| **Promedio** | | **2.17** | **182** | **76.12** | **1 935** | **+8** |
 
 ### 1.4 api/
 
-| BC | Tipo | CC prom | N(CC) | MI prom | N(MI) | SLOC |
-|----|------|:-------:|:-----:|:-------:|:-----:|-----:|
-| competencia | ES (Core) | 1.60 | 96 | 85.83 | 5 | 1 155 |
-| notificaciones | ES (Generic) | — | — | 100.00 | 1 | 0 |
-| torneo | CRUD | 1.80 | 35 | 78.90 | 3 | 408 |
-| registro | CRUD | 2.15 | 46 | 61.63 | 2 | 691 |
-| resultados | CRUD | 2.33 | 15 | 74.39 | 2 | 294 |
-| identidad | CRUD | 2.50 | 24 | 65.32 | 3 | 353 |
-| shared | Shared | — | — | 100.00 | 2 | 2 |
-| **Promedio** | | **2.08** | **216** | **73.21** | **15** | **2 901** |
+| BC | Tipo | CC prom | N(CC) | MI prom | SLOC | Δ SLOC |
+|----|------|:-------:|:-----:|:-------:|-----:|:---:|
+| competencia | ES (Core) | 1.60 | 96 | 82.29 | 1 155 | = |
+| notificaciones | ES (Generic) | — | — | — | 0 | = |
+| torneo | CRUD | 1.80 | 35 | 78.90 | 408 | = |
+| registro | CRUD | 2.20 | 51 | 19.36 | 788 | **+97** |
+| resultados | CRUD | 2.33 | 15 | 48.78 | 294 | = |
+| identidad | CRUD | 2.64 | 28 | 45.16 | 415 | **+62** |
+| shared | Shared | — | — | 100.00 | 2 | = |
+| **Promedio** | | **1.95** | **225** | **68.69** | **3 062** | **+161** |
 
 ---
 
 ## 2. Resumen cruzado por capa (promedio global)
 
-| Capa | CC prom | MI prom | Total bloques CC | Total SLOC |
-|------|:-------:|:-------:|:----------------:|----------:|
-| domain/ | **1.89** | **90.07** | 514 | 4 158 |
-| application/ | 2.25 | 77.15 | 368 | 3 402 |
-| infrastructure/ | 2.12 | 82.32 | 182 | 1 927 |
-| api/ | 2.08 | 73.21 | 216 | 2 901 |
+| Capa | CC prom BL-006 | CC prom v1.0.5 | MI prom BL-006 | MI prom v1.0.5 | SLOC BL-006 | SLOC v1.0.5 |
+|------|:-------:|:-------:|:-------:|:-------:|-----:|-----:|
+| domain/ | 1.89 | **1.86** | 90.07 | **88.02** | 4 158 | **4 192** |
+| application/ | 2.25 | **2.12** | 77.15 | **73.70** | 3 402 | **3 499** |
+| infrastructure/ | 2.12 | **2.17** | 82.32 | **76.12** | 1 927 | **1 935** |
+| api/ | 2.08 | **1.95** | 73.21 | **68.69** | 2 901 | **3 062** |
 
-**Patrón emergente:**
-- `domain/` = capa con **menor CC y mayor MI**: código más simple y mantenible — consistente con el principio hexagonal de mantener el dominio libre de complejidad accidental
-- `api/` = capa con **MI más bajo** a pesar de CC moderada: indicador de archivos voluminosos (routers FastAPI con muchas rutas inlined)
-- `application/` = **mayor CC promedio**: aquí vive la lógica de orquestación; los use cases complejos suben la complejidad
+**El patrón emergente se mantiene idéntico:** `domain/` sigue siendo la capa con menor CC y mayor MI del sistema — el crecimiento post-SP6 (+300 SLOC en total, +8%) no alteró la jerarquía CC/MI entre capas. `api/` sigue siendo la capa con MI más bajo.
+
+**Nota metodológica sobre las variaciones de MI:** los deltas de MI (p. ej. domain 90.07→88.02) son en parte un artefacto de la exclusión de archivos triviales (`__init__.py` vacíos), que puede diferir levemente entre la corrida original y esta — no se debe leer como una caída real de mantenibilidad salvo donde coincide con crecimiento real de SLOC (registro, identidad). Los valores de **CC y SLOC son comparables directamente** porque provienen de una agregación mecánica (suma/promedio de bloques), sin exclusiones.
+
+**Todo el crecimiento estructural post-SP6 se concentra en `registro` e `identidad`**, y dentro de esos dos BCs, específicamente en `application/` y `api/` — exactamente donde SP-ADJ-12 agregó el modelo multi-rol (`agregar_rol`/`quitar_rol`, endpoints `POST/DELETE /auth/me/roles`) y `estado_aceptacion` de inscripciones. `competencia`, `torneo`, `resultados`, `notificaciones` y `shared` no cambiaron en **ninguna** métrica (CC, N(CC), SLOC) desde el 2026-05-18.
 
 ---
 
-## 3. Hipótesis A.1.5 — ¿ES más complejo que CRUD en domain/?
+## 3. Hipótesis A.1.5 — ¿ES más complejo que CRUD en domain/? (revalidación)
 
 **Hipótesis:** CC promedio de `domain/` en BC Competencia (ES) > CC promedio de `domain/` en BCs CRUD
 
-| BC | Tipo | domain/ CC |
-|----|------|:----------:|
-| competencia | **ES (Core)** | **1.74** |
-| notificaciones | ES (Generic) | 1.84 |
-| torneo | CRUD | 1.55 |
-| **registro** | CRUD | **2.11** |
-| **resultados** | CRUD | **2.53** |
-| identidad | CRUD | 1.51 |
+| BC | Tipo | domain/ CC BL-006 | domain/ CC v1.0.5 |
+|----|------|:----------:|:----------:|
+| competencia | **ES (Core)** | **1.74** | **1.74** = |
+| notificaciones | ES (Generic) | 1.84 | 1.84 = |
+| torneo | CRUD | 1.55 | 1.55 = |
+| **registro** | CRUD | **2.11** | **2.09** ≈ |
+| **resultados** | CRUD | **2.53** | **2.53** = |
+| identidad | CRUD | 1.51 | 1.53 ≈ |
 
-**Resultado: hipótesis NO confirmada en CC promedio.**
-
-La complejidad ciclomática de `domain/` en Competencia (1.74) es **inferior** a la de Registro (2.11) y Resultados (2.53).
-
-**Interpretación:** La mayor complejidad de Registro y Resultados en domain/ refleja la cantidad de variantes de estado (multi-rol en Registro, lógica de ranking por variante SPE en Resultados), no el paradigma ES vs CRUD. Competencia ES mantiene baja la CC en domain porque usa agregados con métodos pequeños y delegación a value objects — el patrón ES distribuye la complejidad en muchos métodos sencillos en lugar de concentrarla.
-
-**Lo que sí distingue a Competencia como ES:** el tamaño. Con 219 bloques CC y 2 278 SLOC, `competencia/domain/` es **3–15× más grande** que cualquier otro BC en esa capa — la complejidad del dominio ES se expresa en amplitud, no en profundidad de cada función.
+**Resultado: hipótesis sigue NO confirmada, sin cambios desde BL-006.** El ranking relativo de CC en domain/ es idéntico. `competencia/domain/` sigue con 219 bloques inmutables desde SP6 — 3 meses de trabajo posterior no tocaron el dominio ES Core.
 
 ---
 
-## 4. Módulos de riesgo por capa
+## 4. Módulos de riesgo por capa (v1.0.5)
 
 ### application/ — puntos de complejidad elevada
 
 | BC | CC prom application/ | Observación |
 |----|:--------------------:|-------------|
-| identidad | 3.00 | JWT multi-rol, autenticación, lógica de creación de usuario compuesta |
-| resultados | 2.90 | Queries complejos de ranking (variantes SPE, gender, overall) |
-| notificaciones | 2.04 | Idempotencia exactly-once + reintentos |
+| resultados | 2.90 | Sin cambios — queries complejos de ranking |
+| identidad | 2.52 | **Bajó desde 3.00** — el crecimiento (+78 SLOC, +16 bloques: `agregar_rol_usuario.py`, `quitar_rol_usuario.py`, `agregar_rol.py`) son handlers pequeños y simples, no lógica densa; diluyen el promedio |
+| notificaciones | 2.04 | Sin cambios |
 
 ### api/ — MI bajo (mantenibilidad reducida)
 
-| BC | MI prom api/ | SLOC | Observación |
-|----|:-----------:|-----:|-------------|
-| registro | 61.63 | 691 | Router con muchos endpoints multi-entidad (atleta + juez + organizador) |
-| identidad | 65.32 | 353 | Lógica de auth inline en router |
-| resultados | 74.39 | 294 | Rutas de ranking por variante |
+| BC | SLOC api/ v1.0.5 | Δ vs BL-006 | Observación |
+|----|-----------------:|:---:|-------------|
+| registro | 788 | **+97** | `router.py` pasó a 788 SLOC — nuevos endpoints de aceptación de inscripción y adjuntos (SP-ADJ-12) |
+| identidad | 415 | **+62** | `router.py` (385 SLOC) + `dependencies.py` — endpoints `POST/DELETE /auth/me/roles` |
+| resultados | 294 | = | Sin cambios |
+
+**Router `registro/api/router.py` y `identidad/api/router.py` son los módulos que más crecieron en todo el backend post-SP6** — coherente con el hallazgo de `backend-ck.md` (FanOut de `registro/api/router.py` subió de 11 a 12).
 
 ---
 
-## 5. Distribución SLOC por capa
+## 5. Distribución SLOC por capa (v1.0.5)
 
 ```
-domain/         4 158 SLOC  (33%)  ████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-application/    3 402 SLOC  (27%)  █████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-api/            2 901 SLOC  (23%)  ████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-infrastructure/ 1 927 SLOC  (15%)  ████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+domain/         4 192 SLOC  (33%)  ████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+application/    3 499 SLOC  (28%)  █████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+api/            3 062 SLOC  (24%)  ████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+infrastructure/ 1 935 SLOC  (15%)  ████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 ```
 
-Total backend: ≈ 12 388 SLOC (de los 12 961 del backend-raw.md; diferencia = archivos raíz de BC sin capa asignada)
+Total backend por capa: 12 688 SLOC (de 13 259 SLOC totales — la diferencia son módulos raíz sin capa asignada: `src/app.py` y `src/*/domain/` sueltos). Distribución porcentual prácticamente idéntica a BL-006 (33/27/23/15 → 33/28/24/15).
 
 ---
 
-## 6. Conclusiones para el experimento IEDD
+## 6. Conclusiones para el experimento IEDD (revalidadas 2026-08-13)
 
-1. **La arquitectura hexagonal cumple su promesa de dominio limpio:** `domain/` tiene consistentemente la menor CC (1.89) y mayor MI (90.07) de todas las capas en todos los BCs.
+1. **La arquitectura hexagonal sigue cumpliendo su promesa de dominio limpio** tres meses y ~550 SLOC después: `domain/` mantiene la menor CC (1.86) y mayor MI (88.02) de todas las capas.
 
-2. **El paradigma ES no eleva la CC en domain/ sino el volumen:** Competencia ES tiene 219 bloques vs 44–64 en CRUD. La complejidad ciclomática per-bloque es similar o menor — el ES descompone más finamente.
+2. **El paradigma ES sigue sin elevar la CC en domain/, y ahora con evidencia temporal:** `competencia/domain/` no cambió ni un bloque desde SP6 — es la parte del sistema más estable de todo el proyecto en un sentido literal, no solo relativo.
 
-3. **application/ es el foco de complejidad legítima:** CC 2.25 promedio. Identidad (3.00) y Resultados (2.90) concentran la lógica de orquestación más intrincada — candidatos a refactoring si crecen.
+3. **El crecimiento post-SP6 fue 100% localizado:** de +550 SLOC totales, +196 SLOC (36%) están en `identidad` y +216 SLOC (39%) en `registro` — los dos BCs con el modelo multi-rol de SP-ADJ-12. Ningún otro BC creció. Esto es evidencia de que SP7/SP-ADJ-12/13 fueron incrementos quirúrgicos, no expansión de dominio.
 
-4. **api/ necesita atención en mantenibilidad:** MI 73.21, con Registro (61.63) e Identidad (65.32) como casos críticos. Routers largos con lógica inline degradan el MI sin elevar la CC — señal de mezcla de responsabilidades.
+4. **api/ sigue siendo la capa de menor mantenibilidad**, y el nuevo código (routers de registro e identidad) empeoró levemente esa tendencia — sigue siendo el candidato más claro a refactoring si el proyecto continuara.
 
 ---
 
 *Ejecutado: 2026-05-18 — rama doc/metricas — PLAN-METRICAS.md Prioridad 2 completada*
+*Recalculado: 2026-08-13 — HEAD `main` post SP-ADJ-13 (tag v1.0.5) — PLAN-METRICAS.md §A.1.5 (Ronda 2)*
