@@ -87,7 +87,89 @@ abstracción compartida.
 | **Tasa de éxito de entrega** | 100% de SPs cerrados según plan (7/7), 0 abandono, 0 cancelación | Standish CHAOS: ~31% de proyectos "exitosos" (a tiempo, en presupuesto, alcance completo), ~50% "desafiados", ~19% fallidos | ✅ **Muy por encima** — aunque un proyecto de 1 persona sin stakeholders externos no enfrenta las mismas presiones que motivan la mayoría de las fallas del CHAOS Report (alcance cambiante multi-stakeholder, dependencias organizacionales) |
 | **Cobertura de tracking de tiempo** | 26% de las US (34/131) | Sin benchmark de industria — es una métrica interna del proyecto, no comparable externamente | — No aplica |
 
-### Nota crítica — el claim "3x–10x" necesita ajuste
+### 5.1 Tamaño por unidad de tiempo — la comparación "size/effort" que faltaba
+
+La tabla anterior compara *ritmo de historias* (US/día), que no es una unidad estandarizada de
+industria. Esta sección agrega la comparación que sí tiene tradición académica: **tamaño de
+software producido por unidad de tiempo**, en dos unidades — SLOC/día (simple, directa) y
+Function Points/persona-mes (la unidad que usan ISBSG y Capers Jones).
+
+#### A. SLOC/día — la comparación más creíble
+
+| | Valor |
+|---|---:|
+| SLOC total AtaraxiaDive (backend+frontend, v1.0.5) | 29 027 |
+| **SLOC/día — proyecto completo (77 días)** | **377** |
+| **SLOC/día — fase de construcción (63 días, SP1–SP6)** | **454** |
+
+| Referencia de industria | SLOC/día | Fuente |
+|---|:---:|---|
+| Regla clásica ("The Mythical Man-Month", Brooks) | ~10 | Cita histórica, muy conservadora — ver `blog.ndepend.com` |
+| Encuestas modernas — desarrollador promedio | 50–200 | Agregado de encuestas de industria 2020s |
+| Encuestas modernas — senior / arquitecto | 200–500+ | Agregado de encuestas de industria 2020s |
+
+**Hallazgo — y es más honesto que el "3x–10x":** los 377–454 SLOC/día de AtaraxiaDive están
+**dentro del rango documentado para un desarrollador senior humano sin asistencia** (200–500+
+SLOC/día), no un orden de magnitud por encima de la capacidad humana. **No hay evidencia, en esta
+unidad, de una velocidad de escritura de código "sobrehumana".**
+
+**Lo que sí es inusual no es el volumen de código — es sostener ese volumen junto con 94.7% de
+cobertura de tests, especificación formal por historia, y 0 issues CRITICAL de diseño en 793
+commits, sin pausas para "ponerse al día" con deuda técnica.** Un desarrollador senior humano
+escribiendo 400+ SLOC/día raramente mantiene ese ritmo *y* esa disciplina de tests/diseño
+simultáneamente — la combinación, no el número aislado, es la observación defendible para el
+paper.
+
+#### B. Function Points/persona-mes — intentado, con resultado no confiable
+
+Usando las tablas de *backfiring* (conversión SLOC→FP) de Capers Jones: Python ≈ 20 SLOC/FP
+(estimado por similitud con Perl, no está en la tabla original de Jones); TypeScript/JavaScript
+no está en ninguna tabla publicada — se aproxima con Java/C++ (~53 SLOC/FP) por ser lenguajes
+tipados de nivel de abstracción comparable.
+
+| Cálculo | Valor |
+|---|---:|
+| FP backend (13 259 SLOC / 20) | ≈ 663 FP |
+| FP frontend (15 768 SLOC / 53, aproximado) | ≈ 298 FP |
+| **Total estimado** | **≈ 960 FP** |
+| Persona-meses (1 dev, 77 días) | 2.53 |
+| **FP/persona-mes resultante** | **≈ 380** |
+
+**Este número no es creíble y no se recomienda citarlo.** Los benchmarks ISBSG típicos para
+proyectos de negocio pequeños rondan unas pocas decenas de FP/persona-mes por desarrollador — 380
+está un orden de magnitud por encima de cualquier cifra publicada, incluso las más optimistas
+sobre asistencia de IA. La causa más probable no es que AtaraxiaDive sea así de productivo, sino
+que el **backfiring SLOC→FP tiene hasta 500% de variación documentada entre lenguajes y
+organizaciones** (ver fuente "Using Backfiring... More Wishful Thinking than Science" en
+Sources) — la conversión Python/TypeScript usada aquí es una aproximación gruesa, no una medición.
+
+#### C. COCOMO — corrido, y descartado como comparación de velocidad
+
+Se corrieron dos variantes del modelo COCOMO público sobre las 29 KLOC totales del proyecto:
+
+| Modelo | Esfuerzo estimado (persona-mes) | Ratio vs. real (2.53 pm) |
+|---|---:|---:|
+| COCOMO II, nominal (EAF=1.0) | 119.4 | **47x** |
+| COCOMO 81, modo "Organic" (equipos chicos, requisitos flexibles — el modo más favorable a AtaraxiaDive) | 82.4 | **33x** |
+
+**Estos ratios (33x–47x) no se presentan como evidencia de productividad — son evidencia de que
+COCOMO no es un modelo válido de comparación a esta escala.** COCOMO fue calibrado sobre un
+corpus histórico de proyectos de los años 80–2000, mayormente con procesos formales pesados y
+equipos de varias personas; aplicarlo a un desarrollador senior solo, con frameworks modernos
+(FastAPI, React) y sin la sobrecarga de coordinación de un equipo, ya sobreestima el esfuerzo
+"tradicional" **antes** de considerar cualquier efecto de la IA. Un ratio de 33x–47x es
+inverosímil incluso bajo los claims más optimistas sobre asistencia de IA en la literatura — la
+lectura correcta es "COCOMO no aplica aquí", no "AtaraxiaDive es 40 veces más productivo".
+
+#### Conclusión de esta sub-sección
+
+De las tres unidades de tamaño/tiempo exploradas, **solo SLOC/día produjo un número creíble y
+citable**: AtaraxiaDive está en la banda alta de lo que un desarrollador senior humano logra sin
+asistencia (no por encima de ella). FP/persona-mes y COCOMO dieron resultados no confiables por
+limitaciones conocidas de esos modelos a esta escala — se documentan aquí por transparencia
+metodológica, pero **no se recomienda citarlos en el paper** como evidencia de productividad.
+
+### 5.2 Nota crítica — el claim "3x–10x" necesita ajuste
 
 `CONCLUSIONES-IEDD.md §4.1` cita un ratio implícito de 3x–5x a 6x–12x sobre un desarrollador
 senior sin IA, derivado de una estimación *ad hoc* (2–4 h/US tradicional vs. 20 min/US medido).
@@ -109,6 +191,12 @@ ciclo de PR** — órdenes de magnitud más conservadores que "3x–10x".
 3. **Recomendación para el paper:** presentar el ratio 3x–10x como *hipótesis derivada de
    estimación interna*, con el +55%/−75% de Copilot como *piso conservador con evidencia externa
    más sólida* — no promediarlos ni presentar solo el número más favorable.
+4. **Refuerzo desde §5.1:** la comparación de tamaño/tiempo más directa (SLOC/día) ubica a
+   AtaraxiaDive **dentro** del rango humano senior documentado (200–500+ SLOC/día), no por
+   encima. Esto es consistente con un múltiplo de velocidad *moderado* (más cercano al piso de
+   Copilot que al techo de 10x) si el eje de comparación es "volumen de código escrito". El
+   múltiplo mayor, si existe, vendría de la combinación con calidad sostenida (tests, diseño,
+   especificación) — no de escribir código más rápido en términos brutos.
 
 ---
 
@@ -122,6 +210,9 @@ ciclo de PR** — órdenes de magnitud más conservadores que "3x–10x".
 | Duplicación de código | ⚠️ En el límite aceptable |
 | Tasa de bloqueo de gates | ℹ️ Sin comparación cuantitativa disponible |
 | Velocidad vs. baseline IA (Copilot) | ⚠️ **Claim propio 5-15x más optimista que la evidencia externa más rigurosa** |
+| SLOC/día (tamaño/tiempo) | ℹ️ **En línea** — dentro del rango humano senior documentado, no por encima |
+| FP/persona-mes (backfiring) | ❌ No confiable — descartado (ver §5.1.B) |
+| Esfuerzo vs. COCOMO | ❌ No confiable — descartado, COCOMO no calibrado para esta escala (ver §5.1.C) |
 | Retrabajo formalizado (SP-ADJ) | ℹ️ Dentro de rango citado, pero comparación metodológicamente débil |
 | Tasa de éxito de entrega | ✅ Muy por encima (con caveat de escala) |
 
@@ -169,6 +260,12 @@ las de productividad con el ajuste de expectativas de esta sección.**
 - [Standish Group — CHAOS Report / Project Resolution Benchmark](https://www.standishgroup.com/products/project-resolution-benchmark)
 - [arXiv — Developer Productivity With and Without GitHub Copilot: A Longitudinal Mixed-Methods Case Study](https://arxiv.org/html/2509.20353v2)
 - [GitClear — AI Assistant Code Quality 2025 Research](https://www.gitclear.com/ai_assistant_code_quality_2025_research)
+- [ISBSG — The use of function points in the industry](https://www.isbsg.org/wp-content/uploads/2022/01/ISBSG-Short-Paper-The-Use-of-Function-Points-in-the-Industry-2016-v1.0.pdf)
+- [ISBSG — Productivity in Software Development](https://www.isbsg.org/productivity/)
+- [ResearchGate — Using "Backfiring" to accurately size software: More Wishful Thinking than Science](https://www.researchgate.net/publication/240382664_Using''Backfiring''to_accurately_size_software_More_Wishful_Thinking_than_Science)
+- [IFPUG — Capers Jones, Software Economics and Function Point Metrics](https://www.ifpug.org/wp-content/uploads/2017/04/IYSM.-Thirty-years-of-IFPUG.-Software-Economics-and-Function-Point-Metrics-Capers-Jones.pdf)
+- [Rose-Hulman — COCOMO II Model Definition Manual](https://www.rose-hulman.edu/class/cs/csse372/201310/Homework/CII_modelman2000.pdf)
+- [NDepend Blog — Mythical Man Month: 10 lines per developer day](https://blog.ndepend.com/mythical-man-month-10-lines-per-developer-day/)
 
 ---
 
