@@ -327,7 +327,7 @@
   <!-- INTRO -->
   <section>
     <div class="tag" style="background:rgba(6,182,212,.1);color:#06b6d4;border:1px solid rgba(6,182,212,.3)">
-      Arquitectura · v1.0.2
+      Arquitectura · v1.0.5
     </div>
     <h1>Design Structure Matrix</h1>
     <p class="sub">
@@ -456,7 +456,9 @@
       <div class="insight" style="margin-top:1.2rem">
         <div class="insight-icon">🔵</div>
         <div>
-          <strong>El gradiente I(domain=0.26) → I(api=0.91) es la firma de esta matriz.</strong>
+          <strong>El gradiente I(domain=0.273) → I(api=0.903) es la firma de esta matriz.</strong>
+          Recalculado desde cero en v1.0.5 (77 días después), reproduce el mismo patrón con
+          variaciones de ±0.02.
           domain/ nunca importa de ninguna otra capa. application/ solo importa domain/.
           infrastructure/ implementa los puertos definidos en domain/ — mismo sentido.
           api/ es la única capa que importa de todas las demás (hoja del grafo).
@@ -503,7 +505,7 @@
 </main>
 
 <footer style="text-align:center;padding:2rem;border-top:1px solid var(--border);font-size:.7rem;color:var(--muted)">
-  AtaraxiaDive · Design Structure Matrix · Datos reales extraídos del código fuente · v1.0.2 · 2026
+  AtaraxiaDive · Design Structure Matrix · Datos reales extraídos del código fuente · v1.0.5 · 2026
 </footer>
 
 <script>
@@ -657,10 +659,10 @@ function buildBCMatrix() {
 
 function buildLayerMatrix() {
   const LAYERS = [
-    { id: 'domain', label: 'domain/', i: 'I=0.26', color: '#10b981' },
-    { id: 'infra',  label: 'infrastructure/', i: 'I=0.59', color: '#3b82f6' },
-    { id: 'app',    label: 'application/', i: 'I=0.73', color: '#f59e0b' },
-    { id: 'api',    label: 'api/', i: 'I=0.91', color: '#ef4444' },
+    { id: 'domain', label: 'domain/', i: 'I=0.273', color: '#10b981' },
+    { id: 'infra',  label: 'infrastructure/', i: 'I=0.613', color: '#3b82f6' },
+    { id: 'app',    label: 'application/', i: 'I=0.721', color: '#f59e0b' },
+    { id: 'api',    label: 'api/', i: 'I=0.903', color: '#ef4444' },
   ];
 
   // layer DSM: row i depends on col j

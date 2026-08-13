@@ -242,7 +242,7 @@ const DATA = [
   { id:'competencia',    label:'competencia',    type:'ES Core', bcColor:'#10b981',
     layers: { domain:{sloc:2278,cc:1.74,mi:88.11,cov:96.3}, application:{sloc:1481,cc:1.92,mi:84.27,cov:97.9}, infrastructure:{sloc:391,cc:2.16,mi:86.82,cov:90.4}, api:{sloc:1155,cc:1.60,mi:85.83,cov:null} } },
   { id:'registro',       label:'registro',       type:'CRUD',    bcColor:'#f59e0b',
-    layers: { domain:{sloc:324,cc:2.11,mi:87.25,cov:97.9}, application:{sloc:363,cc:1.98,mi:72.85,cov:99.0}, infrastructure:{sloc:529,cc:2.16,mi:74.73,cov:92.5}, api:{sloc:691,cc:2.15,mi:61.63,cov:null} } },
+    layers: { domain:{sloc:336,cc:2.09,mi:83.76,cov:97.9}, application:{sloc:382,cc:1.96,mi:66.95,cov:99.0}, infrastructure:{sloc:536,cc:2.18,mi:60.11,cov:92.5}, api:{sloc:788,cc:2.20,mi:19.36,cov:null} } },
   { id:'resultados',     label:'resultados',     type:'CRUD',    bcColor:'#ec4899',
     layers: { domain:{sloc:613,cc:2.53,mi:89.61,cov:98.7}, application:{sloc:734,cc:2.90,mi:77.80,cov:76.9}, infrastructure:{sloc:160,cc:2.24,mi:80.97,cov:88.8}, api:{sloc:294,cc:2.33,mi:74.39,cov:null} } },
   { id:'torneo',         label:'torneo',         type:'CRUD',    bcColor:'#3b82f6',
@@ -250,7 +250,7 @@ const DATA = [
   { id:'notificaciones', label:'notificaciones', type:'ES',      bcColor:'#06b6d4',
     layers: { domain:{sloc:404,cc:1.84,mi:85.64,cov:95.5}, application:{sloc:278,cc:2.04,mi:80.19,cov:97.6}, infrastructure:{sloc:354,cc:2.45,mi:81.82,cov:96.6}, api:{sloc:0,cc:null,mi:null,cov:null} } },
   { id:'identidad',      label:'identidad',      type:'CRUD',    bcColor:'#8b5cf6',
-    layers: { domain:{sloc:140,cc:1.51,mi:97.36,cov:99.2}, application:{sloc:300,cc:3.00,mi:70.45,cov:98.5}, infrastructure:{sloc:186,cc:1.90,mi:83.59,cov:99.1}, api:{sloc:353,cc:2.50,mi:65.32,cov:null} } },
+    layers: { domain:{sloc:162,cc:1.53,mi:94.90,cov:98.8}, application:{sloc:338,cc:2.71,mi:56.48,cov:98.8}, infrastructure:{sloc:187,cc:2.00,mi:72.57,cov:98.8}, api:{sloc:415,cc:2.64,mi:45.16,cov:null} } },
   { id:'shared',         label:'shared',         type:'Shared',  bcColor:'#6366f1',
     layers: { domain:{sloc:151,cc:1.92,mi:92.99,cov:99.2}, application:{sloc:0,cc:null,mi:null,cov:null}, infrastructure:{sloc:153,cc:2.11,mi:85.19,cov:100.0}, api:{sloc:2,cc:null,mi:null,cov:null} } },
 ];
@@ -262,13 +262,13 @@ DATA.forEach(bc => {
 const GRAND_TOTAL = DATA.reduce((s, bc) => s + bc.totalSloc, 0);
 
 // global averages
-const GLOBAL = { cc:1.89, mi:90.07, cov:95.3 };
+const GLOBAL = { cc:1.86, mi:88.02, cov:95.35 };
 
 // metric config
 const METRICS = {
-  cc:  { label:'CC Ciclomática', key:'cc', lo:1.5, hi:3.0, loGood:true,  fmt:v=>v.toFixed(2), unit:'', from:'#22c55e', mid:'#f59e0b', to:'#ef4444', ref:1.89 },
-  mi:  { label:'Mantenibilidad MI', key:'mi', lo:60, hi:100, loGood:false, fmt:v=>v.toFixed(1), unit:'', from:'#ef4444', mid:'#f59e0b', to:'#10b981', ref:90.07 },
-  cov: { label:'Cobertura Tests', key:'cov', lo:70, hi:100, loGood:false, fmt:v=>v.toFixed(1), unit:'%', from:'#ef4444', mid:'#f59e0b', to:'#22c55e', ref:95.3 },
+  cc:  { label:'CC Ciclomática', key:'cc', lo:1.5, hi:3.0, loGood:true,  fmt:v=>v.toFixed(2), unit:'', from:'#22c55e', mid:'#f59e0b', to:'#ef4444', ref:1.86 },
+  mi:  { label:'Mantenibilidad MI', key:'mi', lo:60, hi:100, loGood:false, fmt:v=>v.toFixed(1), unit:'', from:'#ef4444', mid:'#f59e0b', to:'#10b981', ref:88.02 },
+  cov: { label:'Cobertura Tests', key:'cov', lo:70, hi:100, loGood:false, fmt:v=>v.toFixed(1), unit:'%', from:'#ef4444', mid:'#f59e0b', to:'#22c55e', ref:95.35 },
 };
 
 let currentMetric = 'cc';
@@ -302,10 +302,10 @@ function buildStatsBar() {
   const items = [
     { val: GRAND_TOTAL.toLocaleString('es'), lbl: 'SLOC backend', color:'#06b6d4' },
     { val: DATA.length,                       lbl: 'Bounded Contexts', color:'#10b981' },
-    { val: '1.89',                            lbl: 'CC promedio global', color:'#f59e0b' },
-    { val: '90.07',                           lbl: 'MI promedio domain/', color:'#10b981' },
-    { val: '95.3%',                           lbl: 'Cobertura tests', color:'#3b82f6' },
-    { val: '73.21',                           lbl: 'MI promedio api/', color:'#f59e0b' },
+    { val: '1.86',                            lbl: 'CC promedio global', color:'#f59e0b' },
+    { val: '88.02',                           lbl: 'MI promedio domain/', color:'#10b981' },
+    { val: '95.35%',                          lbl: 'Cobertura tests', color:'#3b82f6' },
+    { val: '68.69',                           lbl: 'MI promedio api/', color:'#f59e0b' },
   ];
   el.innerHTML = items.map(i=>
     `<div class="stat-item"><div class="stat-val" style="color:${i.color}">${i.val}</div><div class="stat-lbl">${i.lbl}</div></div>`

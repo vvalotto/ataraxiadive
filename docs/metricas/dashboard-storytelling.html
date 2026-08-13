@@ -333,11 +333,13 @@
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-tag">Experimento IEDD · v1.0.2 · 2026</div>
+  <div class="hero-tag">Experimento IEDD · v1.0.5 · 2026</div>
   <h1 class="hero-title">AtaraxiaDive<br><span>Historia en Números</span></h1>
   <p class="hero-subtitle">
-    63 días. 77 historias de usuario. Una arquitectura hexagonal que resistió.<br>
-    Un pipeline de IA que voló. Una calidad que no se sacrificó.
+    77 días de proyecto completo — 63 de construcción activa, 14 de cierre. 77 historias de usuario
+    funcionales. Una arquitectura hexagonal que resistió.<br>
+    Un pipeline de IA que voló. Una calidad que no se sacrificó — verificada dos veces, con 3 meses
+    de diferencia.
   </p>
   <div class="hero-stats">
     <div>
@@ -345,16 +347,16 @@
       <div class="hero-stat-label">US funcionales</div>
     </div>
     <div>
-      <div class="hero-stat-val blue counter" data-target="63">0</div>
-      <div class="hero-stat-label">días calendario</div>
+      <div class="hero-stat-val blue counter" data-target="77">0</div>
+      <div class="hero-stat-label">días de proyecto (63 construcción)</div>
     </div>
     <div>
-      <div class="hero-stat-val emerald" data-target="28331">28 331</div>
+      <div class="hero-stat-val emerald" data-target="28987">28 987</div>
       <div class="hero-stat-label">SLOC totales</div>
     </div>
     <div>
-      <div class="hero-stat-val violet">0.971</div>
-      <div class="hero-stat-label">QPI final</div>
+      <div class="hero-stat-val violet">0.972</div>
+      <div class="hero-stat-label">QPI construcción</div>
     </div>
   </div>
 
@@ -392,31 +394,32 @@
     <div class="grad-bar-wrap" id="grad-bars">
       <div class="grad-bar-row">
         <div class="grad-bar-label">domain/</div>
-        <div class="grad-bar-track"><div class="grad-bar-fill" style="width:0%;background:var(--blue)" data-w="26"></div></div>
-        <div class="grad-bar-val" style="color:var(--blue)">0.26</div>
+        <div class="grad-bar-track"><div class="grad-bar-fill" style="width:0%;background:var(--blue)" data-w="27"></div></div>
+        <div class="grad-bar-val" style="color:var(--blue)">0.273</div>
       </div>
       <div class="grad-bar-row">
         <div class="grad-bar-label">infrastructure/</div>
-        <div class="grad-bar-track"><div class="grad-bar-fill" style="width:0%;background:var(--cyan)" data-w="59"></div></div>
-        <div class="grad-bar-val" style="color:var(--cyan)">0.59</div>
+        <div class="grad-bar-track"><div class="grad-bar-fill" style="width:0%;background:var(--cyan)" data-w="61"></div></div>
+        <div class="grad-bar-val" style="color:var(--cyan)">0.613</div>
       </div>
       <div class="grad-bar-row">
         <div class="grad-bar-label">application/</div>
-        <div class="grad-bar-track"><div class="grad-bar-fill" style="width:0%;background:var(--amber)" data-w="73"></div></div>
-        <div class="grad-bar-val" style="color:var(--amber)">0.73</div>
+        <div class="grad-bar-track"><div class="grad-bar-fill" style="width:0%;background:var(--amber)" data-w="72"></div></div>
+        <div class="grad-bar-val" style="color:var(--amber)">0.721</div>
       </div>
       <div class="grad-bar-row">
         <div class="grad-bar-label">api/</div>
-        <div class="grad-bar-track"><div class="grad-bar-fill" style="width:0%;background:var(--muted)" data-w="91"></div></div>
-        <div class="grad-bar-val" style="color:var(--muted)">0.91</div>
+        <div class="grad-bar-track"><div class="grad-bar-fill" style="width:0%;background:var(--muted)" data-w="90"></div></div>
+        <div class="grad-bar-val" style="color:var(--muted)">0.903</div>
       </div>
     </div>
     <div class="insight">
       <div class="insight-icon">🔵</div>
       <div class="insight-text">
-        <strong>Verificación formal de la intención de diseño.</strong> Este gradiente es invisible
-        en el código fuente — emerge solo al medir Ca/Ce sistemáticamente.
-        Se confirma en los 6 BCs sin excepción.
+        <strong>Verificación formal de la intención de diseño, recalculada dos veces.</strong> Este
+        gradiente es invisible en el código fuente — emerge solo al medir Ca/Ce sistemáticamente.
+        Se recalculó desde cero 77 días después (Ronda 2) y reprodujo el mismo patrón, con
+        variaciones de ±0.02 atribuibles al crecimiento normal del proyecto, no a degradación.
       </div>
     </div>
   </div>
@@ -431,9 +434,11 @@
     <div class="insight">
       <div class="insight-icon">📉</div>
       <div class="insight-text">
-        <strong>competencia</strong> (Core Domain ES) bajó de D=0.62 → D=0.46 — la mejora
-        más significativa. <strong>identidad</strong> bajó de 0.87 → 0.66.
-        El umbral de alerta (D&gt;0.70) <strong>nunca fue superado en ninguna baseline</strong>.
+        <strong>competencia</strong> (Core Domain ES) bajó de D=0.62 → D=0.459 y se mantuvo
+        idéntico en la Ronda 2. <strong>identidad</strong> bajó de 0.87 → 0.652 en BL-006, pero
+        subió a <strong>0.673</strong> en la remedición v1.0.5 — es ahora el BC con mayor D del
+        proyecto, por comandos concretos de SP-ADJ-12 sin nuevas abstracciones.
+        El umbral de alerta (D&gt;0.70) <strong>nunca fue superado en ninguna medición</strong>.
       </div>
     </div>
   </div>
@@ -444,19 +449,19 @@
       <div class="card-glow" style="background:var(--emerald)"></div>
       <div class="card-label">competencia (Core ES)</div>
       <div class="card-value" style="color:var(--emerald)">0.459</div>
-      <div class="card-note">D final · desde 0.62 en BL-004</div>
+      <div class="card-note">D final · desde 0.62 en BL-004 · sin cambios en Ronda 2</div>
     </div>
     <div class="card">
       <div class="card-glow" style="background:var(--blue)"></div>
       <div class="card-label">should_block=false</div>
-      <div class="card-value" style="color:var(--blue)">7/7</div>
-      <div class="card-note">baselines consecutivas · BL-001 → BL-007</div>
+      <div class="card-value" style="color:var(--blue)">8/8</div>
+      <div class="card-note">mediciones consecutivas · BL-001 → v1.0.5</div>
     </div>
     <div class="card">
       <div class="card-glow" style="background:var(--cyan)"></div>
       <div class="card-label">CRITICAL activos</div>
       <div class="card-value" style="color:var(--cyan)">0</div>
-      <div class="card-note">DesignReviewer · toda la historia del proyecto</div>
+      <div class="card-note">DesignReviewer · toda la historia del proyecto, incl. cierre</div>
     </div>
   </div>
 </section>
@@ -520,7 +525,7 @@
   <!-- Timeline de sprints -->
   <div class="chart-wrap">
     <div class="chart-title">Línea de tiempo del proyecto</div>
-    <div class="chart-sub">7 subproyectos · 63 días efectivos · tag v1.0.2</div>
+    <div class="chart-sub">7 subproyectos · 77 días totales (63 construcción + 14 cierre) · tag v1.0.5</div>
     <div class="timeline">
       <div class="tl-item">
         <div class="tl-dot done"></div>
@@ -554,9 +559,9 @@
       </div>
       <div class="tl-item">
         <div class="tl-dot done"></div>
-        <div class="tl-sp">SP7 + SP-ADJ-12</div>
-        <div class="tl-title">Despliegue en Fly.io + correcciones producción real</div>
-        <div class="tl-meta">tag v1.0.2 · 1 049 tests · 0 failed</div>
+        <div class="tl-sp">SP7 + SP-ADJ-12 + SP-ADJ-13 · 14 días</div>
+        <div class="tl-title">Despliegue en Fly.io + correcciones producción + prueba de aceptación real (Puerto Madryn 2026)</div>
+        <div class="tl-meta">tag v1.0.5 · 1 049 tests · 0 failed · 0 US func. (fase de cierre, no de construcción)</div>
       </div>
     </div>
   </div>
@@ -566,19 +571,31 @@
       <div class="card-glow" style="background:var(--emerald)"></div>
       <div class="card-label">mediana pipeline IEDD</div>
       <div class="card-value" style="color:var(--emerald)">20 min</div>
-      <div class="card-note">10 fases · spec → BDD → integración</div>
+      <div class="card-note">10 fases · spec → BDD → integración · sin datos nuevos en el cierre</div>
     </div>
     <div class="card">
       <div class="card-glow" style="background:var(--cyan)"></div>
       <div class="card-label">US en menos de 30 min</div>
       <div class="card-value" style="color:var(--cyan)">64%</div>
-      <div class="card-note">del total de US medidas (n=34)</div>
+      <div class="card-note">del total de US medidas (n=34, cobertura de tracking 26%)</div>
     </div>
     <div class="card">
       <div class="card-glow" style="background:var(--blue)"></div>
       <div class="card-label">velocidad de crucero</div>
       <div class="card-value" style="color:var(--blue)">1.5</div>
-      <div class="card-note">US func./día · SP3 a SP5</div>
+      <div class="card-note">US func./día · SP3 a SP5 · ritmo acumulado 1.00 al cierre (77d)</div>
+    </div>
+  </div>
+
+  <div class="insight" style="margin-top:1.5rem">
+    <div class="insight-icon">🧭</div>
+    <div class="insight-text">
+      <strong>SP7 + SP-ADJ-12 + SP-ADJ-13 entregaron 0 US funcionales por diseño</strong> — fueron
+      14 días de despliegue, manual de usuario y estabilización, no de construcción de dominio.
+      Por eso el ritmo acumulado del proyecto completo cae de <strong>1.22 a 1.00</strong> US
+      func./día: no es una desaceleración del equipo, es el efecto aritmético de sumar una fase de
+      cierre al denominador. El ratio SP-ADJ/US func. queda además <strong>indefinido</strong> en
+      este período (8 US de ajuste / 0 US funcionales).
     </div>
   </div>
 </section>
@@ -606,7 +623,7 @@
     <!-- Coverage chart -->
     <div class="chart-wrap" style="margin-bottom:0">
       <div class="chart-title">Cobertura de tests por capa</div>
-      <div class="chart-sub">pytest-cov · 1 019 unit+integration + 636 BDD scenarios</div>
+      <div class="chart-sub">pytest-cov · 1 049 unit+integration + 647 BDD scenarios</div>
       <div class="chart-canvas" style="height:220px">
         <canvas id="chartCov"></canvas>
       </div>
@@ -633,8 +650,11 @@
       <div class="insight-icon">🛡️</div>
       <div class="insight-text">
         Los WARNINGs crecen con el proyecto — son esperables, no alarmas.
-        La reducción de <strong>issues por US de 17.7 → 2.4</strong> (−86%) indica
+        La reducción de <strong>issues por US de 17.7 → 2.4</strong> (−86%, SP2→SP6) indica
         que el código nuevo es más limpio a medida que la base arquitectónica madura.
+        En el cierre (SP7+ADJ-12+ADJ-13) el conteo subió de 287 a <strong>296</strong> — el
+        incremento absoluto más chico de toda la serie, consistente con una fase de
+        estabilización, no de construcción.
       </div>
     </div>
   </div>
@@ -646,7 +666,7 @@
     <div class="benchmark">
       <div class="bench-item">
         <div class="bench-label">Bugs / 1 000 SLOC</div>
-        <div class="bench-val" style="color:var(--emerald)">0.30</div>
+        <div class="bench-val" style="color:var(--emerald)">0.298</div>
         <div class="bench-note">AtaraxiaDive · percentil &lt;10 industria</div>
       </div>
       <div class="bench-item">
@@ -656,7 +676,7 @@
       </div>
       <div class="bench-item">
         <div class="bench-label">Cobertura de tests</div>
-        <div class="bench-val" style="color:var(--emerald)">95.3%</div>
+        <div class="bench-val" style="color:var(--emerald)">95.35%</div>
         <div class="bench-note">AtaraxiaDive · domain/ 97.3%</div>
       </div>
       <div class="bench-item">
@@ -680,19 +700,19 @@
     <div class="card">
       <div class="card-glow" style="background:var(--violet)"></div>
       <div class="card-label">Clases LCOM &gt; 1</div>
-      <div class="card-value" style="color:var(--violet)">3.3%</div>
-      <div class="card-note">10 de 303 clases · cohesión alta</div>
+      <div class="card-value" style="color:var(--violet)">3.2%</div>
+      <div class="card-note">10 de 309 clases · cohesión alta, sin cambios de fondo</div>
     </div>
     <div class="card">
       <div class="card-glow" style="background:var(--emerald)"></div>
       <div class="card-label">domain/ MI promedio</div>
-      <div class="card-value" style="color:var(--emerald)">90.07</div>
+      <div class="card-value" style="color:var(--emerald)">88.02</div>
       <div class="card-note">Índice de Mantenibilidad / 100 · umbral "alto": 85</div>
     </div>
     <div class="card">
       <div class="card-glow" style="background:var(--blue)"></div>
       <div class="card-label">domain/ CC promedio</div>
-      <div class="card-value" style="color:var(--blue)">1.89</div>
+      <div class="card-value" style="color:var(--blue)">1.86</div>
       <div class="card-note">Complejidad Ciclomática · mínimo del sistema</div>
     </div>
   </div>
@@ -707,32 +727,36 @@
   </div>
 
   <div class="qpi-formula">
-    <div class="qpi-piece">Cobertura<span>0.953</span></div>
+    <div class="qpi-piece">Cobertura<span>0.9535</span></div>
     <div class="qpi-op">+</div>
     <div class="qpi-piece">Cohesión OO<span>0.967</span></div>
     <div class="qpi-op">+</div>
-    <div class="qpi-piece">Salud Arq.<span>0.453</span></div>
+    <div class="qpi-piece">Salud Arq.<span>0.4525</span></div>
     <div class="qpi-op">+</div>
-    <div class="qpi-piece">CC inversa<span>0.811</span></div>
+    <div class="qpi-piece">CC inversa<span>0.814</span></div>
     <div class="qpi-op">→</div>
-    <div class="qpi-piece" style="border-color:rgba(139,92,246,.4)">Score calidad<span style="color:var(--violet)">0.796</span></div>
+    <div class="qpi-piece" style="border-color:rgba(139,92,246,.4)">Score calidad<span style="color:var(--violet)">0.797</span></div>
     <div class="qpi-op">×</div>
     <div class="qpi-piece">Ritmo<span>1.22</span></div>
   </div>
 
-  <div class="qpi-big" id="qpi-display">0.971</div>
+  <div class="qpi-big" id="qpi-display">0.972</div>
 
   <p class="qpi-caption">
     <strong style="color:var(--text)">QPI = Ritmo funcional × Score de calidad</strong><br>
-    Productividad/Calidad Index — AtaraxiaDive IEDD v1.0.2<br>
-    Válido como referencia comparativa entre iteraciones del mismo proyecto,
-    no como valor absoluto cross-proyecto.
+    Productividad/Calidad Index — AtaraxiaDive IEDD v1.0.5<br>
+    QPI de <strong>construcción</strong> (SP1–SP6, 63 días) — recalculado dos veces con 3 meses de
+    diferencia: 0.971 → <strong>0.972</strong>, prácticamente sin cambio. Si se calcula sobre el
+    <strong>proyecto completo</strong> (77 días, incluido el cierre sin US funcionales), el ritmo
+    baja a 1.00 y el QPI a <strong>0.797</strong> — 100% atribuible al denominador de tiempo, no a
+    una caída de calidad. Válido como referencia comparativa entre iteraciones del mismo proyecto
+    y del mismo tipo de fase (construcción vs. cierre), no como valor absoluto cross-proyecto.
   </p>
 </section>
 
 <footer>
   AtaraxiaDive · Plataforma de gestión de torneos de apnea · Victor Valotto + Claude · 2026<br>
-  docs/metricas/REPORTE-METRICAS.md · 17 documentos de métricas · BL-001 → BL-007
+  docs/metricas/REPORTE-METRICAS.md · 17 documentos de métricas · BL-001 → v1.0.5 (Ronda 2, 2026-08-13)
 </footer>
 
 <script>
@@ -759,14 +783,14 @@ function rgba(hex, a) {
 
 // ── CHART D: Evolución distancia por BC ──
 (function() {
-  const labels = ['BL-004','BL-005','BL-006','BL-007'];
+  const labels = ['BL-004','BL-005','BL-006','BL-007','v1.0.5'];
   const bcs = [
-    { label:'competencia', data:[0.62, 0.46, 0.459, 0.459], color: EMERALD },
-    { label:'torneo',      data:[null, 0.48, 0.479, 0.479], color: BLUE },
-    { label:'registro',    data:[0.56, 0.59, 0.583, 0.590], color: AMBER },
-    { label:'identidad',   data:[0.87, 0.67, 0.652, 0.660], color: VIOLET },
-    { label:'shared',      data:[0.63, 0.64, 0.635, 0.630], color: MUTED },
-    { label:'notificaciones', data:[null, 0.45, 0.450, 0.450], color: CYAN },
+    { label:'competencia', data:[0.62, 0.46, 0.459, 0.459, 0.459], color: EMERALD },
+    { label:'torneo',      data:[null, 0.48, 0.479, 0.479, 0.479], color: BLUE },
+    { label:'registro',    data:[0.56, 0.59, 0.583, 0.590, 0.589], color: AMBER },
+    { label:'identidad',   data:[0.87, 0.67, 0.652, 0.660, 0.673], color: VIOLET },
+    { label:'shared',      data:[0.63, 0.64, 0.635, 0.630, 0.635], color: MUTED },
+    { label:'notificaciones', data:[null, 0.45, 0.450, 0.450, 0.450], color: CYAN },
   ];
   new Chart(document.getElementById('chartD'), {
     type: 'line',
@@ -922,7 +946,7 @@ function rgba(hex, a) {
       labels: ['domain/','infrastructure/','application/','global'],
       datasets: [{
         label: 'Cobertura %',
-        data: [97.3, 94.0, 93.6, 95.3],
+        data: [97.3, 94.0, 93.7, 95.35],
         backgroundColor: [rgba(VIOLET,.75), rgba(BLUE,.65), rgba(CYAN,.65), rgba(EMERALD,.7)],
         borderColor: [VIOLET, BLUE, CYAN, EMERALD],
         borderWidth: 1.5, borderRadius: 5
@@ -949,7 +973,7 @@ function rgba(hex, a) {
       labels: ['domain/','infrastructure/','api/','application/'],
       datasets: [{
         label: 'CC promedio',
-        data: [1.89, 2.07, 2.10, 2.25],
+        data: [1.86, 2.17, 1.95, 2.12],
         backgroundColor: [rgba(VIOLET,.8), rgba(BLUE,.65), rgba(CYAN,.65), rgba(AMBER,.6)],
         borderColor: [VIOLET, BLUE, CYAN, AMBER],
         borderWidth: 1.5, borderRadius: 5
@@ -970,8 +994,8 @@ function rgba(hex, a) {
 // ── CHART DR: DesignReviewer evolution ──
 (function() {
   const ctx = document.getElementById('chartDR');
-  const labels = ['SP2','SP3','SP4','SP5 INC-5.6','SP5 INC-5.7','SP6 INC-6.3','SP6 INC-6.4','SP-ADJ-11'];
-  const values = [35, 72, 145, 252, 256, 258, 253, 287];
+  const labels = ['SP2','SP3','SP4','SP5 INC-5.6','SP5 INC-5.7','SP6 INC-6.3','SP6 INC-6.4','SP-ADJ-11','v1.0.5 (cierre)'];
+  const values = [35, 72, 145, 252, 256, 258, 253, 287, 296];
   new Chart(ctx, {
     type: 'line',
     data: {
