@@ -40,3 +40,7 @@ Implementa el ranking global del torneo (`RankingOverall`). Los puntos overall s
 ## Estado
 
 ✅ Completado — 2026-04-28 · PR #126
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/resultados/command-handlers-resultados|Resultados — Command Handlers]], [[arquitectura/resultados/ranking-overall|Resultados — Aggregate RankingOverall]]

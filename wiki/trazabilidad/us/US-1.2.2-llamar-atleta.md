@@ -57,3 +57,8 @@ Inicia el turno de un atleta en la grilla. Marca el inicio del OT (Official Top)
 ## Estado
 
 ✅ Completado — 2026-03-22
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-EJ-02-registro-dns-no-presentado]]
+- **Código sin página de componente propia:** `src/competencia/application/commands/llamar_atleta.py`

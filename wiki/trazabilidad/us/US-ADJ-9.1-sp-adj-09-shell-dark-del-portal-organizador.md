@@ -13,6 +13,7 @@ sources:
 us_id: US-ADJ-9.1
 tests_count: null
 rf: []
+origen_tipo: plataforma
 ---
 
 # US-ADJ-9.1 — SP-ADJ-09: shell dark del portal organizador
@@ -29,3 +30,7 @@ Implementa el shell visual dark para el portal del organizador: layout base con 
 ## Estado
 
 ✅ Completado — 2026-04-28 · PR #129
+
+## Trazabilidad
+
+- **Origen:** plataforma — Refactoring UX portal organizador — nueva capacidad de plataforma (PR #129-136).

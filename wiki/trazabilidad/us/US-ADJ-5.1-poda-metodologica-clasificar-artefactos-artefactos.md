@@ -13,6 +13,9 @@ sources:
 us_id: US-ADJ-5.1
 tests_count: null
 rf: []
+origen_tipo: calidad
+origen_refs:
+  - "HITO-14"
 ---
 
 # US-ADJ-5.1 — Poda metodológica: clasificar artefactos
@@ -40,3 +43,7 @@ El overhead del ecosistema había convergido a ~18 min (HITO confirmada). La cla
 ## Estado
 
 ✅ Completado — 2026-04-04 (commit `5109eff`, PR #63)
+
+## Trazabilidad
+
+- **Origen:** calidad (HITO-14) — Deuda metodológica — hallazgo de HITO-14 al cierre de SP3.

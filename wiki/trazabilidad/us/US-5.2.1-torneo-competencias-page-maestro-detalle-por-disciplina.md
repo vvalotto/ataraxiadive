@@ -44,3 +44,7 @@ DesignReviewer consolidado INC-5.2: **0 CRITICAL · 215 WARNING**.
 ## Estado
 
 ✅ Completado — 2026-04-22 · PR #105
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/competencia/application/queries/obtener_competencias_por_torneo.py`

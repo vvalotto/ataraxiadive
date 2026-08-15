@@ -14,6 +14,9 @@ sources:
 us_id: US-7.1.1
 tests_count: null
 rf: []
+origen_tipo: plataforma
+origen_refs:
+  - "ADR-021"
 ---
 
 # US-7.1.1 — Dockerfile + FastAPI estáticos + fly.toml + entorno producción
@@ -43,3 +46,7 @@ Configura el entorno de despliegue para Fly.io. Imagen Docker multi-stage (node:
 ## Estado
 
 ✅ Completado — 2026-05-17 · PR #194
+
+## Trazabilidad
+
+- **Origen:** plataforma (ADR-021) — Despliegue Fly.io — infraestructura de plataforma.

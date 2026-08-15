@@ -35,3 +35,7 @@ Refactoring de `AlgoritmoPuntajeFAAS` para usar dispatch explícito por tipo de 
 ## Estado
 
 ✅ Completado — 2026-05-10
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/resultados/algoritmo-faas|Resultados — AlgoritmoPuntajeFAAS]]

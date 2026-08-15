@@ -13,6 +13,7 @@ sources:
 us_id: US-ADJ-9.2
 tests_count: null
 rf: []
+origen_tipo: plataforma
 ---
 
 # US-ADJ-9.2 — SP-ADJ-09: routing organizador reestructurado
@@ -29,3 +30,7 @@ Reestructuración de las rutas del portal del organizador con rutas anidadas. As
 ## Estado
 
 ✅ Completado — 2026-04-28 · PR #130
+
+## Trazabilidad
+
+- **Origen:** plataforma — Refactoring UX portal organizador — routing (PR #130).

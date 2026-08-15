@@ -11,6 +11,7 @@ sources:
 us_id: US-ADJ-11.9
 tests_count: null
 rf: []
+origen_tipo: plataforma
 componentes_wiki: []
 ---
 
@@ -29,3 +30,7 @@ Páginas de perfil de datos propios para los roles Juez y Organizador, usando lo
 ## Estado
 
 ✅ Completado · PR #193
+
+## Trazabilidad
+
+- **Origen:** plataforma — UX del modelo multi-rol — nueva capacidad de plataforma (PR #193).

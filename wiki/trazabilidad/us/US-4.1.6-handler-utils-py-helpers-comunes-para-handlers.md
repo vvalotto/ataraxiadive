@@ -49,3 +49,7 @@ BDD waiver — refactoring de handlers sin comportamiento nuevo.
 ## Estado
 
 ✅ Completado — 2026-04-08
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/handler-utils|Competencia — Helpers HandlerUtils]]

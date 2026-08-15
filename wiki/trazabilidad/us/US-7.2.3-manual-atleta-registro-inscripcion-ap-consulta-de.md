@@ -4,11 +4,12 @@ type: trazabilidad-us
 sp: SP7
 inc: INC-7.2
 bc: registro, resultados
-estado: pendiente
-fecha_cierre: null
-last_updated: "2026-05-21"
+estado: cerrada
+fecha_cierre: "2026-05-30"
+last_updated: "2026-05-30"
 sources:
   - docs/plans/sp7/PLAN-SP7.md §INC-7.2
+  - .cm/baselines/BL-007.md
 us_id: US-7.2.3
 tests_count: null
 rf: []
@@ -39,4 +40,4 @@ Documento Markdown en `docs/manual/atleta.md` que cubre el flujo completo del ro
 
 ## Estado
 
-⏳ Planificado — parte de INC-7.2
+✅ Completado — 2026-05-30 · cierre INC-7.2 (BL-007, PR #212). Manual de usuario MkDocs Material publicado, con capturas verificadas contra producción.

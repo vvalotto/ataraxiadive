@@ -51,3 +51,9 @@ Implementa la política P-10: cuando se confirma una inscripción, el sistema en
 ## Estado
 
 ✅ Completado — 2026-04-18 (PR #81)
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-NT-01-canales-notificacion-email-push]], [[rf/RF-NT-03-notificaciones-durante-ejecucion]]
+- **Componentes:** [[arquitectura/notificaciones/command-handlers-notificaciones|Notificaciones — Command Handlers y Políticas]]
+- **Código sin página de componente propia:** `src/notificaciones/infrastructure/templates/inscripcion_confirmada_template.py`

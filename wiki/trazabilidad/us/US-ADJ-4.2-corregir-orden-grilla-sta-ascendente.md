@@ -50,3 +50,8 @@ Tests de generación de grilla STA actualizados para validar el orden correcto.
 ## Estado
 
 ✅ Completado — 2026-04-03
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-PR-05-orden-salida-por-ap]]
+- **Componentes:** [[arquitectura/competencia/competencia-aggregate|Competencia — Aggregate Competencia]]

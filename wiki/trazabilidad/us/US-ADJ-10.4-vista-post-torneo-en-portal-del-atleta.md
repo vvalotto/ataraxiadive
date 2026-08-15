@@ -12,6 +12,7 @@ sources:
 us_id: US-ADJ-10.4
 tests_count: null
 rf: []
+origen_tipo: calidad
 componentes_wiki: []
 ---
 
@@ -29,3 +30,7 @@ Resuelve la observación post-UAT: el portal del atleta no tenía vista definida
 ## Estado
 
 ✅ Completado · PR #182 (fix PR #183)
+
+## Trazabilidad
+
+- **Origen:** calidad — Observación post-UAT — vista faltante para torneo cerrado.

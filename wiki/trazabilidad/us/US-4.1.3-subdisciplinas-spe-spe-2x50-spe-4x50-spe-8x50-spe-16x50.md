@@ -47,3 +47,7 @@ Agrega las cuatro variantes de la disciplina SPE (Static Pool Equipment) según 
 ## Estado
 
 ✅ Completado — 2026-04-08
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-GT-02-disciplinas-configurables]]

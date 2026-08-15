@@ -41,3 +41,7 @@ Flujo completo de recuperación de contraseña olvidada: el usuario solicita un 
 ## Estado
 
 ✅ Completado — 2026-04-24 · PR #114
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/identidad/command-handlers-identidad|Identidad — Command Handlers]]

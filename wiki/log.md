@@ -6,6 +6,138 @@
 
 ---
 
+## [2026-05-30] ingest | Fase 3 — origen documentado en 46 páginas de US aisladas
+
+Motivado por: gap declarado en la ingesta anterior de hoy (M2/observación de Victor) —
+46 páginas de US sin `rf:` ni `origen_tipo`, verdaderamente aisladas en el grafo.
+
+**Fuente:** `docs/traceability/matrix.md` del proyecto (vigente, actualizado 2026-05-30) +
+contenido propio de cada página. Clasificación caso por caso, no mecánica — a diferencia de
+las fases 1 y 2 de hoy.
+
+**Resultado:** 45 páginas recibieron `origen_tipo` (plataforma o calidad) + `origen_refs`
+donde correspondía (ADRs, HITOs, PRs), siguiendo la convención de `WIKI.md`. Un caso
+especial: **US-4.3.5** en realidad sí implementa un RF (RF-EJ-02-registro-dns-no-presentado)
+que nunca se había declarado — se corrigió como `rf:` real, no como origen alternativo.
+
+**Bug propio detectado y corregido en el proceso:** el diagnóstico de esta mañana (lint-002 /
+conteo de 46) tenía un falso positivo — US-4.3.5 no estaba realmente vacía, tenía `rf:`
+poblado, pero un error de regex en el parseo del frontmatter (cuando `rf:` es el último
+campo antes del cierre `---`, se pierde el salto de línea final) la clasificó como vacía.
+La primera corrección aplicada duplicó el ítem por eso. Se detectó por auditoría posterior
+(0 duplicados esperados, se encontró 1) y se corrigió antes de continuar.
+
+**Páginas actualizadas:** 46. **Verificación final:** 177/177 páginas con frontmatter YAML
+válido, 0 duplicados, 0 páginas sin `rf:` ni `origen_tipo` — el hallazgo original de
+Victor (nodos de US aislados) queda resuelto en su totalidad.
+
+---
+
+## [2026-05-30] ingest | Wikilinks reales de trazabilidad en 128 páginas de US
+
+Motivado por: observación de Victor — nodos de US en el graph view conectados solo con
+index.md, sin traza visible hacia RF ni hacia componentes de arquitectura. Verificado:
+los campos `rf:` y `software_items:` del frontmatter existían como texto plano en
+la mayoría de las páginas, nunca como wikilink — invisibles para el grafo de Obsidian
+aunque el dato estuviera cargado.
+
+**Fase 1 — RF:** 76 referencias en 41 páginas verificadas contra `wiki/trazabilidad/rf/`
+(0 huérfanas) y agregadas como wikilink real en una nueva sección "## Trazabilidad".
+
+**Fase 2 — Componentes de arquitectura:** mapeo construido desde el campo `sources:` de
+las 41 páginas de componente C4 L3. De 172 referencias de `software_items:`, 114
+(agrupadas de 125 matches, deduplicadas por componente) resolvieron a un componente real
+y se agregaron como wikilink; 47 no tienen página de componente propia (son handlers o
+comandos individuales sin C4 L3 dedicado) — se dejaron documentadas como código en texto,
+no se inventó una página.
+
+**Páginas tocadas:** 128 / 177. **Wikilinks nuevos agregados:** 190 (76 a RF + 114 a
+componentes), verificados uno por uno contra archivos reales — 0 rotos. Frontmatter YAML
+verificado válido en las 177 páginas después del cambio.
+
+**Pendiente (Fase 3, no ejecutada aún):** 46-49 páginas sin ningún dato de origen (`rf: []`
+sin `origen_tipo`) siguen sin traza. `docs/traceability/matrix.md` del proyecto (vigente,
+884 líneas, actualizado 2026-05-30) tiene, fila por fila, el origen real de cada una —
+tractable, pero requiere clasificación caso por caso, no es mecánico como esta fase.
+
+---
+
+## [2026-05-30] ingest | Corrección M2 lint-002 — wikilinks de Trazabilidad (US) regenerados
+
+Motivado por: hallazgo M2 de [[lint-002]] (177/177 wikilinks rotos en la sección
+"Trazabilidad (US)" de `wiki/index.md`, bug preexistente desde el primer ingest — el slug
+del título aparecía triplicado en el target del enlace).
+
+**Método:** por cada archivo real en `wiki/trazabilidad/us/`, se extrajo su ID (US-X.Y.Z o
+US-ADJ-X.Y) y se construyó un mapeo ID → nombre de archivo real. Se recorrieron los 177
+wikilinks de `index.md`, se extrajo el ID de cada uno (la parte del slug que no está
+corrompida) y se reemplazó el target completo por el nombre de archivo real. Espaciado,
+separadores ("·") y encabezados de sección no se tocaron — solo el contenido de los `[[...]]`.
+
+**Verificación:** 177/177 wikilinks resuelven ahora contra un archivo real en
+`wiki/trazabilidad/us/` (0 rotos, 0 duplicados, 0 sin mapear).
+
+**Páginas actualizadas:** `wiki/index.md` (177 wikilinks corregidos en la sección
+Trazabilidad de Historias de Usuario)
+
+---
+
+## [2026-05-30] lint | lint-002 — Auditoría post-cierre (verificación de la ingesta BL-007)
+
+Motivado por: verificar que la ingesta de BL-007 (entrada anterior de este mismo día) no
+rompió nada. Alcance real: auditoría completa de `wiki/index.md`, no solo de lo tocado hoy.
+
+**Resultado — la ingesta de BL-007 está limpia (M1)**, pero la auditoría expuso un problema
+preexistente y mucho más grave, nunca detectado por lint-001: **177 de 177 wikilinks** de la
+sección "Trazabilidad (US)" de `index.md` están rotos — el slug del título aparece triplicado
+en el target del enlace, en todos los SPs (desde SP1), no solo en SP7. Página generada:
+`wiki/salud/lint-002.md`.
+
+Otros hallazgos: categoría `trazabilidad-rnf` (8 páginas) no documentada en `WIKI.md` ni en
+`index.md`; conteo de "Total de páginas" del header de `index.md` desincronizado respecto de
+su propia tabla y del conteo real en disco. De los gaps de lint-001: L5 y L8-A resueltos,
+L8-B resuelto por la ingesta de hoy, L7 cambió de forma (las páginas dejaron de estar ausentes
+del index, pero sus enlaces siguen sin resolver — mismo bug que el hallazgo nuevo).
+
+**Páginas creadas:** `wiki/salud/lint-002.md`
+**Páginas actualizadas:** `wiki/index.md` (fila Salud, entrada de tabla)
+
+---
+
+## [2026-05-30] ingest | Cierre BL-007 — SP7 completo + SP-ADJ-12/13
+
+Operación: poner al día el wiki con el cierre real del proyecto (tag `v1.0.2`, extendido a
+`v1.0.5` por addendum). El wiki había quedado desactualizado desde el 28/05 — el proyecto
+cerró el 30/05 sin que ese cierre se ingiriera. Detectado por revisión manual, no por lint
+(el lint solo audita lo que el wiki ya tiene; no puede descubrir una fuente nueva por sí solo).
+
+**Fuente:** `.cm/baselines/BL-007.md`
+
+**Páginas actualizadas (5):**
+- `wiki/estado/proyecto.md` — baseline vigente BL-006→BL-007, tag v1.0.0→v1.0.5, SP activo
+  SP7→ninguno (proyecto cerrado), tabla de historia de baselines, bounded contexts (D
+  registro/identidad/shared), deuda técnica (AA-05/06/07 reemplazan AA-02/04), subproyectos.
+- `wiki/trazabilidad/us/US-7.1.2-...md` — estado pendiente→cerrada, fecha_cierre 2026-05-30.
+- `wiki/trazabilidad/us/US-7.2.1-...md` — estado pendiente→cerrada, fecha_cierre 2026-05-30.
+- `wiki/trazabilidad/us/US-7.2.2-...md` — estado pendiente→cerrada, fecha_cierre 2026-05-30.
+- `wiki/trazabilidad/us/US-7.2.3-...md` — estado pendiente→cerrada, fecha_cierre 2026-05-30.
+
+**Páginas creadas (1):**
+- `wiki/salud/calidad-BL-007.md` — snapshot de calidad al cierre, mismo patrón que
+  [[calidad-BL-006]]: 0 CRITICAL DesignReviewer / 296 WARNING, 1049 tests, 3 CRITICAL
+  ArchitectAnalyst / 62 WARNING, decisiones AA-05/06/07.
+
+**wiki/index.md actualizado:** total de páginas 304→305, sección "Estado del proyecto"
+corregida (era uno de los gaps L8-B señalados por [[lint-001]] el 22/05), fila de Salud
+actualizada, entrada de [[calidad-BL-007]] agregada.
+
+**No verificado en esta ingesta:** las 6 US de SP-ADJ-12 y el addendum SP-ADJ-13 no tienen
+páginas de trazabilidad propias — quedaron sintetizadas dentro de `wiki/estado/proyecto.md`
+y `wiki/salud/calidad-BL-007.md`, pero no como US individuales. Si se necesita esa
+granularidad, requiere una ingesta separada sobre `docs/plans/sp-adj-12/` y `docs/plans/sp-adj-13/`.
+
+---
+
 ## [2026-05-28] ingest | Trazabilidad RF individual — 54 páginas RF-XX-NN + wikilinks en tablas de área
 
 Operación: crear páginas individuales por RF para habilitar navegación RF → US → tests.

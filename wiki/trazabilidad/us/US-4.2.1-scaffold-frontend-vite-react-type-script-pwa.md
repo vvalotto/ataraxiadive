@@ -12,6 +12,9 @@ sources:
 us_id: US-4.2.1
 tests_count: null
 rf: []
+origen_tipo: plataforma
+origen_refs:
+  - "ADR-003"
 ---
 
 # US-4.2.1 — Scaffold frontend: Vite + React + TypeScript + PWA
@@ -42,3 +45,7 @@ DesignReviewer consolidado INC-4.2: **0 CRITICAL · 142 WARNING**.
 ## Estado
 
 ✅ Completado — 2026-04-11 (PR #— / UAT pendiente validación manual en browser)
+
+## Trazabilidad
+
+- **Origen:** plataforma (ADR-003) — Scaffold del frontend (Vite/React/PWA) — decisión de plataforma, no de un RF elicitado.

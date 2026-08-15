@@ -12,6 +12,7 @@ sources:
 us_id: US-6.6.3
 tests_count: null
 rf: []
+origen_tipo: plataforma
 componentes_wiki: []
 ---
 
@@ -30,3 +31,7 @@ Implementa la navegación contextual del sistema: el usuario no autenticado ater
 ## Estado
 
 ✅ Completado · PR #166
+
+## Trazabilidad
+
+- **Origen:** plataforma — Navegación contextual — nueva capacidad de plataforma (API pública INC-6.6).

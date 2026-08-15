@@ -12,6 +12,9 @@ sources:
 us_id: US-4.4.1
 tests_count: null
 rf: []
+origen_tipo: plataforma
+origen_refs:
+  - "ADR-015"
 ---
 
 # US-4.4.1 — Dexie.js: cache local de grilla + expiración 24h
@@ -40,3 +43,7 @@ Frontend (build + lint) · UAT INC-4.4 iPhone (BDD waiver — frontend offline-f
 ## Estado
 
 ✅ Completado — 2026-04-18 (PR #77)
+
+## Trazabilidad
+
+- **Origen:** plataforma (ADR-015) — Cache local offline-first (Dexie.js) — decisión de plataforma.

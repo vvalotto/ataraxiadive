@@ -12,6 +12,11 @@ sources:
 us_id: US-6.1.4
 tests_count: null
 rf: []
+origen_tipo: calidad
+origen_refs:
+  - "UI-JUE-01"
+  - "MUX-07"
+  - "MUX-08"
 ---
 
 # US-6.1.4 — Rediseño inicio juez + STA mm:ss + tarjeta amarilla
@@ -29,3 +34,7 @@ Mejoras en la experiencia del juez: rediseño de la pantalla de inicio (UI-JUE-0
 ## Estado
 
 ✅ Completado — 2026-05-04 · PR #146
+
+## Trazabilidad
+
+- **Origen:** calidad (UI-JUE-01, MUX-07, MUX-08) — Corrección post-UAT (hallazgo de UX, PR #146).

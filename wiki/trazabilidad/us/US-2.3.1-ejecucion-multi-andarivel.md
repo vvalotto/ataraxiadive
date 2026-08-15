@@ -51,3 +51,8 @@ Sin entrada explícita en §36 — validado como parte de la suite acumulada de 
 ## Estado
 
 ✅ Completado — 2026-03-28
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-PR-06-competencia-multi-andarivel]]
+- **Componentes:** [[arquitectura/competencia/competencia-aggregate|Competencia — Aggregate Competencia]]

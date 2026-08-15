@@ -51,3 +51,8 @@ Corrige el ordenamiento de la grilla para SPE: según el reglamento CMAS/FAAS, l
 ## Estado
 
 ✅ Completado — 2026-04-08
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-PR-05-orden-salida-por-ap]]
+- **Componentes:** [[arquitectura/competencia/competencia-aggregate|Competencia — Aggregate Competencia]]

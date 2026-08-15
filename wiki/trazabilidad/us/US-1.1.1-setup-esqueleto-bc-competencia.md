@@ -56,3 +56,7 @@ Sin suite dedicada — validación por smoke test del health-check.
 ## Estado
 
 ✅ Completado — 2026-03-21
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/performance-aggregate|Competencia — Aggregate Performance]], [[arquitectura/competencia/sqlite-event-store|Competencia — Adapter SQLiteEventStore]]

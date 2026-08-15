@@ -55,3 +55,8 @@ Protege todos los endpoints de escritura (POST/PUT/PATCH/DELETE) con validación
 ## Estado
 
 ✅ Completado — 2026-04-01
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-US-02-usuario-multiples-roles]], [[rf/RF-US-03-autenticacion-email-contrasena]], [[rf/RF-US-04-asignacion-juez-a-disciplinas]]
+- **Componentes:** [[arquitectura/identidad/router-identidad|Identidad — Router FastAPI + Dependencies]]

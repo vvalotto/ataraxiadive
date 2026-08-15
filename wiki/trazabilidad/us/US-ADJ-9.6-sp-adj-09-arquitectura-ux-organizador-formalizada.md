@@ -13,6 +13,7 @@ sources:
 us_id: US-ADJ-9.6
 tests_count: null
 rf: []
+origen_tipo: plataforma
 ---
 
 # US-ADJ-9.6 — SP-ADJ-09: arquitectura UX organizador formalizada
@@ -29,3 +30,7 @@ Formaliza la separación entre shell, layout y páginas dentro del portal del or
 ## Estado
 
 ✅ Completado — 2026-04-28 (develop directo)
+
+## Trazabilidad
+
+- **Origen:** plataforma — Refactoring UX portal organizador — arquitectura de shell (develop).

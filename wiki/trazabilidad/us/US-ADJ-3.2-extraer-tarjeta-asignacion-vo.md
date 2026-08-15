@@ -47,3 +47,7 @@ BDD waiver — refactoring estructural. Tests existentes pasan sin modificación
 ## Estado
 
 ✅ Completado — 2026-04-03
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/competencia/domain/value_objects/tarjeta_asignacion.py`

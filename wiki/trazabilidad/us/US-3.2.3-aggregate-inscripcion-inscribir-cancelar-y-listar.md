@@ -61,3 +61,8 @@ Introduce el aggregate `Inscripcion` en el BC Registro: permite inscribir un atl
 ## Estado
 
 ✅ Completado — 2026-03-31
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-IN-03-sin-limite-atletas]], [[rf/RF-IN-04-cancelacion-inscripcion-atleta]]
+- **Componentes:** [[arquitectura/registro/command-handlers|Registro — Command Handlers]], [[arquitectura/registro/inscripcion|Registro — Aggregate Inscripcion]], [[arquitectura/registro/sqlite-repositories|Registro — SQLite Repositories (×4)]]

@@ -40,3 +40,7 @@ DesignReviewer consolidado INC-5.4: **0 CRITICAL · 222 WARNING** (+7 vs INC-5.3
 ## Estado
 
 ✅ Completado — 2026-04-24 · PR #112
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/identidad/command-handlers-identidad|Identidad — Command Handlers]]

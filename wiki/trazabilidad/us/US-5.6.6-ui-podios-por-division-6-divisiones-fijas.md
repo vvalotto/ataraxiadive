@@ -36,3 +36,7 @@ Vista de podios del torneo segmentada en 6 divisiones fijas: SENIOR M/F, MASTER 
 ## Estado
 
 ✅ Completado — 2026-04-28 · PR #128
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/resultados/query-handlers-resultados|Resultados — Query Handlers]]

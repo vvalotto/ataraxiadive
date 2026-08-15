@@ -12,6 +12,7 @@ sources:
 us_id: US-4.6.3
 tests_count: null
 rf: []
+origen_tipo: plataforma
 ---
 
 # US-4.6.3 — UI auditoría para organizador: timeline + hash
@@ -38,3 +39,7 @@ Frontend (build + lint) · UAT INC-4.6 iPad organizador. UAT SP4 — 2026-04-18.
 ## Estado
 
 ✅ Completado — 2026-04-18
+
+## Trazabilidad
+
+- **Origen:** plataforma — UI de auditoría para organizador — construcción de portal.

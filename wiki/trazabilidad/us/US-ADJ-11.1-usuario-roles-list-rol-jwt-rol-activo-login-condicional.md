@@ -46,3 +46,7 @@ DesignReviewer cierre SP-ADJ-11: **0 CRITICAL · 287 WARNING**.
 ## Estado
 
 ✅ Completado · PR #184
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/identidad/usuario-aggregate|Identidad — Aggregate Usuario]], [[arquitectura/identidad/jwt-service|Identidad — JWTService + BcryptPasswordHasher]]

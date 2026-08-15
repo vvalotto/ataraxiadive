@@ -11,6 +11,7 @@ sources:
 us_id: US-ADJ-11.7
 tests_count: null
 rf: []
+origen_tipo: plataforma
 componentes_wiki: []
 ---
 
@@ -28,3 +29,7 @@ Actualiza el login para soportar el flujo multi-rol de [[US-ADJ-11.1-usuario-rol
 ## Estado
 
 ✅ Completado · PR #191
+
+## Trazabilidad
+
+- **Origen:** plataforma — UX del modelo multi-rol — nueva capacidad de plataforma (PR #191).

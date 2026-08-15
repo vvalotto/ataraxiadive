@@ -36,3 +36,7 @@ Refactoring del aggregate `Atleta` en BC Registro: `club` y `categoría` pasan a
 ## Estado
 
 ✅ Completado · PR #186
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/registro/atleta|Registro — Aggregate Atleta]]

@@ -12,6 +12,9 @@ sources:
 us_id: US-6.1.1
 tests_count: null
 rf: []
+origen_tipo: calidad
+origen_refs:
+  - "MUX-hallazgos-UAT-SP6"
 ---
 
 # US-6.1.1 — Fix canSubmitBko + reorden flujo juez (tarjeta → marca)
@@ -31,3 +34,7 @@ DesignReviewer cierre conjunto INC-6.1/6.2: **0 CRITICAL · 256 WARNING**.
 ## Estado
 
 ✅ Completado — 2026-05-04 · PR #143
+
+## Trazabilidad
+
+- **Origen:** calidad (MUX-hallazgos-UAT-SP6) — Corrección post-UAT (hallazgo de UX, PR #143).

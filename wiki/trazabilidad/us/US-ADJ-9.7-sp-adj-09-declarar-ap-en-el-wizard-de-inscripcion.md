@@ -36,3 +36,7 @@ Integra la declaración de anuncio previo (AP) directamente en el wizard de insc
 ## Estado
 
 ✅ Completado — 2026-04-28 · PR #136
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/registro/command-handlers|Registro — Command Handlers]]

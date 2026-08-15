@@ -42,3 +42,7 @@ Tab `Inscriptos` del panel organizador. Muestra la lista de atletas inscriptos c
 ## Estado
 
 ✅ Completado — 2026-04-21 · PR #97
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/registro/query-handlers|Registro — Query Handlers]]

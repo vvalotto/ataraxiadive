@@ -11,6 +11,7 @@ sources:
 us_id: US-ADJ-11.8
 tests_count: null
 rf: []
+origen_tipo: plataforma
 componentes_wiki: []
 ---
 
@@ -27,3 +28,7 @@ Actualiza la página de datos del atleta para mostrar y editar los campos `dni` 
 ## Estado
 
 ✅ Completado · PR #192
+
+## Trazabilidad
+
+- **Origen:** plataforma — UX del modelo multi-rol — nueva capacidad de plataforma (PR #192).

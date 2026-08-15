@@ -12,6 +12,7 @@ sources:
 us_id: US-ADJ-6.5
 tests_count: null
 rf: []
+origen_tipo: calidad
 ---
 
 # US-ADJ-6.5 — Corregir violaciones de capa en GrillaPage
@@ -37,3 +38,7 @@ Los componentes de UI no deben conocer la capa de API. El acceso a datos debe ir
 ## Estado
 
 ✅ Completado — 2026-04-18
+
+## Trazabilidad
+
+- **Origen:** calidad — Corrección de violación de capas (arquitectura hexagonal).

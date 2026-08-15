@@ -56,3 +56,8 @@ Sin entrada explícita en §36 — validado como parte de la suite acumulada de 
 ## Estado
 
 ✅ Completado — 2026-03-28
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-PM-03-resolucion-empates]]
+- **Componentes:** [[arquitectura/resultados/command-handlers-resultados|Resultados — Command Handlers]], [[arquitectura/resultados/ranking-competencia|Resultados — Aggregate RankingCompetencia]]

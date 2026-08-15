@@ -41,3 +41,7 @@ Tab `Ejecucion` del panel organizador. Monitor de competencias activas que muest
 ## Estado
 
 ✅ Completado — 2026-04-21 · PR #100
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/competencia/application/queries/obtener_progreso.py`

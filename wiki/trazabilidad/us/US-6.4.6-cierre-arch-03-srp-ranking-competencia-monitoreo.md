@@ -36,3 +36,7 @@ Cierre formal de la decisión ARCH-03 (ACL aceptable para lectura cross-BC de ra
 ## Estado
 
 ✅ Completado — 2026-05-10
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/resultados/ranking-competencia|Resultados — Aggregate RankingCompetencia]]

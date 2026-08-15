@@ -36,3 +36,7 @@ Dashboard del atleta con perfil personal (email/rol del JWT), lista de torneos e
 ## Estado
 
 ✅ Completado — 2026-04-23 · PR #111
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/identidad/command-handlers-identidad|Identidad — Command Handlers]]

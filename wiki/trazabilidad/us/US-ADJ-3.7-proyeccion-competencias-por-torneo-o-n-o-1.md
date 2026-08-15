@@ -47,3 +47,7 @@ BDD waiver — optimización de infraestructura. Tests de queries existentes pas
 ## Estado
 
 ✅ Completado — 2026-04-03
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/competencia/infrastructure/repositories/sqlite_competencias_por_torneo.py`

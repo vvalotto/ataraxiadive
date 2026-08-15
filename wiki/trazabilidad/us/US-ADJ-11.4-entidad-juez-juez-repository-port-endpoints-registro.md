@@ -42,3 +42,7 @@ Introduce la entidad `Juez` en BC Registro con su puerto de repositorio. Expone 
 ## Estado
 
 ✅ Completado · PR #187
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/registro/juez-organizador|Registro — Aggregates Juez y Organizador]], [[arquitectura/registro/command-handlers|Registro — Command Handlers]], [[arquitectura/registro/sqlite-repositories|Registro — SQLite Repositories (×4)]]

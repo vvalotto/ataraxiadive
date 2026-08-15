@@ -35,3 +35,7 @@ Resuelve hallazgo H-01-06 de la UAT E2E SP6: no existía página para que el atl
 ## Estado
 
 ✅ Completado · PR #180
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/registro/command-handlers|Registro — Command Handlers]]

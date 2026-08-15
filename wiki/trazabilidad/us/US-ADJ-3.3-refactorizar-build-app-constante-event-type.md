@@ -44,3 +44,7 @@ BDD waiver — refactoring del composition root. Tests existentes pasan sin modi
 ## Estado
 
 ✅ Completado — 2026-04-03
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/sqlite-event-store|Competencia — Adapter SQLiteEventStore]]

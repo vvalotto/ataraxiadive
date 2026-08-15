@@ -54,3 +54,8 @@ Sin entrada explícita en §36 — validado como parte de la suite acumulada de 
 ## Estado
 
 ✅ Completado — 2026-03-28
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-PR-04-atleta-sin-ap-no-compite]], [[rf/RF-PR-05-orden-salida-por-ap]]
+- **Código sin página de componente propia:** `src/competencia/application/commands/generar_grilla.py`

@@ -13,6 +13,7 @@ sources:
 us_id: US-ADJ-9.3
 tests_count: null
 rf: []
+origen_tipo: plataforma
 componentes_wiki: []
 ---
 
@@ -30,3 +31,7 @@ Vista de entrada del portal del organizador con acceso a los torneos activos. Re
 ## Estado
 
 ✅ Completado — 2026-04-28 · PR #131
+
+## Trazabilidad
+
+- **Origen:** plataforma — Refactoring UX portal organizador — home (PR #131).

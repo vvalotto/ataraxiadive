@@ -50,3 +50,7 @@ Conecta la política P-11 (notificación de resultados) al evento `CompetenciaFi
 ## Estado
 
 ✅ Completado — 2026-04-19
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/app.py`

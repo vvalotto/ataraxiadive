@@ -12,6 +12,7 @@ sources:
 us_id: US-6.2.1
 tests_count: null
 rf: []
+origen_tipo: calidad
 componentes_wiki: []
 ---
 
@@ -30,3 +31,7 @@ DesignReviewer cierre INC-6.2: **0 CRITICAL · 256 WARNING** (sin cambios Python
 ## Estado
 
 ✅ Completado — 2026-05-07 · PR #148
+
+## Trazabilidad
+
+- **Origen:** calidad — Corrección post-UAT — orden de lista (PR #148).

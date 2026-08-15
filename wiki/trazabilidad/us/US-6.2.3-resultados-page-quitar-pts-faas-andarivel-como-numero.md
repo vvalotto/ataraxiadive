@@ -12,6 +12,7 @@ sources:
 us_id: US-6.2.3
 tests_count: null
 rf: []
+origen_tipo: calidad
 componentes_wiki: []
 ---
 
@@ -28,3 +29,7 @@ Ajustes en la tabla de resultados del organizador: se quita la columna de puntos
 ## Estado
 
 ✅ Completado — 2026-05-07 · PR #150
+
+## Trazabilidad
+
+- **Origen:** calidad — Corrección post-UAT — limpieza de UI de resultados (PR #150).

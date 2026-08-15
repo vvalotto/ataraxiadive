@@ -52,3 +52,8 @@ Corrección propagada a todos los tests con fixtures que usaban los acrónimos a
 ## Estado
 
 ✅ Completado — 2026-04-03
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-GT-02-disciplinas-configurables]]
+- **Código sin página de componente propia:** `src/competencia/domain/value_objects/disciplina.py`

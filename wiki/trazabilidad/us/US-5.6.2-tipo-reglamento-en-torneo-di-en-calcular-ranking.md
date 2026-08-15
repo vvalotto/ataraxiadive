@@ -38,3 +38,8 @@ Introduce el Value Object `TipoReglamento` (FAAS/CMAS/AIDA) en el aggregate `Tor
 ## Estado
 
 ✅ Completado — 2026-04-28 · PR #124
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/torneo/sqlite-torneo-repository|Torneo — SQLiteTorneoRepository]]
+- **Código sin página de componente propia:** `src/torneo/domain/value_objects/tipo_reglamento.py`

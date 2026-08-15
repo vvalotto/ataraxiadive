@@ -13,6 +13,9 @@ sources:
 us_id: US-ADJ-5.3
 tests_count: null
 rf: []
+origen_tipo: calidad
+origen_refs:
+  - "HITO-14"
 ---
 
 # US-ADJ-5.3 — Marcar madurez de BCs en context-map
@@ -39,3 +42,7 @@ HITO-14 D-07
 ## Estado
 
 ✅ Completado — 2026-04-04 (commit `4cf8ca0`, PR #63)
+
+## Trazabilidad
+
+- **Origen:** calidad (HITO-14) — Deuda documental — hallazgo de HITO-14 al cierre de SP3.

@@ -45,3 +45,7 @@ Corrige que el endpoint de grilla no exponía el tipo de tarjeta asignada a cada
 ## Estado
 
 ✅ Completado — 2026-04-19 (commit `4007259`, PR #92)
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/router-competencia|Competencia — Router FastAPI]]

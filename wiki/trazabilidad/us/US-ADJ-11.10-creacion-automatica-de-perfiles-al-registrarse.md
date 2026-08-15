@@ -36,3 +36,7 @@ Al completar el registro, el sistema crea automáticamente los perfiles de BC Re
 ## Estado
 
 ✅ Completado · PR #190
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/registro/command-handlers|Registro — Command Handlers]]

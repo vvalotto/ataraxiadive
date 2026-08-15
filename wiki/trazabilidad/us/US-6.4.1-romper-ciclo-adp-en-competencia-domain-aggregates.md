@@ -39,3 +39,7 @@ DesignReviewer post-INC-6.4: **0 CRITICAL · 253 WARNING** (−5 vs INC-6.3).
 ## Estado
 
 ✅ Completado — 2026-05-10 · PR #157
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/competencia-aggregate|Competencia — Aggregate Competencia]]

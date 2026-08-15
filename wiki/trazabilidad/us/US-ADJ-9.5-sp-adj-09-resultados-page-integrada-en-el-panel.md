@@ -13,6 +13,7 @@ sources:
 us_id: US-ADJ-9.5
 tests_count: null
 rf: []
+origen_tipo: plataforma
 componentes_wiki: []
 ---
 
@@ -30,3 +31,7 @@ Reencuadre de la `ResultadosPage` (creada en [[US-5.6.5-ui-resultadospage-tabla-
 ## Estado
 
 ✅ Completado — 2026-04-28 · PR #133
+
+## Trazabilidad
+
+- **Origen:** plataforma — Refactoring UX portal organizador — resultados (PR #133).

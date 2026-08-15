@@ -54,3 +54,9 @@ Validado como parte de la suite acumulada de INC-3.3.
 ## Estado
 
 ✅ Completado — 2026-03-31
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-PM-01-resultados-por-puntos-faas]], [[rf/RF-PM-02-ranking-general-overall]], [[rf/RF-PM-05-rankings-por-categoria-y-genero]]
+- **Componentes:** [[arquitectura/competencia/competencia-aggregate|Competencia — Aggregate Competencia]]
+- **Código sin página de componente propia:** `src/competencia/infrastructure/repositories/sqlite_competencias_por_torneo.py`

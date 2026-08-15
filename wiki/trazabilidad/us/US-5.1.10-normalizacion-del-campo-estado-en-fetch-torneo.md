@@ -36,3 +36,7 @@ Ajuste post-UAT (hallazgo UAT-5.1-04): corrección del mismatch entre el valor H
 ## Estado
 
 ✅ Completado — 2026-04-21 · PR #104
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/torneo/query-handlers-torneo|Torneo — Query Handlers]]

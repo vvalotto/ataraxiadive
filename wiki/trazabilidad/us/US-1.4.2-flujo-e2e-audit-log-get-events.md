@@ -60,3 +60,8 @@ Valida el flujo completo de una competencia de punta a punta e introduce el endp
 ## Estado
 
 ✅ Completado — 2026-03-23
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-EJ-05-cronometraje-manual-por-juez]], [[rf/RF-EJ-10-efecto-sp-registrado-como-tarjeta]]
+- **Componentes:** [[arquitectura/competencia/performance-aggregate|Competencia — Aggregate Performance]], [[arquitectura/competencia/competencia-aggregate|Competencia — Aggregate Competencia]]

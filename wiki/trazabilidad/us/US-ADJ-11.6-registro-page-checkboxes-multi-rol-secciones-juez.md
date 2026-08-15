@@ -11,6 +11,7 @@ sources:
 us_id: US-ADJ-11.6
 tests_count: null
 rf: []
+origen_tipo: plataforma
 componentes_wiki: []
 ---
 
@@ -29,3 +30,7 @@ Actualiza el formulario de registro público para soportar selección de múltip
 ## Estado
 
 ✅ Completado · PR #189
+
+## Trazabilidad
+
+- **Origen:** plataforma — UX del modelo multi-rol — nueva capacidad de plataforma (PR #189).

@@ -47,3 +47,7 @@ BDD waiver — refactoring estructural. Tests existentes de SP2/SP3 pasan sin mo
 ## Estado
 
 ✅ Completado — 2026-04-03
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/competencia-aggregate|Competencia — Aggregate Competencia]]

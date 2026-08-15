@@ -37,3 +37,7 @@ Corrección del hallazgo ARCH-01: `CalcularOverallHandler` hacía un scan O(n) s
 ## Estado
 
 ✅ Completado — 2026-05-10 · PR #158
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/resultados/command-handlers-resultados|Resultados — Command Handlers]]

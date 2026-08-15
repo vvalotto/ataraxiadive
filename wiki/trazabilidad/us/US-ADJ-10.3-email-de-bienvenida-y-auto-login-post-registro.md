@@ -37,3 +37,7 @@ Resuelve hallazgos H-01-03 (email de bienvenida no enviado al registrar usuario)
 ## Estado
 
 ✅ Completado · PR #181
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/identidad/command-handlers-identidad|Identidad — Command Handlers]]

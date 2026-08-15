@@ -55,3 +55,8 @@ Sin entrada explícita en §36 — validado como parte de la suite acumulada de 
 ## Estado
 
 ✅ Completado — 2026-03-28
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-PR-08-intervalo-ot-entre-performances]]
+- **Código sin página de componente propia:** `src/competencia/application/commands/configurar_intervalo_ot.py`

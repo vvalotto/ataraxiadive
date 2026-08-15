@@ -47,3 +47,7 @@ BDD waiver — limpieza de imports. Tests existentes pasan sin modificación.
 ## Estado
 
 ✅ Completado — 2026-04-03
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/competencia-aggregate|Competencia — Aggregate Competencia]]

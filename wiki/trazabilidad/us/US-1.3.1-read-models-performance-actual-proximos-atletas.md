@@ -55,3 +55,8 @@ Construye los modelos de lectura necesarios para que el juez opere en tiempo rea
 ## Estado
 
 ✅ Completado — 2026-03-23
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-EJ-05-cronometraje-manual-por-juez]]
+- **Código sin página de componente propia:** `src/competencia/application/queries/obtener_performance_actual.py`

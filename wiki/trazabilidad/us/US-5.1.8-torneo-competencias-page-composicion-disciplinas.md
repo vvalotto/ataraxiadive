@@ -36,3 +36,7 @@ Ajuste post-UAT (hallazgo UAT-5.1-01): corrección de la composición entre disc
 ## Estado
 
 ✅ Completado — 2026-04-21 · PR #102
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/torneo/query-handlers-torneo|Torneo — Query Handlers]]

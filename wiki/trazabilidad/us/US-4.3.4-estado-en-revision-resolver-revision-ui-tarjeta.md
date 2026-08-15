@@ -54,3 +54,7 @@ unit/competencia/domain (`EnRevision` + `ResolverRevision`) · integration/compe
 ## Estado
 
 ✅ Completado — 2026-04-12
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/competencia/application/commands/resolver_revision.py`, `src/competencia/domain/value_objects/tipo_tarjeta.py`

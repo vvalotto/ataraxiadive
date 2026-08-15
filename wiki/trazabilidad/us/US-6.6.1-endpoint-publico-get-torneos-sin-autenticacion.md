@@ -37,3 +37,7 @@ Expone el listado de torneos sin requerir autenticación, habilitando el portal 
 ## Estado
 
 ✅ Completado — 2026-05-10
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/torneo/router-torneo|Torneo — Router FastAPI]]

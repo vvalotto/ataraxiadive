@@ -12,6 +12,7 @@ sources:
 us_id: US-4.2.2
 tests_count: null
 rf: []
+origen_tipo: plataforma
 ---
 
 # US-4.2.2 — Auth store + login + routing + guards de rol
@@ -40,3 +41,7 @@ D-02 (routing + guards) · D-03 (Zustand)
 ## Estado
 
 ✅ Completado — 2026-04-11
+
+## Trazabilidad
+
+- **Origen:** plataforma — Auth store, routing y guards de rol — infraestructura de plataforma (D-02, D-03).

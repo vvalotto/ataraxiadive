@@ -50,3 +50,9 @@ Implementa la política P-11: cuando se publican los resultados de una disciplin
 ## Estado
 
 ✅ Completado — 2026-04-18 (PR #82)
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-NT-04-notificacion-resultados-publicados]]
+- **Componentes:** [[arquitectura/notificaciones/command-handlers-notificaciones|Notificaciones — Command Handlers y Políticas]]
+- **Código sin página de componente propia:** `src/notificaciones/infrastructure/templates/resultados_publicados_template.py`

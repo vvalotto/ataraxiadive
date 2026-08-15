@@ -48,3 +48,7 @@ BDD waiver — eliminación de código muerto. Tests existentes pasan sin modifi
 ## Estado
 
 ✅ Completado — 2026-03-28
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/competencia/application/_p08_finalizacion.py`

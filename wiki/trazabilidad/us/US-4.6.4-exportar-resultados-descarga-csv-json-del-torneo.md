@@ -51,3 +51,7 @@ DesignReviewer post-INC-4.6: **0 CRITICAL · ~158 WARNING**.
 ## Estado
 
 ✅ Completado — 2026-04-18
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/resultados/query-handlers-resultados|Resultados — Query Handlers]]

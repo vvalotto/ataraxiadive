@@ -48,3 +48,7 @@ BDD waiver — refactoring estructural. Tests existentes de SP1 pasan sin modifi
 ## Estado
 
 ✅ Completado — 2026-03-28
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/router-competencia|Competencia — Router FastAPI]]

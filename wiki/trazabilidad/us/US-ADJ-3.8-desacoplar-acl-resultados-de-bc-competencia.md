@@ -48,3 +48,7 @@ BDD waiver — refactoring arquitectónico. Tests existentes pasan sin modificac
 ## Estado
 
 ✅ Completado — 2026-04-03
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/resultados/resultados-competencia-port|Resultados — ResultadosCompetenciaPort + Adapters]]

@@ -12,6 +12,7 @@ sources:
 us_id: US-ADJ-6.2
 tests_count: null
 rf: []
+origen_tipo: calidad
 ---
 
 # US-ADJ-6.2 — Renombrar FAZ→FAAS en tests
@@ -33,3 +34,7 @@ Propaga la corrección del acrónimo FAZ→FAAS a todos los archivos de tests y 
 ## Estado
 
 ✅ Completado — 2026-04-18
+
+## Trazabilidad
+
+- **Origen:** calidad — Consistencia de nomenclatura (FAZ→FAAS) en tests.

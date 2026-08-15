@@ -55,3 +55,7 @@ El sistema original solo registraba "tarjeta roja" sin especificar el motivo. El
 ## Estado
 
 ✅ Completado — 2026-04-08
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/competencia/domain/value_objects/motivo_dq.py`, `src/competencia/application/commands/asignar_tarjeta.py`

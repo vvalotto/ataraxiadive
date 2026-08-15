@@ -12,6 +12,10 @@ sources:
 us_id: US-6.1.3
 tests_count: null
 rf: []
+origen_tipo: calidad
+origen_refs:
+  - "MUX-01"
+  - "MUX-03"
 ---
 
 # US-6.1.3 — Grilla ordenada por estado + keypad visible en móvil
@@ -28,3 +32,7 @@ Correcciones de usabilidad en la vista del juez: grilla ordenada por estado (MUX
 ## Estado
 
 ✅ Completado — 2026-05-04 · PR #145
+
+## Trazabilidad
+
+- **Origen:** calidad (MUX-01, MUX-03) — Corrección post-UAT (hallazgo de UX, PR #145).

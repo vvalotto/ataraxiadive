@@ -12,6 +12,7 @@ sources:
 us_id: US-ADJ-3.4
 tests_count: null
 rf: []
+origen_tipo: calidad
 componentes_wiki: []
 ---
 
@@ -43,3 +44,7 @@ BDD waiver — refactoring transversal. Tests de auth existentes pasan sin modif
 ## Estado
 
 ✅ Completado — 2026-04-03
+
+## Trazabilidad
+
+- **Origen:** calidad — Refactoring — DIP cross-BC (ADJ-05).

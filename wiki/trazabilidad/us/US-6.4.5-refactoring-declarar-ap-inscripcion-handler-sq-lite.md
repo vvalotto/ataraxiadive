@@ -37,3 +37,7 @@ Refactoring del handler y el repositorio de inscripción: `DeclararAPInscripcion
 ## Estado
 
 ✅ Completado — 2026-05-10
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/registro/command-handlers|Registro — Command Handlers]], [[arquitectura/registro/sqlite-repositories|Registro — SQLite Repositories (×4)]]

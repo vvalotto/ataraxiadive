@@ -12,6 +12,7 @@ sources:
 us_id: US-ADJ-2.6
 tests_count: null
 rf: []
+origen_tipo: calidad
 componentes_wiki: []
 ---
 
@@ -47,3 +48,7 @@ BDD waiver — refactoring arquitectónico cross-BC.
 ## Estado
 
 ✅ Completado — 2026-03-28
+
+## Trazabilidad
+
+- **Origen:** calidad — Refactoring — extracción de shared kernel (B-01, B-02, B-04).

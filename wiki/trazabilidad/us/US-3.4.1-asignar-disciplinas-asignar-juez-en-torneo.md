@@ -58,3 +58,8 @@ Permite al organizador asignar las disciplinas que tendrá el torneo y asignar u
 ## Estado
 
 ✅ Completado — 2026-04-01
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-EJ-01-multiples-jueces-por-disciplina]]
+- **Componentes:** [[arquitectura/torneo/command-handlers-torneo|Torneo — Command Handlers]]

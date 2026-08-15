@@ -12,6 +12,7 @@ sources:
 us_id: US-6.2.5
 tests_count: null
 rf: []
+origen_tipo: plataforma
 componentes_wiki: []
 ---
 
@@ -28,3 +29,7 @@ El formulario de creación de torneo incorpora la selección de grupos etarios (
 ## Estado
 
 ✅ Completado — 2026-05-07 · PR #152
+
+## Trazabilidad
+
+- **Origen:** plataforma — Grupos etarios en creación de torneo — nueva capacidad de plataforma (PR #152).

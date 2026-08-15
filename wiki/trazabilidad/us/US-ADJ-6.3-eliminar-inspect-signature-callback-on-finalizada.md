@@ -44,3 +44,7 @@ El uso de `inspect.signature` era frágil ante refactorings y difícil de razona
 ## Estado
 
 ✅ Completado — 2026-04-18
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/competencia/application/_p08_finalizacion.py`

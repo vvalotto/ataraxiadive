@@ -57,3 +57,8 @@ Permite al juez registrar el resultado real (RP — Resultado de Performance) de
 ## Estado
 
 ✅ Completado — 2026-03-22
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-EJ-05-cronometraje-manual-por-juez]]
+- **Código sin página de componente propia:** `src/competencia/application/commands/registrar_resultado.py`

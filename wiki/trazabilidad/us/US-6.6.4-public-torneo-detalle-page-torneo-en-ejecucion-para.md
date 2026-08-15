@@ -13,6 +13,7 @@ sources:
 us_id: US-6.6.4
 tests_count: null
 rf: []
+origen_tipo: plataforma
 componentes_wiki: []
 ---
 
@@ -31,3 +32,7 @@ Página pública de detalle de un torneo en ejecución. Muestra grilla con tabs 
 ## Estado
 
 ✅ Completado · PR #167
+
+## Trazabilidad
+
+- **Origen:** plataforma — Página pública de detalle de torneo — nueva capacidad de plataforma (API pública INC-6.6).

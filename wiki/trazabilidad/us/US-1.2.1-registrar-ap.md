@@ -65,3 +65,8 @@ Permite al juez registrar el Anuncio de Performance (AP) de un atleta antes de c
 ## Estado
 
 ✅ Completado — 2026-03-21
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-EJ-08-distancias-con-decimales]], [[rf/RF-PR-01-anuncio-previo-ap]], [[rf/RF-PR-02-validacion-valores-ap]], [[rf/RF-PR-03-ap-definitivo-sin-modificacion]]
+- **Código sin página de componente propia:** `src/competencia/application/commands/registrar_ap.py`

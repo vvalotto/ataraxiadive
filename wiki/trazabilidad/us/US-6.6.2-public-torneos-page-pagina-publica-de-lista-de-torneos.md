@@ -13,6 +13,7 @@ sources:
 us_id: US-6.6.2
 tests_count: null
 rf: []
+origen_tipo: plataforma
 componentes_wiki: []
 ---
 
@@ -31,3 +32,7 @@ Primera pantalla del portal público de AtaraxiaDive: lista de torneos accesible
 ## Estado
 
 ✅ Completado · PR #165
+
+## Trazabilidad
+
+- **Origen:** plataforma — Página pública de torneos — nueva capacidad de plataforma (API pública INC-6.6).

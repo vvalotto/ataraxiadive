@@ -43,3 +43,7 @@ Acción `Finalizar prueba` en el panel de ejecución por disciplina. Solo se hab
 ## Estado
 
 ✅ Completado — 2026-04-22 · PR #106
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/competencia/application/commands/finalizar_competencia_manual.py`

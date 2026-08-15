@@ -48,3 +48,8 @@ DesignReviewer post-INC-4.5: **0 CRITICAL · 174 WARNING** (+16 vs INC-4.4 — p
 ## Estado
 
 ✅ Completado — 2026-04-18 (PR #83)
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-NT-01-canales-notificacion-email-push]]
+- **Código sin página de componente propia:** `src/app.py`

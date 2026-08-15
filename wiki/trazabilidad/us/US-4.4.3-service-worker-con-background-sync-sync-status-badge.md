@@ -12,6 +12,7 @@ sources:
 us_id: US-4.4.3
 tests_count: null
 rf: []
+origen_tipo: plataforma
 ---
 
 # US-4.4.3 — Service Worker con Background Sync + SyncStatusBadge
@@ -41,3 +42,7 @@ Frontend (build + lint) · UAT INC-4.4 iPhone (Background Sync). UAT SP4 — 202
 ## Estado
 
 ✅ Completado — 2026-04-18 (PR #77)
+
+## Trazabilidad
+
+- **Origen:** plataforma — Service worker con Background Sync — infraestructura de plataforma.

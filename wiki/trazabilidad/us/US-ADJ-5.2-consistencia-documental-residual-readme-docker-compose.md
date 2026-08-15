@@ -13,6 +13,9 @@ sources:
 us_id: US-ADJ-5.2
 tests_count: null
 rf: []
+origen_tipo: calidad
+origen_refs:
+  - "HITO-14"
 ---
 
 # US-ADJ-5.2 — Consistencia documental residual
@@ -36,3 +39,7 @@ HITO-14 D-02 + D-03
 ## Estado
 
 ✅ Completado — 2026-04-04 (commit `415fa10`, PR #63)
+
+## Trazabilidad
+
+- **Origen:** calidad (HITO-14) — Deuda documental — hallazgo de HITO-14 al cierre de SP3.

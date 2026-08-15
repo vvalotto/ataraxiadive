@@ -48,3 +48,8 @@ Sin entrada explícita en §36 — validado como parte de la suite acumulada de 
 ## Estado
 
 ✅ Completado — 2026-03-28
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-EJ-08-distancias-con-decimales]]
+- **Código sin página de componente propia:** `src/competencia/domain/value_objects/disciplina_descriptor.py`

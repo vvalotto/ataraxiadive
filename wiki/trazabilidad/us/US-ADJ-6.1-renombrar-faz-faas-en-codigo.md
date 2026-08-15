@@ -38,3 +38,7 @@ Corrige el acrónimo de la federación en todo el código: de "FAZ" (nombre ante
 ## Tests
 
 ✅ 2026-04-18
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/competencia-aggregate|Competencia — Aggregate Competencia]]

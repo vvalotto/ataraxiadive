@@ -45,3 +45,7 @@ Tab `Jueces` del panel organizador. Permite asignar un juez a cada disciplina de
 ## Estado
 
 ✅ Completado — 2026-04-21 · PR #99
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/torneo/command-handlers-torneo|Torneo — Command Handlers]], [[arquitectura/torneo/query-handlers-torneo|Torneo — Query Handlers]]

@@ -51,3 +51,8 @@ BDD waiver — refactoring arquitectónico. Tests existentes de SP1 pasan sin mo
 ## Estado
 
 ✅ Completado — 2026-03-28
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/router-competencia|Competencia — Router FastAPI]]
+- **Código sin página de componente propia:** `src/competencia/application/_p08_finalizacion.py`

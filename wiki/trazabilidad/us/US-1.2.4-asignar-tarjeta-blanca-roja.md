@@ -58,3 +58,8 @@ Permite al juez asignar tarjeta blanca (actuación válida) o roja (descalificac
 ## Estado
 
 ✅ Completado — 2026-03-22
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-EJ-10-efecto-sp-registrado-como-tarjeta]]
+- **Código sin página de componente propia:** `src/competencia/application/commands/asignar_tarjeta.py`

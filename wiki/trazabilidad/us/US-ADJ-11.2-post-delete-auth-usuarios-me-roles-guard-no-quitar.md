@@ -38,3 +38,7 @@ API para que un usuario agregue o quite roles en su propio perfil. El guard impi
 ## Estado
 
 ✅ Completado · PR #185
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/identidad/application/commands/agregar_rol_usuario.py`, `src/identidad/application/commands/quitar_rol_usuario.py`

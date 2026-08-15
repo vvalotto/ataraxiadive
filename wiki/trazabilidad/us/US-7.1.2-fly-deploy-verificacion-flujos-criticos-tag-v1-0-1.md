@@ -4,14 +4,18 @@ type: trazabilidad-us
 sp: SP7
 inc: INC-7.1
 bc: infraestructura
-estado: pendiente
-fecha_cierre: null
-last_updated: "2026-05-21"
+estado: cerrada
+fecha_cierre: "2026-05-30"
+last_updated: "2026-05-30"
 sources:
   - docs/plans/sp7/PLAN-SP7.md §INC-7.1
+  - .cm/baselines/BL-007.md
 us_id: US-7.1.2
 tests_count: null
 rf: []
+origen_tipo: plataforma
+origen_refs:
+  - "ADR-021"
 ---
 
 # US-7.1.2 — fly deploy + verificación flujos críticos + tag v1.0.1
@@ -33,4 +37,8 @@ URL pública Fly.io accesible con SSL · login funcional · flujo organizador �
 
 ## Estado
 
-⏳ Planificado — pendiente tras US-7.1.1
+✅ Completado — 2026-05-30 · cierre BL-007 (tag `v1.0.2`, extendido a `v1.0.5` por addendum SP-ADJ-13). `fly deploy` verificado en producción; login y flujo crítico organizador → juez → atleta confirmados end-to-end.
+
+## Trazabilidad
+
+- **Origen:** plataforma (ADR-021) — Despliegue Fly.io — infraestructura de plataforma.

@@ -12,6 +12,7 @@ sources:
 us_id: US-6.2.6
 tests_count: null
 rf: []
+origen_tipo: plataforma
 componentes_wiki: []
 ---
 
@@ -28,3 +29,7 @@ Nueva página de podios en el portal del organizador (UI-ORG-08). Muestra el top
 ## Estado
 
 ✅ Completado — 2026-05-07 · PR #153
+
+## Trazabilidad
+
+- **Origen:** plataforma — Página de Podios (UI-ORG-08) — nueva capacidad de plataforma (PR #153).

@@ -36,3 +36,7 @@ Resolución de hallazgo UAT-5.2-08: la acción `Cancelar torneo` se mueve a una 
 ## Estado
 
 ✅ Completado — 2026-04-22 · PR #109
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/torneo/command-handlers-torneo|Torneo — Command Handlers]]

@@ -42,3 +42,7 @@ RF-EJ-07, RF-EJ-08 · wireframes-juez S-12 a S-14
 ## Estado
 
 ✅ Completado — 2026-04-12
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-EJ-07-registro-black-out-distancia]], [[rf/RF-EJ-08-distancias-con-decimales]]

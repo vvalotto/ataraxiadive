@@ -12,6 +12,7 @@ sources:
 us_id: US-6.2.2
 tests_count: null
 rf: []
+origen_tipo: calidad
 componentes_wiki: []
 ---
 
@@ -29,3 +30,7 @@ Correcciones de legibilidad en paneles del organizador: columna de categoría co
 ## Estado
 
 ✅ Completado — 2026-05-07 · PR #149
+
+## Trazabilidad
+
+- **Origen:** calidad — Corrección post-UAT — legibilidad de columna (PR #149).

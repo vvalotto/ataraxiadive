@@ -43,3 +43,7 @@ Página de detalle del torneo para el organizador. Muestra tabs (`Detalle`, `Ins
 ## Estado
 
 ✅ Completado — 2026-04-21 · PR #96
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/torneo/query-handlers-torneo|Torneo — Query Handlers]]

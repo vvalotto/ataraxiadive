@@ -45,3 +45,7 @@ DesignReviewer consolidado INC-5.1: **0 CRITICAL · 208 WARNING**.
 ## Estado
 
 ✅ Completado — 2026-04-21 · PR #95
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/torneo/command-handlers-torneo|Torneo — Command Handlers]]

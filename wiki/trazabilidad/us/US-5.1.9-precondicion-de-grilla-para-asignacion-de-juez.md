@@ -35,3 +35,7 @@ Ajuste post-UAT (hallazgo UAT-5.1-02): el selector de juez en [[US-5.1.5-juecesp
 ## Estado
 
 ✅ Completado — 2026-04-21 · PR #103
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/torneo/command-handlers-torneo|Torneo — Command Handlers]]

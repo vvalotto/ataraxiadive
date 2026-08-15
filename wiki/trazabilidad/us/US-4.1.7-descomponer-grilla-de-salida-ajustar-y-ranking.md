@@ -48,3 +48,7 @@ BDD waiver — refactoring estructural.
 ## Estado
 
 ✅ Completado — 2026-04-08
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/competencia-aggregate|Competencia — Aggregate Competencia]]

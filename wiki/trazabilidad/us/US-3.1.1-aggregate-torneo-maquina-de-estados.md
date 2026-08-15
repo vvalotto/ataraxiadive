@@ -64,3 +64,8 @@ Introduce el BC Torneo con su aggregate principal: `Torneo` con máquina de esta
 ## Estado
 
 ✅ Completado — 2026-03-29
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-GT-01-sede-unica-por-torneo]], [[rf/RF-GT-03-torneos-activos-simultaneos]], [[rf/RF-GT-04-cancelacion-conserva-datos]], [[rf/RF-GT-05-transiciones-ciclo-vida-torneo]], [[rf/RF-GT-07-entidad-organizadora-registrada]]
+- **Componentes:** [[arquitectura/torneo/torneo-aggregate|Torneo — Aggregate Torneo]], [[arquitectura/torneo/sqlite-torneo-repository|Torneo — SQLiteTorneoRepository]]

@@ -35,3 +35,7 @@ Página de resultados para el organizador (`/organizador/resultados`). Permite s
 ## Estado
 
 ✅ Completado — 2026-04-28 · PR #127
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/resultados/query-handlers-resultados|Resultados — Query Handlers]]

@@ -61,3 +61,8 @@ Introduce el BC Registro con el aggregate `Atleta`: registro de atletas, consult
 ## Estado
 
 ✅ Completado — 2026-03-31
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-IN-01-categorias-configurables]], [[rf/RF-IN-02-brevet-opcional]], [[rf/RF-IN-08-genero-efecto-en-categoria]], [[rf/RF-IN-09-categoria-unica-por-torneo]]
+- **Componentes:** [[arquitectura/registro/atleta|Registro — Aggregate Atleta]], [[arquitectura/registro/sqlite-repositories|Registro — SQLite Repositories (×4)]]

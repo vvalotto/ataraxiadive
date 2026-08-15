@@ -58,3 +58,9 @@ RF-NT-01 · ADR-016 (Resend como proveedor email)
 ## Estado
 
 ✅ Completado — 2026-04-18 (PR #80)
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-NT-01-canales-notificacion-email-push]]
+- **Componentes:** [[arquitectura/notificaciones/sqlite-notificacion-event-store|Notificaciones — SQLiteNotificacionEventStore + EmailPort adapters]]
+- **Código sin página de componente propia:** `src/notificaciones/domain/ports/email_port.py`

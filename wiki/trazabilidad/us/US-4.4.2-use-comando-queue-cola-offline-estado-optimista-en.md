@@ -12,6 +12,7 @@ sources:
 us_id: US-4.4.2
 tests_count: null
 rf: []
+origen_tipo: plataforma
 ---
 
 # US-4.4.2 — useComandoQueue: cola offline + estado optimista en grilla
@@ -38,3 +39,7 @@ Frontend (build + lint) · UAT INC-4.4 iPhone. UAT SP4 — 2026-04-18.
 ## Estado
 
 ✅ Completado — 2026-04-18 (PR #77)
+
+## Trazabilidad
+
+- **Origen:** plataforma — Cola de comandos offline — infraestructura de plataforma.

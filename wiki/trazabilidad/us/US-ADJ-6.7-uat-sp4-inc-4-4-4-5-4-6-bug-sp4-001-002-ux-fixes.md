@@ -40,3 +40,7 @@ Ejecuta la UAT formal de SP4 (INC-4.4, 4.5, 4.6) y resuelve los bugs y ajustes d
 ## Estado
 
 ✅ Completado — 2026-04-18 (PR #91)
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/router-competencia|Competencia — Router FastAPI]]

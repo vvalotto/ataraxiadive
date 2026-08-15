@@ -56,3 +56,8 @@ Extiende el manejo de tarjeta roja para incluir el caso específico de black-out
 ## Estado
 
 ✅ Completado — 2026-03-23
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-EJ-07-registro-black-out-distancia]]
+- **Componentes:** [[arquitectura/competencia/performance-aggregate|Competencia — Aggregate Performance]]

@@ -12,6 +12,10 @@ sources:
 us_id: US-6.1.2
 tests_count: null
 rf: []
+origen_tipo: calidad
+origen_refs:
+  - "MUX-02"
+  - "MUX-05"
 ---
 
 # US-6.1.2 — Colores tarjeta outline/filled + heading paso 5 corregido
@@ -28,3 +32,7 @@ Correcciones visuales del flujo juez: colores outline/filled para los botones de
 ## Estado
 
 ✅ Completado — 2026-05-04 · PR #144
+
+## Trazabilidad
+
+- **Origen:** calidad (MUX-02, MUX-05) — Corrección post-UAT (hallazgo de UX, PR #144).

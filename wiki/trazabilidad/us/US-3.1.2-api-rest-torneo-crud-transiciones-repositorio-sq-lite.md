@@ -69,3 +69,8 @@ Expone el aggregate Torneo vía API REST con endpoints de CRUD y los 7 endpoints
 ## Estado
 
 ✅ Completado — 2026-03-30
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-GT-01-sede-unica-por-torneo]], [[rf/RF-GT-02-disciplinas-configurables]], [[rf/RF-GT-03-torneos-activos-simultaneos]], [[rf/RF-GT-04-cancelacion-conserva-datos]], [[rf/RF-GT-05-transiciones-ciclo-vida-torneo]], [[rf/RF-GT-07-entidad-organizadora-registrada]]
+- **Componentes:** [[arquitectura/torneo/command-handlers-torneo|Torneo — Command Handlers]], [[arquitectura/torneo/router-torneo|Torneo — Router FastAPI]]

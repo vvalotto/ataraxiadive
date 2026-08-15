@@ -12,6 +12,7 @@ sources:
 us_id: US-ADJ-6.6
 tests_count: null
 rf: []
+origen_tipo: calidad
 ---
 
 # US-ADJ-6.6 — Corrección acrónimo FAZ→FAAS en documentación
@@ -31,3 +32,7 @@ Propaga la corrección del acrónimo FAZ→FAAS a los documentos de la capa de d
 ## Estado
 
 ✅ Completado — 2026-04-18 (PR #90)
+
+## Trazabilidad
+
+- **Origen:** calidad — Consistencia de nomenclatura (FAZ→FAAS) en documentación.

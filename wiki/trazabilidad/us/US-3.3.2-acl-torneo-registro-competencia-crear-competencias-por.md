@@ -60,3 +60,8 @@ Implementa la ACL que permite crear automáticamente una `Competencia` por cada 
 ## Estado
 
 ✅ Completado — 2026-03-31
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-GT-02-disciplinas-configurables]], [[rf/RF-GT-03-torneos-activos-simultaneos]], [[rf/RF-IN-01-categorias-configurables]], [[rf/RF-IN-02-brevet-opcional]], [[rf/RF-IN-03-sin-limite-atletas]], [[rf/RF-IN-04-cancelacion-inscripcion-atleta]]
+- **Código sin página de componente propia:** `src/competencia/infrastructure/repositories/sqlite_competencias_por_torneo.py`

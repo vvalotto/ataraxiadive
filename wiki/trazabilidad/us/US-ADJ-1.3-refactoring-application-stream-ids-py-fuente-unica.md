@@ -47,3 +47,7 @@ BDD waiver — refactoring DRY sin comportamiento nuevo.
 ## Estado
 
 ✅ Completado — 2026-03-28
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/handler-utils|Competencia — Helpers HandlerUtils]]

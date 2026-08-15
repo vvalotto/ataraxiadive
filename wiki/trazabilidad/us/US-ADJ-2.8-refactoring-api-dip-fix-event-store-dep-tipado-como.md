@@ -49,3 +49,7 @@ BDD waiver — fix de tipado y arquitectura. Tests existentes pasan sin modifica
 ## Estado
 
 ✅ Completado — 2026-03-28
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/router-competencia|Competencia — Router FastAPI]]

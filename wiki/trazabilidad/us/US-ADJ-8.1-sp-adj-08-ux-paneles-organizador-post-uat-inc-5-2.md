@@ -39,3 +39,7 @@ Resolución de 5 hallazgos UAT (UAT-5.2-01, 03, 04, 06, 07): estados vacío/load
 ## Estado
 
 ✅ Completado — 2026-04-22 · PR #108
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/torneo/router-torneo|Torneo — Router FastAPI]]

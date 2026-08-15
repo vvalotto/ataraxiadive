@@ -57,3 +57,8 @@ Permite corregir el RP de un atleta dentro de la ventana de impugnación habilit
 ## Estado
 
 ✅ Completado — 2026-03-23
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-EJ-06-correccion-resultado-registrado]]
+- **Código sin página de componente propia:** `src/competencia/application/commands/corregir_resultado.py`

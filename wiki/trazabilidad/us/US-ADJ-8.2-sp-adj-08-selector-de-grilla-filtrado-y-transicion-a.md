@@ -37,3 +37,7 @@ Resolución de hallazgos UAT-5.2-02, 05, 07: el selector de grilla se filtra por
 ## Estado
 
 ✅ Completado — 2026-04-22 · PR #107
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/torneo/command-handlers-torneo|Torneo — Command Handlers]]

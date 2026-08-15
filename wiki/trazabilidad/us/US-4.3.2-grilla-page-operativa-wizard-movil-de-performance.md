@@ -41,3 +41,7 @@ RF-EJ-05, RF-EJ-06 · wireframes-juez S-02 a S-09
 ## Estado
 
 ✅ Completado — 2026-04-11
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-EJ-05-cronometraje-manual-por-juez]], [[rf/RF-EJ-06-correccion-resultado-registrado]]

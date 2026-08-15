@@ -46,3 +46,7 @@ Corrige un bug de dominio: un DNS registrado por error era irreversible porque `
 ## Estado
 
 ✅ Completado — 2026-04-19 (commit `e1ac34b`, PR #93)
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/competencia/application/commands/corregir_resultado_tras_dns.py`

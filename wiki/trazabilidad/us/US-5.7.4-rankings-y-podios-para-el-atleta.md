@@ -38,3 +38,7 @@ Sección `Rankings y podios` del portal del atleta. Muestra la tabla de ejecuci�
 ## Estado
 
 ✅ Completado — 2026-05-01 · PR #140
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/resultados/query-handlers-resultados|Resultados — Query Handlers]]

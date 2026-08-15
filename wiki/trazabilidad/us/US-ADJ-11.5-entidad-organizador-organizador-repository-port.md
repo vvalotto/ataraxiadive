@@ -42,3 +42,7 @@ Introduce la entidad `Organizador` en BC Registro con su puerto de repositorio, 
 ## Estado
 
 ✅ Completado · PR #188
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/registro/juez-organizador|Registro — Aggregates Juez y Organizador]], [[arquitectura/registro/command-handlers|Registro — Command Handlers]], [[arquitectura/registro/sqlite-repositories|Registro — SQLite Repositories (×4)]]

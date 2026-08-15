@@ -53,3 +53,7 @@ Tests de parseo y validación del VO `TiempoAP` agregados.
 ## Estado
 
 ✅ Completado — 2026-04-03
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/competencia/domain/value_objects/ap.py`

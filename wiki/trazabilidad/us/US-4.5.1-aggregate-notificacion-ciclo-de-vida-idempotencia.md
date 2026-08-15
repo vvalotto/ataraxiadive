@@ -54,3 +54,8 @@ Introduce el BC Notificaciones con el aggregate `Notificacion` y su ciclo de vid
 ## Estado
 
 ✅ Completado — 2026-04-18 (PR #79)
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-NT-01-canales-notificacion-email-push]]
+- **Componentes:** [[arquitectura/notificaciones/notificacion-aggregate|Notificaciones — Aggregate Notificacion (ES)]], [[arquitectura/notificaciones/sqlite-notificacion-event-store|Notificaciones — SQLiteNotificacionEventStore + EmailPort adapters]]

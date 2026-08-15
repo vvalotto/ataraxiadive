@@ -39,3 +39,7 @@ Extiende `RankingCompetencia` para calcular y almacenar `puntos: Decimal` por at
 ## Estado
 
 ✅ Completado — 2026-04-28 · PR #125
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/resultados/command-handlers-resultados|Resultados — Command Handlers]], [[arquitectura/resultados/ranking-competencia|Resultados — Aggregate RankingCompetencia]]

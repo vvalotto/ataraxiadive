@@ -12,6 +12,7 @@ sources:
 us_id: US-6.3.1
 tests_count: null
 rf: []
+origen_tipo: calidad
 ---
 
 # US-6.3.1 — Inicio atleta: indicador En línea + disciplinas por OT
@@ -30,3 +31,7 @@ DesignReviewer INC-6.3: **0 CRITICAL · 258 WARNING** · CodeGuard: 0 errores.
 ## Estado
 
 ✅ Completado — 2026-05-08 · PR #154
+
+## Trazabilidad
+
+- **Origen:** calidad — Ajuste de UI post-UAT en inicio del atleta (PR #154).

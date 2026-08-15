@@ -57,3 +57,8 @@ Registra la ausencia de un atleta en su turno (Did Not Start). El DNS es una des
 ## Estado
 
 ✅ Completado — 2026-03-23
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-EJ-02-registro-dns-no-presentado]]
+- **Código sin página de componente propia:** `src/competencia/application/commands/registrar_dns.py`

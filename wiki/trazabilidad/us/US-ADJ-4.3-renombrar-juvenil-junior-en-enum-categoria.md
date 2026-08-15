@@ -46,3 +46,7 @@ Corrección propagada a fixtures y tests que usaban `Categoria.JUVENIL`.
 ## Estado
 
 ✅ Completado — 2026-04-03
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/registro/domain/value_objects/categoria.py`

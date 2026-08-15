@@ -39,3 +39,7 @@ DesignReviewer INC-5.6 + SP-ADJ-09 consolidado: **0 CRITICAL · 252 WARNING** (+
 ## Estado
 
 ✅ Completado — 2026-04-28 · PR #123
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/resultados/algoritmo-faas|Resultados — AlgoritmoPuntajeFAAS]]

@@ -38,3 +38,7 @@ DesignReviewer consolidado INC-5.7: **0 CRITICAL · 256 WARNING** (+4 vs INC-5.6
 ## Estado
 
 ✅ Completado — 2026-05-01 · PR #137
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/registro/query-handlers|Registro — Query Handlers]]

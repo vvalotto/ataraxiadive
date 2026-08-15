@@ -56,3 +56,7 @@ BDD waiver — refactoring interno sin comportamiento nuevo.
 ## Estado
 
 ✅ Completado — 2026-04-08
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/performance-aggregate|Competencia — Aggregate Performance]]

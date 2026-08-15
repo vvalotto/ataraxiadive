@@ -44,3 +44,8 @@ Extiende el wizard de inscripción del atleta con AP inline (sin salir del wizar
 ## Estado
 
 ✅ Completado — 2026-05-08 · PR #155
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/registro/command-handlers|Registro — Command Handlers]]
+- **Código sin página de componente propia:** `src/registro/infrastructure/adjuntos/local_adjunto_storage.py`

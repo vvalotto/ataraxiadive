@@ -49,3 +49,7 @@ PLAN-SP4 §INC-4.6 · ADR-001 · ADR-008
 ## Estado
 
 ✅ Completado — 2026-04-18
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/competencia/application/queries/obtener_audit_log.py`

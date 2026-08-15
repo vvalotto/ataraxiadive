@@ -69,3 +69,8 @@ Introduce el BC Identidad con la entidad `Usuario`, autenticación JWT mínima y
 ## Estado
 
 ✅ Completado — 2026-03-30
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-US-01-organizador-unico-por-torneo]], [[rf/RF-US-02-usuario-multiples-roles]], [[rf/RF-US-03-autenticacion-email-contrasena]], [[rf/RF-US-04-asignacion-juez-a-disciplinas]], [[rf/RF-US-05-resultados-visibles-post-competencia]]
+- **Componentes:** [[arquitectura/identidad/usuario-aggregate|Identidad — Aggregate Usuario]], [[arquitectura/identidad/command-handlers-identidad|Identidad — Command Handlers]], [[arquitectura/identidad/jwt-service|Identidad — JWTService + BcryptPasswordHasher]], [[arquitectura/identidad/sqlite-usuario-repository|Identidad — SQLiteUsuarioRepository]]

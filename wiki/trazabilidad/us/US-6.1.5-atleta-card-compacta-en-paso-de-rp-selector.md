@@ -12,6 +12,9 @@ sources:
 us_id: US-6.1.5
 tests_count: null
 rf: []
+origen_tipo: calidad
+origen_refs:
+  - "MUX-06"
 ---
 
 # US-6.1.5 — AtletaCard compacta en paso de RpSelector
@@ -28,3 +31,7 @@ Introduce variante compacta de `AtletaCard` para el paso de registro de marca (M
 ## Estado
 
 ✅ Completado — 2026-05-04 · PR #147
+
+## Trazabilidad
+
+- **Origen:** calidad (MUX-06) — Corrección post-UAT (hallazgo de UX, PR #147).

@@ -40,3 +40,7 @@ DesignReviewer post-merge INC-4.3: **0 CRITICAL · 158 WARNING**.
 ## Estado
 
 ✅ Completado — 2026-04-12
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-EJ-02-registro-dns-no-presentado]]

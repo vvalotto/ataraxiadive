@@ -60,3 +60,8 @@ Brecha CMAS #2 — tarjeta blanca con penalizaciones acumulables.
 ## Estado
 
 ✅ Completado — 2026-04-08
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/performance-aggregate|Competencia — Aggregate Performance]]
+- **Código sin página de componente propia:** `src/competencia/domain/value_objects/penalizacion_tecnica.py`

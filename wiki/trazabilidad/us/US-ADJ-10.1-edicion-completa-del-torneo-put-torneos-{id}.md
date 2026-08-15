@@ -37,3 +37,7 @@ Resuelve hallazgo H-02-06 de la UAT E2E SP6: el organizador no podía corregir n
 ## Estado
 
 ✅ Completado · PR #179
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/torneo/command-handlers-torneo|Torneo — Command Handlers]]

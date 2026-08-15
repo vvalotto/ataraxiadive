@@ -52,3 +52,8 @@ Tests de creación y consulta de `Atleta` actualizados para incluir el campo `cl
 ## Estado
 
 ✅ Completado — 2026-04-03
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-IN-10-club-atleta-obligatorio]]
+- **Componentes:** [[arquitectura/registro/atleta|Registro — Aggregate Atleta]]

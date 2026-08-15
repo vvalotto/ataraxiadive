@@ -42,3 +42,7 @@ Refactoring DRY en la capa de application del BC Notificaciones: elimina la dupl
 ## Estado
 
 ✅ Completado — 2026-04-18
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/notificaciones/command-handlers-notificaciones|Notificaciones — Command Handlers y Políticas]]

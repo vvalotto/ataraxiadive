@@ -39,3 +39,7 @@ DesignReviewer consolidado INC-5.3: **0 CRITICAL · 215 WARNING**.
 ## Estado
 
 ✅ Completado — 2026-04-23 · PR #110
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/identidad/router-identidad|Identidad — Router FastAPI + Dependencies]]

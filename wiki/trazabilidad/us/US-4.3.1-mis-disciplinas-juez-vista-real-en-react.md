@@ -12,6 +12,7 @@ sources:
 us_id: US-4.3.1
 tests_count: null
 rf: []
+origen_tipo: plataforma
 ---
 
 # US-4.3.1 — MisDisciplinas juez: vista real en React
@@ -39,3 +40,7 @@ D-02, D-03 · wireframes-juez S-01
 ## Estado
 
 ✅ Completado — 2026-04-12
+
+## Trazabilidad
+
+- **Origen:** plataforma — Vista real del panel juez — construcción de portal, no RF elicitado.

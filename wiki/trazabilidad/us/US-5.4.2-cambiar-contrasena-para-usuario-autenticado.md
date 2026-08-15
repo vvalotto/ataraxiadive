@@ -36,3 +36,7 @@ Permite a un usuario autenticado cambiar su propia contraseña. El handler valid
 ## Estado
 
 ✅ Completado — 2026-04-24 · PR #113
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/identidad/command-handlers-identidad|Identidad — Command Handlers]]

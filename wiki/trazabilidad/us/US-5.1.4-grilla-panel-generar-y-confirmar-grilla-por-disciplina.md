@@ -44,3 +44,7 @@ Tab `Grilla` del panel organizador. Lista las disciplinas del torneo con botón 
 ## Estado
 
 ✅ Completado — 2026-04-21 · PR #98
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/competencia/application/commands/generar_grilla.py`, `src/competencia/application/commands/confirmar_grilla.py`

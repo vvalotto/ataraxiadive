@@ -52,3 +52,8 @@ Implementa la política P-09: cuando el torneo pasa a estado `CERRADO`, el siste
 ## Estado
 
 ✅ Completado — 2026-04-02
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-PM-05-rankings-por-categoria-y-genero]]
+- **Componentes:** [[arquitectura/resultados/command-handlers-resultados|Resultados — Command Handlers]]

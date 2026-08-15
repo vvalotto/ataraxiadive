@@ -36,3 +36,7 @@ Sección `Mi grilla` del portal del atleta. Muestra la posición del atleta en l
 ## Estado
 
 ✅ Completado — 2026-05-01 · PR #138
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/competencia/application/queries/obtener_grilla.py`

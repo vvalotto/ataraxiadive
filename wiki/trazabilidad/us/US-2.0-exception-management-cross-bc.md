@@ -51,3 +51,7 @@ Sin suite BDD dedicada — validación integrada en tests de cada US funcional.
 ## Estado
 
 ✅ Completado — 2026-03-28
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/competencia/router-competencia|Competencia — Router FastAPI]]

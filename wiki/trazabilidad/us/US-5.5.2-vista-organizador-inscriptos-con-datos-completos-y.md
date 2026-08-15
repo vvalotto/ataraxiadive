@@ -37,3 +37,7 @@ Actualización de la vista de inscriptos del organizador. Muestra nombre, discip
 ## Estado
 
 ✅ Completado — 2026-04-26 · PR #121
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/registro/query-handlers|Registro — Query Handlers]]

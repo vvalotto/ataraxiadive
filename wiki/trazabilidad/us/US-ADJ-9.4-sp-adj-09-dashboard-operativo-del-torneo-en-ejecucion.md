@@ -13,6 +13,7 @@ sources:
 us_id: US-ADJ-9.4
 tests_count: null
 rf: []
+origen_tipo: plataforma
 componentes_wiki: []
 ---
 
@@ -30,3 +31,7 @@ Vista de resumen operativo del torneo activo: estado global del torneo y progres
 ## Estado
 
 ✅ Completado — 2026-04-28 · PR #132
+
+## Trazabilidad
+
+- **Origen:** plataforma — Refactoring UX portal organizador — dashboard (PR #132).

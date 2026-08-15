@@ -36,3 +36,7 @@ Sección `Mis resultados` del portal del atleta. Muestra los resultados del atle
 ## Estado
 
 ✅ Completado — 2026-05-01 · PR #139
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/resultados/query-handlers-resultados|Resultados — Query Handlers]]

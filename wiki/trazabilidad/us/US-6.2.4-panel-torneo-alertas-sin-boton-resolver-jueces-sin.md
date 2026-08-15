@@ -12,6 +12,7 @@ sources:
 us_id: US-6.2.4
 tests_count: null
 rf: []
+origen_tipo: calidad
 componentes_wiki: []
 ---
 
@@ -28,3 +29,7 @@ Correcciones en el panel del torneo: las alertas ya no muestran un botón "Resol
 ## Estado
 
 ✅ Completado — 2026-05-07 · PR #151
+
+## Trazabilidad
+
+- **Origen:** calidad — Corrección post-UAT — panel de alertas (PR #151).

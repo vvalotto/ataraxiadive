@@ -36,3 +36,7 @@ Corrección de los hallazgos ARCH-02 y AA-03: `resultados/api` y `competencia/ap
 ## Estado
 
 ✅ Completado — 2026-05-10 · PR #160
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/resultados/router-resultados|Resultados — Router FastAPI]]

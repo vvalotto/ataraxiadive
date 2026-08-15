@@ -50,3 +50,8 @@ Tests de ranking actualizados para validar la segmentación correcta.
 ## Estado
 
 ✅ Completado — 2026-04-03
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-PM-05-rankings-por-categoria-y-genero]]
+- **Componentes:** [[arquitectura/resultados/ranking-competencia|Resultados — Aggregate RankingCompetencia]]

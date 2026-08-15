@@ -41,3 +41,7 @@ Ajuste post-UAT (hallazgos UAT-5.1-03 y UAT-5.1-05): define la política de visi
 ## Estado
 
 ✅ Completado — 2026-04-21 · PR #101
+
+## Trazabilidad
+
+- **Componentes:** [[arquitectura/torneo/query-handlers-torneo|Torneo — Query Handlers]]

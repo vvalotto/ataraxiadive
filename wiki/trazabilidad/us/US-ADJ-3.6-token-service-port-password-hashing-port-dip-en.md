@@ -48,3 +48,7 @@ BDD waiver — refactoring arquitectónico. Tests de identidad existentes pasan 
 ## Estado
 
 ✅ Completado — 2026-04-03
+
+## Trazabilidad
+
+- **Código sin página de componente propia:** `src/identidad/domain/ports/token_service_port.py`, `src/identidad/domain/ports/password_hashing_port.py`

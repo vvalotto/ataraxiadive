@@ -52,3 +52,8 @@ Validado como parte de la suite de INC-3.5.
 ## Estado
 
 ✅ Completado — 2026-04-02
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-PM-01-resultados-por-puntos-faas]], [[rf/RF-PM-02-ranking-general-overall]]
+- **Componentes:** [[arquitectura/resultados/ranking-overall|Resultados — Aggregate RankingOverall]], [[arquitectura/resultados/command-handlers-resultados|Resultados — Command Handlers]]

@@ -13,6 +13,9 @@ sources:
 us_id: US-ADJ-5.5
 tests_count: null
 rf: []
+origen_tipo: calidad
+origen_refs:
+  - "HITO-14"
 ---
 
 # US-ADJ-5.5 — Corregir deuda tooling .claude/tracking/
@@ -34,3 +37,7 @@ HITO-14 D-08
 ## Estado
 
 ✅ Completado — 2026-04-04 (commit `3eb095f`, PR #63)
+
+## Trazabilidad
+
+- **Origen:** calidad (HITO-14) — Deuda de tooling — hallazgo de HITO-14 al cierre de SP3.

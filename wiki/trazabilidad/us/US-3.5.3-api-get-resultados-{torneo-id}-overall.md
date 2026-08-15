@@ -56,3 +56,8 @@ Expone el ranking overall del torneo vía endpoint REST, permitiendo consultar e
 ## Estado
 
 ✅ Completado — 2026-04-02
+
+## Trazabilidad
+
+- **Implementa:** [[rf/RF-PM-06-publicacion-resultados-descargables]]
+- **Componentes:** [[arquitectura/resultados/query-handlers-resultados|Resultados — Query Handlers]], [[arquitectura/resultados/router-resultados|Resultados — Router FastAPI]]
