@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El Experimento AtaraxiaDive</title>
+<style>
+  :root {
+    --bg: #F5F7F7;
+    --surface: #FFFFFF;
+    --surface-2: #EBF1F2;
+    --border: #D7E1E3;
+    --text: #101820;
+    --text-muted: #4B5C61;
+    --text-faint: #7E9195;
+    --accent: #0B4F6C;
+    --accent-strong: #073349;
+    --accent-soft: #E3EEF1;
+    --good: #1F7A5C;
+    --good-bg: #E3F2EB;
+    --warn: #92620F;
+    --warn-bg: #FAF0DA;
+    --bad: #A23B2E;
+    --bad-bg: #F7E6E2;
+    --info: #3A6EA5;
+    --info-bg: #E7EEF6;
+    --shadow: 0 1px 2px rgba(11,26,31,0.06), 0 8px 24px -12px rgba(11,26,31,0.18);
+    --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --font-body: 'IBM Plex Sans', -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B1416;
+      --surface: #101C1F;
+      --surface-2: #15272A;
+      --border: #22373B;
+      --text: #E7EEEE;
+      --text-muted: #9FB5B8;
+      --text-faint: #6D8386;
+      --accent: #5CC2CD;
+      --accent-strong: #8FDDE5;
+      --accent-soft: #16343A;
+      --good: #55C79A;
+      --good-bg: #12362A;
+      --warn: #E3B664;
+      --warn-bg: #332811;
+      --bad: #E68976;
+      --bad-bg: #35211C;
+      --info: #85B2E6;
+      --info-bg: #1C2E44;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0B1416;
+    --surface: #101C1F;
+    --surface-2: #15272A;
+    --border: #22373B;
+    --text: #E7EEEE;
+    --text-muted: #9FB5B8;
+    --text-faint: #6D8386;
+    --accent: #5CC2CD;
+    --accent-strong: #8FDDE5;
+    --accent-soft: #16343A;
+    --good: #55C79A;
+    --good-bg: #12362A;
+    --warn: #E3B664;
+    --warn-bg: #332811;
+    --bad: #E68976;
+    --bad-bg: #35211C;
+    --info: #85B2E6;
+    --info-bg: #1C2E44;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible, .tocchip:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .page {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  /* ---------- Masthead ---------- */
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    padding: 5px 12px;
+    border-radius: 999px;
+    margin-bottom: 22px;
+  }
+
+  .eyebrow .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    flex: none;
+  }
+
+  h1.title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2rem, 4.5vw, 2.75rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 0 0 14px;
+    text-wrap: balance;
+    color: var(--text);
+  }
+
+  p.dek {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 62ch;
+    margin: 0 0 24px;
+    text-wrap: pretty;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 22px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--text-faint);
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+  }
+  .meta-row strong { color: var(--text-muted); font-weight: 500; }
+
+  /* ---------- TOC chips ---------- */
+
+  .toc {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 22px 0 4px;
+    margin-bottom: 8px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .toc::-webkit-scrollbar { display: none; }
+
+  .tocchip {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--text-muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 7px 13px;
+    border-radius: 8px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .tocchip:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ---------- Headline stat card ---------- */
+
+  .thesis {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 28px 28px 24px;
+    margin: 40px 0 56px;
+  }
+
+  .thesis h2 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 0 0 6px;
+    color: var(--text);
+  }
+
+  .thesis > p {
+    color: var(--text-muted);
+    margin: 0 0 22px;
+    max-width: 68ch;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .stat {
+    background: var(--surface);
+    padding: 18px 18px 16px;
+  }
+
+  .stat .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: var(--accent-strong);
+    line-height: 1.05;
+  }
+  :root:not([data-theme="light"]) .stat .num { color: var(--accent); }
+  :root[data-theme="dark"] .stat .num { color: var(--accent); }
+
+  .stat .label {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  @media (max-width: 620px) {
+    .stat-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- Section rhythm ---------- */
+
+  section { margin: 64px 0; scroll-margin-top: 24px; }
+  section:first-of-type { margin-top: 0; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .section-num {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-faint);
+    letter-spacing: 0.02em;
+  }
+
+  h2.section-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.55rem;
+    margin: 0;
+    color: var(--text);
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--text);
+    margin: 32px 0 12px;
+  }
+
+  p { max-width: 72ch; margin: 0 0 16px; }
+  section > p:first-of-type { margin-top: 18px; }
+
+  .lede {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 68ch;
+  }
+
+  strong { color: var(--text); font-weight: 600; }
+
+  /* ---------- Callouts ---------- */
+
+  .callout {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    max-width: 72ch;
+  }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout.good { border-left-color: var(--good); }
+  .callout.bad { border-left-color: var(--bad); }
+
+  /* ---------- Tables ---------- */
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin: 18px 0 28px;
+    background: var(--surface);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 480px;
+    font-size: 14px;
+  }
+
+  caption {
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-faint);
+    padding: 10px 16px 0;
+  }
+
+  th, td {
+    padding: 10px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  th {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--surface-2);
+  }
+
+  td.num, th.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; }
+  td.wrap, th.wrap { white-space: normal; }
+
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr.total td { font-weight: 600; background: var(--surface-2); }
+  tbody tr.highlight td { background: var(--accent-soft); font-weight: 600; }
+
+  /* ---------- Pills ---------- */
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .pill::before {
+    content: "";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .pill.good { color: var(--good); background: var(--good-bg); }
+  .pill.bad  { color: var(--bad);  background: var(--bad-bg); }
+  .pill.warn { color: var(--warn); background: var(--warn-bg); }
+  .pill.info { color: var(--info); background: var(--info-bg); }
+
+  /* ---------- Source list ---------- */
+
+  .sources {
+    list-style: none;
+    margin: 18px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .sources li {
+    background: var(--surface);
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: baseline;
+  }
+  .sources code {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+  }
+  .sources span {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-align: right;
+  }
+
+  footer {
+    margin-top: 72px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--text-faint);
+  }
+
+  code.inline {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--accent-strong);
+  }
+  :root:not([data-theme="light"]) code.inline { color: var(--accent); }
+  :root[data-theme="dark"] code.inline { color: var(--accent); }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <span class="eyebrow"><span class="dot"></span>Documento de cierre · IEDD · tag v1.0.5</span>
+    <h1 class="title">El experimento AtaraxiaDive</h1>
+    <p class="dek">Tamaño funcional, productividad y calidad de una plataforma de torneos de apnea construida por un desarrollador con asistencia de IA — comparados contra benchmarks reales de ISBSG y Capers Jones, no contra intuición.</p>
+    <div class="meta-row">
+      <span><strong>Período</strong> 2026-03-14 → 2026-05-30 (77 días)</span>
+      <span><strong>Stack</strong> Python / FastAPI · React / TypeScript</span>
+      <span><strong>Metodología</strong> IEDD</span>
+      <span><strong>Compilado</strong> 2026-08-20</span>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Secciones del documento">
+    <a class="tocchip" href="#tamano">1 · Tamaño</a>
+    <a class="tocchip" href="#productividad">2 · Productividad</a>
+    <a class="tocchip" href="#calidad">3 · Calidad</a>
+    <a class="tocchip" href="#conclusion">4 · Conclusión</a>
+    <a class="tocchip" href="#fuentes">5 · Fuentes</a>
+  </nav>
+
+  <div class="thesis">
+    <h2>El hallazgo, en tres números</h2>
+    <p>Cada número depende del anterior: primero se mide qué tan grande es el sistema, después cuánto tardó en construirse comparado con proyectos reales de ese tamaño, y por último si esa velocidad costó calidad.</p>
+    <div class="stat-grid">
+      <div class="stat">
+        <div class="num">343&ndash;373</div>
+        <div class="label">Function Points IFPUG — proyecto mediano según ISBSG</div>
+      </div>
+      <div class="stat">
+        <div class="num">2.4&ndash;3&times;</div>
+        <div class="label">más rápido que la mediana/media de 125 proyectos ISBSG del mismo tamaño</div>
+      </div>
+      <div class="stat">
+        <div class="num">0</div>
+        <div class="label">métricas de calidad degradadas en 77 días — 8 medidas, todas sostenidas</div>
+      </div>
+    </div>
+  </div>
+
+  <section id="tamano">
+    <div class="section-head"><span class="section-num">01</span><h2 class="section-title">Tamaño funcional</h2></div>
+    <p class="lede">De proxies internos (historias, escenarios BDD, endpoints) a Function Points IFPUG — la única unidad comparable contra benchmarks externos.</p>
+
+    <p>El proyecto midió tamaño primero con proxies derivables automáticamente de sus propios artefactos: útiles para ver tendencias internas, pero no comparables contra industria porque no son una unidad estandarizada. Para comparar contra ISBSG se hizo un conteo manual <strong>IFPUG FPA</strong> (ISO/IEC 20926) sobre los seis Bounded Contexts del sistema.</p>
+
+    <div class="table-wrap">
+      <table>
+        <caption>Conteo IFPUG por Bounded Context — ILF/EIF (datos), EI/EO/EQ (transacciones)</caption>
+        <thead>
+          <tr><th>BC</th><th class="wrap">Tipo</th><th class="num">ILF</th><th class="num">EIF</th><th class="num">EI</th><th class="num">EO</th><th class="num">EQ</th><th class="num">UFP</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>registro</td><td class="wrap">CRUD</td><td class="num">4</td><td class="num">1</td><td class="num">12</td><td class="num">3</td><td class="num">8</td><td class="num">119</td></tr>
+          <tr><td>competencia</td><td class="wrap">ES (Core)</td><td class="num">2</td><td class="num">2</td><td class="num">14</td><td class="num">6</td><td class="num">4</td><td class="num">111</td></tr>
+          <tr><td>torneo</td><td class="wrap">CRUD</td><td class="num">1</td><td class="num">0</td><td class="num">11</td><td class="num">0</td><td class="num">4</td><td class="num">52</td></tr>
+          <tr><td>resultados</td><td class="wrap">CRUD</td><td class="num">2</td><td class="num">3</td><td class="num">0</td><td class="num">2</td><td class="num">1</td><td class="num">44</td></tr>
+          <tr><td>identidad</td><td class="wrap">CRUD</td><td class="num">1</td><td class="num">0</td><td class="num">7</td><td class="num">0</td><td class="num">2</td><td class="num">34</td></tr>
+          <tr><td>notificaciones</td><td class="wrap">ES</td><td class="num">1</td><td class="num">0</td><td class="num">2</td><td class="num">0</td><td class="num">0</td><td class="num">13</td></tr>
+          <tr class="total"><td>Total (por-BC)</td><td class="wrap">&mdash;</td><td class="num">11</td><td class="num">6</td><td class="num">46</td><td class="num">11</td><td class="num">19</td><td class="num">373</td></tr>
+          <tr class="highlight"><td colspan="7">Total (sistema único, deduplicado)</td><td class="num">343</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>373 FP</strong> cuenta cada BC como aplicación independiente: el mismo dato aparece como ILF donde se mantiene y como EIF donde se consulta &mdash; práctica válida en arquitecturas de BCs. <strong>343 FP</strong> es la vista de sistema único, la que se usa para comparar contra industria.</p>
+
+    <div class="callout">
+      <p><strong>Señal transversal.</strong> <code class="inline">competencia</code> concentra la única transacción de complejidad Alta del conteo (<code class="inline">GET /grilla</code>, 7 FP) &mdash; coincide con SLOC, complejidad ciclomática y densidad de Halstead, que ya señalaban a ese BC como el de mayor complejidad interna. Cuatro mediciones de naturaleza distinta apuntan al mismo lugar: es, efectivamente, el Core Domain del sistema.</p>
+    </div>
+
+    <h3>Dónde cae por tamaño, según ISBSG</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Rango ISBSG</th><th>UFP</th><th class="wrap">AtaraxiaDive</th></tr></thead>
+        <tbody>
+          <tr><td>Pequeño</td><td class="num">&lt; 100</td><td class="wrap">resultados (44) · identidad (34) · notificaciones (13) &mdash; a nivel BC</td></tr>
+          <tr class="highlight"><td>Mediano</td><td class="num">100&ndash;400</td><td class="wrap">registro (119) · competencia (111) · torneo (52) &mdash; y el total consolidado (343&ndash;373)</td></tr>
+          <tr><td>Grande</td><td class="num">&gt; 400</td><td class="wrap">&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="productividad">
+    <div class="section-head"><span class="section-num">02</span><h2 class="section-title">Productividad</h2></div>
+    <p class="lede">Cinco formas de comparar contra industria. Cuatro se descartan por transparencia metodológica. Una se sostiene con datos reales.</p>
+
+    <h3>Lo que se descartó</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Método</th><th class="wrap">Resultado</th><th class="wrap">Por qué se descarta</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="wrap">SLOC/día</td>
+            <td class="num">377&ndash;454</td>
+            <td class="wrap"><span class="pill warn">Referencial</span> Confirma rango humano senior alto (200&ndash;500+), no sobrehumano &mdash; pero SLOC no captura valor funcional</td>
+          </tr>
+          <tr>
+            <td class="wrap">FP/persona-mes (backfiring SLOC→FP)</td>
+            <td class="num">&asymp;380</td>
+            <td class="wrap"><span class="pill bad">Descartado</span> El backfiring SLOC→FP tiene hasta 500% de variación documentada entre lenguajes</td>
+          </tr>
+          <tr>
+            <td class="wrap">FP/persona-mes (conteo IFPUG real)</td>
+            <td class="num">136&ndash;257</td>
+            <td class="wrap"><span class="pill bad">Descartado</span> 3 supuestos de horas independientes, los 3 caen por debajo del mínimo real de una muestra ISBSG comparable</td>
+          </tr>
+          <tr>
+            <td class="wrap">Esfuerzo vs. COCOMO</td>
+            <td class="num">33&ndash;47&times;</td>
+            <td class="wrap"><span class="pill bad">Descartado</span> COCOMO calibrado sobre proyectos de equipo de los 80&ndash;2000; no aplica a esta escala</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Lo que se sostiene &mdash; duración calendario vs. tamaño</h3>
+    <p>La única comparación que no requiere saber cuántas horas trabajó nadie: duración calendario observada contra una tabla real de ISBSG (<em>Analysis of Project Duration by Size and Effort</em>, N=1513 proyectos; N=125 en la banda de tamaño 301&ndash;400 FP, la de AtaraxiaDive).</p>
+
+    <div class="table-wrap">
+      <table>
+        <caption>Duración en meses calendario — banda 301&ndash;400 FP, 125 proyectos reales</caption>
+        <thead><tr><th>Min</th><th>P10</th><th>P25</th><th>Mediana</th><th>P75</th><th>P90</th><th>Max</th><th>Media</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="num">0.3</td><td class="num">2.9</td><td class="num">3.4</td><td class="num" style="font-weight:600">6.0</td><td class="num">10.0</td><td class="num">13.0</td><td class="num">33.6</td><td class="num">7.7</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>AtaraxiaDive: 2.53 meses (77 días) para 343&ndash;373 FP.</strong></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="wrap">Comparación</th><th class="num">Resultado</th></tr></thead>
+        <tbody>
+          <tr><td class="wrap">vs. mediana (6.0 meses)</td><td class="num" style="font-weight:600; color:var(--good)">2.4&times; más rápido</td></tr>
+          <tr><td class="wrap">vs. media (7.7 meses)</td><td class="num" style="font-weight:600; color:var(--good)">3.0&times; más rápido</td></tr>
+          <tr><td class="wrap">vs. P10 &mdash; el 10% más rápido de 125 proyectos reales (2.9 meses)</td><td class="num">1.15&times; más rápido</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout good">
+      <p><strong>Por qué esta comparación es la más creíble del documento:</strong> el resultado cae dentro del rango real observado (mínimo de la banda: 0.3 meses), no por debajo de él. Los 125 proyectos son mayormente de equipos &mdash; ISBSG señala que a este tamaño "lo que el equipo puede lograr es proporcional a su tamaño". Que un desarrollador solo iguale el ritmo del 10% más rápido de proyectos hechos por equipos completos es una señal más fuerte que si lo hubiera hecho un equipo grande, y no depende de ningún supuesto sobre horas trabajadas.</p>
+    </div>
+  </section>
+
+  <section id="calidad">
+    <div class="section-head"><span class="section-num">03</span><h2 class="section-title">Calidad</h2></div>
+    <p class="lede">Entregar rápido es fácil si se sacrifica diseño, tests o mantenibilidad. Ocho métricas independientes verifican que eso no pasó.</p>
+
+    <h3>Estructural</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="wrap">Métrica</th><th class="num">v1.0.5</th><th class="wrap">Umbral</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td class="wrap">CC domain/ promedio</td><td class="num">1.86</td><td class="wrap">&lt; 5</td><td><span class="pill good">Muy bajo</span></td></tr>
+          <tr><td class="wrap">MI domain/ promedio</td><td class="num">88.02 / 100</td><td class="wrap">&gt; 85</td><td><span class="pill good">Alta mantenibilidad</span></td></tr>
+          <tr><td class="wrap">Bugs estimados (Halstead)</td><td class="num">0.298 / 1000 SLOC</td><td class="wrap">1&ndash;25 (Capers Jones)</td><td><span class="pill good">3&times; mejor que el mínimo</span></td></tr>
+          <tr><td class="wrap">Clases con LCOM &gt; 1</td><td class="num">3.2% (10/309)</td><td class="wrap">&lt; 10%</td><td><span class="pill good">Cohesión alta</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Arquitectónica</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="wrap">Métrica</th><th class="wrap">Valor</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td class="wrap">Gradiente I(domain) → I(api)</td><td class="wrap">0.273 → 0.903</td><td><span class="pill good">Patrón esperado</span></td></tr>
+          <tr><td class="wrap">ArchitectAnalyst &mdash; should_block</td><td class="wrap"><code class="inline">false</code> en las 7 mediciones</td><td><span class="pill good">Nunca bloqueó</span></td></tr>
+          <tr><td class="wrap">ArchitectAnalyst &mdash; CRITICAL</td><td class="wrap">3, estables desde BL-007</td><td><span class="pill info">Zona conocida</span></td></tr>
+          <tr><td class="wrap">DesignReviewer &mdash; CRITICAL en 793+ commits</td><td class="wrap">0, toda la historia</td><td><span class="pill good">Sin bloqueos de diseño</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Testing</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="wrap">Métrica</th><th class="num">v1.0.5</th><th class="wrap">Umbral</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td class="wrap">Cobertura global</td><td class="num">95.35%</td><td class="wrap">90% domain+application</td><td><span class="pill good">Cumplido con margen</span></td></tr>
+          <tr><td class="wrap">Cobertura domain/</td><td class="num">97.3%</td><td class="wrap">90%</td><td><span class="pill good">&mdash;</span></td></tr>
+          <tr><td class="wrap">Cobertura application/</td><td class="num">93.7%</td><td class="wrap">90%</td><td><span class="pill good">&mdash;</span></td></tr>
+          <tr><td class="wrap">Ratio test/código</td><td class="num">1.55</td><td class="wrap">&mdash;</td><td><span class="pill info">1.55 líneas de test por línea de producción</span></td></tr>
+          <tr><td class="wrap">BDD Scenarios</td><td class="num">647</td><td class="wrap">&mdash;</td><td><span class="pill info">127 feature files</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <p>Las 8 métricas (4 estructurales + 2 arquitectónicas + 2 de testing) se mantuvieron en la misma categoría durante los 77 días del proyecto, incluidos los últimos 14 días de despliegue real y corrección post-producción. Ninguna cruzó de "buena" a "aceptable" en ningún punto medido. Esto es lo que hace defendible la comparación de productividad: no es <em>"se entregó rápido, punto"</em> &mdash; es <em>"2.4&ndash;3&times; más rápido que proyectos comparables, sosteniendo un nivel de calidad que la industria típicamente no logra ni al ritmo normal."</em></p>
+    </div>
+  </section>
+
+  <section id="conclusion">
+    <div class="section-head"><span class="section-num">04</span><h2 class="section-title">Conclusión general</h2></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="wrap">Pregunta</th><th class="wrap">Respuesta</th><th class="wrap">Confianza</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="wrap">¿Qué tamaño tiene el sistema?</td>
+            <td class="wrap">343&ndash;373 FP IFPUG &mdash; proyecto mediano según ISBSG</td>
+            <td><span class="pill good">Alta</span></td>
+          </tr>
+          <tr>
+            <td class="wrap">¿Cuánto tardó, vs. proyectos reales similares?</td>
+            <td class="wrap">2.53 meses vs. 6.0/7.7 (mediana/media) de 125 proyectos ISBSG &mdash; 2.4&ndash;3&times; más rápido</td>
+            <td><span class="pill good">Alta</span></td>
+          </tr>
+          <tr>
+            <td class="wrap">¿Se sacrificó calidad por velocidad?</td>
+            <td class="wrap">No &mdash; 8 métricas independientes se mantuvieron estables durante todo el proyecto</td>
+            <td><span class="pill good">Alta</span></td>
+          </tr>
+          <tr>
+            <td class="wrap">¿Cuánto aportó específicamente la IA, en horas ahorradas?</td>
+            <td class="wrap">No medible con este dataset &mdash; no hay grupo de control ni horas registradas</td>
+            <td><span class="pill bad">Baja / No aplicable</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>La afirmación defendible no es un multiplicador de productividad por hora &mdash; es una afirmación de <strong>compresión de calendario con calidad sostenida</strong>. AtaraxiaDive entregó un tamaño funcional mediano (343&ndash;373 FP, comparable a un ERP departamental pequeño) en 2.53 meses, una fracción del tiempo que toman proyectos reales de tamaño equivalente, sin degradar ninguna de las ocho métricas de calidad medidas de forma independiente a lo largo de todo el proyecto.</p>
+
+    <div class="callout bad">
+      <p><strong>Lo que queda abierto.</strong> Un experimento controlado &mdash; mismo desarrollador, mismo tipo de historia, con y sin asistencia de IA, tiempo y defectos medidos directamente &mdash; es la única forma de obtener un multiplicador de productividad válido <em>causalmente</em> atribuible a la IA. Ese experimento no se hizo: este documento mide el resultado final contra benchmarks externos, no un contraste interno.</p>
+    </div>
+  </section>
+
+  <section id="fuentes">
+    <div class="section-head"><span class="section-num">05</span><h2 class="section-title">Fuentes</h2></div>
+    <ul class="sources">
+      <li><code>productividad/fpa-ifpug.md</code><span>Conteo IFPUG completo por BC</span></li>
+      <li><code>productividad/tamano-funcional.md</code><span>Proxies de tamaño (US, BDD, endpoints)</span></li>
+      <li><code>productividad/velocidad-sp.md</code><span>Velocidad por SP, duración calendario</span></li>
+      <li><code>BENCHMARK-INDUSTRIA.md</code><span>Los 5 intentos de comparación, con fuentes citadas</span></li>
+      <li><code>REPORTE-METRICAS.md</code><span>Síntesis ejecutiva de las 17 métricas</span></li>
+      <li><code>CONCLUSIONES-IEDD.md</code><span>Conclusiones de calidad por baseline</span></li>
+      <li><code>calidad/*.md</code><span>Cobertura, DesignReviewer, ArchitectAnalyst</span></li>
+      <li><code>estructurales/*.md</code><span>CC, MI, Halstead, CK, acoplamiento</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    Compilado 2026-08-20 &middot; cierre del experimento IEDD &middot; tag v1.0.5 &middot; proyecto completo SP1 → SP-ADJ-13
+  </footer>
+
+</div>
+</body>
+</html>

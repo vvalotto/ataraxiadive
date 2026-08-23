@@ -161,13 +161,151 @@ equipos de varias personas; aplicarlo a un desarrollador senior solo, con framew
 inverosímil incluso bajo los claims más optimistas sobre asistencia de IA en la literatura — la
 lectura correcta es "COCOMO no aplica aquí", no "AtaraxiaDive es 40 veces más productivo".
 
+#### D. FP/persona-mes con conteo IFPUG manual — mismo problema, causa distinta
+
+El backfiring de §5.1.B es un método reconocidamente débil (hasta 500% de variación documentada).
+Para descartar que el problema sea *solo* el backfiring, se hizo un conteo IFPUG manual real
+(ILF/EIF, EI/EO/EQ con DET/RET/FTR, tablas de complejidad estándar, sin VAF) sobre los 6 BCs —
+ver detalle completo en [`fpa-ifpug.md`](productividad/fpa-ifpug.md). Resultado: **343 FP**
+(vista de sistema único, deduplicando ILF/EIF entre BCs) vs. los ≈960 FP backfireados — un
+conteo sustancialmente más riguroso y ~3x menor.
+
+**El benchmark ISBSG real** (no la aproximación "unas pocas decenas" de §5.1.B) usa el *Project
+Delivery Rate* (PDR = horas de esfuerzo / FP), no FP/persona-mes directamente. Un ejemplo
+publicado por ISBSG (*Practical Guide: Productivity Measurement of Software Projects*, 2019) con
+un peer group comparable en tamaño (N=14 proyectos, aplicación de negocio, tamaño M2 = 300–1000
+FP) da esta distribución de PDR (horas/FP):
+
+| Percentil | Min | P10 | P25 | Mediana | P75 | P90 | Max | Promedio |
+|---|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+| **PDR (hrs/FP)** | 1.1 | 2.2 | 2.6 | **3.6** | 6.2 | 13.6 | 24.7 | 6.3 |
+
+(Peer group: Java/Banking-Financial/New Development — no es el peer group ideal para AtaraxiaDive
+—Python/FastAPI+React, dominio deportivo—, pero es la única tabla de percentiles PDR reales y
+publicados encontrada, y sirve como orden de magnitud.)
+
+**Cálculo para AtaraxiaDive**, usando la misma base de esfuerzo ya establecida en §5.1.B
+(2.53 persona-meses) y un estándar de 152 h/mes:
+
+| | Valor |
+|---|---:|
+| Esfuerzo estimado (2.53 pm × 152 h/mes) | ≈ 385 horas |
+| UFP (vista de sistema único, `fpa-ifpug.md §3.1`) | 343 |
+| **PDR resultante** | **≈ 1.12 hrs/FP** |
+| **FP/persona-mes resultante** | **≈ 136** |
+
+**Este número tampoco es creíble, y por una razón distinta a la de §5.1.B.** Un PDR de 1.12
+hrs/FP cae **por debajo del mínimo (1.1) de los 14 proyectos ISBSG de la muestra** — es decir,
+según este cálculo AtaraxiaDive habría sido más eficiente que el *mejor* de 14 proyectos
+comparables reales. Convertido a FP/persona-mes, 136 es ~2x la mejor década (P10 ≈ 69 FP/pm) y
+~3.8x la mediana (≈ 42 FP/pm) de ese peer group.
+
+**La causa no es el conteo de FP esta vez — es el denominador.** El PDR de ISBSG se calcula sobre
+**horas de esfuerzo efectivamente registradas** por fase (diseño, build, test, implementación,
+normalizadas a un ciclo de vida completo — ver metodología en la guía ISBSG). Los "2.53
+persona-mes" de AtaraxiaDive son **77 días calendario ÷ 30.44**, asumiendo 1 FTE continuo — no
+hay un registro de horas de esfuerzo real por fase en `velocidad-sp.md` ni en ningún otro
+documento de métricas del proyecto (se trackean commits, PRs y días calendario, no horas). Si el
+trabajo real ocurrió en menos horas efectivas que las 385 asumidas (sesiones asistidas por IA,
+no 8h/día de trabajo humano continuo), el denominador está sobrestimado respecto al criterio
+ISBSG, no subestimado — lo que empeora la comparación, no la explica como productividad real.
+
+**Escenario alternativo — asumiendo 4 h/día laboral (no 152h/mes continuas):** para acotar el
+supuesto anterior "por arriba", se probó también un esfuerzo deliberadamente más conservador: 4
+horas de trabajo humano por día **laboral** (lun-vie), no por día calendario. El período SP1→SP7
+(2026-03-14 → 2026-05-30) tiene 55 días laborales.
+
+| | Valor |
+|---|---:|
+| Horas asumidas (55 días × 4 h) | 220 |
+| **PDR resultante** | **0.64 hrs/FP** |
+| Persona-mes equivalente (220h ÷ 152h/mes) | 1.45 |
+| **FP/persona-mes resultante** | **≈ 237** |
+
+**El resultado empeora, no mejora.** 0.64 hrs/FP cae aún más por debajo del mínimo ISBSG de la
+muestra (1.1) que el escenario anterior (1.12) — bajo este supuesto, AtaraxiaDive habría sido
+~1.7x más eficiente que el *mejor* de los 14 proyectos ISBSG, y ~5.6x la mediana. Tiene sentido
+matemáticamente: menos horas asumidas en el denominador solo estira más el ratio hacia arriba.
+
+**Esto es, en sí mismo, el hallazgo relevante:** se probaron dos supuestos de esfuerzo humano
+razonables y opuestos (152h/mes continuas vs. 4h/día laboral) y **ambos** dan un PDR por debajo
+del mínimo observado en la muestra ISBSG. Eso descarta que el problema sea "elegimos mal la
+cantidad de horas" — sugiere que el PDR de ISBSG, calibrado sobre **horas de trabajo humano
+manual** (tecleado, diseño, testing hechos por personas), mide un recurso distinto al que este
+proyecto consumió. Cuando gran parte del "build" lo ejecuta un agente de IA, las horas humanas de
+supervisión/revisión no son la misma magnitud que las horas de esfuerzo que ISBSG registra — son
+categorías distintas, no la misma métrica con un multiplicador. Es un punto más interesante para
+el paper que un simple "Nx más productivo": **la unidad FP/persona-mes asume que esfuerzo humano
+y output escalan juntos en una proporción estable, y esa asunción es la que rompe el desarrollo
+asistido por IA — no el conteo de FP, ni una elección particular de horas.**
+
+**Conclusión: ni el FP/persona-mes por backfiring (§5.1.B) ni el FP/persona-mes por conteo IFPUG
+manual, bajo ningún supuesto de horas probado (esta sección), son citables como evidencia de
+productividad** — en B es el conteo de FP el que es poco confiable; acá el problema es más
+profundo que el denominador: es que "horas de esfuerzo humano" ya no es la unidad correcta para
+medir lo que se produjo. Si en algún momento se registran horas de esfuerzo reales por fase (no
+solo días calendario) esto podría rehacerse con un denominador defendible, pero probablemente
+seguiría dando un resultado atípico — la causa no es un error de medición, es un cambio de
+naturaleza del proceso de desarrollo.
+
+#### E. Duración calendario vs. tamaño (FP) — la comparación que sí funciona
+
+Todos los intentos anteriores (B, C, D) fallan por la misma razón estructural: requieren un
+denominador de **horas de esfuerzo humano**, que este proyecto no registra (solo días calendario).
+Hay, sin embargo, una comparación de industria que **no necesita ese dato**: ISBSG publica
+duración calendario (no horas) directamente en función del tamaño en FP, agregada sobre proyectos
+reales — sin importar cuántas horas por día trabajó cada equipo.
+
+Fuente: *Analysis of Project Duration by Size and Effort* (ISBSG, 2010) — 1513 proyectos,
+Tabla 1-1, duración en **meses calendario** por banda de tamaño (Unadjusted FP). La banda 301–400
+FP (N=125 proyectos reales) es la que coincide con el tamaño de AtaraxiaDive (343–373 FP,
+`fpa-ifpug.md`):
+
+| Estadístico | Min | P10 | P25 | Mediana | P75 | P90 | Max | Media |
+|---|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+| Duración (meses) | 0.3 | 2.9 | 3.4 | **6.0** | 10.0 | 13.0 | 33.6 | 7.7 |
+
+**AtaraxiaDive: 2.53 meses (77 días) para producir 343–373 FP.**
+
+| Comparación | Ratio |
+|---|---:|
+| vs. mediana (6.0 meses) | **2.4x más rápido** |
+| vs. media (7.7 meses) | **3.0x más rápido** |
+| vs. P10 — el 10% más rápido de 125 proyectos reales (2.9 meses) | 1.15x más rápido que ese percentil |
+
+**Esta comparación sí es defendible**, por tres motivos que la distinguen de B/C/D:
+
+1. **No requiere saber cuántas horas trabajó nadie** — la unidad es calendario, el dato que
+   ISBSG realmente mide y publica con percentiles amplios (N=125 en la banda relevante, no un
+   ejemplo aislado de 14 proyectos como en §5.1.D).
+2. **El resultado cae dentro del rango real observado**, no por debajo del mínimo — a diferencia
+   de los cálculos de PDR en B y D, que caían fuera de lo que cualquier proyecto real logró. Acá
+   2.53 meses está en la cola rápida (cerca de P10) pero es un valor que proyectos reales sí
+   alcanzaron (el mínimo de la banda es 0.3 meses).
+3. **Juega en contra, no a favor, de AtaraxiaDive**: los 125 proyectos de esa banda son
+   mayormente de **equipos** — el propio reporte ISBSG señala que a este tamaño "lo que el equipo
+   puede lograr es proporcional a su tamaño". Que **un solo desarrollador** (con asistencia de IA)
+   iguale o supere el ritmo del 10% más rápido de proyectos típicamente hechos por equipos
+   completos es una señal más fuerte que si lo hubiera hecho un equipo grande — sin necesitar
+   ningún supuesto sobre horas de trabajo individual.
+
+**Esta es la comparación de productividad más creíble de todo el documento** — sostiene, con datos
+reales y sin supuestos frágiles, que AtaraxiaDive se construyó en una fracción del tiempo
+calendario que toman proyectos comparables de la industria, manteniendo (§4 y §3) un estándar de
+calidad (cobertura, complejidad, defectos de diseño) que tampoco es inusualmente bajo para
+compensar la velocidad.
+
 #### Conclusión de esta sub-sección
 
-De las tres unidades de tamaño/tiempo exploradas, **solo SLOC/día produjo un número creíble y
-citable**: AtaraxiaDive está en la banda alta de lo que un desarrollador senior humano logra sin
-asistencia (no por encima de ella). FP/persona-mes y COCOMO dieron resultados no confiables por
-limitaciones conocidas de esos modelos a esta escala — se documentan aquí por transparencia
-metodológica, pero **no se recomienda citarlos en el paper** como evidencia de productividad.
+De las unidades de tamaño/tiempo exploradas, **dos produjeron números creíbles y citables**:
+SLOC/día (AtaraxiaDive está en la banda alta de lo que un desarrollador senior humano logra sin
+asistencia, no por encima de ella) y **duración calendario vs. tamaño FP (§5.1.E)** — esta última
+es la evidencia más directa de aceleración real: 2.4x–3x más rápido que la mediana/media de 125
+proyectos ISBSG comparables en tamaño, la mayoría hechos por equipos. FP/persona-mes (por
+backfiring o por conteo IFPUG manual) y COCOMO dieron resultados no confiables por limitaciones
+conocidas de esos modelos o por falta de un denominador de esfuerzo comparable a esta escala — se
+documentan por transparencia metodológica, pero **no se recomienda citarlos** como evidencia de
+productividad. §5.1.E sí se recomienda citar.
 
 ### 5.2 Nota crítica — el claim "3x–10x" necesita ajuste
 
@@ -211,7 +349,9 @@ ciclo de PR** — órdenes de magnitud más conservadores que "3x–10x".
 | Tasa de bloqueo de gates | ℹ️ Sin comparación cuantitativa disponible |
 | Velocidad vs. baseline IA (Copilot) | ⚠️ **Claim propio 5-15x más optimista que la evidencia externa más rigurosa** |
 | SLOC/día (tamaño/tiempo) | ℹ️ **En línea** — dentro del rango humano senior documentado, no por encima |
+| Duración calendario vs. tamaño FP | ✅ **Citable** — 2.4x–3x más rápido que mediana/media de 125 proyectos ISBSG comparables en tamaño (ver §5.1.E) |
 | FP/persona-mes (backfiring) | ❌ No confiable — descartado (ver §5.1.B) |
+| FP/persona-mes (conteo IFPUG manual) | ❌ No confiable — denominador de horas no medido, no comparable con PDR de ISBSG (ver §5.1.D) |
 | Esfuerzo vs. COCOMO | ❌ No confiable — descartado, COCOMO no calibrado para esta escala (ver §5.1.C) |
 | Retrabajo formalizado (SP-ADJ) | ℹ️ Dentro de rango citado, pero comparación metodológicamente débil |
 | Tasa de éxito de entrega | ✅ Muy por encima (con caveat de escala) |
@@ -262,6 +402,9 @@ las de productividad con el ajuste de expectativas de esta sección.**
 - [GitClear — AI Assistant Code Quality 2025 Research](https://www.gitclear.com/ai_assistant_code_quality_2025_research)
 - [ISBSG — The use of function points in the industry](https://www.isbsg.org/wp-content/uploads/2022/01/ISBSG-Short-Paper-The-Use-of-Function-Points-in-the-Industry-2016-v1.0.pdf)
 - [ISBSG — Productivity in Software Development](https://www.isbsg.org/productivity/)
+- [ISBSG — Practical Guide: Productivity Measurement of Software Projects (2019, PDF)](https://www.isbsg.org/wp-content/uploads/2021/08/Productivity-Measurement-of-Software-Projects.pdf)
+- [ISBSG — Analysis of Project Duration by Size and Effort (2010, PDF)](https://isbsg.org/wp-content/uploads/2017/03/Analysis_of_Project_Duration_by_Size_and_Effort_2010.pdf)
+- [Capers Jones — Rule of Thumb #7, Schedule = FP^0.4 (referencial, no usado en el cálculo final)](https://www.scribd.com/presentation/295738435/Caper-Jones-Rule-of-Thumb)
 - [ResearchGate — Using "Backfiring" to accurately size software: More Wishful Thinking than Science](https://www.researchgate.net/publication/240382664_Using''Backfiring''to_accurately_size_software_More_Wishful_Thinking_than_Science)
 - [IFPUG — Capers Jones, Software Economics and Function Point Metrics](https://www.ifpug.org/wp-content/uploads/2017/04/IYSM.-Thirty-years-of-IFPUG.-Software-Economics-and-Function-Point-Metrics-Capers-Jones.pdf)
 - [Rose-Hulman — COCOMO II Model Definition Manual](https://www.rose-hulman.edu/class/cs/csse372/201310/Homework/CII_modelman2000.pdf)

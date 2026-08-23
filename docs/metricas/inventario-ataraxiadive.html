@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inventario AtaraxiaDive</title>
+<style>
+  :root {
+    --bg: #F5F7F7;
+    --surface: #FFFFFF;
+    --surface-2: #EBF1F2;
+    --border: #D7E1E3;
+    --text: #101820;
+    --text-muted: #4B5C61;
+    --text-faint: #7E9195;
+    --accent: #0B4F6C;
+    --accent-strong: #073349;
+    --accent-soft: #E3EEF1;
+    --good: #1F7A5C;
+    --good-bg: #E3F2EB;
+    --warn: #92620F;
+    --warn-bg: #FAF0DA;
+    --bad: #A23B2E;
+    --bad-bg: #F7E6E2;
+    --info: #3A6EA5;
+    --info-bg: #E7EEF6;
+    --shadow: 0 1px 2px rgba(11,26,31,0.06), 0 8px 24px -12px rgba(11,26,31,0.18);
+    --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --font-body: 'IBM Plex Sans', -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B1416;
+      --surface: #101C1F;
+      --surface-2: #15272A;
+      --border: #22373B;
+      --text: #E7EEEE;
+      --text-muted: #9FB5B8;
+      --text-faint: #6D8386;
+      --accent: #5CC2CD;
+      --accent-strong: #8FDDE5;
+      --accent-soft: #16343A;
+      --good: #55C79A;
+      --good-bg: #12362A;
+      --warn: #E3B664;
+      --warn-bg: #332811;
+      --bad: #E68976;
+      --bad-bg: #35211C;
+      --info: #85B2E6;
+      --info-bg: #1C2E44;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0B1416;
+    --surface: #101C1F;
+    --surface-2: #15272A;
+    --border: #22373B;
+    --text: #E7EEEE;
+    --text-muted: #9FB5B8;
+    --text-faint: #6D8386;
+    --accent: #5CC2CD;
+    --accent-strong: #8FDDE5;
+    --accent-soft: #16343A;
+    --good: #55C79A;
+    --good-bg: #12362A;
+    --warn: #E3B664;
+    --warn-bg: #332811;
+    --bad: #E68976;
+    --bad-bg: #35211C;
+    --info: #85B2E6;
+    --info-bg: #1C2E44;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:focus-visible, .tocchip:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  /* ---------- Masthead ---------- */
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    padding: 5px 12px;
+    border-radius: 999px;
+    margin-bottom: 22px;
+  }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; }
+
+  h1.title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2rem, 4.5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    margin: 0 0 14px;
+    text-wrap: balance;
+  }
+
+  p.dek {
+    font-size: 1.08rem;
+    color: var(--text-muted);
+    max-width: 68ch;
+    margin: 0 0 24px;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 22px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--text-faint);
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+  }
+  .meta-row strong { color: var(--text-muted); font-weight: 500; }
+
+  /* ---------- TOC ---------- */
+
+  .toc {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 22px 0 4px;
+    margin-bottom: 8px;
+    scrollbar-width: none;
+  }
+  .toc::-webkit-scrollbar { display: none; }
+
+  .tocchip {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--text-muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 7px 13px;
+    border-radius: 8px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .tocchip:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ---------- Overview grid ---------- */
+
+  .overview {
+    margin: 40px 0 8px;
+  }
+  .overview h2 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 4px;
+  }
+  .overview > p {
+    color: var(--text-muted);
+    margin: 0 0 20px;
+    max-width: 68ch;
+  }
+
+  .tile-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  @media (max-width: 780px) { .tile-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 460px) { .tile-grid { grid-template-columns: 1fr; } }
+
+  .tile {
+    background: var(--surface);
+    padding: 18px 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .tile .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 1.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1.05;
+  }
+  .tile .label {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.35;
+  }
+  .tile .sub {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-faint);
+  }
+
+  .total-band {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    background: var(--accent-soft);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-radius: 12px;
+    padding: 16px 22px;
+    margin-top: 14px;
+  }
+  .total-band .tb-label { font-size: 13.5px; color: var(--text-muted); }
+  .total-band .tb-num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent-strong);
+  }
+  :root:not([data-theme="light"]) .total-band .tb-num { color: var(--accent); }
+  :root[data-theme="dark"] .total-band .tb-num { color: var(--accent); }
+
+  /* ---------- Sections ---------- */
+
+  section { margin: 60px 0; scroll-margin-top: 24px; }
+
+  .section-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+  .section-num { font-family: var(--font-mono); font-size: 13px; color: var(--text-faint); }
+  h2.section-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.4rem;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .lede { font-size: 1.02rem; color: var(--text-muted); max-width: 68ch; margin: 8px 0 0; }
+
+  h3 {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 30px 0 12px;
+  }
+
+  p { max-width: 72ch; margin: 0 0 16px; }
+  strong { color: var(--text); font-weight: 600; }
+
+  .callout {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 20px;
+    margin: 18px 0;
+    max-width: 72ch;
+    font-size: 14.5px;
+    color: var(--text-muted);
+  }
+  .callout p { margin: 0; }
+  .callout strong { color: var(--text); }
+
+  /* ---------- Tables ---------- */
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin: 16px 0 8px;
+    background: var(--surface);
+  }
+  table { border-collapse: collapse; width: 100%; min-width: 420px; font-size: 14px; }
+  caption { text-align: left; font-family: var(--font-mono); font-size: 12px; color: var(--text-faint); padding: 10px 16px 0; }
+  th, td { padding: 9px 16px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  th { font-family: var(--font-mono); font-weight: 500; font-size: 11.5px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--text-muted); background: var(--surface-2); }
+  td.num, th.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; }
+  td.wrap, th.wrap { white-space: normal; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr.total td { font-weight: 600; background: var(--surface-2); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-mono); font-size: 11.5px; font-weight: 500;
+    padding: 2px 9px; border-radius: 999px; white-space: nowrap;
+  }
+  .pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .pill.info { color: var(--info); background: var(--info-bg); }
+  .pill.warn { color: var(--warn); background: var(--warn-bg); }
+  .pill.bad  { color: var(--bad);  background: var(--bad-bg); }
+  .pill.good { color: var(--good); background: var(--good-bg); }
+
+  code.inline {
+    font-family: var(--font-mono); font-size: 0.9em;
+    background: var(--surface-2); padding: 1px 5px; border-radius: 4px; color: var(--accent-strong);
+  }
+  :root:not([data-theme="light"]) code.inline { color: var(--accent); }
+  :root[data-theme="dark"] code.inline { color: var(--accent); }
+
+  footer {
+    margin-top: 72px; padding-top: 24px; border-top: 1px solid var(--border);
+    font-family: var(--font-mono); font-size: 12.5px; color: var(--text-faint);
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <span class="eyebrow"><span class="dot"></span>Inventario documental y de código · HEAD main · tag v1.0.5</span>
+    <h1 class="title">Inventario AtaraxiaDive</h1>
+    <p class="dek">Conteo directo sobre el repositorio de cada categoría de artefacto producido en el proyecto: gobierno arquitectónico, requerimientos, proceso IEDD, calidad y código — sin proxies, contado archivo por archivo.</p>
+    <div class="meta-row">
+      <span><strong>Método</strong> <code>find</code> / <code>grep</code> sobre HEAD</span>
+      <span><strong>Fecha</strong> 2026-08-21</span>
+      <span><strong>Stack</strong> Python / FastAPI · React / TypeScript</span>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Secciones">
+    <a class="tocchip" href="#gobierno">Gobierno</a>
+    <a class="tocchip" href="#requerimientos">Requerimientos</a>
+    <a class="tocchip" href="#proceso">Proceso IEDD</a>
+    <a class="tocchip" href="#calidad">Calidad</a>
+    <a class="tocchip" href="#codigo">Código</a>
+    <a class="tocchip" href="#pruebas">Pruebas</a>
+  </nav>
+
+  <div class="overview">
+    <h2>Panorama general</h2>
+    <p>Diez categorías de artefactos, cada una contada por su fuente real en el repositorio — no estimadas.</p>
+    <div class="tile-grid">
+      <div class="tile"><div class="num">22</div><div class="label">ADR</div><div class="sub">docs/adr</div></div>
+      <div class="tile"><div class="num">6</div><div class="label">Bounded Contexts</div><div class="sub">src/*</div></div>
+      <div class="tile"><div class="num">36</div><div class="label">Aprendizaje (HITO)</div><div class="sub">docs/contexto</div></div>
+      <div class="tile"><div class="num">97</div><div class="label">Requerimientos (RF+AC)</div><div class="sub">docs/dominio</div></div>
+      <div class="tile"><div class="num">15</div><div class="label">Maquetas UX</div><div class="sub">docs/design/ux</div></div>
+      <div class="tile"><div class="num">227</div><div class="label">Planes</div><div class="sub">docs/plans</div></div>
+      <div class="tile"><div class="num">174</div><div class="label">Specs</div><div class="sub">docs/specs</div></div>
+      <div class="tile"><div class="num">206</div><div class="label">Reportes (US/INC)</div><div class="sub">docs/reports</div></div>
+      <div class="tile"><div class="num">178</div><div class="label">Reportes de calidad</div><div class="sub">quality/reports</div></div>
+      <div class="tile"><div class="num">425</div><div class="label">Archivos de código fuente</div><div class="sub">src + frontend/src</div></div>
+      <div class="tile"><div class="num">35 990</div><div class="label">SLOC totales</div><div class="sub">backend + frontend</div></div>
+      <div class="tile"><div class="num">1 658</div><div class="label">Casos de prueba automatizados</div><div class="sub">unit + integration + BDD</div></div>
+      <div class="tile"><div class="num">50 814</div><div class="label">SLOC de testing</div><div class="sub">Python + Gherkin — 2.47&times; el código backend</div></div>
+    </div>
+    <div class="total-band">
+      <span class="tb-label">Artefactos documentales (ADR + HITO + maquetas + planes + specs + reportes + calidad)</span>
+      <span class="tb-num">858</span>
+    </div>
+  </div>
+
+  <section id="gobierno">
+    <div class="section-head"><span class="section-num">01</span><h2 class="section-title">Gobierno arquitectónico</h2></div>
+    <p class="lede">Decisiones ratificadas, unidades de dominio y conocimiento sintetizado del proyecto.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="wrap">Categoría</th><th class="num">Cantidad</th><th class="wrap">Fuente</th></tr></thead>
+        <tbody>
+          <tr><td>ADR (Architecture Decision Records)</td><td class="num">22</td><td class="wrap"><code class="inline">docs/adr/ADR-*.md</code></td></tr>
+          <tr><td>Bounded Contexts</td><td class="num">6</td><td class="wrap">competencia, torneo, registro, resultados, identidad, notificaciones</td></tr>
+          <tr><td>HITO (aprendizaje del experimento)</td><td class="num">36</td><td class="wrap"><code class="inline">docs/contexto/HITO-*.md</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout"><p><strong>Nota.</strong> Los 6 BC se distinguen por tipo: 2 Core/Generic con Event Sourcing (<em>competencia</em>, <em>notificaciones</em>) y 4 CRUD estándar (<em>torneo</em>, <em>registro</em>, <em>resultados</em>, <em>identidad</em>) — ver <code class="inline">CLAUDE.md §3</code>.</p></div>
+  </section>
+
+  <section id="requerimientos">
+    <div class="section-head"><span class="section-num">02</span><h2 class="section-title">Requerimientos</h2></div>
+    <p class="lede">54 funcionales (RF) + 43 atributos de calidad / no funcionales (AC) = 97 requerimientos elicitados.</p>
+
+    <div class="two-col">
+      <div>
+        <h3>RF por área — 54 total</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th class="wrap">Área</th><th>ID</th><th class="num">N</th></tr></thead>
+            <tbody>
+              <tr><td class="wrap">Ejecución de Competencias</td><td>EJ</td><td class="num">10</td></tr>
+              <tr><td class="wrap">Inscripción de Atletas</td><td>IN</td><td class="num">10</td></tr>
+              <tr><td class="wrap">Preparación de Competencias</td><td>PR</td><td class="num">8</td></tr>
+              <tr><td class="wrap">Gestión del Torneo</td><td>GT</td><td class="num">7</td></tr>
+              <tr><td class="wrap">Premiación y Resultados</td><td>PM</td><td class="num">6</td></tr>
+              <tr><td class="wrap">Usuarios, Roles y Permisos</td><td>US</td><td class="num">5</td></tr>
+              <tr><td class="wrap">Notificaciones</td><td>NT</td><td class="num">4</td></tr>
+              <tr><td class="wrap">Integración Externa</td><td>IG</td><td class="num">4</td></tr>
+              <tr class="total"><td class="wrap">Total</td><td>—</td><td class="num">54</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <h3>AC por atributo — 43 total</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th class="wrap">Atributo</th><th>ID</th><th class="num">N</th></tr></thead>
+            <tbody>
+              <tr><td class="wrap">Usabilidad</td><td>US</td><td class="num">6</td></tr>
+              <tr><td class="wrap">Rendimiento</td><td>RD</td><td class="num">5</td></tr>
+              <tr><td class="wrap">Disponibilidad</td><td>DS</td><td class="num">5</td></tr>
+              <tr><td class="wrap">Configurabilidad</td><td>CF</td><td class="num">5</td></tr>
+              <tr><td class="wrap">Seguridad</td><td>SG</td><td class="num">5</td></tr>
+              <tr><td class="wrap">Confiabilidad</td><td>CN</td><td class="num">5</td></tr>
+              <tr><td class="wrap">Escalabilidad</td><td>ES</td><td class="num">4</td></tr>
+              <tr><td class="wrap">Mantenibilidad</td><td>MT</td><td class="num">4</td></tr>
+              <tr><td class="wrap">Interoperabilidad</td><td>IO</td><td class="num">4</td></tr>
+              <tr class="total"><td class="wrap">Total</td><td>—</td><td class="num">43</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout"><p><strong>Nota.</strong> El proyecto no usa la nomenclatura "RNF" — los requerimientos no funcionales están codificados como <strong>AC</strong> (Atributo de Calidad), consistente con el skill <code class="inline">atributos-calidad</code>. Fuente: <code class="inline">docs/dominio/05-requerimientos_funcionales.md</code> y <code class="inline">docs/dominio/03-atributos_calidad.md</code>.</p></div>
+  </section>
+
+  <section id="proceso">
+    <div class="section-head"><span class="section-num">03</span><h2 class="section-title">Proceso IEDD</h2></div>
+    <p class="lede">Planificación, especificación formal y evidencia de cierre — un documento por US/INC en cada categoría.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="wrap">Categoría</th><th class="num">Archivos</th><th class="wrap">Organización</th></tr></thead>
+        <tbody>
+          <tr><td class="wrap">Planes</td><td class="num">227</td><td class="wrap">23 carpetas — 1 por SP (1–7) y SP-ADJ (1–13)</td></tr>
+          <tr><td class="wrap">Specs (precondición/postcondición/invariantes)</td><td class="num">174</td><td class="wrap">18 carpetas — 1 por SP/SP-ADJ con US formales</td></tr>
+          <tr><td class="wrap">Reportes de implementación</td><td class="num">206</td><td class="wrap"><code class="inline">docs/reports/</code> — 1 por US/INC cerrado</td></tr>
+          <tr><td class="wrap">Maquetas UX</td><td class="num">15</td><td class="wrap">10 documentos (wireframes/decisiones/flujos) + 5 prototipos HTML interactivos</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout"><p><strong>Nota.</strong> Planes (227) &gt; Specs (174) &gt; Reportes (206) no es un embudo estricto — algunos SP-ADJ documentales (ej. ajustes de configuración) generan plan sin spec formal, y algunos reportes cubren incrementos completos (varias US) en un solo archivo.</p></div>
+  </section>
+
+  <section id="calidad">
+    <div class="section-head"><span class="section-num">04</span><h2 class="section-title">Reportes de calidad</h2></div>
+    <p class="lede">178 ejecuciones de herramientas de gate registradas en <code class="inline">quality/reports/</code> — evidencia cruda, distinta de los 4 documentos de síntesis narrativa en <code class="inline">docs/metricas/calidad/</code>.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="wrap">Herramienta</th><th class="num">Reportes</th><th class="wrap">Cuándo corre</th></tr></thead>
+        <tbody>
+          <tr><td class="wrap">CodeGuard</td><td class="num">87</td><td class="wrap">Cada commit — advierte, no bloquea</td></tr>
+          <tr><td class="wrap">DesignReviewer</td><td class="num">26</td><td class="wrap">Cada push (PR) — bloquea si CRITICAL</td></tr>
+          <tr><td class="wrap">ArchitectAnalyst</td><td class="num">9</td><td class="wrap">Cierre de Baseline — informa tendencias</td></tr>
+          <tr><td class="wrap">UAT (evidencia de aceptación)</td><td class="num">55</td><td class="wrap">Cierre de SP — validación funcional</td></tr>
+          <tr><td class="wrap">Suelto en raíz</td><td class="num">1</td><td class="wrap"><code class="inline">INC-5.1-quality-control.md</code></td></tr>
+          <tr class="total"><td class="wrap">Total</td><td class="num">178</td><td class="wrap">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="codigo">
+    <div class="section-head"><span class="section-num">05</span><h2 class="section-title">Código fuente</h2></div>
+    <p class="lede">309 archivos backend (18 736 SLOC) + 116 archivos frontend (17 254 SLOC) = 425 archivos, ~35 990 SLOC.</p>
+
+    <h3>Backend por Bounded Context</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="wrap">BC</th><th class="wrap">Tipo</th><th class="num">Archivos</th><th class="num">SLOC</th></tr></thead>
+        <tbody>
+          <tr><td>competencia</td><td class="wrap">ES (Core)</td><td class="num">103</td><td class="num">6 681</td></tr>
+          <tr><td>resultados</td><td class="wrap">CRUD</td><td class="num">34</td><td class="num">2 121</td></tr>
+          <tr><td>registro</td><td class="wrap">CRUD</td><td class="num">52</td><td class="num">2 050</td></tr>
+          <tr><td>identidad</td><td class="wrap">CRUD</td><td class="num">31</td><td class="num">1 115</td></tr>
+          <tr><td>torneo</td><td class="wrap">CRUD</td><td class="num">31</td><td class="num">1 068</td></tr>
+          <tr><td>notificaciones</td><td class="wrap">ES</td><td class="num">39</td><td class="num">1 061</td></tr>
+          <tr><td>shared</td><td class="wrap">Compartido</td><td class="num">17</td><td class="num">428</td></tr>
+          <tr class="total"><td>Total backend</td><td class="wrap">—</td><td class="num">309</td><td class="num">18 736</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Frontend</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="wrap">Categoría</th><th class="num">Archivos</th><th class="num">SLOC</th></tr></thead>
+        <tbody>
+          <tr><td class="wrap">TypeScript / TSX (frontend/src)</td><td class="num">116</td><td class="num">17 254</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout"><p><strong>Nota.</strong> Este SLOC se calculó contando líneas no vacías/no-comentario directo sobre HEAD — difiere levemente de las cifras de <code class="inline">backend-raw.md</code>/<code class="inline">frontend-raw.md</code> (13.2K/15.8K), que usan <code class="inline">radon</code>/<code class="inline">cloc</code> con reglas distintas de qué cuenta como código.</p></div>
+  </section>
+
+  <section id="pruebas">
+    <div class="section-head"><span class="section-num">06</span><h2 class="section-title">Pruebas por tipo</h2></div>
+    <p class="lede">1 658 casos automatizados (unit + integration + BDD), 50 814 SLOC de testing — más código que el de producción backend. El frontend no tiene suite automatizada.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="wrap">Tipo</th><th class="num">Archivos</th><th class="num">Casos</th><th class="num">SLOC</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td class="wrap">Unit</td><td class="num">114</td><td class="num">752</td><td class="num">15 767</td><td><span class="pill good">pytest</span></td></tr>
+          <tr><td class="wrap">Integration</td><td class="num">62</td><td class="num">259</td><td class="num">10 321</td><td><span class="pill good">pytest</span></td></tr>
+          <tr><td class="wrap">Features (BDD) — steps</td><td class="num">66</td><td class="num">647</td><td class="num">15 970</td><td><span class="pill good">pytest-bdd</span></td></tr>
+          <tr><td class="wrap">Features (BDD) — <code class="inline">.feature</code></td><td class="num">127</td><td class="num">—</td><td class="num">4 584</td><td><span class="pill info">Gherkin, no Python</span></td></tr>
+          <tr><td class="wrap">UAT</td><td class="num">16 seeds + 4 <code class="inline">run_uat.sh</code></td><td class="num">—</td><td class="num">4 141</td><td><span class="pill info">Patrón híbrido — seed + HTTP manual</span></td></tr>
+          <tr><td class="wrap">Raíz (<code class="inline">conftest.py</code>, <code class="inline">__init__.py</code>)</td><td class="num">2</td><td class="num">—</td><td class="num">31</td><td>—</td></tr>
+          <tr><td class="wrap">Frontend</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td><span class="pill bad">Sin suite automatizada</span></td></tr>
+          <tr class="total"><td class="wrap">Total testing</td><td class="num">260 <span style="color:var(--text-faint)">(+127 .feature)</span></td><td class="num">1 658</td><td class="num">50 814</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout"><p><strong>UAT no son casos pytest.</strong> Son 6 carpetas por SP (sp1, sp2, sp3, sp4, sp6, producción) con scripts de seed de datos + shell runners para validación HTTP manual contra un ambiente real — el patrón híbrido ya documentado en <code class="inline">project_uat_pattern</code>, no una omisión de conteo.</p></div>
+
+    <div class="callout"><p><strong>El código de test es más grande que el de producción.</strong> 46 230 SLOC de Python en <code class="inline">tests/</code> contra 18 736 SLOC de producción en <code class="inline">src/</code> — ratio ≈ <strong>2.47:1</strong>. Sumando las 4 584 líneas Gherkin de los <code class="inline">.feature</code> (también código de test ejecutable vía pytest-bdd), el total sube a 50 814 SLOC de testing. Esta cifra es más alta que el 1.55:1 de <code class="inline">test-to-code-ratio.md</code> porque ese documento aplica un criterio más estricto (excluye fixtures/steps de soporte o cuenta solo statements ejecutables vía <code class="inline">radon</code>/<code class="inline">coverage</code>), mientras que este conteo suma toda línea no vacía/no comentario.</p></div>
+  </section>
+
+  <footer>
+    Compilado 2026-08-21 · conteo directo sobre HEAD <code class="inline">main</code>, tag v1.0.5 · <code class="inline">find</code> / <code class="inline">grep</code>, sin estimaciones
+  </footer>
+
+</div>
+</body>
+</html>
