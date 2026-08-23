@@ -51,3 +51,6 @@ manual/site/
 graphify-out/
 src/graphify-out/
 src/*/graphify-out/
+
+# POC skills IEC 62304 — evidencia de simulación, no evidencia regulatoria real
+docs/poc-iec62304/
